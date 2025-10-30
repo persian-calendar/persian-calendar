@@ -122,8 +122,8 @@ fun ColumnScope.NotificationSettings() {
                 key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
                 value = isLargeDayNumberOnNotification,
                 title = stringResource(R.string.large_day_number_on_notification),
-                summary = when (language) {
-                    Language.FA, Language.FA_AF -> "نمایش روز ماه به صورت عددی بزرگ در اعلان برنامه"
+                summary = when {
+                    language.isPersianOrDari -> "نمایش روز ماه به صورت عددی بزرگ در اعلان برنامه"
                     else -> null
                 }
             )

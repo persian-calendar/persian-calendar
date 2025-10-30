@@ -74,8 +74,8 @@ class AstronomyState(val date: GregorianCalendar) {
                 Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
             val isSolar = title == R.string.solar_eclipse
             val type = language.tryTranslateEclipseType(isSolar, kind) ?: resources.getString(title)
-            when (language) {
-                Language.FA, Language.FA_AF -> "$type بعدی"
+            when {
+                language.isPersianOrDari -> "$type بعدی"
                 else -> resources.getString(R.string.next_x, type)
             } + spacedColon + formattedDate
         } + generateYearName(

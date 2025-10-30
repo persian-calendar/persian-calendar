@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
@@ -43,7 +51,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.database.getIntOrNull
@@ -80,6 +91,7 @@ import com.byagowi.persiancalendar.global.localNumeralPreference
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekDays
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
@@ -92,6 +104,7 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import kotlinx.coroutines.launch
 
 @Composable
 fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
@@ -232,10 +245,41 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
                 key = PREF_SHOW_MOON_IN_SCORPIO,
                 value = showMoonInScorpio,
                 title = stringResource(R.string.moon_in_scorpio),
-                summary = when (language) {
-                    Language.FA, Language.FA_AF -> "نمایش قمر در عقرب در جدول تقویم"
-                    else -> null
-                }
+                extraWidget = {
+                    Row(
+                        Modifier
+                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                            .clearAndSetSemantics {}
+                    ) {
+                        @OptIn(ExperimentalMaterial3Api::class)
+                        AnimatedVisibility(showMoonInScorpio) {
+                            val coroutine = rememberCoroutineScope()
+                            val tooltipState = rememberTooltipState()
+                            TooltipBox(
+                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                    TooltipAnchorPosition.Above
+                                ),
+                                tooltip = { PlainTooltip { Text("نشان عقرب در ستاره‌شناسی") } },
+                                state = tooltipState,
+                                enableUserInput = false,
+                                modifier = if (language.isPersianOrDari) Modifier.clickable(
+                                    indication = null,
+                                    interactionSource = null,
+                                ) { coroutine.launch { tooltipState.show() } } else Modifier
+                            ) {
+                                Text(
+                                    Zodiac.SCORPIO.symbol,
+                                    fontFamily = FontFamily(
+                                        Font(R.font.notosanssymbolsregularzodiacsubset)
+                                    ),
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.padding(horizontal = 8.dp),
+                                )
+                            }
+                        }
+                    }
+                },
+                summary = if (language.isPersianOrDari) "نمایش قمر در عقرب در تقویم" else null,
             )
         }
     }

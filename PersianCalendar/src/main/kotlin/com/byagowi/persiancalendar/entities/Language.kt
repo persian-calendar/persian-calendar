@@ -59,6 +59,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
+    val isPersianOrDari get() = isPersian || isDari
     val isNepali get() = this == NE
     val isTamil get() = this == TA
 
@@ -464,7 +465,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     fun formatCompatibility(compatibility: ChineseZodiac.Compatibility): String {
         return when {
-            this == FA || this == FA_AF -> when (compatibility) {
+            isPersianOrDari -> when (compatibility) {
                 ChineseZodiac.Compatibility.BEST -> "بهترین"
                 ChineseZodiac.Compatibility.BETTER -> "خوب"
                 ChineseZodiac.Compatibility.NEUTRAL -> "خنثی"
@@ -599,7 +600,7 @@ enum class Language(val code: String, val nativeName: String) {
                             ?: valueOfLanguageCode(locale.split("-").firstOrNull().orEmpty())
                         // Use the knowledge only to detect Persian language
                         // as others might be surprising
-                        if (language == FA || language == FA_AF) return@runCatching language
+                        if (language?.isPersianOrDari == true) return@runCatching language
                     }
                 }
             }

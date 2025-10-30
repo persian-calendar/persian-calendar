@@ -128,7 +128,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     append(stringResource(entry.title))
                     if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         val language by language.collectAsState()
-                        if (language == Language.FA || language == Language.FA_AF) withStyle(
+                        if (language.isPersianOrDari) withStyle(
                             style = MaterialTheme.typography.bodySmall.toSpanStyle().copy(
                                 color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
                             )
