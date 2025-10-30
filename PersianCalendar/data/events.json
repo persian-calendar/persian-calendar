@@ -303,6 +303,9 @@
     { "holiday": false, "month": 3, "day": 20, "type": "Iran",
       "title": "شهادت آیت‌الله سعیدی به دست مأموران ستم‌شاهی پهلوی (۱۳۴۹ ه‍.ش)" },
 
+    { "holiday": false, "month": 3, "day": 23, "type": "Iran",
+      "title": "روز شهدای اقتدار و اتحاد ملی ایران" },
+
     { "holiday": false, "month": 3, "day": 26, "type": "Iran",
       "title": "شهادت سربازان دلیر اسلام: بخارایی، امانی، صفار هرندی و نیک‌نژاد (۱۳۴۴ ه‍.ش)" },
 
@@ -597,6 +600,9 @@
     { "holiday": false, "month": 6, "day": 31, "type": "Iran",
       "title": "آغاز هفتهٔ دفاع مقدس" },
 
+    { "holiday": false, "month": 7, "day": 1, "type": "Iran",
+      "title": "روز پرچم" },
+
     { "holiday": false, "month": 7, "day": 2, "type": "Iran",
       "title": "روز بزرگداشت شهدای منا" },
 
@@ -720,6 +726,9 @@
     { "holiday": false, "month": 8, "day": 18, "type": "Iran",
       "title": "روز کیفیت" },
 
+    { "holiday": false, "month": 8, "day": 21, "type": "Iran",
+      "title": "روز هوافضا" },
+
     { "holiday": false, "month": 8, "day": 24, "type": "Iran",
       "title": "روز کتاب، کتاب‌خوانی و کتابدار" },
 
@@ -761,6 +770,9 @@
 
     { "holiday": false, "month": 9, "day": 9, "type": "Iran",
       "title": "روز بزرگداشت شیخ مفید" },
+
+    { "holiday": false, "month": 9, "day": 9, "type": "Iran",
+      "title": "روز جزایر سه‌گانهٔ خلیج فارس (بوموسی، تنب بزرگ و تنب کوچک)" },
 
     { "holiday": false, "month": 9, "day": 10, "type": "Iran",
       "title": "شهادت آیت‌الله سید حسن مدرس (۱۳۱۶ ه‍.ش) و روز مجلس" },
