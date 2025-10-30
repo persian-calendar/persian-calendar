@@ -123,11 +123,22 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                 R.string.more to {
                     if (language.isPersianOrDari) Toast.makeText(
                         context,
-                        "پرونده‌ای در قالب mp3 انتخاب کنید",
+                        "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
                         Toast.LENGTH_LONG
                     ).show()
                     runCatching {
-                        soundFilePicker.launch(arrayOf("audio/mpeg"))
+                        soundFilePicker.launch(
+                            arrayOf(
+                                "audio/mpeg", // mpga mpega mp1 mp2 mp3
+                                "audio/aac", // adts aac ass
+                                "audio/midi", // midi
+                                "audio/ac3", // ac3
+                                "audio/flac", // flac
+                                "audio/ogg", // oga ogg opus spx
+                                "audio/mp4", // m4a
+                                "audio/x-wav", // wav
+                            )
+                        )
                     }.onFailure(logException).onFailure { onDismissRequest() }
                 },
             )

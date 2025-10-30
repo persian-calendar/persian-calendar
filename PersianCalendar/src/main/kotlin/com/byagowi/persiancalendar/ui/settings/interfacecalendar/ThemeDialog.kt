@@ -213,6 +213,8 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                             arrayOf(
                                 "font/ttf",
                                 "font/otf",
+                                "font/sfnt",
+                                "font/collection",
                                 "font/truetype",
                                 "font/opentype",
                                 "application/x-font-ttf",
