@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import androidx.core.os.bundleOf
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -47,6 +50,7 @@ import java.io.File
 @Composable
 fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
+    val language by language.collectAsState()
 
     fun commonDialogCallback(uri: Uri?, action: (Uri) -> (Pair<String, Uri>?)) {
         onDismissRequest()
@@ -117,6 +121,11 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                     }.onFailure(logException).onFailure { onDismissRequest() }
                 },
                 R.string.more to {
+                    if (language.isPersianOrDari) Toast.makeText(
+                        context,
+                        "پرونده‌ای در قالب mp3 انتخاب کنید",
+                        Toast.LENGTH_LONG
+                    ).show()
                     runCatching {
                         soundFilePicker.launch(arrayOf("audio/mpeg"))
                     }.onFailure(logException).onFailure { onDismissRequest() }

@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -49,7 +50,6 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
@@ -71,6 +71,7 @@ import kotlin.random.Random
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
+    val language by language.collectAsState()
     val userSetTheme by userSetTheme.collectAsState()
     var showMore by rememberSaveable { mutableStateOf(false) }
     val systemLightTheme by systemLightTheme.collectAsState()
@@ -127,7 +128,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 Text(buildAnnotatedString {
                     append(stringResource(entry.title))
                     if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        val language by language.collectAsState()
                         if (language.isPersianOrDari) withStyle(
                             style = MaterialTheme.typography.bodySmall.toSpanStyle().copy(
                                 color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
@@ -204,6 +204,11 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             Column(Modifier.padding(start = 24.dp)) {
                 Row {
                     Button(onClick = {
+                        if (language.isPersianOrDari) Toast.makeText(
+                            context,
+                            "پرونده‌ای در قالب ttf یا otf انتخاب کنید",
+                            Toast.LENGTH_LONG
+                        ).show()
                         fontPicker.launch(
                             arrayOf(
                                 "font/ttf",
