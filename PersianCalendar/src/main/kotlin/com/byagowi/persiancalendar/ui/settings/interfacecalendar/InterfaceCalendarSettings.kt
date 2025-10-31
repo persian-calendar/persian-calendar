@@ -7,12 +7,14 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -106,9 +108,15 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
+fun LazyListScope.interfaceCalendarSettings(destination: String? = null) {
+    stickyHeader { SettingsSection(stringResource(R.string.pref_interface)) }
+    item { Column { InterfaceSettings(destination) } }
+    stickyHeader { SettingsSection(stringResource(R.string.calendar)) }
+    item { Column { CalendarSettings(destination) } }
+}
+
 @Composable
-fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
-    SettingsSection(stringResource(R.string.pref_interface))
+private fun ColumnScope.InterfaceSettings(destination: String? = null) {
     val context = LocalContext.current
     run {
         val themeDisplayName = stringResource(run {
@@ -168,8 +176,12 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             summary = stringResource(R.string.enable_native_digits)
         )
     }
+}
 
-    SettingsSection(stringResource(R.string.calendar))
+@Composable
+private fun ColumnScope.CalendarSettings(destination: String?) {
+    val context = LocalContext.current
+    val language by language.collectAsState()
     SettingsClickable(
         stringResource(R.string.events), stringResource(R.string.events_summary),
         defaultOpen = destination == PREF_HOLIDAY_TYPES,

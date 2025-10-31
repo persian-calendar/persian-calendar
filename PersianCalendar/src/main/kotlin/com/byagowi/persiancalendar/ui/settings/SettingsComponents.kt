@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,11 +75,11 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
-    Spacer(Modifier.height(8.dp))
     Column(
         Modifier
+            .background(color = MaterialTheme.colorScheme.surface)
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp),
+            .padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

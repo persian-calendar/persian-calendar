@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -84,9 +86,22 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
+fun LazyListScope.locationAthanSettings(navigateToMap: () -> Unit, destination: String) {
+    stickyHeader { SettingsSection(stringResource(R.string.location)) }
+    item { Column { LocationSettings(navigateToMap) } }
+    stickyHeader {
+        val coordinates by coordinates.collectAsState()
+        val isLocationSet = coordinates != null
+        SettingsSection(
+            stringResource(R.string.athan),
+            if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
+        )
+    }
+    item { Column { AthanSettings(destination) } }
+}
+
 @Composable
-fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: String) {
-    SettingsSection(stringResource(R.string.location))
+fun ColumnScope.LocationSettings(navigateToMap: () -> Unit) {
     SettingsClickable(
         title = stringResource(R.string.gps_location),
         summary = stringResource(R.string.gps_location_help),
@@ -96,23 +111,22 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
         summary = stringResource(R.string.location_help),
     ) { onDismissRequest -> LocationDialog(onDismissRequest) }
 
-    val coordinates by coordinates.collectAsState()
-    val context = LocalContext.current
-    val resources = LocalResources.current
     val cityName by cityName.collectAsState()
     SettingsClickable(stringResource(R.string.coordinates), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
     }
+}
 
+@Composable
+fun ColumnScope.AthanSettings(destination: String) {
+    val coordinates by coordinates.collectAsState()
+    val context = LocalContext.current
+    val resources = LocalResources.current
     val isLocationSet = coordinates != null
     val calculationMethod by calculationMethod.collectAsState()
     val notificationAthan by notificationAthan.collectAsState()
     val ascendingAthan by ascendingAthan.collectAsState()
     val language by language.collectAsState()
-    SettingsSection(
-        stringResource(R.string.athan),
-        if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
-    )
     this.AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
             key = PREF_PRAY_TIME_METHOD,

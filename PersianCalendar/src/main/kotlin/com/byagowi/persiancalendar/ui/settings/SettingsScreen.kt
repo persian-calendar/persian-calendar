@@ -24,22 +24,22 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Palette
@@ -103,10 +103,10 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
-import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.interfaceCalendarSettings
+import com.byagowi.persiancalendar.ui.settings.locationathan.locationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.widgetNotificationSettings
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -164,15 +164,15 @@ fun SharedTransitionScope.SettingsScreen(
                 TabItem(
                     Icons.Outlined.Palette, Icons.Default.Palette,
                     R.string.pref_interface, R.string.calendar,
-                ) { InterfaceCalendarSettings(destination) },
+                ) { interfaceCalendarSettings(destination) },
                 TabItem(
                     Icons.Outlined.Widgets, Icons.Default.Widgets,
                     R.string.pref_notification, R.string.pref_widget,
-                ) { WidgetNotificationSettings() },
+                ) { widgetNotificationSettings() },
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
-                ) { LocationAthanSettings(navigateToMap, destination) },
+                ) { locationAthanSettings(navigateToMap, destination) },
             )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
@@ -227,13 +227,13 @@ fun SharedTransitionScope.SettingsScreen(
                                 WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
                             )
                     ) {
-                        val scrollState = rememberScrollState()
-                        Column(Modifier.verticalScroll(scrollState)) {
-                            tabs[index].content(this)
-                            Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
-                        }
-                        ScrollShadow(scrollState, top = true)
-                        ScrollShadow(scrollState, top = false)
+                        val listState = rememberLazyListState()
+                        LazyColumn(
+                            state = listState,
+                            contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding()),
+                        ) { tabs[index].content(this) }
+                        ScrollShadow(listState, top = true)
+                        ScrollShadow(listState, top = false)
                     }
                 }
             }
@@ -247,7 +247,7 @@ private data class TabItem(
     private val filledIcon: ImageVector,
     @get:StringRes private val firstTitle: Int,
     @get:StringRes private val secondTitle: Int,
-    val content: @Composable ColumnScope.() -> Unit,
+    val content: LazyListScope.() -> Unit,
 ) {
     @Composable
     fun Title() {

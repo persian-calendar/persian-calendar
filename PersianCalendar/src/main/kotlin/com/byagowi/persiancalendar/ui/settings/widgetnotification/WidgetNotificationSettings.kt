@@ -7,7 +7,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,7 +45,6 @@ import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.isCenterAlignWidgets
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
@@ -69,12 +70,11 @@ import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 import kotlin.time.Duration.Companion.seconds
 
-@Composable
-fun ColumnScope.WidgetNotificationSettings() {
-    SettingsSection(stringResource(R.string.pref_notification))
-    NotificationSettings()
-    SettingsSection(stringResource(R.string.pref_widget))
-    WidgetConfiguration()
+fun LazyListScope.widgetNotificationSettings() {
+    stickyHeader { SettingsSection(stringResource(R.string.pref_notification)) }
+    item { Column { NotificationSettings() } }
+    stickyHeader { SettingsSection(stringResource(R.string.pref_widget)) }
+    item { Column { WidgetConfiguration() } }
 }
 
 @Composable
