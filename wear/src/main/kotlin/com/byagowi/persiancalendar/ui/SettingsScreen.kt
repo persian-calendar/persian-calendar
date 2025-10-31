@@ -98,7 +98,7 @@ fun SettingsScreen(preferences: Preferences?) {
             item { EventsSwitch(internationalKey, "بین‌المللی") }
             item {
                 ListSubHeader {
-                    Text("صفحهٔ ساعت", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    Text("پیچیدگی، صفحهٔ ساعت", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 }
             }
             item {
