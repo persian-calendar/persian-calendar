@@ -3,7 +3,7 @@
     <background android:drawable="@color/dynamic_icon_background" />
     <foreground>
         <inset
-            android:drawable="@drawable/day23"
+            android:drawable="@drawable/day23_tinted"
             android:inset="30%" />
     </foreground>
     <monochrome>

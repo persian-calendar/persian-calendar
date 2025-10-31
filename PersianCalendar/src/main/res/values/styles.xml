@@ -39,7 +39,8 @@
 
     <color name="shortcut_color">#00796b</color>
     <color name="shortcut_background">#F5F5F5</color>
-    <color name="dynamic_icon_background">#00796b</color>
+    <color name="dynamic_icon_foreground">#00796b</color>
+    <color name="dynamic_icon_background">#F5F5F5</color>
 
     <color name="widget_add_event_icon">#D3E3FD</color>
     <color name="widget_add_event">#0B57D0</color>
