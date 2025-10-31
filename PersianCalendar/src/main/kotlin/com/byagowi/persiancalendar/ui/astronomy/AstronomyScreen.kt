@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -46,7 +45,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -96,11 +94,8 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -127,7 +122,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.delay
 import java.util.Date
-import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
@@ -216,10 +210,10 @@ fun SharedTransitionScope.AstronomyScreen(
                         }
                     }
 
-                    var showMoonInScorpioDialog by rememberSaveable { mutableStateOf(false) }
-                    if (showMoonInScorpioDialog) MoonInScorpioDialog(astronomyState.date) {
-                        showMoonInScorpioDialog = false
-                    }
+//                    var showMoonInScorpioDialog by rememberSaveable { mutableStateOf(false) }
+//                    if (showMoonInScorpioDialog) MoonInScorpioDialog(astronomyState.date) {
+//                        showMoonInScorpioDialog = false
+//                    }
 
                     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
@@ -249,13 +243,13 @@ fun SharedTransitionScope.AstronomyScreen(
                             showPlanetaryHoursDialog = true
                             closeMenu()
                         }
-                        val showMoonInScorpio by showMoonInScorpio.collectAsState()
-                        if (showMoonInScorpio) AppDropdownMenuItem({
-                            Text(stringResource(R.string.moon_in_scorpio))
-                        }) {
-                            showMoonInScorpioDialog = true
-                            closeMenu()
-                        }
+//                        val showMoonInScorpio by showMoonInScorpio.collectAsState()
+//                        if (showMoonInScorpio) AppDropdownMenuItem({
+//                            Text(stringResource(R.string.moon_in_scorpio))
+//                        }) {
+//                            showMoonInScorpioDialog = true
+//                            closeMenu()
+//                        }
                     }
                 },
             )
@@ -355,25 +349,31 @@ fun SharedTransitionScope.AstronomyScreen(
     }
 }
 
-@Composable
-fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
-    val listState = rememberLazyListState(lazyColumnCount / 2)
-    val numeral by numeral.collectAsState()
-    AppDialogWithLazyColumn(
-        onDismissRequest = onDismissRequest,
-        lazyListState = listState,
-        title = { Text(stringResource(R.string.moon_in_scorpio)) },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
-        },
-    ) {
-        items(lazyColumnCount) {
-            Text(numeral.format(it))
-        }
-    }
-}
-
-private const val lazyColumnCount = 5000
+//@Composable
+//fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
+//    val ranges = remember(Jdn(now.toCivilDate())) {
+//        val today = Jdn(now.toCivilDate()) on mainCalendar
+//        val start = Jdn(mainCalendar.createDate(today.year, 1, 1))
+//        val end = Jdn(mainCalendar.createDate(today.year + 1, 1, 1))
+//        buildList {
+//            var day = start
+//            while (day != end) {
+//
+//            }
+//        }
+//    }
+//    AppDialog(
+//        onDismissRequest = onDismissRequest,
+//        title = {
+//            Text(
+//                stringResource(R.string.moon_in_scorpio) + spacedComma +
+//            )
+//        },
+//        dismissButton = {
+//            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+//        },
+//    ) { ranges.forEach { Text(it) } }
+//}
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

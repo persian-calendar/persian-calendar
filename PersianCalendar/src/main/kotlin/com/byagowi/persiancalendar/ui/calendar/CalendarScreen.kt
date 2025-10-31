@@ -160,7 +160,6 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.astronomy.MoonInScorpioDialog
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -229,7 +228,6 @@ fun SharedTransitionScope.CalendarScreen(
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
 ) {
-    MoonInScorpioDialog(GregorianCalendar()) {}
     val snackbarHostState = remember { SnackbarHostState() }
     val isYearView by viewModel.isYearView.collectAsState()
     val context = LocalContext.current
