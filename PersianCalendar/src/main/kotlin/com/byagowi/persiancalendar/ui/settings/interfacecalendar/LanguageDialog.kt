@@ -42,7 +42,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
         title = { Text(stringResource(R.string.language)) },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
-        }
+        },
     ) {
         val languages = Language.entries.let { languages ->
             if (TimeZone.getDefault().id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID))

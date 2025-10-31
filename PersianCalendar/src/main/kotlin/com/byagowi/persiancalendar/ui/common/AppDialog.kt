@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -84,6 +86,7 @@ private fun BaseAppDialog(
 fun AppDialog(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
+    scrollState: ScrollState = rememberScrollState(),
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,
@@ -96,7 +99,6 @@ fun AppDialog(
         confirmButton = confirmButton,
         dismissButton = dismissButton,
     ) {
-        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,6 +114,7 @@ fun AppDialog(
 fun AppDialogWithLazyColumn(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
+    lazyListState: LazyListState = rememberLazyListState(),
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,
@@ -124,9 +127,8 @@ fun AppDialogWithLazyColumn(
         confirmButton = confirmButton,
         dismissButton = dismissButton,
     ) {
-        val lazyState = rememberLazyListState()
-        LazyColumn(state = lazyState, content = content)
-        ScrollShadow(lazyState, top = true)
-        ScrollShadow(lazyState, top = false)
+        LazyColumn(state = lazyListState, content = content)
+        ScrollShadow(lazyListState, top = true)
+        ScrollShadow(lazyListState, top = false)
     }
 }

@@ -53,7 +53,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { showProvincesDialog = true },
             ) { Text(stringResource(R.string.more), Modifier.padding(8.dp)) }
-        }) else null
+        }) else null,
     ) {
         items(cities, key = { it.key }) { city ->
             Box(
