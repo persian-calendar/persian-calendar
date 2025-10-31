@@ -19,6 +19,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -58,11 +59,13 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -127,36 +130,49 @@ fun SharedTransitionScope.SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
+    var visibleAppBar by remember { mutableStateOf(true) }
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            TopAppBar(
-                title = {
-                    AnimatedContent(
-                        targetState = stringResource(R.string.settings),
-                        label = "title",
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state -> Text(state) }
-                },
-                colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
-                actions = {
-                    var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
-                    Box(
-                        Modifier
-                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                            .clearAndSetSemantics {}
-                    ) {
-                        ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-                            MenuItems(
-                                openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
-                                closeMenu = closeMenu,
+            Column(Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)) {
+                AnimatedVisibility(visibleAppBar) {
+                    TopAppBar(
+                        windowInsets = WindowInsets(),
+                        title = {
+                            AnimatedContent(
+                                targetState = stringResource(R.string.settings),
+                                label = "title",
+                                transitionSpec = appCrossfadeSpec,
+                            ) { state -> Text(state) }
+                        },
+                        colors = appTopAppBarColors(),
+                        navigationIcon = {
+                            NavigationOpenDrawerIcon(
+                                animatedContentScope,
+                                openDrawer
                             )
-                        }
-                    }
-                    if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
-                },
-            )
+                        },
+                        actions = {
+                            var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
+                            Box(
+                                Modifier
+                                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                                    .clearAndSetSemantics {}
+                            ) {
+                                ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                                    MenuItems(
+                                        openAddWidgetDialog = {
+                                            closeMenu(); showAddWidgetDialog = true
+                                        },
+                                        closeMenu = closeMenu,
+                                    )
+                                }
+                            }
+                            if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
+                        },
+                    )
+                }
+            }
         },
     ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
@@ -232,6 +248,9 @@ fun SharedTransitionScope.SettingsScreen(
                             state = listState,
                             contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding()),
                         ) { tabs[index].content(this) }
+                        if (pagerState.currentPage == index) {
+                            visibleAppBar = !listState.canScrollBackward
+                        }
                         ScrollShadow(listState, top = true)
                         ScrollShadow(listState, top = false)
                     }
