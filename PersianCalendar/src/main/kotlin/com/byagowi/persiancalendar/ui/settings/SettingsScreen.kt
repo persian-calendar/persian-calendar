@@ -130,12 +130,12 @@ fun SharedTransitionScope.SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
-    var visibleAppBar by remember { mutableStateOf(true) }
+    var isAtTop by remember { mutableStateOf(true) }
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
             Column(Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)) {
-                AnimatedVisibility(visibleAppBar) {
+                AnimatedVisibility(isAtTop) {
                     TopAppBar(
                         windowInsets = WindowInsets(),
                         title = {
@@ -180,15 +180,15 @@ fun SharedTransitionScope.SettingsScreen(
                 TabItem(
                     Icons.Outlined.Palette, Icons.Default.Palette,
                     R.string.pref_interface, R.string.calendar,
-                ) { interfaceCalendarSettings(destination) },
+                ) { interfaceCalendarSettings(isAtTop, destination) },
                 TabItem(
                     Icons.Outlined.Widgets, Icons.Default.Widgets,
                     R.string.pref_notification, R.string.pref_widget,
-                ) { widgetNotificationSettings() },
+                ) { widgetNotificationSettings(isAtTop) },
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
-                ) { locationAthanSettings(navigateToMap, destination) },
+                ) { locationAthanSettings(isAtTop, navigateToMap, destination) },
             )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
@@ -249,7 +249,7 @@ fun SharedTransitionScope.SettingsScreen(
                             contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding()),
                         ) { tabs[index].content(this) }
                         if (pagerState.currentPage == index) {
-                            visibleAppBar = !listState.canScrollBackward
+                            isAtTop = !listState.canScrollBackward
                         }
                         ScrollShadow(listState, top = true)
                         ScrollShadow(listState, top = false)

@@ -70,10 +70,10 @@ import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 import kotlin.time.Duration.Companion.seconds
 
-fun LazyListScope.widgetNotificationSettings() {
-    stickyHeader { SettingsSection(stringResource(R.string.pref_notification)) }
+fun LazyListScope.widgetNotificationSettings(isAtTop: Boolean) {
+    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.pref_notification)) }
     item { Column { NotificationSettings() } }
-    stickyHeader { SettingsSection(stringResource(R.string.pref_widget)) }
+    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.pref_widget)) }
     item { Column { WidgetConfiguration() } }
 }
 

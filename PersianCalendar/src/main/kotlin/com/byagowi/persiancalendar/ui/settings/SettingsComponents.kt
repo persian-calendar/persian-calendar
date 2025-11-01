@@ -77,10 +77,10 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
-fun SettingsSection(title: String, subtitle: String? = null) {
+fun SettingsSection(isAtTop: Boolean, title: String, subtitle: String? = null) {
     Column(
         Modifier
-            .background(color = MaterialTheme.colorScheme.surface)
+            .background(if (isAtTop) Color.Transparent else MaterialTheme.colorScheme.surface)
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

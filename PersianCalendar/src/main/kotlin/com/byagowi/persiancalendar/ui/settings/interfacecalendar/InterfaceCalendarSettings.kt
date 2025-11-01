@@ -108,10 +108,10 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
-fun LazyListScope.interfaceCalendarSettings(destination: String? = null) {
-    stickyHeader { SettingsSection(stringResource(R.string.pref_interface)) }
+fun LazyListScope.interfaceCalendarSettings(isAtTop: Boolean, destination: String? = null) {
+    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.pref_interface)) }
     item { Column { InterfaceSettings(destination) } }
-    stickyHeader { SettingsSection(stringResource(R.string.calendar)) }
+    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.calendar)) }
     item { Column { CalendarSettings(destination) } }
 }
 

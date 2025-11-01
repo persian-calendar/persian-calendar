@@ -89,13 +89,18 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
-fun LazyListScope.locationAthanSettings(navigateToMap: () -> Unit, destination: String) {
-    stickyHeader { SettingsSection(stringResource(R.string.location)) }
+fun LazyListScope.locationAthanSettings(
+    isAtTop: Boolean,
+    navigateToMap: () -> Unit,
+    destination: String,
+) {
+    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.location)) }
     item { Column { LocationSettings(navigateToMap) } }
     stickyHeader {
         val coordinates by coordinates.collectAsState()
         val isLocationSet = coordinates != null
         SettingsSection(
+            isAtTop,
             stringResource(R.string.athan),
             if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
         )
