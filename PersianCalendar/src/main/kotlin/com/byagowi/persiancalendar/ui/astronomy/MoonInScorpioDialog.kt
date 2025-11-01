@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
@@ -31,6 +32,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,18 +75,27 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = {
-            HorizontalPager(yearPagerState) { page ->
-                val year = page - yearPages / 2 + currentYear
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year),
-                    maxLines = 1,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    autoSize = TextAutoSize.StepBased(
-                        minFontSize = 9.sp,
-                        maxFontSize = LocalTextStyle.current.fontSize,
+                    Zodiac.SCORPIO.symbol,
+                    fontFamily = FontFamily(
+                        Font(R.font.notosanssymbolsregularzodiacsubset)
                     ),
+                    fontSize = 20.sp,
                 )
+                HorizontalPager(yearPagerState) { page ->
+                    val year = page - yearPages / 2 + currentYear
+                    Text(
+                        stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year),
+                        maxLines = 1,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 9.sp,
+                            maxFontSize = LocalTextStyle.current.fontSize,
+                        ),
+                    )
+                }
             }
         },
         dismissButton = {
