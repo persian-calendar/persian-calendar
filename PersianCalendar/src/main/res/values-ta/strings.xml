@@ -416,4 +416,10 @@
     <string name="horoscope">பிறப்பியம்</string>
     <string name="planetary_hours">கோள்களின் நேரம்</string>
     <string name="month_view">திங்கள் பார்வை</string>
+    <string name="select_font">எழுத்துருவைத் தேர்ந்தெடு</string>
+    <string name="move_up">மேலே நகர்த்து</string>
+    <string name="move_down">கீழே நகர்த்து</string>
+    <string name="black_moon">கருப்புநிலா</string>
+    <string name="dynamic_icon">தானி சின்னம்</string>
+    <string name="large_day_number_on_notification">அறிவிப்பில் பெரிய நாள் எண்</string>
 </resources>
