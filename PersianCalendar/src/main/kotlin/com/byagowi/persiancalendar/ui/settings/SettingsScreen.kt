@@ -94,6 +94,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
+import com.byagowi.persiancalendar.ui.about.ConverterDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ScheduleAlarm
@@ -383,6 +384,11 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuItem({ Text("Schedule an alarm") }) { showDialog = true }
         if (showDialog) ScheduleAlarm { showDialog = false }
+    }
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        AppDropdownMenuItem({ Text("Converter") }) { showDialog = true }
+        if (showDialog) ConverterDialog { showDialog = false }
     }
 
     HorizontalDivider()
