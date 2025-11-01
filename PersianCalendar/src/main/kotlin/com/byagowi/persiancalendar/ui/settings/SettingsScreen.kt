@@ -19,7 +19,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -135,43 +134,40 @@ fun SharedTransitionScope.SettingsScreen(
         containerColor = Color.Transparent,
         topBar = {
             Column(Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)) {
-                AnimatedVisibility(isAtTop) {
-                    TopAppBar(
-                        windowInsets = WindowInsets(),
-                        title = {
-                            AnimatedContent(
-                                targetState = stringResource(R.string.settings),
-                                label = "title",
-                                transitionSpec = appCrossfadeSpec,
-                            ) { state -> Text(state) }
-                        },
-                        colors = appTopAppBarColors(),
-                        navigationIcon = {
-                            NavigationOpenDrawerIcon(
-                                animatedContentScope,
-                                openDrawer
-                            )
-                        },
-                        actions = {
-                            var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
-                            Box(
-                                Modifier
-                                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                                    .clearAndSetSemantics {}
-                            ) {
-                                ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-                                    MenuItems(
-                                        openAddWidgetDialog = {
-                                            closeMenu(); showAddWidgetDialog = true
-                                        },
-                                        closeMenu = closeMenu,
-                                    )
-                                }
+//                AnimatedVisibility(isAtTop) {
+                TopAppBar(
+                    windowInsets = WindowInsets(),
+                    title = {
+                        AnimatedContent(
+                            targetState = stringResource(R.string.settings),
+                            label = "title",
+                            transitionSpec = appCrossfadeSpec,
+                        ) { state -> Text(state) }
+                    },
+                    colors = appTopAppBarColors(),
+                    navigationIcon = {
+                        NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                    },
+                    actions = {
+                        var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
+                        Box(
+                            Modifier
+                                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                                .clearAndSetSemantics {},
+                        ) {
+                            ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                                MenuItems(
+                                    openAddWidgetDialog = {
+                                        closeMenu(); showAddWidgetDialog = true
+                                    },
+                                    closeMenu = closeMenu,
+                                )
                             }
-                            if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
-                        },
-                    )
-                }
+                        }
+                        if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
+                    },
+                )
+//                }
             }
         },
     ) { paddingValues ->
