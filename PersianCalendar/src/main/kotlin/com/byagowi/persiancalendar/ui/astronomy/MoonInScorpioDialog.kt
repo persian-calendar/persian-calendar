@@ -156,15 +156,9 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                                     add(
                                         Entry(
                                             startClock = startClock.toFormattedString(),
-                                            startDate = formatDate(
-                                                startDay on mainCalendar,
-                                                forceNonNumerical = true,
-                                            ),
+                                            startDate = formatDate(startDay on mainCalendar),
                                             endClock = endClock.toFormattedString(),
-                                            endDate = formatDate(
-                                                endDay on mainCalendar,
-                                                forceNonNumerical = true,
-                                            ),
+                                            endDate = formatDate(endDay on mainCalendar),
                                             upcoming = upcoming,
                                         )
                                     )
