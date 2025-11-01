@@ -48,29 +48,35 @@ import java.util.GregorianCalendar
 
 private data class Entry(val from: String, val end: String, val upcoming: Boolean)
 
+private const val yearPages = 5000
+
 @Composable
 fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     val today = Jdn(now.toCivilDate())
-    val year = (today on mainCalendar).year
+    val currentYear = (today on mainCalendar).year
     val numeral by numeral.collectAsState()
     // Type dialog is Persian only for now
     val types = listOf(
         "صورت فلکی" to Zodiac.SCORPIO.iauRange,
         "برج" to Zodiac.SCORPIO.tropicalRange,
     )
+    val yearPagerState = rememberPagerState(initialPage = yearPages / 2, pageCount = { yearPages })
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = {
-            Text(
-                stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year),
-                maxLines = 1,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                autoSize = TextAutoSize.StepBased(
-                    minFontSize = 9.sp,
-                    maxFontSize = LocalTextStyle.current.fontSize,
-                ),
-            )
+            HorizontalPager(yearPagerState) { page ->
+                val year = page - yearPages / 2 + currentYear
+                Text(
+                    stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year),
+                    maxLines = 1,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 9.sp,
+                        maxFontSize = LocalTextStyle.current.fontSize,
+                    ),
+                )
+            }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
@@ -101,13 +107,14 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
             }
         }
         HorizontalPager(state = pagerState, modifier = Modifier.animateContentSize()) { page ->
-            val ranges = remember(year) {
+            val year = yearPagerState.currentPage - yearPages / 2 + currentYear
+            val ranges = remember(currentYear, year) {
                 val start = Jdn(mainCalendar.createDate(year, 1, 1))
                 val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
                 val (rangeStart, rangeEnd) = types[page].second
                 val range = rangeStart..rangeEnd
                 buildList {
-                    var firstComing = true
+                    var firstComing = year == currentYear
                     add(Entry("ورود ماه", "خروج ماه", false))
                     var day = start
                     while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
