@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +44,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.lunarLongitude
@@ -72,17 +74,22 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
         "برج" to Zodiac.SCORPIO.tropicalRange,
     )
     val yearPagerState = rememberPagerState(initialPage = yearPages / 2, pageCount = { yearPages })
+    val coroutineScope = rememberCoroutineScope()
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    Zodiac.SCORPIO.symbol,
-                    fontFamily = FontFamily(
-                        Font(R.font.notosanssymbolsregularzodiacsubset)
-                    ),
-                    fontSize = 20.sp,
-                )
+                Crossfade(yearPagerState.currentPage == yearPages / 2) {
+                    if (it) Text(
+                        Zodiac.SCORPIO.symbol,
+                        fontFamily = FontFamily(
+                            Font(R.font.notosanssymbolsregularzodiacsubset)
+                        ),
+                        fontSize = 20.sp,
+                    ) else TodayActionButton(true) {
+                        coroutineScope.launch { yearPagerState.animateScrollToPage(yearPages / 2) }
+                    }
+                }
                 HorizontalPager(yearPagerState) { page ->
                     val year = page - yearPages / 2 + currentYear
                     Text(
@@ -112,7 +119,6 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
             },
         ) {
             val view = LocalView.current
-            val coroutineScope = rememberCoroutineScope()
             types.forEachIndexed { i, (title, _) ->
                 Tab(
                     text = { Text(title) },
