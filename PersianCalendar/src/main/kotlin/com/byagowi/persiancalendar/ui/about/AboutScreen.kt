@@ -19,6 +19,7 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -39,11 +41,12 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.Android
@@ -150,14 +153,25 @@ fun SharedTransitionScope.AboutScreen(
                 .padding(top = paddingValues.calculateTopPadding())
                 .clip(materialCornerExtraLargeTop()),
         ) {
-            val scrollState = rememberScrollState()
-            Column(modifier = Modifier.verticalScroll(scrollState)) {
-                Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
+            val listState = rememberLazyListState()
+            Column {
+                Box(
+                    Modifier.offset {
+                        IntOffset(
+                            0,
+                            listState.firstVisibleItemScrollOffset * 3 / 4
+                        )
+                    },
+                ) { Header() }
                 ScreenSurface(animatedContentScope) {
-                    AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
+                    AboutScreenContent(
+                        navigateToLicenses,
+                        listState,
+                        paddingValues.calculateBottomPadding()
+                    )
                 }
             }
-            ScrollShadow(scrollState, top = false)
+            ScrollShadow(listState, top = false)
         }
     }
 }
@@ -264,57 +278,84 @@ https://github.com/persian-calendar/persian-calendar"""
 }
 
 @Composable
-private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
-    Column(
+private fun AboutScreenContent(
+    navigateToLicenses: () -> Unit,
+    listState: LazyListState,
+    bottomPadding: Dp
+) {
+    val language by language.collectAsState()
+    var developersRefreshToken by remember { mutableIntStateOf(0) }
+    val headerModifier = Modifier
+        .fillMaxWidth()
+        .background(
+            if (listState.canScrollBackward) MaterialTheme.colorScheme.surface
+            else Color.Transparent
+        )
+        .padding(start = 24.dp, end = 24.dp, top = 20.dp)
+    LazyColumn(
         Modifier.windowInsetsPadding(
             WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
-        )
+        ),
+        contentPadding = PaddingValues(bottom = bottomPadding),
+        state = listState
     ) {
         // Licenses
-        Text(
-            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
-        )
-        AboutScreenButton(
-            icon = Icons.Default.Folder,
-            action = { navigateToLicenses() },
-            title = R.string.about_license_title,
-            summary = R.string.about_license_sum,
-        )
+        stickyHeader {
+            Text(
+                stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
+                modifier = headerModifier,
+            )
+        }
+        item {
+            AboutScreenButton(
+                icon = Icons.Default.Folder,
+                action = { navigateToLicenses() },
+                title = R.string.about_license_title,
+                summary = R.string.about_license_sum,
+            )
+        }
 
         // Help
-        val language by language.collectAsState()
         if (language.isUserAbleToReadPersian) {
-            Row(modifier = Modifier.padding(top = 16.dp, start = 20.dp)) {
-                Icon(
-                    modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
-                    imageVector = Icons.AutoMirrored.Default.Help,
-                    contentDescription = stringResource(R.string.help),
-                )
-                Column(Modifier.padding(start = 4.dp)) {
-                    Text(
-                        stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge
+            stickyHeader {
+                Row(modifier = headerModifier) {
+                    Icon(
+                        modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
+                        imageVector = Icons.AutoMirrored.Default.Help,
+                        contentDescription = stringResource(R.string.help),
                     )
+                    Column(Modifier.padding(start = 4.dp)) {
+                        Text(
+                            stringResource(R.string.help),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                HelpItems()
+            item {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    HelpItems()
+                }
             }
         }
 
         // Bug report
-        Text(
-            stringResource(R.string.about_support_developers),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
-        )
-        AboutScreenButton(
-            icon = Icons.Default.BugReport,
-            action = ::launchReportIntent,
-            title = R.string.about_report_bug,
-            summary = R.string.about_report_bug_sum
-        )
-        run {
+        stickyHeader {
+            Text(
+                stringResource(R.string.about_support_developers),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = headerModifier,
+            )
+        }
+        item {
+            AboutScreenButton(
+                icon = Icons.Default.BugReport,
+                action = ::launchReportIntent,
+                title = R.string.about_report_bug,
+                summary = R.string.about_report_bug_sum
+            )
+        }
+        item {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = Icons.Default.Email,
@@ -326,9 +367,20 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Developers
-        Developers()
-
-        Spacer(Modifier.height(bottomPadding))
+        stickyHeader {
+            val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+            Text(
+                stringResource(R.string.about_developers),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = headerModifier.then(
+                    if (isTalkBackEnabled) Modifier else Modifier.clickable(
+                        interactionSource = null,
+                        indication = ripple(bounded = false),
+                    ) { ++developersRefreshToken },
+                ),
+            )
+        }
+        item { Developers(developersRefreshToken) }
     }
 }
 
@@ -432,7 +484,7 @@ private fun launchReportIntent(context: Context) {
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun Developers() {
+private fun Developers(refreshToken: Int) {
     val context = LocalContext.current
     val developersBeforeShuffle = remember {
         listOf(
@@ -447,22 +499,8 @@ private fun Developers() {
             }
         }
     }
-    var refreshToken by remember { mutableIntStateOf(0) }
     val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
 
-    Text(
-        stringResource(R.string.about_developers),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .padding(start = 24.dp, end = 12.dp, top = 12.dp)
-            .then(
-                if (isTalkBackEnabled) Modifier else Modifier.clickable(
-                    interactionSource = null,
-                    indication = ripple(bounded = false),
-                ) { ++refreshToken },
-            ),
-    )
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Ltr,
         LocalMinimumInteractiveComponentSize provides Dp.Unspecified,
