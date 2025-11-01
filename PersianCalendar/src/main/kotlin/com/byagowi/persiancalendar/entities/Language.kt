@@ -236,9 +236,12 @@ enum class Language(val code: String, val nativeName: String) {
 
     val defaultWeekStart
         get() = when (this) {
-            FA -> "0"
-            TR, TG, RU, IT -> "2" // Monday
-            else -> if (prefersGregorianCalendar || isNepali) "1"/*Sunday*/ else "0"
+            FA, FA_AF, PS -> "0" // Friday
+            EN_US -> "1" // Sunday
+            else -> {
+                if (prefersGregorianCalendar || isNepali) "2" // Monday
+                else "0" // Friday
+            }
         }
 
     val defaultWeekEnds
