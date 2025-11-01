@@ -167,7 +167,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                             text = text,
                             maxLines = 1,
                             autoSize = TextAutoSize.StepBased(
-                                minFontSize = 9.sp,
+                                minFontSize = 5.sp,
                                 maxFontSize = LocalTextStyle.current.fontSize,
                             ),
                             textAlign = TextAlign.Center,
