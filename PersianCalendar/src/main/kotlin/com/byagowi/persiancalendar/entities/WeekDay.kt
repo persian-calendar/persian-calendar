@@ -7,6 +7,7 @@ import io.github.cosinekitty.astronomy.Body
 // Order of week day is a legacy for this code base
 // *DIFFERS* from ISO-8601 standard, 1 (Monday) to 7 (Sunday), unfortunately
 enum class WeekDay(
+    // A concept in planetary hours, see PlanetaryHours.kt, note how similar they are btw
     val ruledBy: Body,
     @param:StringRes val titleId: Int,
     @param:StringRes val shortTitleId: Int,
