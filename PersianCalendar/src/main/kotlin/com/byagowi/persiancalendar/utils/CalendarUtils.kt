@@ -161,12 +161,15 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
     return calendar
 }
 
-fun GregorianCalendar.formatDateAndTime(): String {
+fun formatDateAndTime(clock: Clock, date: AbstractDate): String {
     return language.value.timeAndDateFormat.format(
-        Clock(this).toFormattedString(),
-        formatDate(Jdn(this.toCivilDate()) on mainCalendar, forceNonNumerical = true)
+        clock.toFormattedString(),
+        formatDate(date, forceNonNumerical = true)
     )
 }
+
+fun GregorianCalendar.formatDateAndTime(): String =
+    formatDateAndTime(Clock(this), Jdn(this.toCivilDate()) on mainCalendar)
 
 fun GregorianCalendar.formatDateAndTimeWithWeekDayName(): String {
     val jdn = Jdn(this.toCivilDate())

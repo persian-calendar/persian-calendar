@@ -30,7 +30,7 @@ import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.atan2
 
-private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
+fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
     eclipticGeoMoon(jdn.toAstronomyTime(hourOfDay, setIranTime)).lon
 
 // This only checks the midday, useful for calendar table where fast calculation is needed

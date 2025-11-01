@@ -7,6 +7,8 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,12 +37,12 @@ fun CalendarsTypesPicker(
             TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
         },
     ) {
+        val language by language.collectAsState()
+        val view = LocalView.current
         calendarsList.forEach { calendar ->
             val title = stringResource(
-                if (language.value.betterToUseShortCalendarName) calendar.shortTitle
-                else calendar.title
+                if (language.betterToUseShortCalendarName) calendar.shortTitle else calendar.title
             )
-            val view = LocalView.current
             Tab(
                 text = { Text(title) },
                 modifier = Modifier.clip(MaterialTheme.shapes.large),
