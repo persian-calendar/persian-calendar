@@ -95,7 +95,7 @@ data class PlanetaryHourRow(
     val isDay: Boolean,
     val from: Clock,
     val to: Clock,
-    val highlighted: Boolean,
+    val upcoming: Boolean,
 )
 
 @VisibleForTesting
@@ -130,7 +130,7 @@ fun getDaySplits(
                     isDay = isDay,
                     from = Clock(from % 24),
                     to = Clock(to % 24),
-                    highlighted = isToday && nowClock.value in from..to,
+                    upcoming = isToday && nowClock.value in from..to,
                 )
             })
             clock
@@ -164,7 +164,7 @@ fun PlanetaryHoursDialog(
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
                     .then(
-                        if (row.highlighted) Modifier.background(
+                        if (row.upcoming) Modifier.background(
                             MaterialTheme.colorScheme.surfaceContainerLowest,
                             MaterialTheme.shapes.medium,
                         ) else Modifier

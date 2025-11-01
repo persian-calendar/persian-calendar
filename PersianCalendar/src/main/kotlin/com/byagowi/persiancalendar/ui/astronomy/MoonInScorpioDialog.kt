@@ -1,0 +1,168 @@
+package com.byagowi.persiancalendar.ui.astronomy
+
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.lunarLongitude
+import com.byagowi.persiancalendar.utils.searchMoonAgeTime
+import com.byagowi.persiancalendar.utils.toCivilDate
+import kotlinx.coroutines.launch
+import java.util.GregorianCalendar
+
+private data class Entry(val from: String, val end: String, val upcoming: Boolean)
+
+@Composable
+fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
+    val today = Jdn(now.toCivilDate())
+    val year = (today on mainCalendar).year
+    val numeral by numeral.collectAsState()
+    // Type dialog is Persian only for now
+    val types = listOf(
+        "صورت فلکی" to Zodiac.SCORPIO.iauRange,
+        "برج" to Zodiac.SCORPIO.tropicalRange,
+    )
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(
+                stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year),
+                maxLines = 1,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                autoSize = TextAutoSize.StepBased(
+                    minFontSize = 9.sp,
+                    maxFontSize = LocalTextStyle.current.fontSize,
+                ),
+            )
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+        },
+    ) {
+        val pagerState = rememberPagerState(initialPage = 0, pageCount = { types.size })
+        PrimaryTabRow(
+            selectedTabIndex = pagerState.currentPage,
+            divider = {},
+            containerColor = Color.Transparent,
+            indicator = {
+                TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(pagerState.currentPage))
+            },
+        ) {
+            val view = LocalView.current
+            val coroutineScope = rememberCoroutineScope()
+            types.forEachIndexed { i, (title, _) ->
+                Tab(
+                    text = { Text(title) },
+                    modifier = Modifier.clip(MaterialTheme.shapes.large),
+                    selected = i == pagerState.currentPage,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurface,
+                    onClick = {
+                        view.performHapticFeedbackVirtualKey()
+                        coroutineScope.launch { pagerState.scrollToPage(i) }
+                    },
+                )
+            }
+        }
+        HorizontalPager(state = pagerState, modifier = Modifier.animateContentSize()) { page ->
+            val ranges = remember(year) {
+                val start = Jdn(mainCalendar.createDate(year, 1, 1))
+                val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
+                val (rangeStart, rangeEnd) = types[page].second
+                val range = rangeStart..rangeEnd
+                buildList {
+                    var firstComing = true
+                    add(Entry("ورود ماه", "خروج ماه", false))
+                    var day = start
+                    while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
+                    while (day <= end) {
+                        searchMoonAgeTime(day, rangeStart)?.let parent@{ startClock ->
+                            val startDay = day
+                            val startDate = formatDateAndTime(startClock, startDay on mainCalendar)
+                            while (true) {
+                                searchMoonAgeTime(day, rangeEnd)?.let { endClock ->
+                                    val endDay = day
+                                    val endDate =
+                                        formatDateAndTime(endClock, endDay on mainCalendar)
+                                    val upcoming = if (firstComing && today <= startDay) {
+                                        firstComing = false
+                                        true
+                                    } else false
+                                    add(Entry(startDate, endDate, upcoming))
+                                    return@parent
+                                }
+                                day += 1
+                            }
+                        }
+                        day += 1
+                    }
+                }
+            }
+            SelectionContainer {
+                Column {
+                    ranges.forEachIndexed { i, row ->
+                        if (i != 0) HorizontalDivider()
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp)
+                                .then(
+                                    if (row.upcoming) Modifier.background(
+                                        MaterialTheme.colorScheme.surfaceContainerLowest,
+                                        MaterialTheme.shapes.medium,
+                                    ) else Modifier
+                                )
+                                .padding(vertical = 2.dp),
+                        ) {
+                            listOf(row.from, row.end).forEach {
+                                Text(
+                                    text = it, maxLines = 1, autoSize = TextAutoSize.StepBased(
+                                        minFontSize = 9.sp,
+                                        maxFontSize = LocalTextStyle.current.fontSize,
+                                    ), textAlign = TextAlign.Center, modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

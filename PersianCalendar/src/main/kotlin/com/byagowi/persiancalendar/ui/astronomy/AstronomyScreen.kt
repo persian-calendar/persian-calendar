@@ -5,14 +5,12 @@ import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -45,12 +43,8 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -79,7 +73,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -101,12 +94,9 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -126,8 +116,6 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
-import com.byagowi.persiancalendar.utils.lunarLongitude
-import com.byagowi.persiancalendar.utils.searchMoonAgeTime
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
@@ -135,7 +123,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.delay
 import java.util.Date
-import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
@@ -361,97 +348,6 @@ fun SharedTransitionScope.AstronomyScreen(
             initialJdn = Jdn(astronomyState.date.toCivilDate()),
             onDismissRequest = viewModel::dismissDatePickerDialog,
         ) { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }
-    }
-}
-
-@Composable
-private fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
-    val year = (Jdn(now.toCivilDate()) on mainCalendar).year
-    // Type dialog is Persian only for now
-    val types = listOf(
-        "صورت فلکی" to Zodiac.SCORPIO.iauRange,
-        "برج" to Zodiac.SCORPIO.tropicalRange,
-    )
-    var typeIndex by rememberSaveable { mutableStateOf(0) }
-    val ranges = remember(year, typeIndex) {
-        val start = Jdn(mainCalendar.createDate(year, 1, 1))
-        val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
-        val (rangeStart, rangeEnd) = types[typeIndex].second
-        val range = rangeStart..rangeEnd
-        buildList {
-            var day = start
-            while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
-            while (day <= end) {
-                searchMoonAgeTime(day, rangeStart)?.let parent@{ startClock ->
-                    val startDate = formatDateAndTime(startClock, day on mainCalendar)
-                    while (true) {
-                        searchMoonAgeTime(day, rangeEnd)?.let { endClock ->
-                            val endDate = formatDateAndTime(endClock, day on mainCalendar)
-                            add(listOf(startDate, endDate))
-                            return@parent
-                        }
-                        day += 1
-                    }
-                }
-                day += 1
-            }
-        }
-    }
-    val numeral by numeral.collectAsState()
-    AppDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            Text(
-                stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year)
-            )
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
-        },
-    ) {
-        PrimaryTabRow(
-            selectedTabIndex = typeIndex,
-            divider = {},
-            containerColor = Color.Transparent,
-            indicator = {
-                TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(typeIndex))
-            },
-        ) {
-            val view = LocalView.current
-            types.forEachIndexed { i, (title, _) ->
-                Tab(
-                    text = { Text(title) },
-                    modifier = Modifier.clip(MaterialTheme.shapes.large),
-                    selected = i == typeIndex,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    onClick = {
-                        typeIndex = i
-                        view.performHapticFeedbackVirtualKey()
-                    },
-                )
-            }
-        }
-        Crossfade(ranges, modifier = Modifier.animateContentSize()) { ranges ->
-            SelectionContainer {
-                Column {
-                    ranges.forEach { row ->
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
-                        ) {
-                            row.forEach {
-                                Text(
-                                    text = it,
-                                    maxLines = 1,
-                                    autoSize = TextAutoSize.StepBased(),
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
