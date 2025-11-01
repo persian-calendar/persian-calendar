@@ -168,8 +168,12 @@ fun formatDateAndTime(clock: Clock, date: AbstractDate): String {
     )
 }
 
-fun GregorianCalendar.formatDateAndTime(): String =
-    formatDateAndTime(Clock(this), Jdn(this.toCivilDate()) on mainCalendar)
+fun GregorianCalendar.formatDateAndTime(): String {
+    return language.value.timeAndDateFormat.format(
+        Clock(this).toFormattedString(),
+        formatDate(Jdn(this.toCivilDate()) on mainCalendar, forceNonNumerical = true)
+    )
+}
 
 fun GregorianCalendar.formatDateAndTimeWithWeekDayName(): String {
     val jdn = Jdn(this.toCivilDate())

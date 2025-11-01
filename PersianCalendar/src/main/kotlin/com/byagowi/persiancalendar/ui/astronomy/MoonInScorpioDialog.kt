@@ -26,6 +26,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -39,14 +41,20 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.lunarLongitude
 import com.byagowi.persiancalendar.utils.searchMoonAgeTime
 import com.byagowi.persiancalendar.utils.toCivilDate
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 
-private data class Entry(val from: String, val end: String, val upcoming: Boolean)
+private data class Entry(
+    val startClock: String,
+    val startDate: String,
+    val endClock: String,
+    val endDate: String,
+    val upcoming: Boolean,
+)
 
 private const val yearPages = 5000
 
@@ -108,30 +116,40 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
         }
         HorizontalPager(state = pagerState, modifier = Modifier.animateContentSize()) { page ->
             val year = yearPagerState.currentPage - yearPages / 2 + currentYear
-            val ranges = remember(currentYear, year) {
+            val entries = remember(currentYear, year) {
                 val start = Jdn(mainCalendar.createDate(year, 1, 1))
                 val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
                 val (rangeStart, rangeEnd) = types[page].second
                 val range = rangeStart..rangeEnd
                 buildList {
                     var firstComing = year == currentYear
-                    add(Entry("ورود ماه", "خروج ماه", false))
                     var day = start
                     while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
                     while (day <= end) {
                         searchMoonAgeTime(day, rangeStart)?.let parent@{ startClock ->
                             val startDay = day
-                            val startDate = formatDateAndTime(startClock, startDay on mainCalendar)
                             while (true) {
                                 searchMoonAgeTime(day, rangeEnd)?.let { endClock ->
                                     val endDay = day
-                                    val endDate =
-                                        formatDateAndTime(endClock, endDay on mainCalendar)
                                     val upcoming = if (firstComing && today <= startDay) {
                                         firstComing = false
                                         true
                                     } else false
-                                    add(Entry(startDate, endDate, upcoming))
+                                    add(
+                                        Entry(
+                                            startClock = startClock.toFormattedString(),
+                                            startDate = formatDate(
+                                                startDay on mainCalendar,
+                                                forceNonNumerical = true,
+                                            ),
+                                            endClock = endClock.toFormattedString(),
+                                            endDate = formatDate(
+                                                endDay on mainCalendar,
+                                                forceNonNumerical = true,
+                                            ),
+                                            upcoming = upcoming,
+                                        )
+                                    )
                                     return@parent
                                 }
                                 day += 1
@@ -143,28 +161,54 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
             }
             SelectionContainer {
                 Column {
-                    ranges.forEachIndexed { i, row ->
-                        if (i != 0) HorizontalDivider()
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp)
-                                .then(
-                                    if (row.upcoming) Modifier.background(
-                                        MaterialTheme.colorScheme.surfaceContainerLowest,
-                                        MaterialTheme.shapes.medium,
-                                    ) else Modifier
-                                )
-                                .padding(vertical = 2.dp),
-                        ) {
-                            listOf(row.from, row.end).forEach {
-                                Text(
-                                    text = it, maxLines = 1, autoSize = TextAutoSize.StepBased(
-                                        minFontSize = 9.sp,
-                                        maxFontSize = LocalTextStyle.current.fontSize,
-                                    ), textAlign = TextAlign.Center, modifier = Modifier.weight(1f)
-                                )
+                    @Composable
+                    fun Cell(text: String, weight: Float) {
+                        Text(
+                            text = text,
+                            maxLines = 1,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 9.sp,
+                                maxFontSize = LocalTextStyle.current.fontSize,
+                            ),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(weight),
+                        )
+                    }
+                    Row(Modifier.padding(top = 4.dp)) {
+                        Cell("ورود ماه", 1f)
+                        Cell("خروج ماه", 1f)
+                    }
+                    val outlineColor = MaterialTheme.colorScheme.outlineVariant
+                    Column(
+                        Modifier.drawWithContent {
+                            drawContent()
+                            drawLine(
+                                color = outlineColor,
+                                strokeWidth = 1.dp.toPx(),
+                                start = Offset(size.width / 2, 0f),
+                                end = Offset(size.width / 2, size.height),
+                            )
+                        }
+                    ) {
+                        entries.forEach { entry ->
+                            HorizontalDivider()
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp)
+                                    .then(
+                                        if (entry.upcoming) Modifier.background(
+                                            MaterialTheme.colorScheme.surfaceContainerLowest,
+                                            MaterialTheme.shapes.medium,
+                                        ) else Modifier
+                                    )
+                                    .padding(vertical = 2.dp, horizontal = 4.dp),
+                            ) {
+                                Cell(entry.startClock, 1f)
+                                Cell(entry.startDate, 2f)
+                                Cell(entry.endClock, 1f)
+                                Cell(entry.endDate, 2f)
                             }
                         }
                     }
