@@ -104,7 +104,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         }
         val monthLength = date.calendar.getMonthLength(date.year, date.month)
         val monthStartJdn = Jdn(date)
-        val startingWeekDay = monthStartJdn.weekDay
+        val startingWeekDay = monthStartJdn.weekDayOrdinal
         val fixedStartingWeekDay = applyWeekStartOffsetToWeekDay(startingWeekDay)
         val startOfYearJdn = Jdn(date.calendar, date.year, 1, 1)
         (0..<6 * 7).map {

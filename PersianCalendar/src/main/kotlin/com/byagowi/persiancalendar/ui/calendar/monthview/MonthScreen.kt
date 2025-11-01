@@ -69,7 +69,7 @@ fun SharedTransitionScope.MonthScreen(
 ) {
     val initialItem = ITEMS_COUNT / 2
     val state = rememberLazyListState(initialItem, 0)
-    val weekStartJdn = initiallySelectedDay - initiallySelectedDay.weekDay
+    val weekStartJdn = initiallySelectedDay - initiallySelectedDay.weekDayOrdinal
     val focusedJdn by remember {
         derivedStateOf {
             if (state.firstVisibleItemIndex == initialItem) initiallySelectedDay

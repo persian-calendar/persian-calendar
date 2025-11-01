@@ -236,19 +236,19 @@ enum class Language(val code: String, val nativeName: String) {
 
     val defaultWeekStart
         get() = when (this) {
-            FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK -> "0" // Saturday
-            EN_US -> "1" // Sunday
-            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> "2" // Monday
-        }
+            FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK -> WeekDay.SATURDAY
+            EN_US -> WeekDay.SUNDAY
+            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
+        }.ordinal.toString()
 
     val defaultWeekEnds
         get() = when {
-            this == FA || isIranExclusive -> setOf("6")
-            isAfghanistanExclusive -> setOf("6")
-            isNepali -> setOf("0")
-            prefersGregorianCalendar -> setOf("0", "1") // Saturday and Sunday
-            else -> setOf("6") // 6 means Friday
-        }
+            this == FA || isIranExclusive -> listOf(WeekDay.FRIDAY)
+            isAfghanistanExclusive -> listOf(WeekDay.FRIDAY)
+            isNepali -> listOf(WeekDay.SATURDAY)
+            prefersGregorianCalendar -> listOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
+            else -> listOf(WeekDay.FRIDAY)
+        }.map { it.ordinal.toString() }.toSet()
 
     val additionalShiftWorkTitles: List<String>
         get() = when (this) {
@@ -301,13 +301,13 @@ enum class Language(val code: String, val nativeName: String) {
     fun getWeekDays(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInPersian
         EN_IR -> weekDaysInEnglishIran
-        else -> weekDays.map(resources::getString)
+        else -> WeekDay.entries.map { resources.getString(it.titleId) }
     }
 
     fun getWeekDaysInitials(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInitialsInPersian
         EN_IR -> weekDaysInitialsInEnglishIran
-        else -> weekDaysInitials.map(resources::getString)
+        else -> WeekDay.entries.map { resources.getString(it.shortTitleId) }
     }
 
     fun getCountryName(cityItem: CityItem): String = when {
@@ -647,15 +647,6 @@ enum class Language(val code: String, val nativeName: String) {
             R.string.april, R.string.may, R.string.june, R.string.july,
             R.string.august, R.string.september, R.string.october,
             R.string.november, R.string.december
-        )
-        private val weekDays = listOf7Items(
-            R.string.saturday, R.string.sunday, R.string.monday, R.string.tuesday,
-            R.string.wednesday, R.string.thursday, R.string.friday
-        )
-        private val weekDaysInitials = listOf7Items(
-            R.string.saturday_short, R.string.sunday_short, R.string.monday_short,
-            R.string.tuesday_short, R.string.wednesday_short, R.string.thursday_short,
-            R.string.friday_short
         )
 
         // These are special cases and new ones should be translated in strings.xml of the language

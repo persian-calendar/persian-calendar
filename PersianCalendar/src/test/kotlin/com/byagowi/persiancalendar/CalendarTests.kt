@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayTablePositions
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
@@ -86,7 +87,7 @@ class CalendarTests {
     fun `weekDay calculations correctness`(
         weekDay: Int, year: Int, month: Int, dayOfMonth: Int
     ) {
-        assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDay)
+        assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDayOrdinal)
     }
 
     @ParameterizedTest
@@ -173,7 +174,7 @@ class CalendarTests {
             // https://commons.wikimedia.org/wiki/File:Moz_4_293.pdf
             // FIXME: Change this to 6 when calendar dependency covers the year
             val jdn = Jdn(IslamicDate(1341, 11, 7))
-            assertEquals(jdn.weekDay, 6) // which means جمغع in this code base
+            assertEquals(jdn.weekDay, WeekDay.FRIDAY)
             val persianDate = jdn.toPersianDate()
             assertEquals(
                 "۳۲ جوزا ۱۳۰۲",

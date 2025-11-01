@@ -556,7 +556,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     }
 
     val monthStartJdn = Jdn(monthStartDate)
-    val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
+    val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDayOrdinal)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     remoteViews.setViewVisibility(
@@ -912,7 +912,7 @@ private fun createMonthViewRemoteViews(
     // remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
 
     val monthStart = Jdn(baseDate)
-    val weekStart = applyWeekStartOffsetToWeekDay(Jdn(baseDate).weekDay)
+    val weekStart = applyWeekStartOffsetToWeekDay(Jdn(baseDate).weekDayOrdinal)
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
     monthWidgetCells.forEachIndexed { i, id ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {

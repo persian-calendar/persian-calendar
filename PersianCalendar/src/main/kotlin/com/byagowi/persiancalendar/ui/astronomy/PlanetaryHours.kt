@@ -74,18 +74,8 @@ val geocentricPlanetsList = chaldeanOrder
     // Already drawn
     .filter { it != Body.Moon && it != Body.Sun }
 
-private val ruledBy = listOf(
-    Body.Saturn, // Saturday
-    Body.Sun, // Sunday
-    Body.Moon, // Monday
-    Body.Mars, // Tuesday
-    Body.Mercury, // Wednesday
-    Body.Jupiter, // Thursday
-    Body.Venus, // Friday
-)
-
 private fun chaldeanIndexFromJdn(jdn: Jdn): Int {
-    val ruledBy = ruledBy[jdn.weekDay]
+    val ruledBy = jdn.weekDay.ruledBy
     return chaldeanOrder.indexOfFirst { it.body == ruledBy }
 }
 

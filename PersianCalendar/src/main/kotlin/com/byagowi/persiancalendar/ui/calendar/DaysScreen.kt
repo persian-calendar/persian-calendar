@@ -391,7 +391,7 @@ fun SharedTransitionScope.DaysScreen(
                             val isCurrentPage = weekPagerState.currentPage == page
                             LaunchedEffect(isCurrentPage) {
                                 if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
-                                    val pageDay = sampleDay + (selectedDay.weekDay - today.weekDay)
+                                    val pageDay = sampleDay + (selectedDay.weekDayOrdinal - today.weekDayOrdinal)
                                     setSelectedDayInWeekPager(pageDay)
                                     isHighlighted = today != pageDay
                                 }
@@ -403,7 +403,7 @@ fun SharedTransitionScope.DaysScreen(
                             )
                             val monthStartJdn = Jdn(monthStartDate)
                             val weekStart = (today + (page - weeksLimit / 2) * 7).let {
-                                it - applyWeekStartOffsetToWeekDay(it.weekDay)
+                                it - applyWeekStartOffsetToWeekDay(it.weekDayOrdinal)
                             }
                             val weekDeviceEvents = remember(
                                 refreshToken, isShowDeviceCalendarEvents, weekStart
@@ -534,8 +534,8 @@ fun SharedTransitionScope.DaysScreen(
 }
 
 private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
-    val daysStart = day - applyWeekStartOffsetToWeekDay(day.weekDay)
-    val todaysStart = today - applyWeekStartOffsetToWeekDay(today.weekDay)
+    val daysStart = day - applyWeekStartOffsetToWeekDay(day.weekDayOrdinal)
+    val todaysStart = today - applyWeekStartOffsetToWeekDay(today.weekDayOrdinal)
     return (daysStart - todaysStart) / 7 + weeksLimit / 2
 }
 

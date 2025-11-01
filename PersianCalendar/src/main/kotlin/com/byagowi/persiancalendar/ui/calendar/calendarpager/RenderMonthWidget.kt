@@ -35,7 +35,7 @@ fun renderMonthWidget(
     setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
-    val startingWeekDay = monthStartJdn.weekDay
+    val startingWeekDay = monthStartJdn.weekDayOrdinal
     val monthLength = calendar.getMonthLength(baseDate.year, baseDate.month)
 
     val cellWidth = dayPainter.width

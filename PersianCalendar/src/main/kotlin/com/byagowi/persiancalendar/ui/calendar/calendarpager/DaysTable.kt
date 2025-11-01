@@ -157,7 +157,7 @@ fun daysTable(
         val previousMonthLength =
             if (onlyWeek == null) null else ((monthStartJdn - 1) on mainCalendar).dayOfMonth
 
-        val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
+        val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDayOrdinal)
         val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
         val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
         val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
