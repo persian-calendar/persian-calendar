@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">chiusura</string>
+    <string name="close">Chiusura</string>
     <string name="converter">convertitore</string>
     <string name="outdated_app">A causa dell\'obsolescenza, le cose possono essere imprecise</string>
     <string name="date_converter">Convertitore di data</string>
