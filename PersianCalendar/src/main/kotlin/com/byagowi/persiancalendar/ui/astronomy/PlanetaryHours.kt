@@ -29,13 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.WeekDay.FRIDAY
-import com.byagowi.persiancalendar.entities.WeekDay.MONDAY
-import com.byagowi.persiancalendar.entities.WeekDay.SATURDAY
-import com.byagowi.persiancalendar.entities.WeekDay.SUNDAY
-import com.byagowi.persiancalendar.entities.WeekDay.THURSDAY
-import com.byagowi.persiancalendar.entities.WeekDay.TUESDAY
-import com.byagowi.persiancalendar.entities.WeekDay.WEDNESDAY
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -84,13 +78,13 @@ val geocentricPlanetsList = chaldeanOrder
 private fun chaldeanIndexFromJdn(jdn: Jdn): Int {
     // Just note how similar they are…
     val ruledBy = when (jdn.weekDay) {
-        SATURDAY -> Body.Saturn
-        SUNDAY -> Body.Sun
-        MONDAY -> Body.Moon
-        TUESDAY -> Body.Mars
-        WEDNESDAY -> Body.Mercury
-        THURSDAY -> Body.Jupiter
-        FRIDAY -> Body.Venus
+        WeekDay.SATURDAY -> Body.Saturn
+        WeekDay.SUNDAY -> Body.Sun
+        WeekDay.MONDAY -> Body.Moon
+        WeekDay.TUESDAY -> Body.Mars
+        WeekDay.WEDNESDAY -> Body.Mercury
+        WeekDay.THURSDAY -> Body.Jupiter
+        WeekDay.FRIDAY -> Body.Venus
     }
     return chaldeanOrder.indexOfFirst { it.body == ruledBy }
 }
