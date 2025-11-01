@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.SettingsBackupRestore
@@ -23,6 +24,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
@@ -52,6 +54,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -222,7 +225,14 @@ fun SettingsSingleSelect(
                 ) {
                     RadioButton(selected = entryValue == currentValue, onClick = null)
                     Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                    Text(entry)
+                    Text(
+                        entry,
+                        maxLines = 1,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 9.sp,
+                            maxFontSize = LocalTextStyle.current.fontSize,
+                        ),
+                    )
                 }
             }
         }
@@ -282,7 +292,14 @@ fun SettingsMultiSelect(
                 ) {
                     Checkbox(checked = entryValue in result, onCheckedChange = null)
                     Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                    Text(entry)
+                    Text(
+                        entry,
+                        maxLines = 1,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 9.sp,
+                            maxFontSize = LocalTextStyle.current.fontSize,
+                        ),
+                    )
                 }
             }
         }

@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
@@ -311,7 +314,14 @@ fun ColumnScope.AthanSettings(destination: String) {
                     ) {
                         RadioButton(selected = key == currentSelectionKey, onClick = null)
                         Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                        Text(title)
+                        Text(
+                            title,
+                            maxLines = 1,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 9.sp,
+                                maxFontSize = LocalTextStyle.current.fontSize,
+                            ),
+                        )
                     }
                 }
             }
