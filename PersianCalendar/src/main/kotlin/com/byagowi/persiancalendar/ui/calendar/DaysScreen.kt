@@ -391,7 +391,8 @@ fun SharedTransitionScope.DaysScreen(
                             val isCurrentPage = weekPagerState.currentPage == page
                             LaunchedEffect(isCurrentPage) {
                                 if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
-                                    val pageDay = sampleDay + (selectedDay.weekDayOrdinal - today.weekDayOrdinal)
+                                    val pageDay =
+                                        sampleDay + (selectedDay.weekDayOrdinal - today.weekDayOrdinal)
                                     setSelectedDayInWeekPager(pageDay)
                                     isHighlighted = today != pageDay
                                 }
