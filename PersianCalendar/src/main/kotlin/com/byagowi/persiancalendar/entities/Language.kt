@@ -242,13 +242,15 @@ enum class Language(val code: String, val nativeName: String) {
         }.ordinal.toString()
 
     val defaultWeekEnds
-        get() = when {
-            this == FA || isIranExclusive -> listOf(WeekDay.FRIDAY)
-            isAfghanistanExclusive -> listOf(WeekDay.FRIDAY)
-            isNepali -> listOf(WeekDay.SATURDAY)
-            prefersGregorianCalendar -> listOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
-            else -> listOf(WeekDay.FRIDAY)
-        }.map { it.ordinal.toString() }.toSet()
+        get() = setOf(
+            *when {
+                this == FA || isIranExclusive -> arrayOf(WeekDay.FRIDAY)
+                isAfghanistanExclusive -> arrayOf(WeekDay.FRIDAY)
+                isNepali -> arrayOf(WeekDay.SATURDAY)
+                prefersGregorianCalendar -> arrayOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
+                else -> arrayOf(WeekDay.FRIDAY)
+            }
+        )
 
     val additionalShiftWorkTitles: List<String>
         get() = when (this) {
