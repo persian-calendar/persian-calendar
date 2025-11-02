@@ -332,7 +332,7 @@ private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pm.setComponentEnabledSettings(
         actions.map { (name, newState) ->
             PackageManager.ComponentEnabledSetting(name, newState, flags)
-        }.toList()
+        }
     ) else actions.forEach { (name, newState) ->
         pm.setComponentEnabledSetting(name, newState, flags)
     }
