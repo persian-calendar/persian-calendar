@@ -423,4 +423,6 @@
     <string name="move_down">Aşağı taşı</string>
     <string name="black_moon">Lilith</string>
     <string name="dynamic_icon">Değişken simge</string>
+    <string name="large_day_number_on_notification">Bildirimde büyük gün sayısı</string>
+    <string name="pref_user_interface">Kullanıcı arayüzü</string>
 </resources>

@@ -368,6 +368,7 @@
     <string name="day_view">Vista giornaliera</string>
     <string name="horoscope">Oroscopo</string>
     <string name="planetary_hours">Ore planetarie</string>
+    <string name="pref_user_interface">Interfaccia utente</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s giorno</item>
         <item quantity="many">%1$s %2$s giorni</item>

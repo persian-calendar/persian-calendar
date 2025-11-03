@@ -181,43 +181,49 @@ fun SharedTransitionScope.SettingsScreen(
             val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
             val tabs = listOf(
                 TabItem(
-                    Icons.Outlined.Palette, Icons.Default.Palette,
-                    R.string.pref_interface, R.string.calendar,
+                    outlinedIcon = Icons.Outlined.Palette,
+                    filledIcon = Icons.Default.Palette,
+                    firstTitle = R.string.pref_interface,
+                    secondTitle = R.string.calendar,
                 ) { listState ->
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
-                        title = R.string.pref_interface
+                        title = R.string.pref_user_interface,
                     ) { InterfaceSettings(destination) }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
-                        title = R.string.calendar
+                        title = R.string.calendar,
                     ) { CalendarSettings(destination) }
                 },
                 TabItem(
-                    Icons.Outlined.Widgets, Icons.Default.Widgets,
-                    R.string.pref_notification, R.string.pref_widget,
+                    outlinedIcon = Icons.Outlined.Widgets,
+                    filledIcon = Icons.Default.Widgets,
+                    firstTitle = R.string.pref_notification,
+                    secondTitle = R.string.pref_widget,
                 ) { listState ->
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
-                        title = R.string.pref_notification
+                        title = R.string.pref_notification,
                     ) { NotificationSettings() }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
-                        title = R.string.pref_widget
+                        title = R.string.pref_widget,
                     ) { WidgetSettings() }
                 },
                 TabItem(
-                    Icons.Outlined.LocationOn, Icons.Default.LocationOn,
-                    R.string.location, R.string.athan,
+                    outlinedIcon = Icons.Outlined.LocationOn,
+                    filledIcon = Icons.Default.LocationOn,
+                    firstTitle = R.string.location,
+                    secondTitle = R.string.athan,
                 ) { listState ->
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
-                        title = R.string.location
+                        title = R.string.location,
                     ) { LocationSettings(navigateToMap) }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
@@ -225,8 +231,7 @@ fun SharedTransitionScope.SettingsScreen(
                         title = R.string.athan,
                         subtitle = {
                             val coordinates by coordinates.collectAsState()
-                            val isLocationSet = coordinates != null
-                            if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
+                            if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
                         },
                     ) { AthanSettings(destination) }
                 },
