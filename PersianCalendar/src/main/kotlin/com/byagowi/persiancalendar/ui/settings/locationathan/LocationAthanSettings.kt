@@ -91,13 +91,14 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
 fun LazyListScope.locationAthanSettings(
-    listState: LazyListState,
+    canScrollBackward: Boolean,
+    isTalkBackEnabled: Boolean,
     navigateToMap: () -> Unit,
     destination: String,
 ) {
-    settingsSection(listState, 0, R.string.location)
+    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.location)
     item { Column { LocationSettings(navigateToMap) } }
-    settingsSection(listState, 2, R.string.athan) {
+    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.athan) {
         val coordinates by coordinates.collectAsState()
         val isLocationSet = coordinates != null
         if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)

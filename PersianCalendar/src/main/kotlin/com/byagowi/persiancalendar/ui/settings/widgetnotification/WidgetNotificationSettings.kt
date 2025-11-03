@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -71,10 +70,13 @@ import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 import kotlin.time.Duration.Companion.seconds
 
-fun LazyListScope.widgetNotificationSettings(listState: LazyListState) {
-    settingsSection(listState, 0, R.string.pref_notification)
+fun LazyListScope.widgetNotificationSettings(
+    canScrollBackward: Boolean,
+    isTalkBackEnabled: Boolean,
+) {
+    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.pref_notification)
     item { Column { NotificationSettings() } }
-    settingsSection(listState, 2, R.string.pref_widget)
+    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.pref_widget)
     item { Column { WidgetConfiguration() } }
 }
 

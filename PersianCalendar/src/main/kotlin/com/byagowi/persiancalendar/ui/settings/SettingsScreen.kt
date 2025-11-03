@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
@@ -173,19 +174,38 @@ fun SharedTransitionScope.SettingsScreen(
         },
     ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
             val tabs = listOf(
                 TabItem(
                     Icons.Outlined.Palette, Icons.Default.Palette,
                     R.string.pref_interface, R.string.calendar,
-                ) { listState -> interfaceCalendarSettings(listState, destination) },
+                ) { listState ->
+                    interfaceCalendarSettings(
+                        listState.canScrollBackward,
+                        isTalkBackEnabled,
+                        destination,
+                    )
+                },
                 TabItem(
                     Icons.Outlined.Widgets, Icons.Default.Widgets,
                     R.string.pref_notification, R.string.pref_widget,
-                ) { listState -> widgetNotificationSettings(listState) },
+                ) { listState ->
+                    widgetNotificationSettings(
+                        listState.canScrollBackward,
+                        isTalkBackEnabled,
+                    )
+                },
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
-                ) { listState -> locationAthanSettings(listState, navigateToMap, destination) },
+                ) { listState ->
+                    locationAthanSettings(
+                        listState.canScrollBackward,
+                        isTalkBackEnabled,
+                        navigateToMap,
+                        destination
+                    )
+                },
             )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)

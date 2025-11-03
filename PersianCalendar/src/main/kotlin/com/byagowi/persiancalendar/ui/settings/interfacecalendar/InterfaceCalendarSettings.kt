@@ -109,10 +109,14 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
-fun LazyListScope.interfaceCalendarSettings(listState: LazyListState, destination: String? = null) {
-    settingsSection(listState, 0, R.string.pref_interface)
+fun LazyListScope.interfaceCalendarSettings(
+    canScrollBackward: Boolean,
+    isTalkBackEnabled: Boolean,
+    destination: String? = null,
+) {
+    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.pref_interface)
     item { Column { InterfaceSettings(destination) } }
-    settingsSection(listState, 2, R.string.calendar)
+    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.calendar)
     item { Column { CalendarSettings(destination) } }
 }
 

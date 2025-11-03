@@ -35,9 +35,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,42 +80,33 @@ import com.byagowi.persiancalendar.utils.preferences
 import java.util.Locale
 import kotlin.math.roundToInt
 
-private fun LazyListState.isSticking(index: Int): State<Boolean> {
-    return derivedStateOf {
-        val firstVisible = layoutInfo.visibleItemsInfo.firstOrNull()
-        firstVisible?.index == index && firstVisibleItemScrollOffset != 0
+fun LazyListScope.settingsSection(
+    canScrollBackward: Boolean,
+    isTalkBackEnabled: Boolean,
+    @StringRes title: Int,
+    subtitle: @Composable () -> String? = { null },
+) {
+    if (isTalkBackEnabled) item { SettingsSectionLayout(title, subtitle) } else stickyHeader {
+        Box(
+            if (canScrollBackward) Modifier.background(
+                Brush.verticalGradient(
+                    .75f to MaterialTheme.colorScheme.surface.copy(alpha = .9f),
+                    1f to Color.Transparent,
+                )
+            ) else Modifier,
+        ) { SettingsSectionLayout(title, subtitle) }
     }
 }
 
-fun LazyListScope.settingsSection(
-    listState: LazyListState,
-    headerIndex: Int,
-    @StringRes title: Int,
-    subtitle: @Composable () -> String? = { null }
-) = stickyHeader {
-    val backgroundModifier = if (listState.canScrollBackward) Modifier.background(
-        Brush.verticalGradient(
-            .75f to MaterialTheme.colorScheme.surface.copy(alpha = .9f),
-            1f to Color.Transparent,
-        )
-    ) else Modifier
-    val isSticking by remember(listState) { listState.isSticking(headerIndex) }
+@Composable
+private fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> String?) {
     Column(
-        backgroundModifier
+        Modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = if (isSticking) {
-                Modifier
-                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                    .clearAndSetSemantics {}
-            } else {
-                Modifier
-            },
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             val color by animateColor(MaterialTheme.colorScheme.outlineVariant)
             HorizontalDivider(color = color, modifier = Modifier.weight(1f))
             AnimatedContent(
@@ -125,8 +114,7 @@ fun LazyListScope.settingsSection(
                 contentAlignment = Alignment.Center,
                 label = "title",
                 transitionSpec = appCrossfadeSpec,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
             ) { state ->
                 Text(
                     state,
