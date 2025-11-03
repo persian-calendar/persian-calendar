@@ -10,7 +10,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.RadioButton
@@ -79,7 +77,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectP
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
-import com.byagowi.persiancalendar.ui.settings.settingsSection
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.isHighLatitude
@@ -96,14 +93,6 @@ fun LazyListScope.locationAthanSettings(
     navigateToMap: () -> Unit,
     destination: String,
 ) {
-    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.location)
-    item { Column { LocationSettings(navigateToMap) } }
-    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.athan) {
-        val coordinates by coordinates.collectAsState()
-        val isLocationSet = coordinates != null
-        if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
-    }
-    item { Column { AthanSettings(destination) } }
 }
 
 @Composable

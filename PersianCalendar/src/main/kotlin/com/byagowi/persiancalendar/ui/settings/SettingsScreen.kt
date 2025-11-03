@@ -88,6 +88,7 @@ import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -107,10 +108,13 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.interfaceCalendarSettings
-import com.byagowi.persiancalendar.ui.settings.locationathan.locationAthanSettings
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.CalendarSettings
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceSettings
+import com.byagowi.persiancalendar.ui.settings.locationathan.AthanSettings
+import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.widgetNotificationSettings
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.NotificationSettings
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfiguration
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -180,31 +184,51 @@ fun SharedTransitionScope.SettingsScreen(
                     Icons.Outlined.Palette, Icons.Default.Palette,
                     R.string.pref_interface, R.string.calendar,
                 ) { listState ->
-                    interfaceCalendarSettings(
-                        listState.canScrollBackward,
-                        isTalkBackEnabled,
-                        destination,
-                    )
+                    settingsSection(
+                        canScrollBackward = listState.canScrollBackward,
+                        isTalkBackEnabled = isTalkBackEnabled,
+                        title = R.string.pref_interface
+                    ) { InterfaceSettings(destination) }
+                    settingsSection(
+                        canScrollBackward = listState.canScrollBackward,
+                        isTalkBackEnabled = isTalkBackEnabled,
+                        title = R.string.calendar
+                    ) { CalendarSettings(destination) }
                 },
                 TabItem(
                     Icons.Outlined.Widgets, Icons.Default.Widgets,
                     R.string.pref_notification, R.string.pref_widget,
                 ) { listState ->
-                    widgetNotificationSettings(
-                        listState.canScrollBackward,
-                        isTalkBackEnabled,
-                    )
+                    settingsSection(
+                        canScrollBackward = listState.canScrollBackward,
+                        isTalkBackEnabled = isTalkBackEnabled,
+                        title = R.string.pref_notification
+                    ) { NotificationSettings() }
+                    settingsSection(
+                        canScrollBackward = listState.canScrollBackward,
+                        isTalkBackEnabled = isTalkBackEnabled,
+                        title = R.string.pref_widget
+                    ) { WidgetConfiguration() }
                 },
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
                 ) { listState ->
-                    locationAthanSettings(
+                    settingsSection(
                         listState.canScrollBackward,
                         isTalkBackEnabled,
-                        navigateToMap,
-                        destination
-                    )
+                        R.string.location
+                    ) { LocationSettings(navigateToMap) }
+                    settingsSection(
+                        listState.canScrollBackward,
+                        isTalkBackEnabled,
+                        R.string.athan,
+                        subtitle = {
+                            val coordinates by coordinates.collectAsState()
+                            val isLocationSet = coordinates != null
+                            if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
+                        },
+                    ) { AthanSettings(destination) }
                 },
             )
 

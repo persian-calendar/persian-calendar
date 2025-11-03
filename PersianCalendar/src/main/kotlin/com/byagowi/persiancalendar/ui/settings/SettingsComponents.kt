@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
@@ -85,6 +85,7 @@ fun LazyListScope.settingsSection(
     isTalkBackEnabled: Boolean,
     @StringRes title: Int,
     subtitle: @Composable () -> String? = { null },
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     if (isTalkBackEnabled) item { SettingsSectionLayout(title, subtitle) } else stickyHeader {
         Box(
@@ -96,6 +97,7 @@ fun LazyListScope.settingsSection(
             ) else Modifier,
         ) { SettingsSectionLayout(title, subtitle) }
     }
+    item { Column { content() } }
 }
 
 @Composable

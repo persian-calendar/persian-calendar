@@ -7,15 +7,12 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -102,26 +99,14 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
-import com.byagowi.persiancalendar.ui.settings.settingsSection
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
-fun LazyListScope.interfaceCalendarSettings(
-    canScrollBackward: Boolean,
-    isTalkBackEnabled: Boolean,
-    destination: String? = null,
-) {
-    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.pref_interface)
-    item { Column { InterfaceSettings(destination) } }
-    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.calendar)
-    item { Column { CalendarSettings(destination) } }
-}
-
 @Composable
-private fun ColumnScope.InterfaceSettings(destination: String? = null) {
+fun ColumnScope.InterfaceSettings(destination: String? = null) {
     val context = LocalContext.current
     run {
         val themeDisplayName = stringResource(run {
@@ -184,7 +169,7 @@ private fun ColumnScope.InterfaceSettings(destination: String? = null) {
 }
 
 @Composable
-private fun ColumnScope.CalendarSettings(destination: String?) {
+fun ColumnScope.CalendarSettings(destination: String?) {
     val context = LocalContext.current
     val language by language.collectAsState()
     SettingsClickable(

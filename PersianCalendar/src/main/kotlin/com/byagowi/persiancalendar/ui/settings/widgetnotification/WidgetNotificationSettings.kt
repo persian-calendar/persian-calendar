@@ -7,9 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,23 +60,12 @@ import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
-import com.byagowi.persiancalendar.ui.settings.settingsSection
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 import kotlin.time.Duration.Companion.seconds
-
-fun LazyListScope.widgetNotificationSettings(
-    canScrollBackward: Boolean,
-    isTalkBackEnabled: Boolean,
-) {
-    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.pref_notification)
-    item { Column { NotificationSettings() } }
-    settingsSection(canScrollBackward, isTalkBackEnabled, R.string.pref_widget)
-    item { Column { WidgetConfiguration() } }
-}
 
 @Composable
 fun ColumnScope.NotificationSettings() {
