@@ -189,7 +189,7 @@ fun SharedTransitionScope.SettingsScreen(
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
-                        title = R.string.pref_user_interface,
+                        title = R.string.pref_ui,
                     ) { InterfaceSettings(destination) }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
