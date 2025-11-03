@@ -63,6 +63,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
 import com.byagowi.persiancalendar.R
@@ -93,6 +95,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -311,16 +314,26 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         }
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
+        val isUserLocatedInIranOrAfghanistan = when (TimeZone.getDefault().id) {
+            IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
+            else -> false
+        }
+        val settingsCoordinates by coordinates.collectAsState()
+        val settingsCityName by cityName.collectAsState()
         val (coordinates, cityName) = when {
+            !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
+                settingsCoordinates to settingsCityName
+            }
+
             language.isAfghanistanExclusive -> {
                 val kabulCoordinates = Coordinates(34.53, 69.16, 0.0)
-                kabulCoordinates to if (language.isUserAbleToReadPersian) "کابل" else "Kabul"
+                kabulCoordinates to if (language.isArabicScript) "کابل" else "Kabul"
             }
 
             // So the user would be able to verify it with the calendar book published
             else -> {
                 val tehranCoordinates = Coordinates(35.68, 51.42, 0.0)
-                tehranCoordinates to if (language.isUserAbleToReadPersian) "تهران" else "Tehran"
+                tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"
             }
         }
 
