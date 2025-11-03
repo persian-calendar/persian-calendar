@@ -48,6 +48,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -95,9 +96,14 @@ fun LazyListScope.settingsSection(
     subtitle: @Composable () -> String? = { null }
 ) = stickyHeader {
     val isSticking by remember(state) { state.isSticking(headerIndex) }
+    val backgroundModifier = if (isSticking) Modifier.background(
+        Brush.verticalGradient(
+            .75f to MaterialTheme.colorScheme.surface.copy(alpha = .9f),
+            1f to Color.Transparent,
+        )
+    ) else Modifier
     Column(
-        Modifier
-            .background(if (isSticking) MaterialTheme.colorScheme.surface else Color.Transparent)
+        backgroundModifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
