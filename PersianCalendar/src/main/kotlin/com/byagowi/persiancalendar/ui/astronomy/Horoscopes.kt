@@ -318,8 +318,8 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
             else -> false
         }
-        val settingsCoordinates by coordinates.collectAsState()
-        val settingsCityName by cityName.collectAsState()
+        val settingsCoordinates = coordinates.collectAsState().value
+        val settingsCityName = cityName.collectAsState().value
         val (coordinates, cityName) = when {
             !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
                 settingsCoordinates to settingsCityName
