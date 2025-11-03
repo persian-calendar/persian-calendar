@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -98,20 +99,20 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
-import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
+import com.byagowi.persiancalendar.ui.settings.settingsSection
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
-fun LazyListScope.interfaceCalendarSettings(isAtTop: Boolean, destination: String? = null) {
-    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.pref_interface)) }
+fun LazyListScope.interfaceCalendarSettings(listState: LazyListState, destination: String? = null) {
+    settingsSection(listState, 0, R.string.pref_interface)
     item { Column { InterfaceSettings(destination) } }
-    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.calendar)) }
+    settingsSection(listState, 2, R.string.calendar)
     item { Column { CalendarSettings(destination) } }
 }
 

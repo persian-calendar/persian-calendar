@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.RadioButton
@@ -68,7 +69,6 @@ import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHelp
-import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
@@ -79,6 +79,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectP
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
+import com.byagowi.persiancalendar.ui.settings.settingsSection
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.isHighLatitude
@@ -90,20 +91,16 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
 fun LazyListScope.locationAthanSettings(
-    isAtTop: Boolean,
+    listState: LazyListState,
     navigateToMap: () -> Unit,
     destination: String,
 ) {
-    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.location)) }
+    settingsSection(listState, 0, R.string.location)
     item { Column { LocationSettings(navigateToMap) } }
-    stickyHeader {
+    settingsSection(listState, 2, R.string.athan) {
         val coordinates by coordinates.collectAsState()
         val isLocationSet = coordinates != null
-        SettingsSection(
-            isAtTop,
-            stringResource(R.string.athan),
-            if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
-        )
+        if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
     }
     item { Column { AthanSettings(destination) } }
 }

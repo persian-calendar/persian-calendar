@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -64,7 +65,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -130,7 +130,7 @@ fun SharedTransitionScope.SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
-    var isAtTop by remember { mutableStateOf(true) }
+//    var isAtTop by remember { mutableStateOf(true) }
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -177,23 +177,22 @@ fun SharedTransitionScope.SettingsScreen(
                 TabItem(
                     Icons.Outlined.Palette, Icons.Default.Palette,
                     R.string.pref_interface, R.string.calendar,
-                ) { interfaceCalendarSettings(isAtTop, destination) },
+                ) { listState -> interfaceCalendarSettings(listState, destination) },
                 TabItem(
                     Icons.Outlined.Widgets, Icons.Default.Widgets,
                     R.string.pref_notification, R.string.pref_widget,
-                ) { widgetNotificationSettings(isAtTop) },
+                ) { listState -> widgetNotificationSettings(listState) },
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
-                ) { locationAthanSettings(isAtTop, navigateToMap, destination) },
+                ) { listState -> locationAthanSettings(listState, navigateToMap, destination) },
             )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
             val coroutineScope = rememberCoroutineScope()
 
-            val selectedTabIndex = pagerState.currentPage
             PrimaryTabRow(
-                selectedTabIndex = selectedTabIndex,
+                selectedTabIndex = pagerState.currentPage,
                 contentColor = LocalContentColor.current,
                 containerColor = Color.Transparent,
                 divider = {},
@@ -201,7 +200,7 @@ fun SharedTransitionScope.SettingsScreen(
                     val isLandscape =
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                     TabRowDefaults.PrimaryIndicator(
-                        Modifier.tabIndicatorOffset(selectedTabIndex),
+                        Modifier.tabIndicatorOffset(pagerState.currentPage),
                         width = if (isLandscape) 92.dp else 64.dp,
                         color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
                     )
@@ -210,23 +209,28 @@ fun SharedTransitionScope.SettingsScreen(
                 tabs.forEachIndexed { index, tab ->
                     val isLandscape =
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    val modifier = Modifier.clip(MaterialTheme.shapes.large)
+                    val isSelected = pagerState.currentPage == index
+                    fun onClick() {
+                        coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                    }
                     if (isLandscape) Tab(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                tab.Icon(selectedTabIndex == index)
+                                tab.Icon(isSelected)
                                 Spacer(Modifier.width(8.dp))
                                 tab.Title()
                             }
                         },
-                        modifier = Modifier.clip(MaterialTheme.shapes.large),
-                        selected = pagerState.currentPage == index,
-                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                        modifier = modifier,
+                        selected = isSelected,
+                        onClick = ::onClick,
                     ) else Tab(
-                        icon = { tab.Icon(selectedTabIndex == index) },
+                        icon = { tab.Icon(isSelected) },
                         text = { tab.Title() },
-                        modifier = Modifier.clip(MaterialTheme.shapes.large),
-                        selected = pagerState.currentPage == index,
-                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                        modifier = modifier,
+                        selected = isSelected,
+                        onClick = ::onClick,
                     )
                 }
             }
@@ -244,10 +248,10 @@ fun SharedTransitionScope.SettingsScreen(
                         LazyColumn(
                             state = listState,
                             contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding()),
-                        ) { tabs[index].content(this) }
-                        if (pagerState.currentPage == index) {
-                            isAtTop = !listState.canScrollBackward
-                        }
+                        ) { tabs[index].content(this, listState) }
+//                        if (pagerState.currentPage == index) {
+//                            isAtTop = !listState.canScrollBackward
+//                        }
                         ScrollShadow(listState, top = true)
                         ScrollShadow(listState, top = false)
                     }
@@ -263,7 +267,7 @@ private data class TabItem(
     private val filledIcon: ImageVector,
     @get:StringRes private val firstTitle: Int,
     @get:StringRes private val secondTitle: Int,
-    val content: LazyListScope.() -> Unit,
+    val content: LazyListScope.(listState: LazyListState) -> Unit,
 ) {
     @Composable
     fun Title() {

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
@@ -32,7 +35,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,20 +81,41 @@ import com.byagowi.persiancalendar.utils.preferences
 import java.util.Locale
 import kotlin.math.roundToInt
 
-@Composable
-fun SettingsSection(isAtTop: Boolean, title: String, subtitle: String? = null) {
+private fun LazyListState.isSticking(index: Int): State<Boolean> {
+    return derivedStateOf {
+        val firstVisible = layoutInfo.visibleItemsInfo.firstOrNull()
+        firstVisible?.index == index && firstVisibleItemScrollOffset != 0
+    }
+}
+
+fun LazyListScope.settingsSection(
+    state: LazyListState,
+    headerIndex: Int,
+    @StringRes title: Int,
+    subtitle: @Composable () -> String? = { null }
+) = stickyHeader {
+    val isSticking by remember(state) { state.isSticking(headerIndex) }
     Column(
         Modifier
-            .background(if (isAtTop) Color.Transparent else MaterialTheme.colorScheme.surface)
+            .background(if (isSticking) MaterialTheme.colorScheme.surface else Color.Transparent)
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = if (isSticking) {
+                Modifier
+                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                    .clearAndSetSemantics {}
+            } else {
+                Modifier
+            },
+        ) {
             val color by animateColor(MaterialTheme.colorScheme.outlineVariant)
             HorizontalDivider(color = color, modifier = Modifier.weight(1f))
             AnimatedContent(
-                title,
+                stringResource(title),
                 contentAlignment = Alignment.Center,
                 label = "title",
                 transitionSpec = appCrossfadeSpec,
@@ -104,6 +130,7 @@ fun SettingsSection(isAtTop: Boolean, title: String, subtitle: String? = null) {
             }
             HorizontalDivider(color = color, modifier = Modifier.weight(1f))
         }
+        val subtitle = subtitle()
         this.AnimatedVisibility(visible = subtitle != null) {
             Text(
                 subtitle.orEmpty(),

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,9 +61,9 @@ import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
-import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.settingsSection
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,10 +71,10 @@ import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 import kotlin.time.Duration.Companion.seconds
 
-fun LazyListScope.widgetNotificationSettings(isAtTop: Boolean) {
-    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.pref_notification)) }
+fun LazyListScope.widgetNotificationSettings(listState: LazyListState) {
+    settingsSection(listState, 0, R.string.pref_notification)
     item { Column { NotificationSettings() } }
-    stickyHeader { SettingsSection(isAtTop, stringResource(R.string.pref_widget)) }
+    settingsSection(listState, 2, R.string.pref_widget)
     item { Column { WidgetConfiguration() } }
 }
 
