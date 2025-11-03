@@ -90,18 +90,18 @@ private fun LazyListState.isSticking(index: Int): State<Boolean> {
 }
 
 fun LazyListScope.settingsSection(
-    state: LazyListState,
+    listState: LazyListState,
     headerIndex: Int,
     @StringRes title: Int,
     subtitle: @Composable () -> String? = { null }
 ) = stickyHeader {
-    val isSticking by remember(state) { state.isSticking(headerIndex) }
-    val backgroundModifier = if (isSticking) Modifier.background(
+    val backgroundModifier = if (listState.canScrollBackward) Modifier.background(
         Brush.verticalGradient(
             .75f to MaterialTheme.colorScheme.surface.copy(alpha = .9f),
             1f to Color.Transparent,
         )
     ) else Modifier
+    val isSticking by remember(listState) { listState.isSticking(headerIndex) }
     Column(
         backgroundModifier
             .fillMaxWidth()
