@@ -336,8 +336,17 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
                 minFontSize = 9.sp,
             )
         )
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val time = seasons(gregorianYear).marchEquinox
+        Text(
+            text = Date(time.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime(),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(
+                maxFontSize = LocalTextStyle.current.fontSize,
+                minFontSize = 9.sp,
+            )
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         AscendantZodiac(
             time,
             coordinates,
