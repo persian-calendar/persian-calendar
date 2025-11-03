@@ -108,7 +108,7 @@ private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
                     )
                 }
 
-                WidgetConfiguration()
+                WidgetSettings()
             }
         }
     }

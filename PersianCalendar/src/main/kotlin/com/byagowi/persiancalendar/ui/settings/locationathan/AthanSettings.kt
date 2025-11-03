@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.RadioButton
@@ -57,7 +56,6 @@ import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
-import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
@@ -74,9 +72,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDi
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectPreviewDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.isHighLatitude
@@ -86,31 +81,6 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
-
-fun LazyListScope.locationAthanSettings(
-    canScrollBackward: Boolean,
-    isTalkBackEnabled: Boolean,
-    navigateToMap: () -> Unit,
-    destination: String,
-) {
-}
-
-@Composable
-fun ColumnScope.LocationSettings(navigateToMap: () -> Unit) {
-    SettingsClickable(
-        title = stringResource(R.string.gps_location),
-        summary = stringResource(R.string.gps_location_help),
-    ) { onDismissRequest -> GPSLocationDialog(onDismissRequest) }
-    SettingsClickable(
-        title = stringResource(R.string.location),
-        summary = stringResource(R.string.location_help),
-    ) { onDismissRequest -> LocationDialog(onDismissRequest) }
-
-    val cityName by cityName.collectAsState()
-    SettingsClickable(stringResource(R.string.coordinates), cityName) { onDismissRequest ->
-        CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
-    }
-}
 
 @Composable
 fun ColumnScope.AthanSettings(destination: String) {

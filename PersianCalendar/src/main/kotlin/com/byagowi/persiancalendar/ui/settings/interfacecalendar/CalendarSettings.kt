@@ -6,7 +6,6 @@ import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -61,25 +60,16 @@ import androidx.core.database.getIntOrNull
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
-import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
-import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
-import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
-import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
-import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.alternativePersianMonthsInAzeri
-import com.byagowi.persiancalendar.global.easternGregorianArabicMonths
-import com.byagowi.persiancalendar.global.englishGregorianPersianMonths
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.holidayString
@@ -87,7 +77,6 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.localNumeralPreference
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekDays
@@ -99,74 +88,10 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
-import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
-
-@Composable
-fun ColumnScope.InterfaceSettings(destination: String? = null) {
-    val context = LocalContext.current
-    run {
-        val themeDisplayName = stringResource(run {
-            val currentKey = context.preferences.getString(PREF_THEME, null)
-            Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
-        }.title)
-        Box(
-            Modifier
-                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                .clearAndSetSemantics {},
-        ) {
-            SettingsClickable(
-                title = stringResource(R.string.select_skin),
-                summary = themeDisplayName,
-                defaultOpen = destination == PREF_THEME,
-            ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
-        }
-    }
-    val language by language.collectAsState()
-    SettingsClickable(
-        title = stringResource(R.string.language),
-        summary = language.nativeName,
-    ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
-    this.AnimatedVisibility(language.isPersian) {
-        val englishGregorianPersianMonths by englishGregorianPersianMonths.collectAsState()
-        SettingsSwitch(
-            key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            value = englishGregorianPersianMonths,
-            title = "ماه‌های میلادی با نام انگلیسی",
-            summary = "جون، جولای، آگوست، …"
-        )
-    }
-    this.AnimatedVisibility(language.isArabic) {
-        val easternGregorianArabicMonths by easternGregorianArabicMonths.collectAsState()
-        SettingsSwitch(
-            key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
-            value = easternGregorianArabicMonths,
-            title = "السنة الميلادية بالاسماء الشرقية",
-            summary = "كانون الثاني، شباط، آذار، …"
-        )
-    }
-    this.AnimatedVisibility(language == Language.AZB) {
-        val alternativePersianMonthsInAzeri by alternativePersianMonthsInAzeri.collectAsState()
-        SettingsSwitch(
-            key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
-            value = alternativePersianMonthsInAzeri,
-            title = "آذربایجان دیلینده ایل آیلار",
-            summary = "آغلارگۆلر، گۆلن، قیزاران، …"
-        )
-    }
-    this.AnimatedVisibility(language.canHaveLocalNumeral) {
-        val localNumeralPreference by localNumeralPreference.collectAsState()
-        SettingsSwitch(
-            key = PREF_LOCAL_NUMERAL,
-            value = localNumeralPreference,
-            title = stringResource(R.string.native_digits),
-            summary = stringResource(R.string.enable_native_digits)
-        )
-    }
-}
 
 @Composable
 fun ColumnScope.CalendarSettings(destination: String?) {
@@ -239,7 +164,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
                     putBoolean(PREF_SHOW_MOON_IN_SCORPIO, DEFAULT_SHOW_MOON_IN_SCORPIO)
                 }
                 it
-            }
+            },
         )
         val showMoonInScorpio by showMoonInScorpio.collectAsState()
         AnimatedVisibility(isAstronomicalExtraFeaturesEnabled) {
@@ -251,10 +176,9 @@ fun ColumnScope.CalendarSettings(destination: String?) {
                     Row(
                         Modifier
                             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                            .clearAndSetSemantics {}
+                            .clearAndSetSemantics {},
                     ) {
-                        @OptIn(ExperimentalMaterial3Api::class)
-                        AnimatedVisibility(showMoonInScorpio) {
+                        @OptIn(ExperimentalMaterial3Api::class) AnimatedVisibility(showMoonInScorpio) {
                             val coroutine = rememberCoroutineScope()
                             val tooltipState = rememberTooltipState()
                             TooltipBox(
@@ -267,7 +191,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
                                 modifier = if (language.isPersianOrDari) Modifier.clickable(
                                     indication = null,
                                     interactionSource = null,
-                                ) { coroutine.launch { tooltipState.show() } } else Modifier
+                                ) { coroutine.launch { tooltipState.show() } } else Modifier,
                             ) {
                                 Text(
                                     Zodiac.SCORPIO.symbol,

@@ -114,7 +114,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.AthanSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.NotificationSettings
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfiguration
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetSettings
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -208,21 +208,21 @@ fun SharedTransitionScope.SettingsScreen(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
                         title = R.string.pref_widget
-                    ) { WidgetConfiguration() }
+                    ) { WidgetSettings() }
                 },
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
                 ) { listState ->
                     settingsSection(
-                        listState.canScrollBackward,
-                        isTalkBackEnabled,
-                        R.string.location
+                        canScrollBackward = listState.canScrollBackward,
+                        isTalkBackEnabled = isTalkBackEnabled,
+                        title = R.string.location
                     ) { LocationSettings(navigateToMap) }
                     settingsSection(
-                        listState.canScrollBackward,
-                        isTalkBackEnabled,
-                        R.string.athan,
+                        canScrollBackward = listState.canScrollBackward,
+                        isTalkBackEnabled = isTalkBackEnabled,
+                        title = R.string.athan,
                         subtitle = {
                             val coordinates by coordinates.collectAsState()
                             val isLocationSet = coordinates != null
