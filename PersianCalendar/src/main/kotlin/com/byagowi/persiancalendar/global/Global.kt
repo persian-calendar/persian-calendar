@@ -278,8 +278,8 @@ val secondaryCalendar
 val isCenterAlignWidgets_ = MutableStateFlow(DEFAULT_CENTER_ALIGN_WIDGETS)
 val isCenterAlignWidgets: StateFlow<Boolean> get() = isCenterAlignWidgets_
 
-var weekStartOffset = 0
-    private set
+private val weekStart_ = MutableStateFlow(Language.FA.defaultWeekStart)
+val weekStart: StateFlow<WeekDay> get() = weekStart_
 
 private var weekEnds_ = MutableStateFlow(emptySet<WeekDay>())
 val weekEnds: StateFlow<Set<WeekDay>> get() = weekEnds_
@@ -585,9 +585,9 @@ fun updateStoredPreference(context: Context) {
     }.getOrNull().debugAssertNotNull
 
     isShowWeekOfYearEnabled_.value = preferences.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
-    weekStartOffset =
-        (preferences.getString(PREF_WEEK_START, null) ?: language.defaultWeekStart).toIntOrNull()
-            ?: 0
+    weekStart_.value = preferences.getString(PREF_WEEK_START, null)?.toIntOrNull()?.let {
+        WeekDay.entries[it]
+    } ?: language.defaultWeekStart
 
     weekEnds_.value = preferences.getStringSet(PREF_WEEK_ENDS, null)?.let {
         buildSet { it.forEach { x -> x.toIntOrNull()?.let { i -> add(WeekDay.entries[i]) } } }

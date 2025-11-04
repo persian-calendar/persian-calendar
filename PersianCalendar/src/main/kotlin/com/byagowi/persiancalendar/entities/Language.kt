@@ -239,7 +239,8 @@ enum class Language(val code: String, val nativeName: String) {
             FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK -> WeekDay.SATURDAY
             EN_US -> WeekDay.SUNDAY
             JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
-        }.ordinal.toString()
+        }
+    val defaultWeekStartAsString get() = defaultWeekStart.ordinal.toString()
 
     val defaultWeekEnds
         get() = when {
