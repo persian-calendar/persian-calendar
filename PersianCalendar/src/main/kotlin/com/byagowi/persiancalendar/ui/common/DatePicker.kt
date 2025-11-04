@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -50,9 +51,10 @@ private fun RowScope.DatePickerContent(
     val yearsLimit = 5000 // let's just don't care about accuracy of distant time
     val date = remember(jdn.value, calendar) { jdn on calendar }
     val numeral by numeral.collectAsState()
+    val resources = LocalResources.current
     val daysFormat = remember(calendar, date.year, date.month) {
         val monthStart = Jdn(calendar, date.year, date.month, 1);
-        { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDayName }
+        { item: Int -> numeral.format(item) + " / " + resources.getString((monthStart + item - 1).weekDay.titleId) }
     }
     val monthsLength = remember(calendar, date.year, date.month) {
         calendar.getMonthLength(date.year, date.month)

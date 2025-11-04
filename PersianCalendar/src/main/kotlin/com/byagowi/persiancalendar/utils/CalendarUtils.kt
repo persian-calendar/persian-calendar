@@ -58,7 +58,7 @@ val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestS
 fun getWeekDayName(position: Int) = weekDays[position % 7]
 
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
-    jdn.weekDayName + spacedComma + formatDate(date, calendarNameInLinear)
+    jdn.weekDay.title + spacedComma + formatDate(date, calendarNameInLinear)
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
@@ -172,7 +172,7 @@ fun GregorianCalendar.formatDateAndTime(): String {
 
 fun GregorianCalendar.formatDateAndTimeWithWeekDayName(): String {
     val jdn = Jdn(this.toCivilDate())
-    val weekDayName = jdn.weekDayName
+    val weekDayName = jdn.weekDay.title
     return language.value.timeAndDateFormat.format(
         Clock(this).toFormattedString(),
         weekDayName + spacedComma + formatDate(jdn on mainCalendar, forceNonNumerical = true)

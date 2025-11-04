@@ -1093,7 +1093,7 @@ private fun create4x1RemoteViews(
     subtitle: String,
     clock: Clock,
 ): RemoteViews {
-    val weekDayName = jdn.weekDayName
+    val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
@@ -1141,7 +1141,7 @@ private fun create2x2RemoteViews(
     owghat: String,
     clock: Clock,
 ): RemoteViews {
-    val weekDayName = jdn.weekDayName
+    val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
@@ -1213,7 +1213,7 @@ private fun create4x2RemoteViews(
     clock: Clock,
     prayTimes: PrayTimes?
 ): RemoteViews {
-    val weekDayName = jdn.weekDayName
+    val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val remoteViews = RemoteViews(
         context.packageName,
@@ -1246,7 +1246,7 @@ private fun create4x2RemoteViews(
 
     if (!isWidgetClock.value) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
-        if (isWidgetClock.value) append(jdn.weekDayName + "\n")
+        if (isWidgetClock.value) append(jdn.weekDay.title + "\n")
         append(formatDate(date, calendarNameInLinear = showOtherCalendars))
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })
@@ -1361,7 +1361,7 @@ private fun createWeekViewRemoteViews(
                 )
             )
 
-            remoteViews.setTextViewText(weekDayNameViewId, day.weekDayName)
+            remoteViews.setTextViewText(weekDayNameViewId, day.weekDay.title)
         } else {
             val weekDayNameColor = when {
                 prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
@@ -1375,8 +1375,8 @@ private fun createWeekViewRemoteViews(
 
             remoteViews.setTextColor(weekDayNameViewId, weekDayNameColorInt)
 
-            remoteViews.setContentDescription(weekDayNameViewId, day.weekDayName)
-            remoteViews.setTextViewText(weekDayNameViewId, day.weekDayNameInitials)
+            remoteViews.setContentDescription(weekDayNameViewId, day.weekDay.title)
+            remoteViews.setTextViewText(weekDayNameViewId, day.weekDay.shortTitle)
         }
 
         val dayOfMonth = (day on mainCalendar).dayOfMonth

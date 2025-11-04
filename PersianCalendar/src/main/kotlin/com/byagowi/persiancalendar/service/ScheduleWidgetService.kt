@@ -138,7 +138,7 @@ private class EventsViewFactory(
         (entry as? Header)?.let { header ->
             val headerContent = run {
                 val headerFirstPart = if (widthCells < 3) {
-                    header.day.weekDayNameInitials + spacedComma + language.value.dm.format(
+                    header.day.weekDay.shortTitle + spacedComma + language.value.dm.format(
                         numeral.value.format(header.date.dayOfMonth),
                         header.date.monthName
                     )
@@ -250,7 +250,7 @@ private class EventsViewFactory(
                         if (item.secondaryDate == null) R.id.today_first_line
                         else R.id.today_with_secondary_first_line
                     } else R.id.day_first_line,
-                    item.day.weekDayNameInitials + (item.secondaryDate?.let {
+                    item.day.weekDay.shortTitle + (item.secondaryDate?.let {
                         "(${it.calendar.preferredNumeral.format(it.dayOfMonth)})"
                     }.orEmpty()),
                 )

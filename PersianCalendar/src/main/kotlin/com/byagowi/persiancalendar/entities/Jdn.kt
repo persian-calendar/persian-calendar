@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
-import com.byagowi.persiancalendar.global.weekDays
-import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -26,12 +24,8 @@ value class Jdn(val value: Long) {
     constructor(calendar: Calendar, year: Int, month: Int, day: Int) :
             this(calendar.createDate(year, month, day))
 
-    // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
-    private val weekDayOrdinal: Int get() = ((value + 2L) % 7L).toInt()
-    val weekDay: WeekDay get() = WeekDay.entries[this.weekDayOrdinal]
-    val weekDayName: String get() = weekDays[this.weekDayOrdinal]
-    val weekDayNameInitials: String get() = weekDaysInitials[this.weekDayOrdinal]
-
+    /** 0 means Saturday in it, see [WeekDay]'s comment */
+    val weekDay: WeekDay get() = WeekDay.entries[((value + 2L) % 7L).toInt()]
     val isWeekEnd: Boolean get() = this.weekDay in weekEnds.value
 
     infix fun on(calendar: Calendar): AbstractDate = when (calendar) {

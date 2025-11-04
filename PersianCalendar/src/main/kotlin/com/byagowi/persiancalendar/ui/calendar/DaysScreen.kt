@@ -92,6 +92,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -785,6 +786,7 @@ private fun DaysView(
                 // Time cells and table
                 val outlineVariant = MaterialTheme.colorScheme.outlineVariant
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+                val resources = LocalResources.current
                 Row(
                     Modifier.drawBehind {
                         val topLineY = 2.dp.toPx()
@@ -831,7 +833,9 @@ private fun DaysView(
                                             .semantics {
                                                 if (isTalkBackEnabled) {
                                                     this.contentDescription = listOf(
-                                                        (startingDay + (column - 1)).weekDayName,
+                                                        resources.getString(
+                                                            (startingDay + (column - 1)).weekDay.titleId
+                                                        ),
                                                         clockCache[row * 60],
                                                         clockCache[(row + 1) * 60]
                                                     ).joinToString(" ")
@@ -1089,10 +1093,9 @@ private fun DaysView(
                                         Interaction.ExtendDown -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
-                                                maximumValue =
-                                                    ((ySteps * 24 * 4) - position.y).coerceAtLeast(
-                                                        ySteps * 1f
-                                                    )
+                                                maximumValue = ((ySteps * 24 * 4) - position.y).coerceAtLeast(
+                                                    ySteps * 1f
+                                                )
                                             )
 
                                         Interaction.ExtendUp -> {
