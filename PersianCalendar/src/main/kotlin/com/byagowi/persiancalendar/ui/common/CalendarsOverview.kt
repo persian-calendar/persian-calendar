@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
@@ -312,10 +313,12 @@ fun SharedTransitionScope.CalendarsOverview(
         val endOfYearJdn = Jdn(selectedCalendar, date.year + 1, 1, 1) - 1
         val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
-        val progresses = remember(jdn, selectedCalendar) {
+        val weekStart by weekStart.collectAsState()
+        val progresses = remember(jdn, selectedCalendar, weekStart) {
             val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)
-            listOfNotNull(
+            listOf(
+                Triple(R.string.week, jdn.weekDay - weekStart + 1, 7),
                 Triple(R.string.month, date.dayOfMonth, monthLength),
                 Triple(R.string.season, passedDaysInSeason, totalSeasonDays),
                 Triple(R.string.year, jdn - startOfYearJdn, endOfYearJdn - startOfYearJdn),
