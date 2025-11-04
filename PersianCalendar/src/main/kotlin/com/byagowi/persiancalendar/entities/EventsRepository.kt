@@ -45,19 +45,17 @@ data class EventsRepository(
     val onlyAfghanistanHolidaysIsEnabled get() = enabledTypes.size == 1 && afghanistanHolidays
 
     private fun skipEvent(record: CalendarRecord, calendar: Calendar): Boolean {
-        return when {
-            record.type == EventType.Iran && record.isHoliday && iranHolidays -> false
-            record.type == EventType.Iran && iranOthers -> false
-            record.type == EventType.Afghanistan && record.isHoliday && afghanistanHolidays -> false
-            record.type == EventType.Afghanistan && afghanistanOthers -> false
-            record.type == EventType.Nepal && record.isHoliday && nepalHolidays -> false
-            record.type == EventType.Nepal && nepalOthers -> false
-            record.type == EventType.AncientIran && iranAncient -> false
-            record.type == EventType.International && international -> false
+        return when (record.type) {
+            EventType.Iran if record.isHoliday && iranHolidays -> false
+            EventType.Iran if iranOthers -> false
+            EventType.Afghanistan if record.isHoliday && afghanistanHolidays -> false
+            EventType.Afghanistan if afghanistanOthers -> false
+            EventType.Nepal if record.isHoliday && nepalHolidays -> false
+            EventType.Nepal if nepalOthers -> false
+            EventType.AncientIran if iranAncient -> false
+            EventType.International if international -> false
             // Enable Iranian events of Gregorian calendar even if itself isn't enabled
-            record.type == EventType.Iran && international && calendar == Calendar.GREGORIAN ->
-                false
-
+            EventType.Iran if international && calendar == Calendar.GREGORIAN -> false
             else -> true
         }
     }

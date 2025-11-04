@@ -50,7 +50,7 @@ private fun BaseAppDialog(
                                 start = SettingsHorizontalPaddingItem.dp,
                                 bottom = 16.dp,
                                 end = SettingsHorizontalPaddingItem.dp,
-                            )
+                            ),
                         ) { title() }
                     }
                 }
@@ -61,7 +61,7 @@ private fun BaseAppDialog(
                     Box(
                         Modifier
                             .fillMaxWidth()
-                            .weight(weight = 1f, fill = false)
+                            .weight(weight = 1f, fill = false),
                     ) { content() }
                 }
 

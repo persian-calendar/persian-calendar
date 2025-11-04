@@ -7,7 +7,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.weekEnds
+import com.byagowi.persiancalendar.global.changeWeekDaysForTest
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.Assert.assertEquals
@@ -61,18 +61,16 @@ class EventsTest {
 
     @Test
     fun testCalculateWorkDays() {
-        val weekEndsCopy = weekEnds.copyOf()
-        weekEnds.indices.forEach { weekEnds[it] = false }
-        Language.FA.defaultWeekEnds.mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
-        val repository = EventsRepository(EventsRepository.iranDefault, Language.FA)
-        assertEquals(
-            35,
-            repository.calculateWorkDays(
-                Jdn(PersianDate(1402, 6, 10)),
-                Jdn(PersianDate(1402, 7, 25))
+        changeWeekDaysForTest(weekEnds = Language.FA.defaultWeekEnds) {
+            val repository = EventsRepository(EventsRepository.iranDefault, Language.FA)
+            assertEquals(
+                35,
+                repository.calculateWorkDays(
+                    Jdn(PersianDate(1402, 6, 10)),
+                    Jdn(PersianDate(1402, 7, 25)),
+                ),
             )
-        )
-        weekEndsCopy.forEachIndexed { index, b -> weekEnds[index] = b }
+        }
     }
 
     @Test

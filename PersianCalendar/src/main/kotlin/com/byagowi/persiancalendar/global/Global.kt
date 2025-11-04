@@ -107,6 +107,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.SwipeUpAction
@@ -279,8 +280,9 @@ val isCenterAlignWidgets: StateFlow<Boolean> get() = isCenterAlignWidgets_
 
 var weekStartOffset = 0
     private set
-var weekEnds = BooleanArray(7)
-    private set
+
+private var weekEnds_ = MutableStateFlow(emptySet<WeekDay>())
+val weekEnds: StateFlow<Set<WeekDay>> get() = weekEnds_
 
 private val isShowWeekOfYearEnabled_ = MutableStateFlow(false)
 val isShowWeekOfYearEnabled: StateFlow<Boolean> get() = isShowWeekOfYearEnabled_
@@ -587,9 +589,9 @@ fun updateStoredPreference(context: Context) {
         (preferences.getString(PREF_WEEK_START, null) ?: language.defaultWeekStart).toIntOrNull()
             ?: 0
 
-    weekEnds = BooleanArray(7)
-    (preferences.getStringSet(PREF_WEEK_ENDS, null)
-        ?: language.defaultWeekEnds).mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
+    weekEnds_.value = preferences.getStringSet(PREF_WEEK_ENDS, null)?.let {
+        buildSet { it.forEach { x -> x.toIntOrNull()?.let { i -> add(WeekDay.entries[i]) } } }
+    } ?: language.defaultWeekEnds
 
     isShowDeviceCalendarEvents_.value =
         preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
@@ -641,6 +643,14 @@ fun AccessibilityManager.updateAccessibilityFlows() {
         } else this@updateAccessibilityFlows.javaClass.getMethod("isHighTextContrastEnabled")
             .invoke(this) as? Boolean
     }.onFailure(logException).getOrNull() == true
+}
+
+@VisibleForTesting
+fun changeWeekDaysForTest(weekEnds: Set<WeekDay>, action: () -> Unit) {
+    val originalWeekEnds = weekEnds_.value
+    weekEnds_.value = weekEnds
+    action()
+    weekEnds_.value = originalWeekEnds
 }
 
 @VisibleForTesting

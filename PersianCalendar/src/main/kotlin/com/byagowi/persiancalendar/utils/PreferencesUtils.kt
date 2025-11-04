@@ -99,7 +99,7 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
         language.defaultCalendars.drop(1).joinToString(",") { it.name },
     )
     putString(PREF_WEEK_START, language.defaultWeekStart)
-    putStringSet(PREF_WEEK_ENDS, language.defaultWeekEnds)
+    putStringSet(PREF_WEEK_ENDS, language.defaultWeekEndsAsStringSet)
 
     putString(PREF_PRAY_TIME_METHOD, language.preferredCalculationMethod.name)
     putBoolean(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority)

@@ -241,7 +241,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
         key = PREF_WEEK_ENDS,
         entries = weekDays,
         entryValues = weekDaysValues,
-        defaultValue = language.defaultWeekEnds,
+        defaultValue = language.defaultWeekEndsAsStringSet,
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
     )

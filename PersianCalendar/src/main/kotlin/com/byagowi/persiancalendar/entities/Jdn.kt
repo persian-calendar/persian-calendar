@@ -32,7 +32,7 @@ value class Jdn(val value: Long) {
     val weekDayName: String get() = weekDays[this.weekDayOrdinal]
     val weekDayNameInitials: String get() = weekDaysInitials[this.weekDayOrdinal]
 
-    val isWeekEnd: Boolean get() = weekEnds[this.weekDayOrdinal]
+    val isWeekEnd: Boolean get() = this.weekDay in weekEnds.value
 
     infix fun on(calendar: Calendar): AbstractDate = when (calendar) {
         Calendar.ISLAMIC -> toIslamicDate()
