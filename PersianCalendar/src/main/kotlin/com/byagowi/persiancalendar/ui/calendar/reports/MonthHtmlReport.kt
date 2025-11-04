@@ -20,7 +20,6 @@ import com.byagowi.persiancalendar.utils.createMonthEventsList
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getSecondaryCalendarNumeral
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
@@ -100,7 +99,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         val weekStart = weekStart.value
         tr {
             if (isShowWeekOfYearEnabled.value) th {}
-            repeat(7) { th { +getWeekDayName(weekStart + it) } }
+            repeat(7) { th { +context.getString((weekStart + it).titleId) } }
         }
         val monthLength = date.calendar.getMonthLength(date.year, date.month)
         val monthStartJdn = Jdn(date)

@@ -36,8 +36,6 @@ import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
-import com.byagowi.persiancalendar.global.weekDays
-import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -55,12 +53,8 @@ import kotlin.time.Duration.Companion.days
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
-fun getWeekDayName(position: Int) = weekDays[position % 7]
-
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
     jdn.weekDay.title + spacedComma + formatDate(date, calendarNameInLinear)
-
-fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
 val AbstractDate.monthName get() = yearMonthNameOfDate(this).getOrNull(month - 1).orEmpty()
 
@@ -154,13 +148,6 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
         TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar.time = this
     return calendar
-}
-
-fun formatDateAndTime(clock: Clock, date: AbstractDate): String {
-    return language.value.timeAndDateFormat.format(
-        clock.toFormattedString(),
-        formatDate(date, forceNonNumerical = true)
-    )
 }
 
 fun GregorianCalendar.formatDateAndTime(): String {

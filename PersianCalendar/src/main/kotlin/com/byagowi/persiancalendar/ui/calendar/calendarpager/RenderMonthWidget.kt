@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
@@ -14,7 +15,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
-import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
@@ -52,7 +52,7 @@ fun renderMonthWidget(
                 else cellWidth * column + xStart,
                 0f
             ) {
-                val text = getInitialOfWeekDay(weekStart + column)
+                val text = (weekStart + column).shortTitle
                 setText?.invoke(column, text, false) ?: dayPainter.setInitialOfWeekDay(text)
                 dayPainter.drawDay(this)
             }

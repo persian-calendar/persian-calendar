@@ -582,10 +582,12 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
-            val position = weekStart + i
-            remoteViews.setTextViewText(id, getInitialOfWeekDay(position))
-            val contentDescription =
-                context.getString(R.string.week_days_name_column, getWeekDayName(position))
+            val weekDay = weekStart + i
+            remoteViews.setTextViewText(id, weekDay.shortTitle)
+            val contentDescription = context.getString(
+                R.string.week_days_name_column,
+                weekDay.title,
+            )
             remoteViews.setContentDescription(id, contentDescription)
             return@forEachIndexed
         }
@@ -1061,7 +1063,10 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
         remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, "")
     } else {
         remoteViews.setViewVisibility(R.id.sample_clock, View.GONE)
-        remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, getWeekDayName(0))
+        remoteViews.setTextViewTextOrHideIfEmpty(
+            R.id.sample_clock_replacement,
+            weekStart.value.shortTitle,
+        )
     }
     remoteViews.setTextViewText(R.id.sample_text, context.getString(R.string.widget_text_color))
     return remoteViews

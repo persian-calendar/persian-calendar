@@ -20,7 +20,7 @@ enum class WeekDay(
     FRIDAY(R.string.friday, R.string.friday_short);
 
     operator fun minus(other: WeekDay): Int = (ordinal + 7 - other.ordinal) % 7
-    operator fun plus(other: Int): Int = (ordinal + other) % 7
+    operator fun plus(other: Int): WeekDay = entries[(ordinal + other) % 7]
 
     // Better to use titleId and shortTitleId but it's ok to not to in widgets and so
     val title: String get() = weekDays[this.ordinal]

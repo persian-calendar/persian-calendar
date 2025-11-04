@@ -62,6 +62,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -77,9 +78,7 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getWeekDayName
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -215,13 +214,13 @@ fun daysTable(
                         x = pagerArrowSizeAndPadding.dp + cellWidth * column
                     ),
                 ) {
-                    val weekDayPosition = weekStart + column
+                    val weekDay = weekStart + column
                     val description = stringResource(
                         R.string.week_days_name_column,
-                        getWeekDayName(weekDayPosition),
+                        stringResource(weekDay.titleId),
                     )
                     Text(
-                        getInitialOfWeekDay(weekDayPosition),
+                        stringResource(weekDay.shortTitleId),
                         fontSize = with(density) { (diameter * .5f).toSp() },
                         modifier = Modifier
                             .alpha(AppBlendAlpha)

@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
@@ -54,8 +55,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
-import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
 
 
@@ -139,12 +138,13 @@ fun SharedTransitionScope.MonthScreen(
                 Row {
                     repeat(7) { column ->
                         Box(contentAlignment = Alignment.Center, modifier = cellsSizeModifier) {
-                            val weekDayPosition = weekStart + column
+                            val weekDay = weekStart + column
                             val description = stringResource(
-                                R.string.week_days_name_column, getWeekDayName(weekDayPosition)
+                                R.string.week_days_name_column,
+                                stringResource(weekDay.titleId),
                             )
                             Text(
-                                getInitialOfWeekDay(weekDayPosition),
+                                stringResource(weekDay.shortTitleId),
                                 fontSize = with(density) { (diameter * .5f).toSp() },
                                 modifier = Modifier
                                     .alpha(AppBlendAlpha)
@@ -158,7 +158,7 @@ fun SharedTransitionScope.MonthScreen(
                         val jdn = indexToJdn(initiallySelectedDay, index)
                         Row {
                             repeat(7) { column ->
-                                val weekDayPosition = weekStart + column
+                                val weekDayPosition = weekStart.ordinal + column
                                 val dayJdn = jdn + weekDayPosition
                                 val dayDate = dayJdn on mainCalendar
 //                                val monthStartDate =
