@@ -12,12 +12,11 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
-import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import io.github.persiancalendar.calendar.AbstractDate
 
 fun renderMonthWidget(
@@ -35,7 +34,7 @@ fun renderMonthWidget(
     setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
-    val startingWeekDay = monthStartJdn.weekDayOrdinal
+    val startingWeekDay = monthStartJdn.weekDay
     val monthLength = calendar.getMonthLength(baseDate.year, baseDate.month)
 
     val cellWidth = dayPainter.width
@@ -44,6 +43,7 @@ fun renderMonthWidget(
     val footer =
         language.value.my.format(baseDate.monthName, numeral.value.format(baseDate.year))
 
+    val weekStart = weekStart.value
     canvas.also {
         (0..<7).forEach { column ->
             val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
@@ -52,7 +52,7 @@ fun renderMonthWidget(
                 else cellWidth * column + xStart,
                 0f
             ) {
-                val text = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(column))
+                val text = getInitialOfWeekDay(weekStart + column)
                 setText?.invoke(column, text, false) ?: dayPainter.setInitialOfWeekDay(text)
                 dayPainter.drawDay(this)
             }
@@ -63,8 +63,7 @@ fun renderMonthWidget(
             if (OTHER_CALENDARS_KEY in whatToShowOnWidgets.value) secondaryCalendar else null
         (0..<rowsCount - 1).forEach { row ->
             (0..<7).forEach cell@{ column ->
-                val dayOffset = (column + row * 7) -
-                        applyWeekStartOffsetToWeekDay(startingWeekDay)
+                val dayOffset = (column + row * 7) - (startingWeekDay - weekStart)
                 if (dayOffset !in monthRange) return@cell
                 val day = monthStartJdn + dayOffset
                 val events = eventsRepository.getEvents(day, deviceEvents)

@@ -37,7 +37,7 @@ enum class Calendar(
     // "The values are numbered following the ISO-8601 standard, from 1 (Monday) to 7 (Sunday)."
     fun getNthWeekDayOfMonth(year: Int, month: Int, weekDay: Int, nth: Int): Int {
         val appWeekDay = (weekDay % 7) + 1
-        val monthStartWeekDay = Jdn(this, year, month, 1).weekDayOrdinal
+        val monthStartWeekDay = Jdn(this, year, month, 1).weekDay.ordinal
         return appWeekDay - monthStartWeekDay + nth * 7 - if (monthStartWeekDay < appWeekDay) 7 else 0
     }
 
@@ -45,7 +45,7 @@ enum class Calendar(
     fun getLastWeekDayOfMonth(year: Int, month: Int, weekDay: Int): Int {
         val appWeekDay = (weekDay % 7) + 1
         val monthLength = getMonthLength(year, month)
-        return monthLength - (Jdn(this, year, month, monthLength) - appWeekDay + 1).weekDayOrdinal
+        return monthLength - (Jdn(this, year, month, monthLength) - appWeekDay + 1).weekDay.ordinal
     }
 
     fun getYearMonths(year: Int): Int =

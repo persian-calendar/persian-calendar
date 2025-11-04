@@ -87,7 +87,7 @@ class CalendarTests {
     fun `weekDay calculations correctness`(
         weekDay: Int, year: Int, month: Int, dayOfMonth: Int
     ) {
-        assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDayOrdinal)
+        assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDay.ordinal)
     }
 
     @ParameterizedTest

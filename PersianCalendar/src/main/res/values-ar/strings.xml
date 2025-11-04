@@ -474,4 +474,5 @@
     <string name="vibration">الاهتزاز</string>
     <string name="starting_date">تاريخ البدء</string>
     <string name="pref_ui">واجهة المستخدم</string>
+    <string name="week">أسبوع</string>
 </resources>

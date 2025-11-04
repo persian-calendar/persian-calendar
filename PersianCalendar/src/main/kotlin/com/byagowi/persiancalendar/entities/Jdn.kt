@@ -4,7 +4,7 @@ import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekEnds
-import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Time
@@ -27,7 +27,7 @@ value class Jdn(val value: Long) {
             this(calendar.createDate(year, month, day))
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
-    val weekDayOrdinal: Int get() = ((value + 2L) % 7L).toInt()
+    private val weekDayOrdinal: Int get() = ((value + 2L) % 7L).toInt()
     val weekDay: WeekDay get() = WeekDay.entries[this.weekDayOrdinal]
     val weekDayName: String get() = weekDays[this.weekDayOrdinal]
     val weekDayNameInitials: String get() = weekDaysInitials[this.weekDayOrdinal]
@@ -70,7 +70,7 @@ value class Jdn(val value: Long) {
 
     fun getWeekOfYear(startOfYear: Jdn): Int {
         val dayOfYear = this - startOfYear
-        return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.weekDayOrdinal)) / 7.0).toInt()
+        return ceil(1 + (dayOfYear - (this.weekDay - weekStart.value)) / 7.0).toInt()
     }
 
     // Days passed in a season and total days available in the season

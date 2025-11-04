@@ -13,8 +13,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.utils.isRtl
-import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.createMonthEventsList
 import com.byagowi.persiancalendar.utils.getEventsTitle
@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.html.DIV
 import kotlinx.html.body
@@ -98,14 +97,14 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         small { +" ($title)" }
     }
     table("calendar") {
+        val weekStart = weekStart.value
         tr {
             if (isShowWeekOfYearEnabled.value) th {}
-            repeat(7) { th { +getWeekDayName(revertWeekStartOffsetFromWeekDay(it)) } }
+            repeat(7) { th { +getWeekDayName(weekStart + it) } }
         }
         val monthLength = date.calendar.getMonthLength(date.year, date.month)
         val monthStartJdn = Jdn(date)
-        val startingWeekDay = monthStartJdn.weekDayOrdinal
-        val fixedStartingWeekDay = applyWeekStartOffsetToWeekDay(startingWeekDay)
+        val fixedStartingWeekDay = monthStartJdn.weekDay - weekStart
         val startOfYearJdn = Jdn(date.calendar, date.year, 1, 1)
         (0..<6 * 7).map {
             val index = it - fixedStartingWeekDay

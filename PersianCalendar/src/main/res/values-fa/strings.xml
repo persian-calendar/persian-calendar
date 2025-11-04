@@ -433,4 +433,5 @@
     <string name="dynamic_icon">نمایش عدد روز در آیکون</string>
     <string name="large_day_number_on_notification">عدد بزرگ در نوار اعلان</string>
     <string name="pref_ui">رابط کاربری</string>
+    <string name="week">هفته</string>
 </resources>

@@ -15,5 +15,8 @@ enum class WeekDay(
     TUESDAY(R.string.tuesday, R.string.tuesday_short),
     WEDNESDAY(R.string.wednesday, R.string.wednesday_short),
     THURSDAY(R.string.thursday, R.string.thursday_short),
-    FRIDAY(R.string.friday, R.string.friday_short)
+    FRIDAY(R.string.friday, R.string.friday_short);
+
+    operator fun minus(other: WeekDay): Int = (ordinal + 7 - other.ordinal) % 7
+    operator fun plus(other: Int): Int = (ordinal + other) % 7
 }

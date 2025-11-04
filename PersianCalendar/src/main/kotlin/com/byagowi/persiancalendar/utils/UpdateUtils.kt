@@ -111,6 +111,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.service.BroadcastReceivers
@@ -558,7 +559,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     }
 
     val monthStartJdn = Jdn(monthStartDate)
-    val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDayOrdinal)
+    val startingWeekDay = monthStartJdn.weekDay - weekStart.value
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     remoteViews.setViewVisibility(
@@ -577,10 +578,11 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     val deviceEvents = if (isShowDeviceCalendarEvents.value) {
         context.readDaysDeviceEvents(monthStartJdn - startingWeekDay, (daysRowsCount * 7).days)
     } else EventsStore.empty()
+    val weekStart = weekStart.value
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
-            val position = revertWeekStartOffsetFromWeekDay(i)
+            val position = weekStart + i
             remoteViews.setTextViewText(id, getInitialOfWeekDay(position))
             val contentDescription =
                 context.getString(R.string.week_days_name_column, getWeekDayName(position))
@@ -914,7 +916,7 @@ private fun createMonthViewRemoteViews(
     // remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
 
     val monthStart = Jdn(baseDate)
-    val weekStart = applyWeekStartOffsetToWeekDay(Jdn(baseDate).weekDayOrdinal)
+    val weekStart = Jdn(baseDate).weekDay - weekStart.value
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
     monthWidgetCells.forEachIndexed { i, id ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {

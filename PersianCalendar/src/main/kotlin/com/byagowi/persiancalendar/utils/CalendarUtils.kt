@@ -38,7 +38,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
-import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -55,10 +54,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
-
-fun applyWeekStartOffsetToWeekDay(weekDay: Int): Int = (weekDay + 7 - weekStart.value.ordinal) % 7
-
-fun revertWeekStartOffsetFromWeekDay(weekDay: Int): Int = (weekDay + weekStart.value.ordinal) % 7
 
 fun getWeekDayName(position: Int) = weekDays[position % 7]
 

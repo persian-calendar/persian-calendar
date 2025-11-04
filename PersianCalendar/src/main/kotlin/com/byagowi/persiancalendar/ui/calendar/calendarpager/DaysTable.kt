@@ -70,17 +70,16 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
-import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -152,12 +151,13 @@ fun daysTable(
     val numeral by numeral.collectAsState()
     var focusedDay by remember { mutableStateOf<Jdn?>(null) }
     val focusColor = LocalContentColor.current.copy(.1f)
+    val weekStart by weekStart.collectAsState()
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =
             if (onlyWeek == null) null else ((monthStartJdn - 1) on mainCalendar).dayOfMonth
 
-        val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDayOrdinal)
+        val startingWeekDay = monthStartJdn.weekDay - weekStart
         val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
         val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
         val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
@@ -215,9 +215,10 @@ fun daysTable(
                         x = pagerArrowSizeAndPadding.dp + cellWidth * column
                     ),
                 ) {
-                    val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
+                    val weekDayPosition = weekStart + column
                     val description = stringResource(
-                        R.string.week_days_name_column, getWeekDayName(weekDayPosition)
+                        R.string.week_days_name_column,
+                        getWeekDayName(weekDayPosition),
                     )
                     Text(
                         getInitialOfWeekDay(weekDayPosition),

@@ -423,4 +423,5 @@
     <string name="dynamic_icon">தானி சின்னம்</string>
     <string name="large_day_number_on_notification">அறிவிப்பில் பெரிய நாள் எண்</string>
     <string name="pref_ui">பயனர் இடைமுகம்</string>
+    <string name="week">வாரம்</string>
 </resources>

@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
@@ -56,7 +57,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -69,7 +69,7 @@ fun SharedTransitionScope.MonthScreen(
 ) {
     val initialItem = ITEMS_COUNT / 2
     val state = rememberLazyListState(initialItem, 0)
-    val weekStartJdn = initiallySelectedDay - initiallySelectedDay.weekDayOrdinal
+    val weekStartJdn = initiallySelectedDay - initiallySelectedDay.weekDay.ordinal
     val focusedJdn by remember {
         derivedStateOf {
             if (state.firstVisibleItemIndex == initialItem) initiallySelectedDay
@@ -128,6 +128,7 @@ fun SharedTransitionScope.MonthScreen(
             val daysStyle = LocalTextStyle.current.copy(
                 fontSize = with(density) { daysTextSize.toSp() },
             )
+            val weekStart by weekStart.collectAsState()
 
             Column(
                 modifier = Modifier.padding(
@@ -138,7 +139,7 @@ fun SharedTransitionScope.MonthScreen(
                 Row {
                     repeat(7) { column ->
                         Box(contentAlignment = Alignment.Center, modifier = cellsSizeModifier) {
-                            val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
+                            val weekDayPosition = weekStart + column
                             val description = stringResource(
                                 R.string.week_days_name_column, getWeekDayName(weekDayPosition)
                             )
@@ -157,7 +158,7 @@ fun SharedTransitionScope.MonthScreen(
                         val jdn = indexToJdn(initiallySelectedDay, index)
                         Row {
                             repeat(7) { column ->
-                                val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
+                                val weekDayPosition = weekStart + column
                                 val dayJdn = jdn + weekDayPosition
                                 val dayDate = dayJdn on mainCalendar
 //                                val monthStartDate =

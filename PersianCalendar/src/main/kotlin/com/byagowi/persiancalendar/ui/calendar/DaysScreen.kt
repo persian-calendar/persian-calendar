@@ -128,6 +128,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.daysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
@@ -145,7 +146,6 @@ import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
-import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -155,7 +155,6 @@ import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
-import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
@@ -392,7 +391,7 @@ fun SharedTransitionScope.DaysScreen(
                             LaunchedEffect(isCurrentPage) {
                                 if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
                                     val pageDay =
-                                        sampleDay + (selectedDay.weekDayOrdinal - today.weekDayOrdinal)
+                                        sampleDay + (selectedDay.weekDay.ordinal - today.weekDay.ordinal)
                                     setSelectedDayInWeekPager(pageDay)
                                     isHighlighted = today != pageDay
                                 }
@@ -404,7 +403,8 @@ fun SharedTransitionScope.DaysScreen(
                             )
                             val monthStartJdn = Jdn(monthStartDate)
                             val weekStart = (today + (page - weeksLimit / 2) * 7).let {
-                                it - applyWeekStartOffsetToWeekDay(it.weekDayOrdinal)
+                                val weekStart by weekStart.collectAsState()
+                                it - (it.weekDay - weekStart)
                             }
                             val weekDeviceEvents = remember(
                                 refreshToken, isShowDeviceCalendarEvents, weekStart
@@ -535,8 +535,8 @@ fun SharedTransitionScope.DaysScreen(
 }
 
 private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
-    val daysStart = day - applyWeekStartOffsetToWeekDay(day.weekDayOrdinal)
-    val todaysStart = today - applyWeekStartOffsetToWeekDay(today.weekDayOrdinal)
+    val daysStart = day - (day.weekDay - weekStart.value)
+    val todaysStart = today - (today.weekDay - weekStart.value)
     return (daysStart - todaysStart) / 7 + weeksLimit / 2
 }
 
@@ -700,10 +700,11 @@ private fun DaysView(
                         lineHeight = 24.sp,
                         textDirection = TextDirection.Content,
                     )
+                    val weekStart by weekStart.collectAsState()
                     eventsWithoutTime.forEachIndexed { i, dayEvents ->
                         Column(Modifier.weight(1f)) {
                             if (!hasWeekPager) {
-                                val weekDayPosition = revertWeekStartOffsetFromWeekDay(i)
+                                val weekDayPosition = weekStart + i
                                 val weekDayName = getWeekDayName(weekDayPosition)
                                 val isLandscape =
                                     LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
