@@ -25,4 +25,9 @@ enum class WeekDay(
     // Better to use titleId and shortTitleId but it's ok to not to in widgets and so
     val title: String get() = weekDays[this.ordinal]
     val shortTitle get() = weekDaysInitials[this.ordinal]
+
+    companion object {
+        // Get a WeekDay from ISO-8601's ordinal, from 1 (Monday) to 7 (Sunday).
+        fun fromISO8601(value: Int): WeekDay = entries[value % 7]
+    }
 }
