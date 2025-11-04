@@ -275,7 +275,7 @@ val mainCalendarNumeral
 val secondaryCalendar
     get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
 
-val isCenterAlignWidgets_ = MutableStateFlow(DEFAULT_CENTER_ALIGN_WIDGETS)
+private val isCenterAlignWidgets_ = MutableStateFlow(DEFAULT_CENTER_ALIGN_WIDGETS)
 val isCenterAlignWidgets: StateFlow<Boolean> get() = isCenterAlignWidgets_
 
 private val weekStart_ = MutableStateFlow(Language.FA.defaultWeekStart)
@@ -320,10 +320,10 @@ val isAstronomicalExtraFeaturesEnabled: StateFlow<Boolean> get() = isAstronomica
 private val showMoonInScorpio_ = MutableStateFlow(DEFAULT_SHOW_MOON_IN_SCORPIO)
 val showMoonInScorpio: StateFlow<Boolean> get() = showMoonInScorpio_
 
-val isTalkBackEnabled_ = MutableStateFlow(false)
+private val isTalkBackEnabled_ = MutableStateFlow(false)
 val isTalkBackEnabled: StateFlow<Boolean> get() = isTalkBackEnabled_
 
-var isHighTextContrastEnabled_ = MutableStateFlow(false)
+private var isHighTextContrastEnabled_ = MutableStateFlow(false)
 val isHighTextContrastEnabled: StateFlow<Boolean> get() = isHighTextContrastEnabled_
 
 var shiftWorkTitles = emptyMap<String, String>()
@@ -361,7 +361,7 @@ var nothingScheduledString = ""
 var holidayString = DEFAULT_HOLIDAY
     private set
 
-val numericalDatePreferred_ = MutableStateFlow(DEFAULT_NUMERICAL_DATE_PREFERRED)
+private val numericalDatePreferred_ = MutableStateFlow(DEFAULT_NUMERICAL_DATE_PREFERRED)
 val numericalDatePreferred: StateFlow<Boolean> get() = numericalDatePreferred_
 
 var calendarsTitlesAbbr = emptyList<String>()
