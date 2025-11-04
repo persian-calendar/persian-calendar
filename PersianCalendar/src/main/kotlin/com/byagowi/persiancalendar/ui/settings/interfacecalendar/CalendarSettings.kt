@@ -77,6 +77,7 @@ import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
+import com.byagowi.persiancalendar.global.islamicCalendarOffset
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
@@ -224,7 +225,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
             // One is formatted with locale's numerals and the other used for keys isn't
             entries = (-2..2).map { numeral.format(it.toString()) },
             entryValues = (-2..2).map { it.toString() },
-            defaultValue = DEFAULT_ISLAMIC_OFFSET,
+            persistedValue = islamicCalendarOffset.collectAsState().value,
             dialogTitleResId = R.string.islamic_offset,
             title = stringResource(R.string.islamic_offset),
             summaryResId = R.string.islamic_offset_summary,
@@ -238,7 +239,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
         key = PREF_WEEK_START,
         entries = weekDaysTitles,
         entryValues = weekDaysValues,
-        defaultValue = language.defaultWeekStartAsString,
+        persistedValue = weekStart.ordinal.toString(),
         dialogTitleResId = R.string.week_start_summary,
         title = stringResource(R.string.week_start),
     )

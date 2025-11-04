@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.global
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Build
 import android.view.accessibility.AccessibilityManager
@@ -212,6 +213,10 @@ var midnightMethod = calculationMethod.value.defaultMidnight
 private val asrMethod_ = MutableStateFlow(AsrMethod.Standard)
 val asrMethod: StateFlow<AsrMethod> get() = asrMethod_
 
+// Just to use in the settings
+private val islamicCalendarOffset_ = MutableStateFlow(DEFAULT_ISLAMIC_OFFSET)
+val islamicCalendarOffset: StateFlow<String> get() = islamicCalendarOffset_
+
 var highLatitudesMethod = HighLatitudesMethod.NightMiddle
     private set
 
@@ -380,11 +385,13 @@ fun initGlobal(context: Context) {
 fun configureCalendarsAndLoadEvents(context: Context) {
     debugLog("Utils: configureCalendarsAndLoadEvents is called")
     val preferences = context.preferences
-
-    IslamicDate.islamicOffset = if (preferences.isIslamicOffsetExpired) 0
-    else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
-
+    IslamicDate.islamicOffset = getIslamicCalendarOffset(preferences)
     eventsRepository = EventsRepository(preferences, language.value)
+}
+
+private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
+    return if (preferences.isIslamicOffsetExpired) 0
+    else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 }
 
 fun yearMonthNameOfDate(date: AbstractDate): List<String> {
@@ -448,8 +455,9 @@ fun loadLanguageResources(resources: Resources) {
 fun updateStoredPreference(context: Context) {
     debugLog("Utils: updateStoredPreference is called")
     val preferences = context.preferences
-    val language = preferences.getString(PREF_APP_LANGUAGE, null)
-        ?.let(Language::valueOfLanguageCode) ?: Language.getPreferredDefaultLanguage(context)
+    val language =
+        preferences.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
+            ?: Language.getPreferredDefaultLanguage(context)
 
     language_.value = language
     userSetTheme_.value = run {
@@ -481,7 +489,7 @@ fun updateStoredPreference(context: Context) {
     prefersWidgetsDynamicColors_.value =
         userSetTheme.value.isDynamicColors && preferences.getBoolean(
             PREF_WIDGETS_PREFER_SYSTEM_COLORS,
-            true
+            true,
         )
 
     localNumeralPreference_.value =
@@ -506,8 +514,11 @@ fun updateStoredPreference(context: Context) {
     )
     isWidgetClock_.value = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
-    notificationAthan_.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
-            preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
+    notificationAthan_.value =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || preferences.getBoolean(
+            PREF_NOTIFICATION_ATHAN,
+            isNotifyDate.value,
+        )
     athanVibration_.value = preferences.getBoolean(PREF_ATHAN_VIBRATION, DEFAULT_ATHAN_VIBRATION)
     ascendingAthan_.value =
         preferences.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
@@ -523,6 +534,7 @@ fun updateStoredPreference(context: Context) {
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
+    islamicCalendarOffset_.value = getIslamicCalendarOffset(preferences).toString()
     midnightMethod = preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
         ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
         ?: calculationMethod.value.defaultMidnight
@@ -555,7 +567,7 @@ fun updateStoredPreference(context: Context) {
     }
     cityName_.value = storedCity?.let(language::getCityName) ?: preferences.getString(
         PREF_GEOCODED_CITYNAME,
-        null
+        null,
     )?.takeIf { it.isNotEmpty() }
 
     widgetTransparency_.value =
@@ -566,8 +578,9 @@ fun updateStoredPreference(context: Context) {
             preferences.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultCalendars[0].name
         )
         val otherCalendars = (preferences.getString(PREF_OTHER_CALENDARS_KEY, null)
-            ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }
-                ).splitFilterNotEmpty(",").map(Calendar::valueOf)
+            ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }).splitFilterNotEmpty(
+            ","
+        ).map(Calendar::valueOf)
         enabledCalendars = (listOf(mainCalendar) + otherCalendars).distinct()
         secondaryCalendarEnabled = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE

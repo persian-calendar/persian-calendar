@@ -64,7 +64,6 @@ import androidx.core.graphics.toColorInt
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -209,20 +208,17 @@ fun SettingsSingleSelect(
     key: String,
     entries: List<String>,
     entryValues: List<String>,
-    defaultValue: String,
+    persistedValue: String,
     dialogTitleResId: Int,
     title: String,
     summaryResId: Int? = null
 ) {
     val context = LocalContext.current
-    var summary by remember(language.collectAsState().value) {
-        mutableStateOf(
-            if (summaryResId == null) entries[entryValues.indexOf(
-                context.preferences.getString(key, null) ?: defaultValue
-            )] else context.getString(summaryResId)
-        )
-    }
-    SettingsClickable(title = title, summary = summary) { onDismissRequest ->
+    SettingsClickable(
+        title = title,
+        summary = summaryResId?.let { stringResource(it) }
+            ?: entries[entryValues.indexOf(persistedValue)],
+    ) { onDismissRequest ->
         AppDialog(
             title = { Text(stringResource(dialogTitleResId)) },
             dismissButton = {
@@ -230,23 +226,19 @@ fun SettingsSingleSelect(
             },
             onDismissRequest = onDismissRequest,
         ) {
-            val currentValue = remember {
-                context.preferences.getString(key, null) ?: defaultValue
-            }
             entries.zip(entryValues) { entry, entryValue ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(SettingsItemHeight.dp)
-                        .selectable(entryValue == currentValue, role = Role.RadioButton) {
+                        .selectable(entryValue == persistedValue, role = Role.RadioButton) {
                             onDismissRequest()
                             context.preferences.edit { putString(key, entryValue) }
-                            if (summaryResId == null) summary = entry
                         }
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
-                    RadioButton(selected = entryValue == currentValue, onClick = null)
+                    RadioButton(selected = entryValue == persistedValue, onClick = null)
                     Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                     Text(
                         entry,

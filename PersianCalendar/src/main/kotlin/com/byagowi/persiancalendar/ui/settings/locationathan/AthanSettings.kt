@@ -38,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
-import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
@@ -57,6 +55,7 @@ import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.highLatitudesMethod
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
@@ -97,7 +96,7 @@ fun ColumnScope.AthanSettings(destination: String) {
             key = PREF_PRAY_TIME_METHOD,
             entries = CalculationMethod.entries.map { stringResource(it.titleStringId) },
             entryValues = CalculationMethod.entries.map { it.name },
-            defaultValue = DEFAULT_PRAY_TIME_METHOD,
+            persistedValue = calculationMethod.name,
             dialogTitleResId = R.string.pray_methods_calculation,
             title = stringResource(R.string.pray_methods)
         )
@@ -107,7 +106,7 @@ fun ColumnScope.AthanSettings(destination: String) {
             key = PREF_HIGH_LATITUDES_METHOD,
             entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
             entryValues = HighLatitudesMethod.entries.map { it.name },
-            defaultValue = DEFAULT_HIGH_LATITUDES_METHOD,
+            persistedValue = highLatitudesMethod.name,
             dialogTitleResId = R.string.high_latitudes_method,
             title = stringResource(R.string.high_latitudes_method)
         )
