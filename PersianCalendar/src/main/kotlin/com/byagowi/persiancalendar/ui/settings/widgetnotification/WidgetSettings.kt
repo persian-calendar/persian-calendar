@@ -15,7 +15,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -43,6 +42,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.userSetTheme
+import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
@@ -136,7 +136,7 @@ fun ColumnScope.WidgetSettings() {
         key = PREF_WHAT_TO_SHOW_WIDGETS,
         entries = widgetCustomizations.values.map { stringResource(it) },
         entryValues = widgetCustomizations.keys.toList(),
-        defaultValue = DEFAULT_WIDGET_CUSTOMIZATIONS,
+        persistedSet = whatToShowOnWidgets.collectAsState().value,
         dialogTitleResId = R.string.which_one_to_show,
         title = stringResource(R.string.customize_widget),
         summary = stringResource(R.string.customize_widget_summary),

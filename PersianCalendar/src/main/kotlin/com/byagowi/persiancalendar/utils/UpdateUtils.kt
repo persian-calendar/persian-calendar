@@ -220,7 +220,7 @@ fun update(context: Context, updateDate: Boolean) {
     val title =
         dayTitleSummary(jdn, date) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val widgetTitle = dayTitleSummary(
-        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     ) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
@@ -235,7 +235,9 @@ fun update(context: Context, updateDate: Boolean) {
             append(context.getString(it.stringRes))
             append(": ")
             append(prayTimes[it].toFormattedString())
-            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
+            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets.value) {
+                cityName.value?.also { append(" ($it)") }
+            }
         }
     }.orEmpty()
     // endregion
@@ -1090,7 +1092,7 @@ private fun create4x1RemoteViews(
     clock: Clock,
 ): RemoteViews {
     val weekDayName = jdn.weekDayName
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock.value) {
@@ -1138,7 +1140,7 @@ private fun create2x2RemoteViews(
     clock: Clock,
 ): RemoteViews {
     val weekDayName = jdn.weekDayName
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock.value) {
@@ -1160,7 +1162,7 @@ private fun create2x2RemoteViews(
 
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
 
-    if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
+    if (OWGHAT_KEY in whatToShowOnWidgets.value && owghat.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
         remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
     } else {
@@ -1210,7 +1212,7 @@ private fun create4x2RemoteViews(
     prayTimes: PrayTimes?
 ): RemoteViews {
     val weekDayName = jdn.weekDayName
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val remoteViews = RemoteViews(
         context.packageName,
         if (isWidgetClock.value) R.layout.widget4x2_clock else R.layout.widget4x2
@@ -1247,7 +1249,7 @@ private fun create4x2RemoteViews(
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })
 
-    if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
+    if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets.value) {
         // Set text of owghats
         val owghats = widget4x2TimesViewsIds.zip(
             timesToShow(clock, prayTimes)
@@ -1422,7 +1424,7 @@ private fun setEventsInWidget(
         holidaysId, resources.getString(R.string.holiday_reason, holidays)
     )
 
-    val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
+    val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets.value) getEventsTitle(
         events,
         holiday = false,
         compact = true,
@@ -1451,7 +1453,7 @@ private fun updateNotification(
     }
 
     val isLargeDayNumberOnNotification = isLargeDayNumberOnNotification.value
-    val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
+    val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets.value) {
         if (isLargeDayNumberOnNotification) listOf(
             PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB
         ) else timesToShow(clock, prayTimes)
@@ -1477,7 +1479,7 @@ private fun updateNotification(
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
         isLargeDayNumberOnNotification = isLargeDayNumberOnNotification,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
-        whatToShowOnWidgets = whatToShowOnWidgets,
+        whatToShowOnWidgets = whatToShowOnWidgets.value,
         spacedComma = spacedComma,
         language = language.value,
         notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY

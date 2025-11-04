@@ -311,8 +311,8 @@ val eventCalendarsIdsToExclude: StateFlow<LongSet> get() = eventCalendarsIdsToEx
 private val eventCalendarsIdsAsHoliday_ = MutableStateFlow(emptyLongSet())
 val eventCalendarsIdsAsHoliday: StateFlow<LongSet> get() = eventCalendarsIdsAsHoliday_
 
-var whatToShowOnWidgets = emptySet<String>()
-    private set
+private val whatToShowOnWidgets_ = MutableStateFlow(emptySet<String>())
+val whatToShowOnWidgets get() = whatToShowOnWidgets_
 
 private val isAstronomicalExtraFeaturesEnabled_ = MutableStateFlow(DEFAULT_ASTRONOMICAL_FEATURES)
 val isAstronomicalExtraFeaturesEnabled: StateFlow<Boolean> get() = isAstronomicalExtraFeaturesEnabled_
@@ -606,7 +606,7 @@ fun updateStoredPreference(context: Context) {
         ).mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
 
-    whatToShowOnWidgets =
+    whatToShowOnWidgets_.value =
         preferences.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
     isAstronomicalExtraFeaturesEnabled_.value =

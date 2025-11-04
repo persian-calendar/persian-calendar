@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.holidayString
@@ -80,6 +81,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekDays
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -228,7 +230,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
             summaryResId = R.string.islamic_offset_summary,
         )
     }
-    val weekDaysValues = (0..6).map { it.toString() }
+    val weekDaysValues = WeekDay.entries.map { it.ordinal.toString() }
     SettingsSingleSelect(
         key = PREF_WEEK_START,
         entries = weekDays,
@@ -241,7 +243,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
         key = PREF_WEEK_ENDS,
         entries = weekDays,
         entryValues = weekDaysValues,
-        defaultValue = language.defaultWeekEndsAsStringSet,
+        persistedSet = weekEnds.collectAsState().value.map { it.ordinal.toString() }.toSet(),
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
     )

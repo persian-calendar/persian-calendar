@@ -60,7 +60,7 @@ fun renderMonthWidget(
         val monthRange = 0..<monthLength
         val rowsCount = 7
         val secondaryCalendar =
-            if (OTHER_CALENDARS_KEY in whatToShowOnWidgets) secondaryCalendar else null
+            if (OTHER_CALENDARS_KEY in whatToShowOnWidgets.value) secondaryCalendar else null
         (0..<rowsCount - 1).forEach { row ->
             (0..<7).forEach cell@{ column ->
                 val dayOffset = (column + row * 7) -

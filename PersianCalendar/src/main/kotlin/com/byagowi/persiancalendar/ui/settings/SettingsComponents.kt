@@ -267,25 +267,21 @@ fun SettingsMultiSelect(
     key: String,
     entries: List<String>,
     entryValues: List<String>,
-    defaultValue: Set<String>,
+    persistedSet: Set<String>,
     dialogTitleResId: Int,
     title: String,
     summary: String? = null,
 ) {
-    fun generateSummary(items: List<String>): String =
-        items.map(entryValues::indexOf).sorted().joinToString(spacedComma) { entries[it] }
-
     val context = LocalContext.current
-    var summaryToShow by remember(language.collectAsState().value) {
-        val preferences = context.preferences
-        val items = preferences.getStringSet(key, null) ?: defaultValue
-        mutableStateOf(summary ?: generateSummary(items.toList()))
-    }
-    SettingsClickable(title = title, summary = summaryToShow) { onDismissRequest ->
+    SettingsClickable(
+        title = title,
+        summary = summary ?: persistedSet.map(entryValues::indexOf).sorted()
+            .joinToString(spacedComma) { entries[it] },
+    ) { onDismissRequest ->
         val result = rememberSaveable(
             saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
         ) {
-            (context.preferences.getStringSet(key, null) ?: defaultValue).toList()
+            (context.preferences.getStringSet(key, null) ?: persistedSet).toList()
                 .toMutableStateList()
         }
         AppDialog(
@@ -298,7 +294,6 @@ fun SettingsMultiSelect(
                 TextButton(onClick = {
                     onDismissRequest()
                     context.preferences.edit { putStringSet(key, result.toSet()) }
-                    if (summary == null) summaryToShow = generateSummary(result)
                 }) { Text(stringResource(R.string.accept)) }
             },
         ) {
