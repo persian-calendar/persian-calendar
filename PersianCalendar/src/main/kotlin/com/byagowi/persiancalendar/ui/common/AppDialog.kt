@@ -86,10 +86,10 @@ private fun BaseAppDialog(
 fun AppDialog(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
-    scrollState: ScrollState = rememberScrollState(),
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,
+    scrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     BaseAppDialog(
@@ -103,7 +103,7 @@ fun AppDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(scrollState),
-            content = content
+            content = content,
         )
         ScrollShadow(scrollState, top = true)
         ScrollShadow(scrollState, top = false)
@@ -114,10 +114,10 @@ fun AppDialog(
 fun AppDialogWithLazyColumn(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
-    lazyListState: LazyListState = rememberLazyListState(),
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,
+    lazyListState: LazyListState = rememberLazyListState(),
     content: LazyListScope.() -> Unit,
 ) {
     BaseAppDialog(
