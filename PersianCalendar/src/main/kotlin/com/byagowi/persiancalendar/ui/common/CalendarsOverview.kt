@@ -78,7 +78,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.isAncientIranEnabled
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -267,7 +267,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         if (language.isPersian) {
-            val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
+            val enableExtra = eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }

@@ -23,9 +23,9 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.jetbrains.annotations.VisibleForTesting
 
-data class EventsRepository(
+data class EventsRepository @VisibleForTesting constructor(
     private val enabledTypes: Set<String> = emptySet(),
-    private val language: Language
+    private val language: Language,
 ) {
     constructor(
         preferences: SharedPreferences, language: Language,
@@ -196,5 +196,7 @@ data class EventsRepository(
             return preferences.getStringSet(PREF_HOLIDAY_TYPES, null)
                 ?: if (language.isIranExclusive) iranDefault else emptySet()
         }
+
+        fun empty() = EventsRepository(emptySet(), Language.entries[0])
     }
 }

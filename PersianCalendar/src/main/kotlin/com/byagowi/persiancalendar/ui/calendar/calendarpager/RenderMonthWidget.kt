@@ -67,7 +67,7 @@ fun renderMonthWidget(
                         applyWeekStartOffsetToWeekDay(startingWeekDay)
                 if (dayOffset !in monthRange) return@cell
                 val day = monthStartJdn + dayOffset
-                val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
+                val events = eventsRepository.getEvents(day, deviceEvents)
                 val isToday = day == today
 
                 val text = mainCalendarNumeral.format(dayOffset + 1)

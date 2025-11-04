@@ -16,7 +16,7 @@ class SearchEventsRepository(private val context: Context) {
             SearchEventsStore(
                 context.getAllEnabledAppointments() +
                         // Hopefully we can get rid of this global variable someday
-                        (eventsRepository?.getEnabledEvents(Jdn.today()) ?: emptyList())
+                        eventsRepository.getEnabledEvents(Jdn.today())
             )
         }
     }

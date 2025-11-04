@@ -148,8 +148,8 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
-import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -489,7 +489,7 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     LaunchedEffect(today) {
-        if (mainCalendar == Calendar.SHAMSI && isIranHolidaysEnabled && today.toPersianDate().year > supportedYearOfIranCalendar) {
+        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar) {
             if (snackbarHostState.showSnackbar(
                     context.getString(R.string.outdated_app),
                     duration = SnackbarDuration.Long,

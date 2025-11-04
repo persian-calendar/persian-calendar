@@ -590,7 +590,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
         remoteViews.removeAllViews(id)
         val day = monthStartJdn + i - 7 - startingWeekDay
-        val events = sortEvents(eventsRepository?.getEvents(day, deviceEvents) ?: emptyList())
+        val events = sortEvents(eventsRepository.getEvents(day, deviceEvents))
         val date = day on mainCalendar
         run {
             val viewId = when {
@@ -761,7 +761,7 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     )
     adapterIntent.putExtra("appOpenCount", resumeToken.value)
     adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
-    adapterIntent.putExtra("events", eventsRepository?.hashCode() ?: 0)
+    adapterIntent.putExtra("events", eventsRepository.hashCode())
     adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
     adapterIntent.setData(adapterIntent.toUri(Intent.URI_INTENT_SCHEME).toUri())
     @Suppress("DEPRECATION") remoteViews.setRemoteAdapter(
@@ -1338,7 +1338,7 @@ private fun createWeekViewRemoteViews(
         val deviceEvents =
             if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
             else EventsStore.empty()
-        val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
+        val events = eventsRepository.getEvents(day, deviceEvents)
         val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
 
         if (isHoliday) remoteViews.setTextColor(weekDayNumberViewId, holidaysColor)
@@ -1410,7 +1410,7 @@ private fun timesToShow(clock: Clock, prayTimes: PrayTimes): List<PrayTime> {
 private fun setEventsInWidget(
     resources: Resources, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
 ) {
-    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
+    val events = eventsRepository.getEvents(jdn, deviceCalendarEvents)
     val holidays = getEventsTitle(
         events,
         holiday = true,
@@ -1473,7 +1473,7 @@ private fun updateNotification(
         nextPrayTime = nextPrayTime,
         timesToShow = timesToShow,
         isRtl = context.resources.isRtl,
-        events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
+        events = eventsRepository.getEvents(jdn, deviceCalendarEvents),
         isTalkBackEnabled = isTalkBackEnabled.value,
         isHighTextContrastEnabled = isHighTextContrastEnabled.value,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,

@@ -336,10 +336,6 @@ var shiftWorks = emptyList<ShiftWorkRecord>()
     private set
 var shiftWorkPeriod = 0
     private set
-var isIranHolidaysEnabled = true
-    private set
-var isAncientIranEnabled = false
-    private set
 var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
@@ -366,7 +362,7 @@ val numericalDatePreferred: StateFlow<Boolean> get() = numericalDatePreferred_
 
 var calendarsTitlesAbbr = emptyList<String>()
     private set
-var eventsRepository: EventsRepository? = null
+var eventsRepository = EventsRepository.empty()
     private set
 
 private var secondaryCalendarEnabled = false
@@ -389,8 +385,6 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
     eventsRepository = EventsRepository(preferences, language.value)
-    isIranHolidaysEnabled = eventsRepository?.iranHolidays == true
-    isAncientIranEnabled = eventsRepository?.iranAncient == true
 }
 
 fun yearMonthNameOfDate(date: AbstractDate): List<String> {
