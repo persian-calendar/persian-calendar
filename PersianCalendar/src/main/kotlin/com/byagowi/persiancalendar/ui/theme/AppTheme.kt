@@ -103,14 +103,16 @@ fun AppTheme(content: @Composable () -> Unit) {
     }
 }
 
+fun resolveCustomFontPath(context: Context): File? {
+    return File(context.filesDir, STORED_FONT_NAME).takeIf { it.exists() }
+}
+
 @Composable
 fun resolveFontFile(): File? {
     val customFontName by customFontName.collectAsState()
-    if (customFontName != null) runCatching {
-        val file = File(LocalContext.current.filesDir, STORED_FONT_NAME)
-        if (file.exists()) return file
-    }.onFailure(logException)
-    return null
+    return if (customFontName != null) runCatching {
+        resolveCustomFontPath(LocalContext.current)
+    }.onFailure(logException).getOrNull() else null
 }
 
 @Composable

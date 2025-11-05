@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isCenterAlignWidgets
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
@@ -132,6 +133,7 @@ import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
+import com.byagowi.persiancalendar.ui.theme.resolveCustomFontPath
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
@@ -139,6 +141,7 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
+import java.io.File
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.ceil
@@ -1492,6 +1495,7 @@ private fun updateNotification(
         whatToShowOnWidgets = whatToShowOnWidgets.value,
         spacedComma = spacedComma,
         language = language.value,
+        customFontName = customFontName.value,
         notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
     )
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || // always update as complains in 8.3.0
@@ -1528,6 +1532,7 @@ private data class NotificationData(
     private val whatToShowOnWidgets: Set<String>,
     private val spacedComma: String,
     private val language: Language,
+    private val customFontName: String?,
     private val notificationId: Int,
 ) {
     @CheckResult
@@ -1569,10 +1574,12 @@ private data class NotificationData(
                 },
             )
 
+        val customFontFile = if (customFontName != null) resolveCustomFontPath(context) else null
         // Dynamic small icon generator, most of the times disabled as it needs API 23 and
         // we need to have the other path anyway
-        if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val icon = IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth))
+        if ((customFontFile != null || language.isNepali) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val icon =
+                IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth, customFontFile))
             builder.setSmallIcon(icon)
         } else {
             builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
@@ -1581,6 +1588,7 @@ private data class NotificationData(
             builder.setLargeIcon(
                 createStatusIcon(
                     dayOfMonth = date.dayOfMonth,
+                    customFontFile = customFontFile,
                     color = 0xFF929292.toInt(),
                     addShadow = true
                 )

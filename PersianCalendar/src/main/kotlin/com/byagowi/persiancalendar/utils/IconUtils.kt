@@ -4,15 +4,18 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.numeral
+import java.io.File
 
 // Dynamic icon generation, currently unused
 fun createStatusIcon(
     dayOfMonth: Int,
+    customFontFile: File? = null,
     color: Int = Color.WHITE,
     addShadow: Boolean = false,
 ): Bitmap {
@@ -26,6 +29,7 @@ fun createStatusIcon(
         }
         it.textAlign = Paint.Align.CENTER
         it.color = color
+        if (customFontFile != null) it.typeface = Typeface.createFromFile(customFontFile)
         if (addShadow) it.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
     val bounds = Rect()

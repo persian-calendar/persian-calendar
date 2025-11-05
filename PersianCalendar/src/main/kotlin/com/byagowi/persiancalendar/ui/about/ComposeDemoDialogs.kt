@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
@@ -260,11 +261,12 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
 fun IconsDemoDialog(onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) {
         FlowRow {
+            val fontFile = resolveFontFile()
             (0..61).forEach {
                 val day = it / 2 + 1
                 Image(
                     bitmap = if (it % 2 == 0) ImageBitmap.imageResource(getDayIconResource(day))
-                    else createStatusIcon(day).asImageBitmap(),
+                    else createStatusIcon(day, fontFile).asImageBitmap(),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(all = 4.dp)
