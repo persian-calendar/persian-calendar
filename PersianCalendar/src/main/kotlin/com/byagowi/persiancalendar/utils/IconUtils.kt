@@ -31,7 +31,7 @@ fun createStatusIcon(
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)
     if (bounds.width() > 90f) {
-        paint.textSize = paint.textSize * .9f
+        paint.textSize *= .9f
         paint.getTextBounds(text, 0, text.length, bounds)
     }
     return createBitmap(90, 90).applyCanvas {
