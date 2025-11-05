@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.global.nepaliMonths
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.persianMonths
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
@@ -174,8 +175,12 @@ data class EventsRepository @VisibleForTesting constructor(
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {
         val emptyDeviceCalendar: DeviceCalendarEventsStore = EventsStore.empty()
+        val weekEnds = weekEnds.value
         return (fromJdn + 1..toJdn).count {
-            !it.isWeekEnd && getEvents(it, emptyDeviceCalendar).none(CalendarEvent<*>::isHoliday)
+            it.weekDay !in weekEnds && getEvents(
+                it,
+                emptyDeviceCalendar
+            ).none(CalendarEvent<*>::isHoliday)
         }
     }
 

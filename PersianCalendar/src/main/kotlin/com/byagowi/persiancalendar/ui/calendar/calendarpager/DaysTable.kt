@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
@@ -150,6 +151,7 @@ fun daysTable(
     var focusedDay by remember { mutableStateOf<Jdn?>(null) }
     val focusColor = LocalContentColor.current.copy(.1f)
     val weekStart by weekStart.collectAsState()
+    val weekEnds by weekEnds.collectAsState()
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =
@@ -279,7 +281,7 @@ fun daysTable(
                                                     row == 0 -> monthStartJdn
                                                     // Select first non weekend day of the week
                                                     else -> day + ((0..6).firstOrNull {
-                                                        !(day + it).isWeekEnd
+                                                        (day + it).weekDay !in weekEnds
                                                     } ?: 0)
                                                 },
                                                 true,
@@ -326,7 +328,7 @@ fun daysTable(
                         ) {
                             val isSelected = isHighlighted && selectedDay == day
                             val events = eventsRepository.getEvents(day, deviceEvents)
-                            val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
+                            val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                             if (isHoliday) holidaysPositions.add(row = row, column = column)
                             Canvas(cellsSizeModifier) {
                                 val hasEvents =

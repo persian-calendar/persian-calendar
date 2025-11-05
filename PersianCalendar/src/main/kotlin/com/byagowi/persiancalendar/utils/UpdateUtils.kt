@@ -111,6 +111,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
@@ -579,6 +580,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         context.readDaysDeviceEvents(monthStartJdn - startingWeekDay, (daysRowsCount * 7).days)
     } else EventsStore.empty()
     val weekStart = weekStart.value
+    val weekEnds = weekEnds.value
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
@@ -603,7 +605,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
                 else -> R.layout.widget_month_day
             }
             val dayView = RemoteViews(context.packageName, viewId)
-            if (day.isWeekEnd || events.any { it.isHoliday }) dayView.setInt(
+            if (day.weekDay in weekEnds || events.any { it.isHoliday }) dayView.setInt(
                 R.id.day_root,
                 "setBackgroundResource",
                 R.drawable.widget_month_holiday,
@@ -1339,6 +1341,7 @@ private fun createWeekViewRemoteViews(
     } else {
         0xFFE51C23.toInt()
     }
+    val weekEnds = weekEnds.value
 
     weekDays.forEachIndexed { index, (day, weekDayNameViewId, weekDayNumberViewId) ->
         val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day, 0)
@@ -1346,7 +1349,7 @@ private fun createWeekViewRemoteViews(
             if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
             else EventsStore.empty()
         val events = eventsRepository.getEvents(day, deviceEvents)
-        val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
+        val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
 
         if (isHoliday) remoteViews.setTextColor(weekDayNumberViewId, holidaysColor)
 

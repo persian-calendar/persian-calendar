@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.utils.calendar
@@ -83,10 +84,11 @@ fun monthHtmlReport(context: Context, date: AbstractDate, wholeYear: Boolean) = 
 
 private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     val events = createMonthEventsList(context, date)
+    val weekEnds = weekEnds.value
     fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(
-            "holiday" to ((jdn.isWeekEnd && weekEndsAsHoliday) || dayEvents.any { it.isHoliday }),
+            "holiday" to ((jdn.weekDay in weekEnds && weekEndsAsHoliday) || dayEvents.any { it.isHoliday }),
             "hasEvents" to dayEvents.isNotEmpty()
         ).filter { it.second }.joinToString(" ") { it.first }
     }

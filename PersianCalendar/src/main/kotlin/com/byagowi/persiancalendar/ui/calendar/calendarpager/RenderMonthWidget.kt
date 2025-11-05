@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -43,6 +44,7 @@ fun renderMonthWidget(
         language.value.my.format(baseDate.monthName, numeral.value.format(baseDate.year))
 
     val weekStart = weekStart.value
+    val weekEnds = weekEnds.value
     canvas.also {
         (0..<7).forEach { column ->
             val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
@@ -69,7 +71,7 @@ fun renderMonthWidget(
                 val isToday = day == today
 
                 val text = mainCalendarNumeral.format(dayOffset + 1)
-                val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
+                val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                 dayPainter.setDayOfMonthItem(
                     isToday = isToday,
                     isSelected = day == selectedDay,
