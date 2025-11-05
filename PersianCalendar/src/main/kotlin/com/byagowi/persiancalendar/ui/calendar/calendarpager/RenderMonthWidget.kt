@@ -93,9 +93,10 @@ fun renderMonthWidget(
         }
         if (isShowWeekOfYearEnabled) {
             val startOfYearJdn = Jdn(calendar, baseDate.year, 1, 1)
-            val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
-            val weeksCount = (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
-                    weekOfYearStart + 1
+            val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn, weekStart)
+            val weeksCount =
+                (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn, weekStart) -
+                        weekOfYearStart + 1
             (1..6).forEach { week ->
                 val weekNumber = if (week > weeksCount) ""
                 else numeral.value.format(weekOfYearStart + week - 1)

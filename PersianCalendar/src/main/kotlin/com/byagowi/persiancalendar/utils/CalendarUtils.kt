@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
+import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -117,7 +118,7 @@ fun getA11yDaySummary(
 
     if (withWeekOfYear) {
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
-        val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
+        val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn, weekStart.value)
         appendLine().appendLine().append(
             resources.getString(
                 R.string.nth_week_of_year, numeral.value.format(weekOfYearStart)

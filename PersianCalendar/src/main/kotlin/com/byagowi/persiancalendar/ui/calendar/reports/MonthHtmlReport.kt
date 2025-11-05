@@ -113,7 +113,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
             val firstJdnInWeek = row.firstNotNullOfOrNull { it?.second/*jdn*/ } ?: return@forEach
             tr {
                 if (isShowWeekOfYearEnabled.value) {
-                    val weekOfYear = firstJdnInWeek.getWeekOfYear(startOfYearJdn)
+                    val weekOfYear = firstJdnInWeek.getWeekOfYear(startOfYearJdn, weekStart)
                     th { sub { small { +numeral.value.format(weekOfYear) } } }
                 }
                 row.forEach { pair ->

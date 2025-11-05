@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.entities
 
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.global.weekEnds
-import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Time
@@ -62,9 +61,9 @@ value class Jdn(val value: Long) {
         return Time.fromMillisecondsSince1970(date.timeInMillis)
     }
 
-    fun getWeekOfYear(startOfYear: Jdn): Int {
+    fun getWeekOfYear(startOfYear: Jdn, weekStart: WeekDay): Int {
         val dayOfYear = this - startOfYear
-        return ceil(1 + (dayOfYear - (this.weekDay - weekStart.value)) / 7.0).toInt()
+        return ceil(1 + (dayOfYear - (this.weekDay - weekStart)) / 7.0).toInt()
     }
 
     // Days passed in a season and total days available in the season

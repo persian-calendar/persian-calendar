@@ -374,6 +374,7 @@ fun SharedTransitionScope.DaysScreen(
                         val wasAtTop = scrollState.value == 0
                         { isUp: Boolean -> if (wasAtTop) onSwipeDown(isUp) }
                     }
+                    val weekStart by weekStart.collectAsState()
 
                     HorizontalPager(
                         state = weekPagerState,
@@ -384,11 +385,15 @@ fun SharedTransitionScope.DaysScreen(
                             val offset = page - weeksLimit / 2
                             val sampleDay = today + 7 * offset
                             val startOfYearJdn = Jdn(mainCalendar, date.year, 1, 1)
-                            val week = sampleDay.getWeekOfYear(startOfYearJdn)
+                            val week = sampleDay.getWeekOfYear(startOfYearJdn, weekStart)
 
                             val isCurrentPage = weekPagerState.currentPage == page
                             LaunchedEffect(isCurrentPage) {
-                                if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
+                                if (isCurrentPage && selectedDay.getWeekOfYear(
+                                        startOfYearJdn,
+                                        weekStart,
+                                    ) != week
+                                ) {
                                     val pageDay =
                                         sampleDay + (selectedDay.weekDay.ordinal - today.weekDay.ordinal)
                                     setSelectedDayInWeekPager(pageDay)
@@ -401,15 +406,16 @@ fun SharedTransitionScope.DaysScreen(
                                 today, mainCalendar.getMonthsDistance(today, selectedDay)
                             )
                             val monthStartJdn = Jdn(monthStartDate)
-                            val weekStart = (today + (page - weeksLimit / 2) * 7).let {
-                                val weekStart by weekStart.collectAsState()
+                            val pageWeekStart = (today + (page - weeksLimit / 2) * 7).let {
                                 it - (it.weekDay - weekStart)
                             }
                             val weekDeviceEvents = remember(
-                                refreshToken, isShowDeviceCalendarEvents, weekStart
+                                refreshToken,
+                                isShowDeviceCalendarEvents,
+                                pageWeekStart,
                             ) {
                                 if (isShowDeviceCalendarEvents) {
-                                    context.readWeekDeviceEvents(weekStart)
+                                    context.readWeekDeviceEvents(pageWeekStart)
                                 } else EventsStore.empty()
                             }
 
@@ -426,7 +432,7 @@ fun SharedTransitionScope.DaysScreen(
                             if (isWeekViewState) ScreenSurface(
                                 mayNeedDragHandleToDivide = !isLandscape,
                                 animatedContentScope = appAnimatedContentScope,
-                                disableSharedContent = initiallySelectedDay - weekStart !in 0..<7,
+                                disableSharedContent = initiallySelectedDay - pageWeekStart !in 0..<7,
                             ) {
                                 DaysView(
                                     modifier = if (weekPagerState.currentPage == page) Modifier.sharedBounds(
@@ -440,7 +446,7 @@ fun SharedTransitionScope.DaysScreen(
                                         if (weekPagerState.currentPage == page) addAction = it
                                     },
                                     hasWeekPager = hasWeeksPager,
-                                    startingDay = weekStart,
+                                    startingDay = pageWeekStart,
                                     selectedDay = selectedDay,
                                     setSelectedDay = setSelectedDayInWeekPager,
                                     addEvent = addEvent,

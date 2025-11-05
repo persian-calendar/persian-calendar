@@ -158,7 +158,7 @@ fun daysTable(
         val startingWeekDay = monthStartJdn.weekDay - weekStart
         val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
         val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
-        val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
+        val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn, weekStart)
         val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
 
         Box(

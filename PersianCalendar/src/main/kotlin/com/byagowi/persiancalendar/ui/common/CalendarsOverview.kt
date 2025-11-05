@@ -312,9 +312,9 @@ fun SharedTransitionScope.CalendarsOverview(
 
         val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)
         val endOfYearJdn = Jdn(selectedCalendar, date.year + 1, 1, 1) - 1
-        val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
-        val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
         val weekStart by weekStart.collectAsState()
+        val currentWeek = jdn.getWeekOfYear(startOfYearJdn, weekStart)
+        val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn, weekStart)
         val progresses = remember(jdn, selectedCalendar, weekStart) {
             val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)

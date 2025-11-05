@@ -677,7 +677,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
 
     run {
         val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
-        val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
+        val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn, weekStart)
         val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
         if (isShowWeekOfYearEnabled) monthWidgetWeeks.drop(1).forEachIndexed { i, id ->
             val weekNumber = numeral.format(weekOfYearStart + i)
