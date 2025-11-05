@@ -141,7 +141,6 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.io.File
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.ceil

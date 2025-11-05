@@ -871,7 +871,7 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
             calendar = calendar,
             year = date.year.takeIf { it != -1 } ?: run {
                 val selectedDay = viewModel.selectedDay.value on calendar
-                (selectedDay.year + if (date.month < selectedDay.month) 1 else 0)
+                selectedDay.year + if (date.month < selectedDay.month) 1 else 0
             },
             month = date.month,
             day = date.dayOfMonth,
