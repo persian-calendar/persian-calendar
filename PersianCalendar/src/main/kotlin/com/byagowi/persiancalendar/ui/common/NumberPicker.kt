@@ -255,13 +255,10 @@ fun NumberEdit(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-    var value by remember {
-        val valueText = numeral.value.format(initialValue)
-        mutableStateOf(
-            TextFieldValue(
-                valueText, selection = TextRange(0, valueText.length)
-            )
-        )
+    val numeral by numeral.collectAsState()
+    var value by remember(numeral) {
+        val valueText = numeral.format(initialValue)
+        mutableStateOf(TextFieldValue(valueText, selection = TextRange(0, valueText.length)))
     }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     var isCapturedOnce by remember { mutableStateOf(false) }

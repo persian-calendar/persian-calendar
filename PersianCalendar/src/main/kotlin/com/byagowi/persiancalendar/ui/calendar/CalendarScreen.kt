@@ -968,7 +968,9 @@ private fun SharedTransitionScope.Toolbar(
                         else viewModel.openYearView()
                     }
                     .then(
-                        if (isYearView) Modifier.heightIn(max = toolbarHeight).fillMaxWidth()
+                        if (isYearView) Modifier
+                            .heightIn(max = toolbarHeight)
+                            .fillMaxWidth()
                         else Modifier
                     ),
             ) {
