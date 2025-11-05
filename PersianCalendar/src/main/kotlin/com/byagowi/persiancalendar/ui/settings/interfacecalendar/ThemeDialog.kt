@@ -125,16 +125,19 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) {
                 RadioButton(selected = entry == userSetTheme, onClick = null)
                 Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                Text(buildAnnotatedString {
-                    append(stringResource(entry.title))
-                    if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        if (language.isPersianOrDari) withStyle(
-                            style = MaterialTheme.typography.bodySmall.toSpanStyle().copy(
-                                color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
-                            )
-                        ) { appendLine(); append("براساس حالت تاریک و رنگ‌بندی پس‌زمینه دستگاه") }
-                    }
-                })
+                Text(
+                    buildAnnotatedString {
+                        append(stringResource(entry.title))
+                        if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            if (language.isPersianOrDari) withStyle(
+                                style = MaterialTheme.typography.bodySmall.toSpanStyle().copy(
+                                    color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
+                                )
+                            ) { appendLine(); append("براساس حالت تاریک و رنگ‌بندی پس‌زمینه دستگاه") }
+                        }
+                    },
+                    Modifier.padding(end = 16.dp),
+                )
                 this.AnimatedVisibility(visible = showMore && userSetTheme == Theme.SYSTEM_DEFAULT) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
