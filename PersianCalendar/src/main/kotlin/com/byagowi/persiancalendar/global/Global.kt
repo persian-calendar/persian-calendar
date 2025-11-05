@@ -408,8 +408,9 @@ fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
     val language = language.value
     persianMonths = language.getPersianMonths(resources, alternativePersianMonthsInAzeri.value)
-    oldEraPersianMonths =
-        if (language.isPersian) Language.persianCalendarMonthsInDariOrPersianOldEra else persianMonths
+    oldEraPersianMonths = if (language.isPersianOrDari) {
+        Language.persianCalendarMonthsInDariOrPersianOldEra
+    } else persianMonths
     islamicMonths = language.getIslamicMonths(resources)
     gregorianMonths = language.getGregorianMonths(
         resources,
@@ -428,7 +429,7 @@ fun loadLanguageResources(resources: Resources) {
     when {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two
-        language.isPersian -> {
+        language.isPersianOrDari -> {
             amString = DEFAULT_AM
             pmString = DEFAULT_PM
         }

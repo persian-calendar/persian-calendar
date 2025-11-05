@@ -508,7 +508,7 @@ enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
 private fun enableTimesTab(context: Context): Boolean {
     val preferences = context.preferences
     return coordinates.value != null || // if coordinates is set, should be shown
-            (language.value.isPersian && // The placeholder isn't translated to other languages
+            (language.value.isPersianOrDari && // The placeholder isn't translated to other languages
                     // The user is already dismissed the third tab
                     !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
                     // Try to not show the placeholder to established users
@@ -968,9 +968,8 @@ private fun SharedTransitionScope.Toolbar(
                         else viewModel.openYearView()
                     }
                     .then(
-                        if (!isYearView) Modifier else Modifier
-                            .heightIn(max = toolbarHeight)
-                            .fillMaxWidth()
+                        if (isYearView) Modifier.heightIn(max = toolbarHeight).fillMaxWidth()
+                        else Modifier
                     ),
             ) {
                 if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
@@ -1322,7 +1321,7 @@ fun addEvent(
         AskForCalendarPermissionDialog { isGranted ->
             viewModel.refreshCalendar()
             if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
-                if (language.value.isPersian) coroutineScope.launch {
+                if (language.value.isPersianOrDari) coroutineScope.launch {
                     if (snackbarHostState.showSnackbar(
                             "جهت افزودن رویداد نیاز است از نصب و فعال بودن تقویم گوگل اطمینان حاصل کنید",
                             duration = SnackbarDuration.Long,

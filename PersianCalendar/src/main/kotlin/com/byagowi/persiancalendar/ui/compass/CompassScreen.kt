@@ -250,7 +250,7 @@ fun SharedTransitionScope.CompassScreen(
                         }
                         val language by language.collectAsState()
                         val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
-                        if (isAstronomicalExtraFeaturesEnabled && language.isPersian) {
+                        if (isAstronomicalExtraFeaturesEnabled && language.isPersianOrDari) {
                             var value by remember { mutableStateOf<String?>(null) }
                             AppDropdownMenuItem({
                                 Crossfade(

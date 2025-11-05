@@ -109,7 +109,7 @@ fun generateYearName(
             ChineseZodiac.fromPersianCalendar(persianDate).format(
                 resources = resources,
                 withEmoji = withEmoji,
-                isPersian = language.value.isPersian,
+                isPersian = language.value.isPersianOrDari,
                 withOldEraName = withOldEraName,
             ),
             resources.getString(R.string.shamsi_calendar_short)

@@ -153,7 +153,7 @@ fun ColumnScope.AthanSettings(destination: String) {
             updateStoredPreference(context)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) LaunchedEffect(Unit) {
-            if (language.isPersian) Toast.makeText(
+            if (language.isPersianOrDari) Toast.makeText(
                 context,
                 "جهت عملکرد صحیح اذان برنامه به دسترسی اعلان نیاز دارد.",
                 Toast.LENGTH_LONG
@@ -212,7 +212,7 @@ fun ColumnScope.AthanSettings(destination: String) {
             },
         )
     }
-    this.AnimatedVisibility(isLocationSet && notificationAthan && language.isPersian) {
+    this.AnimatedVisibility(isLocationSet && notificationAthan && language.isPersianOrDari) {
         SettingsHelp(stringResource(R.string.notification_athan_help))
     }
     this.AnimatedVisibility(isLocationSet && !notificationAthan) {

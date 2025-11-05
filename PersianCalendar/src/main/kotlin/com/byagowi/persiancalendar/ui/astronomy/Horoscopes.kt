@@ -300,14 +300,14 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             val date = PersianDate(persianYear + i, 1, 1)
             val chineseZodiac = ChineseZodiac.fromPersianCalendar(date)
             Text(
-                chineseZodiac.resolveEmoji(language.isPersian),
+                chineseZodiac.resolveEmoji(language.isPersianOrDari),
                 fontSize = 40.sp,
                 modifier = Modifier
                     .semantics { this.hideFromAccessibility() }
                     .alpha(1 - animationProgress.value * .8f),
             )
             Text(
-                chineseZodiac.formatForHoroscope(resources, language.isPersian),
+                chineseZodiac.formatForHoroscope(resources, language.isPersianOrDari),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.alpha(animationProgress.value * 1f),
             )
