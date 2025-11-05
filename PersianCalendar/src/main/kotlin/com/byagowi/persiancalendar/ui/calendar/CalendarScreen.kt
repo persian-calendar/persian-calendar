@@ -864,13 +864,17 @@ private fun Search(viewModel: CalendarViewModel) {
 
 private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, context: Context) {
     val date = event.date
-    val type = date.calendar
-    val today = Jdn.today() on type
+    val calendar = date.calendar
     bringDate(
         viewModel,
         Jdn(
-            type, if (date.year == -1) (today.year + if (date.month < today.month) 1 else 0)
-            else date.year, date.month, date.dayOfMonth
+            calendar = calendar,
+            year = date.year.takeIf { it != -1 } ?: run {
+                val selectedDay = viewModel.selectedDay.value on calendar
+                (selectedDay.year + if (date.month < selectedDay.month) 1 else 0)
+            },
+            month = date.month,
+            day = date.dayOfMonth,
         ),
         context,
     )
@@ -968,9 +972,7 @@ private fun SharedTransitionScope.Toolbar(
                         else viewModel.openYearView()
                     }
                     .then(
-                        if (isYearView) Modifier
-                            .heightIn(max = toolbarHeight)
-                            .fillMaxWidth()
+                        if (isYearView) Modifier.heightIn(max = toolbarHeight).fillMaxWidth()
                         else Modifier
                     ),
             ) {
