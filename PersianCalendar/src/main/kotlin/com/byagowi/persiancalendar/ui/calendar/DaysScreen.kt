@@ -535,8 +535,8 @@ fun SharedTransitionScope.DaysScreen(
 
 private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
     val daysStart = day - (day.weekDay - weekStart.value)
-    val todaysStart = today - (today.weekDay - weekStart.value)
-    return (daysStart - todaysStart) / 7 + weeksLimit / 2
+    val todayStart = today - (today.weekDay - weekStart.value)
+    return (daysStart - todayStart) / 7 + weeksLimit / 2
 }
 
 private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
