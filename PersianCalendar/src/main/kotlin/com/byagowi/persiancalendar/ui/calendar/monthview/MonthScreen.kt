@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral

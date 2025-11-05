@@ -146,7 +146,7 @@ fun SharedTransitionScope.TimesTab(
 private fun showEnableAthanForPersianUsers(): Boolean {
     val language by language.collectAsState()
     // As the message is only translated in Persian
-    if (!(language.isPersian || language.isDari)) return false
+    if (!language.isPersianOrDari) return false
     val context = LocalContext.current
     return PREF_ATHAN_ALARM !in context.preferences && PREF_NOTIFICATION_ATHAN !in context.preferences
 }

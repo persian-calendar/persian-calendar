@@ -205,7 +205,7 @@ fun SharedTransitionScope.CalendarsOverview(
         val moonInScorpioState =
             if (showMoonInScorpio.collectAsState().value) moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
-            val text = if (language.isPersian || language.isDari) when (moonInScorpioState) {
+            val text = if (language.isPersianOrDari) when (moonInScorpioState) {
                 MoonInScorpioState.Borji -> "قمر در برج عقرب"
                 MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
                 is MoonInScorpioState.Start -> {

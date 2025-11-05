@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.entities
 
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.weekDays
-import com.byagowi.persiancalendar.global.weekDaysInitials
+import com.byagowi.persiancalendar.global.weekDaysTitles
+import com.byagowi.persiancalendar.global.weekDaysTitlesInitials
 
 // Order of this enum is a legacy for this codebase and it
 // *DIFFERS* from ISO-8601 standard and isn't 1 (Monday) to 7 (Sunday), unfortunately
@@ -23,8 +23,8 @@ enum class WeekDay(
     operator fun plus(other: Int): WeekDay = entries[(ordinal + other) % 7]
 
     // Better to use titleId and shortTitleId but it's ok to not to in widgets and so
-    val title: String get() = weekDays[this.ordinal]
-    val shortTitle get() = weekDaysInitials[this.ordinal]
+    val title: String get() = weekDaysTitles[this.ordinal]
+    val shortTitle: String get() = weekDaysTitlesInitials[this.ordinal]
 
     companion object {
         // Get a WeekDay from ISO-8601's ordinal, from 1 (Monday) to 7 (Sunday).

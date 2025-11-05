@@ -155,9 +155,9 @@ var gregorianMonths = monthNameEmptyList
 var nepaliMonths = monthNameEmptyList
     private set
 private val weekDaysEmptyList = List(7) { "" }
-var weekDays = weekDaysEmptyList
+var weekDaysTitles = weekDaysEmptyList
     private set
-var weekDaysInitials = weekDaysEmptyList
+var weekDaysTitlesInitials = weekDaysEmptyList
     private set
 
 private val numeral_ = MutableStateFlow(Numeral.PERSIAN)
@@ -416,8 +416,8 @@ fun loadLanguageResources(resources: Resources) {
         englishGregorianPersianMonths.value || easternGregorianArabicMonths.value,
     )
     nepaliMonths = language.getNepaliMonths()
-    weekDays = language.getWeekDays(resources)
-    weekDaysInitials = language.getWeekDaysInitials(resources)
+    weekDaysTitles = language.getWeekDays(resources)
+    weekDaysTitlesInitials = language.getWeekDaysInitials(resources)
     shiftWorkTitles = mapOf(
         "d" to resources.getString(R.string.shift_work_morning), // d -> day work, legacy key
         "r" to resources.getString(R.string.shift_work_off), // r -> rest, legacy key
