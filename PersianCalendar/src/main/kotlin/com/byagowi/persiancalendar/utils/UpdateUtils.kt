@@ -918,7 +918,7 @@ private fun createMonthViewRemoteViews(
     // remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
 
     val monthStart = Jdn(baseDate)
-    val weekStart = Jdn(baseDate).weekDay - weekStart.value
+    val weekStart = monthStart.weekDay - weekStart.value
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
     monthWidgetCells.forEachIndexed { i, id ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
