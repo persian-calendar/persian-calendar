@@ -48,6 +48,7 @@ enum class Language(val code: String, val nativeName: String) {
     JA("ja", "日本語"),
     KMR("kmr", "Kurdî"),
     NE("ne", "नेपाली"),
+    OTA("ota", "عثمانى"),
     PT("pt", "Português"),
     RU("ru", "Русский"),
     TA("ta", "தமிழ்"),
@@ -109,7 +110,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val isLessKnownRtl: Boolean
         get() = when (this) {
-            AZB, GLK -> true
+            AZB, GLK, OTA -> true
             else -> false
         }
 
@@ -178,7 +179,7 @@ enum class Language(val code: String, val nativeName: String) {
     val preferredNumeral
         get() = when (this) {
             FA, FA_AF, PS, GLK, AZB -> Numeral.PERSIAN
-            AR, CKB -> Numeral.ARABIC_INDIC
+            AR, CKB, OTA -> Numeral.ARABIC_INDIC
             NE -> Numeral.DEVANAGARI
             TA -> Numeral.TAMIL
             else -> Numeral.ARABIC
@@ -211,7 +212,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersIslamicCalendar: Boolean
         get() = when (this) {
-            AR -> true
+            AR, OTA -> true
             else -> false
         }
 
@@ -236,7 +237,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val defaultWeekStart
         get() = when (this) {
-            FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK -> WeekDay.SATURDAY
+            FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK, OTA -> WeekDay.SATURDAY
             EN_US -> WeekDay.SUNDAY
             JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
         }
@@ -398,7 +399,7 @@ enum class Language(val code: String, val nativeName: String) {
         }
         val format = when (this) {
             // Year major
-            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN -> "%1\$s$sep%2\$s$sep%3\$s"
+            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN, OTA -> "%1\$s$sep%2\$s$sep%3\$s"
             // Month major
             EN_US -> "%2\$s$sep%3\$s$sep%1\$s"
             // Day major, most likely everything else goes here but check via JS'
