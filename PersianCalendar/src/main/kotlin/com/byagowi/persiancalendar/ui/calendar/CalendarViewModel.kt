@@ -188,8 +188,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             Jdn(
                 calendar = calendar,
                 year = date.year.takeIf { it != -1 } ?: run {
-                    val selectedDay = selectedDay.value on calendar
-                    selectedDay.year + if (date.month < selectedDay.month) 1 else 0
+                    val selectedMonth = calendar.getMonthStartFromMonthsDistance(
+                        baseJdn = today.value,
+                        monthsDistance = selectedMonthOffset.value,
+                    )
+                    selectedMonth.year + if (date.month < selectedMonth.month) 1 else 0
                 },
                 month = date.month,
                 day = date.dayOfMonth,
