@@ -1,3 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="code">ota</string>
+    <string name="app_name">ایران تقویمی</string>
+    <string name="widget_name">ایران تقویمی</string>
+    <string name="widget_mini_name">ایران تقویمی (كوچوك)</string>
+    <string name="add">اكلە</string>
+    <string name="help">یاردیم</string>
+    <string name="more">دها</string>
+    <string name="cancel">ایپتال</string>
+    <string name="continue_button">دوام ایت</string>
+    <string name="update">گونجللە</string>
+    <string name="calendar">تقویم</string>
+    <string name="converter">دونوشدیریجی</string>
+    <string name="compass">پوصولە</string>
+    <string name="settings">عیارلر</string>
+    <string name="about">حقندە</string>
+    <string name="exit">چیقیش</string>
+    <string name="today">بوگون</string>
+    <string name="days_distance">مسافە</string>
+    <string name="animal_year_name_monkey">میمون</string>
+    <string name="animal_year_name_rooster">خوروز</string>
+    <string name="animal_year_name_dog">كوپك</string>
+    <string name="animal_year_name_pig">طوموز</string>
+    <string name="animal_year_name_rat">صیچان</string>
+    <string name="animal_year_name_ox">اوكوز</string>
+    <string name="animal_year_name_tiger">قاپلان</string>
+    <string name="animal_year_name_rabbit">طاوشان</string>
+    <string name="animal_year_name_dragon">اژدرها</string>
+    <string name="animal_year_name_snake">ییلان</string>
+    <string name="animal_year_name_horse">آت</string>
+    <string name="animal_year_name_goat">كچی</string>
+    <string name="zodiac">برج</string>
+    <string name="capricorn">اوغلاق</string>
+    <string name="aquarius">قوغە</string>
+    <string name="pisces">بالیق</string>
+    <string name="aries">قوچ</string>
+    <string name="taurus">بوغا</string>
+    <string name="gemini">ایكیزلر</string>
+    <string name="cancer">ینگچ</string>
+    <string name="leo">آرسلان</string>
+    <string name="virgo">باشاق</string>
+    <string name="libra">ترازی</string>
+    <string name="scorpio">عقرب</string>
+    <string name="sagittarius">یای</string>
+    <string name="events">ایتكنلكلر</string>
+    <string name="sunrise_sun_view">گوندوغومی</string>
+    <string name="midday_sun_view">گون اورطەسی</string>
+    <string name="sunset_sun_view">گون باتیمی</string>
+    <string name="length_of_day">گوندوز</string>
+    <string name="remaining_daylight">قالان</string>
+    <string name="times">وقتلری</string>
+    <string name="imsak">امساك</string>
+    <string name="fajr">صبح اذانی</string>
+    <string name="sunrise">گوندوغومی</string>
+    <string name="dhuhr">اوغلە اذانی</string>
+    <string name="asr">ایكیندی اذانی</string>
+    <string name="sunset">گون باتیمی</string>
+    <string name="maghrib">آقشام اذانی</string>
+    <string name="isha">یاتسو اذانی</string>
+    <string name="midnight">گجە یاریسی</string>
+    <string name="year">ییل</string>
+    <string name="month">آی</string>
+    <string name="day">گون</string>
+    <string name="level">دوزەی</string>
+    <string name="stop">طوردور</string>
+    <string name="resume">دوام ایت</string>
+    <string name="north">قوزەی</string>
+    <string name="east">دوغو</string>
+    <string name="south">گونەی</string>
+    <string name="west">باتی</string>
+    <string name="qibla">قبلە</string>
+    <string name="pref_widget">ویژت</string>
+    <string name="pref_notification">بیلدیریم</string>
+    <string name="pref_interface">آرایوز</string>
+    <string name="language">دیل</string>
+    <string name="skin">تەما</string>
+    <string name="astronomy">آسترونومی</string>
+    <string name="week_ends">هفتەصوڭی گونلری</string>
+    <string name="location">قونوم</string>
+    <string name="latitude">اگلەم</string>
+    <string name="longitude">بویلام</string>
+    <string name="altitude">راقم (یوكسكلك)</string>
+    <string name="coordinates">قواوردیناتلر</string>
+    <string name="athan">اذان</string>
+    <string name="licenses">لیسانس</string>
+    <string name="about_send_mail">ای‌پوستە</string>
+    <string name="remove">قالدیر</string>
+    <string name="spaced_and">" و "</string>
+    <string name="spaced_or">" ویا "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
+    <string name="recurs">تكرارلر</string>
+    <string name="am">او.او</string>
+    <string name="pm">او.س</string>
+    <string name="holiday">تعطیل</string>
+    <string name="shift_work_days_head">سورە</string>
+    <string name="map">خریطە</string>
+    <string name="share">پایلاش</string>
+    <string name="preview">اوڭ ایزلەمە</string>
+    <string name="ignore">یوق صای، گوز آردی ایت</string>
+    <string name="theme_light">آچیق رنگ</string>
+    <string name="theme_dark">قویو رنگ</string>
+    <string name="theme_modern">مودەرن</string>
+    <string name="theme_aqua">ماوی</string>
+    <string name="theme_black">سیاه</string>
+    <string name="shamsi_calendar_short">ایران</string>
+    <string name="islamic_calendar_short">هجری</string>
+    <string name="gregorian_calendar_short">میلادی</string>
+    <string name="shift_work_morning">صبح</string>
+    <string name="shift_work_off">قاپالی</string>
+    <string name="shift_work_evening">آقشام</string>
+    <string name="shift_work_night">گجە</string>
+    <string name="other_holidays">دیكر</string>
+    <string name="farvardin">فروردین</string>
+    <string name="ordibehesht">اردیبهشت</string>
+    <string name="khordad">خرداد</string>
+    <string name="tir">تیر</string>
+    <string name="mordad">مرداد</string>
+    <string name="shahrivar">شهریور</string>
+    <string name="mehr">مهر</string>
+    <string name="aban">آبان</string>
+    <string name="azar">آذر</string>
+    <string name="dey">دی</string>
+    <string name="bahman">بهمن</string>
+    <string name="esfand">اسفند</string>
+    <string name="muharram">محرم</string>
+    <string name="safar">صفر</string>
+    <string name="rajab">رجب</string>
+    <string name="shaban">شعبان</string>
+    <string name="ramadan">رمضان</string>
+    <string name="shawwal">شوال</string>
+    <string name="january">اوجاق</string>
+    <string name="february">شباط</string>
+    <string name="march">مارت</string>
+    <string name="april">نیسان</string>
+    <string name="may">مایس</string>
+    <string name="june">خزیران</string>
+    <string name="july">تموز</string>
+    <string name="august">آغوستوس</string>
+    <string name="september">ایلول</string>
+    <string name="october">اكیم</string>
+    <string name="november">قاسم</string>
+    <string name="december">آرالق</string>
+    <string name="saturday">جمعەایرتەسی</string>
+    <string name="sunday">پازار</string>
+    <string name="monday">پازارایرتەسی</string>
+    <string name="tuesday">صالی</string>
+    <string name="wednesday">چهارشنبە</string>
+    <string name="thursday">پرشنبە</string>
+    <string name="friday">جمعە</string>
+    <string name="saturday_short">جت</string>
+    <string name="sunday_short">پز</string>
+    <string name="monday_short">پت</string>
+    <string name="tuesday_short">صا</string>
+    <string name="wednesday_short">چها</string>
+    <string name="thursday_short">پە</string>
+    <string name="friday_short">جو</string>
+    <string name="none">هیچبری</string>
+    <string name="nepali_calendar_short">نپالجە</string>
+    <string name="country_emoji">🇹🇷</string>
+    <string name="season">موسم</string>
+    <string name="nepal">نپال</string>
+    <string name="summer">یاز</string>
+    <string name="autumn">صوڭ‌بهار</string>
+    <string name="winter">قیش</string>
+    <string name="spring">ایلك‌بهار</string>
+    <string name="mercury">مركور</string>
+    <string name="venus">ونوس</string>
+    <string name="earth">دنیا</string>
+    <string name="mars">مارس</string>
+    <string name="jupiter">ژوپیتر</string>
+    <string name="saturn">ساتورن</string>
+    <string name="uranus">اورانوس</string>
+    <string name="neptune">نپتون</string>
+    <string name="pluto">پلوتون</string>
+    <string name="sun">گونش</string>
+    <string name="moon">آی</string>
+    <string name="tropical">تروپیقال</string>
+    <string name="calculator">حساب ماكینەسی</string>
+    <string name="chinese">چین</string>
+    <string name="lock">كلیدلە</string>
+    <string name="yes">أوت</string>
+    <string name="save">قید ایت</string>
+    <string name="vibration">تیترەشیم</string>
+    <string name="schedule">پلان</string>
+    <string name="print">یازدیر</string>
+    <string name="horoscope">برج</string>
+    <string name="black_moon">قمرالاسود</string>
+    <string name="pref_ui">قوللانیجی آرایوزو</string>
+    <string name="week">هفتە</string>
 </resources>
