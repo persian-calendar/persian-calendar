@@ -971,7 +971,8 @@ private fun SharedTransitionScope.Toolbar(
                                             append(stringResource(R.string.cancel))
                                             append(" ")
                                             append(stringResource(R.string.year_view))
-                                        }) { viewModel.changeYearViewCalendar(null) }
+                                        },
+                                    ) { viewModel.changeYearViewCalendar(null) }
                                     .padding(horizontal = 8.dp)
                             },
                         )
