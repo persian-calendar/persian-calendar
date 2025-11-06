@@ -184,20 +184,19 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     fun bringEvent(event: CalendarEvent<*>) {
         val date = event.date
         val calendar = date.calendar
-        bringDay(
-            Jdn(
-                calendar = calendar,
-                year = date.year.takeIf { it != -1 } ?: run {
-                    val selectedMonth = calendar.getMonthStartFromMonthsDistance(
-                        baseJdn = today.value,
-                        monthsDistance = selectedMonthOffset.value,
-                    )
-                    selectedMonth.year + if (date.month < selectedMonth.month) 1 else 0
-                },
-                month = date.month,
-                day = date.dayOfMonth,
-            ),
+        val jdn = Jdn(
+            calendar = calendar,
+            year = date.year.takeIf { it != -1 } ?: run {
+                val selectedMonth = calendar.getMonthStartFromMonthsDistance(
+                    baseJdn = today.value,
+                    monthsDistance = selectedMonthOffset.value,
+                )
+                selectedMonth.year + if (date.month < selectedMonth.month) 1 else 0
+            },
+            month = date.month,
+            day = date.dayOfMonth,
         )
+        bringDay(jdn)
     }
 
     fun bringDay(jdn: Jdn, highlight: Boolean = true) {
