@@ -237,7 +237,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
                                             ) {
-                                                bringDate(calendarViewModel, jdn, context)
+                                                calendarViewModel.bringDay(jdn, context)
                                                 navigateUp()
                                             }
                                             .size(36.dp)

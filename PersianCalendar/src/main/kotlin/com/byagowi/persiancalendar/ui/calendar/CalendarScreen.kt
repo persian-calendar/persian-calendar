@@ -143,8 +143,6 @@ import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -192,10 +190,8 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
 import com.byagowi.persiancalendar.utils.logException
@@ -237,7 +233,7 @@ fun SharedTransitionScope.CalendarScreen(
 
     val daysScreenSelectedDay by viewModel.daysScreenSelectedDay.collectAsState()
     LaunchedEffect(daysScreenSelectedDay) {
-        daysScreenSelectedDay?.let { bringDate(viewModel, it, context, it != today) }
+        daysScreenSelectedDay?.let { viewModel.bringDay(it, context, it != today) }
     }
 
     val density = LocalDensity.current
@@ -260,7 +256,7 @@ fun SharedTransitionScope.CalendarScreen(
         SwipeUpAction.DayView to { navigateToDays(viewModel.selectedDay.value, false) },
         SwipeUpAction.WeekView to { navigateToDays(viewModel.selectedDay.value, true) },
         SwipeUpAction.None to {
-            if (isOnlyEventsTab) bringDate(viewModel, viewModel.selectedDay.value - 7, context)
+            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value - 7, context)
         },
     )
 
@@ -268,7 +264,7 @@ fun SharedTransitionScope.CalendarScreen(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
         SwipeDownAction.YearView to { viewModel.openYearView() },
         SwipeDownAction.None to {
-            if (isOnlyEventsTab) bringDate(viewModel, viewModel.selectedDay.value + 7, context)
+            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value + 7, context)
         },
     )
 
@@ -515,26 +511,6 @@ private fun enableTimesTab(context: Context): Boolean {
                     PREF_APP_LANGUAGE !in preferences)
 }
 
-fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highlight: Boolean = true) {
-    viewModel.changeSelectedDay(jdn)
-    if (!highlight) viewModel.clearHighlightedDay()
-    val today = Jdn.today()
-    viewModel.changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
-
-    // a11y
-    if (isTalkBackEnabled.value && jdn != today) Toast.makeText(
-        context, getA11yDaySummary(
-            context.resources,
-            jdn,
-            false,
-            EventsStore.empty(),
-            withZodiac = true,
-            withOtherCalendars = true,
-            withTitle = true
-        ), Toast.LENGTH_SHORT
-    ).show()
-}
-
 private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -660,7 +636,7 @@ private fun Details(
                         .detectHorizontalSwipe {
                             { isLeft ->
                                 val newJdn = jdn + if (isLeft xor isRtl) -1 else 1
-                                bringDate(viewModel, newJdn, context)
+                                viewModel.bringDay(newJdn, context)
                             }
                         }
                         .then(modifier)
@@ -839,7 +815,7 @@ private fun Search(viewModel: CalendarViewModel) {
                     Modifier
                         .clickable {
                             viewModel.closeSearch()
-                            bringEvent(viewModel, event, context)
+                            viewModel.bringEvent(event, context)
                         }
                         .fillMaxWidth()
                         .padding(vertical = 20.dp, horizontal = 24.dp),
@@ -860,24 +836,6 @@ private fun Search(viewModel: CalendarViewModel) {
             if (events.size > 10) Text("…", Modifier.padding(vertical = 12.dp, horizontal = 24.dp))
         }
     }
-}
-
-private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, context: Context) {
-    val date = event.date
-    val calendar = date.calendar
-    bringDate(
-        viewModel,
-        Jdn(
-            calendar = calendar,
-            year = date.year.takeIf { it != -1 } ?: run {
-                val selectedDay = viewModel.selectedDay.value on calendar
-                selectedDay.year + if (date.month < selectedDay.month) 1 else 0
-            },
-            month = date.month,
-            day = date.dayOfMonth,
-        ),
-        context,
-    )
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -972,7 +930,9 @@ private fun SharedTransitionScope.Toolbar(
                         else viewModel.openYearView()
                     }
                     .then(
-                        if (isYearView) Modifier.heightIn(max = toolbarHeight).fillMaxWidth()
+                        if (isYearView) Modifier
+                            .heightIn(max = toolbarHeight)
+                            .fillMaxWidth()
                         else Modifier
                     ),
             ) {
@@ -1057,7 +1017,7 @@ private fun SharedTransitionScope.Toolbar(
                 val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                 TodayActionButton(todayButtonVisibility) {
                     viewModel.changeYearViewCalendar(null)
-                    bringDate(viewModel, Jdn.today(), context, highlight = false)
+                    viewModel.bringDay(Jdn.today(), context, highlight = false)
                 }
             }
             this.AnimatedVisibility(!isYearView) {
@@ -1097,7 +1057,7 @@ private fun SharedTransitionScope.Menu(
     if (showDatePickerDialog) {
         val selectedDay by viewModel.selectedDay.collectAsState()
         DatePickerDialog(selectedDay, { showDatePickerDialog = false }) { jdn ->
-            bringDate(viewModel, jdn, context)
+            viewModel.bringDay(jdn, context)
         }
     }
 

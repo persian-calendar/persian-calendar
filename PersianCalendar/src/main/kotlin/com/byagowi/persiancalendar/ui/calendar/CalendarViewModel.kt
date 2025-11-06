@@ -1,18 +1,24 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.app.Application
+import android.content.Context
+import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
+import com.byagowi.persiancalendar.utils.calendar
+import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,10 +117,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _selectedDay.value = jdn
     }
 
-    fun clearHighlightedDay() {
-        _isHighlighted.value = false
-    }
-
     fun changeSelectedTab(tab: CalendarScreenTab) {
         _selectedTab.value = tab
     }
@@ -178,6 +180,47 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun yearViewIsInYearSelection(value: Boolean) {
         _yearViewIsInYearSelection.value = value
+    }
+
+    fun bringEvent(event: CalendarEvent<*>, context: Context) {
+        val date = event.date
+        val calendar = date.calendar
+        bringDay(
+            Jdn(
+                calendar = calendar,
+                year = date.year.takeIf { it != -1 } ?: run {
+                    val selectedDay = selectedDay.value on calendar
+                    selectedDay.year + if (date.month < selectedDay.month) 1 else 0
+                },
+                month = date.month,
+                day = date.dayOfMonth,
+            ),
+            context,
+        )
+    }
+
+    fun bringDay(jdn: Jdn, context: Context, highlight: Boolean = true) {
+        changeSelectedDay(jdn)
+        if (!highlight) _isHighlighted.value = false
+        val today = Jdn.today()
+        changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
+
+        // a11y
+        if (isTalkBackEnabled.value && jdn != today) {
+            Toast.makeText(
+                context,
+                getA11yDaySummary(
+                    context.resources,
+                    jdn,
+                    false,
+                    EventsStore.empty(),
+                    withZodiac = true,
+                    withOtherCalendars = true,
+                    withTitle = true
+                ),
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
     }
 
     init {
