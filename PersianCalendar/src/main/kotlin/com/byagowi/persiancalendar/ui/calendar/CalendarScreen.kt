@@ -233,7 +233,7 @@ fun SharedTransitionScope.CalendarScreen(
 
     val daysScreenSelectedDay by viewModel.daysScreenSelectedDay.collectAsState()
     LaunchedEffect(daysScreenSelectedDay) {
-        daysScreenSelectedDay?.let { viewModel.bringDay(it, context, it != today) }
+        daysScreenSelectedDay?.let { viewModel.bringDay(it, it != today) }
     }
 
     val density = LocalDensity.current
@@ -256,7 +256,7 @@ fun SharedTransitionScope.CalendarScreen(
         SwipeUpAction.DayView to { navigateToDays(viewModel.selectedDay.value, false) },
         SwipeUpAction.WeekView to { navigateToDays(viewModel.selectedDay.value, true) },
         SwipeUpAction.None to {
-            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value - 7, context)
+            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value - 7)
         },
     )
 
@@ -264,7 +264,7 @@ fun SharedTransitionScope.CalendarScreen(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
         SwipeDownAction.YearView to { viewModel.openYearView() },
         SwipeDownAction.None to {
-            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value + 7, context)
+            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value + 7)
         },
     )
 
@@ -629,14 +629,13 @@ private fun Details(
             val tabMinHeight = contentMinHeight - (if (isOnlyEventsTab) 0 else 48).dp
             Box(
                 if (isOnlyEventsTab) run {
-                    val context = LocalContext.current
                     val jdn by viewModel.selectedDay.collectAsState()
                     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                     Modifier
                         .detectHorizontalSwipe {
                             { isLeft ->
                                 val newJdn = jdn + if (isLeft xor isRtl) -1 else 1
-                                viewModel.bringDay(newJdn, context)
+                                viewModel.bringDay(newJdn)
                             }
                         }
                         .then(modifier)
@@ -809,13 +808,12 @@ private fun Search(viewModel: CalendarViewModel) {
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            val context = LocalContext.current
             events.take(10).forEach { event ->
                 Box(
                     Modifier
                         .clickable {
                             viewModel.closeSearch()
-                            viewModel.bringEvent(event, context)
+                            viewModel.bringEvent(event)
                         }
                         .fillMaxWidth()
                         .padding(vertical = 20.dp, horizontal = 24.dp),
@@ -849,8 +847,6 @@ private fun SharedTransitionScope.Toolbar(
     isLandscape: Boolean,
     today: Jdn,
 ) {
-    val context = LocalContext.current
-
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
@@ -1017,7 +1013,7 @@ private fun SharedTransitionScope.Toolbar(
                 val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                 TodayActionButton(todayButtonVisibility) {
                     viewModel.changeYearViewCalendar(null)
-                    viewModel.bringDay(Jdn.today(), context, highlight = false)
+                    viewModel.bringDay(Jdn.today(), highlight = false)
                 }
             }
             this.AnimatedVisibility(!isYearView) {
@@ -1057,7 +1053,7 @@ private fun SharedTransitionScope.Menu(
     if (showDatePickerDialog) {
         val selectedDay by viewModel.selectedDay.collectAsState()
         DatePickerDialog(selectedDay, { showDatePickerDialog = false }) { jdn ->
-            viewModel.bringDay(jdn, context)
+            viewModel.bringDay(jdn)
         }
     }
 

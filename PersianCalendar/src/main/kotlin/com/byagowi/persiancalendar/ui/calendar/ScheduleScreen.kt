@@ -201,7 +201,6 @@ fun SharedTransitionScope.ScheduleScreen(
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
-                val context = LocalContext.current
                 val customFontName by customFontName.collectAsState()
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
@@ -237,7 +236,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
                                             ) {
-                                                calendarViewModel.bringDay(jdn, context)
+                                                calendarViewModel.bringDay(jdn)
                                                 navigateUp()
                                             }
                                             .size(36.dp)

@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
@@ -182,7 +181,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _yearViewIsInYearSelection.value = value
     }
 
-    fun bringEvent(event: CalendarEvent<*>, context: Context) {
+    fun bringEvent(event: CalendarEvent<*>) {
         val date = event.date
         val calendar = date.calendar
         bringDay(
@@ -195,11 +194,10 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                 month = date.month,
                 day = date.dayOfMonth,
             ),
-            context,
         )
     }
 
-    fun bringDay(jdn: Jdn, context: Context, highlight: Boolean = true) {
+    fun bringDay(jdn: Jdn, highlight: Boolean = true) {
         changeSelectedDay(jdn)
         if (!highlight) _isHighlighted.value = false
         val today = Jdn.today()
@@ -207,6 +205,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
         // a11y
         if (isTalkBackEnabled.value && jdn != today) {
+            val context = getApplication<Application>()
             Toast.makeText(
                 context,
                 getA11yDaySummary(
