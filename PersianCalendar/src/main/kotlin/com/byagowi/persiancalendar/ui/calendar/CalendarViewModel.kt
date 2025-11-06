@@ -200,19 +200,18 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     fun bringDay(jdn: Jdn, highlight: Boolean = true) {
         changeSelectedDay(jdn)
         if (!highlight) _isHighlighted.value = false
-        val today = Jdn.today()
-        changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
+        changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today.value, jdn))
 
         // a11y
-        if (isTalkBackEnabled.value && jdn != today) {
+        if (isTalkBackEnabled.value && jdn != today.value) {
             val context = getApplication<Application>()
             Toast.makeText(
                 context,
                 getA11yDaySummary(
-                    context.resources,
-                    jdn,
-                    false,
-                    EventsStore.empty(),
+                    resources = context.resources,
+                    jdn = jdn,
+                    isToday = false,
+                    deviceCalendarEvents = EventsStore.empty(),
                     withZodiac = true,
                     withOtherCalendars = true,
                     withTitle = true
