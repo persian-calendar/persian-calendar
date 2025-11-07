@@ -196,7 +196,8 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 File(context.filesDir, STORED_FONT_NAME).outputStream()
                     .use(inputStream::copyTo)
                 // It's funny but if dialog isn't closed before the font change it can cause crash
-                // with "Channel is unrecoverably broken and will be disposed!" message and without
+                // with "Out of order buffers detected for RequestedLayerState" and
+                // "Out of order buffers detected for RequestedLayerState" messages and without
                 // any vm stacktrace…
                 onDismissRequest()
                 context.preferences.edit {
