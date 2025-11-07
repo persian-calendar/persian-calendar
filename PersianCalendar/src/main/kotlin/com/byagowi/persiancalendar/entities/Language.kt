@@ -80,32 +80,32 @@ enum class Language(val code: String, val nativeName: String) {
     // Formatting "Day Month Year" considerations
     val dmy: String
         get() = when (this) {
-            CKB -> "%1\$sی %2\$sی %3\$s"
-            ZH_CN -> "%3\$s 年 %2\$s %1\$s 日"
-            else -> "%1\$s %2\$s %3\$s"
+            CKB -> $$"%1$sی %2$sی %3$s"
+            ZH_CN -> $$"%3$s 年 %2$s %1$s 日"
+            else -> $$"%1$s %2$s %3$s"
         }
     val dm: String
         get() = when (this) {
-            CKB -> "%1\$sی %2\$s"
-            JA, ZH_CN -> "%2\$s %1\$s"
-            EN_US -> "%2\$s %1\$s"
-            else -> "%1\$s %2\$s"
+            CKB -> $$"%1$sی %2$s"
+            JA, ZH_CN -> $$"%2$s %1$s"
+            EN_US -> $$"%2$s %1$s"
+            else -> $$"%1$s %2$s"
         }
     val my: String
         get() = when (this) {
-            CKB -> "%1\$sی %2\$s"
-            ZH_CN -> "%2\$s 年 %1\$s"
-            else -> "%1\$s %2\$s"
+            CKB -> $$"%1$sی %2$s"
+            ZH_CN -> $$"%2$s 年 %1$s"
+            else -> $$"%1$s %2$s"
         }
     val timeAndDateFormat: String
         get() = when (this) {
-            JA, ZH_CN -> "%2\$s %1\$s"
-            else -> "%1\$s$spacedComma%2\$s"
+            JA, ZH_CN -> $$"%2$s %1$s"
+            else -> $$"%1$s$$spacedComma%2$s"
         }
     val clockAmPmOrder: String
         get() = when (this) {
-            ZH_CN -> "%2\$s %1\$s"
-            else -> "%1\$s %2\$s"
+            ZH_CN -> $$"%2$s %1$s"
+            else -> $$"%1$s %2$s"
         }
 
     val isLessKnownRtl: Boolean
@@ -399,12 +399,12 @@ enum class Language(val code: String, val nativeName: String) {
         }
         val format = when (this) {
             // Year major
-            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN, OTA -> "%1\$s$sep%2\$s$sep%3\$s"
+            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN, OTA -> $$"%1$s$$sep%2$s$$sep%3$s"
             // Month major
-            EN_US -> "%2\$s$sep%3\$s$sep%1\$s"
+            EN_US -> $$"%2$s$$sep%3$s$$sep%1$s"
             // Day major, most likely everything else goes here but check via JS'
             // new Date().toLocaleDateString('XX')
-            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> "%3\$s$sep%2\$s$sep%1\$s"
+            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> $$"%3$s$$sep%2$s$$sep%1$s"
         }
         return format.format(
             numeral.format(year),
