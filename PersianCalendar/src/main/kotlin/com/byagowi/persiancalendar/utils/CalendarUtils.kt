@@ -333,15 +333,22 @@ fun calculateDaysDifference(
 }
 
 fun formatDate(
-    date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
-): String =
-    if (numericalDatePreferred.value && !forceNonNumerical) (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(
-        date
-    )) else "").trim() else language.value.dmy.format(
+    date: AbstractDate,
+    calendarNameInLinear: Boolean = true,
+    forceNonNumerical: Boolean = false,
+): String {
+    return if (numericalDatePreferred.value && !forceNonNumerical) buildString {
+        append(date.toLinearDate())
+        if (calendarNameInLinear) {
+            append(" ")
+            append(calendarsTitlesAbbr.value[date.calendar].orEmpty())
+        }
+    }.trim() else language.value.dmy.format(
         numeral.value.format(date.dayOfMonth),
         date.monthName,
         numeral.value.format(date.year),
     )
+}
 
 fun AbstractDate.toLinearDate(numeral: Numeral = com.byagowi.persiancalendar.global.numeral.value) =
     language.value.allNumericsDateFormat(year, month, dayOfMonth, numeral)
@@ -400,9 +407,6 @@ fun otherCalendarFormat(
         numeral.value.format(it)
     }
 }
-
-private fun getCalendarNameAbbr(date: AbstractDate) =
-    calendarsTitlesAbbr.getOrNull(date.calendar.ordinal).orEmpty()
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn on it) }

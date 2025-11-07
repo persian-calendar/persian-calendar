@@ -364,8 +364,9 @@ var holidayString = DEFAULT_HOLIDAY
 private val numericalDatePreferred_ = MutableStateFlow(DEFAULT_NUMERICAL_DATE_PREFERRED)
 val numericalDatePreferred: StateFlow<Boolean> get() = numericalDatePreferred_
 
-var calendarsTitlesAbbr = emptyList<String>()
-    private set
+private val calendarsTitlesAbbr_ = MutableStateFlow(emptyMap<Calendar, String>())
+val calendarsTitlesAbbr: StateFlow<Map<Calendar, String>> get() = calendarsTitlesAbbr_
+
 var eventsRepository = EventsRepository.empty()
     private set
 
@@ -424,7 +425,8 @@ fun loadLanguageResources(resources: Resources) {
         "e" to resources.getString(R.string.shift_work_evening),
         "n" to resources.getString(R.string.shift_work_night)
     )
-    calendarsTitlesAbbr = Calendar.entries.map { resources.getString(it.shortTitle) }
+    calendarsTitlesAbbr_.value =
+        Calendar.entries.associateWith { resources.getString(it.shortTitle) }
     when {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two

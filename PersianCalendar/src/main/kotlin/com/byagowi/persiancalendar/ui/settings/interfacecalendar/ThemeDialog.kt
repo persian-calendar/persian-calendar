@@ -236,7 +236,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     }
                 }
                 AnimatedVisibility(customFontToken != null) {
-                    Text((customFontToken ?: "").split("/").last().split(".").first())
+                    Text(customFontToken.orEmpty().split("/").last().split(".").first())
                 }
             }
         }

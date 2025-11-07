@@ -296,7 +296,7 @@ fun SharedTransitionScope.CalendarsOverview(
                     searchMoonAgeTime(jdn, targetDegrees)?.let {
                         spacedColon + it.toFormattedString()
                     }
-                }.onFailure(logException).getOrNull() ?: ""
+                }.onFailure(logException).getOrNull().orEmpty()
             }
             val coordinates by coordinates.collectAsState()
             AutoSizedBodyText(
