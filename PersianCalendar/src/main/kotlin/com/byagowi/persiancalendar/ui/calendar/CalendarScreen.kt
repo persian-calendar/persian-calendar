@@ -484,7 +484,8 @@ fun SharedTransitionScope.CalendarScreen(
         }
     }
 
-    LaunchedEffect(today) {
+    val eventsRepository by eventsRepository.collectAsState()
+    LaunchedEffect(today, eventsRepository) {
         if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar) {
             if (snackbarHostState.showSnackbar(
                     context.getString(R.string.outdated_app),

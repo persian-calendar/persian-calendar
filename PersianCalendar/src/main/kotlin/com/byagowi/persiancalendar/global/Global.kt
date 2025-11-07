@@ -367,8 +367,8 @@ val numericalDatePreferred: StateFlow<Boolean> get() = numericalDatePreferred_
 private val calendarsTitlesAbbr_ = MutableStateFlow(emptyMap<Calendar, String>())
 val calendarsTitlesAbbr: StateFlow<Map<Calendar, String>> get() = calendarsTitlesAbbr_
 
-var eventsRepository = EventsRepository.empty()
-    private set
+private val eventsRepository_ = MutableStateFlow(EventsRepository.empty())
+val eventsRepository: StateFlow<EventsRepository> get() = eventsRepository_
 
 private var secondaryCalendarEnabled = false
 
@@ -386,7 +386,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     debugLog("Utils: configureCalendarsAndLoadEvents is called")
     val preferences = context.preferences
     IslamicDate.islamicOffset = getIslamicCalendarOffset(preferences)
-    eventsRepository = EventsRepository(preferences, language.value)
+    eventsRepository_.value = EventsRepository(preferences, language.value)
 }
 
 private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {

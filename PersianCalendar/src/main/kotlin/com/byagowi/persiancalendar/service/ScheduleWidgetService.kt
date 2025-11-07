@@ -82,6 +82,7 @@ private class EventsViewFactory(
         val secondaryDates = secondaryCalendar?.let { calendar -> days.map { it on calendar } }
         var monthChange = false
         var secondaryMonthChange = false
+        val eventsRepository = eventsRepository.value
         days.map {
             it to sortEvents(eventsRepository.getEvents(it, deviceEvents))
         }.flatMapIndexed { i, (day, events) ->

@@ -90,7 +90,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = eventsRepository.getEvents(jdn, deviceCalendarEvents)
+    val events = eventsRepository.value.getEvents(jdn, deviceCalendarEvents)
     val holidays = getEventsTitle(
         events,
         true,
@@ -238,7 +238,7 @@ fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<C
     val baseJdn = Jdn(date)
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
     return (0..<mainCalendar.getMonthLength(date.year, date.month)).map { baseJdn + it }
-        .associateWith { eventsRepository.getEvents(it, deviceEvents) }
+        .associateWith { eventsRepository.value.getEvents(it, deviceEvents) }
 }
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
@@ -319,7 +319,7 @@ fun calculateDaysDifference(
             numeral.value.format(weeks),
         ), run {
             if (years != 0 || isInWidget) return@run null
-            val workDays = eventsRepository.calculateWorkDays(
+            val workDays = eventsRepository.value.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn,
                 if (baseJdn > jdn) baseJdn else jdn,
             )

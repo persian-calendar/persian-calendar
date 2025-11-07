@@ -269,6 +269,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         if (language.isPersian) {
+            val eventsRepository by eventsRepository.collectAsState()
             val enableExtra = eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))

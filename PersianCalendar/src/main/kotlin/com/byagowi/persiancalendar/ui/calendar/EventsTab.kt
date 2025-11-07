@@ -423,6 +423,7 @@ fun readEvents(
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
     val resources = LocalResources.current
+    val eventsRepository by eventsRepository.collectAsState()
     val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents))
 
     val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
