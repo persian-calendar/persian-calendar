@@ -187,7 +187,7 @@ val isLargeDayNumberOnNotification: StateFlow<Boolean> get() = isLargeDayNumberO
 private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
 val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> get() = prefersWidgetsDynamicColors_
 
-private var isWidgetClock_ = MutableStateFlow(DEFAULT_WIDGET_CLOCK)
+private val isWidgetClock_ = MutableStateFlow(DEFAULT_WIDGET_CLOCK)
 val isWidgetClock: StateFlow<Boolean> get() = isWidgetClock_
 
 private val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
@@ -207,8 +207,11 @@ val calculationMethod: StateFlow<CalculationMethod> get() = calculationMethod_
 private val athanSoundName_ = MutableStateFlow<String?>(null)
 val athanSoundName: StateFlow<String?> get() = athanSoundName_
 
-var midnightMethod = calculationMethod.value.defaultMidnight
-    private set
+private val midnightMethod_ = MutableStateFlow(calculationMethod.value.defaultMidnight)
+val midnightMethod: StateFlow<MidnightMethod> get() = midnightMethod_
+
+private val highLatitudesMethod_ = MutableStateFlow(HighLatitudesMethod.NightMiddle)
+val highLatitudesMethod: StateFlow<HighLatitudesMethod> get() = highLatitudesMethod_
 
 private val asrMethod_ = MutableStateFlow(AsrMethod.Standard)
 val asrMethod: StateFlow<AsrMethod> get() = asrMethod_
@@ -217,15 +220,11 @@ val asrMethod: StateFlow<AsrMethod> get() = asrMethod_
 private val islamicCalendarOffset_ = MutableStateFlow(DEFAULT_ISLAMIC_OFFSET)
 val islamicCalendarOffset: StateFlow<String> get() = islamicCalendarOffset_
 
-var highLatitudesMethod = HighLatitudesMethod.NightMiddle
-    private set
-
 private val language_ = MutableStateFlow(Language.FA)
 val language: StateFlow<Language> get() = language_
 
-private val userSetTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
-
 // Don't use this just to detect dark mode as it's invalid in system default
+private val userSetTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
 val userSetTheme: StateFlow<Theme> get() = userSetTheme_
 
 private val systemDarkTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
@@ -286,7 +285,7 @@ val isCenterAlignWidgets: StateFlow<Boolean> get() = isCenterAlignWidgets_
 private val weekStart_ = MutableStateFlow(Language.FA.defaultWeekStart)
 val weekStart: StateFlow<WeekDay> get() = weekStart_
 
-private var weekEnds_ = MutableStateFlow(emptySet<WeekDay>())
+private val weekEnds_ = MutableStateFlow(emptySet<WeekDay>())
 val weekEnds: StateFlow<Set<WeekDay>> get() = weekEnds_
 
 private val isShowWeekOfYearEnabled_ = MutableStateFlow(false)
@@ -328,7 +327,7 @@ val showMoonInScorpio: StateFlow<Boolean> get() = showMoonInScorpio_
 private val isTalkBackEnabled_ = MutableStateFlow(false)
 val isTalkBackEnabled: StateFlow<Boolean> get() = isTalkBackEnabled_
 
-private var isHighTextContrastEnabled_ = MutableStateFlow(false)
+private val isHighTextContrastEnabled_ = MutableStateFlow(false)
 val isHighTextContrastEnabled: StateFlow<Boolean> get() = isHighTextContrastEnabled_
 
 var shiftWorkTitles = emptyMap<String, String>()
@@ -536,10 +535,10 @@ fun updateStoredPreference(context: Context) {
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
     islamicCalendarOffset_.value = getIslamicCalendarOffset(preferences).toString()
-    midnightMethod = preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
+    midnightMethod_.value = preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
         ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
         ?: calculationMethod.value.defaultMidnight
-    highLatitudesMethod = HighLatitudesMethod.valueOf(
+    highLatitudesMethod_.value = HighLatitudesMethod.valueOf(
         if (coordinates.value?.isHighLatitude != true) DEFAULT_HIGH_LATITUDES_METHOD
         else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)
             ?: DEFAULT_HIGH_LATITUDES_METHOD

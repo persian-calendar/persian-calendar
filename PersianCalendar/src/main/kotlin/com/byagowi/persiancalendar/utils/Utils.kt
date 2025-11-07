@@ -31,8 +31,8 @@ fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalend
         calendar = calendar,
         calculationMethod = calculationMethod.value,
         asrMethod = asrMethod.value,
-        highLatitudesMethod = highLatitudesMethod,
-        midnightMethod = midnightMethod,
+        highLatitudesMethod = highLatitudesMethod.value,
+        midnightMethod = midnightMethod.value,
     )
 
 @VisibleForTesting

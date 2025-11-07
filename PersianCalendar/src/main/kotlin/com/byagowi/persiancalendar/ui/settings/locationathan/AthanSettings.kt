@@ -102,6 +102,7 @@ fun ColumnScope.AthanSettings(destination: String) {
         )
     }
     this.AnimatedVisibility(coordinates?.isHighLatitude == true) {
+        val highLatitudesMethod by highLatitudesMethod.collectAsState()
         SettingsSingleSelect(
             key = PREF_HIGH_LATITUDES_METHOD,
             entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
