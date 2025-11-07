@@ -195,6 +195,10 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 File(context.filesDir, STORED_FONT_NAME).outputStream()
                     .use(inputStream::copyTo)
+                // It's funny but if dialog isn't closed before the font change it can cause crash
+                // with "Channel is unrecoverably broken and will be disposed!" message and without
+                // any vm stacktrace…
+                onDismissRequest()
                 context.preferences.edit {
                     putString(
                         PREF_CUSTOM_FONT_NAME,
