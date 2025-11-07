@@ -1495,6 +1495,7 @@ private fun updateNotification(
         spacedComma = spacedComma,
         language = language.value,
         customFontName = customFontName.value,
+        numeral = numeral.value,
         notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
     )
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || // always update as complains in 8.3.0
@@ -1533,6 +1534,7 @@ private data class NotificationData(
     private val language: Language,
     private val customFontName: String?,
     private val notificationId: Int,
+    private val numeral: Numeral,
 ) {
     @CheckResult
     fun post(context: Context): Boolean {
@@ -1576,7 +1578,18 @@ private data class NotificationData(
         val customFontFile = if (customFontName != null) resolveCustomFontPath(context) else null
         // Dynamic small icon generator, most of the times disabled as it needs API 23 and
         // we need to have the other path anyway
-        if ((customFontFile != null || language.isNepali) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (when {
+                customFontFile != null -> true
+                language.isNepali -> true
+                // Nepali has 32 days months, necessary to use bitmap provided icons
+                date.calendar == Calendar.NEPALI -> true
+                else -> when (numeral) {
+                    // Numerals we have dedicated image files, 'true' means better to use bitmap
+                    Numeral.ARABIC, Numeral.ARABIC_INDIC, Numeral.PERSIAN -> false
+                    else -> true
+                }
+            } && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        ) {
             val icon =
                 IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth, customFontFile))
             builder.setSmallIcon(icon)
