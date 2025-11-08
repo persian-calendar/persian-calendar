@@ -104,7 +104,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     }
 
     /**
-     * This is just to notify readers of selectedMonthOffset,
+     * This is just to notify the readers of selectedMonthOffset,
      * use [changeSelectedMonthOffsetCommand] for actually altering viewpager's state
      */
     fun notifySelectedMonthOffset(offset: Int) {

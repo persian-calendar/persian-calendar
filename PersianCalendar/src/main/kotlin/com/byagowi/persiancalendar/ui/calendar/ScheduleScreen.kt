@@ -298,11 +298,15 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
                                             ) {
+                                                val monthOffset = mainCalendar.getMonthsDistance(
+                                                    Jdn.today(),
+                                                    Jdn(nextMonth),
+                                                )
                                                 calendarViewModel.changeSelectedMonthOffsetCommand(
-                                                    mainCalendar.getMonthsDistance(
-                                                        Jdn.today(),
-                                                        Jdn(nextMonth),
-                                                    )
+                                                    monthOffset
+                                                )
+                                                calendarViewModel.notifySelectedMonthOffset(
+                                                    monthOffset
                                                 )
                                                 calendarViewModel.openYearView()
                                                 navigateUp()
