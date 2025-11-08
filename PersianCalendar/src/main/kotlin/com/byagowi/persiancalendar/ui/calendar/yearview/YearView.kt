@@ -226,16 +226,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                             viewModel.closeYearView()
                                             if (mainCalendar == calendar) {
                                                 viewModel.changeSelectedMonthOffsetCommand(offset)
-                                            } else {
-                                                val jdn = Jdn(monthDate)
-                                                viewModel.changeSelectedMonthOffsetCommand(
-                                                    mainCalendar.getMonthsDistance(
-                                                        Jdn.today(),
-                                                        jdn,
-                                                    )
-                                                )
-                                                viewModel.changeSelectedDay(jdn)
-                                            }
+                                            } else viewModel.bringDay(Jdn(monthDate))
                                         }
                                         .background(LocalContentColor.current.copy(alpha = .1f))
                                         .then(

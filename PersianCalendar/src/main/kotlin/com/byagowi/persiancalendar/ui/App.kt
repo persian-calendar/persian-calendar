@@ -83,7 +83,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
@@ -163,13 +162,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
 
             composable(Screen.CALENDAR.name) { backStackEntry ->
                 val viewModel = viewModel<CalendarViewModel>()
-                appInitialJdn?.let {
-                    viewModel.changeSelectedMonthOffsetCommand(
-                        mainCalendar.getMonthsDistance(Jdn.today(), it)
-                    )
-                    viewModel.changeSelectedDay(it)
-                    appInitialJdn = null
-                }
+                appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
                 CalendarScreen(
                     openDrawer = openDrawer,
                     navigateToHolidaysSettings = {

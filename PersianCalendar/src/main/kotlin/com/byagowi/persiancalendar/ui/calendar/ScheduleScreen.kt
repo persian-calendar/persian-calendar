@@ -286,7 +286,8 @@ fun SharedTransitionScope.ScheduleScreen(
                                     )
                                     Text(
                                         if (nextMonth.month == 1) language.my.format(
-                                            nextMonth.monthName, numeral.format(nextMonth.year),
+                                            nextMonth.monthName,
+                                            numeral.format(nextMonth.year),
                                         ) else nextMonth.monthName,
                                         fontSize = 24.sp,
                                         modifier = Modifier
@@ -299,7 +300,8 @@ fun SharedTransitionScope.ScheduleScreen(
                                             ) {
                                                 calendarViewModel.changeSelectedMonthOffsetCommand(
                                                     mainCalendar.getMonthsDistance(
-                                                        Jdn.today(), Jdn(nextMonth),
+                                                        Jdn.today(),
+                                                        Jdn(nextMonth),
                                                     )
                                                 )
                                                 calendarViewModel.openYearView()
