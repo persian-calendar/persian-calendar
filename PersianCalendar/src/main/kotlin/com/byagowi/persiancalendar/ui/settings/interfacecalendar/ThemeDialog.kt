@@ -38,8 +38,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
@@ -107,7 +105,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(SettingsItemHeight.dp)
                     .clickable {
                         onDismissRequest()
                         context.preferences.edit {
@@ -123,22 +120,18 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     }
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             ) {
+                Box(Modifier.height(SettingsItemHeight.dp))
                 RadioButton(selected = entry == userSetTheme, onClick = null)
                 Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                Text(
-                    buildAnnotatedString {
-                        append(stringResource(entry.title))
-                        if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            if (language.isPersianOrDari) withStyle(
-                                style = MaterialTheme.typography.bodySmall.toSpanStyle().copy(
-                                    color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
-                                )
-                            ) { appendLine(); append("براساس حالت تاریک و رنگ‌بندی پس‌زمینه دستگاه") }
-                        }
-                    },
-                    Modifier.padding(end = 16.dp),
-                )
-                this.AnimatedVisibility(visible = showMore && userSetTheme == Theme.SYSTEM_DEFAULT) {
+                Column(Modifier.padding(end = 16.dp)) {
+                    Text(stringResource(entry.title))
+                    if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Text(
+                        text = "براساس حالت تاریک و رنگ‌بندی پس‌زمینه دستگاه",
+                        color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+                this.AnimatedVisibility(visible = showMore) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
@@ -154,7 +147,12 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                                             putString(preferenceKey, entry.key)
                                         }
                                     },
-                                    modifier = if (disabledRadio || entry == Theme.SYSTEM_DEFAULT) invisible else Modifier,
+                                    modifier = when {
+                                        disabledRadio -> invisible
+                                        entry == Theme.SYSTEM_DEFAULT -> invisible
+                                        entry.isDark == userSetTheme.isDark -> invisible
+                                        else -> Modifier
+                                    },
                                 )
                                 Text(
                                     stringResource(label),
