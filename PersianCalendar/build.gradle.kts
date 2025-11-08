@@ -26,7 +26,7 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
         versionCode = 1000
         versionName = "10.0.0"
@@ -133,6 +133,7 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.runtime)
     implementation(libs.compose.material.icons.extended)
+    implementation(libs.compose.material3.adaptive.navigation.suite)
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)

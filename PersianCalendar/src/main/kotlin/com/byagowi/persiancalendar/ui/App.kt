@@ -25,13 +25,10 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
@@ -41,11 +38,10 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -107,7 +103,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.DaysScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
-import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
@@ -146,34 +141,35 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val settingsKey = "SETTINGS"
     val daysOffsetKey = "DAYS_OFFSET"
 
-    SharedTransitionLayout {
-        val initialDestination = Screen.fromName(intentStartDestination)
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet(
-                    windowInsets = WindowInsets(0, 0, 0, 0),
-                    drawerContainerColor = animateColor(MaterialTheme.colorScheme.surface).value,
-                    drawerContentColor = animateColor(MaterialTheme.colorScheme.onSurface).value,
-                    modifier = Modifier.renderInSharedTransitionScopeOverlay(),
-                ) {
-                    Box {
-                        val scrollState = rememberScrollState()
-                        DrawerContent(drawerState, navController, finish, scrollState)
-                        DrawerTopGradient()
-                        ScrollShadow(scrollState)
-                    }
-                }
-            },
-            gesturesEnabled = initialDestination == Screen.CALENDAR,
-        ) {
-            NavHost(navController = navController, startDestination = initialDestination.name) {
-                fun Screen.navigate() = navController.navigate(this.name)
-                fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
-                    val destination = navController.graph.findNode(this.name) ?: return
-                    navController.navigate(destination.id, bundleOf(*pairs))
-                }
+    fun Screen.navigate() = navController.navigate(this.name)
+    fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
+        val destination = navController.graph.findNode(this.name) ?: return
+        navController.navigate(destination.id, bundleOf(*pairs))
+    }
 
+    val route = navController.currentBackStackEntryAsState()
+    NavigationSuiteScaffold(
+        containerColor = Color.Transparent,
+        navigationSuiteItems = {
+            Screen.entries.forEach {
+                it.drawerEntry?.let { (icon, title) ->
+                    val route = route.value?.destination?.route
+                    val isSelected = it == Screen.fromName(route).parent
+                    item(
+                        icon = { Icon(icon, contentDescription = stringResource(title)) },
+                        label = { Text(stringResource(title)) },
+                        selected = isSelected,
+                        onClick = it::navigate,
+                    )
+                }
+            }
+        },
+    ) {
+        SharedTransitionLayout {
+            NavHost(
+                navController = navController,
+                startDestination = Screen.fromName(intentStartDestination).name,
+            ) {
                 fun isCurrentDestination(backStackEntry: NavBackStackEntry) =
                     navController.currentDestination == backStackEntry.destination
 
@@ -380,6 +376,26 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
             }
         }
+//        ModalNavigationDrawer(
+//            drawerState = drawerState,
+//            drawerContent = {
+//                ModalDrawerSheet(
+//                    windowInsets = WindowInsets(0, 0, 0, 0),
+//                    drawerContainerColor = animateColor(MaterialTheme.colorScheme.surface).value,
+//                    drawerContentColor = animateColor(MaterialTheme.colorScheme.onSurface).value,
+//                    modifier = Modifier.renderInSharedTransitionScopeOverlay(),
+//                ) {
+//                    Box {
+//                        val scrollState = rememberScrollState()
+//                        DrawerContent(drawerState, navController, finish, scrollState)
+//                        DrawerTopGradient()
+//                        ScrollShadow(scrollState)
+//                    }
+//                }
+//            },
+//            gesturesEnabled = initialDestination == Screen.CALENDAR,
+//        ) {
+//        }
     }
 }
 
@@ -390,8 +406,7 @@ private enum class Screen(val drawerEntry: Pair<ImageVector, Int>? = null) {
     COMPASS(Icons.Default.Explore to R.string.compass), LEVEL,
     ASTRONOMY(AstrologyIcon to R.string.astronomy), MAP,
     SETTINGS(Icons.Default.Settings to R.string.settings),
-    ABOUT(Icons.Default.Info to R.string.about), LICENSES, DEVICE,
-    EXIT(Icons.Default.Cancel to R.string.exit); // Not a screen but is on the drawer, so
+    ABOUT, LICENSES, DEVICE;
 
     // Which item needs to be highlighted when user is on the screen
     val parent
@@ -402,7 +417,6 @@ private enum class Screen(val drawerEntry: Pair<ImageVector, Int>? = null) {
             ASTRONOMY, MAP -> ASTRONOMY
             SETTINGS -> SETTINGS
             ABOUT, LICENSES, DEVICE -> ABOUT
-            EXIT -> EXIT
         }
 
     companion object {
@@ -468,7 +482,7 @@ private fun DrawerContent(
                 label = { Text(stringResource(titleId)) },
                 selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
                 onClick = {
-                    if (item == Screen.EXIT) finish() else coroutineScope.launch {
+                    coroutineScope.launch {
                         drawerState.close()
                         if (navBackStackEntry?.destination?.route != item.name) {
                             navController.navigate(item.name)
