@@ -119,26 +119,27 @@ fun resolveFontFile(): File? {
 fun resolveTypography(): Typography {
     return resolveFontFile()?.let { fontFile ->
         val font = FontFamily(Font(fontFile))
-        Typography(
-            displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
-            displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = font),
-            displaySmall = MaterialTheme.typography.displaySmall.copy(fontFamily = font),
+        val typography = MaterialTheme.typography
+        typography.copy(
+            displayLarge = typography.displayLarge.copy(fontFamily = font),
+            displayMedium = typography.displayMedium.copy(fontFamily = font),
+            displaySmall = typography.displaySmall.copy(fontFamily = font),
 
-            headlineLarge = MaterialTheme.typography.headlineLarge.copy(fontFamily = font),
-            headlineMedium = MaterialTheme.typography.headlineMedium.copy(fontFamily = font),
-            headlineSmall = MaterialTheme.typography.headlineSmall.copy(fontFamily = font),
+            headlineLarge = typography.headlineLarge.copy(fontFamily = font),
+            headlineMedium = typography.headlineMedium.copy(fontFamily = font),
+            headlineSmall = typography.headlineSmall.copy(fontFamily = font),
 
-            titleLarge = MaterialTheme.typography.titleLarge.copy(fontFamily = font),
-            titleMedium = MaterialTheme.typography.titleMedium.copy(fontFamily = font),
-            titleSmall = MaterialTheme.typography.titleSmall.copy(fontFamily = font),
+            titleLarge = typography.titleLarge.copy(fontFamily = font),
+            titleMedium = typography.titleMedium.copy(fontFamily = font),
+            titleSmall = typography.titleSmall.copy(fontFamily = font),
 
-            bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = font),
-            bodyMedium = MaterialTheme.typography.bodyMedium.copy(fontFamily = font),
-            bodySmall = MaterialTheme.typography.bodySmall.copy(fontFamily = font),
+            bodyLarge = typography.bodyLarge.copy(fontFamily = font),
+            bodyMedium = typography.bodyMedium.copy(fontFamily = font),
+            bodySmall = typography.bodySmall.copy(fontFamily = font),
 
-            labelLarge = MaterialTheme.typography.labelLarge.copy(fontFamily = font),
-            labelMedium = MaterialTheme.typography.labelMedium.copy(fontFamily = font),
-            labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = font)
+            labelLarge = typography.labelLarge.copy(fontFamily = font),
+            labelMedium = typography.labelMedium.copy(fontFamily = font),
+            labelSmall = typography.labelSmall.copy(fontFamily = font)
         )
     } ?: MaterialTheme.typography
 }
