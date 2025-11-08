@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.DEFAULT_BOLD_FONT
 import com.byagowi.persiancalendar.DEFAULT_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
@@ -51,6 +52,7 @@ import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.PREF_BOLD_FONT
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
@@ -241,6 +243,9 @@ val isCyberpunk: StateFlow<Boolean> get() = isCyberpunk_
 
 private val isRedHolidays_ = MutableStateFlow(DEFAULT_RED_HOLIDAYS)
 val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
+
+private val isBoldFont_ = MutableStateFlow(DEFAULT_BOLD_FONT)
+val isBoldFont: StateFlow<Boolean> get() = isBoldFont_
 
 private val customFontName_ = MutableStateFlow<String?>(null)
 val customFontName: StateFlow<String?> get() = customFontName_
@@ -477,6 +482,7 @@ fun updateStoredPreference(context: Context) {
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isCyberpunk_.value = preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
+    isBoldFont_.value = preferences.getBoolean(PREF_BOLD_FONT, DEFAULT_BOLD_FONT)
     customFontName_.value = preferences.getString(PREF_CUSTOM_FONT_NAME, null)
     englishGregorianPersianMonths_.value = language.isPersian && preferences.getBoolean(
         PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS

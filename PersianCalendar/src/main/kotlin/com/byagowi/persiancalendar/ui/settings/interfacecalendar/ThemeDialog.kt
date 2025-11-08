@@ -40,6 +40,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.PREF_BOLD_FONT
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
@@ -49,6 +50,7 @@ import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
@@ -184,6 +186,16 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
+        }
+        this.AnimatedVisibility(
+            visible = showMore,
+            modifier = Modifier.padding(horizontal = 24.dp),
+        ) {
+            val isBoldFont by isBoldFont.collectAsState()
+            SwitchWithLabel(
+                label = stringResource(R.string.bold_font),
+                checked = isBoldFont,
+            ) { context.preferences.edit { putBoolean(PREF_BOLD_FONT, it) } }
         }
 
         val customFontToken by customFontName.collectAsState()

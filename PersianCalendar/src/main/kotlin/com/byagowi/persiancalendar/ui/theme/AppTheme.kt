@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -58,6 +59,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
@@ -117,9 +119,9 @@ fun resolveFontFile(): File? {
 
 @Composable
 fun resolveTypography(): Typography {
-    return resolveFontFile()?.let { fontFile ->
-        val font = FontFamily(Font(fontFile))
+    val result = resolveFontFile()?.let { fontFile ->
         val typography = MaterialTheme.typography
+        val font = FontFamily(Font(fontFile))
         typography.copy(
             displayLarge = typography.displayLarge.copy(fontFamily = font),
             displayMedium = typography.displayMedium.copy(fontFamily = font),
@@ -142,6 +144,28 @@ fun resolveTypography(): Typography {
             labelSmall = typography.labelSmall.copy(fontFamily = font)
         )
     } ?: MaterialTheme.typography
+    val isBoldFont by isBoldFont.collectAsState()
+    return if (isBoldFont) result.copy(
+        displayLarge = result.displayLarge.copy(fontWeight = FontWeight.Bold),
+        displayMedium = result.displayMedium.copy(fontWeight = FontWeight.Bold),
+        displaySmall = result.displaySmall.copy(fontWeight = FontWeight.Bold),
+
+        headlineLarge = result.headlineLarge.copy(fontWeight = FontWeight.Bold),
+        headlineMedium = result.headlineMedium.copy(fontWeight = FontWeight.Bold),
+        headlineSmall = result.headlineSmall.copy(fontWeight = FontWeight.Bold),
+
+        titleLarge = result.titleLarge.copy(fontWeight = FontWeight.Bold),
+        titleMedium = result.titleMedium.copy(fontWeight = FontWeight.Bold),
+        titleSmall = result.titleSmall.copy(fontWeight = FontWeight.Bold),
+
+        bodyLarge = result.bodyLarge.copy(fontWeight = FontWeight.Bold),
+        bodyMedium = result.bodyMedium.copy(fontWeight = FontWeight.Bold),
+        bodySmall = result.bodySmall.copy(fontWeight = FontWeight.Bold),
+
+        labelLarge = result.labelLarge.copy(fontWeight = FontWeight.Bold),
+        labelMedium = result.labelMedium.copy(fontWeight = FontWeight.Bold),
+        labelSmall = result.labelSmall.copy(fontWeight = FontWeight.Bold)
+    ) else result
 }
 
 // The app's theme after custom dark/light theme is applied
