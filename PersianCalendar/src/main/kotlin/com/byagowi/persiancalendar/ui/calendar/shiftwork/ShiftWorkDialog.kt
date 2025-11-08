@@ -265,8 +265,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                 }
             }
         }
-        ScrollShadow(lazyListState, top = true)
-        ScrollShadow(lazyListState, top = false)
+        ScrollShadow(lazyListState)
     }
 
     Spacer(Modifier.height(8.dp))

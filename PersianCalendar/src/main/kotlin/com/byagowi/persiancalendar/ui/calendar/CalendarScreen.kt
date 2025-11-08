@@ -476,7 +476,7 @@ fun SharedTransitionScope.CalendarScreen(
                                     )
                                 }
                             }
-                            ScrollShadow(scrollState, top = false)
+                            ScrollShadow(scrollState, skipTop = true)
                         }
                     }
                 }
@@ -647,10 +647,7 @@ private fun Details(
                 Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
                     tabs[index].second(interactionSource, tabMinHeight, bottomPadding)
                 }
-                if (scrollState != null) {
-                    ScrollShadow(scrollState, top = true)
-                    ScrollShadow(scrollState, top = false)
-                }
+                if (scrollState != null) ScrollShadow(scrollState)
             }
         }
     }

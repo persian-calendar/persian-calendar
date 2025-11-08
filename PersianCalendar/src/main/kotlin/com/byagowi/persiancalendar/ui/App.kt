@@ -161,8 +161,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         val scrollState = rememberScrollState()
                         DrawerContent(drawerState, navController, finish, scrollState)
                         DrawerTopGradient()
-                        ScrollShadow(scrollState, top = true)
-                        ScrollShadow(scrollState, top = false)
+                        ScrollShadow(scrollState)
                     }
                 }
             },

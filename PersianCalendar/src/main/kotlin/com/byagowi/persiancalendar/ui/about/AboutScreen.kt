@@ -157,7 +157,7 @@ fun SharedTransitionScope.AboutScreen(
                     AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
             }
-            ScrollShadow(scrollState, top = false)
+            ScrollShadow(scrollState, skipTop = true)
         }
     }
 }

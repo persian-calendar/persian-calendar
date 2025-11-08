@@ -105,8 +105,7 @@ fun AppDialog(
                 .verticalScroll(scrollState),
             content = content,
         )
-        ScrollShadow(scrollState, top = true)
-        ScrollShadow(scrollState, top = false)
+        ScrollShadow(scrollState)
     }
 }
 
@@ -128,7 +127,6 @@ fun AppDialogWithLazyColumn(
         dismissButton = dismissButton,
     ) {
         LazyColumn(state = lazyListState, content = content)
-        ScrollShadow(lazyListState, top = true)
-        ScrollShadow(lazyListState, top = false)
+        ScrollShadow(lazyListState)
     }
 }

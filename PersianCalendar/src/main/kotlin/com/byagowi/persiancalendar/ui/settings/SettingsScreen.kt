@@ -301,8 +301,7 @@ fun SharedTransitionScope.SettingsScreen(
 //                        if (pagerState.currentPage == index) {
 //                            isAtTop = !listState.canScrollBackward
 //                        }
-                        ScrollShadow(listState, top = true)
-                        ScrollShadow(listState, top = false)
+                        ScrollShadow(listState)
                     }
                 }
             }

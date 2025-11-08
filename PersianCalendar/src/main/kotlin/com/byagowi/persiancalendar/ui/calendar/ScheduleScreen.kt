@@ -84,18 +84,18 @@ fun SharedTransitionScope.ScheduleScreen(
     navigateUp: () -> Unit,
 ) {
     var baseJdn by remember { mutableStateOf(initiallySelectedDay) }
-    val state = rememberLazyListState(ITEMS_COUNT / 2, 0)
+    val listState = rememberLazyListState(ITEMS_COUNT / 2, 0)
     val today by calendarViewModel.today.collectAsState()
     var isFirstTime by remember { mutableStateOf(true) }
     val firstVisibleItemJdn by remember {
-        derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
+        derivedStateOf { indexToJdn(baseJdn, listState.firstVisibleItemIndex) }
     }
     LaunchedEffect(today) {
         if (isFirstTime) {
             isFirstTime = false
         } else if (firstVisibleItemJdn == today - 1) {
             baseJdn = today
-            state.animateScrollToItem(ITEMS_COUNT / 2)
+            listState.animateScrollToItem(ITEMS_COUNT / 2)
         }
     }
     val coroutineScope = rememberCoroutineScope()
@@ -137,9 +137,9 @@ fun SharedTransitionScope.ScheduleScreen(
                         baseJdn = today
                         coroutineScope.launch {
                             val destination = ITEMS_COUNT / 2
-                            if (abs(state.firstVisibleItemIndex - destination) < 30) {
-                                state.animateScrollToItem(ITEMS_COUNT / 2)
-                            } else state.scrollToItem(ITEMS_COUNT / 2)
+                            if (abs(listState.firstVisibleItemIndex - destination) < 30) {
+                                listState.animateScrollToItem(ITEMS_COUNT / 2)
+                            } else listState.scrollToItem(ITEMS_COUNT / 2)
                         }
                     }
 
@@ -152,7 +152,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                 baseJdn = jdn
                             }
                             coroutineScope.launch {
-                                state.animateScrollToItem(jdn - baseJdn + ITEMS_COUNT / 2)
+                                listState.animateScrollToItem(jdn - baseJdn + ITEMS_COUNT / 2)
                             }
                         }
                     }
@@ -208,7 +208,7 @@ fun SharedTransitionScope.ScheduleScreen(
                     else MaterialTheme.typography.titleLarge
                 Box {
                     val eventsCache = eventsCache(calendarViewModel)
-                    LazyColumn(state = state) {
+                    LazyColumn(state = listState) {
                         items(ITEMS_COUNT) { index ->
                             val jdn = indexToJdn(baseJdn, index)
                             if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(
@@ -220,7 +220,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             ) {
                                 MoreButton(stringResource(R.string.more)) {
                                     baseJdn = jdn
-                                    coroutineScope.launch { state.scrollToItem(ITEMS_COUNT / 2) }
+                                    coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
                                 }
                             }
                             val events = eventsCache(jdn)
@@ -310,8 +310,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             }
                         }
                     }
-                    ScrollShadow(state, top = true)
-                    ScrollShadow(state, top = false)
+                    ScrollShadow(listState)
                 }
             }
         }

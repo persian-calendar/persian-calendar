@@ -194,8 +194,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                         }
                         item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
                     }
-                    ScrollShadow(listState = listState, top = true)
-                    ScrollShadow(listState = listState, top = false)
+                    ScrollShadow(listState)
                 }
             }
         }

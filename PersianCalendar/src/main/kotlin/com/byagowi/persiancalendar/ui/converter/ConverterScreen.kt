@@ -209,8 +209,7 @@ fun SharedTransitionScope.ConverterScreen(
                             )
                         )
                     }
-                    ScrollShadow(scrollState, top = true)
-                    ScrollShadow(scrollState, top = false)
+                    ScrollShadow(scrollState)
                 }
             }
         }

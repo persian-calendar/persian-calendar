@@ -240,6 +240,5 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
         }
         item { Spacer(Modifier.height(bottomPadding)) }
     }
-    ScrollShadow(listState = listState, top = true)
-    ScrollShadow(listState = listState, top = false)
+    ScrollShadow(listState)
 }
