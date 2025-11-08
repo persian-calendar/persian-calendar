@@ -67,6 +67,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
+import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
@@ -173,7 +174,19 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     }
     val numeral by numeral.collectAsState()
 
-    LazyColumn(state = lazyListState, modifier = detectZoom) {
+    LazyColumn(
+        state = lazyListState,
+        modifier = detectZoom.detectHorizontalSwipe {
+            { isLeft ->
+                coroutineScope.launch {
+                    val years = if (isLeft xor isRtl) -10 else 10
+                    lazyListState.animateScrollToItem(
+                        (lazyListState.firstVisibleItemIndex + years).coerceAtLeast(0)
+                    )
+                }
+            }
+        }
+    ) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
 
