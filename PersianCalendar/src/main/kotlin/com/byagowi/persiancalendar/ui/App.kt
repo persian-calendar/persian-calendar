@@ -1,28 +1,21 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -36,17 +29,16 @@ import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.ModalWideNavigationRail
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.WideNavigationRailDefaults
+import androidx.compose.material3.WideNavigationRailItem
+import androidx.compose.material3.WideNavigationRailItemDefaults
+import androidx.compose.material3.WideNavigationRailState
+import androidx.compose.material3.WideNavigationRailValue
+import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,14 +52,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -120,7 +111,6 @@ import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -133,12 +123,7 @@ import kotlin.time.Duration.Companion.seconds
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
     var appInitialJdn by remember { mutableStateOf(initialJdn) }
     val navController = rememberNavController()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
-
-    if (drawerState.isOpen) {
-        BackHandler(enabled = true) { coroutineScope.launch { drawerState.close() } }
-    }
+    val railState = rememberWideNavigationRailState()
 
     val selectedDayKey = "SELECTED_DAY"
     val isWeekKey = "IS_WEEK"
@@ -146,28 +131,15 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val settingsKey = "SETTINGS"
     val daysOffsetKey = "DAYS_OFFSET"
 
-    SharedTransitionLayout {
-        val initialDestination = Screen.fromName(intentStartDestination)
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet(
-                    windowInsets = WindowInsets(0, 0, 0, 0),
-                    drawerContainerColor = animateColor(MaterialTheme.colorScheme.surface).value,
-                    drawerContentColor = animateColor(MaterialTheme.colorScheme.onSurface).value,
-                    modifier = Modifier.renderInSharedTransitionScopeOverlay(),
-                ) {
-                    Box {
-                        val scrollState = rememberScrollState()
-                        DrawerContent(drawerState, navController, finish, scrollState)
-                        DrawerTopGradient()
-                        ScrollShadow(scrollState)
-                    }
-                }
-            },
-            gesturesEnabled = initialDestination == Screen.CALENDAR,
-        ) {
-            NavHost(navController = navController, startDestination = initialDestination.name) {
+    Box {
+        AppNavigationRail(railState, navController, finish)
+        SharedTransitionLayout {
+            val coroutineScope = rememberCoroutineScope()
+            val openDrawer: () -> Unit = { coroutineScope.launch { railState.expand() } }
+            NavHost(
+                navController = navController,
+                startDestination = Screen.fromName(intentStartDestination).name,
+            ) {
                 fun Screen.navigate() = navController.navigate(this.name)
                 fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
                     val destination = navController.graph.findNode(this.name) ?: return
@@ -200,7 +172,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         appInitialJdn = null
                     }
                     CalendarScreen(
-                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        openDrawer = openDrawer,
                         navigateToHolidaysSettings = {
                             Screen.SETTINGS.navigate(
                                 tabKey to INTERFACE_CALENDAR_TAB,
@@ -287,7 +259,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 composable(Screen.CONVERTER.name) { backStackEntry ->
                     ConverterScreen(
                         animatedContentScope = this,
-                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        openDrawer = openDrawer,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel<ConverterViewModel>(),
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
@@ -298,7 +270,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 composable(Screen.COMPASS.name) { backStackEntry ->
                     CompassScreen(
                         animatedContentScope = this,
-                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        openDrawer = openDrawer,
                         navigateToLevel = Screen.LEVEL::navigate,
                         navigateToMap = Screen.MAP::navigate,
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
@@ -322,7 +294,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                     AstronomyScreen(
                         animatedContentScope = this,
-                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        openDrawer = openDrawer,
                         navigateToMap = Screen.MAP::navigate,
                         viewModel = viewModel,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
@@ -352,17 +324,17 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 composable(Screen.SETTINGS.name) { backStackEntry ->
                     SettingsScreen(
                         animatedContentScope = this,
-                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        openDrawer = openDrawer,
                         navigateToMap = Screen.MAP::navigate,
                         initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
-                        destination = backStackEntry.arguments?.getString(settingsKey).orEmpty()
+                        destination = backStackEntry.arguments?.getString(settingsKey).orEmpty(),
                     )
                 }
 
                 composable(Screen.ABOUT.name) {
                     AboutScreen(
                         animatedContentScope = this,
-                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        openDrawer = openDrawer,
                         navigateToLicenses = Screen.LICENSES::navigate,
                         navigateToDeviceInformation = Screen.DEVICE::navigate,
                     )
@@ -410,96 +382,116 @@ private enum class Screen(val drawerEntry: Pair<ImageVector, Int>? = null) {
     }
 }
 
-// Make system status bar icons visible when surface is light but theme has dark background
 @Composable
-private fun DrawerTopGradient() {
-    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
-    val topColor by animateColor(
-        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent
-    )
-    Spacer(
-        Modifier
-            .fillMaxWidth()
-            .windowInsetsTopHeight(WindowInsets.systemBars)
-            .background(Brush.verticalGradient(listOf(topColor, Color.Transparent))),
-    )
-}
-
-@Composable
-private fun DrawerContent(
-    drawerState: DrawerState,
+private fun BoxScope.AppNavigationRail(
+    railState: WideNavigationRailState,
     navController: NavHostController,
     finish: () -> Unit,
-    scrollState: ScrollState,
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(scrollState)
-            .windowInsetsPadding(WindowInsets.systemBars)
-            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start))
-    ) {
-        Box(
-            Modifier
-                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                .clearAndSetSemantics {},
-        ) {
-            DrawerSeasonsPager(drawerState)
-            DrawerDarkModeToggle()
-        }
-        val onSecondaryContainerColor by animateColor(MaterialTheme.colorScheme.onSecondaryContainer)
-        val navItemColors = NavigationDrawerItemDefaults.colors(
-            unselectedContainerColor = Color.Transparent,
-            unselectedTextColor = LocalContentColor.current,
-            unselectedIconColor = LocalContentColor.current,
-            selectedContainerColor = animateColor(MaterialTheme.colorScheme.secondaryContainer).value,
-            selectedTextColor = onSecondaryContainerColor,
-            selectedIconColor = onSecondaryContainerColor,
-        )
-        val coroutineScope = rememberCoroutineScope()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        Screen.entries.forEach { item ->
-            val (icon, titleId) = item.drawerEntry ?: return@forEach
-            NavigationDrawerItem(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                icon = { Icon(icon, contentDescription = null) },
-                colors = navItemColors,
-                label = { Text(stringResource(titleId)) },
-                selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
-                onClick = {
-                    if (item == Screen.EXIT) finish() else coroutineScope.launch {
-                        drawerState.close()
-                        if (navBackStackEntry?.destination?.route != item.name) {
-                            navController.navigate(item.name)
-                        }
-                    }
-                },
+    val coroutineScope = rememberCoroutineScope()
+    val dir = LocalLayoutDirection.current
+    val startPadding = WindowInsets.displayCutout.asPaddingValues().calculateStartPadding(dir)
+    ModalWideNavigationRail(
+        hideOnCollapse = true,
+        colors = run {
+            val colors = WideNavigationRailDefaults.colors()
+            colors.copy(
+                containerColor = animateColor(colors.containerColor).value,
+                contentColor = animateColor(colors.contentColor).value,
+                modalContainerColor = animateColor(colors.modalContainerColor).value,
+                modalScrimColor = animateColor(colors.modalScrimColor).value,
+                modalContentColor = animateColor(colors.modalContentColor).value,
             )
+        },
+        state = railState,
+        modifier = Modifier.width(240.dp + startPadding),
+        windowInsets = WindowInsets(0, 0, 0, 0),
+    ) {
+        Box {
+            val scrollState = rememberScrollState()
+            Column(
+                Modifier
+                    .padding(start = startPadding)
+                    .verticalScroll(scrollState),
+            ) {
+                val railExpanded = railState.currentValue == WideNavigationRailValue.Expanded
+                Box(
+                    Modifier
+                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        .clearAndSetSemantics {},
+                ) {
+                    DrawerSeasonsPager(railExpanded)
+                    DrawerDarkModeToggle()
+                }
+                val defaultColors = WideNavigationRailItemDefaults.colors()
+                val colors = defaultColors.copy(
+                    selectedIconColor = animateColor(defaultColors.selectedIconColor).value,
+                    selectedTextColor = animateColor(defaultColors.selectedTextColor).value,
+                    selectedIndicatorColor = animateColor(defaultColors.selectedIndicatorColor).value,
+                    unselectedIconColor = animateColor(defaultColors.unselectedIconColor).value,
+                    unselectedTextColor = animateColor(defaultColors.unselectedTextColor).value,
+                    disabledIconColor = animateColor(defaultColors.disabledIconColor).value,
+                    disabledTextColor = animateColor(defaultColors.disabledTextColor).value,
+                )
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                Screen.entries.forEach { item ->
+                    val (icon, titleId) = item.drawerEntry ?: return@forEach
+                    WideNavigationRailItem(
+                        icon = { Icon(icon, contentDescription = null) },
+                        colors = colors,
+                        railExpanded = railExpanded,
+                        label = { Text(stringResource(titleId), Modifier.width(136.dp)) },
+                        selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
+                        onClick = {
+                            if (item == Screen.EXIT) finish() else coroutineScope.launch {
+                                railState.collapse()
+                                if (navBackStackEntry?.destination?.route != item.name) {
+                                    navController.navigate(item.name)
+                                }
+                            }
+                        },
+                    )
+                }
+            }
+            ScrollShadow(scrollState)
         }
     }
 }
 
+// Can't be enabled in ModalWideNavigationRail, sadly
+//@Composable
+//private fun DrawerTopGradient() {
+//    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+//    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+//    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
+//    val topColor by animateColor(
+//        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent
+//    )
+//    Spacer(
+//        Modifier
+//            .fillMaxWidth()
+//            .windowInsetsTopHeight(WindowInsets.systemBars)
+//            .background(Brush.verticalGradient(listOf(topColor, Color.Transparent))),
+//    )
+//}
+
 @Composable
-private fun DrawerSeasonsPager(drawerState: DrawerState) {
+private fun DrawerSeasonsPager(railExpanded: Boolean) {
     var actualSeason by remember {
         mutableIntStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
     }
     val pageSize = 200
     val pagerState = rememberPagerState(
-        initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
+        initialPage = pageSize / 2 + actualSeason,
         pageCount = { pageSize },
     )
-    if (drawerState.isOpen) {
-        LaunchedEffect(Unit) {
-            pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
-            while (true) {
-                delay(30.seconds)
-                val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
-                if (seasonIndex != actualSeason) {
-                    actualSeason = seasonIndex
-                    pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
-                }
+    if (railExpanded) LaunchedEffect(Unit) {
+        while (true) {
+            delay(30.seconds)
+            val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
+            if (seasonIndex != actualSeason) {
+                actualSeason = seasonIndex
+                pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
             }
         }
     }
@@ -515,9 +507,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
-            .height(196.dp)
+            .padding(bottom = 12.dp, top = 12.dp, start = 20.dp, end = 20.dp)
             .clip(MaterialTheme.shapes.extraLarge),
         pageSpacing = 8.dp,
     ) {
@@ -530,7 +520,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
             }""",
             colorFilter = imageFilter,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .clip(MaterialTheme.shapes.extraLarge),
         )
     }
@@ -547,7 +537,7 @@ private fun BoxScope.DrawerDarkModeToggle() {
         targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
         modifier = Modifier
             .semantics { this.hideFromAccessibility() }
-            .padding(32.dp)
+            .padding(bottom = 20.dp, end = 28.dp)
             .align(Alignment.BottomEnd)
             .clickable(
                 indication = ripple(bounded = false),

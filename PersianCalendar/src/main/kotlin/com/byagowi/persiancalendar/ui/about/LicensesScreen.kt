@@ -131,7 +131,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     NavigationRail(
         modifier,
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        windowInsets = WindowInsets(),
         containerColor = Color.Transparent,
     ) {
         listOf<Triple<String, @Composable () -> Unit, (Activity) -> Unit>>(
