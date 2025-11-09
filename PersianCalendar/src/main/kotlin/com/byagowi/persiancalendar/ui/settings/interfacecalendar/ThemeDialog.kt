@@ -127,7 +127,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Column(Modifier.padding(end = 16.dp)) {
                     Text(stringResource(entry.title))
-                    if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Text(
+                    if (!showMore && entry == Theme.SYSTEM_DEFAULT && language.isPersianOrDari && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Text(
                         text = "براساس حالت تاریک و رنگ‌بندی پس‌زمینه دستگاه",
                         color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
                         style = MaterialTheme.typography.bodySmall,
