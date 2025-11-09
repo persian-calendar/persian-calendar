@@ -172,6 +172,8 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
             )
         }
     }
+    val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
+    val language by language.collectAsState()
     val numeral by numeral.collectAsState()
 
     LazyColumn(
@@ -179,9 +181,11 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         modifier = detectZoom.detectHorizontalSwipe {
             { isLeft ->
                 coroutineScope.launch {
-                    val years = if (isLeft xor isRtl) -10 else 10
-                    lazyListState.animateScrollToItem(
-                        (lazyListState.firstVisibleItemIndex + years).coerceAtLeast(0)
+                    val offset = if (isLeft xor isRtl) 1 else -1
+                    val calendars =
+                        enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+                    viewModel.changeYearViewCalendar(
+                        calendars[(calendars.indexOf(viewModel.yearViewCalendar.value) + offset + calendars.size) % calendars.size]
                     )
                 }
             }
@@ -198,7 +202,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                 (today on calendar).year + yearOffset, 1, 1
                             )
                         )
-                        if (isShowDeviceCalendarEvents.value) {
+                        if (isShowDeviceCalendarEvents) {
                             context.readYearDeviceEvents(yearStartJdn)
                         } else EventsStore.empty()
                     }
@@ -212,7 +216,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                 val offset = yearOffset * 12 + month - todayDate.month
                                 val monthDate =
                                     calendar.getMonthStartFromMonthsDistance(today, offset)
-                                val title = language.value.my.format(
+                                val title = language.my.format(
                                     monthDate.monthName,
                                     numeral.format(yearOffset + todayDate.year),
                                 )
