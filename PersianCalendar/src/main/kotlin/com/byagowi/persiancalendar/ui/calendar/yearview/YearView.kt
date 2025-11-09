@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
@@ -180,14 +181,11 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         state = lazyListState,
         modifier = detectZoom.detectHorizontalSwipe {
             { isLeft ->
-                coroutineScope.launch {
-                    val offset = if (isLeft xor isRtl) 1 else -1
-                    val calendars =
-                        enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
-                    viewModel.changeYearViewCalendar(
-                        calendars[(calendars.indexOf(viewModel.yearViewCalendar.value) + offset + calendars.size) % calendars.size]
-                    )
-                }
+                val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+                val currentCalendar = viewModel.yearViewCalendar.value
+                val index = calendars.indexOf(currentCalendar) + if (isLeft xor isRtl) 1 else -1
+                val newCalendar = calendars[index.mod(calendars.size)]
+                coroutineScope.launch { viewModel.changeYearViewCalendar(newCalendar) }
             }
         }
     ) {
