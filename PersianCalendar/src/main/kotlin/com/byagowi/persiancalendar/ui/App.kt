@@ -120,18 +120,11 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
-    var appInitialJdn by remember { mutableStateOf(initialJdn) }
     val navController = rememberNavController()
     val railState = rememberWideNavigationRailState()
-
-    val selectedDayKey = "SELECTED_DAY"
-    val isWeekKey = "IS_WEEK"
-    val tabKey = "TAB"
-    val settingsKey = "SETTINGS"
-    val daysOffsetKey = "DAYS_OFFSET"
-
     AppNavigationRail(railState, navController, finish)
     SharedTransitionLayout {
+        var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         NavHost(
@@ -153,6 +146,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
                 if (!navController.popBackStack()) finish()
             }
+
+            val selectedDayKey = "SELECTED_DAY"
+            val isWeekKey = "IS_WEEK"
+            val tabKey = "TAB"
+            val settingsKey = "SETTINGS"
+            val daysOffsetKey = "DAYS_OFFSET"
 
             fun navigateToSettingsLocationTab() =
                 Screen.SETTINGS.navigate(tabKey to LOCATION_ATHAN_TAB)
@@ -395,6 +394,10 @@ private fun AppNavigationRail(
             )
         },
         state = railState,
+        /**
+         * It should be between the two,
+         * 220dp-360dp [androidx.compose.material3.tokens.NavigationRailExpandedTokens]
+         **/
         modifier = Modifier.width(240.dp + startPadding),
         windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
