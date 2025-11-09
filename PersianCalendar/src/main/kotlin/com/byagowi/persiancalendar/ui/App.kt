@@ -405,13 +405,12 @@ private fun AppNavigationRail(
                     .padding(start = startPadding)
                     .verticalScroll(scrollState),
             ) {
-                val railExpanded = railState.currentValue == WideNavigationRailValue.Expanded
                 Box(
                     Modifier
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 ) {
-                    DrawerSeasonsPager(railExpanded)
+                    DrawerSeasonsPager()
                     DrawerDarkModeToggle()
                 }
                 val defaultColors = WideNavigationRailItemDefaults.colors()
@@ -425,6 +424,7 @@ private fun AppNavigationRail(
                     disabledTextColor = animateColor(defaultColors.disabledTextColor).value,
                 )
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val railExpanded = railState.currentValue == WideNavigationRailValue.Expanded
                 Screen.entries.forEach { item ->
                     val (icon, titleId) = item.drawerEntry ?: return@forEach
                     WideNavigationRailItem(
@@ -467,20 +467,17 @@ private fun AppNavigationRail(
 //}
 
 @Composable
-private fun DrawerSeasonsPager(railExpanded: Boolean) {
+private fun DrawerSeasonsPager() {
     var actualSeason by remember {
         mutableIntStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
     }
     val pageSize = 200
-    val pagerState = rememberPagerState(
-        initialPage = pageSize / 2 + actualSeason,
-        pageCount = { pageSize },
-    )
-    if (railExpanded) LaunchedEffect(Unit) {
+    val pagerState = rememberPagerState(pageSize / 2 + actualSeason, pageCount = { pageSize })
+    LaunchedEffect(Unit) {
         while (true) {
             delay(30.seconds)
             val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
-            if (seasonIndex != actualSeason) {
+            if (actualSeason != seasonIndex) {
                 actualSeason = seasonIndex
                 pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
             }
