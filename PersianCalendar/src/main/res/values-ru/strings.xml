@@ -409,7 +409,7 @@
     <string name="time_zones">Часовые пояса</string>
     <string name="exit_full_screen">Выйти из полноэкранного режима</string>
     <string name="full_screen">Полноэкранный режим</string>
-    <string name="open_drawer">Открыть панель навигации</string>
+    <string name="open_navigation_rail">Открыть панель навигации</string>
     <plurals name="work_days">
         <item quantity="one">%1$s рабочий день</item>
         <item quantity="few">%1$s рабочих дня</item>

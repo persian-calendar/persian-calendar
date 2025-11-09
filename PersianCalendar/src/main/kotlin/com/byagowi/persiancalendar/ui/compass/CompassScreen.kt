@@ -85,7 +85,7 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -111,7 +111,7 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.CompassScreen(
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     navigateToLevel: () -> Unit,
     navigateToMap: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
@@ -214,7 +214,7 @@ fun SharedTransitionScope.CompassScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
-                    else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                    else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
                 },
                 actions = {
                     if (coordinates != null) AppIconButton(

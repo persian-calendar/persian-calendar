@@ -106,7 +106,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
-import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
@@ -122,7 +122,7 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 @Composable
 fun SharedTransitionScope.AboutScreen(
     animatedContentScope: AnimatedContentScope,
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
 ) {
@@ -132,7 +132,9 @@ fun SharedTransitionScope.AboutScreen(
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.about)) },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
+                navigationIcon = {
+                    NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                },
                 actions = {
                     val context = LocalContext.current
                     ShareActionButton(animatedContentScope) { shareApplication(context) }

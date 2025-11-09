@@ -133,7 +133,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     AppNavigationRail(railState, navController, finish)
     SharedTransitionLayout {
         val coroutineScope = rememberCoroutineScope()
-        val openDrawer: () -> Unit = { coroutineScope.launch { railState.expand() } }
+        val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         NavHost(
             navController = navController,
             startDestination = Screen.fromName(intentStartDestination).name,
@@ -164,7 +164,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 val viewModel = viewModel<CalendarViewModel>()
                 appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
                 CalendarScreen(
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     navigateToHolidaysSettings = {
                         Screen.SETTINGS.navigate(
                             tabKey to INTERFACE_CALENDAR_TAB,
@@ -251,7 +251,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             composable(Screen.CONVERTER.name) { backStackEntry ->
                 ConverterScreen(
                     animatedContentScope = this,
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     navigateToAstronomy = ::navigateToAstronomy,
                     viewModel = viewModel<ConverterViewModel>(),
                     noBackStackAction = if (navController.previousBackStackEntry != null) null
@@ -262,7 +262,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             composable(Screen.COMPASS.name) { backStackEntry ->
                 CompassScreen(
                     animatedContentScope = this,
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     navigateToLevel = Screen.LEVEL::navigate,
                     navigateToMap = Screen.MAP::navigate,
                     navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
@@ -286,7 +286,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 AstronomyScreen(
                     animatedContentScope = this,
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     navigateToMap = Screen.MAP::navigate,
                     viewModel = viewModel,
                     noBackStackAction = if (navController.previousBackStackEntry != null) null
@@ -316,7 +316,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             composable(Screen.SETTINGS.name) { backStackEntry ->
                 SettingsScreen(
                     animatedContentScope = this,
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     navigateToMap = Screen.MAP::navigate,
                     initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
                     destination = backStackEntry.arguments?.getString(settingsKey).orEmpty(),
@@ -326,7 +326,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             composable(Screen.ABOUT.name) {
                 AboutScreen(
                     animatedContentScope = this,
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     navigateToLicenses = Screen.LICENSES::navigate,
                     navigateToDeviceInformation = Screen.DEVICE::navigate,
                 )
@@ -347,14 +347,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
 }
 
 // Don't ever change the name of the ones that are mentioned xml/shortcuts.xml and ShortcutActivity.kt
-private enum class Screen(val drawerEntry: Pair<ImageVector, Int>? = null) {
+private enum class Screen(val navigationRailEntry: Pair<ImageVector, Int>? = null) {
     CALENDAR(Icons.Default.DateRange to R.string.calendar), SCHEDULE, DAYS, MONTH,
     CONVERTER(Icons.Default.SwapVerticalCircle to R.string.date_converter),
     COMPASS(Icons.Default.Explore to R.string.compass), LEVEL,
     ASTRONOMY(AstrologyIcon to R.string.astronomy), MAP,
     SETTINGS(Icons.Default.Settings to R.string.settings),
     ABOUT(Icons.Default.Info to R.string.about), LICENSES, DEVICE,
-    EXIT(Icons.Default.Cancel to R.string.exit); // Not a screen but is on the drawer, so
+    EXIT(Icons.Default.Cancel to R.string.exit); // Not a screen but is on the navigation rail, so
 
     // Which item needs to be highlighted when user is on the screen
     val parent
@@ -410,8 +410,8 @@ private fun AppNavigationRail(
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 ) {
-                    DrawerSeasonsPager()
-                    DrawerDarkModeToggle()
+                    NavigationRailSeasonsPager()
+                    NavigationRailDarkModeToggle()
                 }
                 val defaultColors = WideNavigationRailItemDefaults.colors()
                 val colors = defaultColors.copy(
@@ -426,7 +426,7 @@ private fun AppNavigationRail(
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val railExpanded = railState.currentValue == WideNavigationRailValue.Expanded
                 Screen.entries.forEach { item ->
-                    val (icon, titleId) = item.drawerEntry ?: return@forEach
+                    val (icon, titleId) = item.navigationRailEntry ?: return@forEach
                     WideNavigationRailItem(
                         icon = { Icon(icon, contentDescription = null) },
                         colors = colors,
@@ -451,7 +451,7 @@ private fun AppNavigationRail(
 
 // Can't be enabled in ModalWideNavigationRail, sadly
 //@Composable
-//private fun DrawerTopGradient() {
+//private fun NavigationRailTopGradient() {
 //    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
 //    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
 //    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
@@ -467,7 +467,7 @@ private fun AppNavigationRail(
 //}
 
 @Composable
-private fun DrawerSeasonsPager() {
+private fun NavigationRailSeasonsPager() {
     var actualSeason by remember {
         mutableIntStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
     }
@@ -515,7 +515,7 @@ private fun DrawerSeasonsPager() {
 }
 
 @Composable
-private fun BoxScope.DrawerDarkModeToggle() {
+private fun BoxScope.NavigationRailDarkModeToggle() {
     val userSetTheme by userSetTheme.collectAsState()
     // If current theme is default theme, isDark is null so no toggle is shown also
     val isDark = userSetTheme.isDark ?: return

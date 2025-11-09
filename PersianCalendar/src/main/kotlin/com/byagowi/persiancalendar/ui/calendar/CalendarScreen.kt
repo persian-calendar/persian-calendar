@@ -178,7 +178,7 @@ import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
-import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -212,7 +212,7 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.CalendarScreen(
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToMonthView: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
@@ -308,7 +308,7 @@ fun SharedTransitionScope.CalendarScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) { Search(viewModel) } else Toolbar(
                     animatedContentScope = animatedContentScope,
-                    openDrawer = openDrawer,
+                    openNavigationRail = openNavigationRail,
                     swipeUpActions = swipeUpActions,
                     swipeDownActions = swipeDownActions,
                     viewModel = viewModel,
@@ -838,7 +838,7 @@ private fun Search(viewModel: CalendarViewModel) {
 @Composable
 private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
     viewModel: CalendarViewModel,
@@ -985,7 +985,7 @@ private fun SharedTransitionScope.Toolbar(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
                     onClick = viewModel::onYearViewBackPressed,
-                ) else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                ) else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
             }
         },
         actions = {

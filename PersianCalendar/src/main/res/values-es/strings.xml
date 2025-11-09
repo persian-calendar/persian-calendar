@@ -16,7 +16,7 @@
     <string name="continue_button">Continuar</string>
     <string name="outdated_app">Debido a estar desactualizado, las cosas pueden ser incorrectas</string>
     <string name="update">Actualizar</string>
-    <!--Navigation drawers-->
+    <!--Navigation rail items-->
     <string name="calendar">Calendario</string>
     <string name="date_converter">Convertidor de fecha</string>
     <string name="converter">Convertidor</string>
@@ -416,7 +416,7 @@
         <item quantity="other">%1$s días laborables</item>
     </plurals>
     <string name="navigate_up">Navegar hacia arriba</string>
-    <string name="open_drawer">Abra el cajón de navegación</string>
+    <string name="open_navigation_rail">Abra el cajón de navegación</string>
     <string name="more_options">Más opciones</string>
     <string name="yes">Sí</string>
     <string name="sample_inputs">Ejemplos de entradas</string>

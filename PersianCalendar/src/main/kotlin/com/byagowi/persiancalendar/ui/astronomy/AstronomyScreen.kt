@@ -100,7 +100,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
@@ -131,7 +131,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun SharedTransitionScope.AstronomyScreen(
     animatedContentScope: AnimatedContentScope,
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
     noBackStackAction: (() -> Unit)?,
@@ -172,7 +172,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
-                    else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                    else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
                 },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()

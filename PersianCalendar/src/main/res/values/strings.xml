@@ -16,7 +16,7 @@
     <string name="continue_button">Continue</string>
     <string name="outdated_app">Due to being outdated, things can be inaccurate</string>
     <string name="update">Update</string>
-    <!--Navigation drawers-->
+    <!--Navigation rail items-->
     <string name="calendar">Calendar</string>
     <string name="date_converter">Date Converter</string>
     <string name="converter">Converter</string>
@@ -394,7 +394,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="time_zones">Time zones</string>
     <string name="qr_code">QR Code</string>
     <string name="navigate_up">Navigate up</string>
-    <string name="open_drawer">Open navigation drawer</string>
+    <string name="open_navigation_rail">Open navigation drawer</string>
     <string name="more_options">More options</string>
     <string name="yes">Yes</string>
     <string name="sample_inputs">Sample inputs</string>

@@ -349,7 +349,7 @@
     <string name="color_gradient">Sfumatura di colore</string>
     <string name="qr_code">Codice QR</string>
     <string name="navigate_up">Torna su</string>
-    <string name="open_drawer">Apri menu di navigazione</string>
+    <string name="open_navigation_rail">Apri menu di navigazione</string>
     <string name="more_options">Altre opzioni</string>
     <string name="yes">Sì</string>
     <string name="sample_inputs">Esempi di input</string>

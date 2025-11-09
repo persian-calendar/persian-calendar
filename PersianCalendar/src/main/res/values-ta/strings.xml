@@ -211,7 +211,7 @@
     <string name="time_zones">நேர மண்டலங்கள்</string>
     <string name="qr_code">விப குறியீடு</string>
     <string name="navigate_up">மேலே செல்</string>
-    <string name="open_drawer">திறந்த வழிசெலுத்தல் இழுப்பறை</string>
+    <string name="open_navigation_rail">திறந்த வழிசெலுத்தல் இழுப்பறை</string>
     <string name="more_options">மேலும் விருப்பங்கள்</string>
     <string name="yes">ஆம்</string>
     <string name="sample_inputs">மாதிரி உள்ளீடுகள்</string>

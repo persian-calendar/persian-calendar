@@ -403,7 +403,7 @@
     <string name="enable_notification">Möchten Sie die Datumsbenachrichtigung aktivieren?</string>
     <string name="add_quick_settings_tile">Kachel für Schnelleinstellungen hinzufügen</string>
     <string name="navigate_up">Nach oben navigieren</string>
-    <string name="open_drawer">Navigationsfach öffnen</string>
+    <string name="open_navigation_rail">Navigationsfach öffnen</string>
     <string name="live_wallpaper_settings">Live-Hintergrundbild Einstellungen</string>
     <string name="sample_inputs">Beispieleingaben</string>
     <string name="widget_background_transparency">Transparenz des Widget-Hintergrundes</string>

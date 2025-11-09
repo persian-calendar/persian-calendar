@@ -400,7 +400,7 @@
     <string name="time_zones">ناوچەی کاتییەکان</string>
     <string name="exit_full_screen">دەرچوون لە شاشەی پڕ</string>
     <string name="full_screen">پڕ بە شاشە</string>
-    <string name="open_drawer">کردنەوەی لیستی ڕێنیشاندەر</string>
+    <string name="open_navigation_rail">کردنەوەی لیستی ڕێنیشاندەر</string>
     <string name="more_options">هەڵبژاردەی زیاتر</string>
     <string name="ask_for_calendar_permission">ئایا دەتەوێت ڕووداوە کەسییەکانت لە ساڵنامەی ئامێرەکەتەوە چالاک بکەیت؟</string>
     <string name="year_view">دیمەنی ساڵ</string>

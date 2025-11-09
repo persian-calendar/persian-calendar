@@ -396,7 +396,7 @@
         <item quantity="other">%1$s iş günü</item>
     </plurals>
     <string name="navigate_up">Yukarı git</string>
-    <string name="open_drawer">Gezinme çekmecesini aç</string>
+    <string name="open_navigation_rail">Gezinme çekmecesini aç</string>
     <string name="more_options">Daha fazla seçenek</string>
     <string name="widget_background_transparency">Widget arka plan şeffaflığı</string>
     <string name="ask_for_calendar_permission">Aygıtınızın takviminden kişisel etkinliklerinizi etkinleştirmek ister misiniz?</string>

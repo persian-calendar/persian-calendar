@@ -104,7 +104,7 @@ import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
-import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -130,7 +130,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 fun SharedTransitionScope.SettingsScreen(
     animatedContentScope: AnimatedContentScope,
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
     initialPage: Int,
     destination: String,
@@ -152,7 +152,7 @@ fun SharedTransitionScope.SettingsScreen(
                     },
                     colors = appTopAppBarColors(),
                     navigationIcon = {
-                        NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                        NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
                     },
                     actions = {
                         var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }

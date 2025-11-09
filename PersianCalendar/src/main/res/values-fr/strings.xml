@@ -399,7 +399,7 @@
         <item quantity="many">%1$s semaines</item>
         <item quantity="other">%1$s semaines</item>
     </plurals>
-    <string name="open_drawer">Ouvrir le panneau de navigation</string>
+    <string name="open_navigation_rail">Ouvrir le panneau de navigation</string>
     <string name="more_options">Plus d\'options</string>
     <string name="yes">Oui</string>
     <string name="sample_inputs">Exemples d\'entrées</string>

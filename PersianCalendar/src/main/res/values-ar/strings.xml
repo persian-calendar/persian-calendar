@@ -15,7 +15,7 @@
     <string name="continue_button">استمر</string>
     <string name="outdated_app">بسبب إستخدامك لنسخة قديمة من التطبيق، التاريخ قد لا يكون صحيحاً</string>
     <string name="update">حدّث</string>
-    <!--Navigation drawers-->
+    <!--Navigation rail items-->
     <string name="calendar">التقويم</string>
     <string name="date_converter">محول التاريخ</string>
     <string name="converter">محول</string>
@@ -455,7 +455,7 @@
         <item quantity="many">%1$s ثانية</item>
         <item quantity="other">%1$s ثانية</item>
     </plurals>
-    <string name="open_drawer">فتح درج التنقل</string>
+    <string name="open_navigation_rail">فتح درج التنقل</string>
     <string name="more_options">المزيد من الخيارات</string>
     <string name="yes">نعم</string>
     <string name="sample_inputs">المدخلات نموذجية</string>

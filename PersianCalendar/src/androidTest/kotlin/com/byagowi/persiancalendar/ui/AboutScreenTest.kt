@@ -31,7 +31,7 @@ class AboutScreenTest {
             deviceInformationString = stringResource(R.string.device_information)
             AboutScreen(
                 animatedContentScope = scope,
-                openDrawer = {},
+                openNavigationRail = {},
                 navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
                 navigateToLicenses = { assert(false) },
             )
@@ -50,7 +50,7 @@ class AboutScreenTest {
             licensesString = stringResource(R.string.about_license_title)
             AboutScreen(
                 animatedContentScope = scope,
-                openDrawer = {},
+                openNavigationRail = {},
                 navigateToDeviceInformation = { assert(false) },
                 navigateToLicenses = { navigateToLicensesIsCalled = true },
             )

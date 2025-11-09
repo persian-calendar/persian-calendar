@@ -85,7 +85,7 @@ import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -109,7 +109,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun SharedTransitionScope.ConverterScreen(
     animatedContentScope: AnimatedContentScope,
-    openDrawer: () -> Unit,
+    openNavigationRail: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     viewModel: ConverterViewModel,
     noBackStackAction: (() -> Unit)?,
@@ -132,7 +132,7 @@ fun SharedTransitionScope.ConverterScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
-                    else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                    else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
                 },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
