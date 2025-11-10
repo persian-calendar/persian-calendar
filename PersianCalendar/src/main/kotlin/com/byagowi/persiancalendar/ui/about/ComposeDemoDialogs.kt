@@ -18,10 +18,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -33,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -48,6 +52,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
@@ -70,6 +75,7 @@ import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.monthName
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -455,3 +461,33 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
 }
 
 private const val pagesCount = 20000
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FontWeightsDialog(onDismissRequest: () -> Unit) {
+    AppDialog(onDismissRequest = onDismissRequest) {
+        val text by remember { mutableStateOf(TextFieldState("Sample text متن نمونه")) }
+        var weight by remember { mutableFloatStateOf(400f) }
+        TextField(
+            state = text,
+            textStyle = LocalTextStyle.current.copy(
+                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                fontWeight = FontWeight(weight.roundToInt()),
+                textAlign = TextAlign.Center,
+            ),
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Slider(
+            valueRange = 100f..900f,
+            value = weight,
+            onValueChange = { weight = it },
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+        val numeral by numeral.collectAsState()
+        Text(
+            text = numeral.format(weight.roundToInt()),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
+    }
+}

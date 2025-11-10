@@ -98,6 +98,7 @@ import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.ConverterDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
+import com.byagowi.persiancalendar.ui.about.FontWeightsDialog
 import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ScheduleAlarm
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
@@ -411,6 +412,11 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuItem({ Text("Shapes") }) { showDialog = true }
         if (showDialog) ShapesDemoDialog { showDialog = false }
+    }
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        AppDropdownMenuItem({ Text("Font Weights") }) { showDialog = true }
+        if (showDialog) FontWeightsDialog { showDialog = false }
     }
     val isCyberpunk by isCyberpunk.collectAsState()
     AppDropdownMenuCheckableItem(
