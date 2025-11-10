@@ -30,6 +30,8 @@ import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.atan2
 
+fun isMoonInScorpio(time: Time) = eclipticGeoMoon(time).lon in Zodiac.scorpioRange
+
 fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
     eclipticGeoMoon(jdn.toAstronomyTime(hourOfDay, setIranTime)).lon
 

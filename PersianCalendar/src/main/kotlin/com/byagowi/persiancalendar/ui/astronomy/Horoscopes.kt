@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -295,7 +296,11 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
         if (state.currentPageOffsetFraction != 0f) pendingConfirms.forEach { it() }
         val coroutineScope = rememberCoroutineScope()
-        HorizontalPager(state, pageSpacing = 8.dp) { year ->
+        HorizontalPager(
+            state,
+            pageSpacing = 8.dp,
+            modifier = Modifier.animateContentSize(),
+        ) { year ->
             Column {
                 YearHoroscopeDialogContent(
                     persianYear = year,
@@ -435,14 +440,16 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                 initialValue = persianYear,
                 onValueChange = onPagerValueChange,
             )
+            val lines = listOfNotNull(
+                if (language.isPersianOrDari) {
+                    "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
+                } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
+                gregorianCalendar.formatDateAndTime(),
+                if (isMoonInScorpio(time)) stringResource(R.string.moon_in_scorpio) else null,
+                dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma),
+            )
             Text(
-                listOf(
-                    if (language.isPersianOrDari) {
-                        "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
-                    } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
-                    gregorianCalendar.formatDateAndTime(),
-                    dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma)
-                ).joinToString("\n"),
+                lines.joinToString("\n"),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -450,7 +457,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                         showTextEdit = true
                     }
                     .then(if (state) Modifier.alpha(.0f) else Modifier),
-                maxLines = 3,
+                maxLines = lines.size,
                 autoSize = TextAutoSize.StepBased(
                     maxFontSize = LocalTextStyle.current.fontSize,
                     minFontSize = 9.sp,
