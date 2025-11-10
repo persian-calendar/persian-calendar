@@ -113,7 +113,7 @@ fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
             "scrim" to MaterialTheme.colorScheme.scrim,
         ).map { (title, color) ->
             Text(
-                title,
+                text = title,
                 color = MaterialTheme.colorScheme.contentColorFor(color),
                 modifier = Modifier.background(color, MaterialTheme.shapes.extraSmall),
             )
@@ -178,7 +178,7 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Text(
-                        "$title topStart=${f(shape.topStart)} topEnd=${f(shape.topEnd)} bottomStart=${
+                        text = "$title topStart=${f(shape.topStart)} topEnd=${f(shape.topEnd)} bottomStart=${
                             f(
                                 shape.bottomStart
                             )
@@ -288,19 +288,26 @@ fun IconsDemoDialog(onDismissRequest: () -> Unit) {
 fun ScheduleAlarm(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     var seconds by rememberSaveable { mutableStateOf("5") }
-    AppDialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
-        TextButton(onClick = onClick@{
-            onDismissRequest()
-            val value = seconds.toIntOrNull() ?: return@onClick
-            val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>().setInitialDelay(
-                value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS
-            ).build()
-            WorkManager.getInstance(context).beginUniqueWork(
-                "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
-            ).enqueue()
-            Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
-        }) { Text(stringResource(R.string.accept)) }
-    }, onDismissRequest = onDismissRequest) {
+    AppDialog(
+        title = { Text("Enter seconds to schedule alarm") },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    seconds.toIntOrNull()?.let { value ->
+                        val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>().setInitialDelay(
+                            value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS
+                        ).build()
+                        WorkManager.getInstance(context).beginUniqueWork(
+                            "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
+                        ).enqueue()
+                        Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
+                    }
+                },
+            ) { Text(stringResource(R.string.accept)) }
+        },
+        onDismissRequest = onDismissRequest,
+    ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = seconds,
@@ -337,11 +344,11 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                         },
                     ) {
                         val view = LocalView.current
-                        calendars.forEachIndexed { i, calendar ->
+                        calendars.forEach {
                             Tab(
                                 text = {
                                     Text(
-                                        stringResource(calendar.shortTitle),
+                                        stringResource(it.shortTitle),
                                         maxLines = 1,
                                         autoSize = TextAutoSize.StepBased(
                                             minFontSize = 5.sp,
@@ -350,11 +357,11 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                                     )
                                 },
                                 modifier = Modifier.clip(MaterialTheme.shapes.large),
-                                selected = calendar == sourceCalendar,
+                                selected = it == sourceCalendar,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                                 onClick = {
                                     view.performHapticFeedbackVirtualKey()
-                                    sourceCalendar = calendar
+                                    sourceCalendar = it
                                 },
                             )
                         }
@@ -369,11 +376,11 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                         },
                     ) {
                         val view = LocalView.current
-                        otherCalendars.forEachIndexed { i, calendar ->
+                        otherCalendars.forEach {
                             Tab(
                                 text = {
                                     Text(
-                                        stringResource(calendar.title),
+                                        stringResource(it.title),
                                         maxLines = 1,
                                         autoSize = TextAutoSize.StepBased(
                                             minFontSize = 5.sp,
@@ -382,11 +389,11 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                                     )
                                 },
                                 modifier = Modifier.clip(MaterialTheme.shapes.large),
-                                selected = calendar == destinationCalendar,
+                                selected = it == destinationCalendar,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                                 onClick = {
                                     view.performHapticFeedbackVirtualKey()
-                                    destinationCalendar = calendar
+                                    destinationCalendar = it
                                 },
                             )
                         }
