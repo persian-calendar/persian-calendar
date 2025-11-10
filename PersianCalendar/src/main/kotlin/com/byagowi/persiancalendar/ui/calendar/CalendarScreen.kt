@@ -225,7 +225,6 @@ fun SharedTransitionScope.CalendarScreen(
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
 ) {
-    YearHoroscopeDialog(1400) {}
     val snackbarHostState = remember { SnackbarHostState() }
     val isYearView by viewModel.isYearView.collectAsState()
     val context = LocalContext.current
