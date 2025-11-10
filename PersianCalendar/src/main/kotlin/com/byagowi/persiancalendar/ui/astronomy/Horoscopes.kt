@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -272,102 +275,114 @@ private fun EasternHoroscopePattern(
 // See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
 fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
-    val language by language.collectAsState()
-    val resources = LocalResources.current
-    AppDialog(onDismissRequest = onDismissRequest) appDialog@{
+    AppDialog(onDismissRequest = onDismissRequest) {
+        val state = rememberPagerState(persianYear) { 5000 }
         val animationProgress = remember { Animatable(0f) }
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
-        val coroutineScope = rememberCoroutineScope()
-        val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-        val horoscopeString = stringResource(R.string.horoscope)
-        val yearNameString = stringResource(R.string.year_name)
-        val clickableModifier = Modifier.clickable(
-            indication = null, interactionSource = null
-        ) {
-            coroutineScope.launch {
-                animationProgress.animateTo(if (animationProgress.value > .5f) 0f else 1f)
-            }
+        HorizontalPager(state) { year ->
+            Column { YearHoroscopeDialogContent(year, animationProgress) }
         }
-        val yearNameModifier = if (isTalkBackEnabled) Modifier.semantics {
-            this.contentDescription = yearNameString
-            this.isTraversalGroup = true
-        } else clickableModifier
-        val planetaryModifier = if (isTalkBackEnabled) Modifier.semantics {
-            this.contentDescription = horoscopeString
-            this.isTraversalGroup = true
-        } else clickableModifier
-        EasternHoroscopePattern(yearNameModifier) { i ->
-            val date = PersianDate(persianYear + i, 1, 1)
-            val chineseZodiac = ChineseZodiac.fromPersianCalendar(date)
-            Text(
-                chineseZodiac.resolveEmoji(language.isPersianOrDari),
-                fontSize = 40.sp,
-                modifier = Modifier
-                    .semantics { this.hideFromAccessibility() }
-                    .alpha(1 - animationProgress.value * .8f),
-            )
-            Text(
-                chineseZodiac.formatForHoroscope(resources, language.isPersianOrDari),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.alpha(animationProgress.value * 1f),
-            )
-        }
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-        val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
-        val isUserLocatedInIranOrAfghanistan = when (TimeZone.getDefault().id) {
-            IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
-            else -> false
-        }
-        val settingsCoordinates = coordinates.collectAsState().value
-        val settingsCityName = cityName.collectAsState().value
-        val (coordinates, cityName) = when {
-            !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
-                settingsCoordinates to settingsCityName
-            }
+    }
+}
 
-            language.isAfghanistanExclusive -> {
-                val kabulCoordinates = Coordinates(34.53, 69.16, 0.0)
-                kabulCoordinates to if (language.isArabicScript) "کابل" else "Kabul"
-            }
-
-            // So the user would be able to verify it with the calendar book published
-            else -> {
-                val tehranCoordinates = Coordinates(35.68, 51.42, 0.0)
-                tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"
-            }
+@Composable
+private fun ColumnScope.YearHoroscopeDialogContent(
+    persianYear: Int,
+    animationProgress: Animatable<Float, AnimationVector1D>,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val clickableModifier = Modifier.clickable(
+        indication = null,
+        interactionSource = null,
+    ) {
+        coroutineScope.launch {
+            animationProgress.animateTo(if (animationProgress.value > .5f) 0f else 1f)
         }
-
-        val numeral by numeral.collectAsState()
+    }
+    val language by language.collectAsState()
+    val resources = LocalResources.current
+    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+    val horoscopeString = stringResource(R.string.horoscope)
+    val yearNameString = stringResource(R.string.year_name)
+    val yearNameModifier = if (isTalkBackEnabled) Modifier.semantics {
+        this.contentDescription = yearNameString
+        this.isTraversalGroup = true
+    } else clickableModifier
+    val planetaryModifier = if (isTalkBackEnabled) Modifier.semantics {
+        this.contentDescription = horoscopeString
+        this.isTraversalGroup = true
+    } else clickableModifier
+    EasternHoroscopePattern(yearNameModifier) { i ->
+        val date = PersianDate(persianYear + i, 1, 1)
+        val chineseZodiac = ChineseZodiac.fromPersianCalendar(date)
         Text(
-            if (language.isUserAbleToReadPersian) {
-                "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
-            } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            maxLines = 1,
-            autoSize = TextAutoSize.StepBased(
-                maxFontSize = LocalTextStyle.current.fontSize,
-                minFontSize = 9.sp,
-            )
+            chineseZodiac.resolveEmoji(language.isPersianOrDari),
+            fontSize = 40.sp,
+            modifier = Modifier
+                .semantics { this.hideFromAccessibility() }
+                .alpha(1 - animationProgress.value * .8f),
         )
-        val time = seasons(gregorianYear).marchEquinox
         Text(
-            text = Date(time.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime(),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            maxLines = 1,
-            autoSize = TextAutoSize.StepBased(
-                maxFontSize = LocalTextStyle.current.fontSize,
-                minFontSize = 9.sp,
-            )
-        )
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-        AscendantZodiac(
-            time,
-            coordinates,
-            planetaryModifier,
-            animationProgress.value,
-            isYearEquinox = true,
+            chineseZodiac.formatForHoroscope(resources, language.isPersianOrDari),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.alpha(animationProgress.value * 1f),
         )
     }
+    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+    val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
+    val isUserLocatedInIranOrAfghanistan = when (TimeZone.getDefault().id) {
+        IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
+        else -> false
+    }
+    val settingsCoordinates = coordinates.collectAsState().value
+    val settingsCityName = cityName.collectAsState().value
+    val (coordinates, cityName) = when {
+        !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
+            settingsCoordinates to settingsCityName
+        }
+
+        language.isAfghanistanExclusive -> {
+            val kabulCoordinates = Coordinates(34.53, 69.16, 0.0)
+            kabulCoordinates to if (language.isArabicScript) "کابل" else "Kabul"
+        }
+
+        // So the user would be able to verify it with the calendar book published
+        else -> {
+            val tehranCoordinates = Coordinates(35.68, 51.42, 0.0)
+            tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"
+        }
+    }
+
+    val numeral by numeral.collectAsState()
+    Text(
+        if (language.isUserAbleToReadPersian) {
+            "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
+        } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        maxLines = 1,
+        autoSize = TextAutoSize.StepBased(
+            maxFontSize = LocalTextStyle.current.fontSize,
+            minFontSize = 9.sp,
+        )
+    )
+    val time = seasons(gregorianYear).marchEquinox
+    Text(
+        text = Date(time.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime(),
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        maxLines = 1,
+        autoSize = TextAutoSize.StepBased(
+            maxFontSize = LocalTextStyle.current.fontSize,
+            minFontSize = 9.sp,
+        )
+    )
+    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+    AscendantZodiac(
+        time,
+        coordinates,
+        planetaryModifier,
+        animationProgress.value,
+        isYearEquinox = true,
+    )
 }
 
 private val geocentricDistanceBodies = listOf(
