@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -79,6 +80,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.titleStringId
@@ -201,7 +203,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                 )
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-            AscendantZodiac(time, it, isYearEquinox = false)
+            AscendantZodiac(time, it, abjad = false, isYearEquinox = false)
         } ?: Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
     }
 }
@@ -279,8 +281,26 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         val state = rememberPagerState(persianYear) { 5000 }
         val animationProgress = remember { Animatable(0f) }
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
+        var abjad by remember { mutableStateOf(false) }
         HorizontalPager(state) { year ->
-            Column { YearHoroscopeDialogContent(year, animationProgress) }
+            Column { YearHoroscopeDialogContent(year, animationProgress, abjad = abjad) }
+        }
+        val language by language.collectAsState()
+        AnimatedContent(
+            persianYear == state.currentPage,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) { isFirstYear ->
+            if (isFirstYear && language.isArabicScript) Column(Modifier.align(Alignment.CenterHorizontally)) {
+                AnimatedVisibility(animationProgress.value != 0f) {
+                    IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
+                }
+            }
+            if (!isFirstYear) {
+                val coroutineScope = rememberCoroutineScope()
+                TodayActionButton(true) {
+                    coroutineScope.launch { state.animateScrollToPage(persianYear) }
+                }
+            }
         }
     }
 }
@@ -289,6 +309,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 private fun ColumnScope.YearHoroscopeDialogContent(
     persianYear: Int,
     animationProgress: Animatable<Float, AnimationVector1D>,
+    abjad: Boolean,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val clickableModifier = Modifier.clickable(
@@ -380,7 +401,8 @@ private fun ColumnScope.YearHoroscopeDialogContent(
         time,
         coordinates,
         planetaryModifier,
-        animationProgress.value,
+        progress = animationProgress.value,
+        abjad = abjad,
         isYearEquinox = true,
     )
 }
@@ -400,12 +422,13 @@ private val ascendantBodies = listOf(
 )
 
 @Composable
-private fun ColumnScope.AscendantZodiac(
+private fun AscendantZodiac(
     time: Time,
     coordinates: Coordinates,
     modifier: Modifier = Modifier,
     progress: Float = 1f,
     isYearEquinox: Boolean,
+    abjad: Boolean,
 ) {
     val bodiesZodiac = ascendantBodies.map { body ->
         if (body == Body.Sun && isYearEquinox) {
@@ -419,9 +442,7 @@ private fun ColumnScope.AscendantZodiac(
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalResources.current
-    var abjad by rememberSaveable { mutableStateOf(false) }
     val numFontStyle = SpanStyle() // to be used later, hopefully
-    val language by language.collectAsState()
     val meanApogee = meanApogee(time)
     val meanApogeeZodiac = Zodiac.fromTropical(meanApogee)
     fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
@@ -468,11 +489,6 @@ private fun ColumnScope.AscendantZodiac(
                 minFontSize = 9.sp,
             )
         )
-    }
-    if (language.isArabicScript) Column(Modifier.align(Alignment.CenterHorizontally)) {
-        AnimatedVisibility(progress != 0f) {
-            IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
-        }
     }
 }
 
