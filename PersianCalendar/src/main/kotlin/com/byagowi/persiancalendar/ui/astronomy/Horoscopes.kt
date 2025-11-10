@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.Canvas
@@ -292,6 +293,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
         var abjad by remember { mutableStateOf(false) }
         val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
+        if (state.currentPageOffsetFraction != 0f) pendingConfirms.forEach { it() }
         val coroutineScope = rememberCoroutineScope()
         HorizontalPager(state, pageSpacing = 8.dp) { year ->
             Column {
@@ -315,7 +317,12 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             language.collectAsState().value.isArabicScript -> FooterAction.Abjad
             else -> FooterAction.None
         }
-        Crossfade(targetState = action, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+        Crossfade(
+            targetState = action,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .animateContentSize(),
+        ) {
             when (it) {
                 FooterAction.Confirm -> AppIconButton(
                     icon = Icons.Default.Done,
@@ -439,7 +446,9 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { showTextEdit = true }
+                    .clickable(onClickLabel = stringResource(R.string.select_year)) {
+                        showTextEdit = true
+                    }
                     .then(if (state) Modifier.alpha(.0f) else Modifier),
                 maxLines = 3,
                 autoSize = TextAutoSize.StepBased(
