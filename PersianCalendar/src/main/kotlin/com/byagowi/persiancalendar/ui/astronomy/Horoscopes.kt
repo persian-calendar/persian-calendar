@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.Canvas
@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
@@ -36,11 +38,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -73,6 +77,7 @@ import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -80,10 +85,14 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NumberEdit
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -278,38 +287,69 @@ private fun EasternHoroscopePattern(
 @Composable
 fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) {
-        val state = rememberPagerState(persianYear) { 5000 }
+        val state = rememberPagerState(persianYear) { validYears }
         val animationProgress = remember { Animatable(0f) }
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
         var abjad by remember { mutableStateOf(false) }
-        HorizontalPager(state) { year ->
-            Column { YearHoroscopeDialogContent(year, animationProgress, abjad = abjad) }
-        }
-        val language by language.collectAsState()
-        AnimatedContent(
-            persianYear == state.currentPage,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) { isFirstYear ->
-            if (isFirstYear && language.isArabicScript) Column(Modifier.align(Alignment.CenterHorizontally)) {
-                AnimatedVisibility(animationProgress.value != 0f) {
-                    IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
-                }
+        val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
+        val coroutineScope = rememberCoroutineScope()
+        HorizontalPager(state, pageSpacing = 8.dp) { year ->
+            Column {
+                YearHoroscopeDialogContent(
+                    persianYear = year,
+                    animationProgress = animationProgress,
+                    pendingConfirms = pendingConfirms,
+                    abjad = abjad,
+                    onPagerValueChange = {
+                        coroutineScope.launch {
+                            if (abs(it - state.currentPage) > 5) state.requestScrollToPage(it)
+                            else state.animateScrollToPage(it)
+                        }
+                    },
+                )
             }
-            if (!isFirstYear) {
-                val coroutineScope = rememberCoroutineScope()
-                TodayActionButton(true) {
+        }
+        val action = when {
+            pendingConfirms.isNotEmpty() -> FooterAction.Confirm
+            persianYear != state.currentPage -> FooterAction.Reset
+            language.collectAsState().value.isArabicScript -> FooterAction.Abjad
+            else -> FooterAction.None
+        }
+        Crossfade(targetState = action, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            when (it) {
+                FooterAction.Confirm -> AppIconButton(
+                    icon = Icons.Default.Done,
+                    title = stringResource(R.string.accept),
+                    onClick = { pendingConfirms.forEach { it() } },
+                )
+
+                FooterAction.Abjad -> Column(Modifier.align(Alignment.CenterHorizontally)) {
+                    AnimatedVisibility(animationProgress.value != 0f) {
+                        IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
+                    }
+                }
+
+                FooterAction.Reset -> TodayActionButton(true) {
                     coroutineScope.launch { state.animateScrollToPage(persianYear) }
                 }
+
+                FooterAction.None -> {}
             }
         }
     }
 }
 
+private enum class FooterAction { Reset, Confirm, Abjad, None }
+
+const val validYears = 5000
+
 @Composable
 private fun ColumnScope.YearHoroscopeDialogContent(
     persianYear: Int,
     animationProgress: Animatable<Float, AnimationVector1D>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     abjad: Boolean,
+    onPagerValueChange: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val clickableModifier = Modifier.clickable(
@@ -375,27 +415,40 @@ private fun ColumnScope.YearHoroscopeDialogContent(
     }
 
     val numeral by numeral.collectAsState()
-    Text(
-        if (language.isUserAbleToReadPersian) {
-            "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
-        } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
-        modifier = Modifier.align(Alignment.CenterHorizontally),
-        maxLines = 1,
-        autoSize = TextAutoSize.StepBased(
-            maxFontSize = LocalTextStyle.current.fontSize,
-            minFontSize = 9.sp,
-        )
-    )
     val time = seasons(gregorianYear).marchEquinox
-    Text(
-        text = Date(time.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime(),
-        modifier = Modifier.align(Alignment.CenterHorizontally),
-        maxLines = 1,
-        autoSize = TextAutoSize.StepBased(
-            maxFontSize = LocalTextStyle.current.fontSize,
-            minFontSize = 9.sp,
-        )
-    )
+    var showTextEdit by remember { mutableStateOf(false) }
+    Crossfade(showTextEdit) { state ->
+        val gregorianCalendar = Date(time.toMillisecondsSince1970()).toGregorianCalendar()
+        Box(contentAlignment = Alignment.Center) {
+            if (state) NumberEdit(
+                dismissNumberEdit = { showTextEdit = false },
+                pendingConfirms = pendingConfirms,
+                modifier = Modifier.fillMaxWidth(),
+                isValid = { it in 0..validYears },
+                initialValue = persianYear,
+                onValueChange = onPagerValueChange,
+            )
+            Text(
+                listOf(
+                    if (language.isPersianOrDari) {
+                        "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
+                    } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
+                    gregorianCalendar.formatDateAndTime(),
+                    dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma)
+                ).joinToString("\n"),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showTextEdit = true }
+                    .then(if (state) Modifier.alpha(.0f) else Modifier),
+                maxLines = 3,
+                autoSize = TextAutoSize.StepBased(
+                    maxFontSize = LocalTextStyle.current.fontSize,
+                    minFontSize = 9.sp,
+                )
+            )
+        }
+    }
     HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
     AscendantZodiac(
         time,
