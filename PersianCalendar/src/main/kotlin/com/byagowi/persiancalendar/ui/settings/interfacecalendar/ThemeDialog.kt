@@ -193,7 +193,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         ) {
             val isBoldFont by isBoldFont.collectAsState()
             SwitchWithLabel(
-                label = stringResource(R.string.bold_font),
+                label = stringResource(R.string.bold_text),
                 checked = isBoldFont,
             ) { context.preferences.edit { putBoolean(PREF_BOLD_FONT, it) } }
         }

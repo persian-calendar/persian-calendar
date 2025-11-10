@@ -426,5 +426,5 @@
     <string name="large_day_number_on_notification">Bildirimde büyük gün sayısı</string>
     <string name="pref_ui">Kullanıcı arayüzü</string>
     <string name="week">Hafta</string>
-    <string name="bold_font">Kalın</string>
+    <string name="bold_text">Kalın metin</string>
 </resources>
