@@ -37,7 +37,6 @@ import androidx.compose.material3.WideNavigationRailDefaults
 import androidx.compose.material3.WideNavigationRailItem
 import androidx.compose.material3.WideNavigationRailItemDefaults
 import androidx.compose.material3.WideNavigationRailState
-import androidx.compose.material3.WideNavigationRailValue
 import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -372,6 +371,9 @@ private enum class Screen(val navigationRailEntry: Pair<ImageVector, Int>? = nul
     }
 }
 
+/** [androidx.compose.material3.tokens.NavigationRailExpandedTokens.ContainerWidthMinimum] **/
+private val railWidth = 220.dp
+
 @Composable
 private fun AppNavigationRail(
     railState: WideNavigationRailState,
@@ -394,11 +396,7 @@ private fun AppNavigationRail(
             )
         },
         state = railState,
-        /**
-         * It should be between the two,
-         * 220dp-360dp [androidx.compose.material3.tokens.NavigationRailExpandedTokens]
-         **/
-        modifier = Modifier.width(240.dp + startPadding),
+        modifier = Modifier.width(railWidth + startPadding),
         windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         Box {
@@ -433,7 +431,10 @@ private fun AppNavigationRail(
                         icon = { Icon(imageVector = icon, contentDescription = null) },
                         colors = colors,
                         railExpanded = true,
-                        label = { Text(stringResource(titleId), Modifier.width(136.dp)) },
+                        label = {
+                            val width = railWidth - 104.dp
+                            Text(text = stringResource(titleId), modifier = Modifier.width(width))
+                        },
                         selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
                         onClick = {
                             if (item == Screen.EXIT) finish() else coroutineScope.launch {
