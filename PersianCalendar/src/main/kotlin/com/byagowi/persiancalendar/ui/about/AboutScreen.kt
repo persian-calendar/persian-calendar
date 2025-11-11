@@ -155,14 +155,19 @@ fun SharedTransitionScope.AboutScreen(
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
-                ScreenSurface(animatedContentScope) {
-                    AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
-                }
+                val headerPx = with(LocalDensity.current) { headerSize.toPx() }
+                val bottomPadding = paddingValues.calculateBottomPadding()
+                ScreenSurface(
+                    animatedContentScope,
+                    disableSharedContent = scrollState.value > headerPx,
+                ) { AboutScreenContent(navigateToLicenses, bottomPadding) }
             }
             ScrollShadow(scrollState, skipTop = true)
         }
     }
 }
+
+private val headerSize = 250.dp
 
 @Composable
 private fun Header() {
@@ -180,7 +185,7 @@ private fun Header() {
     val interactionSource = remember { MutableInteractionSource() }
     Row(
         Modifier
-            .height(250.dp)
+            .height(headerSize)
             .fillMaxWidth()
             .indication(interactionSource = interactionSource, indication = ripple()),
     ) {
@@ -229,9 +234,7 @@ private fun Header() {
                 .clickable(indication = null, interactionSource = interactionSource) {
                     logoAnimationAtEnd = !logoAnimationAtEnd
                     clickHandlerDialog(activity)
-                    logoEffect = effectsGenerator
-                        ?.invoke()
-                        ?.asComposeRenderEffect()
+                    logoEffect = effectsGenerator?.invoke()?.asComposeRenderEffect()
                 },
             contentAlignment = Alignment.Center,
         ) {
@@ -355,7 +358,7 @@ private fun HelpItems() {
                         vertical = animateDpAsState(
                             if (expandedItem == i) 6.dp else 4.dp,
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-                        ).value
+                        ).value,
                     )
                     .fillMaxWidth()
                     .animateContentSize(appContentSizeAnimationSpec),
