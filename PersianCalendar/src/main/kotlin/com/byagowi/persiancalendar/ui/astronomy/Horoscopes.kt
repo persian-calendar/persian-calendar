@@ -440,9 +440,16 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                 initialValue = persianYear,
                 onValueChange = onPagerValueChange,
             )
+            val resources = LocalResources.current
             val lines = listOfNotNull(
                 if (language.isPersianOrDari) {
-                    "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
+                    "لحظهٔ تحویل سال " + numeral.format(persianYear) + spacedComma + ChineseZodiac.fromPersianCalendar(
+                        PersianDate(persianYear, 1, 1)
+                    ).format(
+                        resources,
+                        withEmoji = true,
+                        isPersian = true,
+                    ) + spacedComma + " شمسی در $cityName"
                 } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
                 gregorianCalendar.formatDateAndTime(),
                 if (isMoonInScorpio(time)) stringResource(R.string.moon_in_scorpio) else null,
