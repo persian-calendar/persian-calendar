@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
@@ -30,6 +32,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalWideNavigationRail
 import androidx.compose.material3.Text
@@ -64,6 +67,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -432,8 +436,16 @@ private fun AppNavigationRail(
                         colors = colors,
                         railExpanded = true,
                         label = {
-                            val width = railWidth - 104.dp
-                            Text(text = stringResource(titleId), modifier = Modifier.width(width))
+                            Text(
+                                text = stringResource(titleId),
+                                modifier = Modifier.width(railWidth - 104.dp),
+                                maxLines = 1,
+                                fontSize = LocalTextStyle.current.fontSize,
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 6.sp,
+                                    maxFontSize = LocalTextStyle.current.fontSize,
+                                ),
+                            )
                         },
                         selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
                         onClick = {
