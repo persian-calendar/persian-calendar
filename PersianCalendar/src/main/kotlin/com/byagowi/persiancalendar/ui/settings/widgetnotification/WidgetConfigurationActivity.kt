@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.create1x1RemoteViews
 import com.byagowi.persiancalendar.utils.create4x1RemoteViews
+import com.byagowi.persiancalendar.utils.createMapRemoteViews
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
@@ -189,6 +190,20 @@ class WidgetSunViewConfigurationActivity : WidgetConfigurationActivity() {
                 WidgetPreview { context, width, height ->
                     val prayTimes = coordinates.value?.calculatePrayTimes()
                     createSunViewRemoteViews(context, width, height, prayTimes)
+                }
+            },
+            settings = { WidgetColoringSettings() },
+        )
+    }
+}
+
+class WidgetMapConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = {
+                WidgetPreview { context, width, height ->
+                    createMapRemoteViews(context, width, height, System.currentTimeMillis())
                 }
             },
             settings = { WidgetColoringSettings() },

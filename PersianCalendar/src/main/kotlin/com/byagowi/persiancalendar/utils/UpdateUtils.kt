@@ -996,7 +996,7 @@ private val monthWidgetCells = listOf(
     R.id.month_grid_cell6x7,
 )
 
-private fun createMapRemoteViews(
+fun createMapRemoteViews(
     context: Context, width: Int, height: Int, time: Long
 ): RemoteViews {
     val size = min(width / 2, height)
