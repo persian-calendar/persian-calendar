@@ -21,6 +21,7 @@ import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
@@ -28,7 +29,6 @@ import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
-import java.io.File
 import java.util.GregorianCalendar
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -340,8 +340,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.textAlign = Paint.Align.CENTER
     }
 
-    fun setFont(file: File?) {
-        val typeface = file?.let(Typeface::createFromFile)
+    fun setFont(typeface: Typeface?) {
         colorTextPaint.typeface = typeface
         zodiacPaint.typeface = typeface
         moonTextPaint.typeface = typeface
@@ -353,6 +352,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.textSize = 20 * dp
         it.textAlign = Paint.Align.CENTER
         it.typeface = ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+        if (isBoldFont.value) it.isFakeBoldText = true
     }
     private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE

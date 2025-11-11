@@ -141,8 +141,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.textAlign = Paint.Align.CENTER
     }
 
-    fun setFont(file: File?) {
-        val typeface = file?.let(Typeface::createFromFile)
+    fun setFont(typeface: Typeface?) {
         textPaint.typeface = typeface
         textStrokePaint.typeface = typeface
         planetsPaint.typeface = typeface

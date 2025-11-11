@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.ui.utils.dp
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -27,12 +28,14 @@ class AngleDisplay(
         it.color = 0xFF00FF00.toInt()
         it.textSize = lcdTextSize
         if (lcd != null) it.typeface = lcd
+        if (isBoldFont.value) it.isFakeBoldText = true
         it.textAlign = Paint.Align.CENTER
     }
     private val lcdBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x44FFFFFF
         it.textSize = lcdTextSize
         if (lcd != null) it.typeface = lcd
+        if (isBoldFont.value) it.isFakeBoldText = true
         it.textAlign = Paint.Align.CENTER
     }
     private val displayRect = Rect().also {

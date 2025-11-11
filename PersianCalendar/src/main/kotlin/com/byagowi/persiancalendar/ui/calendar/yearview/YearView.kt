@@ -59,6 +59,7 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
@@ -115,8 +116,9 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     val monthColors = appMonthColors()
     val fontFile = resolveFontFile()
+    val isBoldFont by isBoldFont.collectAsState()
     val context = LocalContext.current
-    val dayPainter = remember(monthColors, widthInPx) {
+    val dayPainter = remember(monthColors, widthInPx, fontFile, isBoldFont) {
         lruCache(4, create = { height: Float ->
             DayPainter(
                 context = context,
@@ -129,6 +131,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 isYearView = true,
                 selectedDayColor = monthColors.indicator.toArgb(),
                 holidayCircleColor = monthColors.holidaysCircle.toArgb(),
+                isBoldFont = isBoldFont,
             )
         })
     }

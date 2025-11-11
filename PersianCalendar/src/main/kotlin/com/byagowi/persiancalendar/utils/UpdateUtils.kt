@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.eventsRepository
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isCenterAlignWidgets
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isDynamicIconEverEnabled
@@ -1495,6 +1496,7 @@ private fun updateNotification(
         spacedComma = spacedComma,
         language = language.value,
         customFontName = customFontName.value,
+        isBoldFont = isBoldFont.value,
         numeral = numeral.value,
         notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
     )
@@ -1535,6 +1537,7 @@ private data class NotificationData(
     private val customFontName: String?,
     private val notificationId: Int,
     private val numeral: Numeral,
+    private val isBoldFont: Boolean,
 ) {
     @CheckResult
     fun post(context: Context): Boolean {
@@ -1579,8 +1582,7 @@ private data class NotificationData(
         // Dynamic small icon generator, most of the times disabled as it needs API 23 and
         // we need to have the other path anyway
         if (when {
-                customFontFile != null -> true
-                language.isNepali -> true
+                customFontFile != null || isBoldFont -> true
                 // Nepali has 32 days months, necessary to use bitmap provided icons
                 date.calendar == Calendar.NEPALI -> true
                 else -> when (numeral) {
@@ -1590,17 +1592,15 @@ private data class NotificationData(
                 }
             } && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         ) {
-            val icon =
-                IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth, customFontFile))
-            builder.setSmallIcon(icon)
-        } else {
-            builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
-        }
+            val icon = createStatusIcon(date.dayOfMonth, customFontFile, isBoldFont)
+            builder.setSmallIcon(IconCompat.createWithBitmap(icon))
+        } else builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
         if (isLargeDayNumberOnNotification) {
             builder.setLargeIcon(
                 createStatusIcon(
                     dayOfMonth = date.dayOfMonth,
                     customFontFile = customFontFile,
+                    isBoldFont = isBoldFont,
                     color = 0xFF929292.toInt(),
                     addShadow = true
                 )

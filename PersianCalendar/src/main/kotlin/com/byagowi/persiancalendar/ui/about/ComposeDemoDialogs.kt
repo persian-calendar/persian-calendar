@@ -64,6 +64,7 @@ import androidx.work.WorkManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -268,11 +269,12 @@ fun IconsDemoDialog(onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) {
         FlowRow {
             val fontFile = resolveFontFile()
+            val isBoldFont by isBoldFont.collectAsState()
             (0..61).forEach {
                 val day = it / 2 + 1
                 Image(
                     bitmap = if (it % 2 == 0) ImageBitmap.imageResource(getDayIconResource(day))
-                    else createStatusIcon(day, fontFile).asImageBitmap(),
+                    else createStatusIcon(day, fontFile, isBoldFont).asImageBitmap(),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(all = 4.dp)

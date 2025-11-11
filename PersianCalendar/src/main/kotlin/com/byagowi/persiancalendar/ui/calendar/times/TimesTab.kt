@@ -50,13 +50,14 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
+import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
@@ -172,8 +173,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
             .height(100.dp),
     ) { state ->
         val sunViewColors = appSunViewColors()
-        val fontFile = resolveFontFile()
-        val typeface = remember(fontFile) { fontFile?.let(Typeface::createFromFile) }
+        val typeface = resolveAndroidCustomTypeface()
         if (state) AndroidView(
             factory = ::SunView,
             update = {

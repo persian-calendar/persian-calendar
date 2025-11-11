@@ -16,6 +16,7 @@ import java.io.File
 fun createStatusIcon(
     dayOfMonth: Int,
     customFontFile: File? = null,
+    isBoldFont: Boolean = false,
     color: Int = Color.WHITE,
     addShadow: Boolean = false,
 ): Bitmap {
@@ -30,6 +31,7 @@ fun createStatusIcon(
         it.textAlign = Paint.Align.CENTER
         it.color = color
         if (customFontFile != null) it.typeface = Typeface.createFromFile(customFontFile)
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
         if (addShadow) it.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
     val bounds = Rect()

@@ -77,7 +77,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
+import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -190,7 +190,7 @@ fun SharedTransitionScope.LevelScreen(
             ),
         ) {
             Box {
-                val fontFile = resolveFontFile()
+                val typeface = resolveAndroidCustomTypeface()
                 Crossfade(targetState = cmInchFlip, label = "ruler") { state ->
                     AndroidView(
                         modifier = Modifier
@@ -202,7 +202,7 @@ fun SharedTransitionScope.LevelScreen(
                         factory = ::RulerView,
                         update = {
                             it.cmInchFlip = state
-                            it.setFont(fontFile)
+                            it.setFont(typeface)
                         },
                     )
                 }

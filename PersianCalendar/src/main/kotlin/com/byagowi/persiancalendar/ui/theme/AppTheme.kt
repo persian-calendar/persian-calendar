@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.theme
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.PowerManager
 import android.view.View
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -38,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -115,6 +117,17 @@ fun resolveFontFile(): File? {
     return if (customFontName != null) runCatching {
         resolveCustomFontPath(LocalContext.current)
     }.onFailure(logException).getOrNull() else null
+}
+
+@Composable
+fun resolveAndroidCustomTypeface(): Typeface? {
+    val fontFile = resolveFontFile()
+    val isBoldFont by isBoldFont.collectAsState()
+    return remember(fontFile, isBoldFont) {
+        fontFile?.let(Typeface::createFromFile).let {
+            if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
+        }
+    }
 }
 
 @Composable

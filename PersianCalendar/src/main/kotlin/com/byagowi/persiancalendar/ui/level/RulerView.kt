@@ -33,8 +33,8 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             invalidate()
         }
 
-    fun setFont(file: File?) {
-        paint.typeface = file?.let(Typeface::createFromFile)
+    fun setFont(typeface: Typeface?) {
+        paint.typeface = typeface
     }
 
     override fun onDraw(canvas: Canvas) {

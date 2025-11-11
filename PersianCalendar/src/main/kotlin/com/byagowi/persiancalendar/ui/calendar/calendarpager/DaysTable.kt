@@ -63,6 +63,7 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -115,6 +116,7 @@ fun daysTable(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val fontFile = resolveFontFile()
+    val isBoldFont by isBoldFont.collectAsState()
     val language by language.collectAsState()
     val monthColors = appMonthColors()
     val coroutineScope = rememberCoroutineScope()
@@ -123,7 +125,7 @@ fun daysTable(
     val diameter = min(cellWidth, cellHeight)
     val context = LocalContext.current
     val dayPainter = remember(
-        cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile
+        cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile, isBoldFont,
     ) {
         DayPainter(
             context = context,
@@ -133,6 +135,7 @@ fun daysTable(
             isRtl = isRtl,
             colors = monthColors,
             fontFile = fontFile,
+            isBoldFont = isBoldFont,
         )
     }
     val daysTextSize = diameter * when {

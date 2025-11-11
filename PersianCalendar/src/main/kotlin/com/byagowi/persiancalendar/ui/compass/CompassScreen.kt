@@ -79,6 +79,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
@@ -91,7 +92,7 @@ import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
+import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -306,7 +307,7 @@ fun SharedTransitionScope.CompassScreen(
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
                         val surfaceColor = MaterialTheme.colorScheme.surface
-                        val fontFile = resolveFontFile()
+                        val typeface = resolveAndroidCustomTypeface()
                         AndroidView(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
@@ -320,7 +321,7 @@ fun SharedTransitionScope.CompassScreen(
                                 }
                             },
                             update = {
-                                it.setFont(fontFile)
+                                it.setFont(typeface)
                                 it.setSurfaceColor(surfaceColor.toArgb())
                                 it.setTime(time)
                             },

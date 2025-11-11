@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
@@ -34,6 +35,7 @@ class DayPainter(
     private val isRtl: Boolean,
     colors: MonthColors,
     fontFile: File? = null,
+    isBoldFont: Boolean = false,
     isWidget: Boolean = false,
     isYearView: Boolean = false,
     selectedDayColor: Int? = null,
@@ -43,6 +45,7 @@ class DayPainter(
         resources, min(width, height), colors, isWidget, isYearView,
         selectedDayColor, holidayCircleColor,
         typeface = fontFile?.let(Typeface::createFromFile),
+        isBoldFont = isBoldFont,
         zodiacFont = ResourcesCompat.getFont(
             context,
             R.font.notosanssymbolsregularzodiacsubset
@@ -205,6 +208,7 @@ private class Paints(
     @ColorInt holidayCircleColor: Int?,
     typeface: Typeface?,
     zodiacFont: Typeface?,
+    isBoldFont: Boolean,
 ) {
     private val dp = resources.dp
     val circlePadding = .5f * dp
@@ -222,10 +226,12 @@ private class Paints(
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.appointments.toArgb()
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.isFakeBoldText = true
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.eventIndicator.toArgb()
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -233,12 +239,14 @@ private class Paints(
         it.strokeWidth = 1 * dp
         it.color = colors.currentDay.toArgb()
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
     val selectedDayPaint = selectedDayColor?.let {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
             it.color = selectedDayColor
             if (typeface != null) it.typeface = typeface
+            if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
         }
     }
     val holidayPaint = holidayCircleColor?.let { color ->
@@ -272,6 +280,7 @@ private class Paints(
         it.color = colors.holidays.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -280,6 +289,7 @@ private class Paints(
         it.color = colors.contentColor.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -288,6 +298,7 @@ private class Paints(
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -301,6 +312,7 @@ private class Paints(
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         it.typeface = zodiacFont
+        if (isBoldFont) it.isFakeBoldText = true
     }
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = headerTextSize
@@ -327,6 +339,7 @@ private class Paints(
         it.textSize = diameter * 20 / 40
         it.color = colors.colorTextDayName.toArgb()
         if (typeface != null) it.typeface = typeface
+        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
         if (isWidget) addShadowIfNeeded(it)
     }
 }
