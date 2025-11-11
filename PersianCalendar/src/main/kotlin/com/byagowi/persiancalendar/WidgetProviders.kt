@@ -29,6 +29,14 @@ abstract class WidgetProvider : AppWidgetProvider() {
         // set updateDate to make sure it passes throttle and gets updated
         update(context ?: return, true)
     }
+
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        if (context == null || appWidgetIds == null || appWidgetIds.isEmpty()) return
+        super.onDeleted(context, appWidgetIds)
+        context.preferences.edit {
+            appWidgetIds.forEach { remove(PREF_WIDGET_TEXT_SCALE + it) }
+        }
+    }
 }
 
 class Widget1x1 : WidgetProvider()
@@ -46,6 +54,7 @@ class WidgetWeekView : WidgetProvider()
 class AgeWidget : WidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         if (context == null || appWidgetIds == null || appWidgetIds.isEmpty()) return
+        super.onDeleted(context, appWidgetIds)
         context.preferences.edit {
             appWidgetIds.forEach {
                 remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + it)
