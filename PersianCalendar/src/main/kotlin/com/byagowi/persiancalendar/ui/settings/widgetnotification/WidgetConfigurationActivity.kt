@@ -38,16 +38,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.utils.create1x1RemoteViews
+import com.byagowi.persiancalendar.utils.create4x1RemoteViews
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
+import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.GregorianCalendar
 
-class WidgetConfigurationActivity : BaseActivity() {
+open class WidgetConfigurationActivity : BaseActivity() {
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
@@ -71,24 +79,60 @@ class WidgetConfigurationActivity : BaseActivity() {
 
         setContent {
             BackHandler { finishAndSuccess() }
-            SystemTheme { WidgetConfigurationContent(appWidgetId, ::finishAndSuccess) }
+            SystemTheme { WidgetConfigurationContent(::finishAndSuccess) { preview(appWidgetId) } }
         }
+    }
+
+    @Composable
+    open fun preview(appWidgetId: Int): @Composable () -> Unit {
+        WidgetPreview(::createSampleRemoteViews)
+        return {}
+    }
+}
+
+class Widget1x1ConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun preview(appWidgetId: Int): @Composable () -> Unit {
+        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
+        val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
+        val today = Jdn.today() on mainCalendar
+        WidgetPreview { context, width, height ->
+            create1x1RemoteViews(context, width, height, today, textScale.value)
+        }
+        return { WidgetTextScale(key, textScale) }
+    }
+}
+
+class Widget4x1ConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun preview(appWidgetId: Int): @Composable () -> Unit {
+        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
+        val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
+        val jdn = Jdn.today()
+        val today = jdn on mainCalendar
+        val clock = Clock(GregorianCalendar())
+        WidgetPreview { context, width, height ->
+            val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
+            create4x1RemoteViews(
+                context, width, height, jdn, today, "", subtitle, clock,
+                scale = textScale.value,
+            )
+        }
+        return { WidgetTextScale(key, textScale) }
     }
 }
 
 @Composable
-private fun WidgetConfigurationContent(appWidgetId: Int, finishAndSuccess: () -> Unit) {
+private fun WidgetConfigurationContent(
+    finishAndSuccess: () -> Unit,
+    widgetPreview: @Composable () -> (@Composable () -> Unit),
+) {
     Column(
         Modifier
             .safeDrawingPadding()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
-        val context = LocalContext.current
-        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
-        val textScale = remember { MutableStateFlow(context.preferences.getFloat(key, 1f)) }
-        WidgetPreview { context, width, height ->
-            createSampleRemoteViews(context, width, height, textScale.value)
-        }
+        val additionalSetting = widgetPreview()
         Column(
             Modifier
                 .fillMaxSize()
@@ -112,7 +156,7 @@ private fun WidgetConfigurationContent(appWidgetId: Int, finishAndSuccess: () ->
                     )
                 }
 
-                WidgetTextScale(key, textScale)
+                additionalSetting()
                 WidgetSettings()
             }
         }

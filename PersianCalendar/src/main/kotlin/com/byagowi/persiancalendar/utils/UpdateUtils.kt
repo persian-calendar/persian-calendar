@@ -1057,7 +1057,7 @@ private fun createMoonRemoteViews(context: Context, width: Int, height: Int): Re
     return remoteViews
 }
 
-fun createSampleRemoteViews(context: Context, width: Int, height: Int, scale: Float): RemoteViews {
+fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sample)
     remoteViews.setRoundBackground(R.id.widget_sample_background, width, height)
     remoteViews.setDirection(R.id.widget_sample, context.resources)
@@ -1079,6 +1079,7 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int, scale: Fl
         )
     }
     remoteViews.setTextViewText(R.id.sample_text, context.getString(R.string.widget_text_color))
+    val scale = 1f
     remoteViews.setTextViewTextInDp(R.id.sample_clock, 34 * scale)
     remoteViews.setTextViewTextInDp(R.id.sample_clock_replacement, 34 * scale)
     remoteViews.setTextViewTextInDp(R.id.sample_text, 14 * scale)
@@ -1088,7 +1089,7 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int, scale: Fl
 private fun RemoteViews.setTextViewTextInDp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size)
 
-private fun create1x1RemoteViews(
+fun create1x1RemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate, scale: Float
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
@@ -1106,7 +1107,7 @@ private fun create1x1RemoteViews(
     return remoteViews
 }
 
-private fun create4x1RemoteViews(
+fun create4x1RemoteViews(
     context: Context,
     width: Int,
     height: Int,

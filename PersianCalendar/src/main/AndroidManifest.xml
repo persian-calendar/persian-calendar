@@ -185,6 +185,26 @@
         </activity>
 
         <activity
+            android:name=".ui.settings.widgetnotification.Widget1x1ConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.settings.widgetnotification.Widget4x1ConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ui.settings.agewidget.AgeWidgetConfigureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
