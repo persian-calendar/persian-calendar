@@ -48,7 +48,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -150,28 +149,37 @@ fun ColumnScope.WidgetColoringSettings() {
 }
 
 @Composable
-fun WidgetTextScale(key: String, textScale: MutableStateFlow<Float>) {
+private fun WidgetPreferenceDebounce(
+    key: String,
+    flow: MutableStateFlow<Float>,
+    content: @Composable (value: Float, onValueChange: (Float) -> Unit) -> Unit,
+) {
     val context = LocalContext.current
     @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
-        textScale
+        flow
             // Debounce to not spam preferences much but specially is needed for
             // map widget as its expensive calculations
-            .debounce(.25.seconds)
-            .collect { context.preferences.edit { putFloat(key, it) } }
+            .debounce(.25.seconds).collect { context.preferences.edit { putFloat(key, it) } }
     }
-    val widgetTextScale by textScale.collectAsState()
+    val value by flow.collectAsState()
     Box(
         Modifier
             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
             .clearAndSetSemantics {},
-    ) {
+    ) { content(value) { flow.value = it } }
+}
+
+@Composable
+fun WidgetTextScale(key: String, textScale: MutableStateFlow<Float>) {
+    WidgetPreferenceDebounce(key, textScale) { value, onValueChange ->
         SettingsSlider(
             title = stringResource(R.string.widget_text_size),
-            value = widgetTextScale,
+            value = value,
             valueRange = .65f..2f,
             visibleScale = 14f,
             defaultValue = 1f,
-        ) { textScale.value = it }
+            onValueChange = onValueChange,
+        )
     }
 }
 
@@ -190,26 +198,15 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
         )
     }
     this.AnimatedVisibility(prefersWidgetsDynamicColors) {
-        val context = LocalContext.current
         val widgetTransparencyFlow = remember { MutableStateFlow(widgetTransparency.value) }
-        @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
-            widgetTransparencyFlow
-                // Debounce to not spam preferences much but specially is needed for
-                // map widget as its expensive calculations
-                .debounce(.25.seconds)
-                .collect { context.preferences.edit { putFloat(PREF_WIDGET_TRANSPARENCY, it) } }
-        }
-        val widgetTransparency by widgetTransparencyFlow.collectAsState()
-        Box(
-            Modifier
-                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                .clearAndSetSemantics {},
-        ) {
+        val key = PREF_WIDGET_TRANSPARENCY
+        WidgetPreferenceDebounce(key, widgetTransparencyFlow) { value, onValueChange ->
             SettingsSlider(
                 title = stringResource(R.string.widget_background_transparency),
-                value = widgetTransparency,
+                value = value,
                 defaultValue = DEFAULT_WIDGET_TRANSPARENCY,
-            ) { widgetTransparencyFlow.value = it }
+                onValueChange = onValueChange,
+            )
         }
     }
 }
