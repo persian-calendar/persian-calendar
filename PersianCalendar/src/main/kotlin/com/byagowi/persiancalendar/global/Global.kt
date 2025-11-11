@@ -42,7 +42,6 @@ import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
-import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_ALTITUDE
@@ -273,9 +272,6 @@ val cityName: StateFlow<String?> get() = cityName_
 
 private val widgetTransparency_ = MutableStateFlow(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency: StateFlow<Float> get() = widgetTransparency_
-
-private val widgetTextScale_ = MutableStateFlow(DEFAULT_WIDGET_TEXT_SCALE)
-val widgetTextScale: StateFlow<Float> get() = widgetTextScale_
 
 var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
     private set
@@ -586,9 +582,6 @@ fun updateStoredPreference(context: Context) {
 
     widgetTransparency_.value =
         preferences.getFloat(PREF_WIDGET_TRANSPARENCY, DEFAULT_WIDGET_TRANSPARENCY)
-
-    widgetTextScale_.value =
-        preferences.getFloat(PREF_WIDGET_TEXT_SCALE, DEFAULT_WIDGET_TEXT_SCALE)
 
     runCatching {
         val mainCalendar = Calendar.valueOf(

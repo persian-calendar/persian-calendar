@@ -24,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,22 +36,22 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.global.widgetTextScale
 import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class WidgetConfigurationActivity : BaseActivity() {
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
-                RESULT_OK,
-                Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
+                RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
             )
         }
         updateStoredPreference(this)
@@ -63,23 +62,32 @@ class WidgetConfigurationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        val appWidgetId = intent?.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: intent?.action?.takeIf { it.startsWith(AppWidgetManager.EXTRA_APPWIDGET_ID) }
+            ?.replace(AppWidgetManager.EXTRA_APPWIDGET_ID, "")?.toIntOrNull()
+        ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
         setContent {
             BackHandler { finishAndSuccess() }
-            SystemTheme { WidgetConfigurationContent(::finishAndSuccess) }
+            SystemTheme { WidgetConfigurationContent(appWidgetId, ::finishAndSuccess) }
         }
     }
 }
 
 @Composable
-private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
+private fun WidgetConfigurationContent(appWidgetId: Int, finishAndSuccess: () -> Unit) {
     Column(
         Modifier
             .safeDrawingPadding()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
-        val widgetTextScale by widgetTextScale.collectAsState()
+        val context = LocalContext.current
+        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
+        val textScale = remember { MutableStateFlow(context.preferences.getFloat(key, 1f)) }
         WidgetPreview { context, width, height ->
-            createSampleRemoteViews(context, width, height, widgetTextScale)
+            createSampleRemoteViews(context, width, height, textScale.value)
         }
         Column(
             Modifier
@@ -104,6 +112,7 @@ private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
                     )
                 }
 
+                WidgetTextScale(key, textScale)
                 WidgetSettings()
             }
         }

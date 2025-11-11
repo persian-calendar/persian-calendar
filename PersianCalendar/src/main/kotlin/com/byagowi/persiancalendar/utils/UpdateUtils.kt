@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET_START
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
@@ -116,7 +117,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
-import com.byagowi.persiancalendar.global.widgetTextScale
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
@@ -255,17 +255,18 @@ fun update(context: Context, updateDate: Boolean) {
     else context.resources.getDimensionPixelSize(
         android.R.dimen.system_app_widget_background_radius
     ).toFloat()
-    val scale = widgetTextScale.value
 
     // Widgets
     AppWidgetManager.getInstance(context).run {
         updateFromRemoteViews<AgeWidget>(context, now) { width, height, _, widgetId ->
             createAgeRemoteViews(context, width, height, widgetId, jdn)
         }
-        updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, _ ->
+        updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, widgetId ->
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create1x1RemoteViews(context, width, height, date, scale)
         }
-        updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, _ ->
+        updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, widgetId ->
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create4x1RemoteViews(
                 context, width, height, jdn, date, widgetTitle, subtitle, clock, scale
             )
@@ -1088,7 +1089,7 @@ private fun RemoteViews.setTextViewTextInDp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size)
 
 private fun create1x1RemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, scale: Float,
+    context: Context, width: Int, height: Int, date: AbstractDate, scale: Float
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
