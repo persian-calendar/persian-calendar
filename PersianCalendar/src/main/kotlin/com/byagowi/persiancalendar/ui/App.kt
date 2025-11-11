@@ -378,7 +378,6 @@ private fun AppNavigationRail(
     navController: NavHostController,
     finish: () -> Unit,
 ) {
-    var isOpenedOnce by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val dir = LocalLayoutDirection.current
     val startPadding = WindowInsets.displayCutout.asPaddingValues().calculateStartPadding(dir)
@@ -428,14 +427,12 @@ private fun AppNavigationRail(
                     disabledTextColor = animateColor(defaultColors.disabledTextColor).value,
                 )
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val railExpanded = railState.currentValue == WideNavigationRailValue.Expanded
-                if (railExpanded && !isOpenedOnce) isOpenedOnce = true
                 Screen.entries.forEach { item ->
                     val (icon, titleId) = item.navigationRailEntry ?: return@forEach
                     WideNavigationRailItem(
-                        icon = { Icon(icon, contentDescription = null) },
+                        icon = { Icon(imageVector = icon, contentDescription = null) },
                         colors = colors,
-                        railExpanded = railExpanded || isOpenedOnce,
+                        railExpanded = true,
                         label = { Text(stringResource(titleId), Modifier.width(136.dp)) },
                         selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
                         onClick = {
