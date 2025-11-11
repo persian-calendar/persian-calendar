@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
@@ -226,28 +227,30 @@ fun SettingsSingleSelect(
             },
             onDismissRequest = onDismissRequest,
         ) {
-            entries.zip(entryValues) { entry, entryValue ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(SettingsItemHeight.dp)
-                        .selectable(entryValue == persistedValue, role = Role.RadioButton) {
-                            onDismissRequest()
-                            context.preferences.edit { putString(key, entryValue) }
-                        }
-                        .padding(horizontal = SettingsHorizontalPaddingItem.dp),
-                ) {
-                    RadioButton(selected = entryValue == persistedValue, onClick = null)
-                    Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                    Text(
-                        entry,
-                        maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 9.sp,
-                            maxFontSize = LocalTextStyle.current.fontSize,
-                        ),
-                    )
+            Column(Modifier.selectableGroup()) {
+                entries.zip(entryValues) { entry, entryValue ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(SettingsItemHeight.dp)
+                            .selectable(entryValue == persistedValue, role = Role.RadioButton) {
+                                onDismissRequest()
+                                context.preferences.edit { putString(key, entryValue) }
+                            }
+                            .padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                    ) {
+                        RadioButton(selected = entryValue == persistedValue, onClick = null)
+                        Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
+                        Text(
+                            entry,
+                            maxLines = 1,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 9.sp,
+                                maxFontSize = LocalTextStyle.current.fontSize,
+                            ),
+                        )
+                    }
                 }
             }
         }
