@@ -9,6 +9,7 @@ import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
@@ -52,7 +53,7 @@ abstract class BaseActivity : ComponentActivity(),
     }
 
     override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
-        // if (lifecycle.currentState != Lifecycle.State.INITIALIZED) return
+        if (this !is MainActivity && lifecycle.currentState != Lifecycle.State.INITIALIZED) return
         when (key) {
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             EXPANDED_TIME_STATE_KEY -> return // nothing needs to be updated

@@ -1162,7 +1162,7 @@ fun create4x1RemoteViews(
     return remoteViews
 }
 
-private fun create2x2RemoteViews(
+fun create2x2RemoteViews(
     context: Context,
     width: Int,
     height: Int,

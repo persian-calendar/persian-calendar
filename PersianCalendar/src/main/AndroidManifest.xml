@@ -175,16 +175,6 @@
         </receiver>
 
         <activity
-            android:name=".ui.settings.widgetnotification.WidgetConfigurationActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:exported="true"
-            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".ui.settings.widgetnotification.Widget1x1ConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
@@ -226,6 +216,36 @@
 
         <activity
             android:name=".ui.settings.widgetnotification.WidgetMonthViewConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.settings.widgetnotification.Widget2x2ConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.settings.widgetnotification.Widget4x2ConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.settings.widgetnotification.WidgetWeekViewConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">

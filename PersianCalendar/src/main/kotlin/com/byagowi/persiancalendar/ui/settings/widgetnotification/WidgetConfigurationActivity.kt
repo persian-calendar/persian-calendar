@@ -67,7 +67,7 @@ import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.GregorianCalendar
 
-open class WidgetConfigurationActivity : BaseActivity() {
+abstract class WidgetConfigurationActivity : BaseActivity() {
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
@@ -96,16 +96,7 @@ open class WidgetConfigurationActivity : BaseActivity() {
     }
 
     @Composable
-    open fun Content(appWidgetId: Int) {
-        BaseLayout(
-            preview = {
-                WidgetPreview { context, width, height ->
-                    createSampleRemoteViews(context, width, height)
-                }
-            },
-            settings = { WidgetSettings() },
-        )
-    }
+    abstract fun Content(appWidgetId: Int)
 
     @Composable
     protected fun BaseLayout(
@@ -189,6 +180,48 @@ class Widget4x1ConfigurationActivity : WidgetConfigurationActivity() {
                 WidgetTextScale(key, textScale)
                 WidgetColoringSettings()
             },
+        )
+    }
+}
+
+class Widget2x2ConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = {
+                WidgetPreview { context, width, height ->
+                    createSampleRemoteViews(context, width, height)
+                }
+            },
+            settings = { WidgetSettings() },
+        )
+    }
+}
+
+class Widget4x2ConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = {
+                WidgetPreview { context, width, height ->
+                    createSampleRemoteViews(context, width, height)
+                }
+            },
+            settings = { WidgetSettings() },
+        )
+    }
+}
+
+class WidgetWeekViewConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = {
+                WidgetPreview { context, width, height ->
+                    createSampleRemoteViews(context, width, height)
+                }
+            },
+            settings = { WidgetSettings() },
         )
     }
 }

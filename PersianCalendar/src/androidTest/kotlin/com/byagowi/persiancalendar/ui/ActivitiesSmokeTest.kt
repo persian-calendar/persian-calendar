@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.settings.wallpaper.DreamSettingsActivity
 import com.byagowi.persiancalendar.ui.settings.wallpaper.WallpaperSettingsActivity
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -28,9 +27,9 @@ class ActivitiesSmokeTest {
             Intent(context, AthanActivity::class.java)
                 .putExtra(KEY_EXTRA_PRAYER, PrayTime.ASR.name)
         )
-        ActivityScenario.launch<WidgetConfigurationActivity>(
-            Intent(context, WidgetConfigurationActivity::class.java)
-        )
+//        ActivityScenario.launch<WidgetConfigurationActivity>(
+//            Intent(context, WidgetConfigurationActivity::class.java)
+//        )
         ActivityScenario.launch<WallpaperSettingsActivity>(
             Intent(context, WallpaperSettingsActivity::class.java)
         )
