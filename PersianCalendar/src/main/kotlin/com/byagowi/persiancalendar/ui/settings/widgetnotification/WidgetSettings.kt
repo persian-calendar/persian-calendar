@@ -48,6 +48,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,24 +59,7 @@ import kotlin.time.Duration.Companion.seconds
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
 fun ColumnScope.WidgetSettings() {
-    val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
-    WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
-    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
-        SettingsColor(
-            title = stringResource(R.string.widget_text_color),
-            summary = stringResource(R.string.select_widgets_text_color),
-            isBackgroundPick = false,
-            key = PREF_SELECTED_WIDGET_TEXT_COLOR
-        )
-    }
-    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
-        SettingsColor(
-            title = stringResource(R.string.widget_background_color),
-            summary = stringResource(R.string.select_widgets_background_color),
-            isBackgroundPick = true,
-            key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-        )
-    }
+    WidgetColoringSettings()
     run {
         val numericalDatePreferred by numericalDatePreferred.collectAsState()
         SettingsSwitch(
@@ -141,6 +125,28 @@ fun ColumnScope.WidgetSettings() {
         title = stringResource(R.string.customize_widget),
         summary = stringResource(R.string.customize_widget_summary),
     )
+}
+
+@Composable
+fun ColumnScope.WidgetColoringSettings() {
+    val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
+    WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
+    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+        SettingsColor(
+            title = stringResource(R.string.widget_text_color),
+            summary = stringResource(R.string.select_widgets_text_color),
+            isBackgroundPick = false,
+            key = PREF_SELECTED_WIDGET_TEXT_COLOR
+        )
+    }
+    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+        SettingsColor(
+            title = stringResource(R.string.widget_background_color),
+            summary = stringResource(R.string.select_widgets_background_color),
+            isBackgroundPick = true,
+            key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+        )
+    }
 }
 
 @Composable

@@ -451,7 +451,7 @@ fun createAgeRemoteViews(
     return remoteViews
 }
 
-private fun createSunViewRemoteViews(
+fun createSunViewRemoteViews(
     context: Context, width: Int, height: Int, prayTimes: PrayTimes?
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)

@@ -13,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,15 +41,18 @@ import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.create1x1RemoteViews
 import com.byagowi.persiancalendar.utils.create4x1RemoteViews
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
+import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
@@ -79,87 +83,116 @@ open class WidgetConfigurationActivity : BaseActivity() {
 
         setContent {
             BackHandler { finishAndSuccess() }
-            SystemTheme { WidgetConfigurationContent(::finishAndSuccess) { preview(appWidgetId) } }
+            SystemTheme { Content(appWidgetId) }
         }
     }
 
     @Composable
-    open fun preview(appWidgetId: Int): @Composable () -> Unit {
-        WidgetPreview(::createSampleRemoteViews)
-        return {}
+    open fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = { WidgetPreview(::createSampleRemoteViews) },
+            settings = { WidgetSettings() },
+        )
+    }
+
+    @Composable
+    protected fun BaseLayout(
+        preview: @Composable () -> Unit,
+        settings: @Composable ColumnScope.() -> Unit,
+    ) {
+        Column(
+            Modifier
+                .safeDrawingPadding()
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+        ) {
+            preview()
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .alpha(AppBlendAlpha)
+                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
+            ) {
+                Column(
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(vertical = 16.dp)
+                ) {
+                    Button(
+                        onClick = ::finishAndSuccess,
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterHorizontally)
+                            .padding(bottom = 8.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.accept),
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                        )
+                    }
+                    settings()
+                }
+            }
+        }
     }
 }
 
 class Widget1x1ConfigurationActivity : WidgetConfigurationActivity() {
     @Composable
-    override fun preview(appWidgetId: Int): @Composable () -> Unit {
+    override fun Content(appWidgetId: Int) {
         val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
         val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
-        val today = Jdn.today() on mainCalendar
-        WidgetPreview { context, width, height ->
-            create1x1RemoteViews(context, width, height, today, textScale.value)
-        }
-        return { WidgetTextScale(key, textScale) }
+        BaseLayout(
+            preview = {
+                val today = Jdn.today() on mainCalendar
+                WidgetPreview { context, width, height ->
+                    create1x1RemoteViews(context, width, height, today, textScale.value)
+                }
+            },
+            settings = {
+                WidgetTextScale(key, textScale)
+                WidgetColoringSettings()
+            },
+        )
     }
 }
 
 class Widget4x1ConfigurationActivity : WidgetConfigurationActivity() {
     @Composable
-    override fun preview(appWidgetId: Int): @Composable () -> Unit {
+    override fun Content(appWidgetId: Int) {
         val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
         val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
-        val jdn = Jdn.today()
-        val today = jdn on mainCalendar
-        val clock = Clock(GregorianCalendar())
-        WidgetPreview { context, width, height ->
-            val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
-            create4x1RemoteViews(
-                context, width, height, jdn, today, "", subtitle, clock,
-                scale = textScale.value,
-            )
-        }
-        return { WidgetTextScale(key, textScale) }
+        BaseLayout(
+            preview = {
+                val jdn = Jdn.today()
+                val today = jdn on mainCalendar
+                val clock = Clock(GregorianCalendar())
+                WidgetPreview { context, width, height ->
+                    val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
+                    create4x1RemoteViews(
+                        context, width, height, jdn, today, "", subtitle, clock,
+                        scale = textScale.value,
+                    )
+                }
+            },
+            settings = {
+                WidgetTextScale(key, textScale)
+                WidgetColoringSettings()
+            },
+        )
     }
 }
 
-@Composable
-private fun WidgetConfigurationContent(
-    finishAndSuccess: () -> Unit,
-    widgetPreview: @Composable () -> (@Composable () -> Unit),
-) {
-    Column(
-        Modifier
-            .safeDrawingPadding()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-    ) {
-        val additionalSetting = widgetPreview()
-        Column(
-            Modifier
-                .fillMaxSize()
-                .alpha(AppBlendAlpha)
-                .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
-        ) {
-            Column(
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(vertical = 16.dp)
-            ) {
-                Button(
-                    onClick = finishAndSuccess,
-                    modifier = Modifier
-                        .align(alignment = Alignment.CenterHorizontally)
-                        .padding(bottom = 8.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.accept),
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                    )
+class WidgetSunViewConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = {
+                WidgetPreview { context, width, height ->
+                    val prayTimes = coordinates.value?.calculatePrayTimes()
+                    createSunViewRemoteViews(context, width, height, prayTimes)
                 }
-
-                additionalSetting()
-                WidgetSettings()
-            }
-        }
+            },
+            settings = { WidgetColoringSettings() },
+        )
     }
 }
 
