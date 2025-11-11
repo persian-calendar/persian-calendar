@@ -67,31 +67,31 @@ abstract class BaseWidgetConfigurationActivity : BaseActivity() {
         settings: @Composable ColumnScope.() -> Unit,
     ) {
         Column(
-            Modifier.Companion
+            Modifier
                 .safeDrawingPadding()
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) {
             preview()
             Column(
-                Modifier.Companion
+                Modifier
                     .fillMaxSize()
                     .alpha(AppBlendAlpha)
                     .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
             ) {
                 Column(
-                    Modifier.Companion
+                    Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(vertical = 16.dp)
                 ) {
                     Button(
                         onClick = ::finishAndSuccess,
-                        modifier = Modifier.Companion
+                        modifier = Modifier
                             .align(alignment = Alignment.Companion.CenterHorizontally)
                             .padding(bottom = 8.dp)
                     ) {
                         Text(
                             stringResource(R.string.accept),
-                            modifier = Modifier.Companion.padding(horizontal = 8.dp),
+                            modifier = Modifier.padding(horizontal = 8.dp),
                         )
                     }
                     settings()
