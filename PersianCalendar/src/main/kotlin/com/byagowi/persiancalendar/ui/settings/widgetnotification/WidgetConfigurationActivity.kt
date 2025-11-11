@@ -25,7 +25,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,9 +46,12 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.BaseActivity
+import com.byagowi.persiancalendar.ui.settings.SettingsSectionLayout
+import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -191,14 +196,21 @@ class Widget4x1ConfigurationActivity : WidgetConfigurationActivity() {
 class WidgetSunViewConfigurationActivity : WidgetConfigurationActivity() {
     @Composable
     override fun Content(appWidgetId: Int) {
+        val coordinates by coordinates.collectAsState()
         BaseLayout(
             preview = {
-                WidgetPreview { context, width, height ->
-                    val prayTimes = coordinates.value?.calculatePrayTimes()
-                    createSunViewRemoteViews(context, width, height, prayTimes)
+                val prayTimes = coordinates?.calculatePrayTimes()
+                key(prayTimes) {
+                    WidgetPreview { context, width, height ->
+                        createSunViewRemoteViews(context, width, height, prayTimes)
+                    }
                 }
             },
-            settings = { WidgetColoringSettings() },
+            settings = {
+                WidgetColoringSettings()
+                SettingsSectionLayout(R.string.location) { null }
+                LocationSettings(null)
+            },
         )
     }
 }
@@ -212,7 +224,10 @@ class WidgetMapConfigurationActivity : WidgetConfigurationActivity() {
                     createMapRemoteViews(context, width, height, System.currentTimeMillis())
                 }
             },
-            settings = { WidgetColoringSettings() },
+            settings = {
+                val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
+                WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
+            },
         )
     }
 }

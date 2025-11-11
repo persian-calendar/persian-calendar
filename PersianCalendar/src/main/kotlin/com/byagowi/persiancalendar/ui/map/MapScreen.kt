@@ -129,6 +129,7 @@ fun SharedTransitionScope.MapScreen(
     var saveCoordinates by rememberSaveable { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
         inputCoordinates = clickedCoordinates,
+        isFromMap = true,
         onDismissRequest = { showCoordinatesDialog = false },
         saveCoordinates = saveCoordinates,
         toggleSaveCoordinates = { saveCoordinates = it },

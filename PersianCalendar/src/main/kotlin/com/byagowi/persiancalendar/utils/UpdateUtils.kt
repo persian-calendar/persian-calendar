@@ -497,7 +497,7 @@ fun createSunViewRemoteViews(
     remoteViews.setTextColor(R.id.message, color)
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
-        if (coordinates.value == null) context.getString(R.string.ask_user_to_set_location) else ""
+        if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else ""
     )
 
     // These are used to generate preview,

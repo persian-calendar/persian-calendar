@@ -102,7 +102,7 @@ fun LazyListScope.settingsSection(
 }
 
 @Composable
-private fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> String?) {
+fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> String?) {
     Column(
         Modifier
             .fillMaxWidth()

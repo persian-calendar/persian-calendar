@@ -55,6 +55,7 @@ fun CoordinatesDialog(
     inputCoordinates: Coordinates? = null,
     notifyChange: (Coordinates) -> Unit = {},
     saveCoordinates: Boolean = true,
+    isFromMap: Boolean = false,
     toggleSaveCoordinates: (Boolean) -> Unit = {},
     onDismissRequest: () -> Unit,
 ) {
@@ -82,9 +83,11 @@ fun CoordinatesDialog(
                     onDismissRequest()
                     navigateToMap()
                 }) { Text(stringResource(R.string.map)) }
-            } ?: SwitchWithLabel(stringResource(R.string.save), checked = saveCoordinates) {
-                toggleSaveCoordinates(it)
             }
+            if (isFromMap) SwitchWithLabel(
+                stringResource(R.string.save),
+                checked = saveCoordinates,
+            ) { toggleSaveCoordinates(it) }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
