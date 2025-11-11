@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.appSwitchColors
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 
 @Composable
@@ -37,7 +38,12 @@ fun SwitchWithLabel(
             Text(label)
             Spacer(Modifier.width(8.dp))
         }
-        Switch(checked, null, Modifier.minimumInteractiveComponentSize())
+        Switch(
+            checked = checked,
+            onCheckedChange = null,
+            modifier = Modifier.minimumInteractiveComponentSize(),
+            colors = appSwitchColors(),
+        )
         if (!labelBeforeSwitch) {
             Spacer(Modifier.width(8.dp))
             Text(label)

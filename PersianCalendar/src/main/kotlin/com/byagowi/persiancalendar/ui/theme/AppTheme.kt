@@ -28,6 +28,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Typography
@@ -259,6 +261,21 @@ fun appTopAppBarColors(): TopAppBarColors {
         navigationIconContentColor = LocalContentColor.current,
         actionIconContentColor = LocalContentColor.current,
         titleContentColor = LocalContentColor.current,
+    )
+}
+
+@Composable
+fun appSwitchColors(): SwitchColors {
+    val defaultColors = SwitchDefaults.colors()
+    return defaultColors.copy(
+        checkedThumbColor = animateColor(defaultColors.checkedThumbColor).value,
+        checkedTrackColor = animateColor(defaultColors.checkedTrackColor).value,
+        checkedBorderColor = animateColor(defaultColors.checkedBorderColor).value,
+        checkedIconColor = animateColor(defaultColors.checkedIconColor).value,
+        uncheckedThumbColor = animateColor(defaultColors.uncheckedThumbColor).value,
+        uncheckedTrackColor = animateColor(defaultColors.uncheckedTrackColor).value,
+        uncheckedBorderColor = animateColor(defaultColors.uncheckedBorderColor).value,
+        uncheckedIconColor = animateColor(defaultColors.uncheckedIconColor).value,
     )
 }
 
