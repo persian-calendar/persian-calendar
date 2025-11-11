@@ -43,7 +43,9 @@ class DayPainter(
     private val paints = Paints(
         resources, min(width, height), colors, isWidget, isYearView,
         selectedDayColor, holidayCircleColor,
-        typeface = fontFile?.let(Typeface::createFromFile),
+        typeface = fontFile?.let(Typeface::createFromFile).let {
+            if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
+        },
         isBoldFont = isBoldFont,
         zodiacFont = ResourcesCompat.getFont(
             context,
@@ -230,7 +232,6 @@ private class Paints(
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.eventIndicator.toArgb()
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -238,14 +239,12 @@ private class Paints(
         it.strokeWidth = 1 * dp
         it.color = colors.currentDay.toArgb()
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
     val selectedDayPaint = selectedDayColor?.let {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
             it.color = selectedDayColor
             if (typeface != null) it.typeface = typeface
-            if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
         }
     }
     val holidayPaint = holidayCircleColor?.let { color ->
@@ -279,7 +278,6 @@ private class Paints(
         it.color = colors.holidays.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -288,7 +286,6 @@ private class Paints(
         it.color = colors.contentColor.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -297,7 +294,6 @@ private class Paints(
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
     }
 
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -339,7 +335,6 @@ private class Paints(
         it.textSize = diameter * 20 / 40
         it.color = colors.colorTextDayName.toArgb()
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.typeface = Typeface.create(it.typeface, Typeface.BOLD)
         if (isWidget) addShadowIfNeeded(it)
     }
 }
