@@ -236,7 +236,7 @@ private class Paints(
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 1 * dp
+        it.strokeWidth = (if (isBoldFont || isHighTextContrastEnabled.value) 3 else 1) * dp
         it.color = colors.currentDay.toArgb()
         if (typeface != null) it.typeface = typeface
     }
