@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.theme.animateColor
 
 @Composable
 fun ColumnScope.EncourageActionLayout(
@@ -51,12 +53,19 @@ fun ColumnScope.EncourageActionLayout(
             )
             Spacer(Modifier.height(4.dp))
             Row {
+                val defaultOutlineColor = ButtonDefaults.outlinedButtonColors()
                 OutlinedButton(
                     onClick = {
                         discardAction()
                         shown = false
                     },
                     Modifier.weight(1f),
+                    colors = defaultOutlineColor.copy(
+                        containerColor = animateColor(defaultOutlineColor.containerColor).value,
+                        contentColor = animateColor(defaultOutlineColor.contentColor).value,
+                        disabledContainerColor = animateColor(defaultOutlineColor.disabledContainerColor).value,
+                        disabledContentColor = animateColor(defaultOutlineColor.disabledContentColor).value,
+                    ),
                 ) { Text(stringResource(R.string.ignore)) }
                 Spacer(Modifier.width(8.dp))
                 Button(

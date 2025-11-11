@@ -35,7 +35,6 @@ import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.SyncAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -71,11 +70,11 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
+import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
-import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
@@ -300,7 +299,7 @@ private fun ShrinkingFloatingActionButton(
         enter = scaleIn(),
         exit = scaleOut(),
     ) {
-        FloatingActionButton(onClick = action, elevation = appFabElevation()) {
+        AppFloatingActionButton(onClick = action) {
             var showLabel by rememberSaveable { mutableStateOf(true) }
             Row(
                 Modifier.padding(horizontal = if (showLabel) 16.dp else 0.dp),

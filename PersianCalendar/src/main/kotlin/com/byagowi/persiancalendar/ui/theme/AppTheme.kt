@@ -335,17 +335,6 @@ private fun appBackground(): Brush {
 }
 
 @Composable
-fun appFabElevation(): FloatingActionButtonElevation {
-    val isGradient by isGradient.collectAsState()
-    return if (!isGradient) FloatingActionButtonDefaults.elevation(
-        defaultElevation = 0.dp,
-        pressedElevation = 0.dp,
-        focusedElevation = 0.dp,
-        hoveredElevation = 0.dp,
-    ) else FloatingActionButtonDefaults.elevation()
-}
-
-@Composable
 fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme = effectiveTheme()
