@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -510,7 +509,7 @@ private fun NavigationRailSeasonsPager() {
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
-            .padding(bottom = 12.dp, top = 12.dp, start = 20.dp, end = 20.dp)
+            .padding(vertical = 10.dp, horizontal = 20.dp)
             .clip(MaterialTheme.shapes.extraLarge),
         pageSpacing = 8.dp,
     ) {
