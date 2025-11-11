@@ -30,8 +30,10 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.formatDate
@@ -147,11 +149,12 @@ fun PlanetaryHoursDialog(
 ) {
     val language by language.collectAsState()
     AppDialog(onDismissRequest = onDismissRequest) {
+        val cityName by cityName.collectAsState()
         Text(
             formatDate(
                 Jdn(GregorianCalendar().also { it.timeInMillis = now }
                     .toCivilDate()) on mainCalendar,
-            ),
+            ) + (cityName?.let { spacedComma + it } ?: ""),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
