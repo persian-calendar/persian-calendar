@@ -809,7 +809,7 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     return remoteViews
 }
 
-private fun createMonthViewRemoteViews(
+fun createMonthViewRemoteViews(
     context: Context,
     width: Int,
     height: Int,

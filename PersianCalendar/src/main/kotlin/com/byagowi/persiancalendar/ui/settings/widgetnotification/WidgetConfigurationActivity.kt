@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
@@ -52,6 +53,7 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.create1x1RemoteViews
 import com.byagowi.persiancalendar.utils.create4x1RemoteViews
 import com.byagowi.persiancalendar.utils.createMapRemoteViews
+import com.byagowi.persiancalendar.utils.createMonthViewRemoteViews
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
@@ -91,7 +93,11 @@ open class WidgetConfigurationActivity : BaseActivity() {
     @Composable
     open fun Content(appWidgetId: Int) {
         BaseLayout(
-            preview = { WidgetPreview(::createSampleRemoteViews) },
+            preview = {
+                WidgetPreview { context, width, height ->
+                    createSampleRemoteViews(context, width, height)
+                }
+            },
             settings = { WidgetSettings() },
         )
     }
@@ -211,12 +217,27 @@ class WidgetMapConfigurationActivity : WidgetConfigurationActivity() {
     }
 }
 
+class WidgetMonthViewConfigurationActivity : WidgetConfigurationActivity() {
+    @Composable
+    override fun Content(appWidgetId: Int) {
+        BaseLayout(
+            preview = {
+                WidgetPreview(360.dp) { context, width, height ->
+                    val today = Jdn.today()
+                    createMonthViewRemoteViews(context, width, height, true, today)
+                }
+            },
+            settings = { WidgetColoringSettings() },
+        )
+    }
+}
+
 @Composable
-fun WidgetPreview(widgetFactory: (Context, Int, Int) -> RemoteViews) {
+fun WidgetPreview(height: Dp = 78.dp, widgetFactory: (Context, Int, Int) -> RemoteViews) {
     BoxWithConstraints(
         Modifier
             .padding(vertical = 16.dp)
-            .height(78.dp),
+            .height(height),
     ) {
         val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
         val height = with(LocalDensity.current) { (this@BoxWithConstraints).maxHeight.roundToPx() }
