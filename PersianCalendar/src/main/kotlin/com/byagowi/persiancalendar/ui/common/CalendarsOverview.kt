@@ -342,6 +342,9 @@ fun SharedTransitionScope.CalendarsOverview(
                     .padding(top = 4.dp)
                     .fillMaxWidth(),
             ) {
+                val indicatorColor = animateColor(ProgressIndicatorDefaults.circularColor).value
+                val indicatorTrackColor =
+                    animateColor(ProgressIndicatorDefaults.circularDeterminateTrackColor).value
                 progresses.forEach { (stringId, current, max) ->
                     val title = stringResource(stringId)
                     Column(
@@ -364,7 +367,9 @@ fun SharedTransitionScope.CalendarsOverview(
                         CircularProgressIndicator(
                             modifier = Modifier.semantics { this.hideFromAccessibility() },
                             progress = { progress },
-                            strokeWidth = indicatorStrokeWidth
+                            strokeWidth = indicatorStrokeWidth,
+                            color = indicatorColor,
+                            trackColor = indicatorTrackColor,
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(title, style = MaterialTheme.typography.bodyMedium)

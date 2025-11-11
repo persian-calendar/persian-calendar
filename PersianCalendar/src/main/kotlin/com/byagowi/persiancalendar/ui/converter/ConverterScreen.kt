@@ -41,6 +41,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -91,6 +92,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -332,6 +334,11 @@ private fun Calculator(viewModel: ConverterViewModel) {
         // running this inside a runCatching block is absolutely important
         eval(inputText.value)
     }.getOrElse { it.message }.orEmpty()
+    val defaultTextFieldColors = TextFieldDefaults.colors()
+    val textFieldColors = defaultTextFieldColors.copy(
+        focusedContainerColor = animateColor(defaultTextFieldColors.focusedContainerColor).value,
+        unfocusedContainerColor = animateColor(defaultTextFieldColors.unfocusedContainerColor).value,
+    )
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         TextField(
@@ -339,6 +346,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             onValueChange = viewModel::changeCalculatorInput,
             minLines = 6,
             modifier = Modifier.weight(1f),
+            colors = textFieldColors,
         )
         AnimatedContent(
             result,
@@ -359,6 +367,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             onValueChange = viewModel::changeCalculatorInput,
             minLines = 10,
             modifier = Modifier.fillMaxWidth(),
+            colors = textFieldColors,
         )
         Spacer(Modifier.height(16.dp))
         AnimatedContent(result, label = "calculator result") {
@@ -508,11 +517,18 @@ private fun ColumnScope.ConverterAndDistance(
             setJdn = viewModel::changeSelectedDate
         )
         this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
+            val cardColors = CardDefaults.cardColors()
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
                 elevation = CardDefaults.cardElevation(8.dp),
                 onClick = { isExpanded = !isExpanded },
                 modifier = Modifier.padding(top = 16.dp),
+                colors = cardColors.copy(
+                    containerColor = animateColor(cardColors.containerColor).value,
+                    contentColor = animateColor(cardColors.contentColor).value,
+                    disabledContainerColor = animateColor(cardColors.disabledContainerColor).value,
+                    disabledContentColor = animateColor(cardColors.disabledContentColor).value,
+                )
             ) {
                 Spacer(Modifier.height(20.dp))
                 Box(Modifier.fillMaxWidth()) {
