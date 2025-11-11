@@ -134,7 +134,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.resumeToken
-import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
+import com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActivity
 import com.byagowi.persiancalendar.ui.theme.resolveCustomFontPath
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -1828,7 +1828,7 @@ private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int):
         this,
         0,
         Intent(
-            this, AgeWidgetConfigureActivity::class.java
+            this, WidgetAgeConfigureActivity::class.java
         ).setAction(AppWidgetManager.EXTRA_APPWIDGET_ID + widgetId)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
         PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0

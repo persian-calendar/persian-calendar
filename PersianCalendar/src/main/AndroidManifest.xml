@@ -255,7 +255,7 @@
         </activity>
 
         <activity
-            android:name=".ui.settings.agewidget.AgeWidgetConfigureActivity"
+            android:name=".ui.settings.agewidget.WidgetAgeConfigureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop"

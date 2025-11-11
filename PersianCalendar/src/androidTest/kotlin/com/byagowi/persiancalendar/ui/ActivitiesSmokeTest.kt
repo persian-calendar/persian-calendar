@@ -10,7 +10,7 @@ import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
-import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
+import com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActivity
 import com.byagowi.persiancalendar.ui.settings.wallpaper.DreamSettingsActivity
 import com.byagowi.persiancalendar.ui.settings.wallpaper.WallpaperSettingsActivity
 import org.junit.Test
@@ -36,8 +36,8 @@ class ActivitiesSmokeTest {
         ActivityScenario.launch<DreamSettingsActivity>(
             Intent(context, DreamSettingsActivity::class.java)
         )
-        ActivityScenario.launch<AgeWidgetConfigureActivity>(
-            Intent(context, AgeWidgetConfigureActivity::class.java)
+        ActivityScenario.launch<WidgetAgeConfigureActivity>(
+            Intent(context, WidgetAgeConfigureActivity::class.java)
                 .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
         )
     }

@@ -31,7 +31,7 @@ import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseWidgetConfigurationActivity
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetTextScale
@@ -41,7 +41,7 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class AgeWidgetConfigureActivity : WidgetConfigurationActivity() {
+class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
