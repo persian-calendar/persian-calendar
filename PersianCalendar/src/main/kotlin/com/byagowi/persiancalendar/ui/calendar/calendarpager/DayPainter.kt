@@ -324,6 +324,7 @@ private class Paints(
         it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         it.typeface = zodiacFont
+        if (isBoldFont) it.isFakeBoldText = true
     }
 
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
