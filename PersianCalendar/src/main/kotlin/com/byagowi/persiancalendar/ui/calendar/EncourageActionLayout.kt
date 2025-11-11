@@ -53,27 +53,27 @@ fun ColumnScope.EncourageActionLayout(
             )
             Spacer(Modifier.height(4.dp))
             Row {
-                val defaultOutlineColor = ButtonDefaults.outlinedButtonColors()
                 OutlinedButton(
                     onClick = {
                         discardAction()
                         shown = false
                     },
                     Modifier.weight(1f),
-                    colors = defaultOutlineColor.copy(
-                        containerColor = animateColor(defaultOutlineColor.containerColor).value,
-                        contentColor = animateColor(defaultOutlineColor.contentColor).value,
-                        disabledContainerColor = animateColor(defaultOutlineColor.disabledContainerColor).value,
-                        disabledContentColor = animateColor(defaultOutlineColor.disabledContentColor).value,
-                    ),
                 ) { Text(stringResource(R.string.ignore)) }
                 Spacer(Modifier.width(8.dp))
+                val defaultButtonColors = ButtonDefaults.buttonColors()
                 Button(
                     onClick = {
                         if (hideOnAccept) shown = false
                         acceptAction()
                     },
                     Modifier.weight(1f),
+                    colors = defaultButtonColors.copy(
+                        containerColor = animateColor(defaultButtonColors.containerColor).value,
+                        contentColor = animateColor(defaultButtonColors.contentColor).value,
+                        disabledContainerColor = animateColor(defaultButtonColors.disabledContainerColor).value,
+                        disabledContentColor = animateColor(defaultButtonColors.disabledContentColor).value,
+                    )
                 ) { Text(acceptButton) }
             }
         }
