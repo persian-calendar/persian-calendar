@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
-import java.io.File
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val dp = resources.dp

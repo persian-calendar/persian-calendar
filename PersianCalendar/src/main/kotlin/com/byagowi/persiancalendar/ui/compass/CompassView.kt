@@ -29,7 +29,6 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
-import java.io.File
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
