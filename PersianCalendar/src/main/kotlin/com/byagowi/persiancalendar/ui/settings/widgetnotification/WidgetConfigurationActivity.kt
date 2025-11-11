@@ -69,31 +69,31 @@ import java.util.GregorianCalendar
 
 abstract class WidgetConfigurationActivity : BaseActivity() {
     private fun finishAndSuccess() {
-        intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
-            setResult(
-                RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
-            )
-        }
+        setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId()))
         updateStoredPreference(this)
         update(this, false)
         finish()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
-
-        val appWidgetId = intent?.extras?.getInt(
+    protected fun appWidgetId(): Int {
+        return intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: intent?.action?.takeIf { it.startsWith(AppWidgetManager.EXTRA_APPWIDGET_ID) }
             ?.replace(AppWidgetManager.EXTRA_APPWIDGET_ID, "")?.toIntOrNull()
         ?: AppWidgetManager.INVALID_APPWIDGET_ID
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
+        val appWidgetId = appWidgetId()
         setContent {
-            BackHandler { finishAndSuccess() }
+            BackHandler { if (successOnBack) finishAndSuccess() else finish() }
             SystemTheme { Content(appWidgetId) }
         }
     }
+
+    protected open val successOnBack get() = true
 
     @Composable
     abstract fun Content(appWidgetId: Int)
