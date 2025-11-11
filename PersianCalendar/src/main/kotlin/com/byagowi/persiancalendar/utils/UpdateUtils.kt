@@ -116,6 +116,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
+import com.byagowi.persiancalendar.global.widgetTextScale
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
@@ -254,6 +255,7 @@ fun update(context: Context, updateDate: Boolean) {
     else context.resources.getDimensionPixelSize(
         android.R.dimen.system_app_widget_background_radius
     ).toFloat()
+    val scale = widgetTextScale.value
 
     // Widgets
     AppWidgetManager.getInstance(context).run {
@@ -261,10 +263,12 @@ fun update(context: Context, updateDate: Boolean) {
             createAgeRemoteViews(context, width, height, widgetId, jdn)
         }
         updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, _ ->
-            create1x1RemoteViews(context, width, height, date)
+            create1x1RemoteViews(context, width, height, date, scale)
         }
         updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, _ ->
-            create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, clock)
+            create4x1RemoteViews(
+                context, width, height, jdn, date, widgetTitle, subtitle, clock, scale
+            )
         }
         updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, _ ->
             create2x2RemoteViews(
@@ -1052,7 +1056,7 @@ private fun createMoonRemoteViews(context: Context, width: Int, height: Int): Re
     return remoteViews
 }
 
-fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+fun createSampleRemoteViews(context: Context, width: Int, height: Int, scale: Float): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sample)
     remoteViews.setRoundBackground(R.id.widget_sample_background, width, height)
     remoteViews.setDirection(R.id.widget_sample, context.resources)
@@ -1074,11 +1078,17 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
         )
     }
     remoteViews.setTextViewText(R.id.sample_text, context.getString(R.string.widget_text_color))
+    remoteViews.setTextViewTextInDp(R.id.sample_clock, 34 * scale)
+    remoteViews.setTextViewTextInDp(R.id.sample_clock_replacement, 34 * scale)
+    remoteViews.setTextViewTextInDp(R.id.sample_text, 14 * scale)
     return remoteViews
 }
 
+private fun RemoteViews.setTextViewTextInDp(@IdRes id: Int, size: Float) =
+    setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size)
+
 private fun create1x1RemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate
+    context: Context, width: Int, height: Int, date: AbstractDate, scale: Float,
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
@@ -1090,6 +1100,8 @@ private fun create1x1RemoteViews(
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.value.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
     remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, context.launchAppPendingIntent())
+    remoteViews.setTextViewTextInDp(R.id.textPlaceholder1_1x1, 40 * scale)
+    remoteViews.setTextViewTextInDp(R.id.textPlaceholder2_1x1, 15 * scale)
     return remoteViews
 }
 
@@ -1102,6 +1114,7 @@ private fun create4x1RemoteViews(
     widgetTitle: String,
     subtitle: String,
     clock: Clock,
+    scale: Float,
 ): RemoteViews {
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
@@ -1120,6 +1133,10 @@ private fun create4x1RemoteViews(
     remoteViews.setupForegroundTextColors(
         R.id.textPlaceholder1_4x1, R.id.textPlaceholder2_4x1, R.id.textPlaceholder3_4x1
     )
+    remoteViews.setTextViewTextInDp(R.id.textPlaceholder1_4x1, 30 * scale)
+    remoteViews.setTextViewTextInDp(R.id.textPlaceholder2_4x1, 14 * scale)
+    remoteViews.setTextViewTextInDp(R.id.textPlaceholder3_4x1, 12 * scale)
+    if (isWidgetClock.value) remoteViews.setTextViewTextInDp(R.id.time_header_4x1, 22 * scale)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.textPlaceholder1_4x1, android.R.attr.colorAccent
     )

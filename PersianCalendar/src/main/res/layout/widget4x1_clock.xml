@@ -49,7 +49,6 @@
                 android:gravity="start"
                 android:textAlignment="viewStart"
                 android:textFontWeight="500"
-                android:textSize="30dp"
                 tools:ignore="UnusedAttribute" />
 
             <TextView
@@ -59,8 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:gravity="start"
-                android:textAlignment="viewStart"
-                android:textSize="12dp" />
+                android:textAlignment="viewStart" />
 
         </LinearLayout>
 
@@ -69,13 +67,9 @@
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="14sp"
-            android:autoSizeMinTextSize="9sp"
-            android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:gravity="start"
             android:textAlignment="viewStart"
-            android:textSize="14sp"
             tools:ignore="UnusedAttribute" />
 
     </LinearLayout>

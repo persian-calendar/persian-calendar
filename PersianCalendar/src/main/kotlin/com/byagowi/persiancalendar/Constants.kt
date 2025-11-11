@@ -80,6 +80,7 @@ const val PREF_WALLPAPER_DARK = "WallpaperDark"
 const val PREF_WALLPAPER_AUTOMATIC = "WallpaperAutomatic"
 const val PREF_DREAM_NOISE = "DreamNoise"
 const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
+const val PREF_WIDGET_TEXT_SCALE = "WidgetTextScale"
 const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 const val PREF_SWIPE_DOWN_ACTION = "SwipeDownAction"
 const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
@@ -119,6 +120,7 @@ const val DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS = false
 const val DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS = false
 const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
 const val DEFAULT_WIDGET_TRANSPARENCY = 0f
+const val DEFAULT_WIDGET_TEXT_SCALE = 1f
 const val DEFAULT_ATHAN_CHANNEL_ID = 3005
 
 const val ALARMS_BASE_ID = 2000

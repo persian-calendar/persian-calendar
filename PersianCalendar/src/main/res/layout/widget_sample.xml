@@ -23,13 +23,9 @@
             android:id="@+id/sample_clock"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:autoSizeMaxTextSize="34sp"
-            android:autoSizeMinTextSize="9sp"
-            android:autoSizeTextType="uniform"
+            android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:textSize="34sp"
             tools:ignore="UnusedAttribute" />
 
         <TextView
@@ -38,16 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:textSize="34sp" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/sample_text"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp" />
+            android:gravity="center" />
 
     </LinearLayout>
 

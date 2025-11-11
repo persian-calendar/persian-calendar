@@ -429,6 +429,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="pref_ui">UI</string>
     <string name="week">Week</string>
     <string name="bold_text">Bold test</string>
+    <string name="widget_text_size">Text size</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

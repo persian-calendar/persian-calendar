@@ -29,8 +29,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:textAlignment="center"
-            android:textSize="22sp" />
+            android:textAlignment="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +46,6 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:textFontWeight="500"
-                android:textSize="30dp"
                 tools:ignore="UnusedAttribute" />
 
             <TextView
@@ -56,8 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:gravity="center"
-                android:textSize="12dp" />
+                android:gravity="center" />
 
         </LinearLayout>
 
@@ -66,12 +63,8 @@
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="14sp"
-            android:autoSizeMinTextSize="9sp"
-            android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:gravity="center"
-            android:textSize="14sp"
             tools:ignore="UnusedAttribute" />
 
     </LinearLayout>

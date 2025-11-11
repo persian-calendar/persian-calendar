@@ -4,11 +4,9 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.RemoteViews
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,15 +39,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.global.widgetTextScale
+import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
 
-class WidgetConfigurationActivity : ComponentActivity() {
+class WidgetConfigurationActivity : BaseActivity() {
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
@@ -62,18 +61,12 @@ class WidgetConfigurationActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        applyAppLanguage(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             BackHandler { finishAndSuccess() }
             SystemTheme { WidgetConfigurationContent(::finishAndSuccess) }
         }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
-        applyAppLanguage(this)
     }
 }
 
@@ -84,7 +77,10 @@ private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
             .safeDrawingPadding()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
-        WidgetPreview(::createSampleRemoteViews)
+        val widgetTextScale by widgetTextScale.collectAsState()
+        WidgetPreview { context, width, height ->
+            createSampleRemoteViews(context, width, height, widgetTextScale)
+        }
         Column(
             Modifier
                 .fillMaxSize()
@@ -119,7 +115,7 @@ fun WidgetPreview(widgetFactory: (Context, Int, Int) -> RemoteViews) {
     BoxWithConstraints(
         Modifier
             .padding(vertical = 16.dp)
-            .height(68.dp),
+            .height(78.dp),
     ) {
         val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
         val height = with(LocalDensity.current) { (this@BoxWithConstraints).maxHeight.roundToPx() }

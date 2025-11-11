@@ -15,6 +15,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -30,6 +31,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
@@ -43,6 +45,7 @@ import com.byagowi.persiancalendar.global.numericalDatePreferred
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
+import com.byagowi.persiancalendar.global.widgetTextScale
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
@@ -58,6 +61,7 @@ import kotlin.time.Duration.Companion.seconds
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
 fun ColumnScope.WidgetSettings() {
+    WidgetTextScale()
     val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
@@ -144,6 +148,33 @@ fun ColumnScope.WidgetSettings() {
 }
 
 @Composable
+fun WidgetTextScale() {
+    val context = LocalContext.current
+    val widgetTextScaleFlow = remember { MutableStateFlow(widgetTextScale.value) }
+    @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
+        widgetTextScaleFlow
+            // Debounce to not spam preferences much but specially is needed for
+            // map widget as its expensive calculations
+            .debounce(.25.seconds)
+            .collect { context.preferences.edit { putFloat(PREF_WIDGET_TEXT_SCALE, it) } }
+    }
+    val widgetTextScale by widgetTextScaleFlow.collectAsState()
+    Box(
+        Modifier
+            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+            .clearAndSetSemantics {},
+    ) {
+        SettingsSlider(
+            title = stringResource(R.string.widget_text_size),
+            value = widgetTextScale,
+            valueRange = .65f..2f,
+            visibleScale = 14f,
+            defaultValue = DEFAULT_WIDGET_TEXT_SCALE,
+        ) { widgetTextScaleFlow.value = it }
+    }
+}
+
+@Composable
 fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
     val userSetTheme by userSetTheme.collectAsState()
     if (userSetTheme.isDynamicColors) Box(
@@ -160,8 +191,7 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
     this.AnimatedVisibility(prefersWidgetsDynamicColors) {
         val context = LocalContext.current
         val widgetTransparencyFlow = remember { MutableStateFlow(widgetTransparency.value) }
-        @OptIn(FlowPreview::class)
-        LaunchedEffect(Unit) {
+        @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
             widgetTransparencyFlow
                 // Debounce to not spam preferences much but specially is needed for
                 // map widget as its expensive calculations

@@ -425,6 +425,8 @@ fun SettingsSlider(
     title: String,
     value: Float,
     defaultValue: Float,
+    visibleScale: Float = 100f,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     onValueChange: (Float) -> Unit,
 ) {
     Column(Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)) {
@@ -435,12 +437,13 @@ fun SettingsSlider(
         ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Slider(
-                value = animateFloatAsState(value).value.coerceIn(0f, 1f),
+                value = animateFloatAsState(value).value.coerceIn(valueRange),
+                valueRange = valueRange,
                 onValueChange = onValueChange,
                 modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.width(16.dp))
-            val roundedValue = (value * 100).roundToInt()
+            val roundedValue = (value * visibleScale).roundToInt()
             val numeral by numeral.collectAsState()
             Box(contentAlignment = Alignment.Center) {
                 Text(
@@ -450,8 +453,9 @@ fun SettingsSlider(
                 )
                 Text(numeral.format(roundedValue))
             }
-            AnimatedVisibility(roundedValue == 0) { Spacer(Modifier.width(16.dp)) }
-            AnimatedVisibility(roundedValue != 0) {
+            val isDefault = roundedValue == (defaultValue * visibleScale).roundToInt()
+            AnimatedVisibility(visible = isDefault) { Spacer(Modifier.width(16.dp)) }
+            AnimatedVisibility(visible = !isDefault) {
                 IconButton(onClick = { onValueChange(defaultValue) }) {
                     Icon(Icons.Default.SettingsBackupRestore, stringResource(R.string.cancel))
                 }

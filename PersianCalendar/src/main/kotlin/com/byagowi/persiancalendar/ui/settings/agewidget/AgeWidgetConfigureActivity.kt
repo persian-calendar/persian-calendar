@@ -2,9 +2,7 @@ package com.byagowi.persiancalendar.ui.settings.agewidget
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
@@ -42,6 +40,7 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
+import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
@@ -49,17 +48,14 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicC
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
 
-class AgeWidgetConfigureActivity : ComponentActivity() {
+class AgeWidgetConfigureActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        applyAppLanguage(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
@@ -93,14 +89,7 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
             }
         }
 
-        setContent {
-            SystemTheme { AgeWidgetConfigureContent(appWidgetId, ::confirm) }
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
-        applyAppLanguage(this)
+        setContent { SystemTheme { AgeWidgetConfigureContent(appWidgetId, ::confirm) } }
     }
 }
 
