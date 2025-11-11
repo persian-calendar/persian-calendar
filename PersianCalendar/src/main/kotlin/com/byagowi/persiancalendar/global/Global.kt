@@ -543,9 +543,10 @@ fun updateStoredPreference(context: Context) {
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
     islamicCalendarOffset_.value = getIslamicCalendarOffset(preferences).toString()
-    midnightMethod_.value = preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
-        ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
-        ?: calculationMethod.value.defaultMidnight
+    midnightMethod_.value =
+        preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
+            ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
+            ?: calculationMethod.value.defaultMidnight
     highLatitudesMethod_.value = HighLatitudesMethod.valueOf(
         if (coordinates.value?.isHighLatitude != true) DEFAULT_HIGH_LATITUDES_METHOD
         else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)
