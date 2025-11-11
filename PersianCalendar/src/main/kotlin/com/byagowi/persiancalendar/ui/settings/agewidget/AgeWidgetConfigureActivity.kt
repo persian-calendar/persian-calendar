@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET_START
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
@@ -46,6 +47,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetTextScale
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
@@ -53,6 +55,7 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class AgeWidgetConfigureActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,8 +104,13 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
         val today = remember { Jdn.today() }
+        val context = LocalContext.current
+        val textScaleKey = PREF_WIDGET_TEXT_SCALE + appWidgetId
+        val textScale = remember {
+            MutableStateFlow(context.preferences.getFloat(textScaleKey, 1f))
+        }
         WidgetPreview { context, width, height ->
-            createAgeRemoteViews(context, width, height, appWidgetId, today)
+            createAgeRemoteViews(context, width, height, appWidgetId, today, textScale.value)
         }
         Column(
             Modifier
@@ -168,6 +176,8 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                         }
                     }
                 }
+
+                WidgetTextScale(textScaleKey, textScale)
 
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
                 WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)

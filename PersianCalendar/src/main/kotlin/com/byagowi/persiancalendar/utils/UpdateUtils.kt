@@ -259,7 +259,8 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     AppWidgetManager.getInstance(context).run {
         updateFromRemoteViews<AgeWidget>(context, now) { width, height, _, widgetId ->
-            createAgeRemoteViews(context, width, height, widgetId, jdn)
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
+            createAgeRemoteViews(context, width, height, widgetId, jdn, scale)
         }
         updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, widgetId ->
             val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
@@ -418,7 +419,7 @@ private fun getWidgetTextColor(
 ) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(
-    context: Context, width: Int, height: Int, widgetId: Int, today: Jdn,
+    context: Context, width: Int, height: Int, widgetId: Int, today: Jdn, scale: Float
 ): RemoteViews {
     val preferences = context.preferences
     val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
@@ -445,6 +446,8 @@ fun createAgeRemoteViews(
     remoteViews.setOnClickPendingIntent(
         R.id.age_widget_root, context.launchAgeWidgetConfigurationAppPendingIntent(widgetId)
     )
+    remoteViews.setTextViewTextInDp(R.id.textview_age_widget_title, 12 * scale)
+    remoteViews.setTextViewTextInDp(R.id.textview_age_widget, 18 * scale)
     return remoteViews
 }
 
