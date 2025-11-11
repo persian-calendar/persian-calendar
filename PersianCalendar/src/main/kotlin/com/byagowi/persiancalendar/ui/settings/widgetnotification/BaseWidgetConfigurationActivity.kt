@@ -86,7 +86,7 @@ abstract class BaseWidgetConfigurationActivity : BaseActivity() {
                     Button(
                         onClick = ::finishAndSuccess,
                         modifier = Modifier
-                            .align(alignment = Alignment.Companion.CenterHorizontally)
+                            .align(alignment = Alignment.CenterHorizontally)
                             .padding(bottom = 8.dp)
                     ) {
                         Text(
