@@ -3,9 +3,12 @@ package com.byagowi.persiancalendar.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
@@ -25,6 +28,7 @@ import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.loadLanguageResources
+import com.byagowi.persiancalendar.global.updateAccessibilityFlows
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -88,4 +92,41 @@ abstract class BaseActivity : ComponentActivity(),
 
         update(this, true)
     }
+
+    override fun onResume() {
+        super.onResume()
+        applyAppLanguage(this)
+        val accessibilityService = getSystemService<AccessibilityManager>()
+        accessibilityService?.addTouchExplorationStateChangeListener(
+            touchExplorationStateChangeListener
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
+            accessibilityService?.addHighContrastTextStateChangeListener(
+                mainExecutor, it
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val accessibilityService = getSystemService<AccessibilityManager>()
+        accessibilityService?.removeTouchExplorationStateChangeListener(
+            touchExplorationStateChangeListener
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
+            accessibilityService?.removeHighContrastTextStateChangeListener(it)
+        }
+    }
+
+    private val touchExplorationStateChangeListener =
+        AccessibilityManager.TouchExplorationStateChangeListener {
+            getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
+            update(this, true)
+        }
+    private val highContrastTextStateChangeListener =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            AccessibilityManager.HighContrastTextStateChangeListener {
+                getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
+            }
+        } else null
 }
