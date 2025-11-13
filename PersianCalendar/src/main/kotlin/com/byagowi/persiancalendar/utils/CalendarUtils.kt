@@ -217,6 +217,7 @@ private fun readDeviceEvents(
                     date = start.toCivilDate(),
                     color = it.getString(7) ?: it.getString(8).orEmpty(),
                     isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
+                    source = null,
                 )
             }.take(1000 /* let's put some limitation */).toList()
         }

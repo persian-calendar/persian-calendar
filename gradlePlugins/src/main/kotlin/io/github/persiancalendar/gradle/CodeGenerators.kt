@@ -33,11 +33,11 @@ abstract class CodeGenerators : DefaultTask() {
     private val packageName = "com.byagowi.persiancalendar.generated"
 
     private val calendarRecordName = "CalendarRecord"
-    private val eventTypeName = "EventType"
+    private val eventSourceName = "EventSource"
     private val cityItemName = "CityItem"
 
     private val calendarRecordType = ClassName(packageName, calendarRecordName)
-    private val eventType = ClassName(packageName, eventTypeName)
+    private val eventSource = ClassName(packageName, eventSourceName)
     private val cityItemType = ClassName("com.byagowi.persiancalendar.entities", cityItemName)
 
     private operator fun File.div(child: String) = File(this, child)
@@ -140,15 +140,15 @@ abstract class CodeGenerators : DefaultTask() {
         @OptIn(ExperimentalSerializationApi::class)
         val events = Json.decodeFromStream<EventStore>(eventsJson.inputStream())
         builder.addType(
-            TypeSpec.enumBuilder(eventTypeName)
+            TypeSpec.enumBuilder(eventSourceName)
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
-                        .addParameter("source", String::class)
+                        .addParameter("link", String::class)
                         .build()
                 )
                 .addProperty(
-                    PropertySpec.builder("source", String::class)
-                        .initializer("source")
+                    PropertySpec.builder("link", String::class)
+                        .initializer("link")
                         .build()
                 )
                 .also {
@@ -165,7 +165,7 @@ abstract class CodeGenerators : DefaultTask() {
         )
         val calendarRecordFields = listOf(
             "title" to String::class.asClassName(),
-            "type" to eventType,
+            "source" to eventSource,
             "isHoliday" to Boolean::class.asClassName(),
             "month" to Int::class.asClassName(),
             "day" to Int::class.asClassName()
@@ -208,7 +208,7 @@ abstract class CodeGenerators : DefaultTask() {
                                 addStatement("%L(", calendarRecordName)
                                 withIndent {
                                     addStatement("title = %S,", it.title)
-                                    add("type = EventType.%L, ", it.type)
+                                    add("source = EventSource.%L, ", it.type)
                                     add("isHoliday = %L, ", it.holiday)
                                     add("month = %L, ", it.month)
                                     addStatement("day = %L", it.day)

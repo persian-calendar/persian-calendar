@@ -45,7 +45,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -82,26 +82,26 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                 @Composable
                 fun Iran() {
                     CountryEvents(
-                        stringResource(R.string.iran_official_events),
-                        EventType.Iran.source,
-                        stringResource(R.string.iran_holidays),
-                        stringResource(R.string.iran_others),
-                        enabledTypes,
-                        EventsRepository.iranHolidaysKey,
-                        EventsRepository.iranOthersKey,
+                        calendarCenterName = stringResource(R.string.iran_official_events),
+                        sourceLink = EventSource.Iran.link,
+                        holidaysTitle = stringResource(R.string.iran_holidays),
+                        nonHolidaysTitle = stringResource(R.string.iran_others),
+                        enabledTypes = enabledTypes,
+                        holidaysKey = EventsRepository.iranHolidaysKey,
+                        nonHolidaysKey = EventsRepository.iranOthersKey,
                     )
                 }
 
                 @Composable
                 fun Afghanistan() {
                     CountryEvents(
-                        stringResource(R.string.afghanistan_events),
-                        EventType.Afghanistan.source,
-                        stringResource(R.string.afghanistan_holidays),
-                        stringResource(R.string.afghanistan_others),
-                        enabledTypes,
-                        EventsRepository.afghanistanHolidaysKey,
-                        EventsRepository.afghanistanOthersKey,
+                        calendarCenterName = stringResource(R.string.afghanistan_events),
+                        sourceLink = EventSource.Afghanistan.link,
+                        holidaysTitle = stringResource(R.string.afghanistan_holidays),
+                        nonHolidaysTitle = stringResource(R.string.afghanistan_others),
+                        enabledTypes = enabledTypes,
+                        holidaysKey = EventsRepository.afghanistanHolidaysKey,
+                        nonHolidaysKey = EventsRepository.afghanistanOthersKey,
                     )
                 }
 
@@ -114,13 +114,13 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                 }
             } else {
                 CountryEvents(
-                    stringResource(R.string.nepal),
-                    EventType.Nepal.source,
-                    stringResource(R.string.holiday),
-                    stringResource(R.string.other_holidays),
-                    enabledTypes,
-                    EventsRepository.nepalHolidaysKey,
-                    EventsRepository.nepalOthersKey,
+                    calendarCenterName = stringResource(R.string.nepal),
+                    sourceLink = EventSource.Nepal.link,
+                    holidaysTitle = stringResource(R.string.holiday),
+                    nonHolidaysTitle = stringResource(R.string.other_holidays),
+                    enabledTypes = enabledTypes,
+                    holidaysKey = EventsRepository.nepalHolidaysKey,
+                    nonHolidaysKey = EventsRepository.nepalOthersKey,
                 )
             }
             Box(

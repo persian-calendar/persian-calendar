@@ -47,6 +47,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,8 +64,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -78,6 +85,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
@@ -103,6 +111,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -228,35 +237,31 @@ fun eventColor(event: CalendarEvent<*>): Color {
 }
 
 fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
-    event: CalendarEvent.DeviceCalendarEvent,
-    context: Context
+    event: CalendarEvent.DeviceCalendarEvent, context: Context
 ) {
-    runCatching { this@viewEvent.launch(event.id) }
-        .onFailure {
-            Toast
-                .makeText(
-                    context,
-                    R.string.device_does_not_support,
-                    Toast.LENGTH_SHORT
-                )
-                .show()
-        }
-        .onFailure(logException)
+    runCatching { this@viewEvent.launch(event.id) }.onFailure {
+        Toast.makeText(
+            context, R.string.device_does_not_support, Toast.LENGTH_SHORT
+        ).show()
+    }.onFailure(logException)
 }
 
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
 fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
+    val language by language.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     events.forEach { event ->
         val backgroundColor by animateColor(eventColor(event))
         val eventTime =
             (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it }.orEmpty()
         AnimatedContent(
-            (if (event.isHoliday) language.value.inParentheses.format(
+            (if (event.isHoliday) language.inParentheses.format(
                 event.title, holidayString
             ) else event.title) + eventTime,
             label = "event title",
@@ -310,6 +315,56 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         tint = contentColor,
                         modifier = Modifier.padding(start = 8.dp),
                     )
+                }
+                this.AnimatedVisibility(
+                    event.source == EventSource.Iran && language.isUserAbleToReadPersian
+                ) {
+                    val tooltipState = rememberTooltipState()
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                            TooltipAnchorPosition.Above
+                        ),
+                        tooltip = {
+                            PlainTooltip(shape = MaterialTheme.shapes.medium) {
+                                Text(
+                                    buildAnnotatedString {
+                                        appendLine("تقویم رسمی کشور")
+                                        appendLine("تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران")
+                                        val sourceLink = event.source?.link
+                                        if (sourceLink != null && !sourceLink.startsWith("~")) withLink(
+                                            link = LinkAnnotation.Url(
+                                                url = sourceLink,
+                                                styles = TextLinkStyles(
+                                                    SpanStyle(
+                                                        color = MaterialTheme.colorScheme.inversePrimary,
+                                                        textDecoration = TextDecoration.Underline
+                                                    )
+                                                ),
+                                            ),
+                                        ) { append(stringResource(R.string.view_source)) }
+                                    },
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+                        },
+                        enableUserInput = false,
+                        state = tooltipState,
+                    ) {
+                        Text(
+                            "دانشگاه تهران",
+                            color = if (event.isHoliday) MaterialTheme.colorScheme.onPrimaryFixed
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.medium)
+                                .clickable { coroutineScope.launch { tooltipState.show() } }
+                                .background(
+                                    if (event.isHoliday) MaterialTheme.colorScheme.primaryFixed
+                                    else MaterialTheme.colorScheme.surfaceContainerLow
+                                )
+                                .padding(horizontal = 8.dp),
+                        )
+                    }
                 }
             }
         }
@@ -406,11 +461,7 @@ private fun EquinoxCountDownContent(
                         )
                     }
                 }
-                Text(
-                    parts[1],
-                    color = contentColor,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                Text(parts[1], color = contentColor, style = MaterialTheme.typography.bodyMedium)
             } else Text(x, color = contentColor, style = MaterialTheme.typography.bodyMedium)
         }
     }
@@ -443,7 +494,7 @@ fun readEvents(
                 } else x
             }.joinToString("\n")
             val remainedTime = equinoxTime - now
-            val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, remainedTime)
+            val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, null, remainedTime)
             return listOf(event) + events
         }
     }

@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.entities
 import android.content.SharedPreferences
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.generated.CalendarRecord
-import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.nepaliEvents
@@ -46,33 +46,33 @@ data class EventsRepository @VisibleForTesting constructor(
     val onlyAfghanistanHolidaysIsEnabled get() = enabledTypes.size == 1 && afghanistanHolidays
 
     private fun skipEvent(record: CalendarRecord, calendar: Calendar): Boolean {
-        return when (record.type) {
-            EventType.Iran if record.isHoliday && iranHolidays -> false
-            EventType.Iran if iranOthers -> false
-            EventType.Afghanistan if record.isHoliday && afghanistanHolidays -> false
-            EventType.Afghanistan if afghanistanOthers -> false
-            EventType.Nepal if record.isHoliday && nepalHolidays -> false
-            EventType.Nepal if nepalOthers -> false
-            EventType.AncientIran if iranAncient -> false
-            EventType.International if international -> false
+        return when (record.source) {
+            EventSource.Iran if record.isHoliday && iranHolidays -> false
+            EventSource.Iran if iranOthers -> false
+            EventSource.Afghanistan if record.isHoliday && afghanistanHolidays -> false
+            EventSource.Afghanistan if afghanistanOthers -> false
+            EventSource.Nepal if record.isHoliday && nepalHolidays -> false
+            EventSource.Nepal if nepalOthers -> false
+            EventSource.AncientIran if iranAncient -> false
+            EventSource.International if international -> false
             // Enable Iranian events of Gregorian calendar even if itself isn't enabled
-            EventType.Iran if international && calendar == Calendar.GREGORIAN -> false
+            EventSource.Iran if international && calendar == Calendar.GREGORIAN -> false
             else -> true
         }
     }
 
     // Don't mark holidays as holiday if holiday isn't enabled explicitly
     private fun determineIsHoliday(record: CalendarRecord) = when {
-        record.type == EventType.Iran && !iranHolidays -> false
-        record.type == EventType.Afghanistan && !afghanistanHolidays -> false
+        record.source == EventSource.Iran && !iranHolidays -> false
+        record.source == EventSource.Afghanistan && !afghanistanHolidays -> false
         else -> record.isHoliday
     }
 
     private fun multiCountryComment(calendarRecord: CalendarRecord): String {
         return if (calendarRecord.isHoliday && iranHolidays && afghanistanHolidays) {
-            when (calendarRecord.type) {
-                EventType.Iran -> "ایران"
-                EventType.Afghanistan -> "افغانستان"
+            when (calendarRecord.source) {
+                EventSource.Iran -> "ایران"
+                EventSource.Afghanistan -> "افغانستان"
                 else -> ""
             } + spacedComma
         } else ""
@@ -143,22 +143,22 @@ data class EventsRepository @VisibleForTesting constructor(
         return (when (calendar) {
             Calendar.SHAMSI -> {
                 val date = PersianDate(-1, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(title, holiday, date)
+                CalendarEvent.PersianCalendarEvent(title, holiday, date, record.source)
             }
 
             Calendar.GREGORIAN -> {
                 val date = CivilDate(-1, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(title, holiday, date)
+                CalendarEvent.GregorianCalendarEvent(title, holiday, date, record.source)
             }
 
             Calendar.ISLAMIC -> {
                 val date = IslamicDate(-1, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(title, holiday, date)
+                CalendarEvent.IslamicCalendarEvent(title, holiday, date, record.source)
             }
 
             Calendar.NEPALI -> {
                 val date = NepaliDate(-1, record.month, record.day)
-                CalendarEvent.NepaliCalendarEvent(title, holiday, date)
+                CalendarEvent.NepaliCalendarEvent(title, holiday, date, record.source)
             }
         } as? T).debugAssertNotNull
     }
