@@ -317,7 +317,11 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                     )
                 }
                 this.AnimatedVisibility(
-                    event.source == EventSource.Iran && language.isUserAbleToReadPersian
+                    when (event.source) {
+                        EventSource.Iran -> true
+                        EventSource.Afghanistan -> true
+                        else -> false
+                    }
                 ) {
                     val tooltipState = rememberTooltipState()
                     TooltipBox(
@@ -351,13 +355,23 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         state = tooltipState,
                     ) {
                         Text(
-                            "دانشگاه تهران",
+                            text = when (event.source) {
+                                EventSource.Iran -> "دانشگاه تهران"
+                                EventSource.Afghanistan -> "افغانستان"
+                                else -> ""
+                            },
                             color = if (event.isHoliday) MaterialTheme.colorScheme.onPrimaryFixed
                             else MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
+                                .padding(start = 4.dp)
                                 .clip(MaterialTheme.shapes.medium)
-                                .clickable { coroutineScope.launch { tooltipState.show() } }
+                                .clickable(
+                                    enabled = when (event.source) {
+                                        EventSource.Iran -> true
+                                        else -> false
+                                    }
+                                ) { coroutineScope.launch { tooltipState.show() } }
                                 .background(
                                     if (event.isHoliday) MaterialTheme.colorScheme.primaryFixed
                                     else MaterialTheme.colorScheme.surfaceContainerLow
