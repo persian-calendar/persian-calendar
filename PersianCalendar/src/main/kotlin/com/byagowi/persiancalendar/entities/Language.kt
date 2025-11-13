@@ -393,7 +393,6 @@ enum class Language(val code: String, val nativeName: String) {
             // It seems it's a zero padded locale
             // But according to نیازهای شرایط محلی برای زبان فارسی ایران it's not
             // https://drive.google.com/file/d/1yDoUbXnV_q6mrzzaRZK_AvsOLaU-O9Qy/view
-            // http://mohsen.banan.1.byname.net/content/republished/doc.public/standards/communication/iran/locale/Locale-12.pdf
             FA -> false
             else -> false
         }

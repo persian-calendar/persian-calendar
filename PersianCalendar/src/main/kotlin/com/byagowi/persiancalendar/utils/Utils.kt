@@ -65,7 +65,7 @@ fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elev
 
 val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 
-// Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
+// Thee same order as https://praytimes.org/code/v2/js/examples/monthly.htm
 val CalculationMethod.titleStringId
     @StringRes
     get(): Int = when (this) {

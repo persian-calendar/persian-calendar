@@ -101,7 +101,7 @@ class CalendarTests {
         "1400, 8, 15, 1400, 11, 15, 0, 3, 0",
         "1400, 9, 15, 1400, 11, 15, 0, 2, 0",
         "1400, 10, 15, 1400, 11, 15, 0, 1, 0",
-        // Adopted from http://www.ssu.ac.ir/cms/fileadmin/user_upload/Moavenatha/MBehdashti/Gostaresh/pdf/amar/dastor/Mohasebe-Sen.pdf
+        // Adopted from https://www.ssu.ac.ir/cms/fileadmin/user_upload/Moavenatha/MBehdashti/Gostaresh/pdf/amar/dastor/Mohasebe-Sen.pdf
         // Except we don't have the same result
         "1360, 5, 20, 1379, 6, 10, 19, 0, 21",
         "1360, 5, 20, 1379, 6, 10, 19, 0, 21",

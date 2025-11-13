@@ -13,14 +13,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/.
+along with this program.  If not, see https://www.gnu.org/licenses/.
 
 ----
 Assets
 * {spring,summer,autumn,winter}.webp by Lotta Nieminen (CC BY NC 4.0)
   https://www.behance.net/gallery/21015893/Google-Calendar
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
-* kaaba.xml from Emoji One project, v2, 1f54b.svg, http://emojione.com (CC BY 4.0)
+* kaaba.xml from Emoji One project, v2, 1f54b.svg, https://emojione.com (CC BY 4.0)
 * ic_moon is derived from Google Noto Emoji but highly tweaked
   https://github.com/googlefonts/noto-emoji/blob/main/svg/emoji_u1f315.svg
 * ic_sun is derived from Mozilla's Emoji but highly tweaked
@@ -37,7 +37,7 @@ Assets
 
 ----
 Calendar converter - GPLv2
-http://code.google.com/p/mobile-persian-calendar/
+https://code.google.com/p/mobile-persian-calendar/
 
   Copyright (C) 2006  Amir Khosroshahi (amir.khosroshahi)
 
@@ -57,7 +57,7 @@ http://code.google.com/p/mobile-persian-calendar/
 
 ----
 PrayTimes.js (ported) - LGPLv3
-http://praytimes.org/
+https://praytimes.org/
 
   Copyright (C) 2007-2011 PrayTimes.org
 
@@ -97,7 +97,7 @@ Only events data copied when the license was GPLv3
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ----
 Android Salat Times - GPLv3
@@ -117,7 +117,7 @@ QiblaCompassView.java
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ----
 Reorderable - Apache 2
@@ -129,7 +129,7 @@ https://github.com/Calvin-LL/Reorderable
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+     https://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -207,7 +207,7 @@ https://github.com/avianey/Level
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with Level. If not, see <http://www.gnu.org/licenses/>
+  along with Level. If not, see <https://www.gnu.org/licenses/>
 
 ----
 Astronomy Engine - MIT

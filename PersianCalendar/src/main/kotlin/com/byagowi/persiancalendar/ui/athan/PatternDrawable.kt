@@ -82,7 +82,7 @@ private interface Pattern {
 }
 
 private class FirstPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
-    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
+    // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
     override val width = size / 2
     override val height = size / 2
     override val tileModeX = Shader.TileMode.MIRROR
@@ -116,7 +116,7 @@ private class FirstPattern(@get:ColorInt private val tintColor: Int, size: Float
 
 private class SecondPattern(@get:ColorInt private val tintColor: Int, private val size: Float) :
     Pattern {
-    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-4/
+    // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-4/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
     override val height = size
     override val tileModeX = Shader.TileMode.MIRROR
@@ -139,7 +139,7 @@ private class SecondPattern(@get:ColorInt private val tintColor: Int, private va
 }
 
 private class ThirdPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
-    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
+    // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
     override val width = size / 2
     override val height = size / 2
     override val tileModeX = Shader.TileMode.MIRROR
@@ -170,7 +170,7 @@ private class ThirdPattern(@get:ColorInt private val tintColor: Int, size: Float
 }
 
 private class FourthPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
-    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-2/
+    // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-2/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
     override val height = size
     override val tileModeX = Shader.TileMode.MIRROR

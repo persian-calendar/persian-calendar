@@ -29,7 +29,7 @@ class PrayTimeTests {
 
     @Test
     fun `pray times calculations correctness`() {
-        // http://praytimes.org/code/v2/js/examples/monthly.htm
+        // https://praytimes.org/code/v2/js/examples/monthly.htm
         var prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.MWL,
