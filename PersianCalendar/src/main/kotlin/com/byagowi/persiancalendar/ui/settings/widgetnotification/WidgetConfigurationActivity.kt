@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
@@ -14,6 +15,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.settings.SettingsSectionLayout
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -24,6 +26,7 @@ import com.byagowi.persiancalendar.utils.createMonthViewRemoteViews
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
+import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.GregorianCalendar
@@ -60,15 +63,20 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
                 val clock = Clock(GregorianCalendar())
                 WidgetPreview { context, width, height ->
                     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
+                    val widgetTitle = dayTitleSummary(
+                        jdn,
+                        today,
+                        calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
+                    )
                     create4x1RemoteViews(
-                        context, width, height, jdn, today, "", subtitle, clock,
+                        context, width, height, jdn, today, widgetTitle, subtitle, clock,
                         scale = textScale.value,
                     )
                 }
             },
             settings = {
                 WidgetTextScale(key, textScale)
-                WidgetColoringSettings()
+                WidgetSettings()
             },
         )
     }
