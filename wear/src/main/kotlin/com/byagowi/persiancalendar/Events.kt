@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar
 
 import androidx.collection.IntIntPair
 import com.byagowi.persiancalendar.generated.CalendarRecord
-import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
@@ -62,9 +62,9 @@ private fun MutableList<Entry>.eventsOfCalendar(
     enabledEvents: Set<String>,
 ) {
     groupedEvents[IntIntPair(date.month, date.dayOfMonth)]?.forEach {
-        if (when (it.type) {
-                EventType.Iran -> it.isHoliday || iranNonHolidaysKey in enabledEvents
-                EventType.International -> internationalKey in enabledEvents
+        if (when (it.source) {
+                EventSource.Iran -> it.isHoliday || iranNonHolidaysKey in enabledEvents
+                EventSource.International -> internationalKey in enabledEvents
                 else -> false
             }
         ) add(Entry(it.title, if (it.isHoliday) EntryType.Holiday else EntryType.NonHoliday))
