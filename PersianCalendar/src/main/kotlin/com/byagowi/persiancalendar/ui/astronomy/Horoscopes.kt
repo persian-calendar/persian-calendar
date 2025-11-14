@@ -287,9 +287,9 @@ private fun EasternHoroscopePattern(
 // See for example: https://w.wiki/E9uz
 // See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
-fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
+fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) {
-        val state = rememberPagerState(persianYear) { validYears }
+        val state = rememberPagerState(yearPages / 2) { yearPages }
         val animationProgress = remember { Animatable(0f) }
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
         var abjad by remember { mutableStateOf(false) }
@@ -300,17 +300,20 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             state,
             pageSpacing = 8.dp,
             modifier = Modifier.animateContentSize(),
-        ) { year ->
+        ) { page ->
             Column {
                 YearHoroscopeDialogContent(
-                    persianYear = year,
+                    persianYear = page - yearPages / 2 + initialPersianYear,
+                    validRange = initialPersianYear - yearPages / 2..initialPersianYear + yearPages / 2,
                     animationProgress = animationProgress,
                     pendingConfirms = pendingConfirms,
                     abjad = abjad,
                     onPagerValueChange = {
                         coroutineScope.launch {
-                            if (abs(it - state.currentPage) > 5) state.requestScrollToPage(it)
-                            else state.animateScrollToPage(it)
+                            val targetPage = it + yearPages / 2 - initialPersianYear
+                            if (abs(targetPage - state.currentPage) > 5) {
+                                state.requestScrollToPage(targetPage)
+                            } else state.animateScrollToPage(targetPage)
                         }
                     },
                 )
@@ -318,7 +321,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         }
         val action = when {
             pendingConfirms.isNotEmpty() -> FooterAction.Confirm
-            persianYear != state.currentPage -> FooterAction.Reset
+            state.currentPage != yearPages / 2 -> FooterAction.Reset
             language.collectAsState().value.isArabicScript -> FooterAction.Abjad
             else -> FooterAction.None
         }
@@ -342,7 +345,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
                 }
 
                 FooterAction.Reset -> TodayActionButton(true) {
-                    coroutineScope.launch { state.animateScrollToPage(persianYear) }
+                    coroutineScope.launch { state.animateScrollToPage(yearPages / 2) }
                 }
 
                 FooterAction.None -> {}
@@ -353,7 +356,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 
 private enum class FooterAction { Reset, Confirm, Abjad, None }
 
-const val validYears = 5000
+private const val yearPages = 5000
 
 @Composable
 private fun ColumnScope.YearHoroscopeDialogContent(
@@ -362,6 +365,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
     pendingConfirms: SnapshotStateList<() -> Unit>,
     abjad: Boolean,
     onPagerValueChange: (Int) -> Unit,
+    validRange: IntRange,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val clickableModifier = Modifier.clickable(
@@ -436,12 +440,12 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                 dismissNumberEdit = { showTextEdit = false },
                 pendingConfirms = pendingConfirms,
                 modifier = Modifier.fillMaxWidth(),
-                isValid = { it in 0..validYears },
+                isValid = { it in validRange },
                 initialValue = persianYear,
                 onValueChange = onPagerValueChange,
             )
             val resources = LocalResources.current
-            val lines = listOfNotNull(
+            val lines = listOf(
                 if (language.isPersianOrDari) {
                     "لحظهٔ تحویل سال " + numeral.format(persianYear) + spacedComma + ChineseZodiac.fromPersianCalendar(
                         PersianDate(persianYear, 1, 1)
@@ -451,8 +455,10 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                         isPersian = true,
                     ) + spacedComma + " شمسی در $cityName"
                 } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
-                gregorianCalendar.formatDateAndTime(),
-                if (isMoonInScorpio(time)) stringResource(R.string.moon_in_scorpio) else null,
+                gregorianCalendar.formatDateAndTime() + run {
+                    if (isMoonInScorpio(time)) spacedComma + stringResource(R.string.moon_in_scorpio)
+                    else ""
+                },
                 dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma),
             )
             Text(

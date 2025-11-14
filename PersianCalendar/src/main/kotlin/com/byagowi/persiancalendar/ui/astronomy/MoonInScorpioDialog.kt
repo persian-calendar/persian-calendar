@@ -3,7 +3,9 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +14,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -23,10 +27,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -44,6 +52,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NumberEdit
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatDate
@@ -52,6 +62,7 @@ import com.byagowi.persiancalendar.utils.searchMoonAgeTime
 import com.byagowi.persiancalendar.utils.toCivilDate
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
+import kotlin.math.abs
 
 private data class Entry(
     val startClock: String,
@@ -74,34 +85,68 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
         "برج" to Zodiac.SCORPIO.tropicalRange,
     )
     val yearPagerState = rememberPagerState(initialPage = yearPages / 2, pageCount = { yearPages })
+    val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
+    if (yearPagerState.currentPageOffsetFraction != 0f) pendingConfirms.forEach { it() }
     val coroutineScope = rememberCoroutineScope()
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Crossfade(yearPagerState.currentPage == yearPages / 2) {
-                    if (it) Text(
-                        Zodiac.SCORPIO.symbol,
-                        fontFamily = FontFamily(
-                            Font(R.font.notosanssymbolsregularzodiacsubset)
-                        ),
-                        fontSize = 20.sp,
-                    ) else TodayActionButton(true) {
-                        coroutineScope.launch { yearPagerState.animateScrollToPage(yearPages / 2) }
+                Crossfade(pendingConfirms.isNotEmpty()) { hasPendingConfirms ->
+                    if (hasPendingConfirms) AppIconButton(
+                        icon = Icons.Default.Done,
+                        title = stringResource(R.string.accept),
+                        onClick = { pendingConfirms.forEach { it() } },
+                    ) else Crossfade(yearPagerState.currentPage == yearPages / 2) {
+                        if (it) Text(
+                            Zodiac.SCORPIO.symbol,
+                            fontFamily = FontFamily(
+                                Font(R.font.notosanssymbolsregularzodiacsubset)
+                            ),
+                            fontSize = 20.sp,
+                        ) else TodayActionButton(true) {
+                            coroutineScope.launch { yearPagerState.animateScrollToPage(yearPages / 2) }
+                        }
                     }
                 }
                 HorizontalPager(yearPagerState) { page ->
                     val year = page - yearPages / 2 + currentYear
-                    Text(
-                        stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(year),
-                        maxLines = 1,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 9.sp,
-                            maxFontSize = LocalTextStyle.current.fontSize,
-                        ),
-                    )
+                    var showTextEdit by remember { mutableStateOf(false) }
+                    Crossfade(showTextEdit) { state ->
+                        Box(contentAlignment = Alignment.Center) {
+                            if (state) NumberEdit(
+                                dismissNumberEdit = { showTextEdit = false },
+                                pendingConfirms = pendingConfirms,
+                                modifier = Modifier.fillMaxWidth(),
+                                isValid = {
+                                    it in (currentYear - yearPages / 2..currentYear + yearPages / 2)
+                                },
+                                initialValue = year,
+                            ) {
+                                coroutineScope.launch {
+                                    val targetPage = it + yearPages / 2 - currentYear
+                                    if (abs(targetPage - yearPagerState.currentPage) > 5) {
+                                        yearPagerState.requestScrollToPage(targetPage)
+                                    } else yearPagerState.animateScrollToPage(targetPage)
+                                }
+                            }
+                            Text(
+                                stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(
+                                    year
+                                ),
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .alpha(if (state) 0f else 1f)
+                                    .fillMaxWidth()
+                                    .clickable { showTextEdit = true },
+                                textAlign = TextAlign.Center,
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 9.sp,
+                                    maxFontSize = LocalTextStyle.current.fontSize,
+                                ),
+                            )
+                        }
+                    }
                 }
             }
         },
