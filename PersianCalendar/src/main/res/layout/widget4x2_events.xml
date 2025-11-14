@@ -11,8 +11,7 @@
             android:id="@+id/textPlaceholder2_4x2"
             style="@style/WidgetTextStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp" />
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/refresh_icon"

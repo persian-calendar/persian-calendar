@@ -38,8 +38,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="end|center_vertical"
-                android:textAlignment="viewEnd"
-                android:textSize="40sp" />
+                android:textAlignment="viewEnd" />
 
             <FrameLayout
                 android:layout_width="1dp"
@@ -57,8 +56,7 @@
                 android:gravity="start|center_vertical"
                 android:lineSpacingExtra="1dp"
                 android:minLines="4"
-                android:text=""
-                android:textSize="14sp" />
+                android:text="" />
 
         </LinearLayout>
 

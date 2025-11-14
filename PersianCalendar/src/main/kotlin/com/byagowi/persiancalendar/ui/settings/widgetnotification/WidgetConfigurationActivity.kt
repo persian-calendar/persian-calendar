@@ -107,13 +107,16 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
                 val jdn = Jdn.today()
                 val date = jdn on mainCalendar
                 val clock = Clock(GregorianCalendar())
-                create4x2RemoteViews(context, width, height, Jdn.today(), date, clock, prayTimes)
+                create4x2RemoteViews(
+                    context, width, height, Jdn.today(), date, clock, prayTimes, appWidgetId
+                )
             }
         }
     }
 
     @Composable
     override fun ColumnScope.Settings(appWidgetId: Int) {
+        WidgetTextScale(appWidgetId)
         WidgetSettings()
         SettingsSectionLayout(R.string.location)
         LocationSettings()

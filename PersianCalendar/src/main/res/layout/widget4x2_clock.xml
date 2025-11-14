@@ -45,8 +45,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:textSize="22sp" />
+                    android:textAlignment="center" />
 
                 <TextClock
                     android:id="@+id/textPlaceholder0_4x2"
@@ -55,8 +54,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:maxLines="1"
-                    android:textAlignment="center"
-                    android:textSize="48sp" />
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
@@ -76,8 +74,7 @@
                 android:gravity="start|center_vertical"
                 android:lineSpacingExtra="1dp"
                 android:minLines="4"
-                android:text=""
-                android:textSize="13sp" />
+                android:text="" />
 
         </LinearLayout>
 

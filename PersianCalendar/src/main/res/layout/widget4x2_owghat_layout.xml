@@ -16,8 +16,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/not_set_time"
-        android:textSize="14sp" />
+        android:text="@string/not_set_time" />
 
     <FrameLayout
         android:layout_width="1dp"
@@ -34,8 +33,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/not_set_time"
-        android:textSize="14sp" />
+        android:text="@string/not_set_time" />
 
     <FrameLayout
         android:layout_width="1dp"
@@ -52,8 +50,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/not_set_time"
-        android:textSize="14sp" />
+        android:text="@string/not_set_time" />
 
     <FrameLayout
         android:layout_width="1dp"
@@ -70,8 +67,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/not_set_time"
-        android:textSize="14sp" />
+        android:text="@string/not_set_time" />
 
     <FrameLayout
         android:layout_width="1dp"
@@ -88,7 +84,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/not_set_time"
-        android:textSize="14sp" />
+        android:text="@string/not_set_time" />
 
 </LinearLayout>
