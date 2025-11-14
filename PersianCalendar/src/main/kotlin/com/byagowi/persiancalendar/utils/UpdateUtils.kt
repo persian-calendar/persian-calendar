@@ -1058,35 +1058,6 @@ private fun createMoonRemoteViews(context: Context, width: Int, height: Int): Re
     return remoteViews
 }
 
-fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_sample)
-    remoteViews.setRoundBackground(R.id.widget_sample_background, width, height)
-    remoteViews.setDirection(R.id.widget_sample, context.resources)
-    remoteViews.setupForegroundTextColors(
-        R.id.sample_text, R.id.sample_clock, R.id.sample_clock_replacement
-    )
-    if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.sample_clock, android.R.attr.colorAccent
-    )
-    if (isWidgetClock.value) {
-        remoteViews.setViewVisibility(R.id.sample_clock, View.VISIBLE)
-        remoteViews.configureClock(R.id.sample_clock)
-        remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, "")
-    } else {
-        remoteViews.setViewVisibility(R.id.sample_clock, View.GONE)
-        remoteViews.setTextViewTextOrHideIfEmpty(
-            R.id.sample_clock_replacement,
-            weekStart.value.shortTitle,
-        )
-    }
-    remoteViews.setTextViewText(R.id.sample_text, context.getString(R.string.widget_text_color))
-    val scale = 1f
-    remoteViews.setTextViewTextInDp(R.id.sample_clock, 34 * scale)
-    remoteViews.setTextViewTextInDp(R.id.sample_clock_replacement, 34 * scale)
-    remoteViews.setTextViewTextInDp(R.id.sample_text, 14 * scale)
-    return remoteViews
-}
-
 private fun RemoteViews.setTextViewTextInDp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size)
 
@@ -1249,7 +1220,7 @@ private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
     }
 }
 
-private fun create4x2RemoteViews(
+fun create4x2RemoteViews(
     context: Context,
     width: Int,
     height: Int,

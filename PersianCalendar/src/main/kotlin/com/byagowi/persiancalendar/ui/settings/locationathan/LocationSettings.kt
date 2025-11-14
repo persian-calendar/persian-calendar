@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocatio
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
 
 @Composable
-fun ColumnScope.LocationSettings(navigateToMap: (() -> Unit)?) {
+fun ColumnScope.LocationSettings(navigateToMap: (() -> Unit)? = null) {
     SettingsClickable(
         title = stringResource(R.string.gps_location),
         summary = stringResource(R.string.gps_location_help),

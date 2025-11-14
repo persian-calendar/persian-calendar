@@ -21,9 +21,9 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.create1x1RemoteViews
 import com.byagowi.persiancalendar.utils.create2x2RemoteViews
 import com.byagowi.persiancalendar.utils.create4x1RemoteViews
+import com.byagowi.persiancalendar.utils.create4x2RemoteViews
 import com.byagowi.persiancalendar.utils.createMapRemoteViews
 import com.byagowi.persiancalendar.utils.createMonthViewRemoteViews
-import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.createWeekViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
@@ -100,14 +100,23 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun Preview(appWidgetId: Int) {
-        WidgetPreview { context, width, height ->
-            createSampleRemoteViews(context, width, height)
+        val coordinates by coordinates.collectAsState()
+        val prayTimes = coordinates?.calculatePrayTimes()
+        key(prayTimes) {
+            WidgetPreview(180.dp) { context, width, height ->
+                val jdn = Jdn.today()
+                val date = jdn on mainCalendar
+                val clock = Clock(GregorianCalendar())
+                create4x2RemoteViews(context, width, height, Jdn.today(), date, clock, prayTimes)
+            }
         }
     }
 
     @Composable
     override fun ColumnScope.Settings(appWidgetId: Int) {
         WidgetSettings()
+        SettingsSectionLayout(R.string.location)
+        LocationSettings()
     }
 }
 
@@ -143,8 +152,8 @@ class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun ColumnScope.Settings(appWidgetId: Int) {
         WidgetColoringSettings()
-        SettingsSectionLayout(R.string.location) { null }
-        LocationSettings(null)
+        SettingsSectionLayout(R.string.location)
+        LocationSettings()
     }
 }
 
