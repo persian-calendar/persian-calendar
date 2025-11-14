@@ -269,9 +269,9 @@ fun update(context: Context, updateDate: Boolean) {
                 context, width, height, jdn, date, widgetTitle, subtitle, clock, widgetId
             )
         }
-        updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, _ ->
+        updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, widgetId ->
             create2x2RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, owghat, clock
+                context, width, height, jdn, date, widgetTitle, subtitle, owghat, clock, widgetId
             )
         }
         updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, _ ->
@@ -1090,6 +1090,9 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
 private fun RemoteViews.setTextViewTextInDp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size)
 
+private fun RemoteViews.setTextViewTextInSp(@IdRes id: Int, size: Float) =
+    setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_SP, size)
+
 fun create1x1RemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate, widgetId: Int
 ): RemoteViews {
@@ -1172,6 +1175,7 @@ fun create2x2RemoteViews(
     subtitle: String,
     owghat: String,
     clock: Clock,
+    appWidgetId: Int,
 ): RemoteViews {
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
@@ -1183,7 +1187,16 @@ fun create2x2RemoteViews(
             if (isCenterAlignWidgets.value) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
-    if (isWidgetClock.value) remoteViews.configureClock(R.id.time_2x2)
+    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
+    remoteViews.setTextViewTextInSp(R.id.date_2x2, 14 * scale)
+    remoteViews.setTextViewTextInSp(R.id.owghat_2x2, 14 * scale)
+    remoteViews.setTextViewTextInSp(R.id.holiday_2x2, 14 * scale)
+    remoteViews.setTextViewTextInSp(R.id.event_2x2, 14 * scale)
+    remoteViews.setTextViewTextInSp(R.id.time_2x2, 34 * scale)
+    if (isWidgetClock.value) {
+        remoteViews.setTextViewTextInSp(R.id.time_header_2x2, 22 * scale)
+        remoteViews.configureClock(R.id.time_2x2)
+    }
     remoteViews.setRoundBackground(R.id.widget_layout2x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout2x2, context.resources)
     remoteViews.setupForegroundTextColors(

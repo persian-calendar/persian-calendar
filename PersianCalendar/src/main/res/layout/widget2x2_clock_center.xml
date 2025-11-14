@@ -28,8 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:textSize="22sp" />
+            android:gravity="center" />
 
         <TextClock
             android:id="@+id/time_2x2"
@@ -37,24 +36,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:textSize="34sp" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/date_2x2"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/owghat_2x2"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/holiday_2x2"
@@ -62,16 +58,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@color/remote_view_holiday_color"
-            android:textSize="14sp" />
+            android:textColor="@color/remote_view_holiday_color" />
 
         <TextView
             android:id="@+id/event_2x2"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp" />
+            android:gravity="center" />
 
     </LinearLayout>
 

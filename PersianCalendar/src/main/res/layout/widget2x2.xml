@@ -26,8 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textAlignment="viewStart"
-            android:textSize="34sp" />
+            android:textAlignment="viewStart" />
 
         <TextView
             android:id="@+id/date_2x2"
@@ -35,8 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textAlignment="viewStart"
-            android:textSize="14sp" />
+            android:textAlignment="viewStart" />
 
         <TextView
             android:id="@+id/owghat_2x2"
@@ -44,8 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textAlignment="viewStart"
-            android:textSize="14sp" />
+            android:textAlignment="viewStart" />
 
         <TextView
             android:id="@+id/holiday_2x2"
@@ -54,8 +51,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:textAlignment="viewStart"
-            android:textColor="@color/remote_view_holiday_color"
-            android:textSize="14sp" />
+            android:textColor="@color/remote_view_holiday_color" />
 
         <TextView
             android:id="@+id/event_2x2"
@@ -63,8 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textAlignment="viewStart"
-            android:textSize="14sp" />
+            android:textAlignment="viewStart" />
 
     </LinearLayout>
 

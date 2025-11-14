@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSectionLayout
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.create1x1RemoteViews
+import com.byagowi.persiancalendar.utils.create2x2RemoteViews
 import com.byagowi.persiancalendar.utils.create4x1RemoteViews
 import com.byagowi.persiancalendar.utils.createMapRemoteViews
 import com.byagowi.persiancalendar.utils.createMonthViewRemoteViews
@@ -79,11 +80,26 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun Content(appWidgetId: Int) {
         BaseLayout(
             preview = {
-                WidgetPreview { context, width, height ->
-                    createSampleRemoteViews(context, width, height)
+                val jdn = Jdn.today()
+                val today = jdn on mainCalendar
+                val clock = Clock(GregorianCalendar())
+                WidgetPreview(200.dp) { context, width, height ->
+                    val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
+                    val widgetTitle = dayTitleSummary(
+                        jdn,
+                        today,
+                        calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
+                    )
+                    create2x2RemoteViews(
+                        context, width, height, jdn, today, widgetTitle, subtitle, "", clock,
+                        appWidgetId
+                    )
                 }
             },
-            settings = { WidgetSettings() },
+            settings = {
+                WidgetTextScale(appWidgetId)
+                WidgetSettings()
+            },
         )
     }
 }
