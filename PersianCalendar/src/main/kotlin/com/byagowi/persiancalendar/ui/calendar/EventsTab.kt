@@ -307,7 +307,13 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         EquinoxCountDown(contentColor, event, backgroundColor)
                     }
                 }
-                this.AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent || event is CalendarEvent.EquinoxCalendarEvent) {
+                this.AnimatedVisibility(
+                    when (event) {
+                        is CalendarEvent.DeviceCalendarEvent -> !language.isPersianOrDari
+                        is CalendarEvent.EquinoxCalendarEvent -> true
+                        else -> false
+                    }
+                ) {
                     Icon(
                         if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
                         else Icons.AutoMirrored.Default.OpenInNew,
@@ -317,9 +323,10 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                     )
                 }
                 this.AnimatedVisibility(
-                    when (event.source) {
-                        EventSource.Iran -> true
-                        EventSource.Afghanistan -> true
+                    when {
+                        language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
+                        event.source == EventSource.Iran -> true
+                        event.source == EventSource.Afghanistan -> true
                         else -> false
                     }
                 ) {
@@ -355,26 +362,36 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         state = tooltipState,
                     ) {
                         Text(
-                            text = when (event.source) {
-                                EventSource.Iran -> "دانشگاه تهران"
-                                EventSource.Afghanistan -> "افغانستان"
+                            text = when {
+                                event.source == EventSource.Iran -> "دانشگاه تهران"
+                                event.source == EventSource.Afghanistan -> "افغانستان"
+                                event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
                                 else -> ""
                             },
-                            color = if (event.isHoliday) MaterialTheme.colorScheme.onPrimaryFixed
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = when {
+                                event is CalendarEvent.DeviceCalendarEvent ->
+                                    contentColor
+
+                                event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
+                                else -> MaterialTheme.colorScheme.onSurfaceVariant
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .padding(start = 4.dp)
                                 .clip(MaterialTheme.shapes.medium)
-                                .clickable(
-                                    enabled = when (event.source) {
-                                        EventSource.Iran -> true
-                                        else -> false
-                                    }
-                                ) { coroutineScope.launch { tooltipState.show() } }
+                                .then(
+                                    if (event.source == EventSource.Iran) Modifier.clickable {
+                                        coroutineScope.launch { tooltipState.show() }
+                                    } else Modifier
+                                )
                                 .background(
-                                    if (event.isHoliday) MaterialTheme.colorScheme.primaryFixed
-                                    else MaterialTheme.colorScheme.surfaceContainerLow
+                                    when {
+                                        event is CalendarEvent.DeviceCalendarEvent ->
+                                            MaterialTheme.colorScheme.surface.copy(alpha = .35f)
+
+                                        event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
+                                        else -> MaterialTheme.colorScheme.surfaceContainerLow
+                                    }
                                 )
                                 .padding(horizontal = 8.dp),
                         )
