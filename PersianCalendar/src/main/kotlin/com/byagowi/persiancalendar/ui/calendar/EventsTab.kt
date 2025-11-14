@@ -85,6 +85,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
@@ -111,6 +112,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -249,12 +251,24 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
 fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
 
+fun Char.isRtl() = when (Character.getDirectionality(this)) {
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT -> true
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC -> true
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING -> true
+    Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE -> true
+
+    Character.DIRECTIONALITY_LEFT_TO_RIGHT -> false
+    Character.DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING -> false
+    Character.DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE -> false
+
+    else -> null
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val language by language.collectAsState()
+    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
     events.forEach { event ->
         val backgroundColor by animateColor(eventColor(event))
@@ -270,133 +284,174 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                 else appCrossfadeSpec)()
             },
         ) { title ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(backgroundColor)
-                    .then(
-                        if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable(
-                            onClick = { launcher.viewEvent(event, context) },
-                        ) else Modifier
-                    )
-                    .focusable(true)
-                    .semantics {
-                        this.contentDescription = if (event.isHoliday) context.getString(
-                            R.string.holiday_reason, event.oneLinerTitleWithTime
-                        ) else event.oneLinerTitleWithTime
-                    }
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                val contentColor by animateColor(eventTextColor(backgroundColor))
-                Column(modifier = Modifier.weight(1f, fill = false)) {
-                    SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
+            val dir = when (title.firstOrNull()?.isRtl()) {
+                true -> LayoutDirection.Rtl
+                false -> LayoutDirection.Ltr
+                else -> LocalLayoutDirection.current
+            }
+            CompositionLocalProvider(LocalLayoutDirection provides dir) {
+                DayEventContent(
+                    backgroundColor = backgroundColor,
+                    event = event,
+                    title = title,
+                    launcher = launcher,
+                    language = language,
+                    coroutineScope = coroutineScope,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun DayEventContent(
+    backgroundColor: Color,
+    event: CalendarEvent<*>,
+    title: String,
+    language: Language,
+    launcher: ManagedActivityResultLauncher<Long, Void?>,
+    coroutineScope: CoroutineScope,
+) {
+    val context = LocalContext.current
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(backgroundColor)
+            .then(
+                if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable(
+                    onClick = { launcher.viewEvent(event, context) },
+                ) else Modifier
+            )
+            .focusable(true)
+            .semantics {
+                this.contentDescription = if (event.isHoliday) context.getString(
+                    R.string.holiday_reason, event.oneLinerTitleWithTime
+                ) else event.oneLinerTitleWithTime
+            }
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        val contentColor by animateColor(eventTextColor(backgroundColor))
+        Column(modifier = Modifier.weight(1f, fill = false)) {
+            SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
+                Text(
+                    title,
+                    color = contentColor,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        textDirection = TextDirection.Content,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+            if (event is CalendarEvent.EquinoxCalendarEvent) {
+                EquinoxCountDown(contentColor, event, backgroundColor)
+            }
+        }
+        this.AnimatedVisibility(
+            when (event) {
+                is CalendarEvent.DeviceCalendarEvent -> !language.isPersianOrDari
+                is CalendarEvent.EquinoxCalendarEvent -> true
+                else -> false
+            }
+        ) {
+            Icon(
+                if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
+                else Icons.AutoMirrored.Default.OpenInNew,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.padding(start = 8.dp),
+            )
+        }
+        this.AnimatedVisibility(
+            when {
+                language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
+                event.source == EventSource.Iran -> true
+                event.source == EventSource.AncientIran -> true
+                event.source == EventSource.International -> true
+                event.source == EventSource.Afghanistan -> true
+                else -> false
+            }
+        ) {
+            val tooltipState = rememberTooltipState()
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                    TooltipAnchorPosition.Above
+                ),
+                tooltip = {
+                    PlainTooltip(shape = MaterialTheme.shapes.medium) {
                         Text(
-                            title,
-                            color = contentColor,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                textDirection = TextDirection.Content,
-                            ),
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                    if (event is CalendarEvent.EquinoxCalendarEvent) {
-                        EquinoxCountDown(contentColor, event, backgroundColor)
-                    }
-                }
-                this.AnimatedVisibility(
-                    when (event) {
-                        is CalendarEvent.DeviceCalendarEvent -> !language.isPersianOrDari
-                        is CalendarEvent.EquinoxCalendarEvent -> true
-                        else -> false
-                    }
-                ) {
-                    Icon(
-                        if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
-                        else Icons.AutoMirrored.Default.OpenInNew,
-                        contentDescription = null,
-                        tint = contentColor,
-                        modifier = Modifier.padding(start = 8.dp),
-                    )
-                }
-                this.AnimatedVisibility(
-                    when {
-                        language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
-                        event.source == EventSource.Iran -> true
-                        event.source == EventSource.Afghanistan -> true
-                        else -> false
-                    }
-                ) {
-                    val tooltipState = rememberTooltipState()
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                            TooltipAnchorPosition.Above
-                        ),
-                        tooltip = {
-                            PlainTooltip(shape = MaterialTheme.shapes.medium) {
-                                Text(
-                                    buildAnnotatedString {
-                                        appendLine("تقویم رسمی کشور")
-                                        appendLine("تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران")
-                                        val sourceLink = event.source?.link
-                                        if (sourceLink != null && !sourceLink.startsWith("~")) withLink(
-                                            link = LinkAnnotation.Url(
-                                                url = sourceLink,
-                                                styles = TextLinkStyles(
-                                                    SpanStyle(
-                                                        color = MaterialTheme.colorScheme.inversePrimary,
-                                                        textDecoration = TextDecoration.Underline
-                                                    )
-                                                ),
+                            buildAnnotatedString {
+                                if (event.source == EventSource.Iran) {
+                                    appendLine("تقویم رسمی کشور")
+                                    appendLine("تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران")
+                                    val sourceLink = event.source.link
+                                    withLink(
+                                        link = LinkAnnotation.Url(
+                                            url = sourceLink,
+                                            styles = TextLinkStyles(
+                                                SpanStyle(
+                                                    color = MaterialTheme.colorScheme.inversePrimary,
+                                                    textDecoration = TextDecoration.Underline
+                                                )
                                             ),
-                                        ) { append(stringResource(R.string.view_source)) }
-                                    },
-                                    textAlign = TextAlign.Center,
-                                )
-                            }
-                        },
-                        enableUserInput = false,
-                        state = tooltipState,
-                    ) {
-                        Text(
-                            text = when {
-                                event.source == EventSource.Iran -> "دانشگاه تهران"
-                                event.source == EventSource.Afghanistan -> "افغانستان"
-                                event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
-                                else -> ""
+                                        ),
+                                    ) { append(stringResource(R.string.view_source)) }
+                                } else {
+                                    append("این رویداد از تقویم نصب‌شده پیش از این برنامه در دستگاه شما می‌آید")
+                                }
                             },
-                            color = when {
-                                event is CalendarEvent.DeviceCalendarEvent ->
-                                    contentColor
-
-                                event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
-                                else -> MaterialTheme.colorScheme.onSurfaceVariant
-                            },
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .padding(start = 4.dp)
-                                .clip(MaterialTheme.shapes.medium)
-                                .then(
-                                    if (event.source == EventSource.Iran) Modifier.clickable {
-                                        coroutineScope.launch { tooltipState.show() }
-                                    } else Modifier
-                                )
-                                .background(
-                                    when {
-                                        event is CalendarEvent.DeviceCalendarEvent ->
-                                            MaterialTheme.colorScheme.surface.copy(alpha = .35f)
-
-                                        event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
-                                        else -> MaterialTheme.colorScheme.surfaceContainerLow
-                                    }
-                                )
-                                .padding(horizontal = 8.dp),
+                            textAlign = TextAlign.Center,
                         )
                     }
-                }
+                },
+                enableUserInput = false,
+                state = tooltipState,
+            ) {
+                Text(
+                    text = when {
+                        event.source == EventSource.Iran -> "دانشگاه تهران"
+                        event.source == EventSource.Afghanistan -> "افغانستان"
+                        event.source == EventSource.International -> "بین‌المللی"
+                        event.source == EventSource.AncientIran -> "جشن‌های تاریخی"
+                        event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
+                        else -> ""
+                    },
+                    color = when {
+                        event is CalendarEvent.DeviceCalendarEvent ->
+                            MaterialTheme.colorScheme.onSurface
+                        event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .then(
+                            if (when {
+                                    event.source == EventSource.Iran -> true
+                                    event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
+                                    else -> false
+                                }
+                            ) Modifier.clickable {
+                                coroutineScope.launch { tooltipState.show() }
+                            } else Modifier,
+                        )
+                        .background(
+                            when {
+                                event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.surface.copy(
+                                    alpha = .45f
+                                )
+
+                                event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
+                                else -> MaterialTheme.colorScheme.surfaceContainerLow
+                            }
+                        )
+                        .padding(horizontal = 8.dp),
+                )
             }
         }
     }
@@ -426,7 +481,9 @@ private fun EquinoxCountDown(
             showHoroscopeDialog = false
         }
         if (isAstronomicalExtraFeaturesEnabled) TooltipBox(
-            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                TooltipAnchorPosition.Above
+            ),
             tooltip = { PlainTooltip { Text(stringResource(R.string.horoscope)) } },
             state = rememberTooltipState()
         ) {
@@ -492,7 +549,9 @@ private fun EquinoxCountDownContent(
                         )
                     }
                 }
-                Text(parts[1], color = contentColor, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    parts[1], color = contentColor, style = MaterialTheme.typography.bodyMedium
+                )
             } else Text(x, color = contentColor, style = MaterialTheme.typography.bodyMedium)
         }
     }
