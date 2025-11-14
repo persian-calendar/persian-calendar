@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -32,9 +33,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
@@ -64,18 +67,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
@@ -378,51 +377,44 @@ private fun DayEventContent(
                 else -> false
             }
         ) {
-            val tooltipState = rememberTooltipState()
+            val tooltipState = rememberTooltipState(isPersistent = true)
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                     TooltipAnchorPosition.Above
                 ),
                 tooltip = {
-                    PlainTooltip(shape = MaterialTheme.shapes.medium) {
-                        val calendar = stringResource(event.date.calendar.title)
-                        Text(
-                            buildAnnotatedString {
-                                if (event is CalendarEvent.DeviceCalendarEvent) {
-                                    append("این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه در گوشی شما به‌صورت پیش‌فرض نصب بوده است")
-                                } else if (event.source == EventSource.Iran) {
-                                    appendLine("تقویم رسمی کشور")
-                                    appendLine("تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران")
-                                    appendLine(calendar)
-                                    appendLine()
-                                    withLink(
-                                        link = LinkAnnotation.Url(
-                                            url = event.source.link,
-                                            styles = TextLinkStyles(
-                                                SpanStyle(
-                                                    color = MaterialTheme.colorScheme.inversePrimary,
-                                                    textDecoration = TextDecoration.Underline
-                                                )
-                                            ),
-                                        ),
-                                    ) { append(stringResource(R.string.view_source)) }
-                                } else if (event.source == EventSource.Afghanistan) {
-                                    appendLine(stringResource(R.string.afghanistan_events))
-                                    append(calendar)
-                                } else if (event.source == EventSource.International) {
-                                    appendLine(stringResource(R.string.international))
-                                    append(calendar)
-                                } else if (event.source == EventSource.AncientIran) {
-                                    appendLine("این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است")
-                                    appendLine()
-                                    (event.date as? PersianDate)?.let {
-                                        append("این روز معادل ${jalaliDayOfYear(it)} است")
-                                    }
-                                }
-                            },
-                            textAlign = TextAlign.Center,
-                        )
+                    val text = when {
+                        event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه در گوشی شما به‌صورت پیش‌فرض نصب بوده است"
+
+                        event.source == EventSource.Iran -> """تقویم رسمی کشور
+تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
+
+                        event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
+
+                        event.source == EventSource.International -> stringResource(R.string.international)
+
+                        event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است\n\n" + ((event.date as? PersianDate)?.let {
+                            "این روز معادل ${jalaliDayOfYear(it)} است"
+                        } ?: "")
+
+                        else -> ""
                     }
+                    RichTooltip(
+                        maxWidth = 240.dp,
+                        tonalElevation = 12.dp,
+                        action = if (event.source == EventSource.Iran) ({
+                            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                FilledTonalButton(onClick = {
+                                    val uri = event.source.link.toUri()
+                                    CustomTabsIntent.Builder().build().launchUrl(context, uri)
+                                }) { Text(stringResource(R.string.view_source)) }
+                            }
+                        }) else null,
+                        title = if (event is CalendarEvent.DeviceCalendarEvent || event.source == EventSource.AncientIran) null else ({
+                            Text(stringResource(event.date.calendar.title))
+                        }),
+                        caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
+                    ) { Text(text, textAlign = TextAlign.Center) }
                 },
                 enableUserInput = false,
                 state = tooltipState,
