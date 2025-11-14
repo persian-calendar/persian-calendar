@@ -96,7 +96,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -110,6 +109,7 @@ import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
+import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
@@ -385,15 +385,19 @@ private fun DayEventContent(
                 ),
                 tooltip = {
                     PlainTooltip(shape = MaterialTheme.shapes.medium) {
+                        val calendar = stringResource(event.date.calendar.title)
                         Text(
                             buildAnnotatedString {
-                                if (event.source == EventSource.Iran) {
+                                if (event is CalendarEvent.DeviceCalendarEvent) {
+                                    append("این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه در گوشی شما به‌صورت پیش‌فرض نصب بوده است")
+                                } else if (event.source == EventSource.Iran) {
                                     appendLine("تقویم رسمی کشور")
                                     appendLine("تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران")
-                                    val sourceLink = event.source.link
+                                    appendLine(calendar)
+                                    appendLine()
                                     withLink(
                                         link = LinkAnnotation.Url(
-                                            url = sourceLink,
+                                            url = event.source.link,
                                             styles = TextLinkStyles(
                                                 SpanStyle(
                                                     color = MaterialTheme.colorScheme.inversePrimary,
@@ -402,8 +406,18 @@ private fun DayEventContent(
                                             ),
                                         ),
                                     ) { append(stringResource(R.string.view_source)) }
-                                } else {
-                                    append("این رویداد از تقویم نصب‌شده پیش از این برنامه در دستگاه شما می‌آید")
+                                } else if (event.source == EventSource.Afghanistan) {
+                                    appendLine(stringResource(R.string.afghanistan_events))
+                                    append(calendar)
+                                } else if (event.source == EventSource.International) {
+                                    appendLine(stringResource(R.string.international))
+                                    append(calendar)
+                                } else if (event.source == EventSource.AncientIran) {
+                                    appendLine("این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است")
+                                    appendLine()
+                                    (event.date as? PersianDate)?.let {
+                                        append("این روز معادل ${jalaliDayOfYear(it)} است")
+                                    }
                                 }
                             },
                             textAlign = TextAlign.Center,
@@ -428,21 +442,13 @@ private fun DayEventContent(
                     else -> MaterialTheme.colorScheme.surfaceContainerLow
                 }
                 val chipText = when {
-                    event.source == EventSource.AncientIran -> listOf("ایران باستان", "جلالی")
-                    event is CalendarEvent.DeviceCalendarEvent -> listOf("تقویم شخصی")
-                    else -> listOfNotNull(
-                        when {
-                            event.source == EventSource.Iran -> "دانشگاه تهران"
-                            event.source == EventSource.Afghanistan -> "افغانستان"
-                            event.source == EventSource.International -> "بین‌المللی"
-                            else -> null
-                        },
-                        when {
-                            language.isPersianOrDari -> stringResource(event.date.calendar.shortTitle)
-                            else -> null
-                        },
-                    )
-                }.joinToString(spacedComma)
+                    event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
+                    event.source == EventSource.AncientIran -> "ایران باستان، جلالی"
+                    event.source == EventSource.Iran -> "دانشگاه تهران"
+                    event.source == EventSource.Afghanistan -> "افغانستان"
+                    event.source == EventSource.International -> "بین‌المللی"
+                    else -> ""
+                }
                 Text(
                     text = chipText,
                     color = chipTextColor,
@@ -453,6 +459,9 @@ private fun DayEventContent(
                         .then(
                             if (when {
                                     event.source == EventSource.Iran -> true
+                                    event.source == EventSource.AncientIran -> true
+                                    event.source == EventSource.International -> true
+                                    event.source == EventSource.Afghanistan -> true
                                     event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
                                     else -> false
                                 }

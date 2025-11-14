@@ -152,7 +152,7 @@ class CalendarTests {
             val persianDate = jdn.toPersianDate()
             assertEquals(
                 "۱۵ دی جلالی ۸۲۹",
-                jalaliName(persianDate, persianDayOfYear(persianDate, jdn))
+                jalaliName(persianDate.year, persianDayOfYear(persianDate, jdn))
             )
         }
         run {
@@ -197,7 +197,7 @@ class CalendarTests {
                 actual = fasliDayName(dayOfYear),
                 message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name
             )
-            jalaliName(jdn.toPersianDate(), dayOfYear)
+            jalaliName(jdn.toPersianDate().year, dayOfYear)
             formatAsSeleucidDate(jdn)
         }
     }

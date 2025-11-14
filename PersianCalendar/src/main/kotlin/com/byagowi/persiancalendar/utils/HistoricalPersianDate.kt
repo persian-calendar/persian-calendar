@@ -49,12 +49,12 @@ private val jalaliMonthNames = listOf(
 )
 
 @VisibleForTesting
-fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
+fun jalaliName(persianYear: Int?, dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     return when (val month = (dayOfYear - 1) / 30) {
         12 -> "روز " + numeral.value.format(dayOfMonth + 1) + " خمسهٔ جلالی"
         else -> numeral.value.format(dayOfMonth + 1) + " " + jalaliMonthNames[month] + " جلالی"
-    } + " " + numeral.value.format(persianDate.year - 457)
+    } + (if (persianYear != null) " " + numeral.value.format(persianYear - 457) else "")
 }
 // endregion
 
@@ -63,5 +63,13 @@ val persianDelimiter = " ــــ "
 
 fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
     val dayOfYear = persianDayOfYear(persianDate, jdn)
-    return jalaliName(persianDate, dayOfYear) + persianDelimiter + fasliDayName(dayOfYear)
+    return jalaliName(persianDate.year, dayOfYear) + persianDelimiter + fasliDayName(dayOfYear)
 }
+
+fun jalaliDayOfYear(date: PersianDate): String {
+    val dayOfYear = modernPersianMonthDays[date.month - 1] + date.dayOfMonth
+    return jalaliName(null, dayOfYear)
+}
+
+private val modernPersianMonthDays =
+    listOf(0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336, 366)
