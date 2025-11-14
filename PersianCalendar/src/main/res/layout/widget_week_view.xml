@@ -118,7 +118,6 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="4dp"
                     android:textStyle="bold"
-                    android:textSize="14sp"
                     tools:text="پ" />
 
                 <FrameLayout

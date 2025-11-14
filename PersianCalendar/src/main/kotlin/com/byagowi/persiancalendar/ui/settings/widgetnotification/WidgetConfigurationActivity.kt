@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.utils.createMapRemoteViews
 import com.byagowi.persiancalendar.utils.createMonthViewRemoteViews
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
+import com.byagowi.persiancalendar.utils.createWeekViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import java.util.GregorianCalendar
@@ -113,14 +114,17 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun Preview(appWidgetId: Int) {
-        WidgetPreview { context, width, height ->
-            createSampleRemoteViews(context, width, height)
+        WidgetPreview(112.dp) { context, width, height ->
+            val today = Jdn.today()
+            val date = today on mainCalendar
+            createWeekViewRemoteViews(context, width, height, date, today, appWidgetId)
         }
     }
 
     @Composable
     override fun ColumnScope.Settings(appWidgetId: Int) {
-        WidgetSettings()
+        WidgetTextScale(appWidgetId)
+        WidgetColoringSettings()
     }
 }
 

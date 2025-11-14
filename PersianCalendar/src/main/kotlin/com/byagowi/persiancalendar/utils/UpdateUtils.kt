@@ -295,8 +295,8 @@ fun update(context: Context, updateDate: Boolean) {
         updateFromRemoteViews<WidgetSchedule>(context, now) { width, _, hasSize, widgetId ->
             createScheduleRemoteViews(context, width.takeIf { hasSize }, widgetId)
         }
-        updateFromRemoteViews<WidgetWeekView>(context, now) { width, height, _, _ ->
-            createWeekViewRemoteViews(context, width, height, date, jdn)
+        updateFromRemoteViews<WidgetWeekView>(context, now) { width, height, _, widgetId ->
+            createWeekViewRemoteViews(context, width, height, date, jdn, widgetId)
         }
     }
 
@@ -1354,8 +1354,8 @@ private fun create4x2RemoteViews(
     return remoteViews
 }
 
-private fun createWeekViewRemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn
+fun createWeekViewRemoteViews(
+    context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn, widgetId: Int
 ): RemoteViews {
     val weekDays = listOf(
         Triple(today - 3, R.id.textWeekDayText1, R.id.textWeekDayNumber1),
@@ -1381,7 +1381,12 @@ private fun createWeekViewRemoteViews(
     }
     val weekEnds = weekEnds.value
 
+    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
+    remoteViews.setTextViewTextInSp(R.id.textDate, 14 * scale)
+
     weekDays.forEachIndexed { index, (day, weekDayNameViewId, weekDayNumberViewId) ->
+        remoteViews.setTextViewTextInSp(weekDayNameViewId, 14 * scale)
+        remoteViews.setTextViewTextInSp(weekDayNumberViewId, 14 * scale)
         val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day, 0)
         val deviceEvents =
             if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
