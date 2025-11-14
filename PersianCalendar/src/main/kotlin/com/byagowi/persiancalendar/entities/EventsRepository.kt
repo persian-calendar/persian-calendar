@@ -68,16 +68,6 @@ data class EventsRepository @VisibleForTesting constructor(
         else -> record.isHoliday
     }
 
-    private fun multiCountryComment(calendarRecord: CalendarRecord): String {
-        return if (calendarRecord.isHoliday && iranHolidays && afghanistanHolidays) {
-            when (calendarRecord.source) {
-                EventSource.Iran -> "ایران"
-                EventSource.Afghanistan -> "افغانستان"
-                else -> ""
-            } + spacedComma
-        } else ""
-    }
-
     init {
         // It is vital to configure calendar before loading of the events
         IslamicDate.useUmmAlQura =
@@ -135,9 +125,8 @@ data class EventsRepository @VisibleForTesting constructor(
         record: CalendarRecord, calendar: Calendar
     ): T? {
         if (skipEvent(record, calendar)) return null
-        val multiCountryComment = multiCountryComment(record)
         val dayAndMonth = formatDayAndMonth(calendar, record.day, record.month)
-        val title = "${record.title} ($multiCountryComment$dayAndMonth)"
+        val title = "${record.title} ($dayAndMonth)"
 
         val holiday = determineIsHoliday(record)
         return (when (calendar) {
