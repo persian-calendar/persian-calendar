@@ -36,11 +36,13 @@ fun createStatusIcon(
     }
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)
-    if (bounds.width() > 90f) {
-        paint.textSize *= .9f
+    val size = 90
+    val widthWithoutPadding = size - 10
+    if (bounds.width() > widthWithoutPadding) {
+        paint.textSize *= widthWithoutPadding.toFloat() / bounds.width()
         paint.getTextBounds(text, 0, text.length, bounds)
     }
-    return createBitmap(90, 90).applyCanvas {
+    return createBitmap(size, size).applyCanvas {
         val y = when {
             numeral.isTamil -> if (text.length == 1) 62.5f else 55f
             else -> 45f + bounds.height() / 2f
