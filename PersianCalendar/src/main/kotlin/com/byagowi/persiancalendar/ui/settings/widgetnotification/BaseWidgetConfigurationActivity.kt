@@ -59,19 +59,19 @@ abstract class BaseWidgetConfigurationActivity : BaseActivity() {
     protected open val successOnBack get() = true
 
     @Composable
-    abstract fun Content(appWidgetId: Int)
+    abstract fun Preview(appWidgetId: Int)
 
     @Composable
-    protected fun BaseLayout(
-        preview: @Composable () -> Unit,
-        settings: @Composable ColumnScope.() -> Unit,
-    ) {
+    abstract fun ColumnScope.Settings(appWidgetId: Int)
+
+    @Composable
+    private fun Content(appWidgetId: Int) {
         Column(
             Modifier
                 .safeDrawingPadding()
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) {
-            preview()
+            Preview(appWidgetId)
             Column(
                 Modifier
                     .fillMaxSize()
@@ -94,7 +94,7 @@ abstract class BaseWidgetConfigurationActivity : BaseActivity() {
                             modifier = Modifier.padding(horizontal = 8.dp),
                         )
                     }
-                    settings()
+                    Settings(appWidgetId)
                 }
             }
         }

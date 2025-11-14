@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.agewidget
 import android.appwidget.AppWidgetManager
 import android.os.Bundle
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
@@ -65,80 +66,77 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     override val successOnBack: Boolean get() = false
 
     @Composable
-    override fun Content(appWidgetId: Int) {
-        val today = remember { Jdn.today() }
+    override fun Preview(appWidgetId: Int) {
+        WidgetPreview { context, width, height ->
+            createAgeRemoteViews(context, width, height, appWidgetId, Jdn.today())
+        }
+    }
+
+    @Composable
+    override fun ColumnScope.Settings(appWidgetId: Int) {
         val context = LocalContext.current
-        BaseLayout(
-            preview = {
-                WidgetPreview { context, width, height ->
-                    createAgeRemoteViews(context, width, height, appWidgetId, today)
+        val initialTitle = remember {
+            context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null).orEmpty()
+        }
+        var text by rememberSaveable { mutableStateOf(initialTitle) }
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 16.dp),
+            value = text,
+            onValueChange = {
+                text = it
+                context.preferences.edit {
+                    putString(PREF_TITLE_AGE_WIDGET + appWidgetId, text)
                 }
             },
-            settings = {
-                val initialTitle = remember {
-                    context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null)
-                        .orEmpty()
-                }
-                var text by rememberSaveable { mutableStateOf(initialTitle) }
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                    value = text,
-                    onValueChange = {
-                        text = it
-                        context.preferences.edit {
-                            putString(PREF_TITLE_AGE_WIDGET + appWidgetId, text)
-                        }
-                    },
-                    label = { Text(stringResource(R.string.age_widget_title)) },
-                )
-
-                val primaryKey = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                var primaryJdn by remember {
-                    mutableStateOf(context.preferences.getJdnOrNull(primaryKey) ?: today)
-                }
-                SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
-                    DatePickerDialog(initialJdn = primaryJdn, onDismissRequest = onDismissRequest) {
-                        primaryJdn = it
-                        context.preferences.edit { putJdn(primaryKey, it) }
-                    }
-                }
-
-                this.AnimatedVisibility(primaryJdn > today) {
-                    val secondaryKey = PREF_SELECTED_DATE_AGE_WIDGET_START + appWidgetId
-                    var jdn by remember {
-                        mutableStateOf(context.preferences.getJdnOrNull(secondaryKey) ?: today)
-                    }
-                    SettingsClickable(stringResource(R.string.starting_date)) { onDismissRequest ->
-                        DatePickerDialog(initialJdn = jdn, onDismissRequest = onDismissRequest) {
-                            jdn = it
-                            context.preferences.edit { putJdn(secondaryKey, it) }
-                        }
-                    }
-                }
-
-                WidgetTextScale(appWidgetId)
-
-                val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
-                WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
-                this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
-                    SettingsColor(
-                        title = stringResource(R.string.widget_text_color),
-                        summary = stringResource(R.string.select_widgets_text_color),
-                        isBackgroundPick = false,
-                        key = PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
-                    )
-                }
-                this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
-                    SettingsColor(
-                        title = stringResource(R.string.widget_background_color),
-                        summary = stringResource(R.string.select_widgets_background_color),
-                        isBackgroundPick = true,
-                        key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
-                    )
-                }
-            },
+            label = { Text(stringResource(R.string.age_widget_title)) },
         )
+
+        val primaryKey = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
+        val today = Jdn.today()
+        var primaryJdn by remember {
+            mutableStateOf(context.preferences.getJdnOrNull(primaryKey) ?: today)
+        }
+        SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
+            DatePickerDialog(initialJdn = primaryJdn, onDismissRequest = onDismissRequest) {
+                primaryJdn = it
+                context.preferences.edit { putJdn(primaryKey, it) }
+            }
+        }
+
+        this.AnimatedVisibility(primaryJdn > today) {
+            val secondaryKey = PREF_SELECTED_DATE_AGE_WIDGET_START + appWidgetId
+            var jdn by remember {
+                mutableStateOf(context.preferences.getJdnOrNull(secondaryKey) ?: today)
+            }
+            SettingsClickable(stringResource(R.string.starting_date)) { onDismissRequest ->
+                DatePickerDialog(initialJdn = jdn, onDismissRequest = onDismissRequest) {
+                    jdn = it
+                    context.preferences.edit { putJdn(secondaryKey, it) }
+                }
+            }
+        }
+
+        WidgetTextScale(appWidgetId)
+
+        val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
+        WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
+        this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+            SettingsColor(
+                title = stringResource(R.string.widget_text_color),
+                summary = stringResource(R.string.select_widgets_text_color),
+                isBackgroundPick = false,
+                key = PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
+            )
+        }
+        this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+            SettingsColor(
+                title = stringResource(R.string.widget_background_color),
+                summary = stringResource(R.string.select_widgets_background_color),
+                isBackgroundPick = true,
+                key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
+            )
+        }
     }
 }
