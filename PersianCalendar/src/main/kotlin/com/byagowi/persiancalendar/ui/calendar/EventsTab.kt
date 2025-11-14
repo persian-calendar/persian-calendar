@@ -427,58 +427,45 @@ private fun DayEventContent(
                     event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
                     else -> MaterialTheme.colorScheme.surfaceContainerLow
                 }
-                EventTypeChip(
-                    title = when {
-                        event.source == EventSource.AncientIran -> "ایران باستان${spacedComma}جلالی"
-                        event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
-                        else -> listOfNotNull(
-                            when {
-                                event.source == EventSource.Iran -> "دانشگاه تهران"
-                                event.source == EventSource.Afghanistan -> "افغانستان"
-                                event.source == EventSource.International -> "بین‌المللی"
-                                else -> null
-                            },
-                            when {
-                                language.isPersianOrDari -> stringResource(event.date.calendar.shortTitle)
-                                else -> null
-                            },
-                        ).joinToString(spacedComma)
-                    },
+                val chipText = when {
+                    event.source == EventSource.AncientIran -> listOf("ایران باستان", "جلالی")
+                    event is CalendarEvent.DeviceCalendarEvent -> listOf("تقویم شخصی")
+                    else -> listOfNotNull(
+                        when {
+                            event.source == EventSource.Iran -> "دانشگاه تهران"
+                            event.source == EventSource.Afghanistan -> "افغانستان"
+                            event.source == EventSource.International -> "بین‌المللی"
+                            else -> null
+                        },
+                        when {
+                            language.isPersianOrDari -> stringResource(event.date.calendar.shortTitle)
+                            else -> null
+                        },
+                    )
+                }.joinToString(spacedComma)
+                Text(
+                    text = chipText,
                     color = chipTextColor,
-                    modifier = if (when {
-                            event.source == EventSource.Iran -> true
-                            event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
-                            else -> false
-                        }
-                    ) Modifier.clickable {
-                        coroutineScope.launch { tooltipState.show() }
-                    } else Modifier,
-                    backgroundColor = chipBackgroundColor,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .then(
+                            if (when {
+                                    event.source == EventSource.Iran -> true
+                                    event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
+                                    else -> false
+                                }
+                            ) Modifier.clickable {
+                                coroutineScope.launch { tooltipState.show() }
+                            } else Modifier,
+                        )
+                        .background(chipBackgroundColor)
+                        .padding(horizontal = 8.dp),
                 )
             }
         }
     }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun EventTypeChip(
-    title: String,
-    color: Color,
-    backgroundColor: Color,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = title,
-        color = color,
-        style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .then(modifier)
-            .background(backgroundColor)
-            .padding(horizontal = 8.dp),
-    )
 }
 
 private val countDownTimeParts = listOf(
