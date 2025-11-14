@@ -423,6 +423,7 @@ private fun DayEventContent(
                     color = when {
                         event is CalendarEvent.DeviceCalendarEvent ->
                             MaterialTheme.colorScheme.onSurface
+
                         event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
                         else -> MaterialTheme.colorScheme.onSurfaceVariant
                     },

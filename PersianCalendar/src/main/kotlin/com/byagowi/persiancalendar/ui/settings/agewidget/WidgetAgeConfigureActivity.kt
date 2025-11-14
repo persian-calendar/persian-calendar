@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET_START
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
-import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
@@ -39,7 +38,6 @@ import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,21 +68,10 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     override fun Content(appWidgetId: Int) {
         val today = remember { Jdn.today() }
         val context = LocalContext.current
-        val textScaleKey = PREF_WIDGET_TEXT_SCALE + appWidgetId
-        val textScale = remember {
-            MutableStateFlow(context.preferences.getFloat(textScaleKey, 1f))
-        }
         BaseLayout(
             preview = {
                 WidgetPreview { context, width, height ->
-                    createAgeRemoteViews(
-                        context,
-                        width,
-                        height,
-                        appWidgetId,
-                        today,
-                        scale = textScale.value
-                    )
+                    createAgeRemoteViews(context, width, height, appWidgetId, today)
                 }
             },
             settings = {
@@ -131,7 +118,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
                     }
                 }
 
-                WidgetTextScale(textScaleKey, textScale)
+                WidgetTextScale(appWidgetId)
 
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
                 WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)

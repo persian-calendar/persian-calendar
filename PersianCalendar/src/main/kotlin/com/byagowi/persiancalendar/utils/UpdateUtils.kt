@@ -259,17 +259,14 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     AppWidgetManager.getInstance(context).run {
         updateFromRemoteViews<AgeWidget>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
-            createAgeRemoteViews(context, width, height, widgetId, jdn, scale)
+            createAgeRemoteViews(context, width, height, widgetId, jdn)
         }
         updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
-            create1x1RemoteViews(context, width, height, date, scale)
+            create1x1RemoteViews(context, width, height, date, widgetId)
         }
         updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create4x1RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, clock, scale
+                context, width, height, jdn, date, widgetTitle, subtitle, clock, widgetId
             )
         }
         updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, _ ->
@@ -419,9 +416,10 @@ private fun getWidgetTextColor(
 ) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(
-    context: Context, width: Int, height: Int, widgetId: Int, today: Jdn, scale: Float
+    context: Context, width: Int, height: Int, widgetId: Int, today: Jdn
 ): RemoteViews {
     val preferences = context.preferences
+    val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
     val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
     val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null).orEmpty()
     val subtitle = calculateDaysDifference(context.resources, primary, today, isInWidget = true)
@@ -1093,8 +1091,9 @@ private fun RemoteViews.setTextViewTextInDp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size)
 
 fun create1x1RemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, scale: Float
+    context: Context, width: Int, height: Int, date: AbstractDate, widgetId: Int
 ): RemoteViews {
+    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
@@ -1119,8 +1118,9 @@ fun create4x1RemoteViews(
     widgetTitle: String,
     subtitle: String,
     clock: Clock,
-    scale: Float,
+    appWidgetId: Int,
 ): RemoteViews {
+    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)

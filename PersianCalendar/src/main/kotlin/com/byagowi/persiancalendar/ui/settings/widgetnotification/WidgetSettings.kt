@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
@@ -170,7 +171,10 @@ private fun WidgetPreferenceDebounce(
 }
 
 @Composable
-fun WidgetTextScale(key: String, textScale: MutableStateFlow<Float>) {
+fun WidgetTextScale(appWidgetId: Int) {
+    val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
+    val preferences = LocalContext.current.preferences
+    val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
     WidgetPreferenceDebounce(key, textScale) { value, onValueChange ->
         SettingsSlider(
             title = stringResource(R.string.widget_text_size),

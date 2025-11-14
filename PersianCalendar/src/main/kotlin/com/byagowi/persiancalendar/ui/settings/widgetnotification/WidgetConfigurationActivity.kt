@@ -4,10 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
-import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -27,24 +25,20 @@ import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
-import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.GregorianCalendar
 
 class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun Content(appWidgetId: Int) {
-        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
-        val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
         BaseLayout(
             preview = {
                 val today = Jdn.today() on mainCalendar
                 WidgetPreview { context, width, height ->
-                    create1x1RemoteViews(context, width, height, today, textScale.value)
+                    create1x1RemoteViews(context, width, height, today, appWidgetId)
                 }
             },
             settings = {
-                WidgetTextScale(key, textScale)
+                WidgetTextScale(appWidgetId)
                 WidgetColoringSettings()
             },
         )
@@ -54,8 +48,6 @@ class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
 class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun Content(appWidgetId: Int) {
-        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
-        val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
         BaseLayout(
             preview = {
                 val jdn = Jdn.today()
@@ -70,12 +62,12 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
                     )
                     create4x1RemoteViews(
                         context, width, height, jdn, today, widgetTitle, subtitle, clock,
-                        scale = textScale.value,
+                        appWidgetId
                     )
                 }
             },
             settings = {
-                WidgetTextScale(key, textScale)
+                WidgetTextScale(appWidgetId)
                 WidgetSettings()
             },
         )
