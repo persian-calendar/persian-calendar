@@ -39,8 +39,6 @@ sealed class CalendarEvent<T : AbstractDate>(
         val end: GregorianCalendar, val color: String, val time: String?,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date, source)
 
-    val compactTitle get() = title.replace(Regex(" \\([^)]+\\)$"), "")
-
     val oneLinerTitleWithTime
         get() = when (this) {
             is DeviceCalendarEvent -> if (time == null) title else {
@@ -48,18 +46,6 @@ sealed class CalendarEvent<T : AbstractDate>(
             }
 
             else -> title
-        }
-
-    val formattedTitle
-        get() = when (this) {
-            is GregorianCalendarEvent,
-            is IslamicCalendarEvent,
-            is PersianCalendarEvent,
-            is EquinoxCalendarEvent,
-            is NepaliCalendarEvent -> title
-
-            is DeviceCalendarEvent -> oneLinerTitleWithTime +
-                    if (description.isNotBlank()) "$title ($description)" else ""
         }
 
     override fun equals(other: Any?): Boolean {

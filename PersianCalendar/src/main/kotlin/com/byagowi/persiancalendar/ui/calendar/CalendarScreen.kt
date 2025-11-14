@@ -817,7 +817,7 @@ private fun Search(viewModel: CalendarViewModel) {
                         .padding(vertical = 20.dp, horizontal = 24.dp),
                 ) {
                     AnimatedContent(
-                        targetState = event.formattedTitle,
+                        targetState = event.title,
                         label = "title",
                         transitionSpec = appCrossfadeSpec,
                     ) { state ->

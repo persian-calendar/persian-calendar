@@ -640,10 +640,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val overflows = events.size > dayEventsCountToShow
         events.take(dayEventsCountToShow - if (overflows) 1 else 0).forEach {
             val eventView = RemoteViews(context.packageName, R.layout.widget_month_event)
-            eventView.setTextViewText(
-                R.id.title,
-                if (it is CalendarEvent.DeviceCalendarEvent) it.title else it.title.split(" (")[0]
-            )
+            eventView.setTextViewText(R.id.title, it.title)
             when {
                 it is CalendarEvent.DeviceCalendarEvent -> {
                     val background =
@@ -1451,7 +1448,6 @@ private fun setEventsInWidget(
     val holidays = getEventsTitle(
         events,
         holiday = true,
-        compact = true,
         showDeviceCalendarEvents = true,
         insertRLM = resources.isRtl,
         addIsHoliday = isHighTextContrastEnabled.value,
@@ -1464,7 +1460,6 @@ private fun setEventsInWidget(
     val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets.value) getEventsTitle(
         events,
         holiday = false,
-        compact = true,
         showDeviceCalendarEvents = true,
         insertRLM = resources.isRtl,
         addIsHoliday = false
@@ -1642,7 +1637,6 @@ private data class NotificationData(
             val holidays = getEventsTitle(
                 events,
                 holiday = true,
-                compact = true,
                 showDeviceCalendarEvents = true,
                 insertRLM = isRtl,
                 addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
@@ -1651,7 +1645,6 @@ private data class NotificationData(
             val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
                 events,
                 holiday = false,
-                compact = true,
                 showDeviceCalendarEvents = true,
                 insertRLM = isRtl,
                 addIsHoliday = false

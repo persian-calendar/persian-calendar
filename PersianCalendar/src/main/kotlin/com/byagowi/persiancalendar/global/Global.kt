@@ -146,16 +146,11 @@ import java.util.TimeZone
 // are avoiding storing complicated things on it.
 
 private val monthNameEmptyList = List(12) { "" }
-var persianMonths = monthNameEmptyList
-    private set
-var oldEraPersianMonths = monthNameEmptyList
-    private set
-var islamicMonths = monthNameEmptyList
-    private set
-var gregorianMonths = monthNameEmptyList
-    private set
-var nepaliMonths = monthNameEmptyList
-    private set
+private var persianMonths = monthNameEmptyList
+private var oldEraPersianMonths = monthNameEmptyList
+private var islamicMonths = monthNameEmptyList
+private var gregorianMonths = monthNameEmptyList
+private var nepaliMonths = monthNameEmptyList
 private val weekDaysEmptyList = List(7) { "" }
 var weekDaysTitles = weekDaysEmptyList
     private set

@@ -8,12 +8,6 @@ import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.nepaliEvents
 import com.byagowi.persiancalendar.generated.persianEvents
-import com.byagowi.persiancalendar.global.gregorianMonths
-import com.byagowi.persiancalendar.global.islamicMonths
-import com.byagowi.persiancalendar.global.nepaliMonths
-import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.global.persianMonths
-import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -125,41 +119,29 @@ data class EventsRepository @VisibleForTesting constructor(
         record: CalendarRecord, calendar: Calendar
     ): T? {
         if (skipEvent(record, calendar)) return null
-        val dayAndMonth = formatDayAndMonth(calendar, record.day, record.month)
-        val title = "${record.title} ($dayAndMonth)"
 
         val holiday = determineIsHoliday(record)
         return (when (calendar) {
             Calendar.SHAMSI -> {
                 val date = PersianDate(-1, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.PersianCalendarEvent(record.title, holiday, date, record.source)
             }
 
             Calendar.GREGORIAN -> {
                 val date = CivilDate(-1, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.GregorianCalendarEvent(record.title, holiday, date, record.source)
             }
 
             Calendar.ISLAMIC -> {
                 val date = IslamicDate(-1, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.IslamicCalendarEvent(record.title, holiday, date, record.source)
             }
 
             Calendar.NEPALI -> {
                 val date = NepaliDate(-1, record.month, record.day)
-                CalendarEvent.NepaliCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.NepaliCalendarEvent(record.title, holiday, date, record.source)
             }
         } as? T).debugAssertNotNull
-    }
-
-    private fun formatDayAndMonth(calendar: Calendar, day: Int, month: Int): String {
-        val monthName = when (calendar) {
-            Calendar.SHAMSI -> persianMonths
-            Calendar.GREGORIAN -> gregorianMonths
-            Calendar.ISLAMIC -> islamicMonths
-            Calendar.NEPALI -> nepaliMonths
-        }.getOrNull(month - 1).debugAssertNotNull.orEmpty()
-        return language.dm.format(numeral.value.format(day), monthName)
     }
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {

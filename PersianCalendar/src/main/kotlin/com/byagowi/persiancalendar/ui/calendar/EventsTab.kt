@@ -96,6 +96,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -106,6 +107,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.logException
@@ -328,7 +330,7 @@ private fun DayEventContent(
             .focusable(true)
             .semantics {
                 this.contentDescription = if (event.isHoliday) context.getString(
-                    R.string.holiday_reason, event.oneLinerTitleWithTime
+                    R.string.holiday_reason, event.title
                 ) else event.oneLinerTitleWithTime
             }
             .padding(8.dp),
@@ -339,7 +341,7 @@ private fun DayEventContent(
         Column(modifier = Modifier.weight(1f, fill = false)) {
             SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                 Text(
-                    title,
+                    text = title,
                     color = contentColor,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         textDirection = TextDirection.Content,
@@ -411,51 +413,72 @@ private fun DayEventContent(
                 enableUserInput = false,
                 state = tooltipState,
             ) {
-                Text(
-                    text = when {
-                        event.source == EventSource.Iran -> "دانشگاه تهران"
-                        event.source == EventSource.Afghanistan -> "افغانستان"
-                        event.source == EventSource.International -> "بین‌المللی"
-                        event.source == EventSource.AncientIran -> "جشن‌های تاریخی"
+                val chipTextColor = when {
+                    event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.onSurface
+
+                    event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
+                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                }
+                val chipBackgroundColor = when {
+                    event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.surface.copy(
+                        alpha = .45f
+                    )
+
+                    event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
+                    else -> MaterialTheme.colorScheme.surfaceContainerLow
+                }
+                EventTypeChip(
+                    title = when {
+                        event.source == EventSource.AncientIran -> "ایران باستان${spacedComma}جلالی"
                         event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
-                        else -> ""
-                    },
-                    color = when {
-                        event is CalendarEvent.DeviceCalendarEvent ->
-                            MaterialTheme.colorScheme.onSurface
-
-                        event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .then(
-                            if (when {
-                                    event.source == EventSource.Iran -> true
-                                    event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
-                                    else -> false
-                                }
-                            ) Modifier.clickable {
-                                coroutineScope.launch { tooltipState.show() }
-                            } else Modifier,
-                        )
-                        .background(
+                        else -> listOfNotNull(
                             when {
-                                event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.surface.copy(
-                                    alpha = .45f
-                                )
-
-                                event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
-                                else -> MaterialTheme.colorScheme.surfaceContainerLow
-                            }
-                        )
-                        .padding(horizontal = 8.dp),
+                                event.source == EventSource.Iran -> "دانشگاه تهران"
+                                event.source == EventSource.Afghanistan -> "افغانستان"
+                                event.source == EventSource.International -> "بین‌المللی"
+                                else -> null
+                            },
+                            when {
+                                language.isPersianOrDari -> stringResource(event.date.calendar.shortTitle)
+                                else -> null
+                            },
+                        ).joinToString(spacedComma)
+                    },
+                    color = chipTextColor,
+                    modifier = if (when {
+                            event.source == EventSource.Iran -> true
+                            event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
+                            else -> false
+                        }
+                    ) Modifier.clickable {
+                        coroutineScope.launch { tooltipState.show() }
+                    } else Modifier,
+                    backgroundColor = chipBackgroundColor,
                 )
             }
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun EventTypeChip(
+    title: String,
+    color: Color,
+    backgroundColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = title,
+        color = color,
+        style = MaterialTheme.typography.bodySmall,
+        modifier = Modifier
+            .padding(start = 4.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .then(modifier)
+            .background(backgroundColor)
+            .padding(horizontal = 8.dp),
+    )
 }
 
 private val countDownTimeParts = listOf(

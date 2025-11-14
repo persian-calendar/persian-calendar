@@ -94,7 +94,6 @@ fun getA11yDaySummary(
     val holidays = getEventsTitle(
         events,
         true,
-        compact = true,
         showDeviceCalendarEvents = true,
         insertRLM = false,
         addIsHoliday = false
@@ -106,7 +105,6 @@ fun getA11yDaySummary(
     val nonHolidays = getEventsTitle(
         events,
         false,
-        compact = true,
         showDeviceCalendarEvents = true,
         insertRLM = false,
         addIsHoliday = false
@@ -251,7 +249,6 @@ fun Context.getAllEnabledAppointments() = readDeviceEvents(
 fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>,
     holiday: Boolean,
-    compact: Boolean,
     showDeviceCalendarEvents: Boolean,
     insertRLM: Boolean,
     addIsHoliday: Boolean
@@ -260,7 +257,6 @@ fun getEventsTitle(
         .map {
             val title = when {
                 it is CalendarEvent.DeviceCalendarEvent -> it.oneLinerTitleWithTime
-                compact -> it.compactTitle
                 else -> it.title
             }
 

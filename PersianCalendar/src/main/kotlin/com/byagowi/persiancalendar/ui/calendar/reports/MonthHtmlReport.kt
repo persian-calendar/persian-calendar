@@ -166,7 +166,6 @@ private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): Lis
         val holidays = getEventsTitle(
             events,
             holiday = true,
-            compact = true,
             showDeviceCalendarEvents = false,
             insertRLM = false,
             addIsHoliday = true
@@ -174,7 +173,6 @@ private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): Lis
         val nonHolidays = getEventsTitle(
             events,
             holiday = false,
-            compact = true,
             showDeviceCalendarEvents = true,
             insertRLM = false,
             addIsHoliday = true
