@@ -392,9 +392,9 @@ private fun DayEventContent(
 
                         event.source == EventSource.International -> stringResource(R.string.international)
 
-                        event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است\n\n" + ((event.date as? PersianDate)?.let {
-                            "این روز معادل ${jalaliDayOfYear(it)} است"
-                        } ?: "")
+                        event.source == EventSource.AncientIran -> """این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است
+
+${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYear(it)} است" } ?: ""}"""
 
                         else -> ""
                     }
