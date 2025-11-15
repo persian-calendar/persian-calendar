@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 
 @Composable
-fun TodayActionButton(visible: Boolean, onClick: () -> Unit) {
+fun TodayActionButton(visible: Boolean = true, onClick: () -> Unit) {
     AnimatedVisibility(visible, enter = scaleIn(), exit = scaleOut()) {
         AppIconButton(
             icon = Icons.Default.Restore,

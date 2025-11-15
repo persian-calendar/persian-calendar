@@ -344,7 +344,7 @@ fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
                     }
                 }
 
-                FooterAction.Reset -> TodayActionButton(true) {
+                FooterAction.Reset -> TodayActionButton {
                     coroutineScope.launch { state.animateScrollToPage(yearPages / 2) }
                 }
 

@@ -74,6 +74,8 @@ private data class Entry(
 
 private const val yearPages = 5000
 
+private enum class HeaderAction { DialogIcon, Reset, Confirm }
+
 @Composable
 fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     val today = Jdn(now.toCivilDate())
@@ -92,21 +94,31 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Crossfade(pendingConfirms.isNotEmpty()) { hasPendingConfirms ->
-                    if (hasPendingConfirms) AppIconButton(
-                        icon = Icons.Default.Done,
-                        title = stringResource(R.string.accept),
-                        onClick = { pendingConfirms.forEach { it() } },
-                    ) else Crossfade(yearPagerState.currentPage == yearPages / 2) {
-                        if (it) Text(
+                Crossfade(
+                    when {
+                        pendingConfirms.isNotEmpty() -> HeaderAction.Confirm
+                        yearPagerState.currentPage != yearPages / 2 -> HeaderAction.Reset
+                        else -> HeaderAction.DialogIcon
+                    }
+                ) { action ->
+                    when (action) {
+                        HeaderAction.Confirm -> AppIconButton(
+                            icon = Icons.Default.Done,
+                            title = stringResource(R.string.accept),
+                            onClick = { pendingConfirms.forEach { it() } },
+                        )
+
+                        HeaderAction.Reset -> TodayActionButton {
+                            coroutineScope.launch { yearPagerState.animateScrollToPage(yearPages / 2) }
+                        }
+
+                        HeaderAction.DialogIcon -> Text(
                             Zodiac.SCORPIO.symbol,
                             fontFamily = FontFamily(
                                 Font(R.font.notosanssymbolsregularzodiacsubset)
                             ),
                             fontSize = 20.sp,
-                        ) else TodayActionButton(true) {
-                            coroutineScope.launch { yearPagerState.animateScrollToPage(yearPages / 2) }
-                        }
+                        )
                     }
                 }
                 HorizontalPager(yearPagerState) { page ->
