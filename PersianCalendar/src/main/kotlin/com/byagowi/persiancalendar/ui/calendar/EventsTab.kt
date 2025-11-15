@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -276,9 +277,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
         val eventTime =
             (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it }.orEmpty()
         AnimatedContent(
-            (if (event.isHoliday) language.inParentheses.format(
-                event.title, holidayString
-            ) else event.title) + eventTime,
+            targetState = event.title + eventTime,
             label = "event title",
             transitionSpec = {
                 (if (event is CalendarEvent.EquinoxCalendarEvent) noTransitionSpec
@@ -433,37 +432,51 @@ private fun DayEventContent(
                     event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
                     else -> MaterialTheme.colorScheme.surfaceContainerLow
                 }
-                val chipText = when {
-                    event is CalendarEvent.DeviceCalendarEvent -> "تقویم شخصی"
-                    event.source == EventSource.AncientIran -> "ایران باستان، جلالی"
-                    event.source == EventSource.Iran -> "دانشگاه تهران"
-                    event.source == EventSource.Afghanistan -> "افغانستان"
-                    event.source == EventSource.International -> "بین‌المللی"
-                    else -> ""
+                val parts = buildList {
+                    if (event.isHoliday && language.isArabicScript) add(holidayString)
+                    if (event is CalendarEvent.DeviceCalendarEvent) {
+                        add("تقویم شخصی")
+                    } else when (event.source) {
+                        EventSource.Iran -> add("دانشگاه تهران")
+                        EventSource.Afghanistan -> add("افغانستان")
+                        EventSource.International -> add("بین‌المللی")
+                        EventSource.AncientIran -> addAll(listOf("ایران باستان", "جلالی"))
+                        EventSource.Nepal, null -> {}
+                    }
                 }
-                Text(
-                    text = chipText,
-                    color = chipTextColor,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .then(
-                            if (when {
-                                    event.source == EventSource.Iran -> true
-                                    event.source == EventSource.AncientIran -> true
-                                    event.source == EventSource.International -> true
-                                    event.source == EventSource.Afghanistan -> true
-                                    event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
-                                    else -> false
-                                }
-                            ) Modifier.clickable {
-                                coroutineScope.launch { tooltipState.show() }
-                            } else Modifier,
+                val isClickable = when {
+                    event.source == EventSource.Iran -> true
+                    event.source == EventSource.AncientIran -> true
+                    event.source == EventSource.International -> true
+                    event.source == EventSource.Afghanistan -> true
+                    event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
+                    else -> false
+                }
+                val clickModifier = if (isClickable) Modifier.clickable {
+                    coroutineScope.launch { tooltipState.show() }
+                } else Modifier
+                Row(
+                    Modifier
+                        .padding(start = 8.dp)
+                        .clip(MaterialTheme.shapes.medium),
+                ) {
+                    parts.forEachIndexed { i, part ->
+                        Text(
+                            text = part,
+                            color = chipTextColor,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = clickModifier
+                                .padding(start = if (i != 0) 2.dp else 0.dp)
+                                .clip(MaterialTheme.shapes.extraSmall)
+                                .heightIn(min = 20.dp)
+                                .background(chipBackgroundColor)
+                                .padding(
+                                    start = if (i == 0) 8.dp else 4.dp,
+                                    end = if (i == parts.size - 1) 8.dp else 4.dp,
+                                ),
                         )
-                        .background(chipBackgroundColor)
-                        .padding(horizontal = 8.dp),
-                )
+                    }
+                }
             }
         }
     }
