@@ -65,6 +65,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -277,12 +278,15 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val numeral by numeral.collectAsState()
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
+    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     events.forEach { event ->
         val backgroundColor by animateColor(eventColor(event))
-        val eventTime =
-            (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it }.orEmpty()
         AnimatedContent(
-            targetState = event.title + eventTime,
+            targetState = buildString {
+                append(event.title)
+                if (isTalkBackEnabled && event.isHoliday) append(spacedComma + holidayString)
+                (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { append("\n$it") }
+            },
             label = "event title",
             transitionSpec = {
                 (if (event is CalendarEvent.EquinoxCalendarEvent) noTransitionSpec
@@ -409,7 +413,13 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
                         action = if (event.source == EventSource.Iran) ({
-                            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            Box(
+                                Modifier
+                                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                                    .clearAndSetSemantics {}
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.Center,
+                            ) {
                                 FilledTonalButton(onClick = {
                                     val uri = event.source.link.toUri()
                                     CustomTabsIntent.Builder().build().launchUrl(context, uri)
