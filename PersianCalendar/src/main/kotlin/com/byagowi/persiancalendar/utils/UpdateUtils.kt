@@ -235,17 +235,6 @@ fun update(context: Context, updateDate: Boolean) {
     // region upcoming pray time text
     val clock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
     val prayTimes = coordinates.value?.calculatePrayTimes()
-
-    val owghat = prayTimes?.getNextPrayTime(clock)?.let {
-        buildString {
-            append(context.getString(it.stringRes))
-            append(": ")
-            append(prayTimes[it].toFormattedString())
-            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets.value) {
-                cityName.value?.also { append(" ($it)") }
-            }
-        }
-    }.orEmpty()
     // endregion
 
     selectedWidgetTextColor = getWidgetTextColor(preferences)
@@ -259,23 +248,29 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     AppWidgetManager.getInstance(context).run {
         updateFromRemoteViews<AgeWidget>(context, now) { width, height, _, widgetId ->
-            createAgeRemoteViews(context, width, height, widgetId, jdn)
+            createAgeRemoteViews(context, width, height, widgetId, jdn, preferences)
         }
         updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, widgetId ->
-            create1x1RemoteViews(context, width, height, date, widgetId)
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
+            create1x1RemoteViews(context, width, height, date, scale)
         }
         updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, widgetId ->
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create4x1RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, clock, widgetId
+                context, width, height, jdn, date, widgetTitle, subtitle, clock, scale,
             )
         }
         updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, widgetId ->
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create2x2RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, owghat, clock, widgetId
+                context, width, height, jdn, date, widgetTitle, subtitle, prayTimes, clock, scale
             )
         }
         updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, widgetId ->
-            create4x2RemoteViews(context, width, height, jdn, date, clock, prayTimes, widgetId)
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
+            create4x2RemoteViews(
+                context, width, height, jdn, date, clock, prayTimes, scale
+            )
         }
         updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _, _ ->
             createSunViewRemoteViews(context, width, height, prayTimes)
@@ -296,11 +291,29 @@ fun update(context: Context, updateDate: Boolean) {
             createScheduleRemoteViews(context, width.takeIf { hasSize }, widgetId)
         }
         updateFromRemoteViews<WidgetWeekView>(context, now) { width, height, _, widgetId ->
-            createWeekViewRemoteViews(context, width, height, date, jdn, widgetId)
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
+            createWeekViewRemoteViews(context, width, height, date, jdn, scale)
         }
     }
 
-    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
+    updateNotification(context, title, subtitle, jdn, date, prayTimes, clock)
+}
+
+fun getOwghat(
+    context: Context,
+    prayTimes: PrayTimes?,
+    clock: Clock,
+): String {
+    return prayTimes?.getNextPrayTime(clock)?.let {
+        buildString {
+            append(context.getString(it.stringRes))
+            append(": ")
+            append(prayTimes[it].toFormattedString())
+            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets.value) {
+                cityName.value?.also { append(" ($it)") }
+            }
+        }
+    }.orEmpty()
 }
 
 // Dynamic icons needs inflation of AndroidManifest.xml which can be scary on older devices,
@@ -416,9 +429,13 @@ private fun getWidgetTextColor(
 ) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(
-    context: Context, width: Int, height: Int, widgetId: Int, today: Jdn
+    context: Context,
+    width: Int,
+    height: Int,
+    widgetId: Int,
+    today: Jdn,
+    preferences: SharedPreferences,
 ): RemoteViews {
-    val preferences = context.preferences
     val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
     val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
     val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null).orEmpty()
@@ -991,9 +1008,7 @@ private val monthWidgetCells = listOf(
     R.id.month_grid_cell6x7,
 )
 
-fun createMapRemoteViews(
-    context: Context, width: Int, height: Int, time: Long
-): RemoteViews {
+fun createMapRemoteViews(context: Context, width: Int, height: Int, now: Long): RemoteViews {
     val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val isNightMode = isSystemInDarkTheme(context.resources.configuration)
@@ -1012,7 +1027,7 @@ fun createMapRemoteViews(
     else null
     val mapDraw = MapDraw(context.resources, backgroundColor, foregroundColor)
     mapDraw.markersScale = .75f
-    mapDraw.updateMap(time, MapType.DAY_NIGHT)
+    mapDraw.updateMap(now, MapType.DAY_NIGHT)
     val matrix = Matrix()
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
     val bitmap = createBitmap(size * 2, size).applyCanvas {
@@ -1062,9 +1077,8 @@ private fun RemoteViews.setTextViewTextSizeSp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_SP, size)
 
 fun create1x1RemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, widgetId: Int
+    context: Context, width: Int, height: Int, date: AbstractDate, scale: Float,
 ): RemoteViews {
-    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
@@ -1089,9 +1103,8 @@ fun create4x1RemoteViews(
     widgetTitle: String,
     subtitle: String,
     clock: Clock,
-    appWidgetId: Int,
+    scale: Float,
 ): RemoteViews {
-    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
@@ -1141,9 +1154,9 @@ fun create2x2RemoteViews(
     date: AbstractDate,
     widgetTitle: String,
     subtitle: String,
-    owghat: String,
+    prayTimes: PrayTimes?,
     clock: Clock,
-    appWidgetId: Int,
+    scale: Float,
 ): RemoteViews {
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
@@ -1155,7 +1168,6 @@ fun create2x2RemoteViews(
             if (isCenterAlignWidgets.value) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
-    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
     remoteViews.setTextViewTextSizeSp(R.id.date_2x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.owghat_2x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.holiday_2x2, 14 * scale)
@@ -1177,6 +1189,7 @@ fun create2x2RemoteViews(
 
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
 
+    val owghat = getOwghat(context, prayTimes, clock)
     if (OWGHAT_KEY in whatToShowOnWidgets.value && owghat.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
         remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
@@ -1225,7 +1238,7 @@ fun create4x2RemoteViews(
     date: AbstractDate,
     clock: Clock,
     prayTimes: PrayTimes?,
-    widgetId: Int,
+    scale: Float,
 ): RemoteViews {
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
@@ -1235,7 +1248,6 @@ fun create4x2RemoteViews(
         if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
     )
 
-    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
     remoteViews.setTextViewTextSizeSp(
         R.id.textPlaceholder0_4x2,
         scale * if (isWidgetClock) 48 else 40
@@ -1339,7 +1351,7 @@ fun create4x2RemoteViews(
 }
 
 fun createWeekViewRemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn, widgetId: Int
+    context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn, scale: Float
 ): RemoteViews {
     val weekDays = listOf(
         Triple(today - 3, R.id.textWeekDayText1, R.id.textWeekDayNumber1),
@@ -1365,7 +1377,6 @@ fun createWeekViewRemoteViews(
     }
     val weekEnds = weekEnds.value
 
-    val scale = context.preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
     remoteViews.setTextViewTextSizeSp(R.id.textDate, 14 * scale)
 
     weekDays.forEachIndexed { index, (day, weekDayNameViewId, weekDayNumberViewId) ->
@@ -1474,7 +1485,7 @@ private fun setEventsInWidget(
 private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String,
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate,
     prayTimes: PrayTimes?, clock: Clock,
 ) {
     if (!isNotifyDate.value) {
@@ -1500,7 +1511,7 @@ private fun updateNotification(
         subtitle = subtitle,
         jdn = jdn,
         date = date,
-        owghat = owghat,
+        owghat = getOwghat(context, prayTimes, clock),
         prayTimes = prayTimes,
         nextPrayTime = nextPrayTime,
         timesToShow = timesToShow,

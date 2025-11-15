@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -28,13 +29,15 @@ import com.byagowi.persiancalendar.utils.createSunViewRemoteViews
 import com.byagowi.persiancalendar.utils.createWeekViewRemoteViews
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.preferences
 import java.util.GregorianCalendar
 
 class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun Preview(appWidgetId: Int) {
         WidgetPreview { context, width, height ->
-            create1x1RemoteViews(context, width, height, Jdn.today() on mainCalendar, appWidgetId)
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
+            create1x1RemoteViews(context, width, height, Jdn.today() on mainCalendar, scale)
         }
     }
 
@@ -58,8 +61,9 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
                 today,
                 calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
             )
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
             create4x1RemoteViews(
-                context, width, height, jdn, today, widgetTitle, subtitle, clock, appWidgetId
+                context, width, height, jdn, today, widgetTitle, subtitle, clock, scale,
             )
         }
     }
@@ -77,16 +81,22 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
-        WidgetPreview(200.dp) { context, width, height ->
-            val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
-            val widgetTitle = dayTitleSummary(
-                jdn,
-                today,
-                calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
-            )
-            create2x2RemoteViews(
-                context, width, height, jdn, today, widgetTitle, subtitle, "", clock, appWidgetId
-            )
+        val coordinates by coordinates.collectAsState()
+        val prayTimes = coordinates?.calculatePrayTimes()
+        key(prayTimes) {
+            WidgetPreview(200.dp) { context, width, height ->
+                val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
+                val widgetTitle = dayTitleSummary(
+                    jdn,
+                    today,
+                    calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
+                )
+                val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
+                create2x2RemoteViews(
+                    context, width, height, jdn, today, widgetTitle, subtitle, prayTimes,
+                    clock, scale,
+                )
+            }
         }
     }
 
@@ -107,8 +117,9 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
                 val jdn = Jdn.today()
                 val date = jdn on mainCalendar
                 val clock = Clock(GregorianCalendar())
+                val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
                 create4x2RemoteViews(
-                    context, width, height, Jdn.today(), date, clock, prayTimes, appWidgetId
+                    context, width, height, Jdn.today(), date, clock, prayTimes, scale,
                 )
             }
         }
@@ -129,7 +140,8 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
         WidgetPreview(112.dp) { context, width, height ->
             val today = Jdn.today()
             val date = today on mainCalendar
-            createWeekViewRemoteViews(context, width, height, date, today, appWidgetId)
+            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + appWidgetId, 1f)
+            createWeekViewRemoteViews(context, width, height, date, today, scale)
         }
     }
 

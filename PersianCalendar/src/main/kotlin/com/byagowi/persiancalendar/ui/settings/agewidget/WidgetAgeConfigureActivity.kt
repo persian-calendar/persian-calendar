@@ -68,7 +68,9 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun Preview(appWidgetId: Int) {
         WidgetPreview { context, width, height ->
-            createAgeRemoteViews(context, width, height, appWidgetId, Jdn.today())
+            createAgeRemoteViews(
+                context, width, height, appWidgetId, Jdn.today(), preferences
+            )
         }
     }
 
