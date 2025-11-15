@@ -455,7 +455,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                         isPersian = true,
                     ) + spacedComma + " شمسی در $cityName"
                 } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
-                gregorianCalendar.formatDateAndTime() + run {
+                gregorianCalendar.formatDateAndTime(withWeekDay = true) + run {
                     if (isMoonInScorpio(time)) spacedComma + stringResource(R.string.moon_in_scorpio)
                     else ""
                 },

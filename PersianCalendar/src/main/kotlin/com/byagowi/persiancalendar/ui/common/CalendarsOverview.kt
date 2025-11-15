@@ -100,7 +100,7 @@ import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.formatDateAndTimeWithWeekDayName
+import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isOldEra
@@ -457,7 +457,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
     return resources.getString(
         R.string.spring_equinox,
         numeral.value.format(equinoxYear),
-        calendar.formatDateAndTimeWithWeekDayName()
+        calendar.formatDateAndTime(withWeekDay = true)
     ) to timestamp
 }
 
