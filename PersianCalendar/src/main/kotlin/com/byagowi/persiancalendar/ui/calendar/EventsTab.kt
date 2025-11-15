@@ -458,6 +458,7 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                 Row(
                     Modifier
                         .padding(start = 8.dp)
+                        .then(clickModifier)
                         .clip(MaterialTheme.shapes.medium),
                 ) {
                     parts.forEachIndexed { i, part ->
@@ -465,7 +466,7 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                             text = part,
                             color = chipTextColor,
                             style = MaterialTheme.typography.bodySmall,
-                            modifier = clickModifier
+                            modifier = Modifier
                                 .padding(start = if (i != 0) 2.dp else 0.dp)
                                 .clip(MaterialTheme.shapes.extraSmall)
                                 .heightIn(min = 20.dp)
