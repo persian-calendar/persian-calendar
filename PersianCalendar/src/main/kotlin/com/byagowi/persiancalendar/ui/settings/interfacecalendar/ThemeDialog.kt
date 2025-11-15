@@ -228,7 +228,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                             Toast.LENGTH_LONG
                         ).show()
                         fontPicker.launch(
-                            arrayOf(
+                            listOf(
                                 "font/ttf",
                                 "font/otf",
                                 "font/sfnt",
@@ -237,7 +237,11 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                                 "font/opentype",
                                 "application/x-font-ttf",
                                 "application/x-font-otf",
-                            )
+                            ).let {
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                                    it + "application/octet-stream"
+                                else it
+                            }.toTypedArray()
                         )
                     }) { Text(stringResource(R.string.select_font)) }
                     this.AnimatedVisibility(
