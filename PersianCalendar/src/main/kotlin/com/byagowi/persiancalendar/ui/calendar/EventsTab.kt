@@ -86,6 +86,8 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.entities.everyYear
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
@@ -96,6 +98,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -111,6 +114,7 @@ import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import io.github.persiancalendar.calendar.PersianDate
@@ -270,6 +274,7 @@ fun Char.isRtl() = when (Character.getDirectionality(this)) {
 @Composable
 fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val language by language.collectAsState()
+    val numeral by numeral.collectAsState()
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
     events.forEach { event ->
@@ -296,6 +301,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                     title = title,
                     launcher = launcher,
                     language = language,
+                    numeral = numeral,
                     coroutineScope = coroutineScope,
                 )
             }
@@ -312,6 +318,7 @@ private fun DayEventContent(
     language: Language,
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     coroutineScope: CoroutineScope,
+    numeral: Numeral,
 ) {
     val context = LocalContext.current
     Row(
@@ -394,7 +401,7 @@ private fun DayEventContent(
 
                         event.source == EventSource.AncientIran -> """این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است
 
-${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYear(it)} است" } ?: ""}"""
+${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYear(it)} است" }.orEmpty()}"""
 
                         else -> ""
                     }
@@ -410,7 +417,15 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                             }
                         }) else null,
                         title = if (event is CalendarEvent.DeviceCalendarEvent || event.source == EventSource.AncientIran) null else ({
-                            Text(stringResource(event.date.calendar.title))
+                            Text(buildString {
+                                if (event.date.year == everyYear) append(
+                                    language.dm.format(
+                                        numeral.format(event.date.dayOfMonth),
+                                        event.date.monthName,
+                                    ) + spacedComma
+                                )
+                                append(stringResource(event.date.calendar.shortTitle))
+                            })
                         }),
                         caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
                     ) { Text(text, textAlign = TextAlign.Center) }

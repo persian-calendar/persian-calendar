@@ -123,22 +123,22 @@ data class EventsRepository @VisibleForTesting constructor(
         val holiday = determineIsHoliday(record)
         return (when (calendar) {
             Calendar.SHAMSI -> {
-                val date = PersianDate(-1, record.month, record.day)
+                val date = PersianDate(everyYear, record.month, record.day)
                 CalendarEvent.PersianCalendarEvent(record.title, holiday, date, record.source)
             }
 
             Calendar.GREGORIAN -> {
-                val date = CivilDate(-1, record.month, record.day)
+                val date = CivilDate(everyYear, record.month, record.day)
                 CalendarEvent.GregorianCalendarEvent(record.title, holiday, date, record.source)
             }
 
             Calendar.ISLAMIC -> {
-                val date = IslamicDate(-1, record.month, record.day)
+                val date = IslamicDate(everyYear, record.month, record.day)
                 CalendarEvent.IslamicCalendarEvent(record.title, holiday, date, record.source)
             }
 
             Calendar.NEPALI -> {
-                val date = NepaliDate(-1, record.month, record.day)
+                val date = NepaliDate(everyYear, record.month, record.day)
                 CalendarEvent.NepaliCalendarEvent(record.title, holiday, date, record.source)
             }
         } as? T).debugAssertNotNull
@@ -176,3 +176,6 @@ data class EventsRepository @VisibleForTesting constructor(
         fun empty() = EventsRepository(emptySet(), Language.entries[0])
     }
 }
+
+// This isn't that good approach maybe but is what we used on the project
+const val everyYear = -1

@@ -154,7 +154,7 @@ fun PlanetaryHoursDialog(
             formatDate(
                 Jdn(GregorianCalendar().also { it.timeInMillis = now }
                     .toCivilDate()) on mainCalendar,
-            ) + (cityName?.let { spacedComma + it } ?: ""),
+            ) + cityName?.let { spacedComma + it }.orEmpty(),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
