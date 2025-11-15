@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.generateMoonInScorpioEntries
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.moonInScorpioState
 import io.github.persiancalendar.calendar.AbstractDate
@@ -11,7 +13,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 
 class CalendarLibraryTests {
@@ -271,9 +272,25 @@ class CalendarLibraryTests {
     }
 
     @Test
-    fun test_it_different_date_object_equal() {
-        assertFalse(
-            CivilDate(2000, 1, 1) as AbstractDate == PersianDate(2000, 1, 1) as AbstractDate
+    fun `Test generateMoonInScorpioEntries`() {
+        // Should more or less match the links
+        // https://github.com/user-attachments/assets/6f236e58-a946-4235-8795-886d062868d0
+        run {
+            val entries = generateMoonInScorpioEntries(1404, Zodiac.SCORPIO.tropicalRange, true)
+            assertEquals(12, entries.size)
+        }
+        // https://github.com/user-attachments/assets/c90873ad-6e0b-4a7f-abeb-ec81a3f55f5f
+        run {
+            val entries = generateMoonInScorpioEntries(1404, Zodiac.SCORPIO.iauRange, true)
+            assertEquals(13, entries.size)
+        }
+    }
+
+    @Test
+    fun `it differentiate date object equal`() {
+        assertNotEquals(
+            CivilDate(2000, 1, 1) as AbstractDate,
+            PersianDate(2000, 1, 1) as AbstractDate
         )
         assertEquals(CivilDate(2000, 1, 1), CivilDate(2000, 1, 1))
         assertNotEquals(CivilDate(2000, 1, 1), CivilDate(2000, 2, 1))

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -65,7 +66,8 @@ import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import kotlin.math.abs
 
-private data class Entry(
+@VisibleForTesting
+data class Entry(
     val startClock: String,
     val startDate: String,
     val endClock: String,
@@ -197,41 +199,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
         HorizontalPager(state = pagerState, modifier = Modifier.animateContentSize()) { page ->
             val year = yearPagerState.currentPage - yearPages / 2 + currentYear
             val entries = remember(currentYear, year) {
-                val start = Jdn(mainCalendar.createDate(year, 1, 1))
-                val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
-                val (rangeStart, rangeEnd) = types[page].second
-                val range = rangeStart..rangeEnd
-                buildList {
-                    var firstComing = year == currentYear
-                    var day = start
-                    while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
-                    while (day <= end) {
-                        searchMoonAgeTime(day, rangeStart)?.let parent@{ startClock ->
-                            val startDay = day
-                            while (true) {
-                                searchMoonAgeTime(day, rangeEnd)?.let { endClock ->
-                                    val endDay = day
-                                    val upcoming = if (firstComing && today <= startDay) {
-                                        firstComing = false
-                                        true
-                                    } else false
-                                    add(
-                                        Entry(
-                                            startClock = startClock.toFormattedString(),
-                                            startDate = formatDate(startDay on mainCalendar),
-                                            endClock = endClock.toFormattedString(),
-                                            endDate = formatDate(endDay on mainCalendar),
-                                            upcoming = upcoming,
-                                        )
-                                    )
-                                    return@parent
-                                }
-                                day += 1
-                            }
-                        }
-                        day += 1
-                    }
-                }
+                generateMoonInScorpioEntries(year, types[page].second, year == currentYear)
             }
             SelectionContainer {
                 Column {
@@ -288,6 +256,52 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                     }
                 }
             }
+        }
+    }
+}
+
+@VisibleForTesting
+fun generateMoonInScorpioEntries(
+    year: Int,
+    range: List<Double>,
+    markUpcoming: Boolean,
+): List<Entry> {
+    val today = Jdn.today()
+    val start = Jdn(mainCalendar.createDate(year, 1, 1))
+    val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
+    val (rangeStart, rangeEnd) = range
+    val range = rangeStart..rangeEnd
+    return buildList {
+        var firstComing = markUpcoming
+        var day = start
+        while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
+        while (day <= end) {
+            searchMoonAgeTime(day, rangeStart)?.let parent@{ startClock ->
+//                while (lunarLongitude(day, hourOfDay = 0) in range) day += 1
+                val startDay = day
+                while (true) {
+                    searchMoonAgeTime(day, rangeEnd)?.let { endClock ->
+                        val endDay = day
+                        val upcoming = if (firstComing && today <= startDay) {
+                            firstComing = false
+                            true
+                        } else false
+                        add(
+                            Entry(
+                                startClock = startClock.toFormattedString(),
+                                startDate = formatDate(startDay on mainCalendar),
+                                endClock = endClock.toFormattedString(),
+                                endDate = formatDate(endDay on mainCalendar),
+                                upcoming = upcoming,
+                            )
+                        )
+                        return@parent
+                    }
+                    day += 1
+                }
+            }
+            day += 1
+//            while (lunarLongitude(day + 1, hourOfDay = 0) !in range) day += 1
         }
     }
 }
