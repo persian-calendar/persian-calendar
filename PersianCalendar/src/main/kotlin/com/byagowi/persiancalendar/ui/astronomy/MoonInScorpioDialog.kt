@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
@@ -81,10 +82,14 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     val today = Jdn(now.toCivilDate())
     val currentYear = (today on mainCalendar).year
     val numeral by numeral.collectAsState()
-    // Type dialog is Persian only for now
+    val language by language.collectAsState()
     val types = listOf(
-        "صورت فلکی" to Zodiac.SCORPIO.iauRange,
-        "برج" to Zodiac.SCORPIO.tropicalRange,
+        run {
+            if (language.isPersianOrDari) "صورت فلکی" else stringResource(R.string.astronomy)
+        } to Zodiac.SCORPIO.iauRange,
+        run {
+            if (language.isPersianOrDari) "برج" else stringResource(R.string.tropical)
+        } to Zodiac.SCORPIO.tropicalRange,
     )
     val yearPagerState = rememberPagerState(initialPage = yearPages / 2, pageCount = { yearPages })
     val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }

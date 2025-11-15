@@ -94,7 +94,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -244,9 +243,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             showPlanetaryHoursDialog = true
                             closeMenu()
                         }
-                        val showMoonInScorpio by showMoonInScorpio.collectAsState()
-                        val language by language.collectAsState()
-                        if (showMoonInScorpio && language.isPersianOrDari) AppDropdownMenuItem({
+                        AppDropdownMenuItem({
                             Text(stringResource(R.string.moon_in_scorpio))
                         }) {
                             showMoonInScorpioDialog = true
