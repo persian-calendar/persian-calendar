@@ -425,6 +425,7 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                                     ) + spacedComma
                                 )
                                 append(stringResource(event.date.calendar.shortTitle))
+                                if (event.isHoliday) append(spacedComma + holidayString)
                             })
                         }),
                         caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
@@ -447,17 +448,14 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                     event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
                     else -> MaterialTheme.colorScheme.surfaceContainerLow
                 }
-                val parts = buildList {
-                    if (event.isHoliday && language.isArabicScript) add(holidayString)
-                    if (event is CalendarEvent.DeviceCalendarEvent) {
-                        add("تقویم شخصی")
-                    } else when (event.source) {
-                        EventSource.Iran -> add("دانشگاه تهران")
-                        EventSource.Afghanistan -> add("افغانستان")
-                        EventSource.International -> add("بین‌المللی")
-                        EventSource.AncientIran -> addAll(listOf("ایران باستان", "جلالی"))
-                        EventSource.Nepal, null -> {}
-                    }
+                val parts = if (event is CalendarEvent.DeviceCalendarEvent) {
+                    listOf("تقویم شخصی")
+                } else when (event.source) {
+                    EventSource.Iran -> listOf("دانشگاه تهران")
+                    EventSource.Afghanistan -> listOf("افغانستان")
+                    EventSource.International -> listOf("بین‌المللی")
+                    EventSource.AncientIran -> listOf("ایران باستان", "جلالی")
+                    EventSource.Nepal, null -> emptyList()
                 }
                 val isClickable = when {
                     event.source == EventSource.Iran -> true
