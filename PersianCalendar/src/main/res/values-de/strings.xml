@@ -424,4 +424,6 @@
     <string name="large_day_number_on_notification">Große Tageszahl auf der Benachrichtigung</string>
     <string name="pref_ui">Benutzeroberfläche</string>
     <string name="week">Woche</string>
+    <string name="bold_text">Fett Text</string>
+    <string name="widget_text_size">Textgröße</string>
 </resources>
