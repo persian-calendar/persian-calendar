@@ -84,7 +84,7 @@ private class EventsViewFactory(
         var secondaryMonthChange = false
         val eventsRepository = eventsRepository.value
         days.map {
-            it to sortEvents(eventsRepository.getEvents(it, deviceEvents))
+            it to sortEvents(eventsRepository.getEvents(it, deviceEvents), language.value)
         }.flatMapIndexed { i, (day, events) ->
             val items = buildList {
                 val shiftWorkTitle = getShiftWorkTitle(day)

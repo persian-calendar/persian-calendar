@@ -614,7 +614,8 @@ fun readEvents(
 ): List<CalendarEvent<*>> {
     val resources = LocalResources.current
     val eventsRepository by eventsRepository.collectAsState()
-    val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents))
+    val language by language.collectAsState()
+    val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
 
     val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
@@ -622,7 +623,6 @@ fun readEvents(
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
             val now by viewModel.now.collectAsState()
             val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
-            val language by language.collectAsState()
             val title = rawTitle.split(spacedColon).mapIndexed { i, x ->
                 if (i == 0 && isAstronomicalExtraFeaturesEnabled) {
                     val yearString = stringResource(R.string.year)
@@ -640,11 +640,14 @@ fun readEvents(
     return events
 }
 
-fun sortEvents(events: List<CalendarEvent<*>>): List<CalendarEvent<*>> {
+fun sortEvents(events: List<CalendarEvent<*>>, language: Language): List<CalendarEvent<*>> {
+    val isAfghanistan = language.isAfghanistanExclusive
+    val noPriority = !isAfghanistan && !language.isIranExclusive
     return events.sortedBy {
+        val priority = (isAfghanistan xor (it.source != EventSource.Afghanistan)) || noPriority
         when {
-            it.isHoliday -> 0L
-            it !is CalendarEvent.DeviceCalendarEvent -> 1L
+            it.isHoliday -> if (priority) 0L else 1L
+            it !is CalendarEvent.DeviceCalendarEvent -> if (priority) 2L else 3L
             else -> it.start.timeInMillis
         }
     }

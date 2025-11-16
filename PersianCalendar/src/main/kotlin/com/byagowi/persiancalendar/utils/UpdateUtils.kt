@@ -622,7 +622,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
         remoteViews.removeAllViews(id)
         val day = monthStartJdn + i - 7 - startingWeekDay
-        val events = sortEvents(eventsRepository.value.getEvents(day, deviceEvents))
+        val events = sortEvents(eventsRepository.value.getEvents(day, deviceEvents), language.value)
         val date = day on mainCalendar
         run {
             val viewId = when {
