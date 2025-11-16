@@ -277,14 +277,11 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val numeral by numeral.collectAsState()
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     events.forEach { event ->
         val backgroundColor by animateColor(eventColor(event))
         AnimatedContent(
-            targetState = buildString {
-                append(event.title)
-                if (isTalkBackEnabled && event.isHoliday) append(spacedComma + holidayString)
-                (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { append("\n$it") }
+            targetState = event.title.let { title ->
+                (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "$title\n$it" } ?: title
             },
             label = "event title",
             transitionSpec = {
