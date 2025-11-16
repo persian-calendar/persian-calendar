@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.ui.theme
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.PowerManager
 import android.view.View
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.animateColorAsState
@@ -49,12 +51,15 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -90,9 +95,15 @@ fun AppTheme(content: @Composable () -> Unit) {
         val language by language.collectAsState()
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+        val context = LocalContext.current
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
+            LocalUriHandler provides object : UriHandler {
+                override fun openUri(uri: String) = runCatching {
+                    CustomTabsIntent.Builder().build().launchUrl(context, uri.toUri())
+                }.getOrNull().debugAssertNotNull ?: Unit
+            },
         ) {
             Box(
                 Modifier

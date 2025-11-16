@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -63,6 +62,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -76,7 +76,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
@@ -420,9 +419,11 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                                     .fillMaxWidth(),
                                 contentAlignment = Alignment.Center,
                             ) {
+                                // It won't use the theme level defined uri handler but it's ok
+                                // since it's a PDF
+                                val uriHandler = LocalUriHandler.current
                                 FilledTonalButton(onClick = {
-                                    val uri = event.source.link.toUri()
-                                    CustomTabsIntent.Builder().build().launchUrl(context, uri)
+                                    uriHandler.openUri(event.source.link)
                                 }) { Text(stringResource(R.string.view_source)) }
                             }
                         }) else null,

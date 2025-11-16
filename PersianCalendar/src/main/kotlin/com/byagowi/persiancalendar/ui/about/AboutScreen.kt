@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -88,6 +87,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -477,16 +477,14 @@ private fun Developers() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
+            val uriHandler = LocalUriHandler.current
             developers.forEach { (username, displayName, icon) ->
                 ElevatedFilterChip(
                     modifier = Modifier
                         .padding(all = 4.dp),
                     onClick = click@{
                         if (username in listOf("ImanSoltanian", "SeyedHamed")) return@click
-                        runCatching {
-                            val uri = "https://github.com/$username".toUri()
-                            CustomTabsIntent.Builder().build().launchUrl(context, uri)
-                        }.onFailure(logException)
+                        uriHandler.openUri("https://github.com/$username")
                     },
                     label = { Text(displayName) },
                     selected = true,
