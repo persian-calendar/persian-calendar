@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
 import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
@@ -251,25 +252,23 @@ fun update(context: Context, updateDate: Boolean) {
             createAgeRemoteViews(context, width, height, widgetId, jdn, preferences)
         }
         updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
-            create1x1RemoteViews(context, width, height, date, scale)
+            create1x1RemoteViews(context, width, height, date, preferences, widgetId)
         }
         updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create4x1RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, clock, scale,
+                context, width, height, jdn, date, widgetTitle, subtitle, clock,
+                preferences, widgetId,
             )
         }
         updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create2x2RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, prayTimes, clock, scale
+                context, width, height, jdn, date, widgetTitle, subtitle, prayTimes, clock,
+                preferences, widgetId,
             )
         }
         updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
             create4x2RemoteViews(
-                context, width, height, jdn, date, clock, prayTimes, scale
+                context, width, height, jdn, date, clock, prayTimes, preferences, widgetId
             )
         }
         updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _, _ ->
@@ -291,8 +290,7 @@ fun update(context: Context, updateDate: Boolean) {
             createScheduleRemoteViews(context, width.takeIf { hasSize }, widgetId)
         }
         updateFromRemoteViews<WidgetWeekView>(context, now) { width, height, _, widgetId ->
-            val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
-            createWeekViewRemoteViews(context, width, height, date, jdn, scale)
+            createWeekViewRemoteViews(context, width, height, date, jdn, preferences, widgetId)
         }
     }
 
@@ -436,7 +434,7 @@ fun createAgeRemoteViews(
     today: Jdn,
     preferences: SharedPreferences,
 ): RemoteViews {
-    val scale = preferences.getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, 1f)
+    val scale = preferences.getWidgetTextScale(widgetId)
     val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
     val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null).orEmpty()
     val subtitle = calculateDaysDifference(context.resources, primary, today, isInWidget = true)
@@ -1077,8 +1075,14 @@ private fun RemoteViews.setTextViewTextSizeSp(@IdRes id: Int, size: Float) =
     setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_SP, size)
 
 fun create1x1RemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, scale: Float,
+    context: Context,
+    width: Int,
+    height: Int,
+    date: AbstractDate,
+    preferences: SharedPreferences,
+    widgetId: Int,
 ): RemoteViews {
+    val scale = preferences.getWidgetTextScale(widgetId)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
@@ -1103,8 +1107,10 @@ fun create4x1RemoteViews(
     widgetTitle: String,
     subtitle: String,
     clock: Clock,
-    scale: Float,
+    preferences: SharedPreferences,
+    widgetId: Int,
 ): RemoteViews {
+    val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
@@ -1156,8 +1162,10 @@ fun create2x2RemoteViews(
     subtitle: String,
     prayTimes: PrayTimes?,
     clock: Clock,
-    scale: Float,
+    preferences: SharedPreferences,
+    widgetId: Int,
 ): RemoteViews {
+    val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
@@ -1238,8 +1246,10 @@ fun create4x2RemoteViews(
     date: AbstractDate,
     clock: Clock,
     prayTimes: PrayTimes?,
-    scale: Float,
+    preferences: SharedPreferences,
+    widgetId: Int,
 ): RemoteViews {
+    val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val isWidgetClock = isWidgetClock.value
@@ -1351,8 +1361,15 @@ fun create4x2RemoteViews(
 }
 
 fun createWeekViewRemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn, scale: Float
+    context: Context,
+    width: Int,
+    height: Int,
+    date: AbstractDate,
+    today: Jdn,
+    preferences: SharedPreferences,
+    widgetId: Int,
 ): RemoteViews {
+    val scale = preferences.getWidgetTextScale(widgetId)
     val weekDays = listOf(
         Triple(today - 3, R.id.textWeekDayText1, R.id.textWeekDayNumber1),
         Triple(today - 2, R.id.textWeekDayText2, R.id.textWeekDayNumber2),
@@ -1443,6 +1460,9 @@ fun createWeekViewRemoteViews(
     )
     return remoteViews
 }
+
+private fun SharedPreferences.getWidgetTextScale(widgetId: Int): Float =
+    getFloat(PREF_WIDGET_TEXT_SCALE + widgetId, DEFAULT_WIDGET_TEXT_SCALE)
 
 private fun timesToShow(clock: Clock, prayTimes: PrayTimes): List<PrayTime> {
     return if (calculationMethod.value.isJafari) {

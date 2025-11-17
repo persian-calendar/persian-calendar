@@ -15,6 +15,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -174,7 +175,9 @@ private fun WidgetPreferenceDebounce(
 fun WidgetTextScale(appWidgetId: Int) {
     val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
     val preferences = LocalContext.current.preferences
-    val textScale = remember { MutableStateFlow(preferences.getFloat(key, 1f)) }
+    val textScale = remember {
+        MutableStateFlow(preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE))
+    }
     WidgetPreferenceDebounce(key, textScale) { value, onValueChange ->
         SettingsSlider(
             title = stringResource(R.string.widget_text_size),
