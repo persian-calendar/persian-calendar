@@ -203,6 +203,7 @@ private fun Header() {
                     color = LocalContentColor.current,
                 )
                 val numeral by numeral.collectAsState()
+                val language by language.collectAsState()
                 Text(
                     buildString {
                         val version =
@@ -210,7 +211,7 @@ private fun Header() {
                             if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
                             else numeral.format(BuildConfig.VERSION_NAME, skipSeparators = true)
                         append(stringResource(R.string.version, version))
-                        if (language.value.isUserAbleToReadPersian) {
+                        if (language.isUserAbleToReadPersian) {
                             appendLine()
                             append(
                                 stringResource(

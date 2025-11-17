@@ -97,8 +97,9 @@ fun ColumnScope.WidgetSettings() {
             summary = stringResource(R.string.center_align_widgets_summary)
         )
     }
-    val isInIranTimeVisible = remember {
-        (language.value.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+    val language by language.collectAsState()
+    val isInIranTimeVisible = remember(language) {
+        (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
     if (isInIranTimeVisible) {
         val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()

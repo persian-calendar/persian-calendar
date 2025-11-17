@@ -502,10 +502,13 @@ enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
     CALENDAR(R.string.calendar), EVENT(R.string.events), TIMES(R.string.times)
 }
 
-private fun enableTimesTab(context: Context): Boolean {
-    val preferences = context.preferences
-    return coordinates.value != null || // if coordinates is set, should be shown
-            (language.value.isPersianOrDari && // The placeholder isn't translated to other languages
+@Composable
+private fun enableTimesTab(): Boolean {
+    val coordinates by coordinates.collectAsState()
+    val language by language.collectAsState()
+    val preferences = LocalContext.current.preferences
+    return coordinates != null || // if coordinates is set, should be shown
+            (language.isPersianOrDari && // The placeholder isn't translated to other languages
                     // The user is already dismissed the third tab
                     !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
                     // Try to not show the placeholder to established users
@@ -526,9 +529,8 @@ private fun SharedTransitionScope.detailsTabs(
     today: Jdn,
     fabPlaceholderHeight: Dp?,
 ): List<DetailsTab> {
-    val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
-    val hasTimesTab = enableTimesTab(context) && !removeThirdTab
+    val hasTimesTab = enableTimesTab() && !removeThirdTab
     val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
