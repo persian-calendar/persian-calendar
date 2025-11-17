@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
@@ -87,7 +88,8 @@ abstract class BaseActivity : ComponentActivity(),
 
         if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS ||
             key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS ||
-            key == PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+            key == PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS ||
+            key == PREF_HOLIDAY_TYPES
         ) loadLanguageResources(this.resources)
 
         update(this, true)
