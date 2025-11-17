@@ -407,10 +407,16 @@ fun yearMonthNameOfDate(date: AbstractDate): List<String> {
 fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
     val language = language.value
-    persianMonths = language.getPersianMonths(resources, alternativePersianMonthsInAzeri.value)
-    oldEraPersianMonths = if (language.isPersianOrDari) {
-        Language.persianCalendarMonthsInDariOrPersianOldEra
-    } else persianMonths
+    persianMonths = language.getPersianMonths(
+        resources,
+        alternativeMonthsInAzeri = alternativePersianMonthsInAzeri.value,
+        afghanistanHolidaysIsEnable = eventsRepository_.value.afghanistanHolidays && !eventsRepository_.value.iranHolidays,
+    )
+    oldEraPersianMonths = when {
+        language.isPersianOrDari -> Language.persianCalendarMonthsInDariOrPersianOldEra
+        language == Language.EN_IR -> Language.persianCalendarMonthsEnglishInDariOrPersianOldEra
+        else -> persianMonths
+    }
     islamicMonths = language.getIslamicMonths(resources)
     gregorianMonths = language.getGregorianMonths(
         resources,
