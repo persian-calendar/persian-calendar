@@ -273,8 +273,8 @@ enum class Language(val code: String, val nativeName: String) {
         else persianCalendarMonths.map(resources::getString)
 
         EN_US -> when {
-            userTimeZoneId == AFGHANISTAN_TIMEZONE_ID -> persianCalendarMonthsEnglishInDariOrPersianOldEra
-            afghanistanHolidaysIsEnable -> persianCalendarMonthsEnglishInDariOrPersianOldEra
+            userTimeZoneId == AFGHANISTAN_TIMEZONE_ID -> persianCalendarMonthsInDariOrPersianOldEraTransliteration
+            afghanistanHolidaysIsEnable -> persianCalendarMonthsInDariOrPersianOldEraTransliteration
             else -> persianCalendarMonths.map(resources::getString)
         }
 
@@ -686,7 +686,7 @@ enum class Language(val code: String, val nativeName: String) {
             "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
         )
         // https://www.evertype.com/standards/af/af-locales.pdf
-        val persianCalendarMonthsEnglishInDariOrPersianOldEra = listOf12Items(
+        val persianCalendarMonthsInDariOrPersianOldEraTransliteration = listOf12Items(
             "Hamal", "Sawr", "Jawzā", "Saratān", "Asad", "Sonbola",
             "Mīzān", "Aqrab", "Qaws", "Jady", "Dalv", "Hūt",
         )

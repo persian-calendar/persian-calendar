@@ -414,7 +414,7 @@ fun loadLanguageResources(resources: Resources) {
     )
     oldEraPersianMonths = when {
         language.isPersianOrDari -> Language.persianCalendarMonthsInDariOrPersianOldEra
-        language == Language.EN_IR -> Language.persianCalendarMonthsEnglishInDariOrPersianOldEra
+        language == Language.EN_IR -> Language.persianCalendarMonthsInDariOrPersianOldEraTransliteration
         else -> persianMonths
     }
     islamicMonths = language.getIslamicMonths(resources)
