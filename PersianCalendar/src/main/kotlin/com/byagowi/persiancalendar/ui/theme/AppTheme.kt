@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.theme
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.PowerManager
 import android.view.View

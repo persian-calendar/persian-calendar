@@ -685,8 +685,8 @@ enum class Language(val code: String, val nativeName: String) {
             "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
             "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
         )
-        // https://www.evertype.com/standards/af/af-locales.pdf
         val persianCalendarMonthsInDariOrPersianOldEraTransliteration = listOf12Items(
+            // https://www.evertype.com/standards/af/af-locales.pdf
             "Hamal", "Sawr", "Jawzā", "Saratān", "Asad", "Sonbola",
             "Mīzān", "Aqrab", "Qaws", "Jady", "Dalv", "Hūt",
         )
