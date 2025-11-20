@@ -16,8 +16,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.ChecksSdkIntAtLeast
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
@@ -742,7 +740,6 @@ private fun SharedTransitionScope.CalendarsTab(
     }
 }
 
-@ChecksSdkIntAtLeast(Build.VERSION_CODES.M)
 @Composable
 private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val isNotifyDate by isNotifyDate.collectAsState()
@@ -752,10 +749,9 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     val alarmManager = context.getSystemService<AlarmManager>()
     if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) return true
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
+    return !isIgnoringBatteryOptimizations(context)
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     return runCatching {
         context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(

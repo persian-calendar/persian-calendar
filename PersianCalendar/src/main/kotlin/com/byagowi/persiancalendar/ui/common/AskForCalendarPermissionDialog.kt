@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.common
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
@@ -29,10 +28,6 @@ import com.byagowi.persiancalendar.utils.preferences
 fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
     val context = LocalContext.current
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-        setGranted(true)
-        return
-    }
     if (ActivityCompat.checkSelfPermission(
             context, Manifest.permission.READ_CALENDAR
         ) == PackageManager.PERMISSION_GRANTED

@@ -36,9 +36,7 @@ class PersianCalendarDreamService : DreamService() {
             AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
         )
         audioTrack.write(buffer, 0, buffer.size)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
-        }
+        audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
         audioTrack
     }
 

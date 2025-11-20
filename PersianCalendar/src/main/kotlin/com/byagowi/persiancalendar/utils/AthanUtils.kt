@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
-import android.os.Build
 import android.os.PowerManager
 import androidx.annotation.RawRes
 import androidx.core.app.ActivityCompat
@@ -161,8 +160,7 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
             .putExtra(KEY_EXTRA_PRAYER, prayTime.name)
             .putExtra(KEY_EXTRA_PRAYER_TIME, timeInMillis)
             .setAction(BROADCAST_ALARM),
-        PendingIntent.FLAG_UPDATE_CURRENT or
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     if (AlarmManagerCompat.canScheduleExactAlarms(am)) AlarmManagerCompat.setExactAndAllowWhileIdle(
         am,

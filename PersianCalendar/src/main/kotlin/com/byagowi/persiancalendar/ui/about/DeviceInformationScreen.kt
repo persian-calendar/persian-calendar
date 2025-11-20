@@ -133,7 +133,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                     icon = Icons.Default.Print,
                     title = stringResource(R.string.print),
                 ) { context.openHtmlInBrowser(generateHtmlReport(items)) }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) AppIconButton(
+                AppIconButton(
                     icon = Icons.Default.SportsEsports,
                     title = "Game",
                 ) {
@@ -400,16 +400,15 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
     ),
     Item(
         "Battery",
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) activity.getSystemService<BatteryManager>()
-            ?.let {
-                listOf("Charging: ${it.isCharging}") + listOf(
-                    "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
-                    "Charge Counter" to BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
-                    "Current Avg" to BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
-                    "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
-                    "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
-                ).map { (title: String, id: Int) -> "$title: ${it.getLongProperty(id)}" }
-            }?.joinToString("\n") else "",
+        activity.getSystemService<BatteryManager>()?.let {
+            listOf("Charging: ${it.isCharging}") + listOf(
+                "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
+                "Charge Counter" to BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
+                "Current Avg" to BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
+                "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
+                "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
+            ).map { (title: String, id: Int) -> "$title: ${it.getLongProperty(id)}" }
+        }?.joinToString("\n"),
     ),
     Item("App Standby Bucket", appStandbyStatus(activity)),
     Item("Display Metrics", activity.resources?.displayMetrics?.toString().orEmpty()),
@@ -447,7 +446,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
         run {
             val configuration = activity.resources.configuration
             listOfNotNull(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) "Is Screen Round" to configuration.isScreenRound else null,
+                "Is Screen Round" to configuration.isScreenRound,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) "Is Screen HDR" to configuration.isScreenHdr else null,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) "Is Screen Wide Color Gamut" to configuration.isScreenWideColorGamut else null,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) "Is Night Mode Active" to configuration.isNightModeActive else null,

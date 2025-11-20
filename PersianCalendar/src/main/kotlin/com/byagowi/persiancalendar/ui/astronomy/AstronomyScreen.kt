@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Configuration
-import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -495,12 +494,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 ),
             selected = false,
             onClick = navigateToMap,
-            icon = {
-                Text(
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
-                    modifier = Modifier.semantics { this.contentDescription = map },
-                )
-            },
+            icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
         val surfaceColor = MaterialTheme.colorScheme.surface
         val contentColor = LocalContentColor.current

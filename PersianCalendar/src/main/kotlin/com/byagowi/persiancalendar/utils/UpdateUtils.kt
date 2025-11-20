@@ -1347,7 +1347,7 @@ fun create4x2RemoteViews(
             context,
             0,
             Intent(context, Widget4x2::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
 
@@ -1640,7 +1640,7 @@ private data class NotificationData(
                     Numeral.ARABIC, Numeral.ARABIC_INDIC, Numeral.PERSIAN -> false
                     else -> true
                 }
-            } && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            }
         ) {
             val icon = createStatusIcon(date.dayOfMonth, customFontFile, isBoldFont)
             builder.setSmallIcon(IconCompat.createWithBitmap(icon))
@@ -1842,10 +1842,10 @@ fun Context.launchAppPendingIntent(
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
                 if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
             }),
-        PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) when {
+        PendingIntent.FLAG_UPDATE_CURRENT or when {
             isMutable -> PendingIntent.FLAG_MUTABLE
             else -> PendingIntent.FLAG_IMMUTABLE
-        } else 0
+        }
     )
 }
 
@@ -1857,6 +1857,6 @@ private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int):
             this, WidgetAgeConfigureActivity::class.java
         ).setAction(AppWidgetManager.EXTRA_APPWIDGET_ID + widgetId)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
-        PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 }
