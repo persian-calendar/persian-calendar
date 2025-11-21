@@ -174,13 +174,12 @@ data class EventsRepository @VisibleForTesting constructor(
         }
 
         fun keyFromDetails(source: EventSource?, isHoliday: Boolean): String? {
-            return when (source) {
+            return if (source == null) null else when (source) {
                 EventSource.AncientIran -> iranAncientKey
                 EventSource.International -> internationalKey
                 EventSource.Iran -> if (isHoliday) iranHolidaysKey else iranOthersKey
                 EventSource.Nepal -> if (isHoliday) nepalHolidaysKey else nepalOthersKey
                 EventSource.Afghanistan -> if (isHoliday) afghanistanHolidaysKey else afghanistanOthersKey
-                else -> null
             }
         }
 

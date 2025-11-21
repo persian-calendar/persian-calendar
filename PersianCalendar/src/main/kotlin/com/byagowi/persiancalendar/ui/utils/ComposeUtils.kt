@@ -60,7 +60,7 @@ fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 fun Modifier.highlightItem(enabled: Boolean): Modifier {
     if (!enabled) return this
     val alpha = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.1f) }
-    LaunchedEffect(Unit) { alpha.animateTo(0f, tween(2000)) }
+    LaunchedEffect(Unit) { alpha.animateTo(0f, tween(4000)) }
     return background(LocalContentColor.current.copy(alpha = alpha.value))
 }
 

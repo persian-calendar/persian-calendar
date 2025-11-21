@@ -6,6 +6,7 @@ import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -93,6 +94,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
+import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -106,7 +108,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         var shownOnce by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.events), stringResource(R.string.events_summary),
-            defaultOpen = destination == PREF_HOLIDAY_TYPES,
+            defaultOpen = destination == PREF_HOLIDAY_TYPES && destinationItem != PREF_SHOW_DEVICE_CALENDAR_EVENTS,
         ) { onDismissRequest ->
             HolidaysTypesDialog(destinationItem.takeIf { !shownOnce }) {
                 shownOnce = true
@@ -114,7 +116,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
             }
         }
     }
-    run {
+    Box(Modifier.highlightItem(destinationItem == PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
         var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
         val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
         SettingsSwitch(

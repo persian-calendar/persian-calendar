@@ -437,7 +437,7 @@ private fun DayEventContent(
                                 }) { Text(stringResource(R.string.view_source)) }
                             }
                         }) else null,
-                        title = if (event is CalendarEvent.DeviceCalendarEvent) null else ({
+                        title = {
                             CompositionLocalProvider(
                                 LocalLayoutDirection provides if (event.source == EventSource.AncientIran) {
                                     LocalLayoutDirection.current
@@ -447,7 +447,9 @@ private fun DayEventContent(
                                     Text(
                                         buildString {
                                             val date = event.date
-                                            if (event.source == EventSource.AncientIran && event.date is PersianDate) {
+                                            if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                append(stringResource(R.string.show_device_calendar_events))
+                                            } else if (event.source == EventSource.AncientIran && event.date is PersianDate) {
                                                 append(jalaliDayOfYear(date))
                                             } else {
                                                 if (date.year == everyYear) append(
@@ -471,12 +473,17 @@ private fun DayEventContent(
                                     ) {
                                         coroutineScope.launch {
                                             tooltipState.dismiss()
-                                            navigateToHolidaysSettings(event.repositoryKey)
+                                            navigateToHolidaysSettings(
+                                                EventsRepository.keyFromDetails(
+                                                    event.source,
+                                                    event.isHoliday,
+                                                ) ?: PREF_SHOW_DEVICE_CALENDAR_EVENTS
+                                            )
                                         }
                                     }
                                 }
                             }
-                        }),
+                        },
                         caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
                     ) {
                         Text(
@@ -491,7 +498,6 @@ private fun DayEventContent(
             ) {
                 val chipTextColor = when {
                     event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.onSurface
-
                     event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 }.copy(alpha = .65f)

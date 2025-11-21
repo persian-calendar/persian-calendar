@@ -39,8 +39,6 @@ sealed class CalendarEvent<T : AbstractDate>(
         val end: GregorianCalendar, val color: String, val time: String?,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date, source)
 
-    val repositoryKey: String? = EventsRepository.keyFromDetails(source, isHoliday)
-
     val oneLinerTitleWithTime
         get() = when (this) {
             is DeviceCalendarEvent -> if (time == null) title else {
