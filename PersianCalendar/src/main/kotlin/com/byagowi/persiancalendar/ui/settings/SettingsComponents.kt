@@ -157,12 +157,12 @@ fun SettingsClickable(
     var showDialog by rememberSaveable { mutableStateOf(defaultOpen) }
     SettingsLayout(
         modifier = Modifier.clickable { showDialog = true } then run {
-            if (defaultOpen && !showDialog) {
+            if (defaultOpen) {
                 val alpha = remember { Animatable(0f) }
                 LaunchedEffect(Unit) {
-                    repeat(5) {
+                    repeat(3) {
                         alpha.animateTo(0.1f, tween(2500, easing = LinearEasing))
-                        alpha.animateTo(0f, tween(durationMillis = 2500, easing = LinearEasing))
+                        alpha.animateTo(0f, tween(2500, easing = LinearEasing))
                     }
                 }
                 Modifier.background(LocalContentColor.current.copy(alpha = alpha.value))
