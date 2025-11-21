@@ -44,6 +44,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_BOLD_FONT
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_CUSTOM_IMAGE_NAME
@@ -282,6 +283,7 @@ private fun ColumnScope.FontPicker(
 
 @Composable
 private fun ColumnScope.ImagePicker(showMore: Boolean) {
+    if (!BuildConfig.DEVELOPMENT) return
     val customImageName by customImageName.collectAsState()
     val context = LocalContext.current
     val imagePicker = rememberLauncherForActivityResult(
