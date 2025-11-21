@@ -233,7 +233,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
         SettingsSingleSelect(
             key = PREF_ISLAMIC_OFFSET,
             // One is formatted with locale's numerals and the other used for keys isn't
-            entries = (-2..2).map { numeral.format(it.toString()) },
+            entries = (-2..2).map { numeral.format(it) },
             entryValues = (-2..2).map { it.toString() },
             persistedValue = islamicCalendarOffset.collectAsState().value.toString(),
             dialogTitleResId = R.string.islamic_offset,
