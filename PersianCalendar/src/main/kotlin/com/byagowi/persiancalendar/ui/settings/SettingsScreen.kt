@@ -89,6 +89,7 @@ import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -181,6 +182,8 @@ fun SharedTransitionScope.SettingsScreen(
     ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+            val customImageName by customImageName.collectAsState()
+            val disableStickyHeader = isTalkBackEnabled || customImageName != null
             val tabs = listOf(
                 TabItem(
                     outlinedIcon = Icons.Outlined.Palette,
@@ -190,12 +193,12 @@ fun SharedTransitionScope.SettingsScreen(
                 ) { listState ->
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
-                        isTalkBackEnabled = isTalkBackEnabled,
+                        disableStickyHeader = disableStickyHeader,
                         title = R.string.pref_ui,
                     ) { InterfaceSettings(destination) }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
-                        isTalkBackEnabled = isTalkBackEnabled,
+                        disableStickyHeader = disableStickyHeader,
                         title = R.string.calendar,
                     ) { CalendarSettings(destination, destinationItem) }
                 },
@@ -207,12 +210,12 @@ fun SharedTransitionScope.SettingsScreen(
                 ) { listState ->
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
-                        isTalkBackEnabled = isTalkBackEnabled,
+                        disableStickyHeader = disableStickyHeader,
                         title = R.string.pref_notification,
                     ) { NotificationSettings() }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
-                        isTalkBackEnabled = isTalkBackEnabled,
+                        disableStickyHeader = disableStickyHeader,
                         title = R.string.pref_widget,
                     ) { WidgetSettings() }
                 },
@@ -224,12 +227,12 @@ fun SharedTransitionScope.SettingsScreen(
                 ) { listState ->
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
-                        isTalkBackEnabled = isTalkBackEnabled,
+                        disableStickyHeader = disableStickyHeader,
                         title = R.string.location,
                     ) { LocationSettings(navigateToMap) }
                     settingsSection(
                         canScrollBackward = listState.canScrollBackward,
-                        isTalkBackEnabled = isTalkBackEnabled,
+                        disableStickyHeader = disableStickyHeader,
                         title = R.string.athan,
                         subtitle = {
                             val coordinates by coordinates.collectAsState()

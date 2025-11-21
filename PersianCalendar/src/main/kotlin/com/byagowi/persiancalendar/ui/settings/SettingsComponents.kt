@@ -85,12 +85,12 @@ import kotlin.math.roundToInt
 
 fun LazyListScope.settingsSection(
     canScrollBackward: Boolean,
-    isTalkBackEnabled: Boolean,
+    disableStickyHeader: Boolean,
     @StringRes title: Int,
     subtitle: @Composable () -> String? = { null },
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    if (isTalkBackEnabled) item { SettingsSectionLayout(title, subtitle) } else stickyHeader {
+    if (disableStickyHeader) item { SettingsSectionLayout(title, subtitle) } else stickyHeader {
         Box(
             if (canScrollBackward) Modifier.background(
                 Brush.verticalGradient(
