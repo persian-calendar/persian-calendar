@@ -446,19 +446,18 @@ private fun DayEventContent(
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
                                         buildString {
-                                            val date = event.date
                                             if (event is CalendarEvent.DeviceCalendarEvent) {
                                                 append(stringResource(R.string.show_device_calendar_events))
                                             } else if (event.source == EventSource.AncientIran && event.date is PersianDate) {
-                                                append(jalaliDayOfYear(date))
+                                                append(jalaliDayOfYear(event.date))
                                             } else {
-                                                if (date.year == everyYear) append(
+                                                if (event.date.year == everyYear) append(
                                                     language.dm.format(
-                                                        numeral.format(date.dayOfMonth),
-                                                        date.monthName,
+                                                        numeral.format(event.date.dayOfMonth),
+                                                        event.date.monthName,
                                                     ) + spacedComma
                                                 )
-                                                append(stringResource(date.calendar.shortTitle))
+                                                append(stringResource(event.date.calendar.shortTitle))
                                             }
                                             if (event.isHoliday) append(spacedComma + holidayString)
                                         },
