@@ -485,13 +485,13 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                     parts.forEachIndexed { i, part ->
                         Text(
                             text = part,
-                            color = chipTextColor,
+                            color = animateColor(chipTextColor).value,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .padding(start = if (i != 0) 2.dp else 0.dp)
                                 .clip(MaterialTheme.shapes.extraSmall)
                                 .heightIn(min = 20.dp)
-                                .background(chipBackgroundColor)
+                                .background(animateColor(chipBackgroundColor).value)
                                 .padding(
                                     start = if (i == 0) 8.dp else 4.dp,
                                     end = if (i == parts.size - 1) 8.dp else 4.dp,
