@@ -20,6 +20,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
@@ -91,6 +92,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -126,7 +128,15 @@ fun ColumnScope.CalendarSettings(destination: String?) {
                     this.AnimatedVisibility(
                         isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty()
                     ) {
-                        FilledIconButton(onClick = { showEventsSettingsDialog = true }) {
+                        val defaultColors = IconButtonDefaults.filledIconButtonColors()
+                        val colors = defaultColors.copy(
+                            containerColor = animateColor(defaultColors.containerColor).value,
+                            contentColor = animateColor(defaultColors.contentColor).value,
+                        )
+                        FilledIconButton(
+                            colors = colors,
+                            onClick = { showEventsSettingsDialog = true },
+                        ) {
                             Icon(
                                 Icons.Default.Settings,
                                 contentDescription = stringResource(R.string.settings),
