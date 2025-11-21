@@ -123,8 +123,8 @@ fun CalendarScreen(
             ) {
                 val formattedYear = localeUtils.format(focusedPersianDate.year)
                 AnimatedContent(
-                    localeUtils.persianMonth(focusedPersianDate) + " " + formattedYear,
-                    transitionSpec = appCrossfadeSpec,
+                    targetState = localeUtils.persianMonth(focusedPersianDate) + " " + formattedYear,
+                    transitionSpec = appCrossfadeSpec
                 ) { Text(it) }
             }
             Row(

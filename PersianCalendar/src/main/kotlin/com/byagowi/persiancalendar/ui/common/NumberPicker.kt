@@ -173,7 +173,7 @@ fun NumberPicker(
                         .clearAndSetSemantics {},
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
-                Crossfade(showTextEdit) { isInNumberEdit ->
+                Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
                     if (isInNumberEdit) NumberEdit(
                         dismissNumberEdit = { showTextEdit = false },
                         modifier = Modifier.height(numbersColumnHeight / 3),

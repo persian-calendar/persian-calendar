@@ -359,8 +359,9 @@ fun SharedTransitionScope.MapScreen(
             ) {
                 TimeArrow(mapDraw, viewModel, isPrevious = true)
                 AnimatedContent(
-                    formattedTime,
                     modifier = Modifier.weight(1f, fill = false),
+                    targetState = formattedTime,
+                    label = "time",
                     transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Text(

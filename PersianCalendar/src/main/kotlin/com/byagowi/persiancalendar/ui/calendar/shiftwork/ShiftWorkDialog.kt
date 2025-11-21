@@ -165,6 +165,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                         AnimatedContent(
                             summary,
                             transitionSpec = appCrossfadeSpec,
+                            label = "summary",
                         ) { state ->
                             Text(
                                 state,

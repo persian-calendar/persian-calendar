@@ -156,7 +156,7 @@ fun SharedTransitionScope.LevelScreen(
                 actions = {
                     run {
                         val rotation by animateFloatAsState(
-                            if (cmInchFlip) 180f else 0f,
+                            if (cmInchFlip) 180f else 0f, label = "rotation",
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         )
                         val language by language.collectAsState()
@@ -177,6 +177,7 @@ fun SharedTransitionScope.LevelScreen(
         val topCornersRoundness by animateDpAsState(
             if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
             animationSpec = tween(durationMillis = 500, easing = LinearEasing),
+            label = "corner",
         )
         ScreenSurface(
             animatedContentScope = animatedContentScope,
@@ -189,7 +190,7 @@ fun SharedTransitionScope.LevelScreen(
         ) {
             Box {
                 val typeface = resolveAndroidCustomTypeface()
-                Crossfade(cmInchFlip) { state ->
+                Crossfade(targetState = cmInchFlip, label = "ruler") { state ->
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()

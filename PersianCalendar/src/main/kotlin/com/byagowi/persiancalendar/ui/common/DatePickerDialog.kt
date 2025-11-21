@@ -105,7 +105,7 @@ fun DatePickerDialog(
 
         DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
         var showNumberEdit by remember { mutableStateOf(false) }
-        Crossfade(showNumberEdit) { isInNumberEdit ->
+        Crossfade(targetState = showNumberEdit, label = "edit toggle") { isInNumberEdit ->
             if (isInNumberEdit) NumberEdit(
                 dismissNumberEdit = { showNumberEdit = false },
                 initialValue = jdn - today,
@@ -114,7 +114,7 @@ fun DatePickerDialog(
                 pendingConfirms = pendingConfirms,
             ) { jdn = today + it } else AnimatedVisibility(jdn != today) {
                 AnimatedContent(
-                    listOf(
+                    targetState = listOf(
                         stringResource(R.string.days_distance), spacedColon,
                         calculateDaysDifference(
                             LocalResources.current,
@@ -132,6 +132,7 @@ fun DatePickerDialog(
                             animationSpec = tween(500)
                         )
                     },
+                    label = "days distance",
                 ) { state ->
                     Box(
                         modifier = Modifier

@@ -77,7 +77,8 @@ fun SharedTransitionScope.Times(
                     )
                     Text(stringResource(prayTime.stringRes), color = textColor)
                     AnimatedContent(
-                        prayTimes[prayTime].toFormattedString(),
+                        targetState = prayTimes[prayTime].toFormattedString(),
+                        label = "time",
                         transitionSpec = appCrossfadeSpec,
                     ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
                     Spacer(Modifier.height(8.dp))

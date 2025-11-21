@@ -148,7 +148,8 @@ fun SharedTransitionScope.EventsTab(
         val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
         this.AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
-                shiftWorkTitle.orEmpty(),
+                targetState = shiftWorkTitle.orEmpty(),
+                label = "shift work title",
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer {
@@ -166,7 +167,8 @@ fun SharedTransitionScope.EventsTab(
         val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn)
         this.AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
-                shiftWorkInDaysDistance.orEmpty(),
+                targetState = shiftWorkInDaysDistance.orEmpty(),
+                label = "shift work days diff",
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer {
@@ -288,9 +290,10 @@ fun DayEvents(
     events.forEach { event ->
         val backgroundColor by animateColor(eventColor(event))
         AnimatedContent(
-            event.title.let { title ->
+            targetState = event.title.let { title ->
                 (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "$title\n$it" } ?: title
             },
+            label = "event title",
             transitionSpec = {
                 (if (event is CalendarEvent.EquinoxCalendarEvent) noTransitionSpec
                 else appCrossfadeSpec)()

@@ -535,7 +535,8 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
     val isDark = userSetTheme.isDark ?: return
     val context = LocalContext.current
     Crossfade(
-        if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+        label = "dark mode toggle",
+        targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
         modifier = Modifier
             .semantics { this.hideFromAccessibility() }
             .padding(bottom = 20.dp, end = 28.dp)

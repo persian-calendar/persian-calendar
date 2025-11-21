@@ -18,7 +18,7 @@ fun ComposeContentTestRule.setContentWithParent(
     setContent {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
             SharedTransitionLayout {
-                AnimatedContent(Unit) { state ->
+                AnimatedContent(targetState = Unit, label = "") { state ->
                     state.let {}
                     content(this)
                 }

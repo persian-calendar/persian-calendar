@@ -46,6 +46,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
                     stiffness = Spring.StiffnessMediumLow,
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                 ),
+                label = "rotation",
             )
             AppIconButton(
                 icon = Icons.Default.MoreVert,

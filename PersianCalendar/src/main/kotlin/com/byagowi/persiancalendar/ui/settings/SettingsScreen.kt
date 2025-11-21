@@ -146,7 +146,8 @@ fun SharedTransitionScope.SettingsScreen(
                     windowInsets = WindowInsets(),
                     title = {
                         AnimatedContent(
-                            stringResource(R.string.settings),
+                            targetState = stringResource(R.string.settings),
+                            label = "title",
                             transitionSpec = appCrossfadeSpec,
                         ) { state -> Text(state) }
                     },
@@ -328,7 +329,7 @@ private data class TabItem(
 
     @Composable
     fun Icon(isSelected: Boolean) {
-        Crossfade(isSelected) {
+        Crossfade(isSelected, label = "icon") {
             Icon(if (it) filledIcon else outlinedIcon, contentDescription = null)
         }
     }

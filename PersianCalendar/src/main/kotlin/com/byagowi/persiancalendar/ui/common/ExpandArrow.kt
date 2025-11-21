@@ -30,6 +30,7 @@ fun ExpandArrow(
     } * if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
     val angle by animateFloatAsState(
         targetValue = targetValue,
+        label = "angle",
         animationSpec = spring(
             stiffness = Spring.StiffnessMediumLow,
             dampingRatio = Spring.DampingRatioMediumBouncy,
