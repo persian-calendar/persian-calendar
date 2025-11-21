@@ -543,7 +543,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
     Column(modifier) {
         val jdn by remember { derivedStateOf { Jdn(state.date.toCivilDate()) } }
         headerCache[jdn].fastForEach { line ->
-            AnimatedContent(targetState = line, label = "line", transitionSpec = appCrossfadeSpec) {
+            AnimatedContent(line, transitionSpec = appCrossfadeSpec) {
                 SelectionContainer {
                     Text(
                         text = it,

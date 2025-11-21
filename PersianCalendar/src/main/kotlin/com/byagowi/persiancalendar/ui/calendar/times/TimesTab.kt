@@ -164,7 +164,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
     var needsAnimation by remember(isToday) { mutableStateOf(isToday) }
 
     Crossfade(
-        targetState = isToday,
+        isToday,
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp),

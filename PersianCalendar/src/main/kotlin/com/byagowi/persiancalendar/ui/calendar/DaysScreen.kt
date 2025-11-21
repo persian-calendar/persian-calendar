@@ -236,7 +236,6 @@ fun SharedTransitionScope.DaysScreen(
 
     AnimatedContent(
         isWeekView,
-        label = "is week view",
         transitionSpec = noTransitionSpec,
     ) { isWeekViewState ->
         Scaffold(
@@ -992,13 +991,11 @@ private fun DaysView(
                     animationSpec = if (interaction == Interaction.Zoom) snap() else {
                         spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
                     },
-                    label = "offset"
                 ).value
                 val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
-                    animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
-                    label = "duration"
+                    animationSpec = if (interaction == Interaction.Zoom) snap() else spring()
                 )
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val widthReduction = remember { Animatable(defaultWidthReductionPx) }
@@ -1141,7 +1138,7 @@ private fun DaysView(
                     val alpha by animateFloatAsState(
                         if (offset == null) 0f else 1f, animationSpec = spring(
                             Spring.DampingRatioNoBouncy, Spring.StiffnessLow
-                        ), label = "alpha"
+                        )
                     )
                     if (offset == null) return@addEventBox
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)

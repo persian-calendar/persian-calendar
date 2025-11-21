@@ -40,7 +40,6 @@ private fun BoxScope.ScrollShadowImpl(scrollState: ScrollState, top: Boolean) {
         targetValue = with(LocalDensity.current) {
             (abs((scrollState.value - (if (top) 0 else scrollState.maxValue))) / 8).toDp()
         }.coerceAtMost(8.dp),
-        label = "scroll shadow height",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value
     ScrollShadowBar(top, height)
@@ -52,7 +51,6 @@ private fun BoxScope.ScrollShadowImpl(listState: LazyListState, top: Boolean) {
     val needsShadow = if (top) listState.canScrollBackward else listState.canScrollForward
     val height = if (listState.canScrollBackward || listState.canScrollForward) animateDpAsState(
         targetValue = if (needsShadow) 8.dp else 0.dp,
-        label = "height",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value else 0.dp
     ScrollShadowBar(top, height)

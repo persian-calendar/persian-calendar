@@ -62,7 +62,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
     ) {
         val direction = remember { listOf(1, -1).random() }
-        val infiniteTransition = rememberInfiniteTransition(label = "rotation")
+        val infiniteTransition = rememberInfiniteTransition()
         val animationSpec = infiniteRepeatable<Float>(
             animation = tween(durationMillis = 180_000, easing = LinearEasing)
         )
@@ -115,7 +115,7 @@ private fun DrawBackground(
     animationSpec: InfiniteRepeatableSpec<Float>,
 ) {
     val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f, targetValue = 360f, animationSpec = animationSpec, label = "Rotation"
+        initialValue = 0f, targetValue = 360f, animationSpec = animationSpec
     )
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawIntoCanvas { patternDrawable.draw(it.nativeCanvas, rotation * direction) }

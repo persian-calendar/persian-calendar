@@ -118,7 +118,6 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
             AnimatedContent(
                 stringResource(title),
                 contentAlignment = Alignment.Center,
-                label = "title",
                 transitionSpec = appCrossfadeSpec,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) { state ->
@@ -389,13 +388,11 @@ fun SettingsLayout(
         ) {
             AnimatedContent(
                 title,
-                label = "title",
                 transitionSpec = appCrossfadeSpec,
             ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
             if (summary != null) {
                 AnimatedContent(
                     summary,
-                    label = "summary",
                     transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Text(
@@ -433,11 +430,9 @@ fun SettingsSlider(
     onValueChange: (Float) -> Unit,
 ) {
     Column(Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)) {
-        AnimatedContent(
-            title,
-            label = "title",
-            transitionSpec = appCrossfadeSpec,
-        ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
+        AnimatedContent(title, transitionSpec = appCrossfadeSpec) { state ->
+            Text(state, style = MaterialTheme.typography.bodyLarge)
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Slider(
                 value = animateFloatAsState(value).value.coerceIn(valueRange),

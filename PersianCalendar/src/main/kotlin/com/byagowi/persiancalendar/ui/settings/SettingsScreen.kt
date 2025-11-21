@@ -146,8 +146,7 @@ fun SharedTransitionScope.SettingsScreen(
                     windowInsets = WindowInsets(),
                     title = {
                         AnimatedContent(
-                            targetState = stringResource(R.string.settings),
-                            label = "title",
+                            stringResource(R.string.settings),
                             transitionSpec = appCrossfadeSpec,
                         ) { state -> Text(state) }
                     },

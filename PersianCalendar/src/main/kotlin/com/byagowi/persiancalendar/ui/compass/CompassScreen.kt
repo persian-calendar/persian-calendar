@@ -135,7 +135,6 @@ fun SharedTransitionScope.CompassScreen(
     val timeShiftAnimate by animateFloatAsState(
         if (isTimeShiftAnimate) 24f else 0f,
         animationSpec = tween(durationMillis = if (isTimeShiftAnimate) 10.seconds.inWholeMilliseconds.toInt() else 0),
-        label = "time shift",
     ) {
         if (isTimeShiftAnimate) {
             timeShift = 0f

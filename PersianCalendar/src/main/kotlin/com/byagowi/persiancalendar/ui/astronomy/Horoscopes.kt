@@ -326,7 +326,7 @@ fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
             else -> FooterAction.None
         }
         Crossfade(
-            targetState = action,
+            action,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .animateContentSize(),

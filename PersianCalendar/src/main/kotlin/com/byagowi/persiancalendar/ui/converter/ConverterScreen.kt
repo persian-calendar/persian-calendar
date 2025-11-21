@@ -348,11 +348,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             modifier = Modifier.weight(1f),
             colors = textFieldColors,
         )
-        AnimatedContent(
-            result,
-            label = "calculator result",
-            modifier = Modifier.weight(1f),
-        ) {
+        AnimatedContent(result, modifier = Modifier.weight(1f)) {
             Text(
                 it,
                 textAlign = TextAlign.Center,
@@ -370,7 +366,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             colors = textFieldColors,
         )
         Spacer(Modifier.height(16.dp))
-        AnimatedContent(result, label = "calculator result") {
+        AnimatedContent(result) {
             Text(
                 it,
                 textAlign = TextAlign.Center,
@@ -608,7 +604,6 @@ private fun TextWithSlideAnimation(text: String) {
                 animationSpec = tween(500)
             )
         },
-        label = "slide text",
     ) {
         SelectionContainer {
             Text(it, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())

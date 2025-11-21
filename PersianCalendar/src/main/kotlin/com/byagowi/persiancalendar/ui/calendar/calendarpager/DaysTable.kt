@@ -269,7 +269,6 @@ fun daysTable(
                             modifier = Modifier
                                 .offset(x = (16 - 4).dp)
                                 .size((24 + 8).dp, cellHeight),
-                            label = "week number",
                         ) {
                             val weekNumber = onlyWeek ?: (monthStartWeekOfYear + row)
                             Box(

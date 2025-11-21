@@ -101,7 +101,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             },
         ) { i, (calendar, checked), isDragging ->
             key(calendar) {
-                val blur by animateDpAsState(if (dragStarted) 2.dp else 0.dp, label = "blur")
+                val blur by animateDpAsState(if (dragStarted) 2.dp else 0.dp)
                 val interactionSource = remember(calendar) { MutableInteractionSource() }
                 val moveUp = stringResource(R.string.move_up)
                 val moveDown = stringResource(R.string.move_down)

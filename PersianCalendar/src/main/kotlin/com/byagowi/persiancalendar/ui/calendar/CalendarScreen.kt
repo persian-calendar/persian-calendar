@@ -775,7 +775,7 @@ private fun Search(viewModel: CalendarViewModel) {
     viewModel.searchEvent(query)
     val events by viewModel.eventsFlow.collectAsState()
     val expanded = query.isNotEmpty()
-    val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
+    val padding by animateDpAsState(if (expanded) 0.dp else 32.dp)
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     SearchBar(
@@ -814,11 +814,7 @@ private fun Search(viewModel: CalendarViewModel) {
                         .fillMaxWidth()
                         .padding(vertical = 20.dp, horizontal = 24.dp),
                 ) {
-                    AnimatedContent(
-                        targetState = event.title,
-                        label = "title",
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state ->
+                    AnimatedContent(event.title, transitionSpec = appCrossfadeSpec) { state ->
                         Text(
                             state,
                             modifier = Modifier.align(Alignment.CenterStart),
@@ -922,9 +918,7 @@ private fun SharedTransitionScope.Toolbar(
                         else viewModel.openYearView()
                     }
                     .then(
-                        if (isYearView) Modifier
-                            .heightIn(max = toolbarHeight)
-                            .fillMaxWidth()
+                        if (isYearView) Modifier.heightIn(max = toolbarHeight).fillMaxWidth()
                         else Modifier
                     ),
             ) {
@@ -944,9 +938,7 @@ private fun SharedTransitionScope.Toolbar(
                 }
                 this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(subtitle) { subtitle ->
-                        val fraction by animateFloatAsState(
-                            targetValue = if (isYearView) 1f else 0f, label = "font size"
-                        )
+                        val fraction by animateFloatAsState(if (isYearView) 1f else 0f)
                         Text(
                             if (isTalkBackEnabled && isYearView) "$subtitle ${stringResource(R.string.year_view)}"
                             else subtitle,
@@ -978,7 +970,7 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            Crossfade(targetState = isYearView) { state ->
+            Crossfade(isYearView) { state ->
                 if (state) AppIconButton(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
@@ -1128,7 +1120,6 @@ private fun SharedTransitionScope.Menu(
                     }) {
                         val alpha by animateFloatAsState(
                             targetValue = if (preferredAction == item) 1f else .2f,
-                            label = "alpha",
                         )
                         val color = LocalContentColor.current.copy(alpha = alpha)
                         Icon(swipeIcon, null, tint = color)

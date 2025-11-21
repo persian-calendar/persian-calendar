@@ -164,7 +164,6 @@ fun CoordinatesDialog(
         ) {
             AnimatedContent(
                 cityName.orEmpty(),
-                label = "summary",
                 transitionSpec = appCrossfadeSpec,
             ) { state -> Text(state, style = MaterialTheme.typography.titleSmall) }
         }
