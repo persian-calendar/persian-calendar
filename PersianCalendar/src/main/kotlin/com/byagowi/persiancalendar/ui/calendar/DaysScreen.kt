@@ -708,13 +708,11 @@ private fun DaysView(
                         Column(Modifier.weight(1f)) {
                             if (!hasWeekPager) {
                                 val weekDay = weekStart + i
-                                val weekDayTitle = stringResource(weekDay.titleId)
+                                val weekDayTitle = weekDay.title
                                 val isLandscape =
                                     LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                                 Text(
-                                    text = if (isLandscape) weekDayTitle else stringResource(
-                                        weekDay.shortTitleId
-                                    ),
+                                    text = if (isLandscape) weekDayTitle else weekDay.shortTitle,
                                     maxLines = 1,
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.bodySmall,
@@ -835,9 +833,7 @@ private fun DaysView(
                                             .semantics {
                                                 if (isTalkBackEnabled) {
                                                     this.contentDescription = listOf(
-                                                        resources.getString(
-                                                            (startingDay + (column - 1)).weekDay.titleId
-                                                        ),
+                                                        (startingDay + (column - 1)).weekDay.title,
                                                         clockCache[row * 60],
                                                         clockCache[(row + 1) * 60]
                                                     ).joinToString(" ")

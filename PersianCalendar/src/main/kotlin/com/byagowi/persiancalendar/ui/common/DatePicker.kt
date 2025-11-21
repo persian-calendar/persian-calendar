@@ -54,7 +54,7 @@ private fun RowScope.DatePickerContent(
     val resources = LocalResources.current
     val daysFormat = remember(calendar, date.year, date.month) {
         val monthStart = Jdn(calendar, date.year, date.month, 1);
-        { item: Int -> numeral.format(item) + " / " + resources.getString((monthStart + item - 1).weekDay.titleId) }
+        { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDay.title }
     }
     val monthsLength = remember(calendar, date.year, date.month) {
         calendar.getMonthLength(date.year, date.month)

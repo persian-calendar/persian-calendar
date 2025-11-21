@@ -101,7 +101,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         val weekStart = weekStart.value
         tr {
             if (isShowWeekOfYearEnabled.value) th {}
-            repeat(7) { th { +context.getString((weekStart + it).titleId) } }
+            repeat(7) { th { +(weekStart + it).title } }
         }
         val monthLength = date.calendar.getMonthLength(date.year, date.month)
         val monthStartJdn = Jdn(date)

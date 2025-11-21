@@ -172,9 +172,9 @@ fun SharedTransitionScope.CalendarsOverview(
             val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
             AnimatedContent(
                 if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
-                    stringResource(jdn.weekDay.titleId),
+                    jdn.weekDay.title,
                     stringResource(R.string.iran_time)
-                ) else stringResource(jdn.weekDay.titleId),
+                ) else jdn.weekDay.title,
                 transitionSpec = appCrossfadeSpec,
                 label = "weekday name",
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }

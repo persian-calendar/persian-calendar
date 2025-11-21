@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
@@ -62,6 +63,7 @@ import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
@@ -262,6 +264,10 @@ private val alternativePersianMonthsInAzeri_ =
     MutableStateFlow(DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS)
 val alternativePersianMonthsInAzeri: StateFlow<Boolean> get() = alternativePersianMonthsInAzeri_
 
+private val englishWeekDaysInIranEnglish_ =
+    MutableStateFlow(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
+val englishWeekDaysInIranEnglish: StateFlow<Boolean> get() = englishWeekDaysInIranEnglish_
+
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
 val coordinates: StateFlow<Coordinates?> get() = coordinates_
 
@@ -428,8 +434,11 @@ fun loadLanguageResources(resources: Resources) {
         englishGregorianPersianMonths.value || easternGregorianArabicMonths.value,
     )
     nepaliMonths = language.getNepaliMonths()
-    weekDaysTitles = language.getWeekDays(resources)
-    weekDaysTitlesInitials = language.getWeekDaysInitials(resources)
+    weekDaysTitles = if (englishWeekDaysInIranEnglish.value) Language.EN_US.getWeekDays(resources)
+    else language.getWeekDays(resources)
+    weekDaysTitlesInitials =
+        if (englishWeekDaysInIranEnglish.value) Language.EN_US.getWeekDaysInitials(resources)
+        else language.getWeekDaysInitials(resources)
     shiftWorkTitles = mapOf(
         "d" to resources.getString(R.string.shift_work_morning), // d -> day work, legacy key
         "r" to resources.getString(R.string.shift_work_off), // r -> rest, legacy key
@@ -499,6 +508,9 @@ fun updateStoredPreference(context: Context) {
     )
     alternativePersianMonthsInAzeri_.value = language == Language.AZB && preferences.getBoolean(
         PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS, DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+    )
+    englishWeekDaysInIranEnglish_.value = language == Language.EN_IR && preferences.getBoolean(
+        PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH, DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
     )
 
     prefersWidgetsDynamicColors_.value =

@@ -140,10 +140,10 @@ fun SharedTransitionScope.MonthScreen(
                             val weekDay = weekStart + column
                             val description = stringResource(
                                 R.string.week_days_name_column,
-                                stringResource(weekDay.titleId),
+                                weekDay.title,
                             )
                             Text(
-                                stringResource(weekDay.shortTitleId),
+                                weekDay.shortTitle,
                                 fontSize = with(density) { (diameter * .5f).toSp() },
                                 modifier = Modifier
                                     .alpha(AppBlendAlpha)

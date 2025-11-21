@@ -238,7 +238,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     }
     val weekStart by weekStart.collectAsState()
     val weekDays = WeekDay.entries.map { it + weekStart.ordinal }
-    val weekDaysTitles = weekDays.map { stringResource(it.titleId) }
+    val weekDaysTitles = weekDays.map { it.title }
     val weekDaysValues = weekDays.map { it.ordinal.toString() }
     SettingsSingleSelect(
         key = PREF_WEEK_START,

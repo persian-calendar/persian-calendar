@@ -226,8 +226,9 @@ enum class Language(val code: String, val nativeName: String) {
     val defaultCalendars
         get() = when {
             this == FA -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
-            prefersGregorianCalendar ->
-                listOf(Calendar.GREGORIAN, Calendar.ISLAMIC, Calendar.SHAMSI)
+            prefersGregorianCalendar -> listOf(
+                Calendar.GREGORIAN, Calendar.ISLAMIC, Calendar.SHAMSI
+            )
 
             prefersIslamicCalendar -> listOf(Calendar.ISLAMIC, Calendar.GREGORIAN, Calendar.SHAMSI)
             prefersPersianCalendar -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
@@ -311,13 +312,20 @@ enum class Language(val code: String, val nativeName: String) {
     fun getWeekDays(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInPersian
         EN_IR -> weekDaysInEnglishIran
-        else -> WeekDay.entries.map { resources.getString(it.titleId) }
+        else -> listOf(
+            R.string.saturday, R.string.sunday, R.string.monday, R.string.tuesday,
+            R.string.wednesday, R.string.thursday, R.string.friday,
+        ).map { resources.getString(it) }
     }
 
     fun getWeekDaysInitials(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInitialsInPersian
         EN_IR -> weekDaysInitialsInEnglishIran
-        else -> WeekDay.entries.map { resources.getString(it.shortTitleId) }
+        else -> listOf(
+            R.string.saturday_short, R.string.sunday_short, R.string.monday_short,
+            R.string.tuesday_short, R.string.wednesday_short, R.string.thursday_short,
+            R.string.friday_short,
+        ).map(resources::getString)
     }
 
     fun getCountryName(cityItem: CityItem): String = when {
@@ -413,13 +421,9 @@ enum class Language(val code: String, val nativeName: String) {
             AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> $$"%3$s$$sep%2$s$$sep%1$s"
         }
         return format.format(
-            numeral.format(year),
-            numeral.format(
-                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it }
-            ),
-            numeral.format(
-                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it }
-            )
+            numeral.format(year), numeral.format(
+                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it }), numeral.format(
+                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it })
         )
     }
 
@@ -579,8 +583,9 @@ enum class Language(val code: String, val nativeName: String) {
             return when (userDeviceLanguage) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
 
-                "en", EN_US.code ->
-                    guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(context)
+                "en", EN_US.code -> guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(
+                    context
+                )
 
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
@@ -605,8 +610,9 @@ enum class Language(val code: String, val nativeName: String) {
                         } else @Suppress("DEPRECATION") submethod.locale
                         debugLog("Language: '$locale' is available in keyboards")
                         if (locale.isEmpty()) return@forEach
-                        val language = valueOfLanguageCode(locale)
-                            ?: valueOfLanguageCode(locale.split("-").firstOrNull().orEmpty())
+                        val language = valueOfLanguageCode(locale) ?: valueOfLanguageCode(
+                            locale.split("-").firstOrNull().orEmpty()
+                        )
                         // Use the knowledge only to detect Persian language
                         // as others might be surprising
                         if (language?.isPersianOrDari == true) return@runCatching language
