@@ -1,14 +1,17 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,8 +20,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
@@ -40,8 +46,10 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_BOLD_FONT
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
+import com.byagowi.persiancalendar.PREF_CUSTOM_IMAGE_NAME
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
@@ -49,7 +57,10 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
+import com.byagowi.persiancalendar.STORED_IMAGE_NAME
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
@@ -198,65 +209,115 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.preferences.edit { putBoolean(PREF_BOLD_FONT, it) } }
         }
 
-        val customFontToken by customFontName.collectAsState()
-        val fontPicker = rememberLauncherForActivityResult(
-            ActivityResultContracts.OpenDocument()
-        ) { uri ->
-            if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                File(context.filesDir, STORED_FONT_NAME).outputStream()
-                    .use(inputStream::copyTo)
-                // It's funny but if dialog isn't closed before the font change it can cause crash
-                // with "Out of order buffers detected for RequestedLayerState" and
-                // "Out of order buffers detected for RequestedLayerState" messages and without
-                // any vm stacktrace…
-                onDismissRequest()
-                context.preferences.edit {
-                    putString(
-                        PREF_CUSTOM_FONT_NAME,
-                        "${Random.nextDouble()}/${getFileName(context, uri)}",
-                    )
-                }
+        FontPicker(onDismissRequest, showMore)
+        ImagePicker(showMore)
+    }
+}
+
+@Composable
+private fun ColumnScope.FontPicker(
+    onDismissRequest: () -> Unit,
+    showMore: Boolean,
+) {
+    val customFontToken by customFontName.collectAsState()
+    val context = LocalContext.current
+    val fontPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            File(context.filesDir, STORED_FONT_NAME).outputStream()
+                .use(inputStream::copyTo)
+            // It's funny but if dialog isn't closed before the font change it can cause crash
+            // with "Out of order buffers detected for RequestedLayerState" and
+            // "Out of order buffers detected for RequestedLayerState" messages and without
+            // any vm stacktrace…
+            onDismissRequest()
+            context.preferences.edit {
+                putString(
+                    PREF_CUSTOM_FONT_NAME,
+                    "${Random.nextDouble()}/${getFileName(context, uri)}",
+                )
             }
         }
-        this.AnimatedVisibility(visible = showMore || customFontToken != null) {
-            Column(Modifier.padding(start = 24.dp)) {
-                Row {
-                    Button(onClick = {
-                        if (language.isPersianOrDari) Toast.makeText(
-                            context,
-                            "پرونده‌ای در قالب ttf یا otf انتخاب کنید",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        fontPicker.launch(
-                            listOf(
-                                "font/ttf",
-                                "font/otf",
-                                "font/sfnt",
-                                "font/collection",
-                                "font/truetype",
-                                "font/opentype",
-                                "application/x-font-ttf",
-                                "application/x-font-otf",
-                            ).let {
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                                    it + "application/octet-stream"
-                                else it
-                            }.toTypedArray()
-                        )
-                    }) { Text(stringResource(R.string.select_font)) }
-                    this.AnimatedVisibility(
-                        customFontToken != null,
-                        Modifier.padding(start = 8.dp),
-                    ) {
-                        OutlinedIconButton({
-                            context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
-                            File(context.filesDir, STORED_FONT_NAME).delete()
-                        }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
-                    }
+    }
+    this.AnimatedVisibility(visible = showMore || customFontToken != null) {
+        val language by language.collectAsState()
+        Column(Modifier.padding(start = 24.dp)) {
+            Row {
+                Button(onClick = {
+                    if (language.isPersianOrDari) Toast.makeText(
+                        context,
+                        "پرونده‌ای در قالب ttf یا otf انتخاب کنید",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    fontPicker.launch(
+                        listOf(
+                            "font/ttf",
+                            "font/otf",
+                            "font/sfnt",
+                            "font/collection",
+                            "font/truetype",
+                            "font/opentype",
+                            "application/x-font-ttf",
+                            "application/x-font-otf",
+                        ).let {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                                it + "application/octet-stream"
+                            else it
+                        }.toTypedArray()
+                    )
+                }) { Text(stringResource(R.string.select_font)) }
+                this.AnimatedVisibility(
+                    customFontToken != null,
+                    Modifier.padding(start = 8.dp),
+                ) {
+                    OutlinedIconButton({
+                        context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
+                        File(context.filesDir, STORED_FONT_NAME).delete()
+                    }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
                 }
-                AnimatedVisibility(customFontToken != null) {
-                    Text(customFontToken.orEmpty().split("/").last().split(".").first())
+            }
+            AnimatedVisibility(customFontToken != null) {
+                Text(customFontToken.orEmpty().split("/").last().split(".").first())
+            }
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.ImagePicker(showMore: Boolean) {
+    val customImageName by customImageName.collectAsState()
+    val context = LocalContext.current
+    val imagePicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            File(context.filesDir, STORED_IMAGE_NAME).outputStream()
+                .use(inputStream::copyTo)
+            context.preferences.edit {
+                putString(PREF_CUSTOM_IMAGE_NAME, getFileName(context, uri))
+            }
+        }
+    }
+    this.AnimatedVisibility(visible = showMore || customImageName != null) {
+        Column(Modifier.padding(start = 24.dp)) {
+            Row {
+                FilledIconButton(onClick = {
+                    val mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                    imagePicker.launch(PickVisualMediaRequest(mediaType))
+                }) { Icon(Icons.Default.Image, null) }
+                this.AnimatedVisibility(
+                    customImageName != null,
+                    Modifier.padding(start = 8.dp),
+                ) {
+                    OutlinedIconButton({
+                        context.preferences.edit { remove(PREF_CUSTOM_IMAGE_NAME) }
+                        File(context.filesDir, STORED_FONT_NAME).delete()
+                    }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
                 }
+            }
+            AnimatedVisibility(customImageName != null) {
+                Text(customImageName.orEmpty())
             }
         }
     }

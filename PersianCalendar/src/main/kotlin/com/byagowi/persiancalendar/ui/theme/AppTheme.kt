@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.theme
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.os.PowerManager
 import android.view.View
@@ -15,11 +16,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -29,7 +32,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SwitchColors
@@ -49,7 +51,9 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -66,7 +70,9 @@ import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
+import com.byagowi.persiancalendar.STORED_IMAGE_NAME
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
@@ -114,7 +120,23 @@ fun AppTheme(content: @Composable () -> Unit) {
                     .clipToBounds()
                     // Don't move this upper to top of the chain so .clipToBounds can be applied to it
                     .background(appBackground()),
-            ) { content() }
+            ) {
+                val customImageName by customImageName.collectAsState()
+                if (customImageName != null) {
+                    val bitmap = remember(customImageName) {
+                        val file = File(context.filesDir, STORED_IMAGE_NAME)
+                            .takeIf { it.exists() } ?: return@remember null
+                        BitmapFactory.decodeFile(file.absolutePath).asImageBitmap()
+                    }
+                    if (bitmap != null) Image(
+                        bitmap = bitmap,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+                content()
+            }
         }
     }
 }

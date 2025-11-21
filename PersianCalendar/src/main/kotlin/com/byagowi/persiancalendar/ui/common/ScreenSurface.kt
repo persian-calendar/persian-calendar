@@ -10,6 +10,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,8 +24,10 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
+import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.needsScreenSurfaceDragHandle
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
@@ -47,7 +50,12 @@ fun SharedTransitionScope.ScreenSurface(
             val outlineColor = MaterialTheme.colorScheme.outline
             val needsScreenSurfaceDragHandle =
                 mayNeedDragHandleToDivide && needsScreenSurfaceDragHandle()
-            val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
+            val customImageName by customImageName.collectAsState()
+            val surfaceColor by animateColor(
+                MaterialTheme.colorScheme.surface.let {
+                    if (customImageName == null) it else it.copy(AppBlendAlpha)
+                }
+            )
             val density = LocalDensity.current
             Canvas(
                 modifier = if (disableSharedContent) Modifier else Modifier.sharedElement(

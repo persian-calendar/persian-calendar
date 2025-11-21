@@ -57,6 +57,7 @@ import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
+import com.byagowi.persiancalendar.PREF_CUSTOM_IMAGE_NAME
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -244,6 +245,9 @@ val isBoldFont: StateFlow<Boolean> get() = isBoldFont_
 
 private val customFontName_ = MutableStateFlow<String?>(null)
 val customFontName: StateFlow<String?> get() = customFontName_
+
+private val customImageName_ = MutableStateFlow<String?>(null)
+val customImageName: StateFlow<String?> get() = customImageName_
 
 
 private val englishGregorianPersianMonths_ =
@@ -486,6 +490,7 @@ fun updateStoredPreference(context: Context) {
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     isBoldFont_.value = preferences.getBoolean(PREF_BOLD_FONT, DEFAULT_BOLD_FONT)
     customFontName_.value = preferences.getString(PREF_CUSTOM_FONT_NAME, null)
+    customImageName_.value = preferences.getString(PREF_CUSTOM_IMAGE_NAME, null)
     englishGregorianPersianMonths_.value = language.isPersian && preferences.getBoolean(
         PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
     )
