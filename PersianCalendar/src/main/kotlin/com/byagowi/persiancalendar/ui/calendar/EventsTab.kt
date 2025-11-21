@@ -304,6 +304,7 @@ fun DayEvents(
                 false -> LayoutDirection.Ltr
                 else -> LocalLayoutDirection.current
             }
+            val originalLayoutDirection = LocalLayoutDirection.current
             CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
                 DayEventContent(
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
@@ -314,6 +315,7 @@ fun DayEvents(
                     language = language,
                     numeral = numeral,
                     coroutineScope = coroutineScope,
+                    originalLayoutDirection = originalLayoutDirection,
                 )
             }
         }
@@ -331,6 +333,7 @@ private fun DayEventContent(
     coroutineScope: CoroutineScope,
     navigateToHolidaysSettings: (() -> Unit)?,
     numeral: Numeral,
+    originalLayoutDirection: LayoutDirection,
 ) {
     val context = LocalContext.current
     Row(
@@ -435,33 +438,39 @@ private fun DayEventContent(
                             }
                         }) else null,
                         title = if (event is CalendarEvent.DeviceCalendarEvent) null else ({
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    buildString {
-                                        val date = event.date
-                                        if (event.source == EventSource.AncientIran && event.date is PersianDate) {
-                                            append(jalaliDayOfYear(date))
-                                        } else {
-                                            if (date.year == everyYear) append(
-                                                language.dm.format(
-                                                    numeral.format(date.dayOfMonth),
-                                                    date.monthName,
-                                                ) + spacedComma
-                                            )
-                                            append(stringResource(date.calendar.shortTitle))
+                            CompositionLocalProvider(
+                                LocalLayoutDirection provides if (event.source == EventSource.AncientIran) {
+                                     LocalLayoutDirection.current
+                                } else originalLayoutDirection
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        buildString {
+                                            val date = event.date
+                                            if (event.source == EventSource.AncientIran && event.date is PersianDate) {
+                                                append(jalaliDayOfYear(date))
+                                            } else {
+                                                if (date.year == everyYear) append(
+                                                    language.dm.format(
+                                                        numeral.format(date.dayOfMonth),
+                                                        date.monthName,
+                                                    ) + spacedComma
+                                                )
+                                                append(stringResource(date.calendar.shortTitle))
+                                            }
+                                            if (event.isHoliday) append(spacedComma + holidayString)
+                                        },
+                                        modifier = Modifier
+                                            .padding(start = 4.dp)
+                                            .weight(1f),
+                                    )
+                                    if (navigateToHolidaysSettings != null) OutlineSettingsButton(
+                                        modifier = Modifier.padding(top = 8.dp, start = 4.dp),
+                                    ) {
+                                        coroutineScope.launch {
+                                            tooltipState.dismiss()
+                                            navigateToHolidaysSettings()
                                         }
-                                        if (event.isHoliday) append(spacedComma + holidayString)
-                                    },
-                                    modifier = Modifier
-                                        .padding(start = 4.dp)
-                                        .weight(1f),
-                                )
-                                if (navigateToHolidaysSettings != null) OutlineSettingsButton(
-                                    modifier = Modifier.padding(top = 8.dp, start = 4.dp),
-                                ) {
-                                    coroutineScope.launch {
-                                        tooltipState.dismiss()
-                                        navigateToHolidaysSettings()
                                     }
                                 }
                             }
