@@ -226,7 +226,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
         LaunchedEffect(Unit) {
             val preferences = context.preferences
             if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
-                putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
+                putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET.toString())
             }
         }
         val numeral by numeral.collectAsState()
@@ -235,7 +235,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
             // One is formatted with locale's numerals and the other used for keys isn't
             entries = (-2..2).map { numeral.format(it.toString()) },
             entryValues = (-2..2).map { it.toString() },
-            persistedValue = islamicCalendarOffset.collectAsState().value,
+            persistedValue = islamicCalendarOffset.collectAsState().value.toString(),
             dialogTitleResId = R.string.islamic_offset,
             title = stringResource(R.string.islamic_offset),
             summaryResId = R.string.islamic_offset_summary,

@@ -215,7 +215,7 @@ val asrMethod: StateFlow<AsrMethod> get() = asrMethod_
 
 // Just to use in the settings
 private val islamicCalendarOffset_ = MutableStateFlow(DEFAULT_ISLAMIC_OFFSET)
-val islamicCalendarOffset: StateFlow<String> get() = islamicCalendarOffset_
+val islamicCalendarOffset: StateFlow<Int> get() = islamicCalendarOffset_
 
 private val language_ = MutableStateFlow(Language.FA)
 val language: StateFlow<Language> get() = language_
@@ -391,7 +391,8 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 
 private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
     return if (preferences.isIslamicOffsetExpired) 0
-    else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
+    else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET.toString())
+        ?.toIntOrNull() ?: DEFAULT_ISLAMIC_OFFSET
 }
 
 fun yearMonthNameOfDate(date: AbstractDate): List<String> {
@@ -543,7 +544,7 @@ fun updateStoredPreference(context: Context) {
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
-    islamicCalendarOffset_.value = getIslamicCalendarOffset(preferences).toString()
+    islamicCalendarOffset_.value = getIslamicCalendarOffset(preferences)
     midnightMethod_.value =
         preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
             ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
