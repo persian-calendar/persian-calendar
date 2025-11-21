@@ -523,8 +523,8 @@ private fun DayEventContent(
                 Row(
                     Modifier
                         .padding(start = 8.dp)
-                        .then(clickModifier)
-                        .clip(MaterialTheme.shapes.medium),
+                        .clip(MaterialTheme.shapes.medium)
+                        .then(clickModifier),
                 ) {
                     parts.forEachIndexed { i, part ->
                         Text(
