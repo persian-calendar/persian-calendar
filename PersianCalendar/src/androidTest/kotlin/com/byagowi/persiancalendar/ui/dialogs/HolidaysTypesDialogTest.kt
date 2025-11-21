@@ -33,7 +33,7 @@ class HolidaysTypesDialogTest {
         val state = SnapshotStateList<String>()
         composeTestRule.setContent {
             Column {
-                CountryEvents("a", "", "h", "n", state, "hk", "nk", false)
+                CountryEvents("a", "", "h", "n", state, "hk", "nk", null, false)
             }
         }
         composeTestRule.onNodeWithText("h").assertHasClickAction().performClick()

@@ -17,14 +17,14 @@ class SettingsScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithParent { scope ->
-            SettingsScreen(scope, {}, {}, 0, "")
+            SettingsScreen(scope, {}, {}, 0, "", "")
         }
     }
 
     @Test
     fun bringInterfaceCalendarTab() {
         composeTestRule.setContentWithParent { scope ->
-            SettingsScreen(scope, {}, {}, INTERFACE_CALENDAR_TAB, "")
+            SettingsScreen(scope, {}, {}, INTERFACE_CALENDAR_TAB, "", "")
         }
     }
 
@@ -36,6 +36,7 @@ class SettingsScreenTest {
                 {},
                 {},
                 WIDGET_NOTIFICATION_TAB,
+                "",
                 ""
             )
         }
@@ -44,7 +45,7 @@ class SettingsScreenTest {
     @Test
     fun bringLocationAthanTab() {
         composeTestRule.setContentWithParent { scope ->
-            SettingsScreen(scope, {}, {}, LOCATION_ATHAN_TAB, "")
+            SettingsScreen(scope, {}, {}, LOCATION_ATHAN_TAB, "", "")
         }
     }
 }

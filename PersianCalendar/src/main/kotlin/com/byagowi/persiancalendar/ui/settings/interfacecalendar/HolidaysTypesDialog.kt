@@ -49,11 +49,12 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.preferences
 import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
-fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
+fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val language by language.collectAsState()
     val enabledTypes = rememberSaveable(
@@ -92,6 +93,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                         enabledTypes = enabledTypes,
                         holidaysKey = EventsRepository.iranHolidaysKey,
                         nonHolidaysKey = EventsRepository.iranOthersKey,
+                        destinationItem = destinationItem,
                     )
                 }
 
@@ -105,6 +107,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                         enabledTypes = enabledTypes,
                         holidaysKey = EventsRepository.afghanistanHolidaysKey,
                         nonHolidaysKey = EventsRepository.afghanistanOthersKey,
+                        destinationItem = destinationItem,
                     )
                 }
 
@@ -124,6 +127,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     enabledTypes = enabledTypes,
                     holidaysKey = EventsRepository.nepalHolidaysKey,
                     nonHolidaysKey = EventsRepository.nepalOthersKey,
+                    destinationItem = destinationItem,
                 )
             }
             Box(
@@ -141,11 +145,13 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                 stringResource(R.string.iran_ancient),
                 enabledTypes,
                 EventsRepository.iranAncientKey,
+                destinationItem = destinationItem,
             )
             IndentedCheckBox(
                 stringResource(R.string.international),
                 enabledTypes,
                 EventsRepository.internationalKey,
+                destinationItem = destinationItem,
             )
         }
     }
@@ -165,6 +171,7 @@ fun CountryEvents(
     enabledTypes: MutableCollection<String>,
     holidaysKey: String,
     nonHolidaysKey: String,
+    destinationItem: String?,
     hideFromAccessibility: Boolean = true,
 ) {
     Row(
@@ -219,8 +226,8 @@ fun CountryEvents(
             }
         })
     }
-    IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey)
-    IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey)
+    IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
+    IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)
 }
 
 @Composable
@@ -228,10 +235,12 @@ private fun IndentedCheckBox(
     label: String,
     enabledTypes: MutableCollection<String>,
     key: String,
+    destinationItem: String?,
 ) {
     Row(
         Modifier
             .fillMaxWidth()
+            .highlightItem(destinationItem == key)
             .toggleable(value = key in enabledTypes, role = Role.Checkbox) {
                 if (it) enabledTypes.add(key) else enabledTypes.remove(key)
             }

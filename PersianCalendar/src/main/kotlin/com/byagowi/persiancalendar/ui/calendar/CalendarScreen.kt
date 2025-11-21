@@ -213,7 +213,7 @@ fun SharedTransitionScope.CalendarScreen(
     openNavigationRail: () -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToMonthView: () -> Unit,
-    navigateToHolidaysSettings: () -> Unit,
+    navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
@@ -519,7 +519,7 @@ private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInter
 @Composable
 private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
-    navigateToHolidaysSettings: () -> Unit,
+    navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,

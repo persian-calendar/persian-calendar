@@ -132,7 +132,7 @@ import kotlin.time.Duration.Companion.minutes
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.EventsTab(
-    navigateToHolidaysSettings: () -> Unit,
+    navigateToHolidaysSettings: (String?) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     fabPlaceholderHeight: Dp,
@@ -218,7 +218,7 @@ fun SharedTransitionScope.EventsTab(
                         putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
                     }
                 },
-                acceptAction = navigateToHolidaysSettings,
+                acceptAction = { navigateToHolidaysSettings(null) },
             )
         } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
             var showDialog by remember { mutableStateOf(false) }
@@ -280,7 +280,7 @@ fun Char.isRtl() = when (Character.getDirectionality(this)) {
 @Composable
 fun DayEvents(
     events: List<CalendarEvent<*>>,
-    navigateToHolidaysSettings: (() -> Unit)? = null,
+    navigateToHolidaysSettings: ((String?) -> Unit)? = null,
     refreshCalendar: () -> Unit,
 ) {
     val language by language.collectAsState()
@@ -331,7 +331,7 @@ private fun DayEventContent(
     language: Language,
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     coroutineScope: CoroutineScope,
-    navigateToHolidaysSettings: (() -> Unit)?,
+    navigateToHolidaysSettings: ((item: String?) -> Unit)?,
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
 ) {
@@ -471,7 +471,7 @@ private fun DayEventContent(
                                     ) {
                                         coroutineScope.launch {
                                             tooltipState.dismiss()
-                                            navigateToHolidaysSettings()
+                                            navigateToHolidaysSettings(event.repositoryKey)
                                         }
                                     }
                                 }

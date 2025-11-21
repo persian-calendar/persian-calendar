@@ -4,17 +4,24 @@ import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
@@ -49,6 +56,18 @@ fun materialCornerExtraLargeTop(): CornerBasedShape {
 fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
 }
+
+@Composable
+fun Modifier.highlightItem(enabled: Boolean): Modifier {
+    if (!enabled) return this
+    val alpha = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        alpha.animateTo(.1f, tween(500, easing = LinearEasing))
+        alpha.animateTo(0f, tween(5000))
+    }
+    return background(LocalContentColor.current.copy(alpha = alpha.value))
+}
+
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 val appBoundsTransform = BoundsTransform { _, _ ->

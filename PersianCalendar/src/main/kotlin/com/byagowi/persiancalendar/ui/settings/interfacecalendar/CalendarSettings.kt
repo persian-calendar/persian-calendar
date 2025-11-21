@@ -99,13 +99,13 @@ import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
 @Composable
-fun ColumnScope.CalendarSettings(destination: String?) {
+fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
     val context = LocalContext.current
     val language by language.collectAsState()
     SettingsClickable(
         stringResource(R.string.events), stringResource(R.string.events_summary),
         defaultOpen = destination == PREF_HOLIDAY_TYPES,
-    ) { onDismissRequest -> HolidaysTypesDialog(onDismissRequest) }
+    ) { onDismissRequest -> HolidaysTypesDialog(destinationItem, onDismissRequest) }
     run {
         var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
         val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()

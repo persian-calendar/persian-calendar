@@ -82,7 +82,7 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
 @Composable
-fun ColumnScope.AthanSettings(destination: String) {
+fun ColumnScope.AthanSettings(destination: String?) {
     val coordinates by coordinates.collectAsState()
     val context = LocalContext.current
     val resources = LocalResources.current

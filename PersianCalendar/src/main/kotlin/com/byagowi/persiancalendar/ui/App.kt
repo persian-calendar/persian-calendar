@@ -153,6 +153,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             val isWeekKey = "IS_WEEK"
             val tabKey = "TAB"
             val settingsKey = "SETTINGS"
+            val settingsItemKey = "SETTINGS_ITEM"
             val daysOffsetKey = "DAYS_OFFSET"
 
             fun navigateToSettingsLocationTab() =
@@ -166,10 +167,11 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
                 CalendarScreen(
                     openNavigationRail = openNavigationRail,
-                    navigateToHolidaysSettings = {
+                    navigateToHolidaysSettings = { item ->
                         Screen.SETTINGS.navigate(
                             tabKey to INTERFACE_CALENDAR_TAB,
                             settingsKey to PREF_HOLIDAY_TYPES,
+                            settingsItemKey to item,
                         )
                     },
                     navigateToSettingsLocationTabSetAthanAlarm = {
@@ -320,7 +322,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     openNavigationRail = openNavigationRail,
                     navigateToMap = Screen.MAP::navigate,
                     initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
-                    destination = backStackEntry.arguments?.getString(settingsKey).orEmpty(),
+                    destination = backStackEntry.arguments?.getString(settingsKey),
+                    destinationItem = backStackEntry.arguments?.getString(settingsItemKey),
                 )
             }
 

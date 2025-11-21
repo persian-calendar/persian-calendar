@@ -134,7 +134,8 @@ fun SharedTransitionScope.SettingsScreen(
     openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
     initialPage: Int,
-    destination: String,
+    destination: String?,
+    destinationItem: String?,
 ) {
 //    var isAtTop by remember { mutableStateOf(true) }
     Scaffold(
@@ -196,7 +197,7 @@ fun SharedTransitionScope.SettingsScreen(
                         canScrollBackward = listState.canScrollBackward,
                         isTalkBackEnabled = isTalkBackEnabled,
                         title = R.string.calendar,
-                    ) { CalendarSettings(destination) }
+                    ) { CalendarSettings(destination, destinationItem) }
                 },
                 TabItem(
                     outlinedIcon = Icons.Outlined.Widgets,

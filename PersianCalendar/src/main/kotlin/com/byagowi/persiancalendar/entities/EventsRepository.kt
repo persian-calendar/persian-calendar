@@ -173,6 +173,17 @@ data class EventsRepository @VisibleForTesting constructor(
                 ?: if (language.isIranExclusive) iranDefault else emptySet()
         }
 
+        fun keyFromDetails(source: EventSource?, isHoliday: Boolean): String? {
+            return when (source) {
+                EventSource.AncientIran -> iranAncientKey
+                EventSource.International -> internationalKey
+                EventSource.Iran -> if (isHoliday) iranHolidaysKey else iranOthersKey
+                EventSource.Nepal -> if (isHoliday) nepalHolidaysKey else nepalOthersKey
+                EventSource.Afghanistan -> if (isHoliday) afghanistanHolidaysKey else afghanistanOthersKey
+                else -> null
+            }
+        }
+
         fun empty() = EventsRepository(emptySet(), Language.entries[0])
     }
 }
