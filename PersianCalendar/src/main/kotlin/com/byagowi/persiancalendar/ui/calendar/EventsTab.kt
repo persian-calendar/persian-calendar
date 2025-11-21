@@ -299,12 +299,12 @@ fun DayEvents(
                 else appCrossfadeSpec)()
             },
         ) { title ->
-            val dir = when (title.firstOrNull()?.isRtl()) {
+            val layoutDirection = when (title.firstOrNull()?.isRtl()) {
                 true -> LayoutDirection.Rtl
                 false -> LayoutDirection.Ltr
                 else -> LocalLayoutDirection.current
             }
-            CompositionLocalProvider(LocalLayoutDirection provides dir) {
+            CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
                 DayEventContent(
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     backgroundColor = backgroundColor,
