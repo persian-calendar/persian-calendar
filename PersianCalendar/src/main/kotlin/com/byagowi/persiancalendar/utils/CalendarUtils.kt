@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.entities.everyYear
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -131,7 +132,8 @@ fun getA11yDaySummary(
 }
 
 // Before 1304 different month names and lengths, and different animal year names were in use
-val PersianDate.isOldEra get() = year < 1304
+// Every year events are excepted, not clean but unlikely be noticed
+val PersianDate.isOldEra get() = year < 1304 && year != everyYear
 
 fun GregorianCalendar.toCivilDate(): CivilDate {
     return CivilDate(

@@ -127,22 +127,7 @@ fun ColumnScope.CalendarSettings(destination: String?) {
                 Row {
                     this.AnimatedVisibility(
                         isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty()
-                    ) {
-                        val defaultColors = IconButtonDefaults.filledIconButtonColors()
-                        val colors = defaultColors.copy(
-                            containerColor = animateColor(defaultColors.containerColor).value,
-                            contentColor = animateColor(defaultColors.contentColor).value,
-                        )
-                        FilledIconButton(
-                            colors = colors,
-                            onClick = { showEventsSettingsDialog = true },
-                        ) {
-                            Icon(
-                                Icons.Default.Settings,
-                                contentDescription = stringResource(R.string.settings),
-                            )
-                        }
-                    }
+                    ) { FilledSettingsButton { showEventsSettingsDialog = true } }
                 }
                 if (showEventsSettingsDialog) EventsSettingsDialog {
                     showEventsSettingsDialog = false
@@ -261,6 +246,21 @@ fun ColumnScope.CalendarSettings(destination: String?) {
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
     )
+}
+
+@Composable
+private fun FilledSettingsButton(onClick: () -> Unit) {
+    val defaultColors = IconButtonDefaults.filledIconButtonColors()
+    val colors = defaultColors.copy(
+        containerColor = animateColor(defaultColors.containerColor).value,
+        contentColor = animateColor(defaultColors.contentColor).value,
+    )
+    FilledIconButton(colors = colors, onClick = onClick) {
+        Icon(
+            Icons.Default.Settings,
+            contentDescription = stringResource(R.string.settings),
+        )
+    }
 }
 
 private data class CalendarsEntry(

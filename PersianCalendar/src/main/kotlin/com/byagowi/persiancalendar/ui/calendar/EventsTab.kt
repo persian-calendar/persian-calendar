@@ -31,11 +31,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Surface
@@ -198,7 +200,11 @@ fun SharedTransitionScope.EventsTab(
                     animatedVisibilityScope = animatedContentScope,
                     boundsTransform = appBoundsTransform,
                 )
-            ) { DayEvents(events) { viewModel.refreshCalendar() } }
+            ) {
+                DayEvents(events, navigateToHolidaysSettings) {
+                    viewModel.refreshCalendar()
+                }
+            }
         }
 
         val language by language.collectAsState()
@@ -272,7 +278,11 @@ fun Char.isRtl() = when (Character.getDirectionality(this)) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
+fun DayEvents(
+    events: List<CalendarEvent<*>>,
+    navigateToHolidaysSettings: (() -> Unit)? = null,
+    refreshCalendar: () -> Unit,
+) {
     val language by language.collectAsState()
     val numeral by numeral.collectAsState()
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
@@ -296,6 +306,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
             }
             CompositionLocalProvider(LocalLayoutDirection provides dir) {
                 DayEventContent(
+                    navigateToHolidaysSettings = navigateToHolidaysSettings,
                     backgroundColor = backgroundColor,
                     event = event,
                     title = title,
@@ -318,6 +329,7 @@ private fun DayEventContent(
     language: Language,
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     coroutineScope: CoroutineScope,
+    navigateToHolidaysSettings: (() -> Unit)?,
     numeral: Numeral,
 ) {
     val context = LocalContext.current
@@ -399,9 +411,7 @@ private fun DayEventContent(
 
                         event.source == EventSource.International -> stringResource(R.string.international)
 
-                        event.source == EventSource.AncientIran -> """این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است
-
-${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYear(it)} است" }.orEmpty()}"""
+                        event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
 
                         else -> ""
                     }
@@ -424,17 +434,37 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                                 }) { Text(stringResource(R.string.view_source)) }
                             }
                         }) else null,
-                        title = if (event is CalendarEvent.DeviceCalendarEvent || event.source == EventSource.AncientIran) null else ({
-                            Text(buildString {
-                                if (event.date.year == everyYear) append(
-                                    language.dm.format(
-                                        numeral.format(event.date.dayOfMonth),
-                                        event.date.monthName,
-                                    ) + spacedComma
+                        title = if (event is CalendarEvent.DeviceCalendarEvent) null else ({
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    buildString {
+                                        val date = event.date
+                                        if (event.source == EventSource.AncientIran && event.date is PersianDate) {
+                                            append(jalaliDayOfYear(date))
+                                        } else {
+                                            if (date.year == everyYear) append(
+                                                language.dm.format(
+                                                    numeral.format(date.dayOfMonth),
+                                                    date.monthName,
+                                                ) + spacedComma
+                                            )
+                                            append(stringResource(date.calendar.shortTitle))
+                                        }
+                                        if (event.isHoliday) append(spacedComma + holidayString)
+                                    },
+                                    modifier = Modifier
+                                        .padding(start = 4.dp)
+                                        .weight(1f),
                                 )
-                                append(stringResource(event.date.calendar.shortTitle))
-                                if (event.isHoliday) append(spacedComma + holidayString)
-                            })
+                                if (navigateToHolidaysSettings != null) OutlineSettingsButton(
+                                    modifier = Modifier.padding(top = 8.dp, start = 4.dp),
+                                ) {
+                                    coroutineScope.launch {
+                                        tooltipState.dismiss()
+                                        navigateToHolidaysSettings()
+                                    }
+                                }
+                            }
                         }),
                         caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
                     ) { Text(text, textAlign = TextAlign.Center) }
@@ -501,6 +531,16 @@ ${(event.date as? PersianDate)?.let { "این روز معادل ${jalaliDayOfYea
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun OutlineSettingsButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    OutlinedIconButton(modifier = modifier, onClick = onClick) {
+        Icon(
+            imageVector = Icons.Default.Settings,
+            contentDescription = stringResource(R.string.settings),
+        )
     }
 }
 
