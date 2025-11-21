@@ -105,7 +105,7 @@ fun DatePickerDialog(
 
         DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
         var showNumberEdit by remember { mutableStateOf(false) }
-        Crossfade(targetState = showNumberEdit, label = "edit toggle") { isInNumberEdit ->
+        Crossfade(targetState = showNumberEdit) { isInNumberEdit ->
             if (isInNumberEdit) NumberEdit(
                 dismissNumberEdit = { showNumberEdit = false },
                 initialValue = jdn - today,

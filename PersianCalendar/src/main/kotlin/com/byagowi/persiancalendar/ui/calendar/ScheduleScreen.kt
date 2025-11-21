@@ -122,10 +122,10 @@ fun SharedTransitionScope.ScheduleScreen(
                     val date = firstVisibleItemJdn on mainCalendar
                     val screenTitle = stringResource(R.string.schedule)
                     Column(Modifier.semantics { this.contentDescription = screenTitle }) {
-                        Crossfade(date.monthName, label = "title") { state ->
+                        Crossfade(date.monthName) { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
                         }
-                        Crossfade(numeral.format(date.year), label = "subtitle") { state ->
+                        Crossfade(numeral.format(date.year)) { state ->
                             Text(state, style = MaterialTheme.typography.titleMedium)
                         }
                     }

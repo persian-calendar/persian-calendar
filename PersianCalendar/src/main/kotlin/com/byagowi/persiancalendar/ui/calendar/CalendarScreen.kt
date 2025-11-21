@@ -300,7 +300,7 @@ fun SharedTransitionScope.CalendarScreen(
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
 
-            Crossfade(searchBoxIsOpen, label = "toolbar") {
+            Crossfade(searchBoxIsOpen) {
                 if (it) Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxWidth(),
@@ -934,7 +934,7 @@ private fun SharedTransitionScope.Toolbar(
                     label = { stringResource(it.title) },
                     values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
                     small = subtitle.isNotEmpty(),
-                ) else Crossfade(title, label = "title") { title ->
+                ) else Crossfade(title) { title ->
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleLarge,
@@ -943,7 +943,7 @@ private fun SharedTransitionScope.Toolbar(
                     )
                 }
                 this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
-                    Crossfade(subtitle, label = "subtitle") { subtitle ->
+                    Crossfade(subtitle) { subtitle ->
                         val fraction by animateFloatAsState(
                             targetValue = if (isYearView) 1f else 0f, label = "font size"
                         )
@@ -978,7 +978,7 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            Crossfade(targetState = isYearView, label = "nav icon") { state ->
+            Crossfade(targetState = isYearView) { state ->
                 if (state) AppIconButton(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),

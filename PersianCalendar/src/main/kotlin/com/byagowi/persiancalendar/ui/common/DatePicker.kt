@@ -29,7 +29,7 @@ fun DatePicker(
     jdn: Jdn,
     setJdn: (Jdn) -> Unit
 ) {
-    Crossfade(targetState = calendar, label = "day picker") { calendarState ->
+    Crossfade(targetState = calendar) { calendarState ->
         Row(modifier = Modifier.fillMaxWidth()) {
             DatePickerContent(
                 calendarState,

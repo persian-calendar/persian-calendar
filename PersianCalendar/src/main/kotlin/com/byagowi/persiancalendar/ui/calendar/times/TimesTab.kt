@@ -165,7 +165,6 @@ private fun SharedTransitionScope.AstronomicalOverview(
 
     Crossfade(
         targetState = isToday,
-        label = "heading",
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp),

@@ -329,7 +329,7 @@ private data class TabItem(
 
     @Composable
     fun Icon(isSelected: Boolean) {
-        Crossfade(isSelected, label = "icon") {
+        Crossfade(isSelected) {
             Icon(if (it) filledIcon else outlinedIcon, contentDescription = null)
         }
     }

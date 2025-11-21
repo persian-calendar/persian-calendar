@@ -291,10 +291,10 @@ fun SharedTransitionScope.DaysScreen(
                                 )
                             }
 
-                            Crossfade(title, label = "title") { state ->
+                            Crossfade(title) { state ->
                                 Text(state, style = MaterialTheme.typography.titleLarge)
                             }
-                            Crossfade(subtitle, label = "subtitle") { state ->
+                            Crossfade(subtitle) { state ->
                                 Text(state, style = MaterialTheme.typography.titleMedium)
                             }
                         }
