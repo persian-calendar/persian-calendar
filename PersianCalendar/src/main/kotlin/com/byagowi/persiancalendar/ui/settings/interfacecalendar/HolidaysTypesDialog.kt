@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -82,7 +83,11 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     CountryEvents(
                         calendarCenterName = stringResource(R.string.iran_official_events),
                         sourceLink = EventSource.Iran.link,
-                        holidaysTitle = stringResource(R.string.iran_holidays),
+                        holidaysTitle = stringResource(R.string.iran_holidays) + run {
+                            if (!language.isAfghanistanExclusive && EventsRepository.iranHolidaysKey in enabledTypes) {
+                                spacedComma + if (language.isArabicScript) "پیش‌فرض برنامه" else "app's default"
+                            } else ""
+                        },
                         nonHolidaysTitle = stringResource(R.string.iran_others),
                         enabledTypes = enabledTypes,
                         holidaysKey = EventsRepository.iranHolidaysKey,
@@ -239,7 +244,7 @@ private fun IndentedCheckBox(
     ) {
         Checkbox(key in enabledTypes, onCheckedChange = null)
         Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-        Text(label)
+        Crossfade(label) { Text(it) }
     }
 }
 
