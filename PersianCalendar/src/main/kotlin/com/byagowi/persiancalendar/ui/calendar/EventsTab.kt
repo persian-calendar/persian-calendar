@@ -465,7 +465,9 @@ private fun DayEventContent(
                                             .weight(1f),
                                     )
                                     if (navigateToHolidaysSettings != null) OutlineSettingsButton(
-                                        modifier = Modifier.padding(top = 8.dp, start = 4.dp),
+                                        modifier = Modifier.padding(
+                                            top = 8.dp, start = 4.dp, bottom = 8.dp
+                                        ),
                                     ) {
                                         coroutineScope.launch {
                                             tooltipState.dismiss()
