@@ -102,10 +102,18 @@ import kotlinx.coroutines.launch
 fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
     val context = LocalContext.current
     val language by language.collectAsState()
-    SettingsClickable(
-        stringResource(R.string.events), stringResource(R.string.events_summary),
-        defaultOpen = destination == PREF_HOLIDAY_TYPES,
-    ) { onDismissRequest -> HolidaysTypesDialog(destinationItem, onDismissRequest) }
+    run {
+        var shownOnce by rememberSaveable { mutableStateOf(false) }
+        SettingsClickable(
+            stringResource(R.string.events), stringResource(R.string.events_summary),
+            defaultOpen = destination == PREF_HOLIDAY_TYPES,
+        ) { onDismissRequest ->
+            HolidaysTypesDialog(destinationItem.takeIf { !shownOnce }) {
+                shownOnce = true
+                onDismissRequest()
+            }
+        }
+    }
     run {
         var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
         val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()

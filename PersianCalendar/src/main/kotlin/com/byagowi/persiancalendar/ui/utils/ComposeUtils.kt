@@ -4,7 +4,6 @@ import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
@@ -19,8 +18,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
@@ -60,11 +59,8 @@ fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 @Composable
 fun Modifier.highlightItem(enabled: Boolean): Modifier {
     if (!enabled) return this
-    val alpha = remember { Animatable(0f) }
-    LaunchedEffect(Unit) {
-        alpha.animateTo(.1f, tween(500, easing = LinearEasing))
-        alpha.animateTo(0f, tween(5000))
-    }
+    val alpha = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.1f) }
+    LaunchedEffect(Unit) { alpha.animateTo(0f, tween(2000)) }
     return background(LocalContentColor.current.copy(alpha = alpha.value))
 }
 
@@ -74,7 +70,7 @@ val appBoundsTransform = BoundsTransform { _, _ ->
     spring(
         stiffness = Spring.StiffnessMediumLow,
         dampingRatio = Spring.DampingRatioLowBouncy,
-        visibilityThreshold = Rect.VisibilityThreshold
+        visibilityThreshold = Rect.VisibilityThreshold,
     )
 }
 
