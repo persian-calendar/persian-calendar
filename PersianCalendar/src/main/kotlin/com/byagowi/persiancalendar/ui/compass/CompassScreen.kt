@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
+import com.byagowi.persiancalendar.ui.theme.appSliderColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -338,6 +339,7 @@ fun SharedTransitionScope.CompassScreen(
                                         isTimeShiftAnimate = false
                                         timeShift = if (it == 24f) 0f else it
                                     },
+                                    colors = appSliderColor(),
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                 )
                             }

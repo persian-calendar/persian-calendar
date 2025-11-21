@@ -72,6 +72,7 @@ import com.byagowi.persiancalendar.ui.settings.common.ColorBox
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.theme.appSliderColor
 import com.byagowi.persiancalendar.ui.theme.appSwitchColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -441,6 +442,7 @@ fun SettingsSlider(
                 valueRange = valueRange,
                 onValueChange = onValueChange,
                 modifier = Modifier.weight(1f),
+                colors = appSliderColor(),
             )
             Spacer(Modifier.width(16.dp))
             val roundedValue = (value * visibleScale).roundToInt()

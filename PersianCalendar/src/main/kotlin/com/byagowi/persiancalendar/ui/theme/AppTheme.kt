@@ -29,6 +29,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.TopAppBarColors
@@ -355,6 +358,18 @@ private fun appBackground(): Brush {
         1f to backgroundGradientEnd,
         start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
         end = Offset(if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+    )
+}
+
+@Composable
+fun appSliderColor(): SliderColors {
+    val defaultColors = SliderDefaults.colors()
+    return defaultColors.copy(
+        thumbColor = animateColor(defaultColors.thumbColor).value,
+        activeTrackColor = animateColor(defaultColors.activeTrackColor).value,
+        activeTickColor = animateColor(defaultColors.activeTickColor).value,
+        inactiveTrackColor = animateColor(defaultColors.inactiveTrackColor).value,
+        inactiveTickColor = animateColor(defaultColors.inactiveTickColor).value,
     )
 }
 
