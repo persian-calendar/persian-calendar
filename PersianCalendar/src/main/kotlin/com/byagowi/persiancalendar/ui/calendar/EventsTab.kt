@@ -405,7 +405,7 @@ private fun DayEventContent(
                 ),
                 tooltip = {
                     val text = when {
-                        event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه در گوشی شما به‌صورت پیش‌فرض نصب بوده است"
+                        event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است"
 
                         event.source == EventSource.Iran -> """تقویم رسمی کشور
 تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
