@@ -478,7 +478,13 @@ private fun DayEventContent(
                             }
                         }),
                         caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
-                    ) { Text(text, textAlign = TextAlign.Center) }
+                    ) {
+                        Text(
+                            text,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 },
                 enableUserInput = false,
                 state = tooltipState,
