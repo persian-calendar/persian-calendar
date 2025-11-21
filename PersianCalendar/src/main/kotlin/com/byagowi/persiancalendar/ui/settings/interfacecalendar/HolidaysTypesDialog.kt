@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -168,11 +166,11 @@ fun CountryEvents(
         Modifier
             .fillMaxWidth()
             .then(
-                if (hideFromAccessibility)
+                if (hideFromAccessibility) {
                     Modifier
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {}
-                else Modifier
+                } else Modifier,
             )
             .clickable {
                 if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
@@ -195,36 +193,26 @@ fun CountryEvents(
                 else -> ToggleableState.Off
             },
             onClick = null,
-            modifier = Modifier
-                .padding(start = SettingsHorizontalPaddingItem.dp)
-                .align(Alignment.CenterVertically),
+            modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
         )
         Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-        FlowRow(verticalArrangement = Arrangement.Center) {
-            Text(
-                calendarCenterName,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
+        Text(buildAnnotatedString {
+            append(calendarCenterName)
             if (sourceLink.isNotEmpty()) {
-                Text(spacedComma)
-                Text(
-                    buildAnnotatedString {
-                        withLink(
-                            link = LinkAnnotation.Url(
-                                url = sourceLink,
-                                styles = TextLinkStyles(
-                                    SpanStyle(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        textDecoration = TextDecoration.Underline
-                                    )
-                                )
+                append(spacedComma)
+                withLink(
+                    link = LinkAnnotation.Url(
+                        url = sourceLink,
+                        styles = TextLinkStyles(
+                            SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                textDecoration = TextDecoration.Underline,
                             ),
-                        ) { append(stringResource(R.string.view_source)) }
-                    },
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                )
+                        ),
+                    ),
+                ) { append(stringResource(R.string.view_source)) }
             }
-        }
+        })
     }
     IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey)
     IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey)
