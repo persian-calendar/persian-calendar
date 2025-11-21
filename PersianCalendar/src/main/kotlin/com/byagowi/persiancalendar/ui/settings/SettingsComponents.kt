@@ -93,7 +93,9 @@ fun LazyListScope.settingsSection(
         Box(
             if (canScrollBackward) Modifier.background(
                 Brush.verticalGradient(
-                    .75f to MaterialTheme.colorScheme.surface.copy(alpha = .9f),
+                    .75f to animateColor(
+                        MaterialTheme.colorScheme.surface.copy(alpha = .9f)
+                    ).value,
                     1f to Color.Transparent,
                 )
             ) else Modifier,
@@ -111,8 +113,8 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val color by animateColor(MaterialTheme.colorScheme.outlineVariant)
-            HorizontalDivider(color = color, modifier = Modifier.weight(1f))
+            val dividerColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = dividerColor, modifier = Modifier.weight(1f))
             AnimatedContent(
                 stringResource(title),
                 contentAlignment = Alignment.Center,
@@ -123,10 +125,10 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
                 Text(
                     state,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = animateColor(MaterialTheme.colorScheme.primary).value,
                 )
             }
-            HorizontalDivider(color = color, modifier = Modifier.weight(1f))
+            HorizontalDivider(color = dividerColor, modifier = Modifier.weight(1f))
         }
         val subtitle = subtitle()
         this.AnimatedVisibility(visible = subtitle != null) {
