@@ -440,7 +440,7 @@ private fun DayEventContent(
                         title = if (event is CalendarEvent.DeviceCalendarEvent) null else ({
                             CompositionLocalProvider(
                                 LocalLayoutDirection provides if (event.source == EventSource.AncientIran) {
-                                     LocalLayoutDirection.current
+                                    LocalLayoutDirection.current
                                 } else originalLayoutDirection
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
