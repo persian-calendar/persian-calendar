@@ -494,15 +494,12 @@ private fun DayEventContent(
 
                     event.isHoliday -> MaterialTheme.colorScheme.onPrimaryFixed
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
-                }
+                }.copy(alpha = .65f)
                 val chipBackgroundColor = when {
-                    event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.surface.copy(
-                        alpha = .45f
-                    )
-
+                    event is CalendarEvent.DeviceCalendarEvent -> MaterialTheme.colorScheme.surface
                     event.isHoliday -> MaterialTheme.colorScheme.primaryFixed
                     else -> MaterialTheme.colorScheme.surfaceContainerLow
-                }
+                }.copy(alpha = .65f)
                 val parts = if (event is CalendarEvent.DeviceCalendarEvent) {
                     listOf("تقویم شخصی")
                 } else when (event.source) {
