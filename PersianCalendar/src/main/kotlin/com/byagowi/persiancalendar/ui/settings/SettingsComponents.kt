@@ -3,7 +3,10 @@ package com.byagowi.persiancalendar.ui.settings
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,6 +31,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -36,6 +40,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -151,7 +156,18 @@ fun SettingsClickable(
 ) {
     var showDialog by rememberSaveable { mutableStateOf(defaultOpen) }
     SettingsLayout(
-        modifier = Modifier.clickable { showDialog = true },
+        modifier = Modifier.clickable { showDialog = true } then run {
+            if (defaultOpen && !showDialog) {
+                val alpha = remember { Animatable(0f) }
+                LaunchedEffect(Unit) {
+                    repeat(5) {
+                        alpha.animateTo(0.1f, tween(2500, easing = LinearEasing))
+                        alpha.animateTo(0f, tween(durationMillis = 2500, easing = LinearEasing))
+                    }
+                }
+                Modifier.background(LocalContentColor.current.copy(alpha = alpha.value))
+            } else Modifier
+        },
         title = title,
         summary = summary,
     )
