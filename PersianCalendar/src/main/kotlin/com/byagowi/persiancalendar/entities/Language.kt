@@ -312,20 +312,13 @@ enum class Language(val code: String, val nativeName: String) {
     fun getWeekDays(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInPersian
         EN_IR -> weekDaysInEnglishIran
-        else -> listOf(
-            R.string.saturday, R.string.sunday, R.string.monday, R.string.tuesday,
-            R.string.wednesday, R.string.thursday, R.string.friday,
-        ).map { resources.getString(it) }
+        else -> WeekDay.stringIds.map { resources.getString(it) }
     }
 
     fun getWeekDaysInitials(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInitialsInPersian
         EN_IR -> weekDaysInitialsInEnglishIran
-        else -> listOf(
-            R.string.saturday_short, R.string.sunday_short, R.string.monday_short,
-            R.string.tuesday_short, R.string.wednesday_short, R.string.thursday_short,
-            R.string.friday_short,
-        ).map(resources::getString)
+        else -> WeekDay.shortStringIds.map(resources::getString)
     }
 
     fun getCountryName(cityItem: CityItem): String = when {
