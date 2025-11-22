@@ -27,9 +27,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
@@ -340,7 +340,9 @@ fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
 
                 FooterAction.Abjad -> Column(Modifier.align(Alignment.CenterHorizontally)) {
                     AnimatedVisibility(animationProgress.value != 0f) {
-                        IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
+                        FilledTonalIconToggleButton(abjad, { abjad = it }) {
+                            Text("ابجد")
+                        }
                     }
                 }
 
