@@ -91,7 +91,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -786,7 +785,6 @@ private fun DaysView(
                 // Time cells and table
                 val outlineVariant = MaterialTheme.colorScheme.outlineVariant
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-                val resources = LocalResources.current
                 Row(
                     Modifier.drawBehind {
                         val topLineY = 2.dp.toPx()

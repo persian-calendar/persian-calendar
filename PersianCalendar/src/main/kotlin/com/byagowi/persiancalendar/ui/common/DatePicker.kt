@@ -51,7 +51,6 @@ private fun RowScope.DatePickerContent(
     val yearsLimit = 5000 // let's just don't care about accuracy of distant time
     val date = remember(jdn.value, calendar) { jdn on calendar }
     val numeral by numeral.collectAsState()
-    val resources = LocalResources.current
     val daysFormat = remember(calendar, date.year, date.month) {
         val monthStart = Jdn(calendar, date.year, date.month, 1);
         { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDay.title }
