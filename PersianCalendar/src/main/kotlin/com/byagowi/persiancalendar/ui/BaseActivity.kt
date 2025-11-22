@@ -49,6 +49,11 @@ abstract class BaseActivity : ComponentActivity(),
         preferences.registerOnSharedPreferenceChangeListener(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        preferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
         applyAppLanguage(this)
