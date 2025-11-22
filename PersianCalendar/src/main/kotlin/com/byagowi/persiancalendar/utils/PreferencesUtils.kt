@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_CITY
@@ -78,14 +79,18 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
     when {
         language.isAfghanistanExclusive -> {
             val enabledHolidays = EventsRepository(this@saveLanguage, language, emptySet())
-            if (enabledHolidays.isEmpty || enabledHolidays.onlyIranHolidaysIsEnabled)
-                putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.afghanistanDefault)
+            if (enabledHolidays.isEmpty || enabledHolidays.onlyIranHolidaysIsEnabled) putStringSet(
+                PREF_HOLIDAY_TYPES,
+                EventsRepository.afghanistanDefault
+            )
         }
 
         language.isIranExclusive -> {
             val enabledHolidays = EventsRepository(this@saveLanguage, language, emptySet())
-            if (enabledHolidays.isEmpty || enabledHolidays.onlyAfghanistanHolidaysIsEnabled)
-                putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+            if (enabledHolidays.isEmpty || enabledHolidays.onlyAfghanistanHolidaysIsEnabled) putStringSet(
+                PREF_HOLIDAY_TYPES,
+                EventsRepository.iranDefault
+            )
         }
 
         language.isNepali -> {
