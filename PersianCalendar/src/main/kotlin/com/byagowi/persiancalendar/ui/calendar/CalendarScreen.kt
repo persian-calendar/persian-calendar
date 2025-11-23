@@ -24,14 +24,20 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.draggable2D
+import androidx.compose.foundation.gestures.rememberDraggable2DState
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -90,6 +96,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -203,6 +210,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
 import java.util.GregorianCalendar
+import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
@@ -778,6 +786,16 @@ private fun Search(viewModel: CalendarViewModel) {
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    var offsetPositionX by rememberSaveable { mutableFloatStateOf(0f) }
+    var offsetPositionY by rememberSaveable { mutableFloatStateOf(0f) }
+    val layoutDirection = LocalLayoutDirection.current
+    val offset by animateIntOffsetAsState(
+        targetValue = if (expanded) IntOffset.Zero else IntOffset(
+            x = offsetPositionX.roundToInt() * if (layoutDirection == LayoutDirection.Rtl) -1 else 1,
+            y = offsetPositionY.roundToInt(),
+        ),
+        animationSpec = if (expanded) spring(visibilityThreshold = IntOffset.VisibilityThreshold) else snap()
+    )
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
@@ -799,6 +817,13 @@ private fun Search(viewModel: CalendarViewModel) {
         expanded = expanded,
         onExpandedChange = { if (!it) query = "" },
         modifier = Modifier
+            .offset { offset }
+            .draggable2D(
+                rememberDraggable2DState { delta ->
+                    offsetPositionX += delta.x
+                    offsetPositionY += delta.y
+                },
+            )
             .padding(horizontal = padding)
             .focusRequester(focusRequester),
     ) {
