@@ -195,11 +195,11 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
+        val isBoldFont by isBoldFont.collectAsState()
         this.AnimatedVisibility(
-            visible = showMore,
+            visible = showMore || isBoldFont,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
-            val isBoldFont by isBoldFont.collectAsState()
             SwitchWithLabel(
                 label = stringResource(R.string.bold_text),
                 checked = isBoldFont,
@@ -222,8 +222,7 @@ private fun ColumnScope.FontPicker(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            File(context.filesDir, STORED_FONT_NAME).outputStream()
-                .use(inputStream::copyTo)
+            File(context.filesDir, STORED_FONT_NAME).outputStream().use(inputStream::copyTo)
             // It's funny but if dialog isn't closed before the font change it can cause crash
             // with "Out of order buffers detected for RequestedLayerState" and
             // "Out of order buffers detected for RequestedLayerState" messages and without
@@ -243,9 +242,7 @@ private fun ColumnScope.FontPicker(
             Row {
                 Button(onClick = {
                     if (language.isPersianOrDari) Toast.makeText(
-                        context,
-                        "پرونده‌ای در قالب ttf یا otf انتخاب کنید",
-                        Toast.LENGTH_LONG
+                        context, "پرونده‌ای در قالب ttf یا otf انتخاب کنید", Toast.LENGTH_LONG
                     ).show()
                     fontPicker.launch(
                         listOf(
@@ -258,8 +255,7 @@ private fun ColumnScope.FontPicker(
                             "application/x-font-ttf",
                             "application/x-font-otf",
                         ).let {
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                                it + "application/octet-stream"
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) it + "application/octet-stream"
                             else it
                         }.toTypedArray()
                     )
@@ -290,8 +286,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
         ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            File(context.filesDir, STORED_IMAGE_NAME).outputStream()
-                .use(inputStream::copyTo)
+            File(context.filesDir, STORED_IMAGE_NAME).outputStream().use(inputStream::copyTo)
             context.preferences.edit {
                 putString(PREF_CUSTOM_IMAGE_NAME, getFileName(context, uri))
             }
