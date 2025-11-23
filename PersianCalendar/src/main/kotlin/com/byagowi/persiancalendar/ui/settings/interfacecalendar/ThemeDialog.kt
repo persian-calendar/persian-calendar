@@ -175,21 +175,21 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
+        val isGradient by isGradient.collectAsState()
         this.AnimatedVisibility(
-            visible = showMore && anyThemeHasGradient,
+            visible = (showMore || isGradient) && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
-            val isGradient by isGradient.collectAsState()
             SwitchWithLabel(
                 label = stringResource(R.string.color_gradient),
                 checked = isGradient,
             ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, it) } }
         }
+        val isRedHolidays by isRedHolidays.collectAsState()
         this.AnimatedVisibility(
-            visible = showMore && anyThemeIsDynamicColors,
+            visible = (showMore || isRedHolidays) && anyThemeIsDynamicColors,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
-            val isRedHolidays by isRedHolidays.collectAsState()
             SwitchWithLabel(
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
