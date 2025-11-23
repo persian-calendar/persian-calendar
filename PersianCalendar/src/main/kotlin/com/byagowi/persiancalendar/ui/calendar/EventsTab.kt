@@ -424,6 +424,8 @@ private fun DayEventContent(
                     RichTooltip(
                         modifier = Modifier.clickable(
                             onClickLabel = stringResource(R.string.close),
+                            indication = null,
+                            interactionSource = null,
                         ) { coroutineScope.launch { tooltipState.dismiss() } },
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
