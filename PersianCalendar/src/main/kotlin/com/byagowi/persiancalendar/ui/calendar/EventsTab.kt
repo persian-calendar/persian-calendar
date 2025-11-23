@@ -525,7 +525,9 @@ private fun DayEventContent(
                     else -> false
                 }
                 val clickModifier = if (isClickable) Modifier.clickable {
-                    coroutineScope.launch { tooltipState.show() }
+                    coroutineScope.launch {
+                        if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
+                    }
                 } else Modifier
                 Row(
                     Modifier
