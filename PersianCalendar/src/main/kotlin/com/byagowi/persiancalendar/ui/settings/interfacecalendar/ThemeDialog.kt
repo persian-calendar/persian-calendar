@@ -177,7 +177,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         }
         val isGradient by isGradient.collectAsState()
         this.AnimatedVisibility(
-            visible = (showMore || isGradient) && anyThemeHasGradient,
+            visible = (showMore || !isGradient) && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             SwitchWithLabel(
