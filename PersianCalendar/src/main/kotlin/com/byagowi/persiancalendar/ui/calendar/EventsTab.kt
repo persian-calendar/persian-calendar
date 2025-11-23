@@ -299,8 +299,10 @@ fun DayEvents(
             },
             label = "event title",
             transitionSpec = {
-                (if (event is CalendarEvent.EquinoxCalendarEvent) noTransitionSpec
-                else appCrossfadeSpec)()
+                when (event) {
+                    is CalendarEvent.EquinoxCalendarEvent -> noTransitionSpec
+                    else -> appCrossfadeSpec
+                }()
             },
         ) { title ->
             val titleDirection = title.directionality ?: LocalLayoutDirection.current
