@@ -31,11 +31,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PlainTooltip
@@ -426,23 +428,39 @@ private fun DayEventContent(
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
                         action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) ({
-                            Box(
-                                Modifier
-                                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                                    .clearAndSetSemantics {}
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Center,
+                            CompositionLocalProvider(
+                                LocalLayoutDirection provides originalLayoutDirection
                             ) {
-                                // It won't use the theme level defined uri handler but it's ok
-                                // since it's a PDF
-                                val uriHandler = LocalUriHandler.current
-                                FilledTonalButton(onClick = {
-                                    if (event.source == EventSource.Iran) {
-                                        uriHandler.openUri(event.source.link)
-                                    } else if (event is CalendarEvent.DeviceCalendarEvent) {
-                                        launcher.viewEvent(event, context)
+                                Box(
+                                    Modifier
+                                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                                        .clearAndSetSemantics {}
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    // It won't use the theme level defined uri handler but it's ok
+                                    // since it's a PDF
+                                    val uriHandler = LocalUriHandler.current
+                                    FilledTonalButton(onClick = {
+                                        if (event.source == EventSource.Iran) {
+                                            uriHandler.openUri(event.source.link)
+                                        } else if (event is CalendarEvent.DeviceCalendarEvent) {
+                                            launcher.viewEvent(event, context)
+                                        }
+                                    }) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text(stringResource(R.string.view_source))
+                                            Icon(
+                                                imageVector = if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                    Icons.AutoMirrored.Default.OpenInNew
+                                                } else Icons.Default.OpenInBrowser,
+                                                contentDescription = null,
+                                                tint = LocalContentColor.current,
+                                                modifier = Modifier.padding(start = 8.dp),
+                                            )
+                                        }
                                     }
-                                }) { Text(stringResource(R.string.view_source)) }
+                                }
                             }
                         }) else null,
                         title = {
