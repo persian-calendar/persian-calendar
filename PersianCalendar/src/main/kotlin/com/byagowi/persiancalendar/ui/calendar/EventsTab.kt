@@ -338,16 +338,30 @@ private fun DayEventContent(
     originalLayoutDirection: LayoutDirection,
 ) {
     val context = LocalContext.current
+    val tooltipState = rememberTooltipState(isPersistent = true)
+    val hasTooltip = when {
+        language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
+        event.source == EventSource.Iran -> true
+        event.source == EventSource.AncientIran -> true
+        event.source == EventSource.International -> true
+        event.source == EventSource.Afghanistan -> true
+        else -> false
+    }
     Row(
         Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clip(MaterialTheme.shapes.medium)
             .background(backgroundColor)
-            .then(
-                if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable(
-                onClickLabel = stringResource(R.string.view_source),
-            ) { launcher.viewEvent(event, context) } else Modifier)
+            .clickable(onClickLabel = stringResource(R.string.view_source)) {
+                if (event is CalendarEvent.DeviceCalendarEvent) {
+                    launcher.viewEvent(event, context)
+                } else if (hasTooltip) {
+                    coroutineScope.launch {
+                        if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
+                    }
+                }
+            }
             .focusable(true)
             .semantics {
                 this.contentDescription = if (event.isHoliday) context.getString(
@@ -389,17 +403,7 @@ private fun DayEventContent(
                 modifier = Modifier.padding(start = 8.dp),
             )
         }
-        this.AnimatedVisibility(
-            when {
-                language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
-                event.source == EventSource.Iran -> true
-                event.source == EventSource.AncientIran -> true
-                event.source == EventSource.International -> true
-                event.source == EventSource.Afghanistan -> true
-                else -> false
-            }
-        ) {
-            val tooltipState = rememberTooltipState(isPersistent = true)
+        this.AnimatedVisibility(hasTooltip) {
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                     TooltipAnchorPosition.Above
