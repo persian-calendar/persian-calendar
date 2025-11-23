@@ -117,7 +117,6 @@ dependencies {
     implementation(libs.browser)
     implementation(libs.work.manager.ktx)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.foundation.layout)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     implementation(libs.kotlinx.html.jvm)
     implementation(libs.openlocationcode)
