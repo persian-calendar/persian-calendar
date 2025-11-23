@@ -346,9 +346,8 @@ private fun DayEventContent(
             .background(backgroundColor)
             .then(
                 if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable(
-                    onClick = { launcher.viewEvent(event, context) },
-                ) else Modifier
-            )
+                onClickLabel = stringResource(R.string.view_source),
+            ) { launcher.viewEvent(event, context) } else Modifier)
             .focusable(true)
             .semantics {
                 this.contentDescription = if (event.isHoliday) context.getString(
@@ -422,7 +421,7 @@ private fun DayEventContent(
                         ) { coroutineScope.launch { tooltipState.dismiss() } },
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
-                        action = if (event.source == EventSource.Iran) ({
+                        action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) ({
                             Box(
                                 Modifier
                                     .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
@@ -434,7 +433,11 @@ private fun DayEventContent(
                                 // since it's a PDF
                                 val uriHandler = LocalUriHandler.current
                                 FilledTonalButton(onClick = {
-                                    uriHandler.openUri(event.source.link)
+                                    if (event.source == EventSource.Iran) {
+                                        uriHandler.openUri(event.source.link)
+                                    } else if (event is CalendarEvent.DeviceCalendarEvent) {
+                                        launcher.viewEvent(event, context)
+                                    }
                                 }) { Text(stringResource(R.string.view_source)) }
                             }
                         }) else null,
