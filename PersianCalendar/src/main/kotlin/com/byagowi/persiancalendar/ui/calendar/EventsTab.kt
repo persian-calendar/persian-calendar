@@ -263,18 +263,22 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
 fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
 
-fun Char.isRtl() = when (Character.getDirectionality(this)) {
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT -> true
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC -> true
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING -> true
-    Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE -> true
 
-    Character.DIRECTIONALITY_LEFT_TO_RIGHT -> false
-    Character.DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING -> false
-    Character.DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE -> false
+private val String.directionality
+    get() = this.firstNotNullOfOrNull {
+        when (Character.getDirectionality(it)) {
+            Character.DIRECTIONALITY_RIGHT_TO_LEFT -> LayoutDirection.Rtl
+            Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC -> LayoutDirection.Rtl
+            Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING -> LayoutDirection.Rtl
+            Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE -> LayoutDirection.Rtl
 
-    else -> null
-}
+            Character.DIRECTIONALITY_LEFT_TO_RIGHT -> LayoutDirection.Ltr
+            Character.DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING -> LayoutDirection.Ltr
+            Character.DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE -> LayoutDirection.Ltr
+
+            else -> null
+        }
+    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -299,13 +303,9 @@ fun DayEvents(
                 else appCrossfadeSpec)()
             },
         ) { title ->
-            val layoutDirection = when (title.firstOrNull()?.isRtl()) {
-                true -> LayoutDirection.Rtl
-                false -> LayoutDirection.Ltr
-                else -> LocalLayoutDirection.current
-            }
+            val titleDirection = title.directionality ?: LocalLayoutDirection.current
             val originalLayoutDirection = LocalLayoutDirection.current
-            CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
+            CompositionLocalProvider(LocalLayoutDirection provides titleDirection) {
                 DayEventContent(
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     backgroundColor = backgroundColor,
