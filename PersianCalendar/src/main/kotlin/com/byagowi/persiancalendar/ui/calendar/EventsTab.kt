@@ -408,19 +408,18 @@ private fun DayEventContent(
                 tooltip = {
                     val text = when {
                         event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است"
-
+                        event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
+                        event.source == EventSource.International -> stringResource(R.string.international)
+                        event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
                         event.source == EventSource.Iran -> """تقویم رسمی کشور
 تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
-
-                        event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
-
-                        event.source == EventSource.International -> stringResource(R.string.international)
-
-                        event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
 
                         else -> ""
                     }
                     RichTooltip(
+                        modifier = Modifier.clickable(
+                            onClickLabel = stringResource(R.string.close),
+                        ) { coroutineScope.launch { tooltipState.dismiss() } },
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
                         action = if (event.source == EventSource.Iran) ({
@@ -524,7 +523,9 @@ private fun DayEventContent(
                     event is CalendarEvent.DeviceCalendarEvent && language.isPersianOrDari -> true
                     else -> false
                 }
-                val clickModifier = if (isClickable) Modifier.clickable {
+                val clickModifier = if (isClickable) Modifier.clickable(
+                    onClickLabel = stringResource(R.string.view_source)
+                ) {
                     coroutineScope.launch {
                         if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
                     }
