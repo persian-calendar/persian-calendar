@@ -11,8 +11,8 @@ class SearchEventsStore(val events: List<CalendarEvent<*>>) {
         }.split(" ", "(", ")", "-", ZWNJ)
     }
 
-    fun query(constraint: CharSequence?): List<CalendarEvent<*>> {
-        return if (constraint == null) events
+    fun query(constraint: String): List<CalendarEvent<*>> {
+        return if (constraint.isBlank()) emptyList()
         else itemsWords.mapNotNull { (event: CalendarEvent<*>, words: List<String>) ->
             event.takeIf { words.any { word -> word.startsWith(constraint) } }
         }

@@ -43,8 +43,14 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _isSearchOpenFlow = MutableStateFlow(false)
     val isSearchOpen: StateFlow<Boolean> get() = _isSearchOpenFlow
 
-    private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
-    val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
+    private val _foundItems = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
+    val foundItems: StateFlow<List<CalendarEvent<*>>> get() = _foundItems
+
+    private val _query = MutableStateFlow("")
+    val query: StateFlow<String> get() = _query
+
+    private val _isSearchExpanded = MutableStateFlow(false)
+    val isSearchExpanded: StateFlow<Boolean> get() = _isSearchExpanded
 
     private val _refreshToken = MutableStateFlow(0)
     val refreshToken: StateFlow<Int> get() = _refreshToken
@@ -134,6 +140,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun closeSearch() {
         _isSearchOpenFlow.value = false
+        changeQuery("")
     }
 
     fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
@@ -151,8 +158,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     private var repository: SearchEventsRepository? = null
 
-    fun searchEvent(query: CharSequence) {
-        viewModelScope.launch { _eventsFlow.value = repository?.findEvent(query) ?: emptyList() }
+
+    fun changeQuery(query: String) {
+        _query.value = query
     }
 
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
@@ -259,6 +267,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                 _todayButtonVisibility.value = if (isYearView.value)
                     true
                 else selectedMonthOffset.value != 0 || isHighlighted.value
+            }
+        }
+        viewModelScope.launch {
+            query.collectLatest {
+                _foundItems.value = repository?.findEvent(it) ?: emptyList()
+                _isSearchExpanded.value = it.isNotEmpty()
             }
         }
     }

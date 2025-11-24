@@ -48,10 +48,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -301,29 +301,38 @@ fun SharedTransitionScope.CalendarScreen(
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
             var toolbarHeight by remember { mutableStateOf(0.dp) }
-            Crossfade(
-                searchBoxIsOpen,
-                label = "toolbar",
-                modifier = when {
-                    searchBoxIsOpen -> Modifier
-                    isYearView && toolbarHeight > 0.dp -> Modifier.heightIn(max = toolbarHeight)
-                    else -> Modifier.onSizeChanged {
-                        toolbarHeight = with(density) { it.height.toDp() }
-                    }
-                },
-            ) { searchBoxIsOpenState ->
+            Crossfade(searchBoxIsOpen, label = "toolbar") { searchBoxIsOpenState ->
                 if (searchBoxIsOpenState) Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                ) { Search(viewModel, toolbarHeight) } else Toolbar(
-                    animatedContentScope = animatedContentScope,
-                    openNavigationRail = openNavigationRail,
-                    swipeUpActions = swipeUpActions,
-                    swipeDownActions = swipeDownActions,
-                    viewModel = viewModel,
-                    isLandscape = isLandscape,
-                    today = today,
-                )
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(run {
+                            val expanded by viewModel.isSearchExpanded.collectAsState()
+                            if (!expanded && toolbarHeight > 0.dp) Modifier.requiredHeight(
+                                toolbarHeight
+                            ) else Modifier
+                        }),
+                ) { Search(viewModel) } else Box(
+                    modifier = when {
+                        isYearView -> if (toolbarHeight > 0.dp) Modifier.requiredHeight(
+                            toolbarHeight
+                        ) else Modifier
+
+                        else -> Modifier.onSizeChanged {
+                            toolbarHeight = with(density) { it.height.toDp() }
+                        }
+                    },
+                ) {
+                    Toolbar(
+                        animatedContentScope = animatedContentScope,
+                        openNavigationRail = openNavigationRail,
+                        swipeUpActions = swipeUpActions,
+                        swipeDownActions = swipeDownActions,
+                        viewModel = viewModel,
+                        isLandscape = isLandscape,
+                        today = today,
+                    )
+                }
             }
         },
         floatingActionButton = {
@@ -773,17 +782,16 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun Search(viewModel: CalendarViewModel, toolbarHeight: Dp) {
+private fun Search(viewModel: CalendarViewModel) {
     LaunchedEffect(Unit) {
         launch {
             // 2s timeout, give up if took too much time
             withTimeoutOrNull(2.seconds) { viewModel.initializeEventsRepository() }
         }
     }
-    var query by rememberSaveable { mutableStateOf("") }
-    viewModel.searchEvent(query)
-    val events by viewModel.eventsFlow.collectAsState()
-    val expanded = query.isNotEmpty()
+    val events by viewModel.foundItems.collectAsState()
+    val expanded by viewModel.isSearchExpanded.collectAsState()
+    val query by viewModel.query.collectAsState()
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
@@ -791,7 +799,7 @@ private fun Search(viewModel: CalendarViewModel, toolbarHeight: Dp) {
         inputField = {
             SearchBarDefaults.InputField(
                 query = query,
-                onQueryChange = { query = it },
+                onQueryChange = { viewModel.changeQuery(it) },
                 onSearch = {},
                 expanded = expanded,
                 onExpandedChange = {},
@@ -805,11 +813,10 @@ private fun Search(viewModel: CalendarViewModel, toolbarHeight: Dp) {
             )
         },
         expanded = expanded,
-        onExpandedChange = { if (!it) query = "" },
+        onExpandedChange = { if (!it) viewModel.changeQuery("") },
         modifier = Modifier
             .padding(horizontal = padding)
-            .focusRequester(focusRequester)
-            .then(if (expanded) Modifier else Modifier.heightIn(max = toolbarHeight)),
+            .focusRequester(focusRequester),
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
@@ -930,7 +937,7 @@ private fun SharedTransitionScope.Toolbar(
                         if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
                         else viewModel.openYearView()
                     }
-                    .then(if (isYearView) Modifier.fillMaxWidth() else Modifier),
+                    .then(if (isYearView) Modifier.fillMaxSize() else Modifier),
                 verticalArrangement = Arrangement.Center,
             ) {
                 if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(

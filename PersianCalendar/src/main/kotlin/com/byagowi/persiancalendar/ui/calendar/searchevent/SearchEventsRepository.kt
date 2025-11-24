@@ -22,6 +22,6 @@ class SearchEventsRepository(private val context: Context) {
     }
 
     // encapsulate store in repository
-    suspend fun findEvent(query: CharSequence): List<CalendarEvent<*>> =
+    suspend fun findEvent(query: String): List<CalendarEvent<*>> =
         (store ?: createStore(context).also { store = it }).query(query)
 }
