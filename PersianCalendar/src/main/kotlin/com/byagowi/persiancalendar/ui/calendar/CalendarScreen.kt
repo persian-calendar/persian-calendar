@@ -54,6 +54,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -783,7 +785,7 @@ private fun Search(viewModel: CalendarViewModel) {
     LaunchedEffect(repository) { viewModel.initializeEventsStore(repository) }
     val query by viewModel.query.collectAsState()
     val expanded = query.isNotEmpty()
-    val events by viewModel.foundItems.collectAsState()
+    val items by viewModel.foundItems.collectAsState()
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
@@ -812,30 +814,31 @@ private fun Search(viewModel: CalendarViewModel) {
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            events.take(10).forEach { event ->
-                Box(
-                    Modifier
-                        .clickable {
-                            viewModel.closeSearch()
-                            viewModel.bringEvent(event)
+            LazyColumn {
+                items(items) {
+                    Box(
+                        Modifier
+                            .clickable {
+                                viewModel.closeSearch()
+                                viewModel.bringEvent(it)
+                            }
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp, horizontal = 24.dp),
+                    ) {
+                        AnimatedContent(
+                            targetState = it.title,
+                            label = "title",
+                            transitionSpec = appCrossfadeSpec,
+                        ) { title ->
+                            Text(
+                                title,
+                                modifier = Modifier.align(Alignment.CenterStart),
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
                         }
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp, horizontal = 24.dp),
-                ) {
-                    AnimatedContent(
-                        targetState = event.title,
-                        label = "title",
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state ->
-                        Text(
-                            state,
-                            modifier = Modifier.align(Alignment.CenterStart),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
                     }
                 }
             }
-            if (events.size > 10) Text("…", Modifier.padding(vertical = 12.dp, horizontal = 24.dp))
         }
     }
 }
