@@ -76,7 +76,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -511,7 +510,7 @@ private fun DayEventContent(
                                 }
                             }
                         },
-                        caretShape = TooltipDefaults.caretShape(DpSize(32.dp, 16.dp)),
+                        caretShape = TooltipDefaults.caretShape(),
                     ) {
                         Text(
                             text,
