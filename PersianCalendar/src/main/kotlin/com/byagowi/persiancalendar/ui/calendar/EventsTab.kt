@@ -246,7 +246,7 @@ fun eventColor(event: CalendarEvent<*>): Color {
             if (event.color.isEmpty()) null else Color(event.color.toLong())
         }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
 
-        event.isHoliday || event is CalendarEvent.EquinoxCalendarEvent -> MaterialTheme.colorScheme.primaryContainer
+        event.isHoliday || event is CalendarEvent.EquinoxCalendarEvent -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.surfaceVariant
     }
 }
