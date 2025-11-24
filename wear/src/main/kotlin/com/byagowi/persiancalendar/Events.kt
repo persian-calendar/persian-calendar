@@ -12,7 +12,12 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
-enum class EntryType { Date, NonHoliday, Holiday }
+sealed interface EntryType {
+    object Date : EntryType
+    class NonHoliday(val source: EventSource?) : EntryType
+    class Holiday(val source: EventSource?) : EntryType
+}
+
 class Entry(val title: String, val type: EntryType, val jdn: Jdn? = null)
 
 private const val spacedComma = "، "
@@ -41,7 +46,7 @@ fun generateEntries(
             previousYear = persianDate.year
             listOf(
                 Entry(dateTitle, EntryType.Date, jdn)
-            ) + events.ifEmpty { listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday)) }
+            ) + events.ifEmpty { listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday(null))) }
         } else emptyList()
     }
 }
@@ -67,7 +72,13 @@ private fun MutableList<Entry>.eventsOfCalendar(
                 EventSource.International -> internationalKey in enabledEvents
                 else -> false
             }
-        ) add(Entry(it.title, if (it.isHoliday) EntryType.Holiday else EntryType.NonHoliday))
+        ) add(
+            Entry(
+                it.title,
+                if (it.isHoliday) EntryType.Holiday(it.source)
+                else EntryType.NonHoliday(it.source)
+            )
+        )
     }
 }
 
@@ -83,18 +94,20 @@ fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry
         eventsOfCalendar(groupedIslamicEvents, islamicDate, enabledEvents)
         if (islamicDate.dayOfMonth >= 29) {
             irregularRecurringEvents.forEach {
+                val type = EventSource.entries.firstOrNull { entry -> entry.name == it["type"] }
                 if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && it["month"]?.toIntOrNull() == islamicDate.month && IslamicDate(
                         jdn + 1
                     ).month != islamicDate.month && (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
                         it["title"].orEmpty(),
-                        if (it["holiday"] == "true") EntryType.Holiday else EntryType.NonHoliday
+                        if (it["holiday"] == "true") EntryType.Holiday(type)
+                        else EntryType.NonHoliday(type)
                     )
                 )
             }
         }
         eventsOfCalendar(groupedGregorianEvents, civilDate, enabledEvents)
     }
-    return events.filter { it.type == EntryType.Holiday } + events.filter { it.type == EntryType.NonHoliday }
+    return events.filter { it.type is EntryType.Holiday } + events.filter { it.type is EntryType.NonHoliday }
 }

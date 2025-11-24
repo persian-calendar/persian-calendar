@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -42,6 +43,7 @@ import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.generateEntries
+import com.byagowi.persiancalendar.generated.EventSource
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
@@ -100,7 +102,7 @@ fun MainScreen(
 @Composable
 fun EventView(it: Entry) {
     var isExpanded by remember { mutableStateOf(false) }
-    val isHoliday = it.type == EntryType.Holiday
+    val isHoliday = it.type is EntryType.Holiday
     EventButton(
         onClick = { isExpanded = !isExpanded },
         isHoliday = isHoliday,
@@ -108,15 +110,23 @@ fun EventView(it: Entry) {
             .padding(horizontal = 8.dp)
             .fillMaxWidth()
     ) {
-        AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
-            Text(
-                it.title,
-                maxLines = if (state) Int.MAX_VALUE else 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxWidth()
-            )
+        Column {
+            AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
+                Text(
+                    it.title,
+                    maxLines = if (state) Int.MAX_VALUE else 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxWidth()
+                )
+            }
+            when (val type = it.type) {
+                is EntryType.Holiday -> "تعطیل"
+                is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
+                is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
+                else -> null
+            }?.let { Text(it) }
         }
     }
 }

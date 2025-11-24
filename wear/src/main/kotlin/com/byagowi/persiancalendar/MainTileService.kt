@@ -94,7 +94,7 @@ class MainTileService : TileService() {
                         .setHeight(wrap())
                         .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
                     todayEntries.drop(1).take(if (todayEntries.size > 4) 2 else 3).map {
-                        if (it.type == EntryType.Holiday) text(
+                        if (it.type is EntryType.Holiday) text(
                             it.title.layoutString, color = colorScheme.primary
                         ) else text(it.title.layoutString)
                     }.forEach(column::addContent)

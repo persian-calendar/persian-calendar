@@ -177,7 +177,7 @@ class MonthTileService : TileService() {
         val isHoliday = text != "" && y != 0 && getEventsOfDay(
             enabledEvents = emptySet(),
             civilDate = jdn.toCivilDate(),
-        ).any { it.type == EntryType.Holiday }
+        ).any { it.type is EntryType.Holiday }
         val isToday = jdn == today
 
         return LayoutElementBuilders.Box.Builder()

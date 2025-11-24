@@ -67,7 +67,7 @@ fun CalendarScreen(
                         val isFocusedMonth =
                             persianDate.year == focusedPersianDate.year && persianDate.month == focusedPersianDate.month
                         val events = getEventsOfDay(enabledEvents, civilDate)
-                        val isHoliday = weekDay == 6 || events.any { it.type == EntryType.Holiday }
+                        val isHoliday = weekDay == 6 || events.any { it.type is EntryType.Holiday }
                         Box(
                             Modifier
                                 .weight(1f)
