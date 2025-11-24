@@ -40,8 +40,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _selectedTab = MutableStateFlow(CalendarScreenTab.CALENDAR)
     val selectedTab: StateFlow<CalendarScreenTab> get() = _selectedTab
 
-    private val _isSearchOpenFlow = MutableStateFlow(false)
-    val isSearchOpen: StateFlow<Boolean> get() = _isSearchOpenFlow
+    private val _isSearchOpen = MutableStateFlow(false)
+    val isSearchOpen: StateFlow<Boolean> get() = _isSearchOpen
 
     private val _foundItems = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
     val foundItems: StateFlow<List<CalendarEvent<*>>> get() = _foundItems
@@ -135,11 +135,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun openSearch() {
-        _isSearchOpenFlow.value = true
+        _isSearchOpen.value = true
     }
 
     fun closeSearch() {
-        _isSearchOpenFlow.value = false
+        _isSearchOpen.value = false
         changeQuery("")
     }
 
@@ -264,14 +264,15 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             merge(selectedMonthOffset, isHighlighted, isYearView).collectLatest {
-                _todayButtonVisibility.value = if (isYearView.value)
-                    true
-                else selectedMonthOffset.value != 0 || isHighlighted.value
+                _todayButtonVisibility.value =
+                    isYearView.value || selectedMonthOffset.value != 0 || isHighlighted.value
             }
         }
         viewModelScope.launch {
             query.collectLatest {
-                _foundItems.value = repository?.findEvent(it) ?: emptyList()
+                _foundItems.value = if (isSearchExpanded.value) {
+                    repository?.findEvent(it) ?: emptyList()
+                } else emptyList()
                 _isSearchExpanded.value = it.isNotEmpty()
             }
         }
