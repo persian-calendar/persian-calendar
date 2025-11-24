@@ -42,6 +42,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -52,6 +53,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -814,7 +816,11 @@ private fun Search(viewModel: CalendarViewModel) {
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            LazyColumn {
+            LazyColumn(
+                contentPadding = WindowInsets.safeDrawing.only(
+                    sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                ).asPaddingValues()
+            ) {
                 items(items) {
                     Box(
                         Modifier
