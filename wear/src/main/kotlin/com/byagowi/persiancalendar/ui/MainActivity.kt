@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.MotionScheme
 import androidx.wear.compose.material3.dynamicColorScheme
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -53,7 +54,8 @@ private enum class Screen { MAIN, SETTINGS, UTILITIES, CALENDAR, CONVERTER, DAY 
 private fun WearApp() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         MaterialTheme(
-            colorScheme = dynamicColorScheme(LocalContext.current) ?: MaterialTheme.colorScheme
+            colorScheme = dynamicColorScheme(LocalContext.current) ?: MaterialTheme.colorScheme,
+            motionScheme = MotionScheme.expressive(),
         ) {
             AppScaffold {
                 val context = LocalContext.current
