@@ -97,7 +97,7 @@ fun getA11yDaySummary(
         true,
         showDeviceCalendarEvents = true,
         insertRLM = false,
-        addIsHoliday = false
+        addIsHoliday = false,
     )
     if (holidays.isNotEmpty()) {
         appendLine().appendLine().appendLine(resources.getString(R.string.holiday_reason, holidays))
@@ -108,7 +108,7 @@ fun getA11yDaySummary(
         false,
         showDeviceCalendarEvents = true,
         insertRLM = false,
-        addIsHoliday = false
+        addIsHoliday = false,
     )
     if (nonHolidays.isNotEmpty()) {
         appendLine().appendLine().appendLine(resources.getString(R.string.events))
@@ -164,19 +164,43 @@ fun GregorianCalendar.formatDateAndTime(withWeekDay: Boolean = false): String {
 private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
 
 private fun readDeviceEvents(
-    context: Context, startingDate: GregorianCalendar, duration: Duration
-): List<CalendarEvent.DeviceCalendarEvent> =
+    context: Context,
+    startingDate: GregorianCalendar,
+    duration: Duration,
+    limit: Int,
+    searchTerm: String? = null,
+): List<CalendarEvent.DeviceCalendarEvent> {
     if (!isShowDeviceCalendarEvents.value || ActivityCompat.checkSelfPermission(
             context, Manifest.permission.READ_CALENDAR
         ) != PackageManager.PERMISSION_GRANTED
-    ) emptyList() else runCatching {
+    ) return emptyList()
+
+    val selection: String?
+    val selectionArgs: Array<String>?
+    val boundaryRegex: Regex?
+    if (!searchTerm.isNullOrBlank()) {
+        selection =
+            "(${CalendarContract.Instances.TITLE} LIKE ? OR " + "${CalendarContract.Instances.DESCRIPTION} LIKE ?)"
+        selectionArgs = arrayOf("%$searchTerm%", "%$searchTerm%")
+        boundaryRegex = Regex(
+            "\\b${Regex.escape(searchTerm)}",
+            RegexOption.IGNORE_CASE
+        )
+    } else {
+        selection = null
+        selectionArgs = null
+        boundaryRegex = null
+    }
+
+    return runCatching {
         context.contentResolver.query(
             CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
                 ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
                 ContentUris.appendId(
                     this, startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds
                 )
-            }.build(), arrayOf(
+            }.build(),
+            arrayOf(
                 CalendarContract.Instances.EVENT_ID, // 0
                 CalendarContract.Instances.TITLE, // 1
                 CalendarContract.Instances.DESCRIPTION, // 2
@@ -187,11 +211,18 @@ private fun readDeviceEvents(
                 CalendarContract.Instances.EVENT_COLOR, // 7
                 CalendarContract.Instances.DISPLAY_COLOR, // 8
                 CalendarContract.Instances.CALENDAR_ID, // 9
-            ), null, null, null
+            ),
+            selection,
+            selectionArgs,
+            CalendarContract.Instances.BEGIN + " ASC LIMIT ${limit * 3}",
         )?.use {
             generateSequence { if (it.moveToNext()) it else null }.filter {
                 it.getString(5) == "1" && // is visible
-                        it.getLong(9) !in eventCalendarsIdsToExclude.value
+                        it.getLong(9) !in eventCalendarsIdsToExclude.value && run {
+                    boundaryRegex == null
+                            || boundaryRegex.containsMatchIn(it.getString(1).orEmpty())
+                            || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
+                }
             }.map {
                 val start = Date(it.getLong(3)).toGregorianCalendar()
                 val end = Date(it.getLong(4)).toGregorianCalendar()
@@ -212,17 +243,25 @@ private fun readDeviceEvents(
                     isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
                     source = null,
                 )
-            }.take(1000 /* let's put some limitation */).toList()
+            }.take(limit).toList()
         }
     }.onFailure(logException).getOrNull() ?: emptyList()
+}
 
-fun Context.readDaysDeviceEvents(jdn: Jdn, duration: Duration) = DeviceCalendarEventsStore(
+fun Context.readDaysDeviceEvents(
+    jdn: Jdn,
+    duration: Duration,
+    limit: Int = 100,
+) = DeviceCalendarEventsStore(
     readDeviceEvents(
-        this, jdn.toGregorianCalendar(), duration
+        this,
+        jdn.toGregorianCalendar(),
+        duration,
+        limit = limit,
     )
 )
 
-fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days)
+fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days, 20)
 fun Context.readWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 7.days)
 fun Context.readTwoWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 14.days)
 fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32.days)
@@ -235,11 +274,22 @@ fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<C
         .associateWith { eventsRepository.value.getEvents(it, deviceEvents) }
 }
 
-fun Context.getAllEnabledAppointments() = readDeviceEvents(
-    this,
-    GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
-    (365L * 2L).days // all the events of previous and next year from today
-)
+fun Context.searchDeviceCalendarEvents(searchTerm: String?): List<CalendarEvent.DeviceCalendarEvent> {
+    val now = System.currentTimeMillis()
+    val startDate = GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) }
+    val duration = (365L * 2L).days // 1 year backwards + 1 year forward
+    val events = readDeviceEvents(
+        context = this,
+        startingDate = startDate,
+        duration = duration,
+        searchTerm = searchTerm,
+        limit = 100,
+    )
+    val (upcoming, past) = events.partition { it.start.timeInMillis >= now }
+    val sortedUpcoming = upcoming.sortedBy { it.start.timeInMillis }
+    val sortedPast = past.sortedByDescending { it.start.timeInMillis }
+    return (sortedUpcoming + sortedPast).take(100)
+}
 
 fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>,

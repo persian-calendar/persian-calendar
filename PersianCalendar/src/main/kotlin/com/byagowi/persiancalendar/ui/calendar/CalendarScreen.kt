@@ -779,9 +779,10 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
+    val repository by eventsRepository.collectAsState()
+    LaunchedEffect(repository) { viewModel.initializeEventsStore(repository) }
     val query by viewModel.query.collectAsState()
     val expanded = query.isNotEmpty()
-    if (expanded) LaunchedEffect(Unit) { viewModel.initializeEventsStore() }
     val events by viewModel.foundItems.collectAsState()
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }

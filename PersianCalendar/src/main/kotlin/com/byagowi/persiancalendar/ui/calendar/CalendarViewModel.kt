@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore
@@ -19,17 +19,14 @@ import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.coroutines.Dispatchers
+import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.seconds
 
 class CalendarViewModel(application: Application) : AndroidViewModel(application) {
@@ -142,7 +139,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun closeSearch() {
         _isSearchOpen.value = false
-        eventStore.value = null
         changeQuery("")
     }
 
@@ -166,18 +162,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _query.value = query
     }
 
-    // Events store cache needs to be invalidated as preferences of enabled events can be changed
-    // or user has added an appointment on their calendar outside the app.
-    suspend fun initializeEventsStore() {
-        if (eventStore.value != null) return
-        // 2s timeout, give up if took too much time
-        withTimeoutOrNull(2.seconds) {
-            withContext(Dispatchers.IO) {
-                val appointments = getApplication<Application>().getAllEnabledAppointments()
-                val events = eventsRepository.value.getEnabledEvents(Jdn.today())
-                eventStore.value = SearchEventsStore(appointments + events)
-            }
-        }
+    fun initializeEventsStore(repository: EventsRepository) {
+        eventStore.value = SearchEventsStore(repository.getEnabledEvents(Jdn.today()))
     }
 
     fun commandYearView(command: YearViewCommand) {
@@ -280,8 +266,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             }
         }
         viewModelScope.launch {
-            merge(query, eventStore).collectLatest {
-                _foundItems.value = eventStore.value?.query(query.value) ?: emptyList()
+            merge(query).collectLatest {
+                _foundItems.value = (eventStore.value?.query(query.value) ?: emptyList()) +
+                        getApplication<Application>().searchDeviceCalendarEvents(query.value)
             }
         }
     }
