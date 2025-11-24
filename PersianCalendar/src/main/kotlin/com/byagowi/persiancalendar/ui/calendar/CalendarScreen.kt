@@ -261,7 +261,10 @@ fun SharedTransitionScope.CalendarScreen(
 
     val swipeDownActions = mapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
-        SwipeDownAction.YearView to { viewModel.openYearView() },
+        SwipeDownAction.YearView to {
+            viewModel.closeSearch()
+            viewModel.openYearView()
+        },
         SwipeDownAction.None to {
             if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay.value + 7)
         },
