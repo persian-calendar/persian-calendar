@@ -328,6 +328,7 @@ fun SharedTransitionScope.CalendarScreen(
                         viewModel = viewModel,
                         isLandscape = isLandscape,
                         today = today,
+                        hasToolbarHeight = toolbarHeight > 0.dp,
                     )
                 }
             }
@@ -855,6 +856,7 @@ private fun SharedTransitionScope.Toolbar(
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
+    hasToolbarHeight: Boolean,
 ) {
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
@@ -934,7 +936,10 @@ private fun SharedTransitionScope.Toolbar(
                         if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
                         else viewModel.openYearView()
                     }
-                    .then(if (isYearView) Modifier.fillMaxSize() else Modifier),
+                    .then(
+                        // Toolbar height might not exist if screen rotated while being in year view
+                        if (isYearView && hasToolbarHeight) Modifier.fillMaxSize() else Modifier
+                    ),
                 verticalArrangement = Arrangement.Center,
             ) {
                 if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
