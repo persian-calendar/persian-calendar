@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.DEFAULT_BOLD_FONT
 import com.byagowi.persiancalendar.DEFAULT_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
+import com.byagowi.persiancalendar.DEFAULT_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
@@ -129,6 +130,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
+import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -172,7 +174,7 @@ val clockIn24: StateFlow<Boolean> get() = clockIn24_
 var isDynamicIconEverEnabled = false
     private set
 
-private val isDynamicIconEnabled_ = MutableStateFlow(false)
+private val isDynamicIconEnabled_ = MutableStateFlow(DEFAULT_DYNAMIC_ICON_ENABLED)
 val isDynamicIconEnabled: StateFlow<Boolean> get() = isDynamicIconEnabled_
 
 private val isForcedIranTimeEnabled_ = MutableStateFlow(DEFAULT_IRAN_TIME)
@@ -532,7 +534,9 @@ fun updateStoredPreference(context: Context) {
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     isDynamicIconEverEnabled = PREF_DYNAMIC_ICON_ENABLED in preferences
-    isDynamicIconEnabled_.value = preferences.getBoolean(PREF_DYNAMIC_ICON_ENABLED, false)
+    isDynamicIconEnabled_.value = preferences.getBoolean(
+        PREF_DYNAMIC_ICON_ENABLED, DEFAULT_DYNAMIC_ICON_ENABLED
+    ) && supportsDynamicIcon(mainCalendar, language)
     isNotifyDateOnLockScreen_.value = preferences.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     )
