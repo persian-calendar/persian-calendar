@@ -182,10 +182,7 @@ private fun readDeviceEvents(
         selection =
             "(${CalendarContract.Instances.TITLE} LIKE ? OR " + "${CalendarContract.Instances.DESCRIPTION} LIKE ?)"
         selectionArgs = arrayOf("%$searchTerm%", "%$searchTerm%")
-        boundaryRegex = Regex(
-            "\\b${Regex.escape(searchTerm)}",
-            RegexOption.IGNORE_CASE
-        )
+        boundaryRegex = createSearchRegex(searchTerm)
     } else {
         selection = null
         selectionArgs = null
@@ -219,9 +216,9 @@ private fun readDeviceEvents(
             generateSequence { if (it.moveToNext()) it else null }.filter {
                 it.getString(5) == "1" && // is visible
                         it.getLong(9) !in eventCalendarsIdsToExclude.value && run {
-                    boundaryRegex == null
-                            || boundaryRegex.containsMatchIn(it.getString(1).orEmpty())
-                            || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
+                    boundaryRegex == null || boundaryRegex.containsMatchIn(
+                        it.getString(1).orEmpty()
+                    ) || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
                 }
             }.map {
                 val start = Date(it.getLong(3)).toGregorianCalendar()
@@ -247,6 +244,9 @@ private fun readDeviceEvents(
         }
     }.onFailure(logException).getOrNull() ?: emptyList()
 }
+
+fun createSearchRegex(searchTerm: String): Regex =
+    Regex("\\b" + Regex.escape(searchTerm), RegexOption.IGNORE_CASE)
 
 fun Context.readDaysDeviceEvents(
     jdn: Jdn,
@@ -354,12 +354,14 @@ fun calculateDaysDifference(
             R.plurals.years to years, R.plurals.months to months, R.plurals.days to daysOfMonth
         ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
             resources.getQuantityString(pluralId, n, numeral.value.format(n))
-        }, if (weeks == 0) null
+        },
+        if (weeks == 0) null
         else (if (days % 7 == 0) "" else "~") + resources.getQuantityString(
             R.plurals.weeks,
             weeks,
             numeral.value.format(weeks),
-        ), run {
+        ),
+        run {
             if (years != 0 || isInWidget) return@run null
             val workDays = eventsRepository.value.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn,
@@ -369,7 +371,8 @@ fun calculateDaysDifference(
             resources.getQuantityString(
                 R.plurals.work_days, workDays, numeral.value.format(workDays)
             )
-        })
+        },
+    )
     if (result.isEmpty()) return daysString
     return language.value.inParentheses.format(daysString, result.joinToString(spacedOr))
 }

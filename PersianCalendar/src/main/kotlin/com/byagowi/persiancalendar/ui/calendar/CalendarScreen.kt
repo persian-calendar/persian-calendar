@@ -309,7 +309,7 @@ fun SharedTransitionScope.CalendarScreen(
             Crossfade(searchBoxIsOpen, label = "toolbar") { searchBoxIsOpenState ->
                 Box(
                     (if (searchBoxIsOpenState) {
-                        val query by viewModel.query.collectAsState()
+                        val query by viewModel.searchTerm.collectAsState()
                         if (query.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
                             toolbarHeight
                         ) else Modifier
@@ -785,7 +785,7 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 private fun Search(viewModel: CalendarViewModel) {
     val repository by eventsRepository.collectAsState()
     LaunchedEffect(repository) { viewModel.initializeEventsStore(repository) }
-    val query by viewModel.query.collectAsState()
+    val query by viewModel.searchTerm.collectAsState()
     val expanded = query.isNotEmpty()
     val items by viewModel.foundItems.collectAsState()
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
@@ -795,7 +795,7 @@ private fun Search(viewModel: CalendarViewModel) {
         inputField = {
             SearchBarDefaults.InputField(
                 query = query,
-                onQueryChange = { viewModel.changeQuery(it) },
+                onQueryChange = viewModel::changeSearchTerm,
                 onSearch = {},
                 expanded = expanded,
                 onExpandedChange = {},
@@ -809,7 +809,7 @@ private fun Search(viewModel: CalendarViewModel) {
             )
         },
         expanded = expanded,
-        onExpandedChange = { if (!it) viewModel.changeQuery("") },
+        onExpandedChange = { if (!it) viewModel.changeSearchTerm("") },
         modifier = Modifier
             .padding(horizontal = padding)
             .focusRequester(focusRequester),

@@ -13,11 +13,11 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
+import com.byagowi.persiancalendar.utils.createSearchRegex
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
@@ -48,8 +48,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _foundItems = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
     val foundItems: StateFlow<List<CalendarEvent<*>>> get() = _foundItems
 
-    private val _query = MutableStateFlow("")
-    val query: StateFlow<String> get() = _query
+    private val _searchTerm = MutableStateFlow("")
+    val searchTerm: StateFlow<String> get() = _searchTerm
 
     private val _refreshToken = MutableStateFlow(0)
     val refreshToken: StateFlow<Int> get() = _refreshToken
@@ -139,8 +139,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun closeSearch() {
         _isSearchOpen.value = false
-        changeQuery("")
-        eventStore.value = null
+        changeSearchTerm("")
+        enabledEvents.value = emptyList()
     }
 
     fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
@@ -156,15 +156,15 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _isYearView.value = false
     }
 
-    private val eventStore = MutableStateFlow<SearchEventsStore?>(null)
 
-
-    fun changeQuery(query: String) {
-        _query.value = query
+    fun changeSearchTerm(query: String) {
+        _searchTerm.value = query
     }
 
+    private val enabledEvents = MutableStateFlow(emptyList<CalendarEvent<*>>())
+
     fun initializeEventsStore(repository: EventsRepository) {
-        eventStore.value = SearchEventsStore(repository.getEnabledEvents(Jdn.today()))
+        enabledEvents.value = repository.getEnabledEvents(Jdn.today())
     }
 
     fun commandYearView(command: YearViewCommand) {
@@ -267,10 +267,13 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             }
         }
         viewModelScope.launch {
-            merge(query, eventStore).collectLatest {
+            merge(searchTerm, enabledEvents).collectLatest {
                 val deviceEvents =
-                    getApplication<Application>().searchDeviceCalendarEvents(query.value)
-                val events = eventStore.value?.query(query.value) ?: emptyList()
+                    getApplication<Application>().searchDeviceCalendarEvents(searchTerm.value)
+                val events = if (searchTerm.value.isBlank()) emptyList() else {
+                    val regex = createSearchRegex(searchTerm.value)
+                    enabledEvents.value.filter { regex.containsMatchIn(it.title) }
+                }
                 _foundItems.value = deviceEvents + events
             }
         }
