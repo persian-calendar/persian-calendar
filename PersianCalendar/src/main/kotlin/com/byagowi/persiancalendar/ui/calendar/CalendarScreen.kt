@@ -309,8 +309,8 @@ fun SharedTransitionScope.CalendarScreen(
             Crossfade(searchBoxIsOpen, label = "toolbar") { searchBoxIsOpenState ->
                 Box(
                     (if (searchBoxIsOpenState) {
-                        val query by viewModel.searchTerm.collectAsState()
-                        if (query.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
+                        val searchTerm by viewModel.searchTerm.collectAsState()
+                        if (searchTerm.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
                             toolbarHeight
                         ) else Modifier
                     } else if (isYearView) {
@@ -785,8 +785,8 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 private fun Search(viewModel: CalendarViewModel) {
     val repository by eventsRepository.collectAsState()
     LaunchedEffect(repository) { viewModel.initializeEventsStore(repository) }
-    val query by viewModel.searchTerm.collectAsState()
-    val expanded = query.isNotEmpty()
+    val searchTerm by viewModel.searchTerm.collectAsState()
+    val expanded = searchTerm.isNotEmpty()
     val items by viewModel.foundItems.collectAsState()
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
@@ -794,7 +794,7 @@ private fun Search(viewModel: CalendarViewModel) {
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
-                query = query,
+                query = searchTerm,
                 onQueryChange = viewModel::changeSearchTerm,
                 onSearch = {},
                 expanded = expanded,
