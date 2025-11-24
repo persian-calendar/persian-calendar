@@ -267,8 +267,10 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             merge(query).collectLatest {
-                _foundItems.value = (eventStore.value?.query(query.value) ?: emptyList()) +
-                        getApplication<Application>().searchDeviceCalendarEvents(query.value)
+                val deviceEvents =
+                    getApplication<Application>().searchDeviceCalendarEvents(query.value)
+                val events = eventStore.value?.query(query.value) ?: emptyList()
+                _foundItems.value = deviceEvents + events
             }
         }
     }
