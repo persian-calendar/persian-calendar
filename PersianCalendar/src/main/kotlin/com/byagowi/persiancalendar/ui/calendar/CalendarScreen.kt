@@ -201,12 +201,10 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -307,8 +305,8 @@ fun SharedTransitionScope.CalendarScreen(
             Crossfade(searchBoxIsOpen, label = "toolbar") { searchBoxIsOpenState ->
                 Box(
                     (if (searchBoxIsOpenState) {
-                        val expanded by viewModel.isSearchExpanded.collectAsState()
-                        if (!expanded && toolbarHeight > 0.dp) Modifier.requiredHeight(
+                        val query by viewModel.query.collectAsState()
+                        if (query.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
                             toolbarHeight
                         ) else Modifier
                     } else if (isYearView) {
@@ -781,15 +779,10 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
-    LaunchedEffect(Unit) {
-        launch {
-            // 2s timeout, give up if took too much time
-            withTimeoutOrNull(2.seconds) { viewModel.initializeEventsRepository() }
-        }
-    }
-    val events by viewModel.foundItems.collectAsState()
-    val expanded by viewModel.isSearchExpanded.collectAsState()
     val query by viewModel.query.collectAsState()
+    val expanded = query.isNotEmpty()
+    if (expanded) LaunchedEffect(Unit) { viewModel.initializeEventsStore() }
+    val events by viewModel.foundItems.collectAsState()
     val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }

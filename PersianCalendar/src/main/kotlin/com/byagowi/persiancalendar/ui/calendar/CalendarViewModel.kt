@@ -10,21 +10,26 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
+import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
+import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.preferences
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.seconds
 
 class CalendarViewModel(application: Application) : AndroidViewModel(application) {
@@ -48,9 +53,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> get() = _query
-
-    private val _isSearchExpanded = MutableStateFlow(false)
-    val isSearchExpanded: StateFlow<Boolean> get() = _isSearchExpanded
 
     private val _refreshToken = MutableStateFlow(0)
     val refreshToken: StateFlow<Int> get() = _refreshToken
@@ -140,6 +142,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun closeSearch() {
         _isSearchOpen.value = false
+        eventStore.value = null
         changeQuery("")
     }
 
@@ -156,7 +159,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _isYearView.value = false
     }
 
-    private var repository: SearchEventsRepository? = null
+    private var eventStore = MutableStateFlow<SearchEventsStore?>(null)
 
 
     fun changeQuery(query: String) {
@@ -165,8 +168,16 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
     // or user has added an appointment on their calendar outside the app.
-    fun initializeEventsRepository() {
-        repository = SearchEventsRepository(getApplication())
+    suspend fun initializeEventsStore() {
+        if (eventStore.value != null) return
+        // 2s timeout, give up if took too much time
+        withTimeoutOrNull(2.seconds) {
+            withContext(Dispatchers.IO) {
+                val appointments = getApplication<Application>().getAllEnabledAppointments()
+                val events = eventsRepository.value.getEnabledEvents(Jdn.today())
+                eventStore.value = SearchEventsStore(appointments + events)
+            }
+        }
     }
 
     fun commandYearView(command: YearViewCommand) {
@@ -269,9 +280,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             }
         }
         viewModelScope.launch {
-            query.collectLatest {
-                _foundItems.value = repository?.findEvent(it) ?: emptyList()
-                _isSearchExpanded.value = it.isNotEmpty()
+            merge(query, eventStore).collectLatest {
+                _foundItems.value = eventStore.value?.query(query.value) ?: emptyList()
             }
         }
     }
