@@ -34,6 +34,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -299,12 +300,22 @@ fun SharedTransitionScope.CalendarScreen(
         topBar = {
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
-
-            Crossfade(searchBoxIsOpen, label = "toolbar") {
-                if (it) Box(
+            var toolbarHeight by remember { mutableStateOf(0.dp) }
+            Crossfade(
+                searchBoxIsOpen,
+                label = "toolbar",
+                modifier = when {
+                    searchBoxIsOpen -> Modifier
+                    isYearView && toolbarHeight > 0.dp -> Modifier.heightIn(max = toolbarHeight)
+                    else -> Modifier.onSizeChanged {
+                        toolbarHeight = with(density) { it.height.toDp() }
+                    }
+                },
+            ) { searchBoxIsOpenState ->
+                if (searchBoxIsOpenState) Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxWidth(),
-                ) { Search(viewModel) } else Toolbar(
+                ) { Search(viewModel, toolbarHeight) } else Toolbar(
                     animatedContentScope = animatedContentScope,
                     openNavigationRail = openNavigationRail,
                     swipeUpActions = swipeUpActions,
@@ -760,11 +771,9 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     }.onFailure(logException).getOrNull() == true
 }
 
-private val toolbarHeight = 56.dp
-
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun Search(viewModel: CalendarViewModel) {
+private fun Search(viewModel: CalendarViewModel, toolbarHeight: Dp) {
     LaunchedEffect(Unit) {
         launch {
             // 2s timeout, give up if took too much time
@@ -781,7 +790,6 @@ private fun Search(viewModel: CalendarViewModel) {
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
-                modifier = Modifier.height(toolbarHeight),
                 query = query,
                 onQueryChange = { query = it },
                 onSearch = {},
@@ -800,7 +808,8 @@ private fun Search(viewModel: CalendarViewModel) {
         onExpandedChange = { if (!it) query = "" },
         modifier = Modifier
             .padding(horizontal = padding)
-            .focusRequester(focusRequester),
+            .focusRequester(focusRequester)
+            .then(if (expanded) Modifier else Modifier.heightIn(max = toolbarHeight)),
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
@@ -921,12 +930,8 @@ private fun SharedTransitionScope.Toolbar(
                         if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
                         else viewModel.openYearView()
                     }
-                    .then(
-                        if (isYearView) Modifier
-                            .heightIn(max = toolbarHeight)
-                            .fillMaxWidth()
-                        else Modifier
-                    ),
+                    .then(if (isYearView) Modifier.fillMaxWidth() else Modifier),
+                verticalArrangement = Arrangement.Center,
             ) {
                 if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
                     yearViewCalendar,
