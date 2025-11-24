@@ -140,6 +140,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     fun closeSearch() {
         _isSearchOpen.value = false
         changeQuery("")
+        eventStore.value = null
     }
 
     fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
@@ -155,7 +156,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _isYearView.value = false
     }
 
-    private var eventStore = MutableStateFlow<SearchEventsStore?>(null)
+    private val eventStore = MutableStateFlow<SearchEventsStore?>(null)
 
 
     fun changeQuery(query: String) {
@@ -266,7 +267,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             }
         }
         viewModelScope.launch {
-            merge(query).collectLatest {
+            merge(query, eventStore).collectLatest {
                 val deviceEvents =
                     getApplication<Application>().searchDeviceCalendarEvents(query.value)
                 val events = eventStore.value?.query(query.value) ?: emptyList()
