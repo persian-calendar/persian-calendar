@@ -302,28 +302,22 @@ fun SharedTransitionScope.CalendarScreen(
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
             var toolbarHeight by remember { mutableStateOf(0.dp) }
             Crossfade(searchBoxIsOpen, label = "toolbar") { searchBoxIsOpenState ->
-                if (searchBoxIsOpenState) Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(run {
-                            val expanded by viewModel.isSearchExpanded.collectAsState()
-                            if (!expanded && toolbarHeight > 0.dp) Modifier.requiredHeight(
-                                toolbarHeight
-                            ) else Modifier
-                        }),
-                ) { Search(viewModel) } else Box(
-                    modifier = when {
-                        isYearView -> if (toolbarHeight > 0.dp) Modifier.requiredHeight(
+                Box(
+                    (if (searchBoxIsOpenState) {
+                        val expanded by viewModel.isSearchExpanded.collectAsState()
+                        if (!expanded && toolbarHeight > 0.dp) Modifier.requiredHeight(
                             toolbarHeight
                         ) else Modifier
-
-                        else -> Modifier.onSizeChanged {
-                            toolbarHeight = with(density) { it.height.toDp() }
-                        }
-                    },
+                    } else if (isYearView) {
+                        if (toolbarHeight > 0.dp) {
+                            Modifier.requiredHeight(toolbarHeight)
+                        } else Modifier
+                    } else Modifier.onSizeChanged {
+                        toolbarHeight = with(density) { it.height.toDp() }
+                    }).fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Toolbar(
+                    if (searchBoxIsOpenState) Search(viewModel) else Toolbar(
                         animatedContentScope = animatedContentScope,
                         openNavigationRail = openNavigationRail,
                         swipeUpActions = swipeUpActions,
