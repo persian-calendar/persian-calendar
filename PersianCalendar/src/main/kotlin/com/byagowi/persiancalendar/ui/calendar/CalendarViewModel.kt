@@ -270,9 +270,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             query.collectLatest {
-                _foundItems.value = if (isSearchOpen.value) {
-                    repository?.findEvent(it) ?: emptyList()
-                } else emptyList()
+                _foundItems.value = repository?.findEvent(it) ?: emptyList()
                 _isSearchExpanded.value = it.isNotEmpty()
             }
         }
