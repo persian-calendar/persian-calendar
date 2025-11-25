@@ -141,6 +141,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _isSearchOpen.value = false
         changeSearchTerm("")
         enabledEvents.value = emptyList()
+        _foundItems.value = emptyList()
     }
 
     fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
