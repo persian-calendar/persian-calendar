@@ -273,7 +273,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                     getApplication<Application>().searchDeviceCalendarEvents(searchTerm.value)
                 val events = if (searchTerm.value.isBlank()) emptyList() else {
                     val regex = createSearchRegex(searchTerm.value)
-                    enabledEvents.value.filter { regex.containsMatchIn(it.title) }
+                    enabledEvents.value.asSequence().filter { regex.containsMatchIn(it.title) }
+                        .take(50).toList()
                 }
                 _foundItems.value = deviceEvents + events
             }
