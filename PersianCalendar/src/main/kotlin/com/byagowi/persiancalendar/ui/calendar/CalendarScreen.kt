@@ -58,6 +58,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -816,34 +817,39 @@ private fun Search(viewModel: CalendarViewModel) {
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            LazyColumn(
-                contentPadding = WindowInsets.safeDrawing.only(
-                    sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
-                ).asPaddingValues()
-            ) {
-                items(items) {
-                    Box(
-                        Modifier
-                            .clickable {
-                                viewModel.closeSearch()
-                                viewModel.bringEvent(it)
+            Box {
+                val lazyListState = rememberLazyListState()
+                LazyColumn(
+                    state = lazyListState,
+                    contentPadding = WindowInsets.safeDrawing.only(
+                        sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                    ).asPaddingValues()
+                ) {
+                    items(items) {
+                        Box(
+                            Modifier
+                                .clickable {
+                                    viewModel.closeSearch()
+                                    viewModel.bringEvent(it)
+                                }
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp, horizontal = 24.dp),
+                        ) {
+                            AnimatedContent(
+                                targetState = it.title,
+                                label = "title",
+                                transitionSpec = appCrossfadeSpec,
+                            ) { title ->
+                                Text(
+                                    title,
+                                    modifier = Modifier.align(Alignment.CenterStart),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
                             }
-                            .fillMaxWidth()
-                            .padding(vertical = 20.dp, horizontal = 24.dp),
-                    ) {
-                        AnimatedContent(
-                            targetState = it.title,
-                            label = "title",
-                            transitionSpec = appCrossfadeSpec,
-                        ) { title ->
-                            Text(
-                                title,
-                                modifier = Modifier.align(Alignment.CenterStart),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
                         }
                     }
                 }
+                ScrollShadow(lazyListState)
             }
         }
     }
