@@ -64,18 +64,14 @@ class MonthComplicationService : SuspendingComplicationDataSourceService() {
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val locale = ULocale("fa_IR@calendar=persian")
         val calendar = Calendar.getInstance(locale)
-        val date = Date()
-        val title =
-            DateFormat.getPatternInstance(calendar, DateFormat.ABBR_MONTH_DAY, locale).format(date)
-        val (dayOfMonth, monthDays) = run {
-            val date = Jdn.today().toPersianDate()
-            val endOfMonth = Jdn(date.monthStartOfMonthsDistance(1)) - 1
-            date.dayOfMonth to endOfMonth.toPersianDate().dayOfMonth
-        }
+        val formatter = DateFormat.getPatternInstance(calendar, DateFormat.ABBR_MONTH_DAY, locale)
+        val title = formatter.format(Date())
+        val date = Jdn.today().toPersianDate()
+        val endOfMonth = Jdn(date.monthStartOfMonthsDistance(1)) - 1
         val dataBuilder = createRangedValueComplicationData(
             title = title,
-            dayOfMonth = dayOfMonth,
-            monthDays = monthDays,
+            dayOfMonth = date.dayOfMonth,
+            monthDays = endOfMonth.toPersianDate().dayOfMonth,
         )
         dataBuilder.setTapAction(getTapAction())
         dataBuilder.setValidTimeRange(getValidTimeRange())
