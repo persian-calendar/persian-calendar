@@ -28,7 +28,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.dataStore
-import com.byagowi.persiancalendar.requestComplicationUpdate
+import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         run {
             // Request update of both on activity just in case
-            requestComplicationUpdate()
+            requestComplicationsUpdate()
             requestTileUpdate()
         }
         setContent { WearApp() }

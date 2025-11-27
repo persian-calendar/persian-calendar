@@ -37,7 +37,7 @@ import com.byagowi.persiancalendar.editPreferences
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.internationalKey
 import com.byagowi.persiancalendar.iranNonHolidaysKey
-import com.byagowi.persiancalendar.requestComplicationUpdate
+import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import kotlinx.coroutines.launch
 
@@ -82,7 +82,7 @@ fun SettingsScreen(preferences: Preferences?) {
                     .padding(horizontal = 8.dp),
                 label = { title(value) },
                 onCheckedChange = { newValue ->
-                    context.requestComplicationUpdate()
+                    context.requestComplicationsUpdate()
                     coroutineScope.launch { context.editPreferences { it[key] = newValue } }
                 },
             )

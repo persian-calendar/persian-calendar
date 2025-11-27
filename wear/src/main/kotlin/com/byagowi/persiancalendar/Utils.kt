@@ -7,9 +7,15 @@ import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.tiles.TileService.getUpdater
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 
-fun Context.requestComplicationUpdate() {
-    val component = ComponentName(this, MainComplicationService::class.java)
-    ComplicationDataSourceUpdateRequester.create(this, component).requestUpdateAll()
+fun Context.requestComplicationsUpdate() {
+    listOf(
+        MainComplicationService::class.java,
+        MonthComplicationService::class.java,
+    ).forEach {
+        val component = ComponentName(this, it)
+        ComplicationDataSourceUpdateRequester.create(this, component)
+            .requestUpdateAll()
+    }
 }
 
 fun Context.requestTileUpdate() {
