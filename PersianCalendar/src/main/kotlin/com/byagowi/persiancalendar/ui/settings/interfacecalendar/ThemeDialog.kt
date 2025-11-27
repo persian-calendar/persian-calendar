@@ -72,6 +72,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.getFileName
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.preferences
 import java.io.File
 import kotlin.random.Random
@@ -241,24 +242,26 @@ private fun ColumnScope.FontPicker(
         Column(Modifier.padding(start = 24.dp)) {
             Row {
                 Button(onClick = {
-                    if (language.isPersianOrDari) Toast.makeText(
-                        context, "پرونده‌ای در قالب ttf یا otf انتخاب کنید", Toast.LENGTH_LONG
-                    ).show()
-                    fontPicker.launch(
-                        listOf(
-                            "font/ttf",
-                            "font/otf",
-                            "font/sfnt",
-                            "font/collection",
-                            "font/truetype",
-                            "font/opentype",
-                            "application/x-font-ttf",
-                            "application/x-font-otf",
-                        ).let {
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) it + "application/octet-stream"
-                            else it
-                        }.toTypedArray()
-                    )
+                    runCatching {
+                        fontPicker.launch(
+                            listOf(
+                                "font/ttf",
+                                "font/otf",
+                                "font/sfnt",
+                                "font/collection",
+                                "font/truetype",
+                                "font/opentype",
+                                "application/x-font-ttf",
+                                "application/x-font-otf",
+                            ).let {
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) it + "application/octet-stream"
+                                else it
+                            }.toTypedArray()
+                        )
+                        if (language.isPersianOrDari) Toast.makeText(
+                            context, "پرونده‌ای در قالب ttf یا otf انتخاب کنید", Toast.LENGTH_LONG
+                        ).show()
+                    }.getOrNull().debugAssertNotNull
                 }) { Text(stringResource(R.string.select_font)) }
                 this.AnimatedVisibility(
                     customFontToken != null,
@@ -297,7 +300,9 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
             Row {
                 FilledIconButton(onClick = {
                     val mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
-                    imagePicker.launch(PickVisualMediaRequest(mediaType))
+                    runCatching {
+                        imagePicker.launch(PickVisualMediaRequest(mediaType))
+                    }.getOrNull().debugAssertNotNull
                 }) { Icon(Icons.Default.Image, null) }
                 this.AnimatedVisibility(
                     customImageName != null,

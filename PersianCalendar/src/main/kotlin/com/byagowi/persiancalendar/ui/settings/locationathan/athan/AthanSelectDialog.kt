@@ -121,11 +121,6 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                     }.onFailure(logException).onFailure { onDismissRequest() }
                 },
                 R.string.more to {
-                    if (language.isPersianOrDari) Toast.makeText(
-                        context,
-                        "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
-                        Toast.LENGTH_LONG
-                    ).show()
                     runCatching {
                         soundFilePicker.launch(
                             arrayOf(
@@ -139,6 +134,11 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                                 "audio/x-wav", // wav
                             )
                         )
+                        if (language.isPersianOrDari) Toast.makeText(
+                            context,
+                            "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }.onFailure(logException).onFailure { onDismissRequest() }
                 },
             )
