@@ -19,20 +19,20 @@
             android:name="first_band"
             android:fillColor="@android:color/white"
             android:pathData="M325,202v61h234v-61z" />
-        <group android:name="second_band">
-            <path
-                android:fillColor="@android:color/white"
-                android:pathData="M325,296h234v33h-234z" />
-        </group>
-        <group android:name="third_band">
-            <path
-                android:fillColor="@android:color/white"
-                android:pathData="M325,360h234v33h-234z" />
-        </group>
-        <group android:name="fourth_band">
-            <path
-                android:fillColor="@android:color/white"
-                android:pathData="M325,423h169v31h-169z" />
-        </group>
+        <path
+            android:name="second_band"
+            android:fillAlpha=".7"
+            android:fillColor="@android:color/white"
+            android:pathData="M325,296h234v33h-234z" />
+        <path
+            android:name="third_band"
+            android:fillAlpha=".7"
+            android:fillColor="@android:color/white"
+            android:pathData="M325,360h234v33h-234z" />
+        <path
+            android:name="fourth_band"
+            android:fillAlpha=".7"
+            android:fillColor="@android:color/white"
+            android:pathData="M325,423h169v31h-169z" />
     </group>
 </vector>
