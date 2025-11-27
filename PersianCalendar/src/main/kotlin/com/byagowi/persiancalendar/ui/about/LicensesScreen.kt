@@ -17,14 +17,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -62,7 +62,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -94,11 +93,7 @@ fun SharedTransitionScope.LicensesScreen(
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
                 ScreenSurface(animatedContentScope) {
-                    Box(
-                        modifier = Modifier.windowInsetsPadding(
-                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
-                        ),
-                    ) { Licenses(paddingValues.calculateBottomPadding()) }
+                    Licenses()
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -170,12 +165,17 @@ private fun Sidebar(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun BoxScope.Licenses(bottomPadding: Dp) {
+private fun BoxScope.Licenses() {
     val sections = remember { getCreditsSections() }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     val listState = rememberLazyListState()
     val expandArrowSizeModifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() })
-    LazyColumn(state = listState) {
+    LazyColumn(
+        state = listState,
+        contentPadding = WindowInsets.safeDrawing.only(
+            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+        ).asPaddingValues(),
+    ) {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) HorizontalDivider(
                 modifier = Modifier.padding(start = 16.dp, end = 88.dp),
@@ -238,7 +238,6 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                 }
             }
         }
-        item { Spacer(Modifier.height(bottomPadding)) }
     }
     ScrollShadow(listState)
 }

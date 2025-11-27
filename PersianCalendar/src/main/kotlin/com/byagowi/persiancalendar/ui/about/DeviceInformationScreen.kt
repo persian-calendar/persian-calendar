@@ -25,13 +25,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -157,9 +155,9 @@ fun SharedTransitionScope.DeviceInformationScreen(
                     val listState = rememberLazyListState()
                     LazyColumn(
                         state = listState,
-                        modifier = Modifier.windowInsetsPadding(
-                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
-                        ),
+                        contentPadding = WindowInsets.safeDrawing.only(
+                            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                        ).asPaddingValues(),
                     ) {
                         item {
                             Box(
@@ -192,7 +190,6 @@ fun SharedTransitionScope.DeviceInformationScreen(
                                 }
                             }
                         }
-                        item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
                     }
                     ScrollShadow(listState)
                 }

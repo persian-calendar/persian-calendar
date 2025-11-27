@@ -823,7 +823,7 @@ private fun Search(viewModel: CalendarViewModel) {
                     state = lazyListState,
                     contentPadding = WindowInsets.safeDrawing.only(
                         sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
-                    ).asPaddingValues()
+                    ).asPaddingValues(),
                 ) {
                     items(items) {
                         Box(
