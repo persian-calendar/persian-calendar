@@ -60,7 +60,7 @@ abstract class BaseActivity : ComponentActivity(),
     }
 
     override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
-        if (this !is MainActivity && lifecycle.currentState != Lifecycle.State.INITIALIZED) return
+        if (this !is MainActivity && !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
         when (key) {
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             EXPANDED_TIME_STATE_KEY -> return // nothing needs to be updated
