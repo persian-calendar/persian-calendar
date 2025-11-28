@@ -118,7 +118,13 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                 R.string.theme_default to {
                     runCatching {
                         deviceRingtone.launch(Unit)
-                    }.onFailure(logException).onFailure { onDismissRequest() }
+                    }.onFailure(logException).onFailure {
+                        Toast.makeText(
+                            context,
+                            R.string.device_does_not_support,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }.onFailure { onDismissRequest() }
                 },
                 R.string.more to {
                     runCatching {
@@ -139,7 +145,13 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                             "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
                             Toast.LENGTH_LONG
                         ).show()
-                    }.onFailure(logException).onFailure { onDismissRequest() }
+                    }.onFailure(logException).onFailure {
+                        Toast.makeText(
+                            context,
+                            R.string.device_does_not_support,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }.onFailure { onDismissRequest() }
                 },
             )
         }.forEach { (stringId, callback) ->

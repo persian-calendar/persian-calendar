@@ -261,6 +261,12 @@ private fun ColumnScope.FontPicker(
                         if (language.isPersianOrDari) Toast.makeText(
                             context, "پرونده‌ای در قالب ttf یا otf انتخاب کنید", Toast.LENGTH_LONG
                         ).show()
+                    }.onFailure {
+                        Toast.makeText(
+                            context,
+                            R.string.device_does_not_support,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }.getOrNull().debugAssertNotNull
                 }) { Text(stringResource(R.string.select_font)) }
                 this.AnimatedVisibility(
@@ -302,6 +308,12 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                     val mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
                     runCatching {
                         imagePicker.launch(PickVisualMediaRequest(mediaType))
+                    }.onFailure {
+                        Toast.makeText(
+                            context,
+                            R.string.device_does_not_support,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }.getOrNull().debugAssertNotNull
                 }) { Icon(Icons.Default.Image, null) }
                 this.AnimatedVisibility(
