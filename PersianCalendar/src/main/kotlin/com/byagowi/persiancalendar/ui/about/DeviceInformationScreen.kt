@@ -13,7 +13,6 @@ import android.os.BatteryManager
 import android.os.Build
 import android.view.InputDevice
 import android.view.RoundedCorner
-import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -88,6 +87,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -141,11 +141,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                                 "com.android.systemui", "com.android.systemui.egg.MLandActivity"
                             ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
-                    }.onFailure(logException).onFailure {
-                        Toast.makeText(
-                            context, R.string.device_does_not_support, Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
                 }
             },
         )

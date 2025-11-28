@@ -73,7 +73,9 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.getFileName
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import java.io.File
 import kotlin.random.Random
 
@@ -261,12 +263,8 @@ private fun ColumnScope.FontPicker(
                         if (language.isPersianOrDari) Toast.makeText(
                             context, "پرونده‌ای در قالب ttf یا otf انتخاب کنید", Toast.LENGTH_LONG
                         ).show()
-                    }.onFailure {
-                        Toast.makeText(
-                            context,
-                            R.string.device_does_not_support,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    }.onFailure(logException).onFailure {
+                        showUnsupportedActionToast(context)
                     }.getOrNull().debugAssertNotNull
                 }) { Text(stringResource(R.string.select_font)) }
                 this.AnimatedVisibility(
@@ -308,12 +306,8 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                     val mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
                     runCatching {
                         imagePicker.launch(PickVisualMediaRequest(mediaType))
-                    }.onFailure {
-                        Toast.makeText(
-                            context,
-                            R.string.device_does_not_support,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    }.onFailure(logException).onFailure {
+                        showUnsupportedActionToast(context)
                     }.getOrNull().debugAssertNotNull
                 }) { Icon(Icons.Default.Image, null) }
                 this.AnimatedVisibility(

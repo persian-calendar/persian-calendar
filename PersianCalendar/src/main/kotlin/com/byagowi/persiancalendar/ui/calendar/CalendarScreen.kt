@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.CalendarContract
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -203,6 +202,7 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.launch
@@ -1309,8 +1309,7 @@ fun addEvent(
                             withDismissAction = true,
                         ) == SnackbarResult.ActionPerformed
                     ) context.bringMarketPage("com.google.android.calendar")
-                } else Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT)
-                    .show()
+                } else showUnsupportedActionToast(context)
             }
             addEventData = null
         }

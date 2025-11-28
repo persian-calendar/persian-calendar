@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
-import android.widget.Toast
 import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.BROADCAST_ALARM
 import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
@@ -14,11 +13,11 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
 import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
 import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
 import com.byagowi.persiancalendar.MONTH_RESET_COMMAND
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
@@ -40,9 +39,7 @@ class BroadcastReceivers : BroadcastReceiver() {
             ADD_EVENT -> runCatching {
                 val addEventIntent = AddEventData.upcoming().asIntent()
                 context.startActivity(addEventIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            }.onFailure(logException).onFailure {
-                Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
-            }
+            }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
 
             BROADCAST_ALARM -> {
                 val key = PrayTime.fromName(intent.getStringExtra(KEY_EXTRA_PRAYER)) ?: return

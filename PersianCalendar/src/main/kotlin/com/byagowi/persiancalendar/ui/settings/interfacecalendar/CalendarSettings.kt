@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 import android.Manifest
 import android.content.pm.PackageManager
 import android.provider.CalendarContract
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -98,6 +97,7 @@ import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.coroutines.launch
 
 @Composable
@@ -291,7 +291,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
     }
     var showHolidaysToggles by rememberSaveable { mutableStateOf(holidaysIds.isNotEmpty()) }
     val calendars = resolveDeviceCalendars {
-        Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+        showUnsupportedActionToast(context)
         onDismissRequest()
     }
     DisposableEffect(Unit) {

@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import java.io.File
 
 @Composable
@@ -119,11 +120,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                     runCatching {
                         deviceRingtone.launch(Unit)
                     }.onFailure(logException).onFailure {
-                        Toast.makeText(
-                            context,
-                            R.string.device_does_not_support,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showUnsupportedActionToast(context)
                     }.onFailure { onDismissRequest() }
                 },
                 R.string.more to {
@@ -146,11 +143,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                             Toast.LENGTH_LONG
                         ).show()
                     }.onFailure(logException).onFailure {
-                        Toast.makeText(
-                            context,
-                            R.string.device_does_not_support,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showUnsupportedActionToast(context)
                     }.onFailure { onDismissRequest() }
                 },
             )

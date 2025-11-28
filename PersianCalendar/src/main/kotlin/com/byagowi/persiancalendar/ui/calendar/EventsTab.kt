@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
-import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
@@ -120,6 +119,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -255,9 +255,7 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
     event: CalendarEvent.DeviceCalendarEvent, context: Context
 ) {
     runCatching { this@viewEvent.launch(event.id) }.onFailure {
-        Toast.makeText(
-            context, R.string.device_does_not_support, Toast.LENGTH_SHORT
-        ).show()
+        showUnsupportedActionToast(context)
     }.onFailure(logException)
 }
 

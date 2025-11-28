@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.utils
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.BuildConfig
@@ -55,7 +57,7 @@ fun Coordinates.calculatePrayTimes(
         }
     return PrayTimes(
         calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod,
-        midnightMethod
+        midnightMethod,
     )
 }
 
@@ -64,11 +66,13 @@ val Coordinates.isSouthernHemisphere get() = latitude < .0
 fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elevation)
 
 val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
+fun showUnsupportedActionToast(context: Context) {
+    Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+}
 
 // Thee same order as https://praytimes.org/code/v2/js/examples/monthly.htm
 val CalculationMethod.titleStringId
-    @StringRes
-    get(): Int = when (this) {
+    @StringRes get(): Int = when (this) {
         CalculationMethod.MWL -> R.string.method_mwl
         CalculationMethod.ISNA -> R.string.method_isna
         CalculationMethod.Egypt -> R.string.method_egypt
@@ -82,8 +86,7 @@ val CalculationMethod.titleStringId
 val Coordinates.isHighLatitude: Boolean get() = abs(latitude) > 48
 
 val HighLatitudesMethod.titleStringId
-    @StringRes
-    get(): Int = when (this) {
+    @StringRes get(): Int = when (this) {
         HighLatitudesMethod.NightMiddle -> R.string.high_latitudes_night_middle
         HighLatitudesMethod.AngleBased -> R.string.high_latitudes_angle_based
         HighLatitudesMethod.OneSeventh -> R.string.high_latitudes_one_seventh
