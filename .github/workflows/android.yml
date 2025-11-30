@@ -32,11 +32,22 @@ jobs:
         run: |
           ./gradlew assembleDebug lintDebug testDebugUnitTest --stacktrace
 
+      - name: Run lint checks with baseline
+        run: |
+          ./gradlew lintReportDebug --stacktrace
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: PersianCalendar
           path: PersianCalendar/build/outputs/apk/**/*.apk
+
+      - name: Upload lint reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-reports
+          path: "*/build/reports/lint-*.html"
 
       - name: Archive reports for failed build
         if: ${{ failure() }}

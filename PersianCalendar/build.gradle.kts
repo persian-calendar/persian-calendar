@@ -100,6 +100,15 @@ android {
     lint {
         disable += listOf("MissingTranslation")
         warningsAsErrors = true
+        abortOnError = true
+        checkAllWarnings = true
+        checkReleaseBuilds = true
+        checkDependencies = true
+        checkTestSources = true
+        checkGeneratedSources = false
+        baseline = file("lint-baseline.xml") // To create/update: ./gradlew updateLintBaseline
+        // error += listOf("NewApi", "InlinedApi")
+        // warning += listOf("UnusedResources")
     }
 
     kotlin {

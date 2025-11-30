@@ -41,6 +41,13 @@ android {
 
     lint {
         warningsAsErrors = true
+        checkAllWarnings = true
+        checkReleaseBuilds = true
+        abortOnError = true
+        checkDependencies = true
+        checkTestSources = true
+        checkGeneratedSources = false
+        baseline = file("lint-baseline.xml")
     }
 
     kotlin {
