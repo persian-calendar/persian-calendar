@@ -69,7 +69,7 @@ enum class Language(val code: String, val nativeName: String) {
     val language get() = code.replace(Regex("-(IR|AF|US|CN)"), "")
 
     // en-IR and fa-AF aren't recognized by system, that's handled by #language
-    fun asSystemLocale() = Locale(language)
+    fun asSystemLocale(): Locale = Locale.forLanguageTag(language)
 
     val inParentheses: String
         get() = when (this) {
