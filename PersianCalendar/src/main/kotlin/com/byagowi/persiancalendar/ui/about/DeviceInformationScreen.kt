@@ -459,7 +459,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                     |Installer Package Name: ${
                         @Suppress("DEPRECATION") activity.packageManager?.getInstallerPackageName(
                             activity.packageName
-                        )?.toString().orEmpty()
+                        ).orEmpty()
                     }
                     """.trimMargin("|").trim()
                 }
