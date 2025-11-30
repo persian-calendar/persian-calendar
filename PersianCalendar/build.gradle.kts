@@ -97,7 +97,16 @@ android {
         targetCompatibility = javaVersion
     }
 
-    lint { disable += listOf("MissingTranslation") }
+    lint {
+        disable += listOf("MissingTranslation")
+        warningsAsErrors = true
+    }
+
+    kotlin {
+        compilerOptions {
+            allWarningsAsErrors.set(true)
+        }
+    }
 }
 
 dependencies {

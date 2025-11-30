@@ -39,6 +39,16 @@ android {
         targetCompatibility = javaVersion
     }
 
+    lint {
+        warningsAsErrors = true
+    }
+
+    kotlin {
+        compilerOptions {
+            allWarningsAsErrors.set(true)
+        }
+    }
+
     buildFeatures { compose = true }
 }
 

@@ -17,6 +17,12 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 }
 
+kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
+}
+
 gradlePlugin {
     plugins {
         create("dependencies") {
