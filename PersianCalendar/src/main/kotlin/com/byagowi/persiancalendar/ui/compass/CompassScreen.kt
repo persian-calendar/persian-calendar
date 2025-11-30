@@ -5,8 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.Build
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -61,6 +59,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
@@ -122,10 +121,7 @@ fun SharedTransitionScope.CompassScreen(
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
-        val display = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            @Suppress("DEPRECATION") context.getSystemService<WindowManager>()?.defaultDisplay
-        } else context.display
-        when (display?.rotation) {
+        when (ActivityCompat.getDisplayOrDefault(context).rotation) {
             android.view.Surface.ROTATION_0 -> 0f
             android.view.Surface.ROTATION_90 -> 90f
             android.view.Surface.ROTATION_180 -> 180f

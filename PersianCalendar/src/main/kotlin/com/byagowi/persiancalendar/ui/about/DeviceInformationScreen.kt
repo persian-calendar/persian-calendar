@@ -76,6 +76,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppIconButton
@@ -358,10 +359,8 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             )
         },
         "%.1fHz".format(
-            Locale.ENGLISH, when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> activity.display?.refreshRate
-                else -> @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.refreshRate
-            } ?: 0f
+            Locale.ENGLISH,
+            ActivityCompat.getDisplayOrDefault(activity).refreshRate,
         ),
     ),
     Item("DPI", activity.resources?.displayMetrics?.densityDpi?.toString()),

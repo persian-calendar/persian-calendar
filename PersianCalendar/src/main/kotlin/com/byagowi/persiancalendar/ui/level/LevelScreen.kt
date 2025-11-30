@@ -57,6 +57,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -105,8 +106,7 @@ fun SharedTransitionScope.LevelScreen(
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("level: ON_RESUME")
                 // Rotation lock, https://stackoverflow.com/a/75984863
-                val destination =
-                    @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
+                val destination = ActivityCompat.getDisplayOrDefault(activity).rotation
                 activity.requestedOrientation = when (destination) {
                     Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
                     Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
