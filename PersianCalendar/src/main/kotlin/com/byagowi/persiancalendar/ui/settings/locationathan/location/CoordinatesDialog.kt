@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
-import android.location.Geocoder
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,19 +33,15 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.utils.friendlyName
-import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.geocode
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 @Composable
@@ -170,20 +165,11 @@ fun CoordinatesDialog(
         }
         val context = LocalContext.current
         LaunchedEffect(changeCounter) {
-            launch(Dispatchers.IO) {
-                runCatching {
-                    val latitude = parseDouble(state[0].value) ?: 0.0
-                    val longitude = parseDouble(state[1].value) ?: 0.0
-                    val geocoder =
-                        Geocoder(context, language.value.asSystemLocale()).getFromLocation(
-                            latitude, longitude, 20
-                        )
-                    withContext(Dispatchers.Main.immediate) {
-                        val result = geocoder?.getOrNull(0)
-                        cityName = result?.friendlyName
-                        countryCode = result?.countryCode
-                    }
-                }.onFailure(logException)
+            val latitude = parseDouble(state[0].value) ?: 0.0
+            val longitude = parseDouble(state[1].value) ?: 0.0
+            geocode(context, latitude, longitude) {
+                cityName = it.friendlyName
+                countryCode = it.countryCode
             }
         }
     }

@@ -1,6 +1,13 @@
 package com.byagowi.persiancalendar.utils
 
+import android.content.Context
 import android.location.Address
+import android.location.Geocoder
+import android.os.Build
+import com.byagowi.persiancalendar.global.language
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.abs
 
@@ -16,3 +23,22 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
 
 val Address.friendlyName: String?
     get() = listOf(locality, subAdminArea, adminArea).firstOrNull { !it.isNullOrBlank() }
+
+fun CoroutineScope.geocode(
+    context: Context,
+    latitude: Double,
+    longitude: Double,
+    onResult: (Address) -> Unit,
+) {
+    val geocoder = Geocoder(context, language.value.asSystemLocale())
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) runCatching {
+        geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+            addresses.firstOrNull()?.also(onResult)
+        }
+    }.onFailure(logException).getOrNull() else launch(Dispatchers.IO) {
+        @Suppress("DEPRECATION") runCatching {
+            val address = geocoder.getFromLocation(latitude, longitude, 1)?.firstOrNull()
+            address?.also(onResult)
+        }.onFailure(logException).getOrNull()
+    }
+}

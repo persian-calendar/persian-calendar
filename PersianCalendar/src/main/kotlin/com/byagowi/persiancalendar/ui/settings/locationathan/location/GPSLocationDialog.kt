@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -41,21 +40,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.friendlyName
+import com.byagowi.persiancalendar.utils.geocode
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveLocation
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinates
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 
@@ -190,14 +187,9 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
 
     coordinates?.also { coord ->
         LaunchedEffect(coord.latitude, coord.longitude) {
-            launch(Dispatchers.IO) {
-                runCatching {
-                    val result = Geocoder(context, language.value.asSystemLocale())
-                        .getFromLocation(coord.latitude, coord.longitude, 1)
-                        ?.firstOrNull()
-                    countryCode = result?.countryCode
-                    cityName = result?.friendlyName
-                }.onFailure(logException).getOrNull()
+            geocode(context, coord.latitude, coord.longitude) { address ->
+                countryCode = address.countryCode
+                cityName = address.friendlyName
             }
         }
         LaunchedEffect(coord.latitude, coord.longitude) {
