@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.level
 
 import android.content.pm.ActivityInfo
-import android.os.PowerManager
 import android.view.Surface
+import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -57,7 +57,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.getSystemService
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -82,7 +81,6 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.debugLog
 import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -130,19 +128,15 @@ fun SharedTransitionScope.LevelScreen(
     }
 
     if (isFullscreen) DisposableEffect(Unit) {
-        val lock = context.getSystemService<PowerManager>()
-            ?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "persiancalendar:level")
-        lock?.acquire(15.minutes.inWholeMilliseconds)
-
-        activity ?: return@DisposableEffect onDispose {}
-        val windowInsetsController =
-            WindowCompat.getInsetsController(activity.window, activity.window.decorView)
+        val window = activity?.window ?: return@DisposableEffect onDispose {}
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
         onDispose {
-            lock?.release()
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
         }
     }
