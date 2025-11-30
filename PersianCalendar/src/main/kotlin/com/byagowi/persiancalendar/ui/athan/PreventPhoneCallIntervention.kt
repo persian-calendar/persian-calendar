@@ -10,7 +10,7 @@ import android.telephony.TelephonyManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.utils.logException
 
-// Whole probably won't work on modern Android but given our notifications use
+// The whole thing probably won't work on modern Android but given our notifications use
 // we don't care about this anymore.
 class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
     var stopListener = {}
