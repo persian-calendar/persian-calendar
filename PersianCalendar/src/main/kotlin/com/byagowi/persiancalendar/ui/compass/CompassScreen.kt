@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContentScope
@@ -121,7 +122,10 @@ fun SharedTransitionScope.CompassScreen(
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
-        when (context.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
+        val display = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            @Suppress("DEPRECATION") context.getSystemService<WindowManager>()?.defaultDisplay
+        } else context.display
+        when (display?.rotation) {
             android.view.Surface.ROTATION_0 -> 0f
             android.view.Surface.ROTATION_90 -> 90f
             android.view.Surface.ROTATION_180 -> 180f
