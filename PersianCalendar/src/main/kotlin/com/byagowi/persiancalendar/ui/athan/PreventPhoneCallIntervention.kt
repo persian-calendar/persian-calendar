@@ -8,6 +8,8 @@ import android.telephony.TelephonyManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.utils.logException
 
+// Whole probably won't work on modern Android but given our notifications use
+// we don't care about this anymore.
 class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
     var stopListener = {}
         private set
@@ -39,10 +41,9 @@ class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
         } else startFallbackListener(telephonyManager)
     }
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     private fun startFallbackListener(telephonyManager: TelephonyManager) {
         val listener = object : PhoneStateListener() {
-            @Deprecated("", ReplaceWith(""))
             override fun onCallStateChanged(state: Int, incomingNumber: String) =
                 onStateChange(state)
         }
