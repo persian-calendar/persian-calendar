@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.byagowi.persiancalendar.ui.athan
 
 import android.content.Context
@@ -41,7 +43,7 @@ class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
         } else startFallbackListener(telephonyManager)
     }
 
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    @Suppress("OVERRIDE_DEPRECATION")
     private fun startFallbackListener(telephonyManager: TelephonyManager) {
         val listener = object : PhoneStateListener() {
             override fun onCallStateChanged(state: Int, incomingNumber: String) =
