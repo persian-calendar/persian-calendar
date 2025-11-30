@@ -33,7 +33,6 @@ import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION
-import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -151,14 +150,7 @@ class AthanNotification : Service() {
 
         notificationManager?.notify(notificationId, notificationBuilder.build())
 
-        val preventPhoneCallIntervention =
-            if (notificationAthan) PreventPhoneCallIntervention(cleanUp) else null
-        cleanUp = {
-            preventPhoneCallIntervention?.stopListener?.invoke()
-            notificationManager?.cancel(notificationId)
-        }
-
-        preventPhoneCallIntervention?.startListener(this)
+        cleanUp = { notificationManager?.cancel(notificationId) }
         Handler(Looper.getMainLooper()).postDelayed(6.minutes.inWholeMilliseconds) { cleanUp() }
 
         return super.onStartCommand(intent, flags, startId)
