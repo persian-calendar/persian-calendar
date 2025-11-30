@@ -56,43 +56,4 @@
             column="22"/>
     </issue>
 
-    <issue
-        id="ConvertToWebp"
-        message="One or more images in this project can be converted to the WebP format which typically results in smaller file sizes, even for lossless conversion">
-        <location
-            file="src/main/res/drawable-round/month_tile_preview.png"/>
-    </issue>
-
-    <issue
-        id="IconDuplicatesConfig"
-        message="The `main_tile_preview.png` icon has identical contents in the following configuration folders: drawable-round, drawable">
-        <location
-            file="src/main/res/drawable/main_tile_preview.png"/>
-        <location
-            file="src/main/res/drawable-round/main_tile_preview.png"/>
-    </issue>
-
-    <issue
-        id="IconDuplicatesConfig"
-        message="The `month_tile_preview.png` icon has identical contents in the following configuration folders: drawable-round, drawable">
-        <location
-            file="src/main/res/drawable/month_tile_preview.png"/>
-        <location
-            file="src/main/res/drawable-round/month_tile_preview.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/main_tile_preview.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/main_tile_preview.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/month_tile_preview.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/month_tile_preview.png"/>
-    </issue>
-
 </issues>

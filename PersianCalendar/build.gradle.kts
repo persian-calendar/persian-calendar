@@ -106,7 +106,7 @@ android {
         checkDependencies = true
         checkTestSources = true
         checkGeneratedSources = false
-        baseline = file("lint-baseline.xml") // To create/update: ./gradlew updateLintBaseline
+        baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
         // error += listOf("NewApi", "InlinedApi")
         // warning += listOf("UnusedResources")
     }
