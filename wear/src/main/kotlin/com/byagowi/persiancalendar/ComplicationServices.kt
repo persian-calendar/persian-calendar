@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.icu.text.DateFormat
 import android.icu.util.Calendar
@@ -93,7 +94,8 @@ class MonthComplicationService : SuspendingComplicationDataSourceService() {
     }
 }
 
-private fun SuspendingComplicationDataSourceService.getTapAction(): PendingIntent? {
+@JvmSynthetic
+private fun Context.getTapAction(): PendingIntent? {
     return PendingIntent.getActivity(
         this,
         0,
@@ -102,6 +104,7 @@ private fun SuspendingComplicationDataSourceService.getTapAction(): PendingInten
     )
 }
 
+@JvmSynthetic
 private fun getValidTimeRange(): TimeRange {
     val zoneId = ZoneId.systemDefault()
     val now = ZonedDateTime.now(zoneId)

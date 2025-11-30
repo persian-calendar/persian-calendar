@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
 
 private enum class Screen { MAIN, SETTINGS, UTILITIES, CALENDAR, CONVERTER, DAY }
 
+@JvmSynthetic
 @Composable
 private fun WearApp() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
