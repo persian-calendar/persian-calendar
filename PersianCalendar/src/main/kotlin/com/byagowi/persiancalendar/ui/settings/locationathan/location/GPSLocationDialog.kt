@@ -143,7 +143,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
 
     DisposableEffect(Unit) {
         val locationListener = object : LocationListener {
-            @Deprecated("")
+            @Suppress("OVERRIDE_DEPRECATION")
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
             }
 
