@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
-import android.os.PowerManager
 import androidx.annotation.RawRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AlarmManagerCompat
@@ -45,7 +44,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 // https://stackoverflow.com/a/69505596
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
@@ -83,14 +81,6 @@ fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
 private fun startAthanBody(context: Context, prayTime: PrayTime) {
     runCatching {
         debugLog("Alarms: startAthanBody for $prayTime")
-
-        runCatching {
-            context.getSystemService<PowerManager>()?.newWakeLock(
-                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
-                "persiancalendar:alarm"
-            )?.acquire(30.seconds.inWholeMilliseconds)
-        }.onFailure(logException)
-
         if (notificationAthan.value || ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
