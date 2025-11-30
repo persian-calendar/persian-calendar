@@ -94,7 +94,6 @@ class MonthComplicationService : SuspendingComplicationDataSourceService() {
     }
 }
 
-@JvmSynthetic
 private fun Context.getTapAction(): PendingIntent? {
     return PendingIntent.getActivity(
         this,
@@ -104,7 +103,6 @@ private fun Context.getTapAction(): PendingIntent? {
     )
 }
 
-@JvmSynthetic
 private fun getValidTimeRange(): TimeRange {
     val zoneId = ZoneId.systemDefault()
     val now = ZonedDateTime.now(zoneId)
