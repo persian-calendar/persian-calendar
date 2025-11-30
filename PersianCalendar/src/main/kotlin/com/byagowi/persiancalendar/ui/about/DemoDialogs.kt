@@ -20,8 +20,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.AudioAttributes
 import android.media.AudioFormat
-import android.media.AudioManager
 import android.media.AudioTrack
 import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
@@ -908,12 +908,23 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
                     else -> .0
                 } * Short.MAX_VALUE).toInt().toShort()
             }
-
-            val audioTrack = AudioTrack(
-                AudioManager.STREAM_MUSIC, sampleRate,
-                AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
-                buffer.size, AudioTrack.MODE_STATIC
-            )
+            val audioTrack = AudioTrack.Builder()
+                .setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+                .setAudioFormat(
+                    AudioFormat.Builder()
+                        .setSampleRate(sampleRate)
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .build()
+                )
+                .setBufferSizeInBytes(buffer.size)
+                .setTransferMode(AudioTrack.MODE_STATIC)
+                .build()
             audioTrack.write(buffer, 0, buffer.size)
             audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
             audioTrack.play()
@@ -1200,10 +1211,23 @@ suspend fun playSoundTick(offset: Double) {
             sampleRate = sampleRate,
             duration = 4.0
         )
-        val audioTrack = AudioTrack(
-            AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-            AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
-        )
+        val audioTrack = AudioTrack.Builder()
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setSampleRate(sampleRate)
+                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                    .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                    .build()
+            )
+            .setBufferSizeInBytes(buffer.size)
+            .setTransferMode(AudioTrack.MODE_STATIC)
+            .build()
         audioTrack.write(buffer, 0, buffer.size)
         runCatching { audioTrack.play() }.onFailure(logException)
     }

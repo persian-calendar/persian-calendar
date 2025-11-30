@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.service
 
 import android.animation.ValueAnimator
 import android.graphics.Canvas
+import android.media.AudioAttributes
 import android.media.AudioFormat
-import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
 import android.service.dreams.DreamService
@@ -31,10 +31,23 @@ class PersianCalendarDreamService : DreamService() {
             // Brown noise https://github.com/zacharydenton/noise.js/blob/master/noise.js#L45
             (((Random.nextDouble() * 2 - 1) * .02 + lastOut) / 1.02)
         }.map { (it * Short.MAX_VALUE).toInt().toShort() }.toShortArray()
-        val audioTrack = AudioTrack(
-            AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-            AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
-        )
+        val audioTrack = AudioTrack.Builder()
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setSampleRate(sampleRate)
+                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                    .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                    .build()
+            )
+            .setBufferSizeInBytes(buffer.size * 2)
+            .setTransferMode(AudioTrack.MODE_STATIC)
+            .build()
         audioTrack.write(buffer, 0, buffer.size)
         audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
         audioTrack
