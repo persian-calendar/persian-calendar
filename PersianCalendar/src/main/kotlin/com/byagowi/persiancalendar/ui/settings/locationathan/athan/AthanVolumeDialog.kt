@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.RingtoneManager
 import androidx.compose.foundation.layout.padding
@@ -43,7 +44,10 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
 
     val ringtone = remember {
         val ringtone = RingtoneManager.getRingtone(context, getAthanUri(context))
-        ringtone?.streamType = AudioManager.STREAM_ALARM
+        ringtone?.audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .build()
         ringtone?.play()
         ringtone
     }
