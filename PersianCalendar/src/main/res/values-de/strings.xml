@@ -171,7 +171,7 @@
     <string name="version">Version %1$s</string>
     <string name="week_number">Wochennummer</string>
     <string name="week_number_summary">Wochennummer im Kalender anzeigen</string>
-    <string name="wait_for_gps">Bitte warten... Wenn nach einer Minute nichts erscheint, sollten Sie andere Optionen ausprobieren</string>
+    <string name="wait_for_gps">Bitte warten… Wenn nach einer Minute nichts erscheint, sollten Sie andere Optionen ausprobieren</string>
     <string name="moon_in_scorpio">Der Mond steht im Skorpion</string>
     <string name="sunrise_sun_view">Sonnenaufgang</string>
     <string name="midday_sun_view">Mittag</string>

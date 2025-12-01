@@ -110,7 +110,6 @@ android {
             "SelectableText",
             "IconLocation",
             "TypographyQuotes",
-            "TypographyEllipsis",
             "DuplicateStrings",
             "SyntheticAccessor",
             "UnusedResources",

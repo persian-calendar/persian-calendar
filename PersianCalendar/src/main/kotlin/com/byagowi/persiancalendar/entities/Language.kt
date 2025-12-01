@@ -347,7 +347,7 @@ enum class Language(val code: String, val nativeName: String) {
     fun prepareForSort(text: String) = when {
         isArabicScript && !isArabic -> prepareForArabicSort(text)
         // We will need some preparation for non-English latin script
-        // languages (Turkish, Spanish, French, ...) but our cities.json
+        // languages (Turkish, Spanish, French, …) but our cities.json
         // don't have those a translation to those, so
         else -> text
     }
