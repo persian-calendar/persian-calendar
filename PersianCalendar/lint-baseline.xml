@@ -2,17 +2,6 @@
 <issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="true" name="AGP (8.13.1)" variant="all" version="8.13.1">
 
     <issue
-        id="UseCompoundDrawables"
-        message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
-        errorLine1="    &lt;LinearLayout"
-        errorLine2="     ~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/widget4x2_events.xml"
-            line="4"
-            column="6"/>
-    </issue>
-
-    <issue
         id="StringFormatTrivial"
         message="This formatting string is trivial. Rather than using `String.format` to create your String, it will be more performant to concatenate your arguments with `+`. "
         errorLine1="    ContentResolver.SCHEME_ANDROID_RESOURCE, this.getResourcePackageName(rawRes),"

@@ -1346,7 +1346,6 @@ fun create4x2RemoteViews(
             )
         )
 
-        remoteViews.setImageViewResource(R.id.refresh_icon, R.drawable.ic_widget_refresh)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             0,
@@ -1356,7 +1355,11 @@ fun create4x2RemoteViews(
         remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
 
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
-    } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
+        remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.VISIBLE)
+    } else {
+        remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
+        remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
+    }
 
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
 
