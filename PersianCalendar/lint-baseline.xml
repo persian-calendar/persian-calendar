@@ -112,13 +112,6 @@
     </issue>
 
     <issue
-        id="ConvertToWebp"
-        message="One or more images in this project can be converted to the WebP format which typically results in smaller file sizes, even for lossless conversion">
-        <location
-            file="src/main/res/drawable/w4x2.png"/>
-    </issue>
-
-    <issue
         id="NegativeMargin"
         message="Margin values should not be negative"
         errorLine1="            android:layout_marginTop=&quot;-3dp&quot;"
@@ -138,17 +131,6 @@
             file="src/main/kotlin/com/byagowi/persiancalendar/ui/about/DemoDialogs.kt"
             line="1425"
             column="24"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="            button.text = &quot;Share&quot;"
-        errorLine2="                           ~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/settings/SettingsScreen.kt"
-            line="462"
-            column="28"/>
     </issue>
 
 </issues>

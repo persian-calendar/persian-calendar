@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.StatusBarManager
 import android.app.WallpaperManager
@@ -459,7 +460,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         val dialogBuilder = AlertDialog.Builder(context)
         val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
         val button = Button(context).also { button ->
-            button.text = "Share"
+            @SuppressLint("SetTextI18n") run { button.text = "Share" }
             button.setOnClickListener {
                 context.shareTextFile(result, "log.txt", "text/plain")
             }
