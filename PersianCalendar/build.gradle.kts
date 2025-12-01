@@ -115,8 +115,6 @@ android {
             "SyntheticAccessor",
             "UnusedResources",
         )
-        // error += listOf("NewApi", "InlinedApi")
-        // warning += listOf("UnusedResources")
     }
 
     kotlin {
