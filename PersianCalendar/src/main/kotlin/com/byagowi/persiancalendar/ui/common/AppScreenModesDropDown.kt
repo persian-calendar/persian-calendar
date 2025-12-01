@@ -25,11 +25,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 
@@ -47,7 +49,9 @@ fun <T> AppScreenModesDropDown(
         Modifier
             .clip(MaterialTheme.shapes.extraLarge)
             .background(LocalContentColor.current.copy(alpha = .175f))
-            .clickable {
+            .clickable(
+                onClickLabel = stringResource(if (showMenu) R.string.close else R.string.open),
+            ) {
                 showMenu = !showMenu
                 if (showMenu) hapticFeedback.performLongPress()
             },

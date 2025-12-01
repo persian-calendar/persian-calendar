@@ -14,6 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -28,6 +31,7 @@ fun CalendarsTypesPicker(
     val selectedTabIndex = calendarsList.indexOf(current)
         // If user returned from disabling one of the calendar, do a fallback
         .coerceAtLeast(0)
+    val selectDateTypeString = stringResource(R.string.select_type_date)
     PrimaryTabRow(
         selectedTabIndex = selectedTabIndex,
         divider = {},
@@ -36,6 +40,7 @@ fun CalendarsTypesPicker(
             val offset = selectedTabIndex.coerceAtMost(calendarsList.size - 1)
             TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
         },
+        modifier = Modifier.semantics { this.contentDescription = selectDateTypeString },
     ) {
         val language by language.collectAsState()
         val view = LocalView.current
