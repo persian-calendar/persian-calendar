@@ -104,7 +104,6 @@ android {
         checkReleaseBuilds = true
         checkDependencies = true
         checkTestSources = true
-        baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
         disable += listOf(
             "MissingTranslation",
             "SelectableText",
