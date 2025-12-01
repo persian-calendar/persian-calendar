@@ -104,7 +104,6 @@
     <string name="location_access">Дастрасии макон</string>
     <string name="calendar_access">Дастрасӣ ба тақвим</string>
     <string name="phone_calendar_required">Ин қисми барнома ба иҷозати тақвим ниёз дорад, агар шумо ба он иҷозат диҳед, рӯйдодҳои шахсии шумо дар тақвим нишон дода мешаванд.</string>
-    <string name="gpl_logo">Иҷозатномаи умумии ҷамъиятии GNU</string>
     <string name="version">Версияи %1$s</string>
     <string name="licenses">Иҷозатнома</string>
     <string name="about_support_developers">Дастгирии таҳиягарон</string>

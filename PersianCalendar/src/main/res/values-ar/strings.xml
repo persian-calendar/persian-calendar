@@ -183,7 +183,6 @@
     <string name="calendar_access">الوصول إلى التقويم</string>
     <string name="phone_calendar_required">يحتاج هذا الجزء من التطبيق إذن الوصول للتقويم الخاص بك، إذا تم السماح يمكنك إظهار الأحداث الخاصة في التقويم.</string>
     <!--About-->
-    <string name="gpl_logo">شعار GPL</string>
     <string name="version">الإصدار %1$s</string>
     <string name="licenses">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>

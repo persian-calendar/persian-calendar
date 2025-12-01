@@ -187,7 +187,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="calendar_access">Calendar Access</string>
     <string name="phone_calendar_required">This part of the app needs calendar permission, if you allow it your personal events will be shown on the calendar.</string>
     <!--About-->
-    <string name="gpl_logo">GPL Logo</string>
     <string name="version">Version %1$s</string>
     <string name="licenses">License</string>
     <string name="about_license_title">Application License</string>

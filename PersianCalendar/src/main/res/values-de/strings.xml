@@ -166,7 +166,6 @@
     <string name="default_athan_summary">Zurück zum Standard Adhan</string>
     <string name="location_access">Standortzugriff</string>
     <string name="calendar_access">Kalenderzugriff</string>
-    <string name="gpl_logo">GPL Logo</string>
     <string name="version">Version %1$s</string>
     <string name="week_number">Wochennummer</string>
     <string name="week_number_summary">Wochennummer im Kalender anzeigen</string>

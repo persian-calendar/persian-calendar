@@ -94,7 +94,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
     val anyThemeHasGradient = themesToCheck.any { it.hasGradient }
     val anyThemeIsDynamicColors = themesToCheck.any { it.isDynamicColors }
     AppDialog(
-        title = { Text(stringResource(R.string.select_skin)) },
+        title = { Text(stringResource(R.string.skin)) },
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.accept)) }

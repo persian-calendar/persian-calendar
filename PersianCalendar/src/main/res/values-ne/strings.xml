@@ -175,7 +175,6 @@
     <string name="location_access">स्थान पहुँच</string>
     <string name="calendar_access">क्यालेन्डर पहुँच</string>
     <string name="phone_calendar_required">एपको यो भागलाई क्यालेन्डर अनुमति चाहिन्छ, यदि तपाईंले यसलाई अनुमति दिनुभयो भने तपाईंको व्यक्तिगत घटनाहरू पात्रोमा देखाइनेछ।</string>
-    <string name="gpl_logo">GPL लोगो</string>
     <string name="version">संस्करण %1$s</string>
     <string name="nepali_calendar">नेपाली पात्रो</string>
     <string name="nepali_calendar_short">नेपाली</string>

@@ -45,6 +45,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
@@ -188,25 +190,33 @@ fun ColumnScope.ShiftWorkDialogContent(
                     Spacer(Modifier.width(16.dp))
                     Text(text = numeral.format(position + 1) + spacedColon)
                     Box(Modifier.weight(70f)) {
-                        TextField(shiftWorkKeyToString(type), onValueChange = { value ->
-                            selectedTypeDropdownIndex = -1
-                            viewModel.changeShiftWorkTypeOfPosition(
-                                position,
-                                // Don't allow inserting '=' or ',' as they have special meaning
-                                value.replace(Regex("[=,]"), "")
-                            )
-                        }, trailingIcon = {
-                            IconButton(onClick = { selectedTypeDropdownIndex = position }) {
-                                ExpandArrow(
-                                    isExpanded = selectedTypeDropdownIndex == position,
-                                    contentDescription = stringResource(R.string.more_options),
+                        TextField(
+                            shiftWorkKeyToString(type),
+                            onValueChange = { value ->
+                                selectedTypeDropdownIndex = -1
+                                viewModel.changeShiftWorkTypeOfPosition(
+                                    position,
+                                    // Don't allow inserting '=' or ',' as they have special meaning
+                                    value.replace(Regex("[=,]"), "")
                                 )
-                            }
-                        })
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = { selectedTypeDropdownIndex = position }) {
+                                    ExpandArrow(
+                                        isExpanded = selectedTypeDropdownIndex == position,
+                                        contentDescription = stringResource(R.string.more_options),
+                                    )
+                                }
+                            },
+                        )
+                        val durationString = stringResource(R.string.shift_work_days_head)
                         AppDropdownMenu(
                             expanded = selectedTypeDropdownIndex == position,
                             onDismissRequest = { selectedTypeDropdownIndex = -1 },
                             minWidth = 40.dp,
+                            modifier = Modifier.semantics {
+                                this.contentDescription = durationString
+                            },
                         ) {
                             (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
                                 AppDropdownMenuItem({ Text(it) }) {

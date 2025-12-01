@@ -16,7 +16,6 @@
     <string name="showing_clock_in_24">24時間表示</string>
     <string name="clock_in_24">24時間表示</string>
     <string name="about">アプリについて</string>
-    <string name="gpl_logo">GNU一般公衆利用許諾契約書</string>
     <string name="date_converter">日付変換</string>
     <string name="converter">変換</string>
     <string name="widget_text_color">ウィジェットのテキストの色</string>

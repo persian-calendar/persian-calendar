@@ -163,7 +163,6 @@
     <string name="about_license_title">Uygulama Lisansı</string>
     <string name="licenses">Lisans</string>
     <string name="version">Sürüm %1$s</string>
-    <string name="gpl_logo">GPL Logosu</string>
     <string name="phone_calendar_required">Uygulamanın bu bölümünün takvim iznine ihtiyacı vardır, izin verirseniz kişisel etkinlikleriniz takvimde gösterilir.</string>
     <string name="calendar_access">Takvim Erişimi</string>
     <string name="phone_location_required">Uygulamanın bu kısmının, konumunuza erişmesi gerekmektedir. Reddet’i seçerseniz enlem ve boylam bilgilerini manuel girmeniz gerekir.</string>

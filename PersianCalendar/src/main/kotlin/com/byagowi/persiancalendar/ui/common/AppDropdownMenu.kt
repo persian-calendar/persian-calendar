@@ -21,13 +21,14 @@ import androidx.compose.ui.unit.dp
 fun AppDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
     minWidth: Dp = 200.dp,
     content: @Composable ColumnScope.(closeMenu: () -> Unit) -> Unit,
 ) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
-        modifier = Modifier.defaultMinSize(minWidth = minWidth),
+        modifier = modifier.defaultMinSize(minWidth = minWidth),
         shape = MaterialTheme.shapes.extraLarge,
         content = { content(onDismissRequest) },
     )

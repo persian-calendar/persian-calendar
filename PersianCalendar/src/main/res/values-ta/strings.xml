@@ -28,7 +28,6 @@
     <string name="phone_location_required">இந்தப் பகுதிக்கு இருப்பிட இசைவு தேவை, நீங்கள் மறுக்க விரும்பினால் உங்கள் குறுக்குக்கோடு மற்றும் நெடுங்கோடுகளை கைமுறையாக உள்ளிட வேண்டும்.</string>
     <string name="calendar_access">நாட்காட்டி அணுகல்</string>
     <string name="phone_calendar_required">இந்தப் பகுதிக்கு நாள்காட்டி இசைவு தேவை, கிடைத்தால் உங்கள் நிகழ்வுகள் காண்பிக்கப்படும்.</string>
-    <string name="gpl_logo">சிபிஎல் குறியம்</string>
     <string name="version">பதிப்பு %1$s</string>
     <string name="licenses">உரிமம்</string>
     <string name="about_license_title">பயன்பாடு உரிமம்</string>

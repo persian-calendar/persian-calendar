@@ -184,7 +184,6 @@
     <string name="calendar_access">Acceso al calendario</string>
     <string name="phone_calendar_required">Esta parte de la aplicación necesita permiso de calendario, si lo permite, sus eventos personales se mostrarán en el calendario.</string>
     <!--About-->
-    <string name="gpl_logo">GPL Logo</string>
     <string name="version">Versión %1$s</string>
     <string name="licenses">Licencia</string>
     <string name="about_license_title">Licencia de aplicación</string>
