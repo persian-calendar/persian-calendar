@@ -5,9 +5,10 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import com.byagowi.persiancalendar.global.language
-import kotlinx.coroutines.CoroutineScope
+import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.util.Locale
 import kotlin.math.abs
 
@@ -24,21 +25,17 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
 val Address.friendlyName: String?
     get() = listOf(locality, subAdminArea, adminArea).firstOrNull { !it.isNullOrBlank() }
 
-fun CoroutineScope.geocode(
-    context: Context,
-    latitude: Double,
-    longitude: Double,
-    onResult: (Address) -> Unit,
-) {
+suspend fun Coordinates.geocode(context: Context): Address? = withContext(Dispatchers.IO) {
     val geocoder = Geocoder(context, language.value.asSystemLocale())
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) runCatching {
-        geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
-            addresses.firstOrNull()?.also(onResult)
-        }
-    }.onFailure(logException).getOrNull() else launch(Dispatchers.IO) {
-        @Suppress("DEPRECATION") runCatching {
-            val address = geocoder.getFromLocation(latitude, longitude, 1)?.firstOrNull()
-            address?.also(onResult)
-        }.onFailure(logException).getOrNull()
-    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) suspendCancellableCoroutine { cont ->
+        runCatching {
+            geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+                if (cont.isActive) cont.resume(addresses.firstOrNull()) { _, _, _ -> }
+            }
+        }.onFailure(logException).onFailure {
+            if (cont.isActive) cont.resume(null) { _, _, _ -> }
+        }.getOrNull().debugAssertNotNull
+    } else @Suppress("DEPRECATION") runCatching {
+        geocoder.getFromLocation(latitude, longitude, 1)?.firstOrNull()
+    }.onFailure(logException).getOrNull().debugAssertNotNull
 }

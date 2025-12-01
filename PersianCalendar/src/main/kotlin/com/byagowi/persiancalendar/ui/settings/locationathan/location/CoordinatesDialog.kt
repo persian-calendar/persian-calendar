@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -68,8 +69,7 @@ fun CoordinatesDialog(
     // and no need to save as below remember also isn't saved
     var changeCounter by remember { mutableIntStateOf(0) }
     val numeral by numeral.collectAsState()
-    fun parseDouble(value: String): Double? =
-        numeral.parseDouble(value.replace("°", ""))
+    fun parseDouble(value: String): Double? = numeral.parseDouble(value.replace("°", ""))
     AppDialog(
         title = { Text(stringResource(R.string.coordinates)) },
         neutralButton = {
@@ -161,16 +161,20 @@ fun CoordinatesDialog(
                 cityName.orEmpty(),
                 label = "summary",
                 transitionSpec = appCrossfadeSpec,
-            ) { state -> Text(state, style = MaterialTheme.typography.titleSmall) }
+            ) { state ->
+                SelectionContainer { Text(state, style = MaterialTheme.typography.titleSmall) }
+            }
         }
         val context = LocalContext.current
         LaunchedEffect(changeCounter) {
-            val latitude = parseDouble(state[0].value) ?: 0.0
-            val longitude = parseDouble(state[1].value) ?: 0.0
-            geocode(context, latitude, longitude) {
-                cityName = it.friendlyName
-                countryCode = it.countryCode
-            }
+            val address = run {
+                val latitude = parseDouble(state[0].value) ?: return@run null
+                val longitude = parseDouble(state[1].value) ?: return@run null
+                if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return@run null
+                Coordinates(latitude, longitude, .0)
+            }?.geocode(context)
+            cityName = address?.friendlyName
+            countryCode = address?.countryCode
         }
     }
 }

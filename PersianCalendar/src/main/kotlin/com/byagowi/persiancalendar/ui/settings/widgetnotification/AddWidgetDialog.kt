@@ -30,7 +30,7 @@ fun AddWidgetDialog(closeDialog: () -> Unit) {
         val widgetManager = AppWidgetManager.getInstance(context)
         val widgets = runCatching {
             widgetManager.getInstalledProvidersForPackage(context.packageName, null)
-        }.debugAssertNotNull.getOrNull() ?: emptyList()
+        }.getOrNull().debugAssertNotNull ?: emptyList()
         widgets.forEach { widget ->
             fun addWidget() {
                 closeDialog()
