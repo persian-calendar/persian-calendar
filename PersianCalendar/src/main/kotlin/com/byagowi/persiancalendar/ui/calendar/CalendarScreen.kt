@@ -954,10 +954,9 @@ private fun SharedTransitionScope.Toolbar(
                 if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
                     yearViewCalendar,
                     onValueChange = viewModel::changeYearViewCalendar,
-                    label = { stringResource(it.title) },
                     values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
                     small = subtitle.isNotEmpty(),
-                ) else Crossfade(title, label = "title") { title ->
+                ) { stringResource(it.title) } else Crossfade(title, label = "title") { title ->
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleLarge,

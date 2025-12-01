@@ -127,9 +127,8 @@ fun SharedTransitionScope.ConverterScreen(
                     AppScreenModesDropDown(
                         value = screenMode,
                         onValueChange = { viewModel.changeScreenMode(it) },
-                        label = { stringResource(it.title) },
                         values = ConverterScreenMode.entries,
-                    )
+                    ) { stringResource(it.title) }
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {

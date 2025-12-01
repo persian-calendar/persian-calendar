@@ -37,9 +37,9 @@ import com.byagowi.persiancalendar.ui.utils.performLongPress
 fun <T> AppScreenModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
-    label: @Composable (T) -> String,
     values: Iterable<T>,
     small: Boolean = false,
+    label: @Composable (T) -> String,
 ) {
     var showMenu by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback = LocalHapticFeedback.current

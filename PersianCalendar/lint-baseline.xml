@@ -2,50 +2,6 @@
 <issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="true" name="AGP (8.13.1)" variant="all" version="8.13.1">
 
     <issue
-        id="ComposableLambdaParameterNaming"
-        message="Composable lambda parameter should be named `content`"
-        errorLine1="fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> String? = { null }) {"
-        errorLine2="                                                 ~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/settings/SettingsComponents.kt"
-            line="109"
-            column="50"/>
-    </issue>
-
-    <issue
-        id="ComposableLambdaParameterNaming"
-        message="Composable lambda parameter should be named `content`"
-        errorLine1="    extraWidget: (@Composable () -> Unit)? = null,"
-        errorLine2="    ~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/settings/SettingsComponents.kt"
-            line="335"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ComposableLambdaParameterPosition"
-        message="Composable lambda parameter should be the last parameter so it can be used as a trailing lambda"
-        errorLine1="    label: @Composable (T) -> String,"
-        errorLine2="    ~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/common/AppScreenModesDropDown.kt"
-            line="40"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ComposableLambdaParameterPosition"
-        message="Composable lambda parameter should be the last parameter so it can be used as a trailing lambda"
-        errorLine1="    extraWidget: (@Composable () -> Unit)? = null,"
-        errorLine2="    ~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/settings/SettingsComponents.kt"
-            line="335"
-            column="5"/>
-    </issue>
-
-    <issue
         id="UseCompoundDrawables"
         message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
         errorLine1="    &lt;LinearLayout"

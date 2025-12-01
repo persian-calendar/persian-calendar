@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -105,6 +106,7 @@ fun LazyListScope.settingsSection(
     item { Column { content() } }
 }
 
+@SuppressLint("ComposableLambdaParameterNaming")
 @Composable
 fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> String? = { null }) {
     Column(
@@ -326,6 +328,7 @@ fun SettingsMultiSelect(
     }
 }
 
+@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun SettingsSwitch(
     key: String,
