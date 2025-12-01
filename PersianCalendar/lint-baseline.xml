@@ -45,15 +45,4 @@
             column="9"/>
     </issue>
 
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `Canvas.withSave` instead?"
-        errorLine1="                &apos;[&apos; -> canvas.save()"
-        errorLine2="                       ~~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/about/DemoDialogs.kt"
-            line="1425"
-            column="24"/>
-    </issue>
-
 </issues>

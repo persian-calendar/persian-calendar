@@ -1422,7 +1422,7 @@ class LSystem(context: Context, attrs: AttributeSet? = null) : View(context, att
             when (it) {
                 '-' -> canvas.rotate(-angle)
                 '+' -> canvas.rotate(+angle)
-                '[' -> canvas.save()
+                '[' -> @SuppressLint("UseKtx") canvas.save()
                 ']' -> canvas.restore()
 
                 else -> {
