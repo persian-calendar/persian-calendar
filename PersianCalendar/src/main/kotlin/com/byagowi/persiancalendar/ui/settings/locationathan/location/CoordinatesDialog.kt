@@ -167,14 +167,13 @@ fun CoordinatesDialog(
         }
         val context = LocalContext.current
         LaunchedEffect(changeCounter) {
-            val address = run {
-                val latitude = parseDouble(state[0].value) ?: return@run null
-                val longitude = parseDouble(state[1].value) ?: return@run null
-                if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return@run null
-                Coordinates(latitude, longitude, .0)
-            }?.geocode(context)
-            cityName = address?.friendlyName
-            countryCode = address?.countryCode
+            val latitude = parseDouble(state[0].value) ?: return@LaunchedEffect
+            val longitude = parseDouble(state[1].value) ?: return@LaunchedEffect
+            if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return@LaunchedEffect
+            geocode(context, Coordinates(latitude, longitude, .0)) {
+                cityName = it?.friendlyName
+                countryCode = it?.countryCode
+            }
         }
     }
 }
