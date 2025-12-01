@@ -604,7 +604,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         context.readDaysDeviceEvents(
             monthStartJdn - startingWeekDay,
             (daysRowsCount * 7).days,
-            10,
+            250,
         )
     } else EventsStore.empty()
     val weekStart = weekStart.value
