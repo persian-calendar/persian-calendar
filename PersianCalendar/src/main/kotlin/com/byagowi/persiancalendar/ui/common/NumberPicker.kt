@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
@@ -45,6 +46,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -61,6 +63,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import kotlinx.coroutines.launch
@@ -281,8 +284,17 @@ fun NumberEdit(
     fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
 
     Box(modifier, contentAlignment = Alignment.Center) {
+        val inError = resolveValue() == null
+        val context = LocalContext.current
+        LaunchedEffect(inError) {
+            if (inError) Toast.makeText(
+                context,
+                R.string.incorrect_date,
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
         val textBackground by animateColor(
-            if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
+            if (inError) MaterialTheme.colorScheme.error.copy(alpha = .1f)
             else Color.Transparent
         )
         BasicTextField(
