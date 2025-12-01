@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="200dp"
     android:height="200dp"
     android:viewportWidth="600"
-    android:viewportHeight="600">
+    android:viewportHeight="600"
+    tools:targetApi="24">
     <group
         android:pivotX="300"
         android:pivotY="300"

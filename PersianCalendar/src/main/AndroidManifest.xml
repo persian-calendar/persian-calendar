@@ -60,7 +60,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/SplashScreenTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -163,7 +163,8 @@
             android:showForAllUsers="true"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true" />
+            android:turnScreenOn="true"
+            tools:ignore="UnusedAttribute" />
 
         <receiver
             android:name=".service.BroadcastReceivers"
