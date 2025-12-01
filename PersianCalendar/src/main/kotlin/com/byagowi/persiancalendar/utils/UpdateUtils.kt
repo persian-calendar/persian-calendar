@@ -336,9 +336,10 @@ private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     val dayOfMonth = date.dayOfMonth
     val actions = buildList {
         add(
-            ComponentName(context, MainActivity::class.java) to
-                    (if (!isDynamicIconEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                    else PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
+            ComponentName(
+                context, MainActivity::class.java
+            ) to (if (!isDynamicIconEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
         )
 
         (1..31).forEach {
@@ -353,8 +354,7 @@ private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pm.setComponentEnabledSettings(
         actions.map { (name, newState) ->
             PackageManager.ComponentEnabledSetting(name, newState, flags)
-        }
-    ) else actions.forEach { (name, newState) ->
+        }) else actions.forEach { (name, newState) ->
         pm.setComponentEnabledSetting(name, newState, flags)
     }
 }
@@ -1087,7 +1087,11 @@ fun create1x1RemoteViews(
     widgetId: Int,
 ): RemoteViews {
     val scale = preferences.getWidgetTextScale(widgetId)
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
+    val remoteViews = RemoteViews(
+        context.packageName,
+        if (scale == DEFAULT_WIDGET_TEXT_SCALE) R.layout.widget1x1_autosize
+        else R.layout.widget1x1,
+    )
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
     remoteViews.setupForegroundTextColors(R.id.textPlaceholder1_1x1, R.id.textPlaceholder2_1x1)
@@ -1097,8 +1101,10 @@ fun create1x1RemoteViews(
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.value.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
     remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, context.launchAppPendingIntent())
-    remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder1_1x1, 38 * scale)
-    remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder2_1x1, 15 * scale)
+    if (scale != DEFAULT_WIDGET_TEXT_SCALE) {
+        remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder1_1x1, 38 * scale)
+        remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder2_1x1, 15 * scale)
+    }
     return remoteViews
 }
 
@@ -1258,17 +1264,14 @@ fun create4x2RemoteViews(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
     val isWidgetClock = isWidgetClock.value
     val remoteViews = RemoteViews(
-        context.packageName,
-        if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
+        context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
     )
 
     remoteViews.setTextViewTextSizeSp(
-        R.id.textPlaceholder0_4x2,
-        scale * if (isWidgetClock) 48 else 40
+        R.id.textPlaceholder0_4x2, scale * if (isWidgetClock) 48 else 40
     )
     if (isWidgetClock) remoteViews.setTextViewTextSizeSp(
-        R.id.time_header_4x2,
-        (if (language.value.isTamil) 22f else 48f) * scale
+        R.id.time_header_4x2, (if (language.value.isTamil) 22f else 48f) * scale
     )
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder1_4x2, 13 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder2_4x2, 13 * scale)
@@ -1843,13 +1846,9 @@ fun Context.launchAppPendingIntent(
         )
     } else Intent(this, MainActivity::class.java)
     return PendingIntent.getActivity(
-        this,
-        0,
-        activityIntent.setAction(action)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
-                if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
-            }),
-        PendingIntent.FLAG_UPDATE_CURRENT or when {
+        this, 0, activityIntent.setAction(action).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
+            if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
+        }), PendingIntent.FLAG_UPDATE_CURRENT or when {
             isMutable -> PendingIntent.FLAG_MUTABLE
             else -> PendingIntent.FLAG_IMMUTABLE
         }
