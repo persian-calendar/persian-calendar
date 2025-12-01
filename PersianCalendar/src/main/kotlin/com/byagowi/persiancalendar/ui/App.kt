@@ -403,7 +403,7 @@ private fun AppNavigationRail(
         },
         state = railState,
         modifier = Modifier.width(railWidth + startPadding),
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        windowInsets = WindowInsets(),
     ) {
         Box {
             val scrollState = rememberScrollState()
