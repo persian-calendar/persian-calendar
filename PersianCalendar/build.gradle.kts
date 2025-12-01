@@ -104,6 +104,7 @@ android {
         checkReleaseBuilds = true
         checkDependencies = true
         checkTestSources = true
+        checkGeneratedSources = true
         disable += listOf(
             "MissingTranslation",
             "SelectableText",

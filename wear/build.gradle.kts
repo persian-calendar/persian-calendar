@@ -46,6 +46,7 @@ android {
         abortOnError = true
         checkDependencies = true
         checkTestSources = true
+        checkGeneratedSources = true
         disable += listOf(
             "SquareAndRoundTilePreviews",
             "IconLocation",
