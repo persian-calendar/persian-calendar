@@ -25,14 +25,13 @@
     <string name="exit">خروج</string>
     <!--Calendar-->
     <string name="add_event">إضافة حدث جديد</string>
-    <string name="device_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
+    <string name="not_supported_action">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
     <string name="today">اليوم</string>
     <string name="return_to_today">الرجوع إلى اليوم</string>
     <string name="search_in_events">البحث في المناسبات</string>
     <string name="days_distance">الفرق</string>
     <string name="start_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) من بداية السنة</string>
     <string name="end_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) إلى آخر السنة</string>
-    <string name="date_copied_clipboard">«%1$s» تم النسخ إلى المحفظة.</string>
     <string name="year_name">أسم السنة</string>
     <string name="animal_year_name_monkey">القرد</string>
     <string name="animal_year_name_rooster">الديك</string>
@@ -88,7 +87,7 @@
     <string name="select_month">إختيار الشهر</string>
     <string name="day">اليوم</string>
     <string name="select_day">إختيار اليوم</string>
-    <string name="date_exception">عذرًا، التاريخ الذي أدخلته غير صالح.</string>
+    <string name="incorrect_date">عذرًا، التاريخ الذي أدخلته غير صالح.</string>
     <!--Compass-->
     <string name="compass_not_found">تعذّر الوصول لمستشعر البوصلة</string>
     <string name="calibrate_compass_summary">لتحسين دقة مستشعر البوصلة أبعد الجهاز عن الأجسام المغناطيسية، وحرك الجهاز بكل الإتجاهات.</string>
@@ -148,7 +147,7 @@
     <!--Location and Athan-->
     <string name="gps_location">تحديد المكان باستخدام ال GPS</string>
     <string name="gps_location_help">لا تحتاج إلى الخيارات الأخرى إذا كان هذا الخيار مفعل</string>
-    <string name="gps_internet_desc">يرجى تفعيل ال GPS أو الإتصال بالشبكة ليتم تحديد المكان.
+    <string name="gps_internet_description">يرجى تفعيل ال GPS أو الإتصال بالشبكة ليتم تحديد المكان.
 \n
 \nالتطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل ال GPS والشبكة لتحديد المكان الجديد.</string>
     <string name="wait_for_gps">جارٍ البحث يرجى الانتظار … تأكد أن ال GPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى</string>
@@ -223,7 +222,7 @@
     <string name="shift_work_days_head">طول</string>
     <string name="prefer_linear_date_summary">إستخدام صيغة (1432/12/24) بدل (1432 ذي الحجة 24) في المصغر والتنبيهات</string>
     <string name="prefer_linear_date">إظهار التاريخ بالصيغة الرقمية</string>
-    <string name="month_overview">مناسبات الشهر</string>
+    <string name="month_events">مناسبات الشهر</string>
     <string name="map">خريطة</string>
     <string name="enable_ascending_athan_volume">يصل صوت أذان إلى ذروته خلال دقيقة</string>
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
@@ -293,12 +292,12 @@
     <!--Islamic Calendar months-->
     <string name="muharram">المحرم</string>
     <string name="safar">صفر</string>
-    <string name="rabi_al_awwal">ربيع الأول</string>
-    <string name="rabi_al_thani">ربيع الثاني</string>
+    <string name="rabi_alawwal">ربيع الأول</string>
+    <string name="rabi_althani">ربيع الثاني</string>
     <string name="jumada_al_awwal">جمادى الاولى</string>
     <string name="jumada_al_thani">جمادى الثانية</string>
     <string name="rajab">رجب</string>
-    <string name="shaban">شعبان</string>
+    <string name="shabaan">شعبان</string>
     <string name="ramadan">رمضان</string>
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذو القعدة</string>
@@ -460,7 +459,7 @@
     <string name="yes">نعم</string>
     <string name="sample_inputs">المدخلات نموذجية</string>
     <string name="year_view">عرض السنوي</string>
-    <string name="ask_for_calendar_permission">هل ترغب في تمكين الأحداث الشخصية من تقويم جهازك؟</string>
+    <string name="ask_calendar_permission">هل ترغب في تمكين الأحداث الشخصية من تقويم جهازك؟</string>
     <string name="exempt_app_battery_optimization">هل ترغب في إضافة التطبيق إلى قائمة استثناءات تحسين البطارية لضمان وظائف الإشعار بشكل صحيح؟</string>
     <string name="widget_background_transparency">شفافية خلفية المصغر</string>
     <string name="save">حفظ</string>

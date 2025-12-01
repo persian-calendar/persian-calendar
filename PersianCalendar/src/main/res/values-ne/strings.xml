@@ -27,14 +27,13 @@
     <string name="about">बारे</string>
     <string name="exit">बाहिर निस्कनुहोस्</string>
     <string name="add_event">घटना थप्नुहोस्</string>
-    <string name="device_does_not_support">मोबाइलको क्यालेन्डरले कार्यलाई समर्थन गर्दैन</string>
+    <string name="not_supported_action">मोबाइलको क्यालेन्डरले कार्यलाई समर्थन गर्दैन</string>
     <string name="today">आज</string>
     <string name="return_to_today">आज मा फर्कनुहोस्</string>
     <string name="search_in_events">घटनाहरूमा खोज्नुहोस्</string>
     <string name="days_distance">दूरी</string>
     <string name="start_of_year_diff">%1$s दिनहरू(~%2$s हप्ताहरू वा %3$s महिनाहरु) बर्षको सुरु बाट</string>
     <string name="end_of_year_diff">%1$s दिनहरू(~%2$s हप्ताहरू वा %3$s महिनाहरु) बर्षको अन्त्य बाट</string>
-    <string name="date_copied_clipboard">%1$s क्लिपबोर्डमा प्रतिलिपि गरियो।</string>
     <string name="year_name">वर्षको नाम</string>
     <string name="animal_year_name_monkey">बादर</string>
     <string name="animal_year_name_rooster">भाले</string>
@@ -90,7 +89,7 @@
     <string name="custom_notification_is_set">अनुकूलन सूचना भर्खरै सेट गरिएको छ</string>
     <string name="select_widgets_text_color">विजेट पाठहरूको लागि अनुकूलन रङ चयन गर्नुहोस्</string>
     <string name="gps_location_help">यदि यो सम्भव छ भने अन्य विकल्पहरू आवश्यक पर्दैन</string>
-    <string name="gps_internet_desc">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्।
+    <string name="gps_internet_description">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्।
 \n
 \nएपलाई यो एक पटक मात्र चाहिन्छ, यद्यपि, यदि तपाइँ नयाँ स्थानमा जानुभयो भने, GPS र इन्टरनेटमा पहुँच गर्न फेरि आवश्यक छ।</string>
     <string name="wait_for_gps">कृपया प्रतीक्षा गर्नुहोस्… यदि एक मिनेट पछि केहि पनि देखा परेन भने तपाईले अन्य विकल्पहरू प्रयास गर्नुपर्छ</string>
@@ -111,7 +110,7 @@
     <string name="select_month">महिना छान्नुहोस्</string>
     <string name="day">दिन</string>
     <string name="select_day">दिन चयन गर्नुहोस्</string>
-    <string name="date_exception">प्रविष्ट गरिएको दिन मान्य छैन।</string>
+    <string name="incorrect_date">प्रविष्ट गरिएको दिन मान्य छैन।</string>
     <string name="compass_not_found">कम्पास सेन्सर फेला परेन</string>
     <string name="calibrate_compass_summary">कम्पास सेन्सरको शुद्धता सुधार गर्नका लागि फोनलाई कुनै पनि चुम्बकीय वस्तुहरूबाट टाढा लैजानुहोस्, यन्त्रलाई प्रत्येक अक्षमा अगाडि पछाडि झुकाउनुहोस् र घुमाउनुहोस्।</string>
     <string name="level">स्तर</string>
@@ -257,7 +256,7 @@
     <string name="pm">PM</string>
     <string name="holiday">छुट्टी</string>
     <string name="shift_work_days_head">अवधि</string>
-    <string name="month_overview">महिनाका घटनाहरू</string>
+    <string name="month_events">महिनाका घटनाहरू</string>
     <string name="map">नक्सा</string>
     <string name="widget_background_color">विजेट पृष्ठभूमि रङ</string>
     <string name="share">सेयर गर्नुहोस्</string>
@@ -306,12 +305,12 @@
     <string name="esfand">एसफान्ड</string>
     <string name="muharram">मुहर्रम</string>
     <string name="safar">सफार</string>
-    <string name="rabi_al_awwal">रबि अल अव्वल</string>
-    <string name="rabi_al_thani">रबी अल थानी</string>
+    <string name="rabi_alawwal">रबि अल अव्वल</string>
+    <string name="rabi_althani">रबी अल थानी</string>
     <string name="jumada_al_awwal">जुमाद अल अव्वल</string>
     <string name="jumada_al_thani">जुमादा अल थानी</string>
     <string name="rajab">रजब</string>
-    <string name="shaban">Sha\'ban</string>
+    <string name="shabaan">Sha’ban</string>
     <string name="ramadan">रमजान</string>
     <string name="shawwal">सवल</string>
     <string name="dhu_al_qidah">धु अल-किदाह</string>

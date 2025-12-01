@@ -67,7 +67,7 @@ fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elev
 
 val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 fun showUnsupportedActionToast(context: Context) {
-    Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, R.string.not_supported_action, Toast.LENGTH_SHORT).show()
 }
 
 // Thee same order as https://praytimes.org/code/v2/js/examples/monthly.htm

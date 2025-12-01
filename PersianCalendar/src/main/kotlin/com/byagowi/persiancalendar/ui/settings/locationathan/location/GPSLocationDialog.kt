@@ -134,7 +134,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                 }
             ) {
                 Text(
-                    stringResource(R.string.gps_internet_desc),
+                    stringResource(R.string.gps_internet_description),
                     modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 )
             }

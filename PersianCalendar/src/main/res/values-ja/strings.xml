@@ -71,9 +71,8 @@
     <string name="select_year">年を選択</string>
     <string name="select_month">月を選択</string>
     <string name="select_day">日を選択</string>
-    <string name="date_exception">入力された日付が有効な形式ではありません。</string>
+    <string name="incorrect_date">入力された日付が有効な形式ではありません。</string>
     <string name="in_city_time">現地時間%1$s</string>
-    <string name="date_copied_clipboard">%1$s をクリップボードにコピーしました。</string>
     <string name="stop">ストップ</string>
     <string name="wait_for_gps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります。</string>
     <string name="notify_date_lock_screen">画面ロックで通知を表示</string>
@@ -196,12 +195,12 @@
     <string name="esfand">エスファンド</string>
     <string name="muharram">ムハッラム</string>
     <string name="safar">サファル</string>
-    <string name="rabi_al_awwal">ラビー・ウル・アッワル</string>
-    <string name="rabi_al_thani">ラビー・ウッサーニ</string>
+    <string name="rabi_alawwal">ラビー・ウル・アッワル</string>
+    <string name="rabi_althani">ラビー・ウッサーニ</string>
     <string name="jumada_al_awwal">ジュマダル・ウッラー</string>
     <string name="jumada_al_thani">ジュマダッサーニ</string>
     <string name="rajab">ラジャブ</string>
-    <string name="shaban">シャバーン</string>
+    <string name="shabaan">シャバーン</string>
     <string name="ramadan">ラマダーン</string>
     <string name="shawwal">シャッワール</string>
     <string name="dhu_al_qidah">ズルカーダ</string>
@@ -245,5 +244,5 @@
     <string name="more">詳細</string>
     <string name="end_of_year_diff">今年はあと %1$s 日 (%2$s 週 / %3$s か月)</string>
     <string name="moon_in_scorpio">月星座はさそり座です</string>
-    <string name="device_does_not_support">お使いの端末はこのアクションに対応していません</string>
+    <string name="not_supported_action">お使いの端末はこのアクションに対応していません</string>
 </resources>

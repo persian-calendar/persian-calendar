@@ -44,7 +44,7 @@
     <string name="prefer_linear_date_summary">Utiliser 2000/1/1 au lieu de 1er janvier 2000 dans les widgets et les notifications</string>
     <string name="widget_background_color">Couleur d’arrière-plan du widget</string>
     <string name="map">Carte</string>
-    <string name="month_overview">Évènements du mois</string>
+    <string name="month_events">Évènements du mois</string>
     <string name="prefer_linear_date">Préférer la forme numérique des dates</string>
     <plurals name="days">
         <item quantity="one">%1$s jour</item>
@@ -75,7 +75,7 @@
     <string name="location_help">Si aucun d’entre eux, précisez-le ci-dessous</string>
     <string name="location">Localisation</string>
     <string name="wait_for_gps">Veuillez patienter… Si rien n’apparaît après une minute, vous devriez probablement essayer d’autres options</string>
-    <string name="gps_internet_desc">Veuillez activer le GPS de l’appareil et la connexion Internet pour trouver votre position.
+    <string name="gps_internet_description">Veuillez activer le GPS de l’appareil et la connexion Internet pour trouver votre position.
 \n
 \nL’application n’en a besoin qu’une seule fois, mais si vous changez de lieu, l’accès au GPS et à Internet est à nouveau nécessaire.</string>
     <string name="gps_location_help">Les autres options ne sont pas nécessaires si ceci est possible</string>
@@ -130,7 +130,7 @@
     <string name="level">Niveau</string>
     <string name="calibrate_compass_summary">Pour améliorer la précision du capteur de la boussole, éloignez le téléphone de tout objet magnétique, inclinez et faites pivoter l’appareil d’avant en arrière sur chaque axe.</string>
     <string name="compass_not_found">Capteur de boussole non trouvé</string>
-    <string name="date_exception">Le jour saisi n’est pas valide.</string>
+    <string name="incorrect_date">Le jour saisi n’est pas valide.</string>
     <string name="select_day">Sélectionnez le jour</string>
     <string name="day">Jour</string>
     <string name="select_month">Sélectionnez le mois</string>
@@ -181,14 +181,13 @@
     <string name="animal_year_name_rooster">Coq</string>
     <string name="animal_year_name_monkey">Singe</string>
     <string name="year_name">Nom de l’année</string>
-    <string name="date_copied_clipboard">%1$s copié dans le presse-papier.</string>
     <string name="end_of_year_diff">%1$s jours (~%2$s semaines ou %3$s mois) jusqu’à la fin de l’année</string>
     <string name="start_of_year_diff">%1$s jours (~%2$s semaines ou %3$s mois) depuis le début de l’année</string>
     <string name="days_distance">Distance</string>
     <string name="search_in_events">Chercher dans les évènements</string>
     <string name="return_to_today">Retour à aujourd’hui</string>
     <string name="today">Aujourd’hui</string>
-    <string name="device_does_not_support">Le calendrier du périphérique ne prend pas en charge l’action</string>
+    <string name="not_supported_action">Le calendrier du périphérique ne prend pas en charge l’action</string>
     <string name="add_event">Ajouter un évènement</string>
     <string name="exit">Quitter</string>
     <string name="about">À propos</string>
@@ -303,12 +302,12 @@
     <string name="esfand">esfand</string>
     <string name="muharram">mouharram</string>
     <string name="safar">safar</string>
-    <string name="rabi_al_awwal">rabia al awal</string>
-    <string name="rabi_al_thani">rabia ath-thani</string>
+    <string name="rabi_alawwal">rabia al awal</string>
+    <string name="rabi_althani">rabia ath-thani</string>
     <string name="jumada_al_awwal">joumada al oula</string>
     <string name="jumada_al_thani">joumada ath-thania</string>
     <string name="rajab">rajab</string>
-    <string name="shaban">chaabane</string>
+    <string name="shabaan">chaabane</string>
     <string name="ramadan">ramadan</string>
     <string name="shawwal">chawwal</string>
     <string name="dhu_al_qidah">dhou al qi`da</string>
@@ -400,11 +399,11 @@
         <item quantity="other">%1$s semaines</item>
     </plurals>
     <string name="open_navigation_rail">Ouvrir le panneau de navigation</string>
-    <string name="more_options">Plus d\'options</string>
+    <string name="more_options">Plus d’options</string>
     <string name="yes">Oui</string>
-    <string name="sample_inputs">Exemples d\'entrées</string>
-    <string name="ask_for_calendar_permission">Souhaitez-vous transmettre vos événements personnels à partir du calendrier de votre appareil?</string>
-    <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l\'application à l\'économiseur de la batterie pour un fonctionnement correct des notifications ?</string>
+    <string name="sample_inputs">Exemples d’entrées</string>
+    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos événements personnels à partir du calendrier de votre appareil?</string>
+    <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l’application à l’économiseur de la batterie pour un fonctionnement correct des notifications ?</string>
     <string name="holidays_in_red">Vacances en rouge</string>
     <plurals name="work_days">
         <item quantity="one">%1$s jour de travail</item>

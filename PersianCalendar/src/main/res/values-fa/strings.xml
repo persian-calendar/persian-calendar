@@ -71,15 +71,14 @@
     <string name="select_year">انتخاب سال</string>
     <string name="select_month">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
-    <string name="date_exception">تاریخ واردشده اشتباه است.</string>
+    <string name="incorrect_date">تاریخ واردشده اشتباه است.</string>
     <string name="in_city_time">به افق %1$s</string>
-    <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد.</string>
     <string name="stop">توقف</string>
     <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که مکان‌یاب دستگاه از تنظیمات روشن است. اگر روشن کردن آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم‌شده باشد کار می‌کند.</string>
     <string name="warn_if_events_not_set">جهت روشن کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
-    <string name="ask_for_calendar_permission">مایلید رویدادهای شخصی‌تان از تقویم دستگاه نمایش داده شود؟</string>
+    <string name="ask_calendar_permission">مایلید رویدادهای شخصی‌تان از تقویم دستگاه نمایش داده شود؟</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
@@ -95,7 +94,7 @@
     <string name="show_device_calendar_events_summary">نمایش رویدادهای شخصی</string>
     <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">افزودن رویداد</string>
-    <string name="device_does_not_support">دستگاه از این کنش پشتیبانی نمی‌کند</string>
+    <string name="not_supported_action">دستگاه از این کنش پشتیبانی نمی‌کند</string>
     <string name="customize_widget_summary">چه چیزهایی در ویجت و اعلان نمایش داده شوند</string>
     <string name="customize_widget">شخصی‌سازی ویجت و اعلان</string>
     <string name="add">افزودن</string>
@@ -119,7 +118,7 @@
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
-    <string name="gps_internet_desc">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید.
+    <string name="gps_internet_description">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید.
 \n
 \nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از آغاز سال</string>
@@ -232,7 +231,7 @@
     <string name="shift_work_days_head">طول</string>
     <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به‌جای ۱ فرودین ۱۳۹۰ در ویجت ‌و اعلان</string>
     <string name="prefer_linear_date">نمایش تاریخ به‌صورت عددی</string>
-    <string name="month_overview">مناسبت‌های ماه</string>
+    <string name="month_events">مناسبت‌های ماه</string>
     <string name="map">نقشه</string>
     <string name="ascending_athan_volume">صدای افزایشی اذان</string>
     <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
@@ -317,12 +316,12 @@
     <string name="esfand">اسفند</string>
     <string name="muharram">مُحَرَّم</string>
     <string name="safar">صَفَر</string>
-    <string name="rabi_al_awwal">ربیع‌الاول</string>
-    <string name="rabi_al_thani">ربیع‌الثانی</string>
+    <string name="rabi_alawwal">ربیع‌الاول</string>
+    <string name="rabi_althani">ربیع‌الثانی</string>
     <string name="jumada_al_awwal">جمادى‌الاولى</string>
     <string name="jumada_al_thani">جمادی‌الثانیه</string>
     <string name="rajab">رجب</string>
-    <string name="shaban">شعبان</string>
+    <string name="shabaan">شعبان</string>
     <string name="ramadan">رمضان</string>
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذی‌القعده</string>

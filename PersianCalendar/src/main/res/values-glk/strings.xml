@@ -71,9 +71,8 @@
     <string name="select_year">سالˇدؤجين کۊدن</string>
     <string name="select_month">مايأ دؤجين کۊدن</string>
     <string name="select_day">رۊزˈدؤجين کۊدن</string>
-    <string name="date_exception">تاریخˇدۊرۊن ساب بؤبؤ!</string>
+    <string name="incorrect_date">تاریخˇدۊرۊن ساب بؤبؤ!</string>
     <string name="in_city_time">به اؤفؤقˇ %1$s</string>
-    <string name="date_copied_clipboard">«%1$s»حافظه دۊرۊنم ذخيره بؤبؤ</string>
     <string name="stop">بئس</string>
     <string name="wait_for_gps">ايپچه بئسيد… اگر ئي دقه پسي نتيجه نيگيفتيد شيمي دزگا جي پي اسˇجأ خاطرجم بيبيد کي تنظيماتˇجأ فعاله. اگر اۊنˇفعال‌سازی کارساز نۊبۊ، احتمالن وا باقي گۊزينهانأ ايمتحان بۊکۊنيد</string>
     <string name="notify_date_lock_screen">صفه کي قؤفلˈبؤسته أ اعلانانيشان بده</string>
@@ -94,7 +93,7 @@
     <string name="show_device_calendar_events_summary">شخصي رۊيدادانأ نيشان دأن</string>
     <string name="show_device_calendar_events">شخصي رۊيدادان</string>
     <string name="add_event">رۊيدادˈعيلاوه کۊدن</string>
-    <string name="device_does_not_support">دزگا تقويم أ کؤنشˇپۊشتين ني-يه</string>
+    <string name="not_supported_action">دزگا تقويم أ کؤنشˇپۊشتين ني-يه</string>
     <string name="customize_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
     <string name="customize_widget">ويجتان ؤ اعلانˈشخصي چاکۊدن</string>
     <string name="add">عيلاوه کۊدن</string>
@@ -118,7 +117,7 @@
     <string name="about_developers">تؤسعه‌دهندهان</string>
     <string name="about_support_developers">تؤسعه‌دهنده پۊشتين</string>
     <string name="about_email_sum">شخصي رايانامهˈ برنامه نيويسˇره اۊسه کۊدن</string>
-    <string name="gps_internet_desc">موقعیت‌یاب لؤطفن (GPS) ؤ اينترنتˈ قبله يا جهتˇجؤغرافيائي يافتنˇوأستي رؤشنˈکۊنيد. برنامه ايتأ جا ره فقد ايدفأ أ دسترسي-يانˈلازيم دأره, ولي أگه شيمي جأ عوضˈبه وا دۊمرتبه اۊنˈتنظيم بۊکۊنيد.</string>
+    <string name="gps_internet_description">موقعیت‌یاب لؤطفن (GPS) ؤ اينترنتˈ قبله يا جهتˇجؤغرافيائي يافتنˇوأستي رؤشنˈکۊنيد. برنامه ايتأ جا ره فقد ايدفأ أ دسترسي-يانˈلازيم دأره, ولي أگه شيمي جأ عوضˈبه وا دۊمرتبه اۊنˈتنظيم بۊکۊنيد.</string>
     <string name="start_of_year_diff">%1$s رۊز (~%2$s هفته یا %3$s ماه) اولˇسال</string>
     <string name="end_of_year_diff">%1$s رۊز (~%2$s هفته یا %3$s ما) تا آخرˇسال</string>
     <!-- Sun Info -->
@@ -222,7 +221,7 @@
     <string name="shift_work_days_head">طۊل</string>
     <string name="prefer_linear_date_summary">۱۳۹۰/۱/۱شمسی جأ ايستفاده کۊدن ۱ فرودینˇ۱۳۹۰ جأ ویجت ؤ اعلانˇدۊرۊن</string>
     <string name="prefer_linear_date">عددي تاريخ</string>
-    <string name="month_overview">أ ما مۊناسبتان</string>
+    <string name="month_events">أ ما مۊناسبتان</string>
     <string name="map">Map</string>
     <string name="ascending_athan_volume">صدای افزایشی اذان</string>
     <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
@@ -298,12 +297,12 @@
     <string name="esfand">ايسفند</string>
     <string name="muharram">مُحَرَّم</string>
     <string name="safar">صَفَر</string>
-    <string name="rabi_al_awwal">ربيع الأول</string>
-    <string name="rabi_al_thani">ربیع الثاني</string>
+    <string name="rabi_alawwal">ربيع الأول</string>
+    <string name="rabi_althani">ربیع الثاني</string>
     <string name="jumada_al_awwal">جمادي الأولى</string>
     <string name="jumada_al_thani">جمادي الثانية</string>
     <string name="rajab">رجب</string>
-    <string name="shaban">شعبان</string>
+    <string name="shabaan">شعبان</string>
     <string name="ramadan">رمضان</string>
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذؤ القعده</string>

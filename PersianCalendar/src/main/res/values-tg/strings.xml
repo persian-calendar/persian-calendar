@@ -44,7 +44,7 @@
     <string name="calendar">Тақвим</string>
     <string name="settings">Танзимот</string>
     <string name="exit">Хуруҷ</string>
-    <string name="device_does_not_support">Тақвими дастгоҳ ин амалро дастгирӣ намекунад</string>
+    <string name="not_supported_action">Тақвими дастгоҳ ин амалро дастгирӣ намекунад</string>
     <string name="today">Имрӯз</string>
     <string name="return_to_today">Бозгашт ба имрӯз</string>
     <string name="search_in_events">Ҷустуҷӯ дар рӯйдодҳо</string>
@@ -61,7 +61,7 @@
     <string name="zodiac">Минтақаи Зодиак</string>
     <string name="capricorn">Ҷадӣ</string>
     <string name="select_day">Рӯзи интихоб кунед</string>
-    <string name="date_exception">Рӯзи воридшуда эътибор надорад.</string>
+    <string name="incorrect_date">Рӯзи воридшуда эътибор надорад.</string>
     <string name="level">Сатҳ</string>
     <string name="stop">Ист</string>
     <string name="set_location">Барои он ки макони Офтоб ва Моҳ ва самти қибла дошта бошед, маконро дар танзимот танзим кунед.</string>
@@ -136,7 +136,7 @@
     <string name="holiday">истироҳат</string>
     <string name="shift_work_days_head">Давомнокӣ</string>
     <string name="prefer_linear_date_summary">Ба ҷои 1 январи 2000 дар виҷет ва огоҳӣ 2000/1/1 -ро истифода баред</string>
-    <string name="month_overview">рӯйдодҳои моҳ</string>
+    <string name="month_events">рӯйдодҳои моҳ</string>
     <string name="map">Харита</string>
     <string name="widget_background_color">Ранги пасзаминаи виҷет</string>
     <string name="share">мубодила</string>
@@ -158,7 +158,6 @@
     <string name="outdated_app">Аз сабаби кӯҳна шудан, чизҳо метавонанд нодуруст бошанд</string>
     <string name="date_converter">Табдилдиҳандаи сана</string>
     <string name="converter">Табдилдиҳандаи</string>
-    <string name="date_copied_clipboard">%1$s ба буфер нусхабардорӣ карда шуд.</string>
     <string name="animal_year_name_rooster">Хурӯс</string>
     <string name="compass">Компас</string>
     <string name="about">Дар бораи</string>
@@ -239,11 +238,11 @@
     <string name="esfand">Исфанд</string>
     <string name="muharram">Мухаррам</string>
     <string name="safar">Сафар</string>
-    <string name="rabi_al_awwal">Рабеъ-ул-аввал</string>
-    <string name="rabi_al_thani">Рабеъ-ул-сони</string>
+    <string name="rabi_alawwal">Рабеъ-ул-аввал</string>
+    <string name="rabi_althani">Рабеъ-ул-сони</string>
     <string name="jumada_al_awwal">Ҷимоди-ул-уло</string>
     <string name="rajab">Раҷаб</string>
-    <string name="shaban">Шаъбон</string>
+    <string name="shabaan">Шаъбон</string>
     <string name="ramadan">Рамазон</string>
     <string name="shawwal">Шаввол</string>
     <string name="dhu_al_qidah">Зулқаъда</string>
@@ -298,7 +297,7 @@
     <string name="enable_notify">Эълони доимӣ барои санаҳо</string>
     <string name="gps_location">Аз GPS координатаҳо гиред</string>
     <string name="gps_location_help">Агар ин имконпазир бошад, дар ин бахш ба танзимоти дигар ниёзе нест</string>
-    <string name="gps_internet_desc">Лутфан GPS ва интернетро фаъол кунед, то самти қибла ё самти ҷуғрофиро ёбед.
+    <string name="gps_internet_description">Лутфан GPS ва интернетро фаъол кунед, то самти қибла ё самти ҷуғрофиро ёбед.
 \n
 \nИн барнома барои ҷойгиршавӣ танҳо як маротиба ба ин иҷозатҳо ниёз дорад, аммо дар сурати тағир ёфтани макони шумо бояд аз нав барқарор карда шавад.</string>
     <string name="wait_for_gps">Мунтазир бошед… Агар пас аз як дақиқа ягон натиҷа ба даст наояд, боварӣ ҳосил кунед, ки дастгоҳи GPS аз танзимот фаъол аст. Агар фаъолсозии он кор накунад, ба шумо лозим меояд, ки имконоти дигарро санҷед</string>
@@ -360,7 +359,7 @@
     <string name="neptune">Нептун</string>
     <string name="pluto">Плутун</string>
     <string name="lock">Қуфл</string>
-    <string name="ask_for_calendar_permission">Моилияд рӯйдодҳои шахситон аз тақвими дастгоҳ намоиш дода шавад?</string>
+    <string name="ask_calendar_permission">Моилияд рӯйдодҳои шахситон аз тақвими дастгоҳ намоиш дода шавад?</string>
     <string name="save">Захира</string>
     <string name="nepali_calendar_short">Неполӣ</string>
     <string name="chinese">Чинӣ</string>

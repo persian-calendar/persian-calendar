@@ -645,9 +645,9 @@ enum class Language(val code: String, val nativeName: String) {
             R.string.bahman, R.string.esfand
         )
         private val islamicCalendarMonths = listOf12Items(
-            R.string.muharram, R.string.safar, R.string.rabi_al_awwal,
-            R.string.rabi_al_thani, R.string.jumada_al_awwal, R.string.jumada_al_thani,
-            R.string.rajab, R.string.shaban, R.string.ramadan, R.string.shawwal,
+            R.string.muharram, R.string.safar, R.string.rabi_alawwal,
+            R.string.rabi_althani, R.string.jumada_al_awwal, R.string.jumada_al_thani,
+            R.string.rajab, R.string.shabaan, R.string.ramadan, R.string.shawwal,
             R.string.dhu_al_qidah, R.string.dhu_al_hijjah
         )
         private val gregorianCalendarMonths = listOf12Items(
@@ -713,7 +713,7 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val weekDaysInEnglishIran = listOf7Items(
             "Shanbe", "Yekshanbe", "Doshanbe", "Seshanbe", "Chahaarshanbe",
-            "Panjshanbe", "Jom'e"
+            "Panjshanbe", "Jom’e"
         )
         private val weekDaysInitialsInEnglishIran = listOf7Items(
             "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"

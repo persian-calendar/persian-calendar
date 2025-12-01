@@ -11,9 +11,9 @@
     <string name="ordibehesht">Ordibehesht</string>
     <string name="farvardin">Farvardin</string>
     <string name="esfand">Esfand</string>
-    <string name="warn_if_events_not_set">Tercih edilen tatilleri ve etkinlikleri seçmek ve göstermek için \"Ayarlar\"ı ziyaret edin</string>
+    <string name="warn_if_events_not_set">Tercih edilen tatilleri ve etkinlikleri seçmek ve göstermek için “Ayarlar”ı ziyaret edin</string>
     <string name="wait_for_gps">Lütfen bekleyin… Bir dakika sonra yine hiçbir şey görünmüyorsa, diğer seçenekleri deneyin</string>
-    <string name="customize_widget_summary">Daha belirgin hale getirmek için bildirim ve widget\'larda ne gösterilmelidir</string>
+    <string name="customize_widget_summary">Daha belirgin hale getirmek için bildirim ve widget’larda ne gösterilmelidir</string>
     <string name="shift_work_starting_date_edit">%1$s, daha önce seçilen vardiyalı çalışma başlangıç günüdür.</string>
     <string name="sunrise_sun_view">Gündoğumu</string>
     <string name="sun_view">Güneş Görünümü</string>
@@ -44,22 +44,22 @@
     <string name="february">Şubat</string>
     <string name="january">Ocak</string>
     <string name="dhu_al_hijjah">Zilhicce</string>
-    <string name="dhu_al_qidah">Zil-Ka\'de</string>
+    <string name="dhu_al_qidah">Zil-Ka’de</string>
     <string name="shawwal">Şevval</string>
     <string name="ramadan">Ramazan</string>
-    <string name="shaban">Şaban</string>
+    <string name="shabaan">Şaban</string>
     <string name="rajab">Receb</string>
-    <string name="jumada_al_thani">Cumada\'s- Sani</string>
-    <string name="jumada_al_awwal">Cumada\'l- Evvel</string>
-    <string name="rabi_al_thani">Rabi\' us- Sani</string>
-    <string name="rabi_al_awwal">Rebi\'ul- Evvel</string>
+    <string name="jumada_al_thani">Cumada’s- Sani</string>
+    <string name="jumada_al_awwal">Cumada’l- Evvel</string>
+    <string name="rabi_althani">Rabi’ us- Sani</string>
+    <string name="rabi_alawwal">Rebi’ul- Evvel</string>
     <string name="safar">Safer</string>
     <string name="muharram">Muharrem</string>
     <string name="dey">Dey</string>
-    <string name="widget_customization_owghat_location">2x2\'de namaz vakitlerinin konumu ve bildirim (ayarlanmışsa)</string>
+    <string name="widget_customization_owghat_location">2x2’de namaz vakitlerinin konumu ve bildirim (ayarlanmışsa)</string>
     <string name="widget_customization_owghat">2x2 pencerede namaz vakitleri ve bildirim (ayarlanmışsa)</string>
     <string name="widget_customization_non_holiday_events">2x2 widget ve bildirimde tatil dışı</string>
-    <string name="widget_customization_other_calendars">1x4 ve 2x2 widget\'lardaki diğer takvimler</string>
+    <string name="widget_customization_other_calendars">1x4 ve 2x2 widget’lardaki diğer takvimler</string>
     <string name="view_source">Kaynağı Görüntüle</string>
     <string name="other_holidays">Diğer</string>
     <string name="afghanistan_events">Afganistan (Farsça)</string>
@@ -72,7 +72,7 @@
     <string name="iran_holidays">İran Tatilleri</string>
     <string name="method_tehran">Jeofizik Enstitüsü, Tahran Üniversitesi</string>
     <string name="method_karachi">İslami İlimler Üniversitesi, KARAÇİ</string>
-    <string name="method_makkah">Ummu\'l-Kura Üniversitesi, MEKKE</string>
+    <string name="method_makkah">Ummu’l-Kura Üniversitesi, MEKKE</string>
     <string name="method_egypt">Mısır Genel Araştırma Kurumu</string>
     <string name="method_isna">Kuzey Amerika İslam Cemiyeti</string>
     <string name="method_mwl">Dünya Müslüman Birliği</string>
@@ -114,7 +114,7 @@
     <string name="select_widgets_background_color">Widget arka planı için özel renk seçin</string>
     <string name="widget_background_color">Widget Arka Plan Rengi</string>
     <string name="map">Harita</string>
-    <string name="month_overview">Ayın etkinlikleri</string>
+    <string name="month_events">Ayın etkinlikleri</string>
     <string name="prefer_linear_date">Tarihlerin sayısal biçimini tercih edin</string>
     <string name="prefer_linear_date_summary">Widget ve bildirimde 1 Ocak 2000 yerine 2000/1/1 kullan</string>
     <string name="shift_work_days_head">Süre</string>
@@ -126,9 +126,9 @@
         <item quantity="one">%1$s %2$s gün</item>
         <item quantity="other">%1$s %2$s gün</item>
     </plurals>
-    <string name="n_till">%2$s \'na %1$s var</string>
-    <string name="center_align_widgets">Widget\'ları ortaya hizala</string>
-    <string name="center_align_widgets_summary">4x1 ve 2x2 Widget\'ları ortaya hizala</string>
+    <string name="n_till">%2$s ’na %1$s var</string>
+    <string name="center_align_widgets">Widget’ları ortaya hizala</string>
+    <string name="center_align_widgets_summary">4x1 ve 2x2 Widget’ları ortaya hizala</string>
     <string name="device_information">Cihaz Bilgisi</string>
     <string name="spaced_colon">": "</string>
     <string name="spaced_comma">", "</string>
@@ -157,7 +157,7 @@
     <string name="about_email_sum">Uygulamanın yazarlarına kişisel e-posta gönder</string>
     <string name="about_send_mail">E-Posta</string>
     <string name="about_report_bug_sum">Tercih edilen hata raporlama veya yeni özellik isteme, GitHub hesabına ihtiyaç duyar</string>
-    <string name="about_report_bug">GitHub\'da hata bildir</string>
+    <string name="about_report_bug">GitHub’da hata bildir</string>
     <string name="about_support_developers">Geliştirici Desteği</string>
     <string name="about_license_sum">İran Takviminde kullanılan GPLv3 Lisansını ve diğer lisans koşullarını kontrol edin.</string>
     <string name="about_license_title">Uygulama Lisansı</string>
@@ -166,7 +166,7 @@
     <string name="gpl_logo">GPL Logosu</string>
     <string name="phone_calendar_required">Uygulamanın bu bölümünün takvim iznine ihtiyacı vardır, izin verirseniz kişisel etkinlikleriniz takvimde gösterilir.</string>
     <string name="calendar_access">Takvim Erişimi</string>
-    <string name="phone_location_required">Uygulamanın bu kısmının, konumunuza erişmesi gerekmektedir. Reddet\'i seçerseniz enlem ve boylam bilgilerini manuel girmeniz gerekir.</string>
+    <string name="phone_location_required">Uygulamanın bu kısmının, konumunuza erişmesi gerekmektedir. Reddet’i seçerseniz enlem ve boylam bilgilerini manuel girmeniz gerekir.</string>
     <string name="location_access">Konum Erişimi</string>
     <string name="athan_disabled_summary">Ezan alarmını kurmak için bir konum seç veya yukarıdaki koordinatları gir</string>
     <string name="athan_volume_summary">Alarmın sesini ayarla</string>
@@ -196,22 +196,22 @@
     <string name="latitude">Enlem</string>
     <string name="location_help">Hiçbiri yoksa aşağıda koordinatları kendiniz belirleyin</string>
     <string name="location">Konum</string>
-    <string name="gps_internet_desc">Konumunuzu bulmak için cihazın GPS ve İnternet bağlantısını etkinleştirin lütfen.
+    <string name="gps_internet_description">Konumunuzu bulmak için cihazın GPS ve İnternet bağlantısını etkinleştirin lütfen.
 \n
-\nUygulamanın buna yalnızca bir kez ihtiyacı vardır, ancak yeni bir konuma geçerseniz, GPS ve İnternet\'e tekrar erişim gerekir.</string>
+\nUygulamanın buna yalnızca bir kez ihtiyacı vardır, ancak yeni bir konuma geçerseniz, GPS ve İnternet’e tekrar erişim gerekir.</string>
     <string name="gps_location_help">Bu mümkünse diğer seçeneklere gerek yoktur</string>
     <string name="gps_location">GPS veya ağdan konum al</string>
     <string name="notify_date_lock_screen_summary">Yalnızca kilit ekranı güvenlik yöntemi ayarlandığında.</string>
     <string name="notify_date_lock_screen">Kilit ekranında bildirimi göster</string>
     <string name="enable_notify">Tüm tarih türleri için kalıcı bildirim</string>
     <string name="notify_date">Tarih Bildirimini Etkinleştir</string>
-    <string name="ask_user_to_set_location">Bu yeri doğru görüntülemek için Ayarlar\'da konumu ayarlayın</string>
+    <string name="ask_user_to_set_location">Bu yeri doğru görüntülemek için Ayarlar’da konumu ayarlayın</string>
     <string name="which_one_to_show">Gösterilecek/Gizlenecek Ögeler</string>
     <string name="customize_widget">Widget Özelleştirmesi</string>
-    <string name="showing_iran_time">İran saat diliminde widget\'lar ve bildirimler</string>
+    <string name="showing_iran_time">İran saat diliminde widget’lar ve bildirimler</string>
     <string name="iran_time">İran Zamanı</string>
-    <string name="showing_clock_on_widget">Widget\'ta saati göster</string>
-    <string name="clock_on_widget">Widget\'taki Saat</string>
+    <string name="showing_clock_on_widget">Widget’ta saati göster</string>
+    <string name="clock_on_widget">Widget’taki Saat</string>
     <string name="select_widgets_text_color">Widget metinleri için özel renk seç</string>
     <string name="widget_text_color">Widget Metin Rengi</string>
     <string name="showing_clock_in_24">24 Saat Göster</string>
@@ -250,7 +250,7 @@
     <string name="level">Düzey</string>
     <string name="calibrate_compass_summary">Pusula sensörünün doğruluğunu artırmak için telefonunuzu herhangi bir manyetik nesneden uzaklaştırın, cihazı her yöne ileri geri eğin ve döndürün.</string>
     <string name="compass_not_found">Pusula sensörü bulunamadı</string>
-    <string name="date_exception">Girilen Gün Geçerli Değil.</string>
+    <string name="incorrect_date">Girilen Gün Geçerli Değil.</string>
     <string name="select_day">Gün Seç</string>
     <string name="day">Gün</string>
     <string name="select_month">Ay Seç</string>
@@ -303,14 +303,13 @@
     <string name="animal_year_name_rooster">Horoz</string>
     <string name="animal_year_name_monkey">Maymun</string>
     <string name="year_name">Yıl Adı</string>
-    <string name="date_copied_clipboard">%1$s panoya kopyalandı.</string>
     <string name="end_of_year_diff">Yıl sonuna %1$s gün var (~%2$s hafta veya %3$s ay)</string>
     <string name="start_of_year_diff">Yıl başından itibaren %1$s gün geçti (~%2$s hafta veya %3$s ay)</string>
     <string name="days_distance">Yaklaşan Etkinliğe Kalan Gün</string>
     <string name="search_in_events">Etkinliklerde Ara</string>
     <string name="return_to_today">Bugüne Geri Dön</string>
     <string name="today">Bugün</string>
-    <string name="device_does_not_support">Aygıt Takvimi Bu Eylemi Desteklemiyor</string>
+    <string name="not_supported_action">Aygıt Takvimi Bu Eylemi Desteklemiyor</string>
     <string name="add_event">Yeni Bir Etkinlik Ekle</string>
     <string name="exit">Çıkış</string>
     <string name="about">Hakkında</string>
@@ -399,7 +398,7 @@
     <string name="open_navigation_rail">Gezinme çekmecesini aç</string>
     <string name="more_options">Daha fazla seçenek</string>
     <string name="widget_background_transparency">Widget arka plan şeffaflığı</string>
-    <string name="ask_for_calendar_permission">Aygıtınızın takviminden kişisel etkinliklerinizi etkinleştirmek ister misiniz?</string>
+    <string name="ask_calendar_permission">Aygıtınızın takviminden kişisel etkinliklerinizi etkinleştirmek ister misiniz?</string>
     <string name="yes">Evet</string>
     <string name="sample_inputs">Örnek girdiler</string>
     <string name="year_view">Yıl görünümü</string>

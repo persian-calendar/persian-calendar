@@ -109,7 +109,6 @@ android {
             "MissingTranslation",
             "SelectableText",
             "IconLocation",
-            "TypographyQuotes",
             "DuplicateStrings",
             "SyntheticAccessor",
             "UnusedResources",

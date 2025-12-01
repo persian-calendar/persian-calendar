@@ -21,11 +21,10 @@
     <string name="settings">设置</string>
     <string name="exit">退出</string>
     <string name="add_event">添加日程</string>
-    <string name="device_does_not_support">您的设备日历不支持此操作。</string>
+    <string name="not_supported_action">您的设备日历不支持此操作。</string>
     <string name="today">今日</string>
     <string name="return_to_today">跳转到今日</string>
     <string name="search_in_events">在日程中搜索</string>
-    <string name="date_copied_clipboard">“%1$s”已复制到剪贴板</string>
     <string name="year_name">生肖</string>
     <string name="animal_year_name_monkey">申猴</string>
     <string name="animal_year_name_rooster">酉鸡</string>
@@ -67,7 +66,7 @@
     <string name="select_month">选择月份</string>
     <string name="day">日</string>
     <string name="select_day">选择日期</string>
-    <string name="date_exception">所选的日期不存在。</string>
+    <string name="incorrect_date">所选的日期不存在。</string>
     <string name="compass_not_found">罗盘传感器不可用。</string>
     <string name="about">关于</string>
     <string name="days_distance">相差</string>
@@ -134,7 +133,7 @@
     <string name="notify_date">启用日期通知</string>
     <string name="enable_notify">显示包含所有日历的持久通知</string>
     <string name="notify_date_lock_screen">在锁屏上显示通知</string>
-    <string name="gps_internet_desc">请打开设备的 GPS 和互联网连接，以对您所在的位置进行定位。
+    <string name="gps_internet_description">请打开设备的 GPS 和互联网连接，以对您所在的位置进行定位。
 \n
 \n本应用只会请求这一次位置信息，但如果您移动到了新的位置，您需要重新打开 GPS 和互联网连接。</string>
     <string name="location">位置</string>
@@ -199,7 +198,7 @@
     <string name="select_widgets_background_color">自定义小部件背景的颜色</string>
     <string name="widget_background_color">小部件背景颜色</string>
     <string name="prefer_linear_date_summary">在小部件和通知中以 2000/1/1 而不是 2000 年 1 月 1 日的形式显示日期</string>
-    <string name="month_overview">本月活动</string>
+    <string name="month_events">本月活动</string>
     <string name="share">分享</string>
     <string name="map">地图</string>
     <string name="islamic_calendar_short">伊斯兰历</string>
@@ -332,12 +331,12 @@
     <string name="abdulbasit">阿卜杜勒·巴西推·阿卜杜·赛迈德</string>
     <string name="muharram">1 月</string>
     <string name="safar">2 月</string>
-    <string name="rabi_al_awwal">3 月</string>
-    <string name="rabi_al_thani">4 月</string>
+    <string name="rabi_alawwal">3 月</string>
+    <string name="rabi_althani">4 月</string>
     <string name="jumada_al_awwal">5 月</string>
     <string name="jumada_al_thani">6 月</string>
     <string name="rajab">7 月</string>
-    <string name="shaban">8 月</string>
+    <string name="shabaan">8 月</string>
     <string name="ramadan">9 月</string>
     <string name="shawwal">10 月</string>
     <string name="dhu_al_qidah">11 月</string>

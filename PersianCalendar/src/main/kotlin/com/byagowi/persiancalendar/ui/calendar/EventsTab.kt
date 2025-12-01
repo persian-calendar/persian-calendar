@@ -227,7 +227,7 @@ fun SharedTransitionScope.EventsTab(
 
             Spacer(Modifier.height(16.dp))
             EncourageActionLayout(
-                header = stringResource(R.string.ask_for_calendar_permission),
+                header = stringResource(R.string.ask_calendar_permission),
                 discardAction = {
                     context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
                 },

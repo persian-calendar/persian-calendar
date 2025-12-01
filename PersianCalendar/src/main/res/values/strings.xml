@@ -26,14 +26,13 @@
     <string name="exit">Exit</string>
     <!--Calendar-->
     <string name="add_event">Add event</string>
-    <string name="device_does_not_support">"The device doesn't support this action"</string>
+    <string name="not_supported_action">The device doesn’t support this action</string>
     <string name="today">Today</string>
     <string name="return_to_today">Return to today</string>
     <string name="search_in_events">Search in events</string>
     <string name="days_distance">Distance</string>
     <string name="start_of_year_diff">%1$s days (~%2$s weeks or %3$s months) from start of the year</string>
     <string name="end_of_year_diff">%1$s days (~%2$s weeks or %3$s months) to end of the year</string>
-    <string name="date_copied_clipboard">"%1$s" copied to clipboard.</string>
     <string name="year_name">Year name</string>
     <string name="animal_year_name_monkey">Monkey</string>
     <string name="animal_year_name_rooster">Rooster</string>
@@ -66,7 +65,7 @@
     <string name="no_event">No event or appointment for this day</string>
     <string name="nothing_scheduled">Nothing scheduled</string>
     <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
-    <string name="ask_for_calendar_permission">"Would you like to enable your personal events from your device's calendar?"</string>
+    <string name="ask_calendar_permission">"Would you like to enable your personal events from your device’s calendar?"</string>
     <string name="sunrise_sun_view">Sunrise</string>
     <string name="midday_sun_view">Midday</string>
     <string name="sunset_sun_view">Sunset</string>
@@ -92,7 +91,7 @@
     <string name="select_month">Select month</string>
     <string name="day">Day</string>
     <string name="select_day">Select day</string>
-    <string name="date_exception">"The entered day isn't valid."</string>
+    <string name="incorrect_date">"The entered day isn’t valid."</string>
     <!--Compass-->
     <string name="compass_not_found">Compass sensor not found</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
@@ -150,7 +149,7 @@
     <!--Location and Athan-->
     <string name="gps_location">Get location from GPS or network</string>
     <string name="gps_location_help">Other options are not needed if this is possible</string>
-    <string name="gps_internet_desc">"Enable device's GPS and Internet connection to find your location, please.
+    <string name="gps_internet_description">"Please enable device’s GPS and Internet connection to find your location.
 
 The app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again."</string>
     <string name="wait_for_gps">Please wait… If nothing appeared after one minute you probably should try other options</string>
@@ -233,7 +232,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_days_head">Duration</string>
     <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
     <string name="prefer_linear_date">Prefer numerical form of dates</string>
-    <string name="month_overview">"Month's events"</string>
+    <string name="month_events">"Month’s events"</string>
     <string name="map">Map</string>
     <string name="widget_background_color">Widget Background Color</string>
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
@@ -303,12 +302,12 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--Islamic Calendar months-->
     <string name="muharram">Muharram</string>
     <string name="safar">Safar</string>
-    <string name="rabi_al_awwal">Rabi\' al-awwal</string>
-    <string name="rabi_al_thani">Rabi\' al-Thani</string>
+    <string name="rabi_alawwal">Rabi’ al-awwal</string>
+    <string name="rabi_althani">Rabi’ al-Thani</string>
     <string name="jumada_al_awwal">Jumada al-awwal</string>
     <string name="jumada_al_thani">Jumada al-Thani</string>
     <string name="rajab">Rajab</string>
-    <string name="shaban">Sha\'ban</string>
+    <string name="shabaan">Sha’ban</string>
     <string name="ramadan">Ramadan</string>
     <string name="shawwal">Shawwal</string>
     <string name="dhu_al_qidah">Dhu al-Qidah</string>
@@ -346,7 +345,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
     <string name="enable_new_interface">Enable the new interface</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="month_pray_times">Month\'s pray times</string>
+    <string name="month_pray_times">Month’s pray times</string>
     <string name="high_latitudes_method">High Latitudes Method</string>
     <string name="high_latitudes_night_middle">Night Middle</string>
     <string name="high_latitudes_angle_based">Angle Based</string>

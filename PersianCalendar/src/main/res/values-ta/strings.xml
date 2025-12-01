@@ -65,7 +65,7 @@
     <string name="shift_work_days_head">காலம்</string>
     <string name="prefer_linear_date_summary">நிரல்பலகை மற்றும் அறிவிப்பில் 1 மா-தை 2000 க்கு பதிலாக 2000/1/1 ஐப் பயன்படுத்து</string>
     <string name="prefer_linear_date">தேதிகளின் எண்ணியல் வடிவ விருப்பம்</string>
-    <string name="month_overview">திங்கள் நிகழ்வுகள்</string>
+    <string name="month_events">திங்கள் நிகழ்வுகள்</string>
     <string name="map">வரைபடம்</string>
     <string name="widget_background_color">நிரல்பலகை பின்னணி நிறம்</string>
     <string name="select_widgets_background_color">நிரல்பலகைகள் பின்னணிக்கு தனிப்பயன் நிறத்தைத் தேர்ந்தெடு</string>
@@ -125,12 +125,12 @@
     <string name="mehr">மேகர்</string>
     <string name="muharram">முஃகர்ரம்</string>
     <string name="safar">சஃபர்</string>
-    <string name="rabi_al_awwal">ரபி உல்-அவ்வல்</string>
-    <string name="rabi_al_thani">ரபி உல்-தானி</string>
+    <string name="rabi_alawwal">ரபி உல்-அவ்வல்</string>
+    <string name="rabi_althani">ரபி உல்-தானி</string>
     <string name="jumada_al_awwal">சுமாத்துல்-அவ்வல்</string>
     <string name="jumada_al_thani">சுமாத்துல்-தானி</string>
     <string name="rajab">ரசப்</string>
-    <string name="shaban">சஃபான்</string>
+    <string name="shabaan">சஃபான்</string>
     <string name="ramadan">ரமலான்</string>
     <string name="shawwal">சவ்வால்</string>
     <string name="dhu_al_qidah">துல் கஃதா</string>
@@ -278,14 +278,13 @@
     <string name="about">பற்றி</string>
     <string name="exit">வெளியேறு</string>
     <string name="add_event">நிகழ்வைச் சேர்</string>
-    <string name="device_does_not_support">கருவி இந்தச் செயலை ஆதரிக்கவில்லை</string>
+    <string name="not_supported_action">கருவி இந்தச் செயலை ஆதரிக்கவில்லை</string>
     <string name="today">இன்று</string>
     <string name="return_to_today">இன்றைக்குத் திரும்பு</string>
     <string name="search_in_events">நிகழ்வுகளில் தேடு</string>
     <string name="days_distance">தூரம்</string>
     <string name="start_of_year_diff">ஆண்டின் தொடக்கத்திலிருந்து %1$s நாள்கள் (~ %2$s வாரங்கள் அல்லது %3$s திங்கள்கள்)</string>
     <string name="end_of_year_diff">ஆண்டின் இறுதிக்கு %1$s நாள்கள் (~ %2$s வாரங்கள் அல்லது %3$s திங்கள்கள்)</string>
-    <string name="date_copied_clipboard">%1$s இடைநிலைப்பலகைக்கு நகலெடுக்கப்பட்டது.</string>
     <string name="year_name">ஆண்டுப் பெயர்</string>
     <string name="animal_year_name_monkey">குரங்கு</string>
     <string name="animal_year_name_rooster">சேவல்</string>
@@ -315,7 +314,7 @@
     <string name="events">நிகழ்வுகள்</string>
     <string name="no_event">இந்த நாளில் நிகழ்வு அல்லது சந்திப்பு இல்லை</string>
     <string name="warn_if_events_not_set">விருப்பமான விடுமுறைகள் மற்றும் நிகழ்வுகளைத் தேர்ந்தெடுத்து காட்ட, அமைப்புகளைப் பார்வையிடவும்</string>
-    <string name="ask_for_calendar_permission">உங்கள் கருவியின் நாட்காட்டியிலிருந்து உங்கள் தனிப்பட்ட நிகழ்வுகளை இயக்க விரும்புகிறீர்களா?</string>
+    <string name="ask_calendar_permission">உங்கள் கருவியின் நாட்காட்டியிலிருந்து உங்கள் தனிப்பட்ட நிகழ்வுகளை இயக்க விரும்புகிறீர்களா?</string>
     <string name="sunrise_sun_view">புலர்</string>
     <string name="midday_sun_view">நண்பகல்</string>
     <string name="sunset_sun_view">கருக்கல்</string>
@@ -336,7 +335,7 @@
     <string name="select_month">திங்களைத் தேர்ந்தெடு</string>
     <string name="day">நாள்</string>
     <string name="select_day">நாள் தேர்ந்தெடு</string>
-    <string name="date_exception">நுழைந்த நாள் செல்லுபடியாகாது.</string>
+    <string name="incorrect_date">நுழைந்த நாள் செல்லுபடியாகாது.</string>
     <string name="compass_not_found">திசைகாட்டி உணரி கிடைக்கவில்லை</string>
     <string name="calibrate_compass_summary">திசைகாட்டி உணரி துல்லியத்தை மேம்படுத்துவதற்கு தொலைபேசியை எந்தக் காந்தப் பொருள்களிலிருந்தும் நகர்த்தவும், ஒவ்வொரு அச்சிலும் கருவியை முன்னும் பின்னுமாகச் சாய்த்து சுழற்றவும்.</string>
     <string name="level">நிலை</string>
@@ -388,7 +387,7 @@
     <string name="notify_date_lock_screen_summary">பூட்டு திரை பாதுகாப்பு முறை அமைக்கப்படும்போது மட்டுமே.</string>
     <string name="gps_location">இடங்காட்டி அல்லது இணையத்திலிருந்து இருப்பிடத்தைப் பெறு</string>
     <string name="gps_location_help">இது முடிந்தால் பிற விருப்பங்கள் தேவையில்லை</string>
-    <string name="gps_internet_desc">தயவுசெய்து உங்கள் கருவியின் இடங்காட்டி மற்றும் இணைய இணைப்பை இயக்கவும்.\n\nஇது ஒரு முறை மட்டுமே தேவை, இருப்பினும், நீங்கள் ஒரு புதிய இடத்திற்குச் சென்றால், இடங்காட்டி மற்றும் இணையத்தை அணுகுவது மீண்டும் தேவைப்படும்.</string>
+    <string name="gps_internet_description">தயவுசெய்து உங்கள் கருவியின் இடங்காட்டி மற்றும் இணைய இணைப்பை இயக்கவும்.\n\nஇது ஒரு முறை மட்டுமே தேவை, இருப்பினும், நீங்கள் ஒரு புதிய இடத்திற்குச் சென்றால், இடங்காட்டி மற்றும் இணையத்தை அணுகுவது மீண்டும் தேவைப்படும்.</string>
     <string name="wait_for_gps">காத்திரு… எதும் காட்டவில்லை என்றால் ஒரு நிமையம் கழித்து மற்ற விருப்பங்களை முயற்சிக்கவும்</string>
     <string name="location">இடம்</string>
     <string name="location_help">அவை எதுவும் இல்லை என்றால், அதைக் கீழே குறிப்பிடு</string>

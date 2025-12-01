@@ -62,9 +62,8 @@
     <string name="select_year">کال سڼخاب کړئ</string>
     <string name="select_month">میاشته سڼخاب کړئ</string>
     <string name="select_day">ورځ سڼخاب کړئ</string>
-    <string name="date_exception">هغه نیټه چې تاسو دننه کړې وه ناځوټی سراب وه!</string>
+    <string name="incorrect_date">هغه نیټه چې تاسو دننه کړې وه ناځوټی سراب وه!</string>
     <string name="in_city_time">در %1$s</string>
-    <string name="date_copied_clipboard">«%1$s» په کليدړه کې لمېسل شو</string>
     <string name="stop">توقف</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
@@ -84,7 +83,7 @@
     <string name="show_device_calendar_events_summary">نمایش رویدادهای شخصی</string>
     <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">پيښه ډېاپه کړئ</string>
-    <string name="device_does_not_support">دا کړواسب جنتری د دې چاړ ملاتړ نه کوي</string>
+    <string name="not_supported_action">دا کړواسب جنتری د دې چاړ ملاتړ نه کوي</string>
     <string name="customize_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
     <string name="customize_widget">شخصی‌سازی ویجت‌ها و اعلان</string>
     <string name="add">ډېاپه کړئ</string>
@@ -207,7 +206,7 @@
     <string name="shift_work_days_head">طول</string>
     <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان</string>
     <string name="prefer_linear_date">ترجیح نمایش عددی تاریخ</string>
-    <string name="month_overview">مناسبت‌های ماه</string>
+    <string name="month_events">مناسبت‌های ماه</string>
     <string name="map">نقشہ</string>
     <string name="enable_ascending_athan_volume">د اذان غږ په یوه دقیقه کې خپل عروج ته رسي</string>
     <string name="ascending_athan_volume">د اذان غږ زیاتیدل</string>
@@ -283,12 +282,12 @@
     <string name="esfand">کب</string>
     <string name="muharram">مُحَرَّم</string>
     <string name="safar">صَفَر</string>
-    <string name="rabi_al_awwal">ربیع‌الاول</string>
-    <string name="rabi_al_thani">ربیع‌الثانی</string>
+    <string name="rabi_alawwal">ربیع‌الاول</string>
+    <string name="rabi_althani">ربیع‌الثانی</string>
     <string name="jumada_al_awwal">جمادى‌الاولى</string>
     <string name="jumada_al_thani">جمادی‌الثانیه</string>
     <string name="rajab">رجب</string>
-    <string name="shaban">شعبان</string>
+    <string name="shabaan">شعبان</string>
     <string name="ramadan">رمضان</string>
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذی‌القعده</string>

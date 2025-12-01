@@ -354,7 +354,7 @@
             android:name=".WidgetMonth"
             android:exported="false"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/month_overview">
+            android:label="@string/month_events">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
