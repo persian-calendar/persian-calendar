@@ -1097,7 +1097,7 @@ fun create1x1RemoteViews(
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.value.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
     remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, context.launchAppPendingIntent())
-    remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder1_1x1, 40 * scale)
+    remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder1_1x1, 38 * scale)
     remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder2_1x1, 15 * scale)
     return remoteViews
 }

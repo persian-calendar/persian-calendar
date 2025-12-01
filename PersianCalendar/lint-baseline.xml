@@ -112,17 +112,6 @@
     </issue>
 
     <issue
-        id="NegativeMargin"
-        message="Margin values should not be negative"
-        errorLine1="            android:layout_marginTop=&quot;-3dp&quot;"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/widget1x1.xml"
-            line="28"
-            column="13"/>
-    </issue>
-
-    <issue
         id="UseKtx"
         message="Use the KTX extension function `Canvas.withSave` instead?"
         errorLine1="                &apos;[&apos; -> canvas.save()"
