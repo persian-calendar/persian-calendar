@@ -331,15 +331,12 @@
     <string name="friday_short">جم</string>
     <string name="sun_view">عرض الشمس</string>
     <string name="asr_hanafi_juristic">طريقة الحنفي في حساب وقت صلاة العصر</string>
-    <string name="enable_new_interface">تفعيل الواجهة الجديدة</string>
-    <string name="are_you_sure">هل أنت متأكد؟</string>
     <string name="month_pray_times">أوقات الصلوات الشهر</string>
     <string name="high_latitudes_method">طريقة خطوط العرض العالية</string>
     <string name="high_latitudes_night_middle">منتصف الليل</string>
     <string name="high_latitudes_angle_based">بناء على الزاوية</string>
     <string name="high_latitudes_one_seventh">سُبٌع</string>
     <string name="none">لا شيء</string>
-    <string name="country_emoji">🇸🇦🇮🇶🇦🇪</string>
     <plurals name="minutes">
         <item quantity="zero">لا دقائق</item>
         <item quantity="one">دقيقة واحدة</item>
@@ -430,7 +427,6 @@
     <string name="enable_notification">هل ترغب في تفعيل تنبيه التاريخ؟</string>
     <string name="add_quick_settings_tile">إضافة إعدادات السريعة</string>
     <string name="true_north">الشمال الحقيقي</string>
-    <string name="lock">قفل</string>
     <string name="full_screen">ملء الشاشة</string>
     <string name="exit_full_screen">الخروج من وضع ملء الشاشة</string>
     <string name="color_gradient">تدرج اللون</string>

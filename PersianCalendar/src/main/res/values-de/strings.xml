@@ -25,7 +25,6 @@
     <string name="october">Oktober</string>
     <string name="november">November</string>
     <string name="december">Dezember</string>
-    <string name="country_emoji">🇩🇪🇦🇹🇨🇭</string>
     <string name="app_name">Persischer Kalender</string>
     <string name="return_to_today">Zurück zum heutigen Tag</string>
     <string name="close">Schließen</string>
@@ -349,7 +348,6 @@
     <string name="calculator">Rechner</string>
     <string name="chinese_calendar">Chinesischer Kalender</string>
     <string name="tropical">Tropisch</string>
-    <string name="lock">Sperren</string>
     <string name="full_screen">Vollbild</string>
     <string name="screensaver_settings">Bildschirmschoner Einstellungen</string>
     <string name="exit_full_screen">Vollbild beenden</string>
@@ -372,8 +370,6 @@
         <item quantity="other">%1$s Jahre</item>
     </plurals>
     <string name="sun_view">Ansicht der Sonne</string>
-    <string name="enable_new_interface">Neue Schnittstelle Aktivieren</string>
-    <string name="are_you_sure">Sind Sie sicher?</string>
     <string name="high_latitudes_angle_based">Winkelbasiert</string>
     <string name="high_latitudes_one_seventh">Ein Siebtel</string>
     <string name="none">Keine</string>

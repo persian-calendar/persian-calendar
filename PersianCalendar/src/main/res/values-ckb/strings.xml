@@ -342,14 +342,12 @@
     <string name="thursday_short">پ</string>
     <string name="friday_short">ھ</string>
     <string name="sun_view">نیشاندانی خۆر</string>
-    <string name="country_emoji">🇮🇷🇮🇶</string>
     <string name="nepal">نیپال</string>
     <string name="nepali_calendar">ڕۆژژمێری نیپالی</string>
     <string name="nepali_calendar_short">نیپالی</string>
     <string name="season">وەرز</string>
     <string name="show_secondary_calendar">ڕۆژژمێری لاوەکی نیشان بدە</string>
     <string name="widget_prefer_device_colors">شوێنکەوتنی ڕەنگکاریی سیستەم لە ویجیتەکاندا</string>
-    <string name="enable_new_interface">چالاککردنی ڕووکاری نوێ</string>
     <string name="calculator">حسێبکەر</string>
     <string name="asr_hanafi_juristic">شێوازی نوێژی ئێوارەی حەنەفی</string>
     <string name="high_latitudes_angle_based">بەپێی گۆشە</string>
@@ -371,7 +369,6 @@
     <string name="winter">زستان</string>
     <string name="lunar_eclipse">مانگگیران</string>
     <string name="summer">ھاوین</string>
-    <string name="are_you_sure">دڵنیای؟</string>
     <string name="month_pray_times">کاتە شەرعییەکانی مانگ</string>
     <string name="high_latitudes_night_middle">ناوەڕاستی شەو</string>
     <string name="high_latitudes_one_seventh">حەوت یەک</string>
@@ -385,7 +382,6 @@
     <string name="enable_notification">دەتەوێت ئاگاداریی ڕێککەوت چالاک بکەیت؟</string>
     <string name="add_quick_settings_tile">زیادکردنی کاشیی ڕێکخستنی خێرا</string>
     <string name="true_north">باکووری ڕاستی</string>
-    <string name="lock">قوفڵ</string>
     <string name="yes">بەڵێ</string>
     <plurals name="seconds">
         <item quantity="one">تەنها یەک چرکە</item>

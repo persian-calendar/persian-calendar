@@ -322,8 +322,6 @@
     <string name="dhu_al_hijjah">Dhu al-Hijjah</string>
     <string name="sun_view">Vista del Sole</string>
     <string name="asr_hanafi_juristic">Metodo Hanafi Asr Juristic</string>
-    <string name="enable_new_interface">Attiva la interfaccia nuova</string>
-    <string name="are_you_sure">Sei sicuro?</string>
     <string name="month_pray_times">Orari di preghiera del mese</string>
     <string name="high_latitudes_method">Metodo delle alte latitudini</string>
     <string name="high_latitudes_night_middle">Centro della notte</string>
@@ -334,14 +332,12 @@
     <string name="widget_prefer_device_colors">Segui la colorazione dei dispositivi nei widget</string>
     <string name="nepali_calendar">Calendario nepalese</string>
     <string name="nepali_calendar_short">Nepali</string>
-    <string name="country_emoji">🇺🇸🇬🇧</string>
     <string name="show_secondary_calendar">Mostra calendario secondario</string>
     <string name="nepal">Nepal</string>
     <string name="solar_eclipse">Eclissi Solare</string>
     <string name="lunar_eclipse">Eclissi Lunare</string>
     <string name="add_quick_settings_tile">Aggiungi riquadro Impostazioni rapide</string>
     <string name="true_north">Nord geografico</string>
-    <string name="lock">Blocco</string>
     <string name="full_screen">Schermo intero</string>
     <string name="exit_full_screen">Esci dalla modalità a schermo intero</string>
     <string name="color_gradient">Sfumatura di colore</string>

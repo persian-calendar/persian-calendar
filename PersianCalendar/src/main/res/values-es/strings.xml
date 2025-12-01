@@ -338,13 +338,11 @@
     <string name="wednesday_short">M</string>
     <string name="thursday_short">J</string>
     <string name="friday_short">V</string>
-    <string name="country_emoji">🇪🇸</string>
     <string name="season">Estación</string>
     <string name="show_secondary_calendar">Mostrar calendario secundario</string>
     <string name="nepal">Nepal</string>
     <string name="view_source">Ver fuente</string>
     <string name="shift_work_night">Noche</string>
-    <string name="are_you_sure">¿Está usted seguro\?</string>
     <string name="nepali_calendar_short">Nepalí</string>
     <string name="shift_work_morning">La mañana</string>
     <string name="summer">Verano</string>
@@ -359,7 +357,6 @@
     <string name="other_holidays">Otros</string>
     <string name="nepali_calendar">Calendario nepalí</string>
     <string name="shift_work_evening">La tarde</string>
-    <string name="enable_new_interface">Habilitar la nueva interfaz</string>
     <string name="high_latitudes_night_middle">Medianoche</string>
     <string name="widget_customization_other_calendars">Otros clendarios en widget 1x4 y 2x2</string>
     <string name="shift_work_off">Descanso</string>
@@ -392,7 +389,6 @@
     <string name="true_north">Norte verdadero</string>
     <string name="enable_notification">¿Desea habilitar la notificación de la fecha\?</string>
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
-    <string name="lock">Bloquear</string>
     <string name="exit_full_screen">Salir de la pantalla completa</string>
     <string name="full_screen">Pantalla completa</string>
     <string name="color_gradient">Gradiente del color</string>

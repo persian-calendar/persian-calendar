@@ -206,8 +206,6 @@
     <string name="earth">Земля</string>
     <string name="sun_view">Вид на солнце</string>
     <string name="asr_hanafi_juristic">Ханафитский аср юридический метод</string>
-    <string name="enable_new_interface">Включите новый интерфейс</string>
-    <string name="are_you_sure">Ты уверен\?</string>
     <string name="month_pray_times">Время молитвы за месяц</string>
     <string name="high_latitudes_method">Метод высоких широт</string>
     <string name="high_latitudes_night_middle">Середина ночи</string>
@@ -218,7 +216,6 @@
     <string name="high_latitudes_one_seventh">Одна седьмая</string>
     <string name="summer">Лето</string>
     <string name="mercury">Меркурий</string>
-    <string name="country_emoji">🇷🇺🇺🇦</string>
     <string name="show_secondary_calendar">Показать дополнительный календарь</string>
     <string name="season">Сезон</string>
     <string name="nepal">Непал</string>
@@ -340,7 +337,6 @@
     <string name="enable_notification">Хотите включить уведомление о дате\?</string>
     <string name="add_quick_settings_tile">Добавить плитку быстрых настроек</string>
     <string name="true_north">Истинный север</string>
-    <string name="lock">Запирать</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s день</item>
         <item quantity="few">%1$s %2$s дня</item>

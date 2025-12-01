@@ -231,13 +231,11 @@
     <string name="wednesday_short">三</string>
     <string name="thursday_short">四</string>
     <string name="friday_short">五</string>
-    <string name="are_you_sure">你确定吗？</string>
     <string name="august">8 月</string>
     <string name="september">9 月</string>
     <string name="october">10 月</string>
     <string name="november">11 月</string>
     <string name="december">12 月</string>
-    <string name="country_emoji">🇨🇳</string>
     <string name="show_secondary_calendar">显示第二日历</string>
     <string name="season">季</string>
     <string name="summer">夏至</string>
@@ -293,7 +291,6 @@
     <string name="widget_customization_owghat_location">在 2×2 小部件和通知中显示礼拜时间对应的位置</string>
     <string name="widget_customization_non_holiday_events">在 2×2 小部件和通知中显示非节假日的日程</string>
     <string name="month_pray_times">本月礼拜时间</string>
-    <string name="enable_new_interface">启用新界面</string>
     <string name="sun">太阳</string>
     <string name="moon">月亮</string>
     <string name="solar_eclipse">日食</string>

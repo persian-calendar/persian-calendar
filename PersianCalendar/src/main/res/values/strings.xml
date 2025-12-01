@@ -342,8 +342,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--Title of a widget that shows how much of a day is passed-->
     <string name="sun_view">Sun View</string>
     <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
-    <string name="enable_new_interface">Enable the new interface</string>
-    <string name="are_you_sure">Are you sure?</string>
     <string name="month_pray_times">Month’s pray times</string>
     <string name="high_latitudes_method">High Latitudes Method</string>
     <string name="high_latitudes_night_middle">Night Middle</string>
@@ -354,7 +352,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_prefer_device_colors">Follow Device Coloring in Widgets</string>
     <string name="nepali_calendar">Nepali Calendar</string>
     <string name="nepali_calendar_short">Nepali</string>
-    <string name="country_emoji">🇺🇸🇬🇧</string>
     <string name="show_secondary_calendar">Show secondary calendar</string>
     <string name="season">Season</string>
     <string name="nepal">Nepal</string>
@@ -385,7 +382,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="enable_notification">Would you like to enable date notification?</string>
     <string name="add_quick_settings_tile">Add Quick Settings tile</string>
     <string name="true_north">True north</string>
-    <string name="lock">Lock</string>
     <string name="full_screen">Full Screen</string>
     <string name="exit_full_screen">Exit Full Screen</string>
     <string name="color_gradient">Color gradient</string>

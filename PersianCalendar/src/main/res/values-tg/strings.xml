@@ -268,7 +268,6 @@
     <string name="wednesday_short">Чш</string>
     <string name="thursday_short">Пш</string>
     <string name="friday_short">Ҷм</string>
-    <string name="are_you_sure">Шумо мутмаъин ҳастед\?</string>
     <string name="method_mwl">Лигаи ҷаҳонии мусалмонон</string>
     <string name="method_isna">Ҷамъияти исломии Амрикои Шимолӣ</string>
     <string name="method_egypt">Маъмурияти умумии тадқиқоти Миср</string>
@@ -330,8 +329,6 @@
     <string name="age_widget_title">Унвони виджет</string>
     <string name="sun_view">Хоршиднамо</string>
     <string name="asr_hanafi_juristic">Усули ҳисоб кардани азони Ҳанафӣ</string>
-    <string name="enable_new_interface">Намуди навро фаъол кунед</string>
-    <string name="country_emoji">🇹🇯</string>
     <string name="nepal">Непал</string>
     <string name="calculator">Калкулятор</string>
     <string name="lunar_eclipse">Моҳгирифтагӣ</string>
@@ -357,7 +354,6 @@
     <string name="uranus">Уронус</string>
     <string name="neptune">Нептун</string>
     <string name="pluto">Плутун</string>
-    <string name="lock">Қуфл</string>
     <string name="ask_calendar_permission">Моилияд рӯйдодҳои шахситон аз тақвими дастгоҳ намоиш дода шавад?</string>
     <string name="save">Захира</string>
     <string name="nepali_calendar_short">Неполӣ</string>

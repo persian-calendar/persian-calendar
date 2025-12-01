@@ -339,8 +339,6 @@
     <string name="friday_short">v</string>
     <string name="sun_view">Vue Soleil</string>
     <string name="asr_hanafi_juristic">Méthode juridique Hanafi Asr</string>
-    <string name="enable_new_interface">Activer la nouvelle interface</string>
-    <string name="are_you_sure">Êtes-vous sûr·e \?</string>
     <string name="month_pray_times">Heures de prière du mois</string>
     <string name="high_latitudes_method">Méthode des hautes latitudes</string>
     <string name="high_latitudes_night_middle">Milieu de nuit</string>
@@ -348,7 +346,6 @@
     <string name="high_latitudes_one_seventh">Un septième</string>
     <string name="none">None</string>
     <string name="show_sun_and_moon_path_in_24_hours">Afficher la trajectoire du Soleil et de la Lune en 24 heures</string>
-    <string name="country_emoji">🇫🇷</string>
     <string name="nepali_calendar_short">népalais</string>
     <string name="nepali_calendar">Calendrier népalais</string>
     <string name="widget_prefer_device_colors">Suivre la coloration du système dans les widgets</string>
@@ -381,7 +378,6 @@
     <string name="enable_notification">Voulez-vous activer la notification de la date \?</string>
     <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
     <string name="true_north">Vrai Nord</string>
-    <string name="lock">Verrouiller</string>
     <string name="full_screen">Plein écran</string>
     <string name="exit_full_screen">Quitter le plein écran</string>
     <string name="color_gradient">Dégradé de couleurs</string>

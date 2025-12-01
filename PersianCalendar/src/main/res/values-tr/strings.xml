@@ -333,10 +333,7 @@
     <string name="app_name">İran Takvimi</string>
     <string name="code">tr</string>
     <string name="asr_hanafi_juristic">İkindi Hanefi Fıkıh Metodu</string>
-    <string name="enable_new_interface">Yeni arayüzü etkinleştirin</string>
-    <string name="are_you_sure">Emin misiniz\?</string>
     <string name="month_pray_times">Aylık namaz vakitleri</string>
-    <string name="country_emoji">🇹🇷</string>
     <string name="nepal">Nepal</string>
     <string name="nepali_calendar">Nepal Takvimi</string>
     <string name="nepali_calendar_short">Nepalce</string>
@@ -375,7 +372,6 @@
     <string name="live_wallpaper_settings">Canlı duvar kağıdı ayarları</string>
     <string name="screensaver_settings">Ekran koruyucu ayarları</string>
     <string name="true_north">Gerçek kuzey</string>
-    <string name="lock">Kilitle</string>
     <plurals name="weeks">
         <item quantity="one">%1$s hafta</item>
         <item quantity="other">%1$s hafta</item>

@@ -161,8 +161,6 @@
     <string name="friday_short">வெ</string>
     <string name="sun_view">ஞாயிறு பார்வை</string>
     <string name="asr_hanafi_juristic">அனாஃபி எச்ஆர் சூரிக் முறை</string>
-    <string name="enable_new_interface">புதிய இடைமுகத்தை இயக்கு</string>
-    <string name="are_you_sure">நீங்கள் உறுதியாக இருக்கிறீர்களா?</string>
     <string name="month_pray_times">திங்களின் தொழுகை நேரம்</string>
     <string name="high_latitudes_method">உயர் குறுங்கோடுகள் முறை</string>
     <string name="high_latitudes_night_middle">நடுஇரவு முறை</string>
@@ -174,7 +172,6 @@
     <string name="nepali_calendar">நேபாளி நாட்காட்டி</string>
     <string name="nepali_calendar_short">நேபாளி</string>
     <string name="season">பருவம்</string>
-    <string name="country_emoji">🏳️</string>
     <string name="show_secondary_calendar">இரண்டாம் நிலை நாட்காட்டியைக் காட்டு</string>
     <string name="nepal">நேபாளம்</string>
     <string name="solar_eclipse">ஞாயிறு மறைப்பு</string>
@@ -202,7 +199,6 @@
     <string name="screensaver_settings">திரைக் காப்பி அமைப்புகள்</string>
     <string name="true_north">உண்மையான வடக்கு</string>
     <string name="enable_notification">தேதி அறிவிப்பை இயக்க விரும்புகிறீர்களா?</string>
-    <string name="lock">பூட்டு</string>
     <string name="add_quick_settings_tile">விரைவான அமைப்புகள் ஓடு சேர்</string>
     <string name="full_screen">முழுத் திரை</string>
     <string name="exit_full_screen">முழுத் திரை வெளியேறு</string>

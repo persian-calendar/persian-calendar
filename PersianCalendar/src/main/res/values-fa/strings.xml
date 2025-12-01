@@ -356,8 +356,6 @@
     <string name="friday_short">ج</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
-    <string name="enable_new_interface">بهره‌وری از نمای جدید</string>
-    <string name="are_you_sure">آیا اطمینان دارید؟</string>
     <string name="month_pray_times">اوقات شرعی ماه</string>
     <string name="high_latitudes_method">شیوهٔ عرض‌های جغرافیایی بالا</string>
     <string name="high_latitudes_night_middle">نیمهٔ شب</string>
@@ -366,7 +364,6 @@
     <string name="none">هیچ‌کدام</string>
     <string name="show_sun_and_moon_path_in_24_hours">نمایش مسیر ماه و خورشید در ۲۴ ساعت آینده</string>
     <string name="widget_prefer_device_colors">پیروی از رنگ‌بندی دستگاه در ویجت‌ها</string>
-    <string name="country_emoji">🇮🇷</string>
     <string name="nepali_calendar">نپالی</string>
     <string name="nepali_calendar_short">نپالی</string>
     <string name="show_secondary_calendar">نمایش تقویم ثانویه</string>
@@ -398,7 +395,6 @@
     <string name="enable_notification">مایلید اعلان تاریخ برنامه روشن شود؟</string>
     <string name="add_quick_settings_tile">افزودن کاشی تنظیمات سریع</string>
     <string name="true_north">شمال حقیقی</string>
-    <string name="lock">قفل</string>
     <string name="full_screen">تمام‌صفحه</string>
     <string name="exit_full_screen">خروج از تمام‌صفحه</string>
     <string name="color_gradient">طیف رنگی</string>
