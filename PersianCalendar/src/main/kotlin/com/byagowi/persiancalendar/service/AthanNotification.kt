@@ -173,6 +173,7 @@ class AthanNotification : Service() {
             context.preferences.edit { putInt(PREF_ATHAN_CHANNEL_ID, current + 1) }
         }
 
+        @JvmSynthetic
         private fun currentChannelId(context: Context): Int {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return DEFAULT_ATHAN_CHANNEL_ID
             val preferences = context.preferences

@@ -111,7 +111,6 @@ android {
             "SelectableText",
             "IconLocation",
             "DuplicateStrings",
-            "SyntheticAccessor",
         )
     }
 

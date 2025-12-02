@@ -52,11 +52,13 @@ internal data class ItemInterval(val start: Float = 0f, val size: Int = 0) {
     val end: Float get() = start + size
 }
 
+@JvmSynthetic
 private inline fun <T> List<T>.firstIndexOfIndexed(predicate: (Int, T) -> Boolean): Int? {
     forEachIndexed { i, e -> if (predicate(i, e)) return i }
     return null
 }
 
+@JvmSynthetic
 private inline fun <T> List<T>.lastIndexOfIndexed(predicate: (Int, T) -> Boolean): Int? {
     for (i in lastIndex downTo 0) {
         if (predicate(i, this[i])) return i

@@ -61,7 +61,8 @@ enum class Zodiac(
     fun shortTitle(resources: Resources) = resources.getString(titleId).split(" (")[0]
 
     private val iauNextRangeStart: Double
-        get() = entries.getOrNull(ordinal + 1)?.iauRangeStart ?: (ARIES.iauRangeStart + 360)
+        @JvmSynthetic get() = entries.getOrNull(ordinal + 1)?.iauRangeStart
+            ?: (ARIES.iauRangeStart + 360)
 
     val iauRange get() = listOf(iauRangeStart, iauNextRangeStart)
     val tropicalRange get() = listOf(ordinal * 30.0, (ordinal + 1) * 30.0)
@@ -71,9 +72,10 @@ enum class Zodiac(
             entries.getOrNull(persianDate.month - 1) ?: ARIES
 
         // Or can be named Falaki فلکی
-        fun fromIau(longitude: Double): Zodiac =
-            if (longitude < ARIES.iauRangeStart) PISCES
+        fun fromIau(longitude: Double): Zodiac {
+            return if (longitude < ARIES.iauRangeStart) PISCES
             else entries.firstOrNull { longitude < it.iauNextRangeStart } ?: PISCES
+        }
 
         // Or can be named Borji برجی in addition to اعتدالی ُTropical
         fun fromTropical(longitude: Double): Zodiac =

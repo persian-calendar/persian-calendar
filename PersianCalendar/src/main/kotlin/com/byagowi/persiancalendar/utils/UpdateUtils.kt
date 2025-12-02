@@ -156,7 +156,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 private val useDefaultPriority
-    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
+    @JvmSynthetic get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastLanguage: Language? = null
@@ -1816,6 +1816,7 @@ private fun RemoteViews.setDynamicTextColor(
     @IdRes id: Int, @AttrRes attr: Int = android.R.attr.colorForeground
 ): Unit = setColorAttr(id, "setTextColor", attr)
 
+@JvmSynthetic
 @RequiresApi(Build.VERSION_CODES.S)
 private fun RemoteViews.setAlpha(@IdRes viewId: Int, value: Float): Unit =
     setFloat(viewId, "setAlpha", value)
@@ -1827,6 +1828,7 @@ private fun RemoteViews.setupForegroundTextColors(@IdRes vararg ids: Int) {
     }
 }
 
+@JvmSynthetic
 private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) {
     if (text.isBlank()) setViewVisibility(viewId, View.GONE)
     else {

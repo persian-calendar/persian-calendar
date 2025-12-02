@@ -127,6 +127,8 @@ class ConverterViewModel : ViewModel() {
 
     companion object {
         private val utc = TimeZone.getTimeZone("UTC")
+
+        @JvmSynthetic
         private fun haveSameClock(first: GregorianCalendar, second: GregorianCalendar): Boolean {
             return first[GregorianCalendar.MINUTE] == second[GregorianCalendar.MINUTE] &&
                     first[GregorianCalendar.HOUR_OF_DAY] == second[GregorianCalendar.HOUR_OF_DAY]

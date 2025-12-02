@@ -2,61 +2,6 @@
 <issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="true" name="AGP (8.13.1)" variant="all" version="8.13.1">
 
     <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `getTapAction` of class `ComplicationServicesKt` requires synthetic accessor"
-        errorLine1="        dataBuilder.setTapAction(getTapAction())"
-        errorLine2="                                 ~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ComplicationServices.kt"
-            line="45"
-            column="34"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `getValidTimeRange` of class `ComplicationServicesKt` requires synthetic accessor"
-        errorLine1="        dataBuilder.setValidTimeRange(getValidTimeRange())"
-        errorLine2="                                      ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ComplicationServices.kt"
-            line="46"
-            column="39"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `getTapAction` of class `ComplicationServicesKt` requires synthetic accessor"
-        errorLine1="        dataBuilder.setTapAction(getTapAction())"
-        errorLine2="                                 ~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ComplicationServices.kt"
-            line="77"
-            column="34"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `getValidTimeRange` of class `ComplicationServicesKt` requires synthetic accessor"
-        errorLine1="        dataBuilder.setValidTimeRange(getValidTimeRange())"
-        errorLine2="                                      ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ComplicationServices.kt"
-            line="78"
-            column="39"/>
-    </issue>
-
-    <issue
-        id="SyntheticAccessor"
-        message="Access to `private` method `WearApp` of class `MainActivityKt` requires synthetic accessor"
-        errorLine1="        setContent { WearApp() }"
-        errorLine2="                     ~~~~~~~">
-        <location
-            file="src/main/kotlin/com/byagowi/persiancalendar/ui/MainActivity.kt"
-            line="47"
-            column="22"/>
-    </issue>
-
-    <issue
         id="ConvertToWebp"
         message="One or more images in this project can be converted to the WebP format which typically results in smaller file sizes, even for lossless conversion">
         <location

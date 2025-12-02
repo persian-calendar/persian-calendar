@@ -16,6 +16,7 @@ class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
     var stopListener = {}
         private set
 
+    @JvmSynthetic
     private fun onStateChange(state: Int) {
         if (state == TelephonyManager.CALL_STATE_RINGING ||
             state == TelephonyManager.CALL_STATE_OFFHOOK

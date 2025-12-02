@@ -78,6 +78,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     }
 
     companion object {
+        @JvmSynthetic
         private fun linearFormat(hours: Int, minutes: Int) =
             numeral.value.format("%d:%02d".format(Locale.ENGLISH, hours, minutes))
 
