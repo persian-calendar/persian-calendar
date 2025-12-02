@@ -47,12 +47,7 @@ android {
         checkDependencies = true
         checkTestSources = true
         checkGeneratedSources = true
-        disable += listOf(
-            "SquareAndRoundTilePreviews",
-            "IconLocation",
-            "ConvertToWebp",
-            "SyntheticAccessor",
-        )
+        baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
     }
 
     kotlin {
