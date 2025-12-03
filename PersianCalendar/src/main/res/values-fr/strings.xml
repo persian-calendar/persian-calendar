@@ -27,7 +27,7 @@
     <string name="spaced_and">" et "</string>
     <string name="spaced_or">" ou "</string>
     <string name="spaced_comma">", "</string>
-    <string name="spaced_colon">" : "</string>
+    <string name="spaced_colon">": "</string>
     <plurals name="hours">
         <item quantity="one">%1$s heure</item>
         <item quantity="many">%1$s heures</item>
@@ -397,7 +397,7 @@
     <string name="more_options">Plus d’options</string>
     <string name="yes">Oui</string>
     <string name="sample_inputs">Exemples d’entrées</string>
-    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos événements personnels à partir du calendrier de votre appareil?</string>
+    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos évènements personnels à partir de l\'agenda de votre appareil ?</string>
     <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l’application à l’économiseur de la batterie pour un fonctionnement correct des notifications ?</string>
     <string name="holidays_in_red">Vacances en rouge</string>
     <plurals name="work_days">
@@ -421,4 +421,14 @@
     <string name="day_view">Vue journalière</string>
     <string name="horoscope">Horoscope</string>
     <string name="planetary_hours">Heures planétaires</string>
+    <string name="select_font">Sélectionner une police</string>
+    <string name="move_up">Monter</string>
+    <string name="move_down">Descendre</string>
+    <string name="black_moon">Lilith</string>
+    <string name="dynamic_icon">Icône dynamique</string>
+    <string name="large_day_number_on_notification">Nombre long du jour dans la notification</string>
+    <string name="pref_ui">Interface utilisateur</string>
+    <string name="week">Semaine</string>
+    <string name="bold_text">Texte en gras</string>
+    <string name="widget_text_size">Taille du texte</string>
 </resources>
