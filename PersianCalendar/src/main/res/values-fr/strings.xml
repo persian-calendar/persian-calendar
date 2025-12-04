@@ -397,7 +397,7 @@
     <string name="more_options">Plus d’options</string>
     <string name="yes">Oui</string>
     <string name="sample_inputs">Exemples d’entrées</string>
-    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos évènements personnels à partir de l\'agenda de votre appareil ?</string>
+    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos évènements personnels à partir de l’agenda de votre appareil ?</string>
     <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l’application à l’économiseur de la batterie pour un fonctionnement correct des notifications ?</string>
     <string name="holidays_in_red">Vacances en rouge</string>
     <plurals name="work_days">

@@ -395,7 +395,7 @@
         <item quantity="other">%1$s giorni</item>
     </plurals>
     <string name="about_send_mail">E-mail</string>
-    <string name="about_email_sum">Invia un\'e-mail personale agli autori dell\'app</string>
+    <string name="about_email_sum">Invia un’e-mail personale agli autori dell’app</string>
     <string name="about_no_client">Nessun client di posta elettronica è installato</string>
     <string name="about_developers">Sviluppatori (spesso ordinati)</string>
     <string name="previous_x">Precedente %1$s</string>
