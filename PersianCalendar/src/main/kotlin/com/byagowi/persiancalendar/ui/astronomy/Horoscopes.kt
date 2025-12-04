@@ -603,7 +603,7 @@ private val abjadMap = mapOf(
 
 @VisibleForTesting
 fun toAbjad(number: Int): String {
-    if (number == 0) return "ها" // It's like ها in Nastaliq https://imgur.com/a/0eMBO2c
+    if (number == 0) return "۰" // It is like this though https://imgur.com/a/0eMBO2c
     var n = number
     return buildString {
         for (value in abjadMap.keys) while (n >= value) {
