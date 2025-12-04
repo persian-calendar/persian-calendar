@@ -443,7 +443,7 @@ private fun launchReportIntent(context: Context) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun Developers() {
-    val context = LocalResources.current
+    val resources = LocalResources.current
     val developersBeforeShuffle = remember {
         listOf(
             R.string.about_developers_list to Icons.Default.Android,
@@ -451,7 +451,7 @@ private fun Developers() {
             R.string.about_translators_list to Icons.Default.Translate,
             R.string.about_contributors_list to Icons.Default.Android,
         ).flatMap { (listId: Int, icon: ImageVector) ->
-            context.getString(listId).trim().split("\n").map {
+            resources.getString(listId).trim().split("\n").map {
                 val (username, displayName) = it.split(": ")
                 Triple(username, displayName, icon)
             }
