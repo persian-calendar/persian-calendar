@@ -19,7 +19,7 @@ class LanguageDialogTest {
             languageString = stringResource(R.string.language)
             LanguageDialog {}
         }
-        composeTestRule.onNodeWithText(languageString)
+        composeTestRule.onNodeWithText(languageString).assertExists()
 
 //        val language = Language.entries.take(5).random()
 //        println("\n\n\nSelecting $language in language preference switch dialog\n\n\n")

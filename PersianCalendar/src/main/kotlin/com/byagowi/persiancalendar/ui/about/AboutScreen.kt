@@ -69,6 +69,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -87,6 +88,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -159,7 +161,7 @@ fun SharedTransitionScope.AboutScreen(
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 ScreenSurface(
                     animatedContentScope,
-                    disableSharedContent = scrollState.value > headerPx,
+                    disableSharedContent = remember { derivedStateOf { scrollState.value > headerPx } }.value,
                 ) { AboutScreenContent(navigateToLicenses, bottomPadding) }
             }
             ScrollShadow(scrollState, skipTop = true)
@@ -353,7 +355,9 @@ private fun HelpItems() {
         sections.forEachIndexed { i, (title, body) ->
             Column(
                 modifier = Modifier
-                    .toggleable(expandedItem == i) { expandedItem = if (it) i else -1 }
+                    .toggleable(expandedItem == i) {
+                        expandedItem = if (it) i else -1
+                    }
                     .padding(
                         horizontal = 4.dp,
                         vertical = animateDpAsState(
@@ -439,7 +443,7 @@ private fun launchReportIntent(context: Context) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun Developers() {
-    val context = LocalContext.current
+    val context = LocalResources.current
     val developersBeforeShuffle = remember {
         listOf(
             R.string.about_developers_list to Icons.Default.Android,
@@ -481,8 +485,7 @@ private fun Developers() {
             val uriHandler = LocalUriHandler.current
             developers.forEach { (username, displayName, icon) ->
                 ElevatedFilterChip(
-                    modifier = Modifier
-                        .padding(all = 4.dp),
+                    modifier = Modifier.padding(all = 4.dp),
                     onClick = click@{
                         if (username in listOf("ImanSoltanian", "SeyedHamed")) return@click
                         uriHandler.openUri("https://github.com/$username")

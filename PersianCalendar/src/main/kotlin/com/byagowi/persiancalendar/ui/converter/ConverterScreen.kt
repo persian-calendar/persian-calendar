@@ -261,7 +261,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
     val context = LocalContext.current
     val resources = LocalResources.current
     ShareActionButton(animatedContentScope) {
-        val chooserTitle = context.getString(screenMode.title)
+        val chooserTitle = resources.getString(screenMode.title)
         when (screenMode) {
             ConverterScreenMode.CONVERTER -> {
                 val jdn = viewModel.selectedDate.value
@@ -272,7 +272,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                 context.shareText(
                     listOf(
                         dayTitleSummary(jdn, jdn on selectedCalendar),
-                        context.getString(R.string.equivalent_to),
+                        resources.getString(R.string.equivalent_to),
                         otherCalendars.joinToString(spacedComma) { formatDate(jdn on it) }
                     ).joinToString(" "),
                     chooserTitle,

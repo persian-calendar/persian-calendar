@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -294,7 +295,9 @@ fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
         var abjad by remember { mutableStateOf(false) }
         val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
-        if (state.currentPageOffsetFraction != 0f) pendingConfirms.forEach { it() }
+        if (remember { derivedStateOf { state.currentPageOffsetFraction != 0f } }.value) {
+            pendingConfirms.forEach { it() }
+        }
         val coroutineScope = rememberCoroutineScope()
         HorizontalPager(
             state,
@@ -476,7 +479,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                 autoSize = TextAutoSize.StepBased(
                     maxFontSize = LocalTextStyle.current.fontSize,
                     minFontSize = 9.sp,
-                )
+                ),
             )
         }
     }
@@ -564,14 +567,14 @@ private fun AscendantZodiac(
             style = LocalTextStyle.current.copy(
                 lineHeight = with(LocalDensity.current) {
                     LocalTextStyle.current.lineHeight.toDp().coerceAtMost(20.dp).toSp()
-                }
+                },
             ),
             softWrap = false,
             maxLines = text.split("\n").size,
             autoSize = TextAutoSize.StepBased(
                 maxFontSize = LocalTextStyle.current.fontSize,
                 minFontSize = 9.sp,
-            )
+            ),
         )
     }
 }

@@ -111,7 +111,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                     AthanNotification.invalidateChannel(context)
                     context.preferences.edit {
                         putString(PREF_ATHAN_URI, resources.getRawUri(rawId))
-                        putString(PREF_ATHAN_NAME, context.getString(stringId))
+                        putString(PREF_ATHAN_NAME, resources.getString(stringId))
                     }
                     onDismissRequest()
                 }

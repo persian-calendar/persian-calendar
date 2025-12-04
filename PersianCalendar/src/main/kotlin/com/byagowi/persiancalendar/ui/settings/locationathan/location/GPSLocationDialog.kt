@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -90,6 +91,7 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
 @Composable
 fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     var isGranted by remember { mutableStateOf<Boolean?>(null) }
     if (ActivityCompat.checkSelfPermission(
             context, Manifest.permission.ACCESS_FINE_LOCATION
@@ -101,7 +103,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         else onDismissRequest()
     }
 
-    var message by remember { mutableStateOf(context.getString(R.string.wait_for_gps)) }
+    var message by remember { mutableStateOf(resources.getString(R.string.wait_for_gps)) }
     var coordinates by remember { mutableStateOf<Coordinates?>(null) }
     var cityName by remember { mutableStateOf<String?>(null) }
     var countryCode by remember { mutableStateOf<String?>(null) }
@@ -150,12 +152,12 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
 
             override fun onProviderEnabled(provider: String) {
                 isOneProviderEnabled = true
-                message = context.getString(R.string.wait_for_gps)
+                message = resources.getString(R.string.wait_for_gps)
             }
 
             override fun onProviderDisabled(provider: String) {
                 if (!isOneProviderEnabled) message =
-                    context.getString(R.string.enable_location_services)
+                    resources.getString(R.string.enable_location_services)
             }
         }
 

@@ -504,12 +504,13 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     val eventsRepository by eventsRepository.collectAsState()
+    val resources = LocalResources.current
     LaunchedEffect(today, eventsRepository) {
         if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar) {
             if (snackbarHostState.showSnackbar(
-                    context.getString(R.string.outdated_app),
+                    resources.getString(R.string.outdated_app),
                     duration = SnackbarDuration.Long,
-                    actionLabel = context.getString(R.string.update),
+                    actionLabel = resources.getString(R.string.update),
                     withDismissAction = true,
                 ) == SnackbarResult.ActionPerformed
             ) context.bringMarketPage()

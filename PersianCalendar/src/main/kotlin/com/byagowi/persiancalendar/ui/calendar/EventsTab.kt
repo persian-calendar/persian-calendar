@@ -337,6 +337,7 @@ private fun DayEventContent(
     originalLayoutDirection: LayoutDirection,
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val tooltipState = rememberTooltipState(isPersistent = true)
     val hasTooltip = when {
         language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
@@ -363,7 +364,7 @@ private fun DayEventContent(
             }
             .focusable(true)
             .semantics {
-                this.contentDescription = if (event.isHoliday) context.getString(
+                this.contentDescription = if (event.isHoliday) resources.getString(
                     R.string.holiday_reason, event.title
                 ) else event.oneLinerTitleWithTime
             }

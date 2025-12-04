@@ -19,6 +19,6 @@ class LocationDialogTest {
             locationString = stringResource(R.string.location)
             LocationDialog {}
         }
-        composeTestRule.onNodeWithText(locationString)
+        composeTestRule.onNodeWithText(locationString).assertExists()
     }
 }

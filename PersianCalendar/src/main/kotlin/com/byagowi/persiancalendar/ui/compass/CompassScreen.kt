@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -165,12 +166,14 @@ fun SharedTransitionScope.CompassScreen(
         coroutineScope.launch { snackbarHostState.showSnackbar(message, duration = duration) }
     }
 
+    val resources = LocalResources.current
+
     fun showSetLocationMessage() {
         coroutineScope.launch {
             when (snackbarHostState.showSnackbar(
-                context.getString(R.string.set_location),
+                resources.getString(R.string.set_location),
                 duration = SnackbarDuration.Long,
-                actionLabel = context.getString(R.string.settings),
+                actionLabel = resources.getString(R.string.settings),
                 withDismissAction = true,
             )) {
                 SnackbarResult.ActionPerformed -> navigateToSettingsLocationTab()
@@ -374,7 +377,7 @@ fun SharedTransitionScope.CompassScreen(
                             if (coordinates == null) {
                                 showSetLocationMessage()
                             } else showSnackbarMessage(
-                                context.getString(
+                                resources.getString(
                                     if (sensorNotFound) R.string.compass_not_found
                                     else R.string.calibrate_compass_summary
                                 ),
@@ -471,7 +474,7 @@ fun SharedTransitionScope.CompassScreen(
                     ).show()
                 } else if (coordinates != null) {
                     showSnackbarMessage(
-                        context.getString(R.string.compass_not_found),
+                        resources.getString(R.string.compass_not_found),
                         SnackbarDuration.Short,
                     )
                     sensorNotFound = true

@@ -25,7 +25,7 @@ class HolidaysTypesDialogTest {
             eventsString = stringResource(R.string.events)
             HolidaysTypesDialog {}
         }
-        composeTestRule.onNodeWithText(eventsString)
+        composeTestRule.onNodeWithText(eventsString).assertExists()
     }
 
     @Test

@@ -76,6 +76,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -347,6 +348,7 @@ const val LOCATION_ATHAN_TAB = 2
 @Composable
 private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     AppDropdownMenuItem({ Text(stringResource(R.string.live_wallpaper_settings)) }) {
         closeMenu()
         runCatching {
@@ -366,7 +368,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
                 ComponentName(
                     context.packageName, PersianCalendarTileService::class.qualifiedName.orEmpty(),
                 ),
-                context.getString(R.string.app_name),
+                resources.getString(R.string.app_name),
                 Icon.createWithResource(context, R.drawable.day19),
                 {},
                 {},
