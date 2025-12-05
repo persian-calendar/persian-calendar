@@ -109,7 +109,7 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
             if (!fasterUpdate) rotationDegree += .05f * direction
             handler.removeCallbacks(drawRunner)
             runCatching {
-                val canvas = surfaceHolder.lockCanvas() ?: return@runCatching
+                val canvas = surfaceHolder.lockHardwareCanvas() ?: return@runCatching
                 canvas.getClipBounds(bounds)
                 val centerX = bounds.exactCenterX()
                 val centerY = bounds.exactCenterY()
