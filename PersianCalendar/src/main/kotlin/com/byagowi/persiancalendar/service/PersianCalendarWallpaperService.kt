@@ -108,8 +108,12 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
                 fasterUpdateTimestamp != 0L && fasterUpdateTimestamp.milliseconds + 2.seconds > System.currentTimeMillis().milliseconds
             if (!fasterUpdate) rotationDegree += .05f * direction
             handler.removeCallbacks(drawRunner)
-            runCatching {
-                val canvas = surfaceHolder.lockHardwareCanvas() ?: return@runCatching
+            val canvas = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                surfaceHolder.lockHardwareCanvas()
+            } else {
+                surfaceHolder.lockCanvas()
+            }
+            if (canvas != null) runCatching {
                 canvas.getClipBounds(bounds)
                 val centerX = bounds.exactCenterX()
                 val centerY = bounds.exactCenterY()
@@ -124,8 +128,8 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
                         canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
                     }
                 }
-                surfaceHolder.unlockCanvasAndPost(canvas)
             }.onFailure(logException)
+            if (canvas != null) surfaceHolder.unlockCanvasAndPost(canvas)
             if (visible) {
                 val nextFrameDelay = if (fasterUpdate) {
                     this.fasterUpdateTimestamp = 0L
