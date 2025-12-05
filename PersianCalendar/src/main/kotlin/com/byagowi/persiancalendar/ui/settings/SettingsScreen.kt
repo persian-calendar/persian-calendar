@@ -23,6 +23,8 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,6 +45,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Widgets
@@ -61,6 +64,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
@@ -97,7 +101,9 @@ import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.service.PersianCalendarDreamService
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
+import com.byagowi.persiancalendar.service.PersianCalendarWallpaperService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.ConverterDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
@@ -127,6 +133,7 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import kotlinx.coroutines.launch
 
@@ -349,17 +356,31 @@ const val LOCATION_ATHAN_TAB = 2
 private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     val context = LocalContext.current
     val resources = LocalResources.current
-    AppDropdownMenuItem({ Text(stringResource(R.string.live_wallpaper_settings)) }) {
+    AppDropdownMenuItem(
+        text = { Text(stringResource(R.string.live_wallpaper_settings)) },
+        trailingIcon = {
+            Box(Modifier.clickable {
+                closeMenu()
+                runCatching {
+                    val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).putExtra(
+                        WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                        ComponentName(context, PersianCalendarWallpaperService::class.java)
+                    )
+                    context.startActivity(intent)
+                }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
+            }) { Icon(Icons.Default.Check, stringResource(R.string.accept)) }
+        },
+    ) {
         closeMenu()
         runCatching {
             context.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
-        }.onFailure(logException).getOrNull().debugAssertNotNull
+        }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
     }
     AppDropdownMenuItem({ Text(stringResource(R.string.screensaver_settings)) }) {
         closeMenu()
-        runCatching { context.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }.onFailure(
-            logException
-        ).getOrNull().debugAssertNotNull
+        runCatching {
+            context.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS))
+        }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         AppDropdownMenuItem({ Text(stringResource(R.string.add_quick_settings_tile)) }) {
