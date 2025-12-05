@@ -7,7 +7,7 @@ import com.byagowi.persiancalendar.utils.update
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        initGlobal(applicationContext) // mostly used for things should be provided in locale level
+        initGlobal(this) // mostly used for things should be provided in locale level
         update(this, true)
     }
 }
