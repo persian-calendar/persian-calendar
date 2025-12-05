@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.wallpaper
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -7,9 +8,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.PREF_WALLPAPER_ALTERNATIVE
 import com.byagowi.persiancalendar.PREF_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.wallpaperAlternative
 import com.byagowi.persiancalendar.global.wallpaperAutomatic
 import com.byagowi.persiancalendar.global.wallpaperDark
 import com.byagowi.persiancalendar.ui.BaseActivity
@@ -36,6 +40,11 @@ class WallpaperSettingsActivity : BaseActivity() {
                         title = stringResource(R.string.theme_dark)
                     )
                 }
+                if (BuildConfig.DEVELOPMENT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) SettingsSwitch(
+                    key = PREF_WALLPAPER_ALTERNATIVE,
+                    value = wallpaperAlternative.collectAsState().value,
+                    title = "Alternative"
+                )
             }
         }
     }

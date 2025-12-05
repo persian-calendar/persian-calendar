@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
+import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_ALTERNATIVE
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
@@ -97,6 +98,7 @@ import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
+import com.byagowi.persiancalendar.PREF_WALLPAPER_ALTERNATIVE
 import com.byagowi.persiancalendar.PREF_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
@@ -311,6 +313,9 @@ val wallpaperDark: StateFlow<Boolean> get() = wallpaperDark_
 
 private val wallpaperAutomatic_ = MutableStateFlow(DEFAULT_WALLPAPER_AUTOMATIC)
 val wallpaperAutomatic: StateFlow<Boolean> get() = wallpaperAutomatic_
+
+private val wallpaperAlternative_ = MutableStateFlow(DEFAULT_WALLPAPER_ALTERNATIVE)
+val wallpaperAlternative: StateFlow<Boolean> get() = wallpaperAlternative_
 
 private val preferredSwipeUpAction_ = MutableStateFlow(SwipeUpAction.entries[0])
 val preferredSwipeUpAction: StateFlow<SwipeUpAction> get() = preferredSwipeUpAction_
@@ -581,6 +586,8 @@ fun updateStoredPreference(context: Context) {
     wallpaperDark_.value = preferences.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
     wallpaperAutomatic_.value =
         preferences.getBoolean(PREF_WALLPAPER_AUTOMATIC, DEFAULT_WALLPAPER_AUTOMATIC)
+    wallpaperAlternative_.value =
+        preferences.getBoolean(PREF_WALLPAPER_ALTERNATIVE, DEFAULT_WALLPAPER_ALTERNATIVE)
 
     preferredSwipeUpAction_.value = SwipeUpAction.entries.firstOrNull {
         it.name == preferences.getString(PREF_SWIPE_UP_ACTION, null)
