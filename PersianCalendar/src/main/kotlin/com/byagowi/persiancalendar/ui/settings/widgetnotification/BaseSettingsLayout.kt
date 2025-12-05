@@ -44,26 +44,15 @@ fun BaseSettingsLayout(
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .then(if (needsMaxHeight) Modifier.fillMaxSize() else Modifier.Companion)
+                    .then(if (needsMaxHeight) Modifier.fillMaxSize() else Modifier)
                     .alpha(AppBlendAlpha)
-                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
+                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(vertical = 16.dp)
-                ) {
-                    Button(
-                        onClick = finish,
-                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-                    ) {
-                        Text(
-                            stringResource(R.string.accept),
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                        )
-                    }
-                    content()
-                }
+                Button(onClick = finish) { Text(stringResource(R.string.accept)) }
+                content()
             }
         }
     }
