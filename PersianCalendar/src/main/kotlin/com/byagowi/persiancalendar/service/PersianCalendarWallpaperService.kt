@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
-import androidx.annotation.CallSuper
 import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
@@ -33,10 +32,6 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
-    /**
-     * The best practice is to derive from [androidx.lifecycle.LifecycleService] instead
-     * but we need a WallpaperService so we have to mimic that ourselves this way
-     * */
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
     private val configurationChangeCounterFlow = MutableStateFlow(0)
@@ -45,7 +40,6 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
         ++configurationChangeCounterFlow.value
     }
 
-    @CallSuper
     override fun onCreate() {
         dispatcher.onServicePreSuperOnCreate()
         super.onCreate()
@@ -69,7 +63,6 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
         }
     }
 
-    @CallSuper
     override fun onDestroy() {
         dispatcher.onServicePreSuperOnDestroy()
         super.onDestroy()

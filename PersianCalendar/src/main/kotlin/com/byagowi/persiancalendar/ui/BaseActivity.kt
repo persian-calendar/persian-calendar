@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
+import androidx.annotation.CallSuper
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
@@ -43,6 +44,7 @@ import com.byagowi.persiancalendar.utils.update
 abstract class BaseActivity : ComponentActivity(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
