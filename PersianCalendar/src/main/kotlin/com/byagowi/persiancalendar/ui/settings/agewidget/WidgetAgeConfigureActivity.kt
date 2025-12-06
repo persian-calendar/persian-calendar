@@ -63,7 +63,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         }
     }
 
-    override val successOnBack: Boolean get() = false
+    override fun onBack() = finish()
 
     @Composable
     override fun Preview(appWidgetId: Int) {

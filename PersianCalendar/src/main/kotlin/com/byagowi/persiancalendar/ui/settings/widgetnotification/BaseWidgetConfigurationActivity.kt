@@ -2,18 +2,15 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.CallSuper
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.utils.update
 
-abstract class BaseWidgetConfigurationActivity : BaseActivity() {
-    private fun finishAndSuccess() {
+abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
+    contentNeedsMaxHeight = true,
+) {
+    override fun onAcceptClick() {
         setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId()))
         updateStoredPreference(this)
         update(this, false)
@@ -28,20 +25,11 @@ abstract class BaseWidgetConfigurationActivity : BaseActivity() {
         ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
 
-    @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
-        val appWidgetId = appWidgetId()
-        setContent {
-            BaseSettingsLayout(
-                finish = { if (successOnBack) finishAndSuccess() else finish() },
-                header = { Preview(appWidgetId) },
-            ) { Settings(appWidgetId) }
-        }
-    }
+    @Composable
+    override fun ColumnScope.Content() = Settings(appWidgetId())
 
-    protected open val successOnBack get() = true
+    @Composable
+    override fun Header() = Preview(appWidgetId())
 
     @Composable
     abstract fun Preview(appWidgetId: Int)

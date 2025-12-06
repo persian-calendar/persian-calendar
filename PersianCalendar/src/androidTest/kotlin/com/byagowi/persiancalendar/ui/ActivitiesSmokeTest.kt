@@ -11,8 +11,8 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActivity
-import com.byagowi.persiancalendar.ui.settings.wallpaper.DreamSettingsActivity
-import com.byagowi.persiancalendar.ui.settings.wallpaper.WallpaperSettingsActivity
+import com.byagowi.persiancalendar.ui.settings.wallpaper.ScreensaverConfigurationActivity
+import com.byagowi.persiancalendar.ui.settings.wallpaper.WallpaperConfigurationActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -30,11 +30,11 @@ class ActivitiesSmokeTest {
 //        ActivityScenario.launch<WidgetConfigurationActivity>(
 //            Intent(context, WidgetConfigurationActivity::class.java)
 //        )
-        ActivityScenario.launch<WallpaperSettingsActivity>(
-            Intent(context, WallpaperSettingsActivity::class.java)
+        ActivityScenario.launch<WallpaperConfigurationActivity>(
+            Intent(context, WallpaperConfigurationActivity::class.java)
         )
-        ActivityScenario.launch<DreamSettingsActivity>(
-            Intent(context, DreamSettingsActivity::class.java)
+        ActivityScenario.launch<ScreensaverConfigurationActivity>(
+            Intent(context, ScreensaverConfigurationActivity::class.java)
         )
         ActivityScenario.launch<WidgetAgeConfigureActivity>(
             Intent(context, WidgetAgeConfigureActivity::class.java)

@@ -267,14 +267,14 @@
         </activity>
 
         <activity
-            android:name=".ui.settings.wallpaper.WallpaperSettingsActivity"
+            android:name=".ui.settings.wallpaper.WallpaperConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar" />
 
         <activity
-            android:name=".ui.settings.wallpaper.DreamSettingsActivity"
+            android:name=".ui.settings.wallpaper.ScreensaverConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop"
