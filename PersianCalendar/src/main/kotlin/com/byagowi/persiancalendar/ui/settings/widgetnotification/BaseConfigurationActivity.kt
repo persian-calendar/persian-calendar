@@ -46,7 +46,7 @@ abstract class BaseConfigurationActivity(
                 Column(
                     Modifier
                         .safeDrawingPadding()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        .padding(16.dp),
                 ) {
                     Header()
                     Column(
@@ -78,5 +78,6 @@ abstract class BaseConfigurationActivity(
     protected abstract fun ColumnScope.Settings()
 
     @Composable
-    protected open fun Header() = Spacer(Modifier.padding(16.dp))
+    protected open fun Header() {
+    }
 }

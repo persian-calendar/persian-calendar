@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.utils.preferences
 fun WidgetPreview(height: Dp = 78.dp, widgetFactory: (Context, Int, Int) -> RemoteViews) {
     BoxWithConstraints(
         Modifier
-            .padding(vertical = 16.dp)
+            .padding(bottom = 16.dp)
             .height(height),
     ) {
         val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
