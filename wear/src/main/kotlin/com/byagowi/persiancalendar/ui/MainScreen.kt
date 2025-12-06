@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -126,7 +127,7 @@ fun EventView(it: Entry) {
                 is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
                 is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
                 else -> null
-            }?.let { Text(it) }
+            }?.let { Text(it, Modifier.alpha(.65f)) }
         }
     }
 }
