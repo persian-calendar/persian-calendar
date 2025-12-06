@@ -2,8 +2,7 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.runtime.Composable
+import androidx.core.os.bundleOf
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.update
 
@@ -11,7 +10,8 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
 ) {
     override fun onAcceptClick() {
-        setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId()))
+        val bundle = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId())
+        setResult(RESULT_OK, Intent().putExtras(bundle))
         updateStoredPreference(this)
         update(this, false)
         finish()
@@ -24,16 +24,4 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
             ?.replace(AppWidgetManager.EXTRA_APPWIDGET_ID, "")?.toIntOrNull()
         ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
-
-    @Composable
-    override fun ColumnScope.Content() = Settings(appWidgetId())
-
-    @Composable
-    override fun Header() = Preview(appWidgetId())
-
-    @Composable
-    abstract fun Preview(appWidgetId: Int)
-
-    @Composable
-    abstract fun ColumnScope.Settings(appWidgetId: Int)
 }

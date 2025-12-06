@@ -20,7 +20,7 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseConfigurat
 
 class WallpaperConfigurationActivity : BaseConfigurationActivity() {
     @Composable
-    override fun ColumnScope.Content() {
+    override fun ColumnScope.Settings() {
         val wallpaperAutomatic by wallpaperAutomatic.collectAsState()
         SettingsSwitch(
             key = PREF_WALLPAPER_AUTOMATIC,

@@ -33,7 +33,8 @@ import java.util.GregorianCalendar
 
 class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
+        val appWidgetId = appWidgetId()
         WidgetPreview { context, width, height ->
             create1x1RemoteViews(
                 context, width, height, Jdn.today() on mainCalendar, preferences, appWidgetId
@@ -42,15 +43,16 @@ class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
-        WidgetTextScale(appWidgetId)
+    override fun ColumnScope.Settings() {
+        WidgetTextScale(appWidgetId())
         WidgetColoringSettings()
     }
 }
 
 class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
+        val appWidgetId = appWidgetId()
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
@@ -69,15 +71,16 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
-        WidgetTextScale(appWidgetId)
+    override fun ColumnScope.Settings() {
+        WidgetTextScale(appWidgetId())
         WidgetSettings()
     }
 }
 
 class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
+        val appWidgetId = appWidgetId()
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
@@ -100,15 +103,16 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
-        WidgetTextScale(appWidgetId)
+    override fun ColumnScope.Settings() {
+        WidgetTextScale(appWidgetId())
         WidgetSettings()
     }
 }
 
 class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
+        val appWidgetId = appWidgetId()
         val coordinates by coordinates.collectAsState()
         val prayTimes = coordinates?.calculatePrayTimes()
         key(prayTimes) {
@@ -132,8 +136,8 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
-        WidgetTextScale(appWidgetId)
+    override fun ColumnScope.Settings() {
+        WidgetTextScale(appWidgetId())
         WidgetSettings()
         SettingsSectionLayout(R.string.location)
         LocationSettings()
@@ -142,7 +146,8 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 
 class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
+        val appWidgetId = appWidgetId()
         WidgetPreview(112.dp) { context, width, height ->
             val today = Jdn.today()
             val date = today on mainCalendar
@@ -151,15 +156,15 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
-        WidgetTextScale(appWidgetId)
+    override fun ColumnScope.Settings() {
+        WidgetTextScale(appWidgetId())
         WidgetColoringSettings()
     }
 }
 
 class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
         val coordinates by coordinates.collectAsState()
         val prayTimes = coordinates?.calculatePrayTimes()
         key(prayTimes) {
@@ -170,7 +175,7 @@ class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
+    override fun ColumnScope.Settings() {
         WidgetColoringSettings()
         SettingsSectionLayout(R.string.location)
         LocationSettings()
@@ -179,14 +184,14 @@ class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 
 class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
         WidgetPreview { context, width, height ->
             createMapRemoteViews(context, width, height, System.currentTimeMillis())
         }
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
+    override fun ColumnScope.Settings() {
         val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
         WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     }
@@ -194,7 +199,7 @@ class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
 
 class WidgetMonthViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
         WidgetPreview(360.dp) { context, width, height ->
             val today = Jdn.today()
             createMonthViewRemoteViews(context, width, height, true, today)
@@ -202,7 +207,7 @@ class WidgetMonthViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
+    override fun ColumnScope.Settings() {
         WidgetColoringSettings()
     }
 }

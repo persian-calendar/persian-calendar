@@ -66,7 +66,8 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     override fun onBack() = finish()
 
     @Composable
-    override fun Preview(appWidgetId: Int) {
+    override fun Header() {
+        val appWidgetId = appWidgetId()
         WidgetPreview { context, width, height ->
             createAgeRemoteViews(
                 context, width, height, appWidgetId, Jdn.today(), preferences
@@ -75,8 +76,9 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
     }
 
     @Composable
-    override fun ColumnScope.Settings(appWidgetId: Int) {
+    override fun ColumnScope.Settings() {
         val context = LocalContext.current
+        val appWidgetId = appWidgetId()
         val initialTitle = remember {
             context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null).orEmpty()
         }

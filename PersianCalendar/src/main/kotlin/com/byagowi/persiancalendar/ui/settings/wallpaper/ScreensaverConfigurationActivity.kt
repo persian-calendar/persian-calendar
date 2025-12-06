@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseConfigurat
 
 class ScreensaverConfigurationActivity : BaseConfigurationActivity() {
     @Composable
-    override fun ColumnScope.Content() {
+    override fun ColumnScope.Settings() {
         val dreamNoise by dreamNoise.collectAsState()
         SettingsSwitch(key = PREF_DREAM_NOISE, value = dreamNoise, title = "🔊🔊🔊")
     }

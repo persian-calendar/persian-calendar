@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
@@ -29,11 +30,12 @@ import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 
-// This is used in various widgets screens, screen saver and wallpaper settings screens
+// This is used in various widgets screens, screensaver and wallpaper settings screens
 // Please test the different usages when modifying
 abstract class BaseConfigurationActivity(
-    private val contentNeedsMaxHeight: Boolean = false
+    private val contentNeedsMaxHeight: Boolean = false,
 ) : BaseActivity() {
+
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -61,7 +63,8 @@ abstract class BaseConfigurationActivity(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
-                        Content()
+                        Spacer(Modifier.height(4.dp))
+                        Settings()
                     }
                 }
             }
@@ -72,10 +75,8 @@ abstract class BaseConfigurationActivity(
     protected open fun onBack() = onAcceptClick()
 
     @Composable
-    protected abstract fun ColumnScope.Content()
+    protected abstract fun ColumnScope.Settings()
 
     @Composable
-    protected open fun Header() {
-        Spacer(Modifier.padding(16.dp))
-    }
+    protected open fun Header() = Spacer(Modifier.padding(16.dp))
 }
