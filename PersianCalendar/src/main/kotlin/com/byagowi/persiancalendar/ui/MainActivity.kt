@@ -13,23 +13,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.AppTheme
+import com.byagowi.persiancalendar.ui.utils.initialDayFromIntent
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.eventKey
-import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
-import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.Date
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,25 +51,6 @@ class MainActivity : BaseActivity() {
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        val initialJdn = run {
-            // Follows https://github.com/FossifyOrg/Calendar/blob/fb56145d/app/src/main/kotlin/org/fossify/calendar/activities/MainActivity.kt#L531-L554
-            // Receives content://com.android.calendar/time/1740774600000 or content://0@com.android.calendar/time/1740774600000
-            intent?.data?.takeIf {
-                when (CalendarContract.AUTHORITY) {
-                    it.authority, it.authority?.substringAfter("@") -> true
-                    else -> false
-                } && when {
-                    it.path?.startsWith("/time") == true -> true
-                    intent?.extras?.getBoolean("DETAIL_VIEW", false) == true -> true
-                    else -> false
-                }
-            }?.pathSegments?.last()?.toLongOrNull()?.let {
-                Jdn(Date(it).toGregorianCalendar().toCivilDate())
-            } ?: (intent.getLongExtra(jdnActionKey, -1L).takeIf { it != -1L }
-                ?: intent.action?.takeIf {
-                    it.startsWith(jdnActionKey)
-                }?.replace(jdnActionKey, "")?.toLongOrNull())?.let(::Jdn)
-        }
         setContent {
             AppTheme {
                 val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
@@ -90,6 +67,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
+                val initialJdn = initialDayFromIntent(intent)
                 App(intent?.action, initialJdn, ::finish)
             }
         }
