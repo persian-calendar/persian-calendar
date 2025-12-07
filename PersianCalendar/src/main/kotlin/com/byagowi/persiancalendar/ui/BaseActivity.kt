@@ -51,17 +51,17 @@ abstract class BaseActivity : ComponentActivity(),
         preferences.registerOnSharedPreferenceChangeListener(this)
     }
 
-    override fun onDestroy() {
+    final override fun onDestroy() {
         super.onDestroy()
         preferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
+    final override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
         applyAppLanguage(this)
     }
 
-    override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
+    final override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
         if (this !is MainActivity && !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
         when (key) {
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
@@ -104,6 +104,7 @@ abstract class BaseActivity : ComponentActivity(),
         update(this, true)
     }
 
+    @CallSuper
     override fun onResume() {
         super.onResume()
         applyAppLanguage(this)

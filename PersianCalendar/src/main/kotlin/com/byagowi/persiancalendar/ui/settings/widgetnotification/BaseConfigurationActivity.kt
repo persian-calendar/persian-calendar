@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.CallSuper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -36,10 +35,10 @@ abstract class BaseConfigurationActivity(
     private val contentNeedsMaxHeight: Boolean = false,
 ) : BaseActivity() {
 
-    @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?) {
+    final override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        onAfterCreate()
         setContent {
             BackHandler(onBack = ::onBack)
             SystemTheme {
@@ -73,11 +72,11 @@ abstract class BaseConfigurationActivity(
 
     protected open fun onAcceptClick() = finish()
     protected open fun onBack() = onAcceptClick()
+    protected open fun onAfterCreate() = Unit
 
     @Composable
     protected abstract fun ColumnScope.Settings()
 
     @Composable
-    protected open fun Header() {
-    }
+    protected open fun Header() = Unit
 }

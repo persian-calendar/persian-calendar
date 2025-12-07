@@ -41,9 +41,8 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 
 class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    override fun onAfterCreate() {
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
