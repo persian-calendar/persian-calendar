@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -29,32 +29,25 @@ fun WidgetPreview(height: Dp = 78.dp, widgetFactory: (Context, Int, Int) -> Remo
             .padding(bottom = 16.dp)
             .height(height),
     ) {
-        val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
-        val height = with(LocalDensity.current) { (this@BoxWithConstraints).maxHeight.roundToPx() }
+        val density = LocalDensity.current
+        val width = with(density) { (this@BoxWithConstraints).maxWidth.roundToPx() }
+        val height = with(density) { (this@BoxWithConstraints).maxHeight.roundToPx() }
         val preferences = LocalContext.current.preferences
-        var updateCallback by remember { mutableStateOf({}) }
+        var updateToken by remember { mutableIntStateOf(0) }
         DisposableEffect(preferences) {
             val callback = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-                updateCallback()
+                ++updateToken
             }
             preferences.registerOnSharedPreferenceChangeListener(callback)
             onDispose { preferences.unregisterOnSharedPreferenceChangeListener(callback) }
         }
         AndroidView(
-            factory = { context ->
-                val preview = FrameLayout(context)
-                fun updateWidget() {
-                    val remoteViews = widgetFactory(context, width, height)
-                    preview.addView(remoteViews.apply(context.applicationContext, preview))
-                }
-                updateWidget()
-                updateCallback = {
-                    preview.post {
-                        preview.removeAllViews()
-                        updateWidget()
-                    }
-                }
-                preview
+            factory = ::FrameLayout,
+            update = {
+                updateToken.let {}
+                it.removeAllViews()
+                val remoteViews = widgetFactory(it.context, width, height)
+                it.addView(remoteViews.apply(it.context.applicationContext, it))
             },
             modifier = Modifier.fillMaxSize(),
         )
