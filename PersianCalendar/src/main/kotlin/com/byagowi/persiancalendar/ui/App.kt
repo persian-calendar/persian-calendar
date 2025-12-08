@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -46,17 +47,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -68,14 +70,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
@@ -114,7 +111,6 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.time.Duration.Companion.seconds
@@ -122,258 +118,248 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
-    val navController = rememberNavController()
+    val backStack = remember { mutableStateListOf(Screen.fromName(intentStartDestination)) }
     val railState = rememberWideNavigationRailState()
-    AppNavigationRail(railState, navController, finish)
+    AppNavigationRail(railState, backStack, finish)
     SharedTransitionLayout {
         var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
-        NavHost(
-            navController = navController,
-            startDestination = Screen.fromName(intentStartDestination).name,
-        ) {
-            fun Screen.navigate() = navController.navigate(this.name)
-            fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
-                val destination = navController.graph.findNode(this.name) ?: return
-                navController.navigate(destination.id, bundleOf(*pairs))
-            }
+        fun Screen.navigate() = backStack.add(this)
+        fun Screen.isCurrentDestination() = this == backStack.lastOrNull()
+        fun Screen.navigateUp() {
+            // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
+            if (this != backStack.lastOrNull()) return
+            if (backStack.size > 1) backStack.removeLast() else finish()
+        }
 
-            fun isCurrentDestination(backStackEntry: NavBackStackEntry) =
-                navController.currentDestination == backStackEntry.destination
+        fun navigateToSettingsLocationTab() = Screen.Settings(tab = LOCATION_ATHAN_TAB).navigate()
 
-            fun navigateUp(backStackEntry: NavBackStackEntry) {
-                // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
-                if (!isCurrentDestination(backStackEntry)) return
-                // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
-                if (!navController.popBackStack()) finish()
-            }
+        fun navigateToAstronomy(jdn: Jdn) =
+            Screen.Astronomy(daysOffset = jdn - Jdn.today()).navigate()
 
-            val selectedDayKey = "SELECTED_DAY"
-            val isWeekKey = "IS_WEEK"
-            val tabKey = "TAB"
-            val settingsKey = "SETTINGS"
-            val settingsItemKey = "SETTINGS_ITEM"
-            val daysOffsetKey = "DAYS_OFFSET"
+        AnimatedContent(backStack.lastOrNull()) {
+            it.let { }
+            // Not the best approach to access calendar screen view model…
+            var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
+            NavDisplay(backStack = backStack, onBack = { backStack.removeLastOrNull() }) { key ->
+                NavEntry(key) { screen ->
+                    when (screen) {
+                        Screen.Calendar -> {
+                            val viewModel = viewModel<CalendarViewModel>()
+                            calendarViewModel = viewModel
+                            appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
+                            CalendarScreen(
+                                openNavigationRail = openNavigationRail,
+                                navigateToHolidaysSettings = { item ->
+                                    Screen.Settings(
+                                        tab = INTERFACE_CALENDAR_TAB,
+                                        settings = PREF_HOLIDAY_TYPES,
+                                        settingsItem = item,
+                                    ).navigate()
+                                },
+                                navigateToSettingsLocationTabSetAthanAlarm = {
+                                    Screen.Settings(
+                                        tab = LOCATION_ATHAN_TAB,
+                                        settings = PREF_ATHAN_ALARM,
+                                    ).navigate()
+                                },
+                                navigateToSchedule = { Screen.Schedule().navigate() },
+                                navigateToDays = { jdn, isWeek ->
+                                    Screen.Days(jdn.value, isWeek).navigate()
+                                },
+                                navigateToMonthView = { Screen.Month().navigate() },
+                                navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                                navigateToAstronomy = ::navigateToAstronomy,
+                                viewModel = viewModel,
+                                animatedContentScope = this,
+                                isCurrentDestination = screen.isCurrentDestination(),
+                            )
+                        }
 
-            fun navigateToSettingsLocationTab() =
-                Screen.SETTINGS.navigate(tabKey to LOCATION_ATHAN_TAB)
+                        is Screen.Month -> {
+                            val calendarViewModel = calendarViewModel ?: viewModel()
+                            val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
+                                calendarViewModel.selectedDay.value
+                            }
+                            MonthScreen(
+                                calendarViewModel = calendarViewModel,
+                                animatedContentScope = this,
+                                navigateUp = { screen.navigateUp() },
+                                initiallySelectedDay = jdn,
+                            )
+                        }
 
-            fun navigateToAstronomy(jdn: Jdn) =
-                Screen.ASTRONOMY.navigate(daysOffsetKey to jdn - Jdn.today())
+                        is Screen.Schedule -> {
+                            val calendarViewModel = calendarViewModel ?: viewModel()
+                            val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
+                                calendarViewModel.selectedDay.value
+                            }
+                            ScheduleScreen(
+                                calendarViewModel = calendarViewModel,
+                                animatedContentScope = this,
+                                navigateUp = { screen.navigateUp() },
+                                initiallySelectedDay = jdn,
+                            )
+                        }
 
-            composable(Screen.CALENDAR.name) { backStackEntry ->
-                val viewModel = viewModel<CalendarViewModel>()
-                appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
-                CalendarScreen(
-                    openNavigationRail = openNavigationRail,
-                    navigateToHolidaysSettings = { item ->
-                        Screen.SETTINGS.navigate(
-                            tabKey to INTERFACE_CALENDAR_TAB,
-                            settingsKey to PREF_HOLIDAY_TYPES,
-                            settingsItemKey to item,
-                        )
-                    },
-                    navigateToSettingsLocationTabSetAthanAlarm = {
-                        Screen.SETTINGS.navigate(
-                            tabKey to LOCATION_ATHAN_TAB,
-                            settingsKey to PREF_ATHAN_ALARM,
-                        )
-                    },
-                    navigateToSchedule = Screen.SCHEDULE::navigate,
-                    navigateToDays = { jdn, isWeek ->
-                        Screen.DAYS.navigate(
-                            selectedDayKey to jdn.value,
-                            isWeekKey to isWeek
-                        )
-                    },
-                    navigateToMonthView = Screen.MONTH::navigate,
-                    navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                    navigateToAstronomy = ::navigateToAstronomy,
-                    viewModel = viewModel,
-                    animatedContentScope = this,
-                    isCurrentDestination = isCurrentDestination(backStackEntry),
-                )
-            }
+                        is Screen.Days -> {
+                            val calendarViewModel = calendarViewModel ?: viewModel()
+                            val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
+                                calendarViewModel.selectedDay.value
+                            }
+                            DaysScreen(
+                                calendarViewModel = calendarViewModel,
+                                initiallySelectedDay = jdn,
+                                appAnimatedContentScope = this,
+                                isInitiallyWeek = screen.isWeek,
+                                navigateUp = { screen.navigateUp() },
+                            )
+                        }
 
-            composable(Screen.MONTH.name) { backStackEntry ->
-                val previousEntry = navController.previousBackStackEntry
-                val previousRoute = previousEntry?.destination?.route
-                val viewModel = if (previousRoute == Screen.CALENDAR.name) {
-                    viewModel<CalendarViewModel>(previousEntry)
-                } else viewModel<CalendarViewModel>()
+                        Screen.Converter -> {
+                            ConverterScreen(
+                                animatedContentScope = this,
+                                openNavigationRail = openNavigationRail,
+                                navigateToAstronomy = ::navigateToAstronomy,
+                                viewModel = viewModel<ConverterViewModel>(),
+                                noBackStackAction = if (backStack.size > 1) null else ({
+                                    screen.navigateUp()
+                                }),
+                            )
+                        }
 
-                val jdn =
-                    backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
-                        ?.let(::Jdn) ?: remember { viewModel.selectedDay.value }
-                MonthScreen(
-                    calendarViewModel = viewModel,
-                    animatedContentScope = this,
-                    navigateUp = { navigateUp(backStackEntry) },
-                    initiallySelectedDay = jdn,
-                )
-            }
+                        Screen.Compass -> {
+                            CompassScreen(
+                                animatedContentScope = this,
+                                openNavigationRail = openNavigationRail,
+                                navigateToLevel = Screen.Level::navigate,
+                                navigateToMap = { Screen.Map().navigate() },
+                                navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                                noBackStackAction = if (backStack.size > 1) null else ({
+                                    screen.navigateUp()
+                                }),
+                            )
+                        }
 
-            composable(Screen.SCHEDULE.name) { backStackEntry ->
-                val previousEntry = navController.previousBackStackEntry
-                val previousRoute = previousEntry?.destination?.route
-                val viewModel = if (previousRoute == Screen.CALENDAR.name) {
-                    viewModel<CalendarViewModel>(previousEntry)
-                } else viewModel<CalendarViewModel>()
+                        Screen.Level -> {
+                            LevelScreen(
+                                animatedContentScope = this,
+                                navigateUp = { screen.navigateUp() },
+                                navigateToCompass = Screen.Compass::navigate,
+                            )
+                        }
 
-                val jdn =
-                    backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
-                        ?.let(::Jdn) ?: remember { viewModel.selectedDay.value }
-                ScheduleScreen(
-                    calendarViewModel = viewModel,
-                    animatedContentScope = this,
-                    navigateUp = { navigateUp(backStackEntry) },
-                    initiallySelectedDay = jdn,
-                )
-            }
+                        is Screen.Astronomy -> {
+                            val viewModel = viewModel<AstronomyViewModel>()
+                            screen.daysOffset.let {
+                                viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
+                            }
+                            AstronomyScreen(
+                                animatedContentScope = this,
+                                openNavigationRail = openNavigationRail,
+                                navigateToMap = {
+                                    val time = viewModel.astronomyState.value.date.time
+                                    Screen.Map(time = time).navigate()
+                                },
+                                viewModel = viewModel,
+                                noBackStackAction = if (backStack.size > 1) null else ({
+                                    screen.navigateUp()
+                                }),
+                            )
+                        }
 
-            composable(Screen.DAYS.name) { backStackEntry ->
-                val previousEntry = navController.previousBackStackEntry
-                val previousRoute = previousEntry?.destination?.route
-                val viewModel = if (previousRoute == Screen.CALENDAR.name) {
-                    viewModel<CalendarViewModel>(previousEntry)
-                } else viewModel<CalendarViewModel>()
-                val arguments = backStackEntry.arguments
-                val isWeek = arguments?.getBoolean(isWeekKey) ?: false
-                val jdn = arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }?.let(::Jdn)
-                    ?: Jdn.today()
-                DaysScreen(
-                    calendarViewModel = viewModel,
-                    initiallySelectedDay = jdn,
-                    appAnimatedContentScope = this,
-                    isInitiallyWeek = isWeek,
-                    navigateUp = { navigateUp(backStackEntry) },
-                )
-            }
+                        is Screen.Map -> {
+                            val viewModel = viewModel<MapViewModel>()
+                            LaunchedEffect(Unit) {
+                                if (screen.time != null) viewModel.changeToTime(screen.time)
+                            }
+                            MapScreen(
+                                animatedContentScope = this,
+                                navigateUp = { screen.navigateUp() },
+                                fromSettings = screen.fromSettings,
+                                viewModel = viewModel,
+                            )
+                        }
 
-            composable(Screen.CONVERTER.name) { backStackEntry ->
-                ConverterScreen(
-                    animatedContentScope = this,
-                    openNavigationRail = openNavigationRail,
-                    navigateToAstronomy = ::navigateToAstronomy,
-                    viewModel = viewModel<ConverterViewModel>(),
-                    noBackStackAction = if (navController.previousBackStackEntry != null) null
-                    else ({ navigateUp(backStackEntry) }),
-                )
-            }
+                        is Screen.Settings -> {
+                            SettingsScreen(
+                                animatedContentScope = this,
+                                openNavigationRail = openNavigationRail,
+                                navigateToMap = { Screen.Map(fromSettings = true).navigate() },
+                                initialPage = screen.tab,
+                                destination = screen.settings,
+                                destinationItem = screen.settingsItem,
+                            )
+                        }
 
-            composable(Screen.COMPASS.name) { backStackEntry ->
-                CompassScreen(
-                    animatedContentScope = this,
-                    openNavigationRail = openNavigationRail,
-                    navigateToLevel = Screen.LEVEL::navigate,
-                    navigateToMap = Screen.MAP::navigate,
-                    navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                    noBackStackAction = if (navController.previousBackStackEntry != null) null
-                    else ({ navigateUp(backStackEntry) }),
-                )
-            }
+                        Screen.About -> {
+                            AboutScreen(
+                                animatedContentScope = this,
+                                openNavigationRail = openNavigationRail,
+                                navigateToLicenses = Screen.Licenses::navigate,
+                                navigateToDeviceInformation = Screen.Device::navigate,
+                            )
+                        }
 
-            composable(Screen.LEVEL.name) { backStackEntry ->
-                LevelScreen(
-                    animatedContentScope = this,
-                    navigateUp = { navigateUp(backStackEntry) },
-                    navigateToCompass = Screen.COMPASS::navigate,
-                )
-            }
+                        Screen.Licenses -> {
+                            LicensesScreen(animatedContentScope = this) { screen.navigateUp() }
+                        }
 
-            composable(Screen.ASTRONOMY.name) { backStackEntry ->
-                val viewModel = viewModel<AstronomyViewModel>()
-                backStackEntry.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
-                    viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
-                }
-                AstronomyScreen(
-                    animatedContentScope = this,
-                    openNavigationRail = openNavigationRail,
-                    navigateToMap = Screen.MAP::navigate,
-                    viewModel = viewModel,
-                    noBackStackAction = if (navController.previousBackStackEntry != null) null
-                    else ({ navigateUp(backStackEntry) }),
-                )
-            }
+                        Screen.Device -> {
+                            DeviceInformationScreen(
+                                navigateUp = { screen.navigateUp() },
+                                animatedContentScope = this,
+                            )
+                        }
 
-            composable(Screen.MAP.name) { backStackEntry ->
-                val viewModel = viewModel<MapViewModel>()
-                val previousEntry = navController.previousBackStackEntry
-                val previousRoute = previousEntry?.destination?.route
-                if (previousRoute == Screen.ASTRONOMY.name) {
-                    val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
-                    LaunchedEffect(Unit) {
-                        viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-                        viewModel.state.collectLatest { astronomyViewModel.changeToTime(it.time) }
+                        Screen.Exit -> {}
                     }
                 }
-                MapScreen(
-                    animatedContentScope = this,
-                    navigateUp = { navigateUp(backStackEntry) },
-                    fromSettings = previousRoute == Screen.SETTINGS.name,
-                    viewModel = viewModel,
-                )
-            }
-
-            composable(Screen.SETTINGS.name) { backStackEntry ->
-                SettingsScreen(
-                    animatedContentScope = this,
-                    openNavigationRail = openNavigationRail,
-                    navigateToMap = Screen.MAP::navigate,
-                    initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
-                    destination = backStackEntry.arguments?.getString(settingsKey),
-                    destinationItem = backStackEntry.arguments?.getString(settingsItemKey),
-                )
-            }
-
-            composable(Screen.ABOUT.name) {
-                AboutScreen(
-                    animatedContentScope = this,
-                    openNavigationRail = openNavigationRail,
-                    navigateToLicenses = Screen.LICENSES::navigate,
-                    navigateToDeviceInformation = Screen.DEVICE::navigate,
-                )
-            }
-
-            composable(Screen.LICENSES.name) { backStackEntry ->
-                LicensesScreen(animatedContentScope = this) { navigateUp(backStackEntry) }
-            }
-
-            composable(Screen.DEVICE.name) { backStackEntry ->
-                DeviceInformationScreen(
-                    navigateUp = { navigateUp(backStackEntry) },
-                    animatedContentScope = this,
-                )
             }
         }
     }
 }
 
-// Don't ever change the name of the ones that are mentioned xml/shortcuts.xml and ShortcutActivity.kt
-private enum class Screen(val navigationRailEntry: Pair<ImageVector, Int>? = null) {
-    CALENDAR(Icons.Default.DateRange to R.string.calendar), SCHEDULE, DAYS, MONTH,
-    CONVERTER(Icons.Default.SwapVerticalCircle to R.string.date_converter),
-    COMPASS(Icons.Default.Explore to R.string.compass), LEVEL,
-    ASTRONOMY(AstrologyIcon to R.string.astronomy), MAP,
-    SETTINGS(Icons.Default.Settings to R.string.settings),
-    ABOUT(Icons.Default.Info to R.string.about), LICENSES, DEVICE,
-    EXIT(Icons.Default.Cancel to R.string.exit); // Not a screen but is on the navigation rail, so
+private sealed interface Screen {
+    object Calendar : Screen
+    class Schedule(val selectedDay: Long? = null) : Screen
+    class Days(val selectedDay: Long? = null, val isWeek: Boolean = false) : Screen
+    class Month(val selectedDay: Long? = null) : Screen
+    object Converter : Screen
+    object Compass : Screen
+    object Level : Screen
+    class Astronomy(val daysOffset: Int = 0) : Screen
+    class Map(val fromSettings: Boolean = false, val time: Date? = null) : Screen
+    class Settings(
+        val tab: Int = 0, val settings: String? = null, val settingsItem: String? = null
+    ) : Screen
 
-    // Which item needs to be highlighted when user is on the screen
-    val parent
-        get() = when (this) {
-            CALENDAR, SCHEDULE, DAYS, MONTH -> CALENDAR
-            CONVERTER -> CONVERTER
-            COMPASS, LEVEL -> COMPASS
-            ASTRONOMY, MAP -> ASTRONOMY
-            SETTINGS -> SETTINGS
-            ABOUT, LICENSES, DEVICE -> ABOUT
-            EXIT -> EXIT
-        }
+    object About : Screen
+    object Licenses : Screen
+    object Device : Screen
+    object Exit : Screen // Not a screen but is on the navigation rail, so
 
     companion object {
-        fun fromName(value: String?) = entries.firstOrNull { it.name == value } ?: entries[0]
+        val navEntries = listOf(
+            Triple(Calendar, Icons.Default.DateRange, R.string.calendar),
+            Triple(Converter, Icons.Default.SwapVerticalCircle, R.string.date_converter),
+            Triple(Compass, Icons.Default.Explore, R.string.compass),
+            Triple(Astronomy(), AstrologyIcon, R.string.astronomy),
+            Triple(Settings(), Icons.Default.Settings, R.string.settings),
+            Triple(About, Icons.Default.Info, R.string.about),
+            Triple(Exit, Icons.Default.Cancel, R.string.exit)
+        )
+
+        // These are mentioned in xml/shortcuts.xml and ShortcutActivity.kt
+        fun fromName(value: String?) = when (value) {
+            "CONVERTER" -> Converter
+            "COMPASS" -> Compass
+            "LEVEL" -> Level
+            "ASTRONOMY" -> Astronomy()
+            "MAP" -> Map()
+            else -> Calendar
+        }
     }
 }
 
@@ -383,7 +369,7 @@ private val railWidth = 220.dp
 @Composable
 private fun AppNavigationRail(
     railState: WideNavigationRailState,
-    navController: NavHostController,
+    backStack: SnapshotStateList<Screen>,
     finish: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -430,9 +416,7 @@ private fun AppNavigationRail(
                     disabledIconColor = animateColor(defaultColors.disabledIconColor).value,
                     disabledTextColor = animateColor(defaultColors.disabledTextColor).value,
                 )
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                Screen.entries.forEach { item ->
-                    val (icon, titleId) = item.navigationRailEntry ?: return@forEach
+                Screen.navEntries.forEach { (screen, icon, titleId) ->
                     WideNavigationRailItem(
                         icon = { Icon(imageVector = icon, contentDescription = null) },
                         colors = colors,
@@ -449,12 +433,12 @@ private fun AppNavigationRail(
                                 ),
                             )
                         },
-                        selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
+                        selected = screen == backStack.lastOrNull(),
                         onClick = {
-                            if (item == Screen.EXIT) finish() else coroutineScope.launch {
+                            if (screen == Screen.Exit) finish() else coroutineScope.launch {
                                 railState.collapse()
-                                if (navBackStackEntry?.destination?.route != item.name) {
-                                    navController.navigate(item.name)
+                                if (backStack.lastOrNull() != screen) {
+                                    backStack.add(screen)
                                 }
                             }
                         },

@@ -4,7 +4,6 @@ android-test = "1.7.0"
 android-test-runner = "1.7.0"
 androidx-activity = "1.12.1"
 androidx-core = "1.17.0"
-androidx-navigation = "2.9.6"
 androidx-test-ext-junit = "1.3.0"
 astronomy = "61dc07020aaa6885d2c7f688a4d82beaf6edb9ef" # is equal to v2.1.19
 browser = "1.9.0"
@@ -20,6 +19,7 @@ kotlinpoet = "2.2.0"
 kotlinx-html-jvm = "0.12.0"
 kotlinx-serialization-json = "1.9.0"
 lifecycle = "2.10.0"
+nav3-core = "1.0.0"
 openlocationcode = "1.0.4"
 persiancalendar-calculator = "64d264a2c4c9eff6e7c060c3ff0bff0b15879f0e"
 persiancalendar-calendar = "652d510f7075daf0ca66a778287d87205196b34d"
@@ -35,6 +35,9 @@ wear-tooling-preview = "1.0.0"
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
+androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "nav3-core" }
+androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "nav3-core" }
+androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "lifecycle" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
@@ -43,7 +46,6 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
