@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.agewidget
 
 import android.appwidget.AppWidgetManager
-import android.os.Bundle
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth

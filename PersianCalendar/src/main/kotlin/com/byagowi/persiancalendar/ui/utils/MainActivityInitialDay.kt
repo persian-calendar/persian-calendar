@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.utils;
+package com.byagowi.persiancalendar.ui.utils
 
 import android.content.Intent
 import android.provider.CalendarContract

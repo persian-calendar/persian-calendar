@@ -23,7 +23,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,7 +63,6 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
@@ -101,7 +99,6 @@ import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.service.PersianCalendarDreamService
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.service.PersianCalendarWallpaperService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
