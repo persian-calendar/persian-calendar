@@ -134,7 +134,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         fun Screen.navigateUp() {
             // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
             if (this != backStack.lastOrNull()) return
-            if (backStack.size > 1) backStack.removeLast() else finish()
+            if (backStack.size > 1) backStack.removeLastOrNull() else finish()
         }
 
         fun navigateToSettingsLocationTab() = Screen.Settings(tab = LOCATION_ATHAN_TAB).navigate()
