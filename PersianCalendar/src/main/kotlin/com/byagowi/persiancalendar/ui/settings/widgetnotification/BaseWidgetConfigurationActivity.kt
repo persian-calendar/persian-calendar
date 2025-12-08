@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.widget.FrameLayout
 import android.widget.RemoteViews
+import androidx.collection.IntIntPair
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -33,6 +35,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
+import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,7 +75,11 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
 
     @Composable
     final override fun Header() {
-        val info = AppWidgetManager.getInstance(this).getAppWidgetInfo(appWidgetId)
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        val (widthPx, heightPx) = run {
+            val size = appWidgetManager.getWidgetSize(LocalResources.current, appWidgetId)
+            size ?: IntIntPair(300, 300)
+        }
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         Box(
@@ -91,13 +98,8 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
             BoxWithConstraints(
                 with(density) {
                     Modifier.size(
-                        // TODO: Why these numbers? Who knows…
-                        width = (info.minWidth.toDp() * if (isLandscape) 2.7f else 2.2f).coerceAtMost(
-                            320.dp
-                        ),
-                        height = (info.minHeight.toDp() * if (isLandscape) 2.2f else 2.7f).coerceAtMost(
-                            240.dp
-                        ),
+                        width = widthPx.toDp().coerceAtMost(320.dp),
+                        height = heightPx.toDp().coerceAtMost(240.dp),
                     )
                 },
             ) {
