@@ -1,9 +1,12 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,6 +75,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -138,183 +142,189 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         fun navigateToAstronomy(jdn: Jdn) =
             Screen.Astronomy(daysOffset = jdn - Jdn.today()).navigate()
 
-        AnimatedContent(backStack.lastOrNull()) {
-            it.let { }
-            // Not the best approach to access calendar screen view model…
-            var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
-            NavDisplay(backStack = backStack, onBack = { backStack.removeLastOrNull() }) { key ->
-                NavEntry(key) { screen ->
-                    when (screen) {
-                        Screen.Calendar -> {
-                            val viewModel = viewModel<CalendarViewModel>()
-                            calendarViewModel = viewModel
-                            appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
-                            CalendarScreen(
-                                openNavigationRail = openNavigationRail,
-                                navigateToHolidaysSettings = { item ->
-                                    Screen.Settings(
-                                        tab = INTERFACE_CALENDAR_TAB,
-                                        settings = PREF_HOLIDAY_TYPES,
-                                        settingsItem = item,
-                                    ).navigate()
-                                },
-                                navigateToSettingsLocationTabSetAthanAlarm = {
-                                    Screen.Settings(
-                                        tab = LOCATION_ATHAN_TAB,
-                                        settings = PREF_ATHAN_ALARM,
-                                    ).navigate()
-                                },
-                                navigateToSchedule = { Screen.Schedule().navigate() },
-                                navigateToDays = { jdn, isWeek ->
-                                    Screen.Days(jdn.value, isWeek).navigate()
-                                },
-                                navigateToMonthView = { Screen.Month().navigate() },
-                                navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                                navigateToAstronomy = ::navigateToAstronomy,
-                                viewModel = viewModel,
-                                animatedContentScope = this,
-                                isCurrentDestination = screen.isCurrentDestination(),
-                            )
-                        }
-
-                        is Screen.Month -> {
-                            val calendarViewModel = calendarViewModel ?: viewModel()
-                            val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
-                                calendarViewModel.selectedDay.value
-                            }
-                            MonthScreen(
-                                calendarViewModel = calendarViewModel,
-                                animatedContentScope = this,
-                                navigateUp = { screen.navigateUp() },
-                                initiallySelectedDay = jdn,
-                            )
-                        }
-
-                        is Screen.Schedule -> {
-                            val calendarViewModel = calendarViewModel ?: viewModel()
-                            val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
-                                calendarViewModel.selectedDay.value
-                            }
-                            ScheduleScreen(
-                                calendarViewModel = calendarViewModel,
-                                animatedContentScope = this,
-                                navigateUp = { screen.navigateUp() },
-                                initiallySelectedDay = jdn,
-                            )
-                        }
-
-                        is Screen.Days -> {
-                            val calendarViewModel = calendarViewModel ?: viewModel()
-                            val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
-                                calendarViewModel.selectedDay.value
-                            }
-                            DaysScreen(
-                                calendarViewModel = calendarViewModel,
-                                initiallySelectedDay = jdn,
-                                appAnimatedContentScope = this,
-                                isInitiallyWeek = screen.isWeek,
-                                navigateUp = { screen.navigateUp() },
-                            )
-                        }
-
-                        Screen.Converter -> {
-                            ConverterScreen(
-                                animatedContentScope = this,
-                                openNavigationRail = openNavigationRail,
-                                navigateToAstronomy = ::navigateToAstronomy,
-                                viewModel = viewModel<ConverterViewModel>(),
-                                noBackStackAction = if (backStack.size > 1) null else ({
-                                    screen.navigateUp()
-                                }),
-                            )
-                        }
-
-                        Screen.Compass -> {
-                            CompassScreen(
-                                animatedContentScope = this,
-                                openNavigationRail = openNavigationRail,
-                                navigateToLevel = Screen.Level::navigate,
-                                navigateToMap = { Screen.Map().navigate() },
-                                navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                                noBackStackAction = if (backStack.size > 1) null else ({
-                                    screen.navigateUp()
-                                }),
-                            )
-                        }
-
-                        Screen.Level -> {
-                            LevelScreen(
-                                animatedContentScope = this,
-                                navigateUp = { screen.navigateUp() },
-                                navigateToCompass = Screen.Compass::navigate,
-                            )
-                        }
-
-                        is Screen.Astronomy -> {
-                            val viewModel = viewModel<AstronomyViewModel>()
-                            screen.daysOffset.let {
-                                viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
-                            }
-                            AstronomyScreen(
-                                animatedContentScope = this,
-                                openNavigationRail = openNavigationRail,
-                                navigateToMap = {
-                                    val time = viewModel.astronomyState.value.date.time
-                                    Screen.Map(time = time).navigate()
-                                },
-                                viewModel = viewModel,
-                                noBackStackAction = if (backStack.size > 1) null else ({
-                                    screen.navigateUp()
-                                }),
-                            )
-                        }
-
-                        is Screen.Map -> {
-                            val viewModel = viewModel<MapViewModel>()
-                            LaunchedEffect(Unit) {
-                                if (screen.time != null) viewModel.changeToTime(screen.time)
-                            }
-                            MapScreen(
-                                animatedContentScope = this,
-                                navigateUp = { screen.navigateUp() },
-                                fromSettings = screen.fromSettings,
-                                viewModel = viewModel,
-                            )
-                        }
-
-                        is Screen.Settings -> {
-                            SettingsScreen(
-                                animatedContentScope = this,
-                                openNavigationRail = openNavigationRail,
-                                navigateToMap = { Screen.Map(fromSettings = true).navigate() },
-                                initialPage = screen.tab,
-                                destination = screen.settings,
-                                destinationItem = screen.settingsItem,
-                            )
-                        }
-
-                        Screen.About -> {
-                            AboutScreen(
-                                animatedContentScope = this,
-                                openNavigationRail = openNavigationRail,
-                                navigateToLicenses = Screen.Licenses::navigate,
-                                navigateToDeviceInformation = Screen.Device::navigate,
-                            )
-                        }
-
-                        Screen.Licenses -> {
-                            LicensesScreen(animatedContentScope = this) { screen.navigateUp() }
-                        }
-
-                        Screen.Device -> {
-                            DeviceInformationScreen(
-                                navigateUp = { screen.navigateUp() },
-                                animatedContentScope = this,
-                            )
-                        }
-
-                        Screen.Exit -> {}
+        // Not the best approach to access calendar screen view model…
+        var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
+        NavDisplay(
+            backStack = backStack,
+            onBack = { backStack.removeLastOrNull() },
+            predictivePopTransitionSpec = {
+                ContentTransform(fadeIn(), fadeOut())
+            },
+        ) { key ->
+            NavEntry(key) { screen ->
+                when (screen) {
+                    Screen.Calendar -> {
+                        val viewModel = viewModel<CalendarViewModel>()
+                        calendarViewModel = viewModel
+                        appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
+                        CalendarScreen(
+                            openNavigationRail = openNavigationRail,
+                            navigateToHolidaysSettings = { item ->
+                                Screen.Settings(
+                                    tab = INTERFACE_CALENDAR_TAB,
+                                    settings = PREF_HOLIDAY_TYPES,
+                                    settingsItem = item,
+                                ).navigate()
+                            },
+                            navigateToSettingsLocationTabSetAthanAlarm = {
+                                Screen.Settings(
+                                    tab = LOCATION_ATHAN_TAB,
+                                    settings = PREF_ATHAN_ALARM,
+                                ).navigate()
+                            },
+                            navigateToSchedule = { Screen.Schedule().navigate() },
+                            navigateToDays = { jdn, isWeek ->
+                                Screen.Days(jdn.value, isWeek).navigate()
+                            },
+                            navigateToMonthView = { Screen.Month().navigate() },
+                            navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                            navigateToAstronomy = ::navigateToAstronomy,
+                            viewModel = viewModel,
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            isCurrentDestination = screen.isCurrentDestination(),
+                        )
                     }
+
+                    is Screen.Month -> {
+                        val calendarViewModel = calendarViewModel ?: viewModel()
+                        val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
+                            calendarViewModel.selectedDay.value
+                        }
+                        MonthScreen(
+                            calendarViewModel = calendarViewModel,
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            navigateUp = { screen.navigateUp() },
+                            initiallySelectedDay = jdn,
+                        )
+                    }
+
+                    is Screen.Schedule -> {
+                        val calendarViewModel = calendarViewModel ?: viewModel()
+                        val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
+                            calendarViewModel.selectedDay.value
+                        }
+                        ScheduleScreen(
+                            calendarViewModel = calendarViewModel,
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            navigateUp = { screen.navigateUp() },
+                            initiallySelectedDay = jdn,
+                        )
+                    }
+
+                    is Screen.Days -> {
+                        val calendarViewModel = calendarViewModel ?: viewModel()
+                        val jdn = screen.selectedDay?.let(::Jdn) ?: remember {
+                            calendarViewModel.selectedDay.value
+                        }
+                        DaysScreen(
+                            calendarViewModel = calendarViewModel,
+                            initiallySelectedDay = jdn,
+                            appAnimatedContentScope = LocalNavAnimatedContentScope.current,
+                            isInitiallyWeek = screen.isWeek,
+                            navigateUp = { screen.navigateUp() },
+                        )
+                    }
+
+                    Screen.Converter -> {
+                        ConverterScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            openNavigationRail = openNavigationRail,
+                            navigateToAstronomy = ::navigateToAstronomy,
+                            viewModel = viewModel<ConverterViewModel>(),
+                            noBackStackAction = if (backStack.size > 1) null else ({
+                                screen.navigateUp()
+                            }),
+                        )
+                    }
+
+                    Screen.Compass -> {
+                        CompassScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            openNavigationRail = openNavigationRail,
+                            navigateToLevel = Screen.Level::navigate,
+                            navigateToMap = { Screen.Map().navigate() },
+                            navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                            noBackStackAction = if (backStack.size > 1) null else ({
+                                screen.navigateUp()
+                            }),
+                        )
+                    }
+
+                    Screen.Level -> {
+                        LevelScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            navigateUp = { screen.navigateUp() },
+                            navigateToCompass = Screen.Compass::navigate,
+                        )
+                    }
+
+                    is Screen.Astronomy -> {
+                        val viewModel = viewModel<AstronomyViewModel>()
+                        screen.daysOffset.let {
+                            viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
+                        }
+                        AstronomyScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            openNavigationRail = openNavigationRail,
+                            navigateToMap = {
+                                val time = viewModel.astronomyState.value.date.time
+                                Screen.Map(time = time).navigate()
+                            },
+                            viewModel = viewModel,
+                            noBackStackAction = if (backStack.size > 1) null else ({
+                                screen.navigateUp()
+                            }),
+                        )
+                    }
+
+                    is Screen.Map -> {
+                        val viewModel = viewModel<MapViewModel>()
+                        LaunchedEffect(Unit) {
+                            if (screen.time != null) viewModel.changeToTime(screen.time)
+                        }
+                        MapScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            navigateUp = { screen.navigateUp() },
+                            fromSettings = screen.fromSettings,
+                            viewModel = viewModel,
+                        )
+                    }
+
+                    is Screen.Settings -> {
+                        SettingsScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            openNavigationRail = openNavigationRail,
+                            navigateToMap = { Screen.Map(fromSettings = true).navigate() },
+                            initialPage = screen.tab,
+                            destination = screen.settings,
+                            destinationItem = screen.settingsItem,
+                        )
+                    }
+
+                    Screen.About -> {
+                        AboutScreen(
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                            openNavigationRail = openNavigationRail,
+                            navigateToLicenses = Screen.Licenses::navigate,
+                            navigateToDeviceInformation = Screen.Device::navigate,
+                        )
+                    }
+
+                    Screen.Licenses -> {
+                        val animatedContentScope = LocalNavAnimatedContentScope.current
+                        LicensesScreen(animatedContentScope = animatedContentScope) {
+                            screen.navigateUp()
+                        }
+                    }
+
+                    Screen.Device -> {
+                        DeviceInformationScreen(
+                            navigateUp = { screen.navigateUp() },
+                            animatedContentScope = LocalNavAnimatedContentScope.current,
+                        )
+                    }
+
+                    Screen.Exit -> {}
                 }
             }
         }
