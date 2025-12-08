@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.agewidget
 
 import android.appwidget.AppWidgetManager
+import android.widget.RemoteViews
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +46,6 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-        val appWidgetId = appWidgetId()
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
             return
@@ -62,19 +62,12 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
     override fun onBack() = finish()
 
-    @Composable
-    override fun Header() {
-        WidgetPreview { context, width, height, appWidgetId ->
-            createAgeRemoteViews(
-                context, width, height, appWidgetId, Jdn.today(), preferences
-            )
-        }
-    }
+    override fun preview(width: Int, height: Int): RemoteViews =
+        createAgeRemoteViews(this, width, height, appWidgetId, Jdn.today(), preferences)
 
     @Composable
     override fun ColumnScope.Settings() {
         val context = LocalContext.current
-        val appWidgetId = appWidgetId()
         val initialTitle = remember {
             context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null).orEmpty()
         }

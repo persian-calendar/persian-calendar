@@ -6,7 +6,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -46,36 +45,34 @@ abstract class BaseConfigurationActivity(
         setContent {
             BackHandler(onBack = ::onBack)
             SystemTheme {
-                Box(
+                @Composable
+                fun Linear(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+                    val isLandscape =
+                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    if (isLandscape) Row(modifier) { content() } else Column(modifier) { content() }
+                }
+                Linear(
                     Modifier
                         .safeDrawingPadding()
                         .padding(16.dp)
                 ) {
-                    @Composable
-                    fun Linear(content: @Composable () -> Unit) {
-                        val isLandscape =
-                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                        if (isLandscape) Row { content() } else Column { content() }
-                    }
-                    Linear {
-                        Header()
-                        Column(
-                            Modifier
-                                .fillMaxWidth()
-                                .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
-                                .alpha(AppBlendAlpha)
-                                .background(
-                                    color = MaterialTheme.colorScheme.surface,
-                                    shape = MaterialTheme.shapes.extraLarge,
-                                )
-                                .verticalScroll(rememberScrollState())
-                                .padding(vertical = 16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
-                            Spacer(Modifier.height(4.dp))
-                            Settings()
-                        }
+                    Header()
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
+                            .alpha(AppBlendAlpha)
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceBright,
+                                shape = MaterialTheme.shapes.extraLarge,
+                            )
+                            .verticalScroll(rememberScrollState())
+                            .padding(vertical = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
+                        Spacer(Modifier.height(4.dp))
+                        Settings()
                     }
                 }
             }

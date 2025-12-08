@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.appwidget.AppWidgetManager
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -34,8 +33,8 @@ import com.byagowi.persiancalendar.utils.update
 abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
 ) {
-    override fun onAcceptClick() {
-        val bundle = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId())
+    final override fun onAcceptClick() {
+        val bundle = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId)
         setResult(RESULT_OK, Intent().putExtras(bundle))
         updateStoredPreference(this)
         update(this, false)
@@ -43,32 +42,29 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     }
 
     @Suppress("KotlinConstantConditions")
-    protected fun appWidgetId(): Int {
+    protected val appWidgetId by lazy(LazyThreadSafetyMode.NONE) {
         val defaultValue = AppWidgetManager.INVALID_APPWIDGET_ID
-        val intent = intent ?: return defaultValue
+        val intent = intent ?: return@lazy defaultValue
 
         run {
             // first try to get it from intent's extras, most of the times it is here
             val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, defaultValue)
-            if (id != defaultValue) return id
+            if (id != defaultValue) return@lazy id
         }
 
         run {
             // on age widget plain clicks, id is set as the action so next try that
             val id = intent.action?.takeIf { it.startsWith(AppWidgetManager.EXTRA_APPWIDGET_ID) }
                 ?.replace(AppWidgetManager.EXTRA_APPWIDGET_ID, "")?.toIntOrNull()
-            if (id != null) return id
+            if (id != null) return@lazy id
         }
 
         // Shouldn't happen but if everything fails, return invalid id
-        return defaultValue
+        defaultValue
     }
 
     @Composable
-    protected fun WidgetPreview(
-        widgetFactory: (context: Context, width: Int, height: Int, appWidgetId: Int) -> RemoteViews,
-    ) {
-        val appWidgetId = appWidgetId()
+    final override fun Header() {
         val info = AppWidgetManager.getInstance(this).getAppWidgetInfo(appWidgetId)
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -89,10 +85,12 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                 with(density) {
                     Modifier.size(
                         // TODO: Why these numbers? Who knows…
-                        width = (info.minWidth.toDp() * if (isLandscape) 2.7f else 2.2f)
-                            .coerceAtMost(320.dp),
-                        height = (info.minHeight.toDp() * if (isLandscape) 2.2f else 2.7f)
-                            .coerceAtMost(240.dp),
+                        width = (info.minWidth.toDp() * if (isLandscape) 2.7f else 2.2f).coerceAtMost(
+                            320.dp
+                        ),
+                        height = (info.minHeight.toDp() * if (isLandscape) 2.2f else 2.7f).coerceAtMost(
+                            240.dp
+                        ),
                     )
                 },
             ) {
@@ -112,7 +110,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                     update = {
                         updateToken.let {}
                         it.removeAllViews()
-                        val remoteViews = widgetFactory(it.context, width, height, appWidgetId)
+                        val remoteViews = preview(width, height)
                         it.addView(remoteViews.apply(it.context.applicationContext, it))
                     },
                     modifier = Modifier.fillMaxSize(),
@@ -120,4 +118,6 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
             }
         }
     }
+
+    abstract fun preview(width: Int, height: Int): RemoteViews
 }
