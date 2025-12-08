@@ -152,7 +152,7 @@ fun ColumnScope.WidgetColoringSettings() {
 }
 
 @Composable
-private fun WidgetPreferenceDebounce(
+fun WidgetPreferenceDebounce(
     key: String,
     flow: MutableStateFlow<Float>,
     content: @Composable (value: Float, onValueChange: (Float) -> Unit) -> Unit,
@@ -170,25 +170,6 @@ private fun WidgetPreferenceDebounce(
             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
             .clearAndSetSemantics {},
     ) { content(value) { flow.value = it } }
-}
-
-@Composable
-fun WidgetTextScale(appWidgetId: Int) {
-    val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
-    val preferences = LocalContext.current.preferences
-    val textScale = remember {
-        MutableStateFlow(preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE))
-    }
-    WidgetPreferenceDebounce(key, textScale) { value, onValueChange ->
-        SettingsSlider(
-            title = stringResource(R.string.widget_text_size),
-            value = value,
-            valueRange = .65f..2f,
-            visibleScale = 14f,
-            defaultValue = 1f,
-            onValueChange = onValueChange,
-        )
-    }
 }
 
 @Composable

@@ -40,7 +40,7 @@ class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        WidgetTextScale(appWidgetId)
+        TextScaleSettings()
         WidgetColoringSettings()
     }
 }
@@ -65,7 +65,7 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        WidgetTextScale(appWidgetId)
+        TextScaleSettings()
         WidgetSettings()
     }
 }
@@ -91,7 +91,7 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        WidgetTextScale(appWidgetId)
+        TextScaleSettings()
         WidgetSettings()
     }
 }
@@ -117,7 +117,7 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        WidgetTextScale(appWidgetId)
+        TextScaleSettings()
         WidgetSettings()
         SettingsSectionLayout(R.string.location)
         LocationSettings()
@@ -133,7 +133,7 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        WidgetTextScale(appWidgetId)
+        TextScaleSettings()
         WidgetColoringSettings()
     }
 }

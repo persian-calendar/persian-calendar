@@ -33,7 +33,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseWidgetConfigurationActivity
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetTextScale
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.preferences
@@ -111,7 +110,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
             }
         }
 
-        WidgetTextScale(appWidgetId)
+        TextScaleSettings()
 
         val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
         WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)

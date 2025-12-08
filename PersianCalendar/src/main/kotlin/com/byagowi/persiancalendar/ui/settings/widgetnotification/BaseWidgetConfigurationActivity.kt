@@ -22,13 +22,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
+import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
+import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
@@ -116,6 +123,25 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                     modifier = Modifier.fillMaxSize(),
                 )
             }
+        }
+    }
+
+    @Composable
+    protected fun TextScaleSettings() {
+        val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
+        val preferences = LocalContext.current.preferences
+        val textScale = remember {
+            MutableStateFlow(preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE))
+        }
+        WidgetPreferenceDebounce(key, textScale) { value, onValueChange ->
+            SettingsSlider(
+                title = stringResource(R.string.widget_text_size),
+                value = value,
+                valueRange = .65f..2f,
+                visibleScale = 14f,
+                defaultValue = 1f,
+                onValueChange = onValueChange,
+            )
         }
     }
 
