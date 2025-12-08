@@ -1,12 +1,15 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
@@ -42,28 +46,36 @@ abstract class BaseConfigurationActivity(
         setContent {
             BackHandler(onBack = ::onBack)
             SystemTheme {
-                Column(
+                Box(
                     Modifier
                         .safeDrawingPadding()
-                        .padding(16.dp),
+                        .padding(16.dp)
                 ) {
-                    Header()
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
-                            .alpha(AppBlendAlpha)
-                            .background(
-                                color = MaterialTheme.colorScheme.surface,
-                                shape = MaterialTheme.shapes.extraLarge,
-                            )
-                            .verticalScroll(rememberScrollState())
-                            .padding(vertical = 16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
-                        Spacer(Modifier.height(4.dp))
-                        Settings()
+                    @Composable
+                    fun Linear(content: @Composable () -> Unit) {
+                        val isLandscape =
+                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                        if (isLandscape) Row { content() } else Column { content() }
+                    }
+                    Linear {
+                        Header()
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
+                                .alpha(AppBlendAlpha)
+                                .background(
+                                    color = MaterialTheme.colorScheme.surface,
+                                    shape = MaterialTheme.shapes.extraLarge,
+                                )
+                                .verticalScroll(rememberScrollState())
+                                .padding(vertical = 16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
+                            Spacer(Modifier.height(4.dp))
+                            Settings()
+                        }
                     }
                 }
             }

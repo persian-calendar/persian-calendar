@@ -32,7 +32,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseWidgetConfigurationActivity
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetTextScale
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
@@ -65,8 +64,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun Header() {
-        val appWidgetId = appWidgetId()
-        WidgetPreview { context, width, height ->
+        WidgetPreview { context, width, height, appWidgetId ->
             createAgeRemoteViews(
                 context, width, height, appWidgetId, Jdn.today(), preferences
             )
