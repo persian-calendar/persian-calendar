@@ -4,7 +4,6 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
@@ -50,12 +49,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,7 +71,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
@@ -116,22 +116,23 @@ import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
-    val backStack = remember { mutableStateListOf(Screen.fromName(intentStartDestination)) }
+    val backStack = rememberNavBackStack(Screen.fromName(intentStartDestination))
     val railState = rememberWideNavigationRailState()
     AppNavigationRail(railState, backStack, finish)
     SharedTransitionLayout {
         var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
-        fun Screen.navigate() = backStack.add(this)
-        fun Screen.isCurrentDestination() = this == backStack.lastOrNull()
-        fun Screen.navigateUp() {
+        fun NavKey.navigate() = backStack.add(this)
+        fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
+        fun NavKey.navigateUp() {
             // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
             if (this != backStack.lastOrNull()) return
             if (backStack.size > 1) backStack.removeLastOrNull() else finish()
@@ -267,7 +268,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             animatedContentScope = LocalNavAnimatedContentScope.current,
                             openNavigationRail = openNavigationRail,
                             navigateToMap = {
-                                val time = viewModel.astronomyState.value.date.time
+                                val time = viewModel.astronomyState.value.date.timeInMillis
                                 Screen.Map(time = time).navigate()
                             },
                             viewModel = viewModel,
@@ -280,7 +281,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     is Screen.Map -> {
                         val viewModel = viewModel<MapViewModel>()
                         LaunchedEffect(Unit) {
-                            if (screen.time != null) viewModel.changeToTime(screen.time)
+                            if (screen.time != null) viewModel.changeToTime(Date(screen.time))
                         }
                         MapScreen(
                             animatedContentScope = LocalNavAnimatedContentScope.current,
@@ -331,23 +332,49 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     }
 }
 
-private sealed interface Screen {
+private sealed interface Screen : NavKey {
+    @Serializable
     object Calendar : Screen
+
+    @Serializable
     class Schedule(val selectedDay: Long? = null) : Screen
+
+    @Serializable
     class Days(val selectedDay: Long? = null, val isWeek: Boolean = false) : Screen
+
+    @Serializable
     class Month(val selectedDay: Long? = null) : Screen
+
+    @Serializable
     object Converter : Screen
+
+    @Serializable
     object Compass : Screen
+
+    @Serializable
     object Level : Screen
+
+    @Serializable
     class Astronomy(val daysOffset: Int = 0) : Screen
-    class Map(val fromSettings: Boolean = false, val time: Date? = null) : Screen
+
+    @Serializable
+    class Map(val fromSettings: Boolean = false, val time: Long? = null) : Screen
+
+    @Serializable
     class Settings(
         val tab: Int = 0, val settings: String? = null, val settingsItem: String? = null
     ) : Screen
 
+    @Serializable
     object About : Screen
+
+    @Serializable
     object Licenses : Screen
+
+    @Serializable
     object Device : Screen
+
+    @Serializable
     object Exit : Screen // Not a screen but is on the navigation rail, so
 
     companion object {
@@ -379,7 +406,7 @@ private val railWidth = 220.dp
 @Composable
 private fun AppNavigationRail(
     railState: WideNavigationRailState,
-    backStack: SnapshotStateList<Screen>,
+    backStack: NavBackStack<NavKey>,
     finish: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
