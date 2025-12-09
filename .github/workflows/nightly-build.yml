@@ -3,7 +3,7 @@ name: Nightly Build
 on:
   workflow_dispatch: # To run the workflow manually if needed
   schedule:
-    - cron: '0 0 * * *' # once a day
+    - cron: '30 8,20 * * *' # twice a day
 
 jobs:
   evaluateChanges:
@@ -19,7 +19,7 @@ jobs:
       - name: Check
         id: check
         run: |
-          if [[ $(git rev-list --after="24 hours" main) ]]; then
+          if [[ $(git rev-list --after="12 hours" main) ]]; then
             echo shouldBuild=true >> $GITHUB_OUTPUT
           else
             echo shouldBuild=false >> $GITHUB_OUTPUT
