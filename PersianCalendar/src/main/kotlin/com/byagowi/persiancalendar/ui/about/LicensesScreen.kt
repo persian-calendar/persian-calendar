@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -75,10 +74,7 @@ import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.LicensesScreen(
-    animatedContentScope: AnimatedContentScope,
-    navigateUp: () -> Unit,
-) {
+fun SharedTransitionScope.LicensesScreen(navigateUp: () -> Unit) {
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -92,7 +88,7 @@ fun SharedTransitionScope.LicensesScreen(
     ) { paddingValues ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-                ScreenSurface(animatedContentScope) {
+                ScreenSurface {
                     Licenses()
                     Box(
                         modifier = Modifier

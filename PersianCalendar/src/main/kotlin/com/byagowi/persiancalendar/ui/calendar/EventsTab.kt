@@ -8,7 +8,6 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -78,6 +77,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
@@ -135,7 +135,6 @@ import kotlin.time.Duration.Companion.minutes
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: (String?) -> Unit,
     viewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
     fabPlaceholderHeight: Dp,
 ) {
     Column(
@@ -198,7 +197,7 @@ fun SharedTransitionScope.EventsTab(
             Column(
                 Modifier.sharedBounds(
                     rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                    animatedVisibilityScope = animatedContentScope,
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 )
             ) {

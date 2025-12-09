@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
@@ -20,6 +19,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -27,13 +27,12 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.ThreeDotsDropdownMenu(
-    animatedContentScope: AnimatedContentScope,
     content: @Composable ColumnScope.(onDismissRequest: () -> Unit) -> Unit,
 ) {
     Box(
         Modifier.sharedElement(
             rememberSharedContentState(key = SHARED_CONTENT_KEY_THREE_DOTS_MENU),
-            animatedVisibilityScope = animatedContentScope,
+            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,
         )
     ) {

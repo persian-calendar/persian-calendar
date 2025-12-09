@@ -14,7 +14,6 @@ import android.os.Build
 import android.view.InputDevice
 import android.view.RoundedCorner
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
@@ -107,10 +106,7 @@ import java.util.Locale
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
-fun SharedTransitionScope.DeviceInformationScreen(
-    navigateUp: () -> Unit,
-    animatedContentScope: AnimatedContentScope,
-) {
+fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
     val scrollBehavior = exitUntilCollapsedScrollBehavior()
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
@@ -125,7 +121,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
             colors = appTopAppBarColors(),
             navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             actions = {
-                ShareActionButton(animatedContentScope) {
+                ShareActionButton {
                     context.shareTextFile(generateHtmlReport(items), "device.html", "text/html")
                 }
                 AppIconButton(
@@ -146,7 +142,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 }
             },
         )
-        ScreenSurface(animatedContentScope) {
+        ScreenSurface {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 Box {
                     val listState = rememberLazyListState()

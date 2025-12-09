@@ -27,53 +27,53 @@ class ConverterScreenTest {
     @OptIn(ExperimentalSharedTransitionApi::class)
     @Test
     fun converterScreenSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
-            ConverterScreen(scope, {}, {}, viewModel(), null)
+        composeTestRule.setContentWithParent {
+            ConverterScreen({}, {}, viewModel(), null)
         }
     }
 
     @Test
     fun converterScreenConverterSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.CONVERTER)
-            ConverterScreen(scope, {}, {}, viewModel, null)
+            ConverterScreen({}, {}, viewModel, null)
         }
     }
 
     @Test
     fun converterScreenDistanceSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.DISTANCE)
-            ConverterScreen(scope, {}, {}, viewModel, null)
+            ConverterScreen({}, {}, viewModel, null)
         }
     }
 
     @Test
     fun converterScreenCalculatorSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.CALCULATOR)
-            ConverterScreen(scope, {}, {}, viewModel, null)
+            ConverterScreen({}, {}, viewModel, null)
         }
     }
 
     @Test
     fun converterScreenQrCodeSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.QR_CODE)
-            ConverterScreen(scope, {}, {}, viewModel, null)
+            ConverterScreen({}, {}, viewModel, null)
         }
     }
 
     @Test
     fun converterScreenTimeZonesSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.TIME_ZONES)
-            ConverterScreen(scope, {}, {}, viewModel, null)
+            ConverterScreen({}, {}, viewModel, null)
         }
     }
 

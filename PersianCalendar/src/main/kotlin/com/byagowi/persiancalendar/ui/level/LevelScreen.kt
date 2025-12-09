@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo
 import android.view.Surface
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -64,6 +63,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
@@ -89,7 +89,6 @@ import kotlin.time.Duration.Companion.seconds
 fun SharedTransitionScope.LevelScreen(
     navigateUp: () -> Unit,
     navigateToCompass: () -> Unit,
-    animatedContentScope: AnimatedContentScope,
 ) {
     var isStopped by rememberSaveable { mutableStateOf(false) }
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
@@ -174,7 +173,6 @@ fun SharedTransitionScope.LevelScreen(
             label = "corner",
         )
         ScreenSurface(
-            animatedContentScope = animatedContentScope,
             shape = MaterialTheme.shapes.large.copy(
                 topStart = CornerSize(topCornersRoundness),
                 topEnd = CornerSize(topCornersRoundness),
@@ -207,7 +205,7 @@ fun SharedTransitionScope.LevelScreen(
                             .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier)
                             .sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                                animatedVisibilityScope = animatedContentScope,
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
                         factory = {
@@ -236,7 +234,7 @@ fun SharedTransitionScope.LevelScreen(
                                 title = stringResource(R.string.compass),
                                 modifier = Modifier.sharedBounds(
                                     rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                    animatedVisibilityScope = animatedContentScope,
+                                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                     boundsTransform = appBoundsTransform,
                                 ),
                                 onClick = navigateToCompass,
@@ -245,7 +243,7 @@ fun SharedTransitionScope.LevelScreen(
                             Box(
                                 Modifier.sharedElement(
                                     rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
-                                    animatedVisibilityScope = animatedContentScope,
+                                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                     boundsTransform = appBoundsTransform,
                                 )
                             ) { StopButton(isStopped) { isStopped = it } }

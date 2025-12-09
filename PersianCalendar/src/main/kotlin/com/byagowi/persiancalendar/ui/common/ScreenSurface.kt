@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
@@ -22,6 +21,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
 import com.byagowi.persiancalendar.global.customImageName
@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.ScreenSurface(
-    animatedContentScope: AnimatedContentScope,
     shape: CornerBasedShape = materialCornerExtraLargeTop(),
     // Remove when https://issuetracker.google.com/issues/376709945 is resolved
     // Actually this can be simplified into a simple Box inside a Surface when that resolved
@@ -60,7 +59,7 @@ fun SharedTransitionScope.ScreenSurface(
             Canvas(
                 modifier = if (disableSharedContent) Modifier else Modifier.sharedElement(
                     rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                    animatedVisibilityScope = animatedContentScope,
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 )
             ) {
@@ -85,7 +84,7 @@ fun SharedTransitionScope.ScreenSurface(
         Box(
             (if (disableSharedContent) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
-                animatedVisibilityScope = animatedContentScope,
+                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                 boundsTransform = appBoundsTransform,
             )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)
         ) {

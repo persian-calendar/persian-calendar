@@ -17,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -223,7 +222,6 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
     viewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -247,7 +245,6 @@ fun SharedTransitionScope.CalendarScreen(
         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
         navigateToAstronomy = navigateToAstronomy,
-        animatedContentScope = animatedContentScope,
         today = today,
         fabPlaceholderHeight = fabPlaceholderHeight,
     )
@@ -324,7 +321,6 @@ fun SharedTransitionScope.CalendarScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     if (searchBoxIsOpenState) Search(viewModel) else Toolbar(
-                        animatedContentScope = animatedContentScope,
                         openNavigationRail = openNavigationRail,
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
@@ -411,7 +407,6 @@ fun SharedTransitionScope.CalendarScreen(
                             )
                         }
                         ScreenSurface(
-                            animatedContentScope,
                             materialCornerExtraLargeNoBottomEnd(),
                             drawBehindSurface = false,
                         ) {
@@ -480,7 +475,6 @@ fun SharedTransitionScope.CalendarScreen(
 
                                 val detailsMinHeight = maxHeight - calendarHeight
                                 ScreenSurface(
-                                    animatedContentScope,
                                     workaroundClipBug = true,
                                     mayNeedDragHandleToDivide = true,
                                 ) {
@@ -545,7 +539,6 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
-    animatedContentScope: AnimatedContentScope,
     today: Jdn,
     fabPlaceholderHeight: Dp?,
 ): List<DetailsTab> {
@@ -563,14 +556,12 @@ private fun SharedTransitionScope.detailsTabs(
                 bottomPadding = bottomPadding,
                 today = today,
                 navigateToAstronomy = navigateToAstronomy,
-                animatedContentScope = animatedContentScope,
             )
         } else null,
         CalendarScreenTab.EVENT to { _, _, bottomPadding ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
-                animatedContentScope = animatedContentScope,
                 // See the comment in floatingActionButton
                 fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
             )
@@ -581,7 +572,6 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                 navigateToAstronomy = navigateToAstronomy,
-                animatedContentScope = animatedContentScope,
                 viewModel = viewModel,
                 interactionSource = interactionSource,
                 minHeight = minHeight,
@@ -684,7 +674,6 @@ private fun SharedTransitionScope.CalendarsTab(
     bottomPadding: Dp,
     today: Jdn,
     navigateToAstronomy: (Jdn) -> Unit,
-    animatedContentScope: AnimatedContentScope,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Column(
@@ -706,7 +695,6 @@ private fun SharedTransitionScope.CalendarsTab(
             shownCalendars = enabledCalendars,
             isExpanded = isExpanded,
             navigateToAstronomy = navigateToAstronomy,
-            animatedContentScope = animatedContentScope,
         )
 
         val context = LocalContext.current
@@ -859,7 +847,6 @@ private fun Search(viewModel: CalendarViewModel) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.Toolbar(
-    animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
@@ -1006,7 +993,7 @@ private fun SharedTransitionScope.Toolbar(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
                     onClick = viewModel::onYearViewBackPressed,
-                ) else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                ) else NavigationOpenNavigationRailIcon(openNavigationRail)
             }
         },
         actions = {
@@ -1044,7 +1031,6 @@ private fun SharedTransitionScope.Toolbar(
             }
             this.AnimatedVisibility(!isYearView) {
                 Menu(
-                    animatedContentScope = animatedContentScope,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
                     swipeUpActions = swipeUpActions,
@@ -1059,7 +1045,6 @@ private fun SharedTransitionScope.Toolbar(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.Menu(
-    animatedContentScope: AnimatedContentScope,
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
     viewModel: CalendarViewModel,
@@ -1101,7 +1086,7 @@ private fun SharedTransitionScope.Menu(
         ) { showPlanetaryHoursDialog = false }
     }
 
-    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+    ThreeDotsDropdownMenu { closeMenu ->
         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
             closeMenu()
             showDatePickerDialog = true

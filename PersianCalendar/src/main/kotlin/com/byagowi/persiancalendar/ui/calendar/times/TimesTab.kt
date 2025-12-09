@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -40,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
@@ -68,7 +68,6 @@ fun SharedTransitionScope.TimesTab(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
@@ -113,9 +112,7 @@ fun SharedTransitionScope.TimesTab(
     ) {
         Spacer(Modifier.height(16.dp))
         val isToday = jdn == today
-        AstronomicalOverview(
-            viewModel, prayTimes, now, isToday, navigateToAstronomy, animatedContentScope
-        )
+        AstronomicalOverview(viewModel, prayTimes, now, isToday, navigateToAstronomy)
         Spacer(Modifier.height(16.dp))
         Times(isExpanded, prayTimes, now, isToday)
         Spacer(Modifier.height(8.dp))
@@ -158,7 +155,6 @@ private fun SharedTransitionScope.AstronomicalOverview(
     now: Long,
     isToday: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
-    animatedContentScope: AnimatedContentScope,
 ) {
     val jdn by viewModel.selectedDay.collectAsState()
     var needsAnimation by remember(isToday) { mutableStateOf(isToday) }
@@ -195,7 +191,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .semantics { this.hideFromAccessibility() }
                     .sharedBounds(
                         rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                        animatedVisibilityScope = animatedContentScope,
+                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                         boundsTransform = appBoundsTransform,
                     )
                     .clickable(

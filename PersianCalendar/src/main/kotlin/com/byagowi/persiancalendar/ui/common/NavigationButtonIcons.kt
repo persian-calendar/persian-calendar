@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material.icons.Icons
@@ -9,6 +8,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_OPEN_NAVIGATION_RAIL
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.NavigationOpenNavigationRailIcon(
-    animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
 ) {
     AppIconButton(
@@ -24,7 +23,7 @@ fun SharedTransitionScope.NavigationOpenNavigationRailIcon(
         title = stringResource(R.string.open_navigation_rail),
         modifier = Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_OPEN_NAVIGATION_RAIL),
-            animatedVisibilityScope = animatedContentScope,
+            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,
         ),
         onClick = openNavigationRail,

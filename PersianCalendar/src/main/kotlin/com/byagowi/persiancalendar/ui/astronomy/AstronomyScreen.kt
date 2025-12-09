@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -85,6 +84,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
@@ -128,7 +128,6 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.AstronomyScreen(
-    animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
@@ -170,7 +169,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
-                    else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                    else NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()
@@ -214,7 +213,7 @@ fun SharedTransitionScope.AstronomyScreen(
                         showMoonInScorpioDialog = false
                     }
 
-                    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                    ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
                             closeMenu()
                             viewModel.showDatePickerDialog()
@@ -254,7 +253,7 @@ fun SharedTransitionScope.AstronomyScreen(
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            ScreenSurface(animatedContentScope) {
+            ScreenSurface {
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 if (isLandscape) BoxWithConstraints(
                     Modifier
@@ -276,14 +275,14 @@ fun SharedTransitionScope.AstronomyScreen(
                         ) {
                             Header(Modifier, viewModel)
                             Spacer(Modifier.weight(1f))
-                            SliderBar(animatedContentScope, slider, viewModel) { slider = it }
+                            SliderBar(slider, viewModel) { slider = it }
                         }
                         SolarDisplay(
                             Modifier
                                 .weight(1f)
                                 .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
                                 .height(maxHeight - bottomPadding),
-                            animatedContentScope, viewModel, slider, navigateToMap,
+                            viewModel, slider, navigateToMap,
                         )
                     }
                 } else Column {
@@ -305,7 +304,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                     Modifier
                                         .fillMaxWidth()
                                         .height(maxWidth - (56 * 2 + 8).dp),
-                                    animatedContentScope, viewModel, slider, navigateToMap,
+                                    viewModel, slider, navigateToMap,
                                 )
                             },
                         ) { (header, content), constraints ->
@@ -330,7 +329,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             }
                         }
                     }
-                    SliderBar(animatedContentScope, slider, viewModel) { slider = it }
+                    SliderBar(slider, viewModel) { slider = it }
                     Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
@@ -350,7 +349,6 @@ fun SharedTransitionScope.AstronomyScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.SliderBar(
-    animatedContentScope: AnimatedContentScope,
     slider: SliderView?,
     viewModel: AstronomyViewModel,
     setSlider: (SliderView) -> Unit,
@@ -378,7 +376,7 @@ private fun SharedTransitionScope.SliderBar(
                 )
                 .sharedElement(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
-                    animatedVisibilityScope = animatedContentScope,
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
             color = MaterialTheme.colorScheme.onSurface,
@@ -455,7 +453,6 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
 @Composable
 private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
-    animatedContentScope: AnimatedContentScope,
     viewModel: AstronomyViewModel,
     slider: SliderView?,
     navigateToMap: () -> Unit,
@@ -471,8 +468,7 @@ private fun SharedTransitionScope.SolarDisplay(
                     selected = mode == it,
                     onClick = { viewModel.setMode(it) },
                     icon = {
-                        if (it == AstronomyMode.MOON) MoonIcon(state, animatedContentScope)
-                        else Icon(
+                        if (it == AstronomyMode.MOON) MoonIcon(state) else Icon(
                             ImageVector.vectorResource(it.icon),
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
@@ -489,7 +485,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 .align(Alignment.CenterEnd)
                 .sharedBounds(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = animatedContentScope,
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
             selected = false,
@@ -639,10 +635,7 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Stable
 @Composable
-private fun SharedTransitionScope.MoonIcon(
-    astronomyState: AstronomyState,
-    animatedContentScope: AnimatedContentScope,
-) {
+private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState) {
     val resources = LocalResources.current
     val solarDraw = remember(resources) { SolarDraw(resources) }
     Box(
@@ -650,7 +643,7 @@ private fun SharedTransitionScope.MoonIcon(
             .size(24.dp)
             .sharedBounds(
                 rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                animatedVisibilityScope = animatedContentScope,
+                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                 boundsTransform = appBoundsTransform,
             )
             .drawBehind {

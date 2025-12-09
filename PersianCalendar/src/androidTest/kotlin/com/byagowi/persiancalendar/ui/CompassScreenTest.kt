@@ -18,8 +18,8 @@ class CompassScreenTest {
 
     @Test
     fun basicSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
-            CompassScreen({}, {}, {}, {}, scope, null)
+        composeTestRule.setContentWithParent {
+            CompassScreen({}, {}, {}, {}, null)
         }
     }
 
@@ -27,14 +27,13 @@ class CompassScreenTest {
     fun navigateToLevelIsCalled() {
         var levelString = ""
         var navigateToLevelIsCalled = false
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             levelString = stringResource(R.string.level)
             CompassScreen(
                 openNavigationRail = {},
                 navigateToLevel = { navigateToLevelIsCalled = true },
                 navigateToMap = { assert(false) },
                 navigateToSettingsLocationTab = {},
-                animatedContentScope = scope,
                 noBackStackAction = null,
             )
         }
@@ -49,14 +48,13 @@ class CompassScreenTest {
     fun navigateToMapIsCalled() {
         var mapString = ""
         var navigateToMapIsCalled = false
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             mapString = stringResource(R.string.map)
             CompassScreen(
                 openNavigationRail = {},
                 navigateToLevel = { assert(false) },
                 navigateToMap = { navigateToMapIsCalled = true },
                 navigateToSettingsLocationTab = {},
-                animatedContentScope = scope,
                 noBackStackAction = null,
             )
         }

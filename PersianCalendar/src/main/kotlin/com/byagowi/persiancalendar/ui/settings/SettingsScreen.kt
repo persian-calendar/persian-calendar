@@ -19,7 +19,6 @@ import android.widget.TextView
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -136,7 +135,6 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 fun SharedTransitionScope.SettingsScreen(
-    animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
     initialTab: SettingsTab,
@@ -160,7 +158,7 @@ fun SharedTransitionScope.SettingsScreen(
                     },
                     colors = appTopAppBarColors(),
                     navigationIcon = {
-                        NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                        NavigationOpenNavigationRailIcon(openNavigationRail)
                     },
                     actions = {
                         var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
@@ -169,7 +167,7 @@ fun SharedTransitionScope.SettingsScreen(
                                 .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                                 .clearAndSetSemantics {},
                         ) {
-                            ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                            ThreeDotsDropdownMenu { closeMenu ->
                                 MenuItems(
                                     openAddWidgetDialog = {
                                         closeMenu(); showAddWidgetDialog = true
@@ -236,7 +234,7 @@ fun SharedTransitionScope.SettingsScreen(
                 }
             }
 
-            ScreenSurface(animatedContentScope) {
+            ScreenSurface {
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val customImageName by customImageName.collectAsState()
                 val disableStickyHeader = isTalkBackEnabled || customImageName != null

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -123,7 +122,6 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.AboutScreen(
-    animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
@@ -135,11 +133,11 @@ fun SharedTransitionScope.AboutScreen(
                 title = { Text(stringResource(R.string.about)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
-                    NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                    NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
                     val context = LocalContext.current
-                    ShareActionButton(animatedContentScope) { shareApplication(context) }
+                    ShareActionButton { shareApplication(context) }
                     AppIconButton(
                         icon = Icons.Default.PermDeviceInformation,
                         title = stringResource(R.string.device_information),
@@ -160,7 +158,6 @@ fun SharedTransitionScope.AboutScreen(
                 val headerPx = with(LocalDensity.current) { headerSize.toPx() }
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 ScreenSurface(
-                    animatedContentScope,
                     disableSharedContent = remember { derivedStateOf { scrollState.value > headerPx } }.value,
                 ) { AboutScreenContent(navigateToLicenses, bottomPadding) }
             }

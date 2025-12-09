@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.monthview
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -61,7 +60,6 @@ import com.byagowi.persiancalendar.utils.monthName
 @Composable
 fun SharedTransitionScope.MonthScreen(
     calendarViewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
 ) {
@@ -197,11 +195,7 @@ fun SharedTransitionScope.MonthScreen(
                 Modifier
                     .align(Alignment.BottomCenter)
                     .height(0.dp),
-            ) {
-                ScreenSurface(animatedContentScope = animatedContentScope) {
-                    Box(Modifier.fillMaxWidth())
-                }
-            }
+            ) { ScreenSurface { Box(Modifier.fillMaxWidth()) } }
         }
     }
 }

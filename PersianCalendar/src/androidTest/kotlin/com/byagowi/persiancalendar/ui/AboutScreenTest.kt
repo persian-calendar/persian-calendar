@@ -27,10 +27,9 @@ class AboutScreenTest {
     fun aboutScreenNavigateToDeviceInformation() {
         var navigateToDeviceInformationIsCalled = false
         var deviceInformationString = ""
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             deviceInformationString = stringResource(R.string.device_information)
             AboutScreen(
-                animatedContentScope = scope,
                 openNavigationRail = {},
                 navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
                 navigateToLicenses = { assert(false) },
@@ -46,10 +45,9 @@ class AboutScreenTest {
     fun aboutScreenNavigateToLicenses() {
         var navigateToLicensesIsCalled = false
         var licensesString = ""
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             licensesString = stringResource(R.string.about_license_title)
             AboutScreen(
-                animatedContentScope = scope,
                 openNavigationRail = {},
                 navigateToDeviceInformation = { assert(false) },
                 navigateToLicenses = { navigateToLicensesIsCalled = true },
@@ -63,13 +61,13 @@ class AboutScreenTest {
 
     @Test
     fun deviceInformationSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
-            DeviceInformationScreen({}, scope)
+        composeTestRule.setContentWithParent {
+            DeviceInformationScreen({})
         }
     }
 
     @Test
     fun licensesSmokeTest() {
-        composeTestRule.setContentWithParent { scope -> LicensesScreen(scope) {} }
+        composeTestRule.setContentWithParent { LicensesScreen {} }
     }
 }

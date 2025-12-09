@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.common
 import android.content.ClipData
 import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -71,6 +70,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
@@ -129,7 +129,6 @@ fun SharedTransitionScope.CalendarsOverview(
     shownCalendars: List<Calendar>,
     isExpanded: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
-    animatedContentScope: AnimatedContentScope,
 ) {
     val resources = LocalResources.current
     val language by language.collectAsState()
@@ -162,7 +161,7 @@ fun SharedTransitionScope.CalendarsOverview(
                         .semantics { this.hideFromAccessibility() }
                         .sharedBounds(
                             rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                            animatedVisibilityScope = animatedContentScope,
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         )
                         .clickable { navigateToAstronomy(jdn) }

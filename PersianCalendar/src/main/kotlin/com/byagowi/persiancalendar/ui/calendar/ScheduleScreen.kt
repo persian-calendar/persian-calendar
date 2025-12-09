@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import android.content.res.Configuration
 import androidx.collection.mutableLongSetOf
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -46,6 +45,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -79,7 +79,6 @@ import kotlin.math.abs
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
 ) {
@@ -157,7 +156,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         }
                     }
 
-                    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                    ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
                             showDatePickerDialog = true
                             closeMenu()
@@ -200,7 +199,7 @@ fun SharedTransitionScope.ScheduleScreen(
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            ScreenSurface(animatedContentScope) {
+            ScreenSurface {
                 val customFontName by customFontName.collectAsState()
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
@@ -271,7 +270,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                     Column(
                                         if (baseJdn == jdn) Modifier.sharedBounds(
                                             rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                                            animatedVisibilityScope = animatedContentScope,
+                                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                             boundsTransform = appBoundsTransform,
                                         ) else Modifier,
                                     ) { DayEvents(events) {} }

@@ -6,7 +6,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.widget.Toast
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -66,6 +65,7 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_COMPASS_SET_LOCATION_IGNORED
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
@@ -117,7 +117,6 @@ fun SharedTransitionScope.CompassScreen(
     navigateToLevel: () -> Unit,
     navigateToMap: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
-    animatedContentScope: AnimatedContentScope,
     noBackStackAction: (() -> Unit)?,
 ) {
     val context = LocalContext.current
@@ -218,7 +217,7 @@ fun SharedTransitionScope.CompassScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
-                    else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                    else NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
                     if (coordinates != null) AppIconButton(
@@ -236,9 +235,7 @@ fun SharedTransitionScope.CompassScreen(
                             context.preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
                         )
                     }
-                    if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu(
-                        animatedContentScope
-                    ) { closeMenu ->
+                    if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
                             stringResource(R.string.true_north), showTrueNorth
                         ) {
@@ -306,7 +303,7 @@ fun SharedTransitionScope.CompassScreen(
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            ScreenSurface(animatedContentScope) {
+            ScreenSurface {
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
                         val surfaceColor = MaterialTheme.colorScheme.surface
@@ -314,7 +311,7 @@ fun SharedTransitionScope.CompassScreen(
                         AndroidView(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                animatedVisibilityScope = animatedContentScope,
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
                             factory = {
@@ -355,7 +352,7 @@ fun SharedTransitionScope.CompassScreen(
                             title = stringResource(R.string.level),
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                                animatedVisibilityScope = animatedContentScope,
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
                             onClick = navigateToLevel,
@@ -365,7 +362,7 @@ fun SharedTransitionScope.CompassScreen(
                             title = stringResource(R.string.map),
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                                animatedVisibilityScope = animatedContentScope,
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
                             onClick = navigateToMap,
@@ -388,7 +385,7 @@ fun SharedTransitionScope.CompassScreen(
                         Box(
                             Modifier.sharedElement(
                                 rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
-                                animatedVisibilityScope = animatedContentScope,
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             )
                         ) { StopButton(isStopped) { isStopped = it } }

@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -164,7 +163,6 @@ import kotlin.math.roundToInt
 fun SharedTransitionScope.DaysScreen(
     calendarViewModel: CalendarViewModel,
     initiallySelectedDay: Jdn,
-    appAnimatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
 ) {
@@ -428,7 +426,6 @@ fun SharedTransitionScope.DaysScreen(
 
                             if (isWeekViewState) ScreenSurface(
                                 mayNeedDragHandleToDivide = !isLandscape,
-                                animatedContentScope = appAnimatedContentScope,
                                 disableSharedContent = initiallySelectedDay - pageWeekStart !in 0..<7,
                             ) {
                                 DaysView(
@@ -466,10 +463,7 @@ fun SharedTransitionScope.DaysScreen(
                         }
                     }
 
-                    if (!isWeekViewState) ScreenSurface(
-                        appAnimatedContentScope,
-                        mayNeedDragHandleToDivide = !isLandscape,
-                    ) {
+                    if (!isWeekViewState) ScreenSurface(mayNeedDragHandleToDivide = !isLandscape) {
                         HorizontalPager(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),

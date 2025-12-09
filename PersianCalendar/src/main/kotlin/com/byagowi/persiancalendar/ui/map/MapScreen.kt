@@ -6,7 +6,6 @@ import android.graphics.Matrix
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -72,6 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
@@ -103,7 +103,6 @@ import kotlin.time.Duration.Companion.minutes
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.MapScreen(
-    animatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
     fromSettings: Boolean,
     viewModel: MapViewModel,
@@ -226,7 +225,7 @@ fun SharedTransitionScope.MapScreen(
             Column {
                 Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
                 Spacer(Modifier.height((16 + menuHeight + 16).dp))
-                ScreenSurface(animatedContentScope) { Box(Modifier.fillMaxSize()) }
+                ScreenSurface { Box(Modifier.fillMaxSize()) }
             }
         }
         AndroidView(
@@ -234,7 +233,7 @@ fun SharedTransitionScope.MapScreen(
                 .fillMaxSize()
                 .sharedBounds(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = animatedContentScope,
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
             factory = {
@@ -377,7 +376,7 @@ fun SharedTransitionScope.MapScreen(
                             )
                             .sharedElement(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
-                                animatedVisibilityScope = animatedContentScope,
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,

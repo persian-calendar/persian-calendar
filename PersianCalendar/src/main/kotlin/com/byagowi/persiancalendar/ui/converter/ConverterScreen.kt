@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -110,7 +109,6 @@ import kotlin.time.Duration.Companion.milliseconds
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.ConverterScreen(
-    animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     viewModel: ConverterViewModel,
@@ -133,7 +131,7 @@ fun SharedTransitionScope.ConverterScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
-                    else NavigationOpenNavigationRailIcon(animatedContentScope, openNavigationRail)
+                    else NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
@@ -152,18 +150,14 @@ fun SharedTransitionScope.ConverterScreen(
                         )
                     }
                     AnimatedVisibility(!anyPendingConfirm) {
-                        ConverterScreenShareActionButton(
-                            animatedContentScope,
-                            viewModel,
-                            qrShareAction,
-                        )
+                        ConverterScreenShareActionButton(viewModel, qrShareAction)
                     }
                 },
             )
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            ScreenSurface(animatedContentScope) {
+            ScreenSurface {
                 Box(
                     Modifier
                         .fillMaxSize()
@@ -185,7 +179,6 @@ fun SharedTransitionScope.ConverterScreen(
                                 ConverterAndDistance(
                                     navigateToAstronomy = navigateToAstronomy,
                                     viewModel = viewModel,
-                                    animatedContentScope = animatedContentScope,
                                     sharedTransitionScope = this@ConverterScreen,
                                     pendingConfirms = pendingConfirms,
                                 )
@@ -253,14 +246,13 @@ private fun TimeZones(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.ConverterScreenShareActionButton(
-    animatedContentScope: AnimatedContentScope,
     viewModel: ConverterViewModel,
     qrShareAction: () -> Unit,
 ) {
     val screenMode by viewModel.screenMode.collectAsState()
     val context = LocalContext.current
     val resources = LocalResources.current
-    ShareActionButton(animatedContentScope) {
+    ShareActionButton {
         val chooserTitle = resources.getString(screenMode.title)
         when (screenMode) {
             ConverterScreenMode.CONVERTER -> {
@@ -459,7 +451,6 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
 private fun ColumnScope.ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,
     viewModel: ConverterViewModel,
-    animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope,
     pendingConfirms: MutableCollection<() -> Unit>,
 ) {
@@ -499,7 +490,6 @@ private fun ColumnScope.ConverterAndDistance(
                         shownCalendars = calendarsList - calendar,
                         isExpanded = isExpanded,
                         navigateToAstronomy = navigateToAstronomy,
-                        animatedContentScope = animatedContentScope,
                     )
                 }
             }
@@ -539,7 +529,6 @@ private fun ColumnScope.ConverterAndDistance(
                             shownCalendars = calendarsList - calendar,
                             isExpanded = isExpanded,
                             navigateToAstronomy = navigateToAstronomy,
-                            animatedContentScope = animatedContentScope,
                         )
                     }
                 }

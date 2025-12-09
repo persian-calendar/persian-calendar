@@ -15,7 +15,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -31,7 +30,6 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
-import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar

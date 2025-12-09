@@ -76,7 +76,6 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -183,7 +182,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         isCurrentDestination = it.isCurrentDestination(),
                     )
                 }
@@ -194,7 +192,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                     MonthScreen(
                         calendarViewModel = calendarViewModel,
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         navigateUp = it::navigateUp,
                         initiallySelectedDay = jdn,
                     )
@@ -206,7 +203,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                     ScheduleScreen(
                         calendarViewModel = calendarViewModel,
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         navigateUp = it::navigateUp,
                         initiallySelectedDay = jdn,
                     )
@@ -219,14 +215,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     DaysScreen(
                         calendarViewModel = calendarViewModel,
                         initiallySelectedDay = jdn,
-                        appAnimatedContentScope = LocalNavAnimatedContentScope.current,
                         isInitiallyWeek = it.isWeek,
                         navigateUp = it::navigateUp,
                     )
                 }
                 entry<Screen.Converter> {
                     ConverterScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         openNavigationRail = openNavigationRail,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel<ConverterViewModel>(),
@@ -235,7 +229,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.Compass> {
                     CompassScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         openNavigationRail = openNavigationRail,
                         navigateToLevel = Screen.Level::navigate,
                         navigateToMap = { Screen.Map().navigate() },
@@ -245,7 +238,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.Level> {
                     LevelScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         navigateUp = it::navigateUp,
                         navigateToCompass = Screen.Compass::navigate,
                     )
@@ -256,7 +248,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
                     }
                     AstronomyScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         openNavigationRail = openNavigationRail,
                         navigateToMap = {
                             val time = viewModel.astronomyState.value.date.timeInMillis
@@ -272,7 +263,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         if (it.time != null) viewModel.changeToTime(Date(it.time))
                     }
                     MapScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         navigateUp = it::navigateUp,
                         fromSettings = it.fromSettings,
                         viewModel = viewModel,
@@ -280,7 +270,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.Settings> {
                     SettingsScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         openNavigationRail = openNavigationRail,
                         navigateToMap = { Screen.Map(fromSettings = true).navigate() },
                         initialTab = it.tab,
@@ -290,22 +279,13 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.About> {
                     AboutScreen(
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
                         openNavigationRail = openNavigationRail,
                         navigateToLicenses = Screen.Licenses::navigate,
                         navigateToDeviceInformation = Screen.Device::navigate,
                     )
                 }
-                entry<Screen.Licenses> {
-                    val animatedContentScope = LocalNavAnimatedContentScope.current
-                    LicensesScreen(animatedContentScope = animatedContentScope) { it.navigateUp() }
-                }
-                entry<Screen.Device> {
-                    DeviceInformationScreen(
-                        navigateUp = it::navigateUp,
-                        animatedContentScope = LocalNavAnimatedContentScope.current,
-                    )
-                }
+                entry<Screen.Licenses> { LicensesScreen(navigateUp = it::navigateUp) }
+                entry<Screen.Device> { DeviceInformationScreen(navigateUp = it::navigateUp) }
             },
         )
     }

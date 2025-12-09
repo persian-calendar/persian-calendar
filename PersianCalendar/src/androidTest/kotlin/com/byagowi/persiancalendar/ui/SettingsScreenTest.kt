@@ -14,9 +14,8 @@ class SettingsScreenTest {
 
     @Test
     fun bringInterfaceCalendarTab() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             SettingsScreen(
-                scope,
                 {},
                 {},
                 SettingsTab.InterfaceCalendar,
@@ -28,9 +27,8 @@ class SettingsScreenTest {
 
     @Test
     fun bringWidgetNotificationTab() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             SettingsScreen(
-                scope,
                 {},
                 {},
                 SettingsTab.WidgetNotification,
@@ -42,9 +40,8 @@ class SettingsScreenTest {
 
     @Test
     fun bringLocationAthanTab() {
-        composeTestRule.setContentWithParent { scope ->
+        composeTestRule.setContentWithParent {
             SettingsScreen(
-                scope,
                 {},
                 {},
                 SettingsTab.LocationAthan,
