@@ -75,6 +75,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
@@ -137,7 +138,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             if (backStack.size > 1) backStack.removeLastOrNull() else finish()
         }
 
-        fun navigateToSettingsLocationTab() = Screen.Settings(tab = SettingsTab.LocationAthan).navigate()
+        fun navigateToSettingsLocationTab() =
+            Screen.Settings(tab = SettingsTab.LocationAthan).navigate()
 
         fun navigateToAstronomy(jdn: Jdn) =
             Screen.Astronomy(daysOffset = jdn - Jdn.today()).navigate()
@@ -150,6 +152,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             predictivePopTransitionSpec = {
                 ContentTransform(fadeIn(), fadeOut())
             },
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                // TODO: Make rememberViewModelStoreNavEntryDecorator() here also work
+            ),
         ) { key ->
             NavEntry(key) { screen ->
                 when (screen) {
