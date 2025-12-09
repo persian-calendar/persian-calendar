@@ -64,7 +64,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -140,7 +139,7 @@ fun SharedTransitionScope.SettingsScreen(
     animatedContentScope: AnimatedContentScope,
     openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
-    initialPage: Int,
+    initialTab: SettingsTab,
     destination: String?,
     destinationItem: String?,
 ) {
@@ -187,68 +186,10 @@ fun SharedTransitionScope.SettingsScreen(
         },
     ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-            val customImageName by customImageName.collectAsState()
-            val disableStickyHeader = isTalkBackEnabled || customImageName != null
-            val tabs = listOf(
-                TabItem(
-                    outlinedIcon = Icons.Outlined.Palette,
-                    filledIcon = Icons.Default.Palette,
-                    firstTitle = R.string.pref_interface,
-                    secondTitle = R.string.calendar,
-                ) { listState ->
-                    settingsSection(
-                        canScrollBackward = listState.canScrollBackward,
-                        disableStickyHeader = disableStickyHeader,
-                        title = R.string.pref_ui,
-                    ) { InterfaceSettings(destination) }
-                    settingsSection(
-                        canScrollBackward = listState.canScrollBackward,
-                        disableStickyHeader = disableStickyHeader,
-                        title = R.string.calendar,
-                    ) { CalendarSettings(destination, destinationItem) }
-                },
-                TabItem(
-                    outlinedIcon = Icons.Outlined.Widgets,
-                    filledIcon = Icons.Default.Widgets,
-                    firstTitle = R.string.pref_notification,
-                    secondTitle = R.string.pref_widget,
-                ) { listState ->
-                    settingsSection(
-                        canScrollBackward = listState.canScrollBackward,
-                        disableStickyHeader = disableStickyHeader,
-                        title = R.string.pref_notification,
-                    ) { NotificationSettings() }
-                    settingsSection(
-                        canScrollBackward = listState.canScrollBackward,
-                        disableStickyHeader = disableStickyHeader,
-                        title = R.string.pref_widget,
-                    ) { WidgetSettings() }
-                },
-                TabItem(
-                    outlinedIcon = Icons.Outlined.LocationOn,
-                    filledIcon = Icons.Default.LocationOn,
-                    firstTitle = R.string.location,
-                    secondTitle = R.string.athan,
-                ) { listState ->
-                    settingsSection(
-                        canScrollBackward = listState.canScrollBackward,
-                        disableStickyHeader = disableStickyHeader,
-                        title = R.string.location,
-                    ) { LocationSettings(navigateToMap) }
-                    settingsSection(
-                        canScrollBackward = listState.canScrollBackward,
-                        disableStickyHeader = disableStickyHeader,
-                        title = R.string.athan,
-                        subtitle = {
-                            val coordinates by coordinates.collectAsState()
-                            if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
-                        },
-                    ) { AthanSettings(destination) }
-                },
+            val pagerState = rememberPagerState(
+                initialPage = initialTab.ordinal,
+                pageCount = SettingsTab.entries::size,
             )
-
-            val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
             val coroutineScope = rememberCoroutineScope()
 
             PrimaryTabRow(
@@ -266,7 +207,7 @@ fun SharedTransitionScope.SettingsScreen(
                     )
                 },
             ) {
-                tabs.forEachIndexed { index, tab ->
+                SettingsTab.entries.forEachIndexed { index, tab ->
                     val isLandscape =
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                     val modifier = Modifier.clip(MaterialTheme.shapes.large)
@@ -296,6 +237,9 @@ fun SharedTransitionScope.SettingsScreen(
             }
 
             ScreenSurface(animatedContentScope) {
+                val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+                val customImageName by customImageName.collectAsState()
+                val disableStickyHeader = isTalkBackEnabled || customImageName != null
                 HorizontalPager(state = pagerState) { index ->
                     Box(
                         modifier = Modifier
@@ -308,7 +252,16 @@ fun SharedTransitionScope.SettingsScreen(
                         LazyColumn(
                             state = listState,
                             contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding()),
-                        ) { tabs[index].content(this, listState) }
+                        ) {
+                            SettingsTab.entries.getOrNull(index)?.content(
+                                this@LazyColumn,
+                                listState,
+                                disableStickyHeader,
+                                destination,
+                                destinationItem,
+                                navigateToMap,
+                            )
+                        }
 //                        if (pagerState.currentPage == index) {
 //                            isAtTop = !listState.canScrollBackward
 //                        }
@@ -320,14 +273,78 @@ fun SharedTransitionScope.SettingsScreen(
     }
 }
 
-@Immutable
-private data class TabItem(
+enum class SettingsTab(
     private val outlinedIcon: ImageVector,
     private val filledIcon: ImageVector,
     @get:StringRes private val firstTitle: Int,
     @get:StringRes private val secondTitle: Int,
-    val content: LazyListScope.(listState: LazyListState) -> Unit,
+    val content: LazyListScope.(
+        listState: LazyListState,
+        disableStickyHeader: Boolean,
+        destination: String?,
+        destinationItem: String?,
+        navigateToMap: () -> Unit,
+    ) -> Unit,
 ) {
+    InterfaceCalendar(
+        outlinedIcon = Icons.Outlined.Palette,
+        filledIcon = Icons.Default.Palette,
+        firstTitle = R.string.pref_interface,
+        secondTitle = R.string.calendar,
+        content = { listState, disableStickyHeader, destination, destinationItem, _ ->
+            settingsSection(
+                canScrollBackward = listState.canScrollBackward,
+                disableStickyHeader = disableStickyHeader,
+                title = R.string.pref_ui,
+            ) { InterfaceSettings(destination) }
+            settingsSection(
+                canScrollBackward = listState.canScrollBackward,
+                disableStickyHeader = disableStickyHeader,
+                title = R.string.calendar,
+            ) { CalendarSettings(destination, destinationItem) }
+        }
+    ),
+    WidgetNotification(
+        outlinedIcon = Icons.Outlined.Widgets,
+        filledIcon = Icons.Default.Widgets,
+        firstTitle = R.string.pref_notification,
+        secondTitle = R.string.pref_widget,
+        content = { listState, disableStickyHeader, _, _, _ ->
+            settingsSection(
+                canScrollBackward = listState.canScrollBackward,
+                disableStickyHeader = disableStickyHeader,
+                title = R.string.pref_notification,
+            ) { NotificationSettings() }
+            settingsSection(
+                canScrollBackward = listState.canScrollBackward,
+                disableStickyHeader = disableStickyHeader,
+                title = R.string.pref_widget,
+            ) { WidgetSettings() }
+        }
+    ),
+    LocationAthan(
+        outlinedIcon = Icons.Outlined.LocationOn,
+        filledIcon = Icons.Default.LocationOn,
+        firstTitle = R.string.location,
+        secondTitle = R.string.athan,
+        content = { listState, disableStickyHeader, destination, _, navigateToMap ->
+            settingsSection(
+                canScrollBackward = listState.canScrollBackward,
+                disableStickyHeader = disableStickyHeader,
+                title = R.string.location,
+            ) { LocationSettings(navigateToMap) }
+            settingsSection(
+                canScrollBackward = listState.canScrollBackward,
+                disableStickyHeader = disableStickyHeader,
+                title = R.string.athan,
+                subtitle = {
+                    val coordinates by coordinates.collectAsState()
+                    if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
+                },
+            ) { AthanSettings(destination) }
+        }
+    );
+
     @Composable
     fun Title() {
         Text(
@@ -344,10 +361,6 @@ private data class TabItem(
         }
     }
 }
-
-const val INTERFACE_CALENDAR_TAB = 0
-const val WIDGET_NOTIFICATION_TAB = 1
-const val LOCATION_ATHAN_TAB = 2
 
 @Composable
 private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {

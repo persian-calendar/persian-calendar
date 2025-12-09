@@ -108,9 +108,8 @@ import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
 import com.byagowi.persiancalendar.ui.map.MapViewModel
-import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
+import com.byagowi.persiancalendar.ui.settings.SettingsTab
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.utils.preferences
@@ -138,7 +137,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             if (backStack.size > 1) backStack.removeLastOrNull() else finish()
         }
 
-        fun navigateToSettingsLocationTab() = Screen.Settings(tab = LOCATION_ATHAN_TAB).navigate()
+        fun navigateToSettingsLocationTab() = Screen.Settings(tab = SettingsTab.LocationAthan).navigate()
 
         fun navigateToAstronomy(jdn: Jdn) =
             Screen.Astronomy(daysOffset = jdn - Jdn.today()).navigate()
@@ -162,14 +161,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             openNavigationRail = openNavigationRail,
                             navigateToHolidaysSettings = { item ->
                                 Screen.Settings(
-                                    tab = INTERFACE_CALENDAR_TAB,
+                                    tab = SettingsTab.InterfaceCalendar,
                                     settings = PREF_HOLIDAY_TYPES,
                                     settingsItem = item,
                                 ).navigate()
                             },
                             navigateToSettingsLocationTabSetAthanAlarm = {
                                 Screen.Settings(
-                                    tab = LOCATION_ATHAN_TAB,
+                                    tab = SettingsTab.LocationAthan,
                                     settings = PREF_ATHAN_ALARM,
                                 ).navigate()
                             },
@@ -296,7 +295,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             animatedContentScope = LocalNavAnimatedContentScope.current,
                             openNavigationRail = openNavigationRail,
                             navigateToMap = { Screen.Map(fromSettings = true).navigate() },
-                            initialPage = screen.tab,
+                            initialTab = screen.tab,
                             destination = screen.settings,
                             destinationItem = screen.settingsItem,
                         )
@@ -362,7 +361,9 @@ private sealed interface Screen : NavKey {
 
     @Serializable
     class Settings(
-        val tab: Int = 0, val settings: String? = null, val settingsItem: String? = null
+        val tab: SettingsTab = SettingsTab.entries[0],
+        val settings: String? = null,
+        val settingsItem: String? = null,
     ) : Screen
 
     @Serializable
