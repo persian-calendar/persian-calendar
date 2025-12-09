@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
-import com.byagowi.persiancalendar.ui.settings.WIDGET_NOTIFICATION_TAB
+import com.byagowi.persiancalendar.ui.settings.SettingsTab
 import org.junit.Rule
 import org.junit.Test
 
@@ -15,16 +13,16 @@ class SettingsScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun basicSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
-            SettingsScreen(scope, {}, {}, 0, "", "")
-        }
-    }
-
-    @Test
     fun bringInterfaceCalendarTab() {
         composeTestRule.setContentWithParent { scope ->
-            SettingsScreen(scope, {}, {}, INTERFACE_CALENDAR_TAB, "", "")
+            SettingsScreen(
+                scope,
+                {},
+                {},
+                SettingsTab.InterfaceCalendar,
+                "",
+                "",
+            )
         }
     }
 
@@ -35,9 +33,9 @@ class SettingsScreenTest {
                 scope,
                 {},
                 {},
-                WIDGET_NOTIFICATION_TAB,
+                SettingsTab.WidgetNotification,
                 "",
-                ""
+                "",
             )
         }
     }
@@ -45,7 +43,14 @@ class SettingsScreenTest {
     @Test
     fun bringLocationAthanTab() {
         composeTestRule.setContentWithParent { scope ->
-            SettingsScreen(scope, {}, {}, LOCATION_ATHAN_TAB, "", "")
+            SettingsScreen(
+                scope,
+                {},
+                {},
+                SettingsTab.LocationAthan,
+                "",
+                "",
+            )
         }
     }
 }
