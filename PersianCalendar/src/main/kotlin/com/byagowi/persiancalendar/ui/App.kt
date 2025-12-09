@@ -293,50 +293,50 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
 
 private sealed interface Screen : NavKey {
     @Serializable
-    object Calendar : Screen
+    data object Calendar : Screen
 
     @Serializable
-    class Schedule(val selectedDay: Long? = null) : Screen
+    data class Schedule(val selectedDay: Long? = null) : Screen
 
     @Serializable
-    class Days(val selectedDay: Long? = null, val isWeek: Boolean = false) : Screen
+    data class Days(val selectedDay: Long? = null, val isWeek: Boolean = false) : Screen
 
     @Serializable
-    class Month(val selectedDay: Long? = null) : Screen
+    data class Month(val selectedDay: Long? = null) : Screen
 
     @Serializable
-    object Converter : Screen
+    data object Converter : Screen
 
     @Serializable
-    object Compass : Screen
+    data object Compass : Screen
 
     @Serializable
-    object Level : Screen
+    data object Level : Screen
 
     @Serializable
-    class Astronomy(val daysOffset: Int = 0) : Screen
+    data class Astronomy(val daysOffset: Int = 0) : Screen
 
     @Serializable
-    class Map(val fromSettings: Boolean = false, val time: Long? = null) : Screen
+    data class Map(val fromSettings: Boolean = false, val time: Long? = null) : Screen
 
     @Serializable
-    class Settings(
+    data class Settings(
         val tab: SettingsTab = SettingsTab.entries[0],
         val settings: String? = null,
         val settingsItem: String? = null,
     ) : Screen
 
     @Serializable
-    object About : Screen
+    data object About : Screen
 
     @Serializable
-    object Licenses : Screen
+    data object Licenses : Screen
 
     @Serializable
-    object Device : Screen
+    data object Device : Screen
 
     @Serializable
-    object Exit : Screen // Not a screen but is on the navigation rail, so
+    data object Exit : Screen // Not a screen but is on the navigation rail, so
 
     companion object {
         val navEntries = listOf(
