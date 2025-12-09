@@ -62,7 +62,10 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 
 class MapDraw(
-    resources: Resources, mapBackgroundColor: Int? = null, mapForegroundColor: Int? = null
+    resources: Resources,
+    private val scaleDegree: Int = 1,
+    mapBackgroundColor: Int? = null,
+    mapForegroundColor: Int? = null,
 ) {
     private val solarDraw = SolarDraw(resources)
     private val pinDrawable = resources.getDrawable(R.drawable.ic_pin, null)
@@ -98,7 +101,7 @@ class MapDraw(
     }
     // How the two above are created: https://gist.github.com/ebraminio/8313cff47813a5c9f98278c7ee8cde4e
 
-    private val maskMap = createBitmap(360, 180)
+    private val maskMap = createBitmap(360 / scaleDegree, 180 / scaleDegree)
     private val maskMapMoonScaleDown = 8
     private val maskMapCrescentVisibility =
         createBitmap(360 / maskMapMoonScaleDown, 180 / maskMapMoonScaleDown)
@@ -220,8 +223,8 @@ class MapDraw(
         val isMoonVisibility = currentMapType == MapType.MOON_VISIBILITY
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-        (0..<360).forEach { x ->
-            (0..<180).forEach { y ->
+        (0..<360 step scaleDegree).forEach { x ->
+            (0..<180 step scaleDegree).forEach { y ->
                 val latitude = 180 / 2.0 - y
                 val longitude = x - 360 / 2.0
                 val observer = Observer(latitude, longitude, .0)
@@ -234,13 +237,13 @@ class MapDraw(
                     if (moonAltitude > 0) {
                         val value = ((moonAltitude * 90 * 7).toInt()).coerceAtMost(120)
                         // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                        maskMap[x, y] = (value shl 24) + 0xF4F4F4
+                        maskMap[x / scaleDegree, y / scaleDegree] = (value shl 24) + 0xF4F4F4
                     }
                 } else {
                     if (sunAltitude < 0) {
                         val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
                         // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                        maskMap[x, y] = value shl 24
+                        maskMap[x / scaleDegree, y / scaleDegree] = value shl 24
                     }
                 }
 

@@ -1027,7 +1027,7 @@ fun createMapRemoteViews(context: Context, width: Int, height: Int, now: Long): 
         else android.R.color.system_accent1_600
     )
     else null
-    val mapDraw = MapDraw(context.resources, backgroundColor, foregroundColor)
+    val mapDraw = MapDraw(context.resources, 4, backgroundColor, foregroundColor)
     mapDraw.markersScale = .75f
     mapDraw.updateMap(now, MapType.DAY_NIGHT)
     val matrix = Matrix()
