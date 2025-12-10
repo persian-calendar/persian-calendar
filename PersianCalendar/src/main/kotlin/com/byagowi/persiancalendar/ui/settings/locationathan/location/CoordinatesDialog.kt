@@ -70,6 +70,13 @@ fun CoordinatesDialog(
     var changeCounter by remember { mutableIntStateOf(0) }
     val numeral by numeral.collectAsState()
     fun parseDouble(value: String): Double? = numeral.parseDouble(value.replace("°", ""))
+    fun isValidPart(value: Double, i: Int): Boolean {
+        return when (i) {
+            0 -> abs(value) <= 90 // Valid latitudes
+            1 -> abs(value) <= 180 // Valid longitudes
+            else -> value in -418.0..8_849.0 // Altitude, from Dead Sea to Mount Everest
+        }
+    }
     AppDialog(
         title = { Text(stringResource(R.string.coordinates)) },
         neutralButton = {
@@ -96,13 +103,7 @@ fun CoordinatesDialog(
                     if (i == 2 && x.value.isEmpty()) "0" else x.value
                 }.mapIndexedNotNull { i, coordinate ->
                     // Make sure coordinates array has both parsable and in range numbers
-                    parseDouble(coordinate)?.takeIf {
-                        when (i) {
-                            0 -> abs(it) <= 90 // Valid latitudes
-                            1 -> abs(it) <= 180 // Valid longitudes
-                            else -> it in -418.0..8_849.0 // Altitude, from Dead Sea to Mount Everest
-                        }
-                    }
+                    parseDouble(coordinate)?.takeIf { isValidPart(it, i) }
                 }
                 if (parts.size == 3) {
                     val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
@@ -117,7 +118,7 @@ fun CoordinatesDialog(
         },
         onDismissRequest = onDismissRequest,
     ) {
-        fields.zip(state) { (stringId), fieldState ->
+        fields.zip(state.withIndex()) { (stringId), (i, fieldState) ->
             val uiDirection = LocalLayoutDirection.current
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 TextField(
@@ -126,13 +127,10 @@ fun CoordinatesDialog(
                         .padding(vertical = 2.dp),
                     label = {
                         CompositionLocalProvider(LocalLayoutDirection provides uiDirection) {
-                            Text(
-                                stringResource(stringId),
-                                modifier = Modifier.fillMaxWidth(),
-                            )
+                            Text(stringResource(stringId), modifier = Modifier.fillMaxWidth())
                         }
                     },
-                    isError = parseDouble(fieldState.value) == null,
+                    isError = parseDouble(fieldState.value)?.takeIf { isValidPart(it, i) } == null,
                     value = numeral.format(fieldState.value, isInEdit = true).let {
                         if (stringId == R.string.altitude) it else it.replace("°", "") + "°"
                     },
