@@ -41,5 +41,5 @@ suspend fun geocode(
         } else @Suppress("DEPRECATION") {
             geocoder.getFromLocation(latitude, longitude, 1)?.firstOrNull()
         }
-    }.onFailure(logException).getOrNull().debugAssertNotNull
+    }.onFailure(logException).getOrNull()
 }
