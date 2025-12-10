@@ -46,6 +46,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Palette
@@ -117,6 +118,7 @@ import com.byagowi.persiancalendar.ui.settings.interfacecalendar.CalendarSetting
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.AthanSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
+import com.byagowi.persiancalendar.ui.settings.wallpaper.WallpaperConfigurationActivity
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.NotificationSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetSettings
@@ -300,8 +302,7 @@ enum class SettingsTab(
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.calendar,
             ) { CalendarSettings(destination, destinationItem) }
-        }
-    ),
+        }),
     WidgetNotification(
         outlinedIcon = Icons.Outlined.Widgets,
         filledIcon = Icons.Default.Widgets,
@@ -318,8 +319,7 @@ enum class SettingsTab(
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.pref_widget,
             ) { WidgetSettings() }
-        }
-    ),
+        }),
     LocationAthan(
         outlinedIcon = Icons.Outlined.LocationOn,
         filledIcon = Icons.Default.LocationOn,
@@ -340,8 +340,7 @@ enum class SettingsTab(
                     if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
                 },
             ) { AthanSettings(destination) }
-        }
-    );
+        });
 
     @Composable
     fun Title() {
@@ -367,16 +366,26 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     AppDropdownMenuItem(
         text = { Text(stringResource(R.string.live_wallpaper_settings)) },
         trailingIcon = {
+            val componentName = ComponentName(context, PersianCalendarWallpaperService::class.java)
+            val isCurrent = runCatching {
+                WallpaperManager.getInstance(context)?.wallpaperInfo?.component == componentName
+            }.getOrNull() ?: false
             Box(Modifier.clickable {
                 closeMenu()
                 runCatching {
-                    val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).putExtra(
+                    val intent = if (isCurrent) Intent(
+                        context,
+                        WallpaperConfigurationActivity::class.java,
+                    ) else Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).putExtra(
                         WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                        ComponentName(context, PersianCalendarWallpaperService::class.java)
+                        componentName,
                     )
                     context.startActivity(intent)
                 }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
-            }) { Icon(Icons.Default.Check, stringResource(R.string.accept)) }
+            }) {
+                val icon = if (isCurrent) Icons.Default.Settings else Icons.Default.Check
+                Icon(imageVector = icon, contentDescription = stringResource(R.string.accept))
+            }
         },
     ) {
         closeMenu()
