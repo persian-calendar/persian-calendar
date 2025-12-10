@@ -302,7 +302,8 @@ enum class SettingsTab(
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.calendar,
             ) { CalendarSettings(destination, destinationItem) }
-        }),
+        },
+    ),
     WidgetNotification(
         outlinedIcon = Icons.Outlined.Widgets,
         filledIcon = Icons.Default.Widgets,
@@ -319,7 +320,8 @@ enum class SettingsTab(
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.pref_widget,
             ) { WidgetSettings() }
-        }),
+        },
+    ),
     LocationAthan(
         outlinedIcon = Icons.Outlined.LocationOn,
         filledIcon = Icons.Default.LocationOn,
@@ -340,7 +342,8 @@ enum class SettingsTab(
                     if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
                 },
             ) { AthanSettings(destination) }
-        });
+        },
+    );
 
     @Composable
     fun Title() {
