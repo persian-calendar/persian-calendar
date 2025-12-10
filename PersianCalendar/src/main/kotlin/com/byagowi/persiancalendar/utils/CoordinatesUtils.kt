@@ -5,11 +5,11 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import com.byagowi.persiancalendar.global.language
-import io.github.persiancalendar.praytimes.Coordinates
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.util.Locale
+import kotlin.coroutines.resume
 import kotlin.math.abs
 
 // https://stackoverflow.com/a/62499553
@@ -25,21 +25,21 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
 val Address.friendlyName: String?
     get() = listOf(locality, subAdminArea, adminArea).firstOrNull { !it.isNullOrBlank() }
 
-fun CoroutineScope.geocode(
+suspend fun geocode(
     context: Context,
-    coordinates: Coordinates,
-    onResult: (Address?) -> Unit,
-) {
-    launch(Dispatchers.IO) {
-        val geocoder = Geocoder(context, language.value.asSystemLocale())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) runCatching {
-            geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1) { addresses ->
-                launch(Dispatchers.Main.immediate) { onResult(addresses.firstOrNull()) }
+    latitude: Double,
+    longitude: Double,
+): Address? = withContext(Dispatchers.IO) {
+    val geocoder = Geocoder(context, language.value.asSystemLocale())
+    runCatching {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            suspendCancellableCoroutine { continuation ->
+                geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+                    if (continuation.isActive) continuation.resume(addresses.firstOrNull())
+                }
             }
-        }.onFailure(logException).getOrNull().debugAssertNotNull else runCatching {
-            @Suppress("DEPRECATION") val addresses =
-                geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1)
-            launch(Dispatchers.Main.immediate) { onResult(addresses?.firstOrNull()) }
-        }.onFailure(logException).getOrNull().debugAssertNotNull
-    }
+        } else @Suppress("DEPRECATION") {
+            geocoder.getFromLocation(latitude, longitude, 1)?.firstOrNull()
+        }
+    }.onFailure(logException).getOrNull().debugAssertNotNull
 }

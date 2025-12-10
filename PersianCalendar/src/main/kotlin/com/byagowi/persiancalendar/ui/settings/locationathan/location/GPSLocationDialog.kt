@@ -187,15 +187,14 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
             // Don't set elevation/altitude even from GPS, See #1011
             val coordinates = Coordinates(coord.latitude, coord.longitude, .0)
             context.preferences.saveLocation(coordinates, "", "")
-            geocode(context, coordinates) {
-                countryCode = it?.countryCode
-                cityName = it?.friendlyName
-                context.preferences.saveLocation(
-                    coordinates,
-                    cityName.orEmpty(),
-                    countryCode.orEmpty(),
-                )
-            }
+            val address = geocode(context, coordinates.latitude, coordinates.longitude)
+            countryCode = address?.countryCode
+            cityName = address?.friendlyName
+            context.preferences.saveLocation(
+                coordinates,
+                cityName.orEmpty(),
+                countryCode.orEmpty(),
+            )
         }
     }
 

@@ -168,10 +168,9 @@ fun CoordinatesDialog(
             val latitude = parseDouble(state[0].value) ?: return@LaunchedEffect
             val longitude = parseDouble(state[1].value) ?: return@LaunchedEffect
             if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return@LaunchedEffect
-            geocode(context, Coordinates(latitude, longitude, .0)) {
-                cityName = it?.friendlyName
-                countryCode = it?.countryCode
-            }
+            val address = geocode(context, latitude, longitude)
+            cityName = address?.friendlyName
+            countryCode = address?.countryCode
         }
     }
 }
