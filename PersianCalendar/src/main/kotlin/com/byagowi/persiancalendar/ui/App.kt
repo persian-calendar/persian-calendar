@@ -349,14 +349,13 @@ private sealed interface Screen : NavKey {
             Triple(Exit, Icons.Default.Cancel, R.string.exit)
         )
 
-        // These are mentioned in xml/shortcuts.xml and ShortcutActivity.kt
-        fun fromName(value: String?) = when (value) {
-            "CONVERTER" -> Converter
-            "COMPASS" -> Compass
-            "LEVEL" -> Level
-            "ASTRONOMY" -> Astronomy()
-            "MAP" -> Map()
-            else -> Calendar
+        fun fromName(value: String?) = when (Shortcut.fromName(value)) {
+            Shortcut.CONVERTER -> Converter
+            Shortcut.COMPASS -> Compass
+            Shortcut.LEVEL -> Level
+            Shortcut.ASTRONOMY -> Astronomy()
+            Shortcut.MAP -> Map()
+            null -> Calendar
         }
     }
 }
