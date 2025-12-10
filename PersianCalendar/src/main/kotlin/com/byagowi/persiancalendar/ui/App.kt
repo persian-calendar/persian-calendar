@@ -430,13 +430,11 @@ private fun AppNavigationRail(
                                 ),
                             )
                         },
-                        selected = screen == backStack.lastOrNull(),
+                        selected = screen.javaClass == backStack.lastOrNull()?.javaClass,
                         onClick = {
                             if (screen == Screen.Exit) finish() else coroutineScope.launch {
                                 railState.collapse()
-                                if (backStack.lastOrNull() != screen) {
-                                    backStack.add(screen)
-                                }
+                                if (backStack.lastOrNull() != screen) backStack.add(screen)
                             }
                         },
                     )
