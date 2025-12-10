@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.DpSize
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
@@ -31,10 +32,9 @@ import com.byagowi.persiancalendar.utils.preferences
 import java.util.GregorianCalendar
 
 class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
-
-    override fun preview(width: Int, height: Int): RemoteViews {
+    override fun preview(size: DpSize): RemoteViews {
         return create1x1RemoteViews(
-            this, width, height, Jdn.today() on mainCalendar, preferences, appWidgetId
+            this, size, Jdn.today() on mainCalendar, preferences, appWidgetId
         )
     }
 
@@ -46,8 +46,7 @@ class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
-
-    override fun preview(width: Int, height: Int): RemoteViews {
+    override fun preview(size: DpSize): RemoteViews {
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
@@ -58,7 +57,7 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
             calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
         )
         return create4x1RemoteViews(
-            this, width, height, jdn, today, widgetTitle, subtitle, clock,
+            this, size, jdn, today, widgetTitle, subtitle, clock,
             preferences, appWidgetId,
         )
     }
@@ -71,8 +70,7 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
-
-    override fun preview(width: Int, height: Int): RemoteViews {
+    override fun preview(size: DpSize): RemoteViews {
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
@@ -84,7 +82,7 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
             calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
         )
         return create2x2RemoteViews(
-            this, width, height, jdn, today, widgetTitle, subtitle, prayTimes,
+            this, size, jdn, today, widgetTitle, subtitle, prayTimes,
             clock, preferences, appWidgetId,
         )
     }
@@ -97,15 +95,13 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
-
-    override fun preview(width: Int, height: Int): RemoteViews {
+    override fun preview(size: DpSize): RemoteViews {
         val jdn = Jdn.today()
         val date = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
         return create4x2RemoteViews(
             this,
-            width,
-            height,
+            size,
             Jdn.today(),
             date,
             clock,
@@ -125,10 +121,10 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
-    override fun preview(width: Int, height: Int): RemoteViews {
+    override fun preview(size: DpSize): RemoteViews {
         val today = Jdn.today()
         val date = today on mainCalendar
-        return createWeekViewRemoteViews(this, width, height, date, today, preferences, appWidgetId)
+        return createWeekViewRemoteViews(this, size, date, today, preferences, appWidgetId)
     }
 
     @Composable
@@ -139,8 +135,8 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
-    override fun preview(width: Int, height: Int) =
-        createSunViewRemoteViews(this, width, height, coordinates.value?.calculatePrayTimes())
+    override fun preview(size: DpSize) =
+        createSunViewRemoteViews(this, size, coordinates.value?.calculatePrayTimes())
 
     @Composable
     override fun ColumnScope.Settings() {
@@ -151,9 +147,8 @@ class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
-
-    override fun preview(width: Int, height: Int): RemoteViews =
-        createMapRemoteViews(this, width, height, System.currentTimeMillis())
+    override fun preview(size: DpSize): RemoteViews =
+        createMapRemoteViews(this, size, System.currentTimeMillis())
 
     @Composable
     override fun ColumnScope.Settings() {
@@ -163,9 +158,8 @@ class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class WidgetMonthViewConfigurationActivity : BaseWidgetConfigurationActivity() {
-
-    override fun preview(width: Int, height: Int): RemoteViews =
-        createMonthViewRemoteViews(this, width, height, true, Jdn.today())
+    override fun preview(size: DpSize): RemoteViews =
+        createMonthViewRemoteViews(this, size, Jdn.today())
 
     @Composable
     override fun ColumnScope.Settings() {

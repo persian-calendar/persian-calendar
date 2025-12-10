@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.widget.FrameLayout
 import android.widget.RemoteViews
-import androidx.collection.IntIntPair
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,9 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
@@ -75,11 +74,9 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
 
     @Composable
     final override fun Header() {
-        val appWidgetManager = AppWidgetManager.getInstance(this)
-        val (widthPx, heightPx) = run {
-            val size = appWidgetManager.getWidgetSize(LocalResources.current, appWidgetId)
-            size ?: IntIntPair(300, 300)
-        }
+        val size = AppWidgetManager.getInstance(this)?.getWidgetSize(
+            LocalResources.current, appWidgetId
+        ) ?: DpSize(100.dp, 100.dp)
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         Box(
@@ -94,14 +91,11 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
             },
             contentAlignment = Alignment.Center,
         ) {
-            val density = LocalDensity.current
             BoxWithConstraints(
-                with(density) {
-                    Modifier.size(
-                        width = widthPx.toDp().coerceAtMost(320.dp),
-                        height = heightPx.toDp().coerceAtMost(240.dp),
-                    )
-                },
+                Modifier.size(
+                    width = size.width.coerceAtMost(320.dp),
+                    height = size.height.coerceAtMost(240.dp),
+                ),
             ) {
                 val preferences = preferences
                 var updateToken by remember { mutableIntStateOf(0) }
@@ -112,14 +106,12 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                     preferences.registerOnSharedPreferenceChangeListener(callback)
                     onDispose { preferences.unregisterOnSharedPreferenceChangeListener(callback) }
                 }
-                val width = with(density) { (this@BoxWithConstraints).maxWidth.roundToPx() }
-                val height = with(density) { (this@BoxWithConstraints).maxHeight.roundToPx() }
                 AndroidView(
                     factory = ::FrameLayout,
                     update = {
                         updateToken.let {}
                         it.removeAllViews()
-                        val remoteViews = preview(width, height)
+                        val remoteViews = preview(DpSize(maxWidth, maxHeight))
                         it.addView(remoteViews.apply(it.context.applicationContext, it))
                     },
                     modifier = Modifier.fillMaxSize(),
@@ -147,5 +139,5 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
         }
     }
 
-    abstract fun preview(width: Int, height: Int): RemoteViews
+    abstract fun preview(size: DpSize): RemoteViews
 }

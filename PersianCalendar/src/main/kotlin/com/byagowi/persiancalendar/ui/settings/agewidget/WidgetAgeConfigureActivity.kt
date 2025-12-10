@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
@@ -61,8 +62,8 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
     override fun onBack() = finish()
 
-    override fun preview(width: Int, height: Int): RemoteViews =
-        createAgeRemoteViews(this, width, height, appWidgetId, Jdn.today(), preferences)
+    override fun preview(size: DpSize): RemoteViews =
+        createAgeRemoteViews(this, size, appWidgetId, Jdn.today(), preferences)
 
     @Composable
     override fun ColumnScope.Settings() {

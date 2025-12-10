@@ -29,8 +29,9 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
-import androidx.collection.IntIntPair
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -247,50 +248,49 @@ fun update(context: Context, updateDate: Boolean) {
     ).toFloat()
 
     // Widgets
-    AppWidgetManager.getInstance(context).run {
-        updateFromRemoteViews<AgeWidget>(context, now) { width, height, _, widgetId ->
-            createAgeRemoteViews(context, width, height, widgetId, jdn, preferences)
+    AppWidgetManager.getInstance(context)?.run {
+        updateFromRemoteViews<AgeWidget>(context, now) { size, widgetId ->
+            createAgeRemoteViews(context, size, widgetId, jdn, preferences)
         }
-        updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, widgetId ->
-            create1x1RemoteViews(context, width, height, date, preferences, widgetId)
+        updateFromRemoteViews<Widget1x1>(context, now) { size, widgetId ->
+            create1x1RemoteViews(context, size, date, preferences, widgetId)
         }
-        updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, widgetId ->
+        updateFromRemoteViews<Widget4x1>(context, now) { size, widgetId ->
             create4x1RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, clock,
-                preferences, widgetId,
+                context, size, jdn, date, widgetTitle, subtitle, clock, preferences, widgetId
             )
         }
-        updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, widgetId ->
+        updateFromRemoteViews<Widget2x2>(context, now) { size, widgetId ->
             create2x2RemoteViews(
-                context, width, height, jdn, date, widgetTitle, subtitle, prayTimes, clock,
+                context, size, jdn, date, widgetTitle, subtitle, prayTimes, clock,
                 preferences, widgetId,
             )
         }
-        updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, widgetId ->
+        updateFromRemoteViews<Widget4x2>(context, now) { size, widgetId ->
             create4x2RemoteViews(
-                context, width, height, jdn, date, clock, prayTimes, preferences, widgetId
+                context, size, jdn, date, clock, prayTimes, preferences, widgetId
             )
         }
-        updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _, _ ->
-            createSunViewRemoteViews(context, width, height, prayTimes)
+        updateFromRemoteViews<WidgetSunView>(context, now) { size, _ ->
+            createSunViewRemoteViews(context, size, prayTimes)
         }
-        updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, hasSize, _ ->
-            createMonthViewRemoteViews(context, width, height, hasSize, jdn)
+        updateFromRemoteViews<WidgetMonthView>(context, now) { size, _ ->
+            createMonthViewRemoteViews(context, size, jdn)
         }
-        updateFromRemoteViews<WidgetMonth>(context, now) { _, height, hasSize, widgetId ->
-            createMonthRemoteViews(context, height.takeIf { hasSize }, widgetId)
+        updateFromRemoteViews<WidgetMonth>(context, now) { size, widgetId ->
+            createMonthRemoteViews(context, size, widgetId)
         }
-        updateFromRemoteViews<WidgetMap>(context, now) { width, height, _, _ ->
-            createMapRemoteViews(context, width, height, now)
+        updateFromRemoteViews<WidgetMap>(context, now) { size, _ ->
+            createMapRemoteViews(context, size, now)
         }
-        updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _, _ ->
-            createMoonRemoteViews(context, width, height)
+        updateFromRemoteViews<WidgetMoon>(context, now) { size, _ ->
+            createMoonRemoteViews(context, size)
         }
-        updateFromRemoteViews<WidgetSchedule>(context, now) { width, _, hasSize, widgetId ->
-            createScheduleRemoteViews(context, width.takeIf { hasSize }, widgetId)
+        updateFromRemoteViews<WidgetSchedule>(context, now) { size, widgetId ->
+            createScheduleRemoteViews(context, size, widgetId)
         }
-        updateFromRemoteViews<WidgetWeekView>(context, now) { width, height, _, widgetId ->
-            createWeekViewRemoteViews(context, width, height, date, jdn, preferences, widgetId)
+        updateFromRemoteViews<WidgetWeekView>(context, now) { size, widgetId ->
+            createWeekViewRemoteViews(context, size, date, jdn, preferences, widgetId)
         }
     }
 
@@ -365,7 +365,7 @@ private fun PrayTimes.getNextPrayTime(clock: Clock): PrayTime {
     return times.firstOrNull { this[it] > clock } ?: PrayTime.FAJR
 }
 
-fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntPair? {
+fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): DpSize? {
     // https://stackoverflow.com/a/69080699
     val isLandscape = resources.isLandscape
     val (width, height) = listOf(
@@ -373,22 +373,23 @@ fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntP
         else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
         if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-    ).map { (getAppWidgetOptions(widgetId).getInt(it, 0) * resources.dp).toInt() }
+    ).map { getAppWidgetOptions(widgetId).getInt(it, 0) }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
-    return if (width > 10 && height > 10) IntIntPair(width, height) else null
+    return DpSize(width.dp, height.dp).takeIf { width > 10 && height > 10 }
 }
 
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     context: Context,
     now: Long,
-    widgetUpdateAction: (width: Int, height: Int, hasSize: Boolean, widgetId: Int) -> RemoteViews
+    widgetUpdateAction: (size: DpSize?, widgetId: Int) -> RemoteViews
 ) {
     runCatching {
         getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
             latestAnyWidgetUpdate = now
-            val size = getWidgetSize(context.resources, widgetId)
-            val (width, height) = size ?: IntIntPair(250, 250)
-            updateAppWidget(widgetId, widgetUpdateAction(width, height, size != null, widgetId))
+            updateAppWidget(
+                widgetId,
+                widgetUpdateAction(getWidgetSize(context.resources, widgetId), widgetId)
+            )
         }
     }.onFailure(logException).onFailure {
         if (BuildConfig.DEVELOPMENT) {
@@ -409,10 +410,12 @@ private fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
 }
 
 private fun createRoundedBitmap(
-    width: Int, height: Int, @ColorInt color: Int, roundSize: Float
+    resources: Resources, size: DpSize?, @ColorInt color: Int, roundSize: Float
 ): Bitmap {
-    val bitmap = createBitmap(width, height)
-    val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+    val width = (size?.width?.value ?: 250f) * resources.dp
+    val height = (size?.height?.value ?: 250f) * resources.dp
+    val bitmap = createBitmap(width.roundToInt(), height.roundToInt())
+    val rect = RectF(0f, 0f, width, height)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color }
     Canvas(bitmap).drawRoundRect(rect, roundSize, roundSize, paint)
     return bitmap
@@ -428,8 +431,7 @@ private fun getWidgetTextColor(
 
 fun createAgeRemoteViews(
     context: Context,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     widgetId: Int,
     today: Jdn,
     preferences: SharedPreferences,
@@ -443,7 +445,9 @@ fun createAgeRemoteViews(
         preferences, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
     )
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
-    remoteViews.setRoundBackground(R.id.age_widget_background, width, height, backgroundColor)
+    remoteViews.setRoundBackground(
+        context.resources, R.id.age_widget_background, size, backgroundColor
+    )
     remoteViews.setDirection(R.id.age_widget_root, context.resources)
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title)
     remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
@@ -464,9 +468,7 @@ fun createAgeRemoteViews(
     return remoteViews
 }
 
-fun createSunViewRemoteViews(
-    context: Context, width: Int, height: Int, prayTimes: PrayTimes?
-): RemoteViews {
+fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTimes?): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = when {
         prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
@@ -493,9 +495,11 @@ fun createSunViewRemoteViews(
         textColorSecondary = color,
         linesColor = ColorUtils.setAlphaComponent(color, 0x60)
     )
-    remoteViews.setRoundBackground(R.id.image_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
     sunView.layoutDirection = context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
+    val width = ((size?.width?.value ?: 250f) * context.resources.dp).roundToInt()
+    val height = ((size?.height?.value ?: 250f) * context.resources.dp).roundToInt()
     sunView.measure(
         View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
         View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
@@ -544,11 +548,11 @@ fun updateMonthWidget(context: Context, widgetId: Int, command: Int) {
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
         if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command)
     )
-    val views = createMonthRemoteViews(context, size?.second, widgetId)
-    appWidgetManager.updateAppWidget(widgetId, views)
+    val views = createMonthRemoteViews(context, size, widgetId)
+    appWidgetManager?.updateAppWidget(widgetId, views)
 }
 
-private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int): RemoteViews {
+private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month)
     remoteViews.setDirection(R.id.widget_month, context.resources)
     val today = Jdn.today()
@@ -595,8 +599,8 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         "setBackgroundResource",
         if (daysRowsCount > 5) R.drawable.widget_month_bottom_border else 0
     )
-    val eventsCountToShow = height?.let {
-        val bottomSpace = it / context.resources.dp - 52 - 20
+    val eventsCountToShow = size?.let {
+        val bottomSpace = it.height.value - 52 - 20
         ((bottomSpace / daysRowsCount - 14) / 14).toInt()
     } ?: 3
 
@@ -768,16 +772,15 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     return remoteViews
 }
 
-private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: Int): RemoteViews {
+private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_schedule)
     remoteViews.setDirection(R.id.widget_schedule, context.resources)
 
     // An estimation, https://developer.android.com/guide/practices/ui_guidelines/widget_design.html
-    val widthCells = width?.let {
-        val widthDp = it / context.resources.dp
+    val widthCells = size?.width?.let {
         when {
-            widthDp < 182 -> 2
-            widthDp < 310 -> 3
+            it < 182.dp -> 2
+            it < 310.dp -> 3
             else -> 4
         }
     } ?: 3
@@ -823,15 +826,11 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     return remoteViews
 }
 
-fun createMonthViewRemoteViews(
-    context: Context,
-    width: Int,
-    height: Int,
-    hasSize: Boolean,
-    today: Jdn,
-): RemoteViews {
+fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): RemoteViews {
+    val width = ((size?.width?.value ?: 250f) * context.resources.dp).roundToInt()
+    val height = ((size?.height?.value ?: 250f) * context.resources.dp).roundToInt()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
-    remoteViews.setRoundBackground(R.id.image_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
 
     val contentColor = androidx.compose.ui.graphics.Color(
         when {
@@ -894,7 +893,7 @@ fun createMonthViewRemoteViews(
         isRtl = isRtl,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         selectedDay = null,
-        setWeekNumberText = if (hasSize && prefersWidgetsDynamicColors) { i, text ->
+        setWeekNumberText = if (size != null && prefersWidgetsDynamicColors) { i, text ->
             val id = monthWidgetWeeks[i]
             remoteViews.setTextViewText(id, text)
             val contentDescription = context.getString(R.string.nth_week_of_year, text)
@@ -905,7 +904,7 @@ fun createMonthViewRemoteViews(
             remoteViews.setAlpha(id, .5f)
             remoteViews.setDynamicTextColor(id, android.R.attr.colorForeground)
         } else null,
-        setText = if (hasSize && prefersWidgetsDynamicColors) { i, text, isHoliday ->
+        setText = if (size != null && prefersWidgetsDynamicColors) { i, text, isHoliday ->
             val id = monthWidgetCells[i]
             remoteViews.setTextViewText(id, text)
             remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, cellFontSize)
@@ -920,7 +919,7 @@ fun createMonthViewRemoteViews(
         } else null,
     )
     val footerSize = min(width, height) / 7f * 20 / 40 * (if (language.value.isTamil) .8f else 1f)
-    if (hasSize && prefersWidgetsDynamicColors) {
+    if (size != null && prefersWidgetsDynamicColors) {
         remoteViews.setTextViewText(R.id.month_year, contentDescription)
         remoteViews.setTextViewTextSize(R.id.month_year, TypedValue.COMPLEX_UNIT_PX, footerSize)
         remoteViews.setAlpha(R.id.month_year, 0.5f)
@@ -1010,8 +1009,10 @@ private val monthWidgetCells = listOf(
     R.id.month_grid_cell6x7,
 )
 
-fun createMapRemoteViews(context: Context, width: Int, height: Int, now: Long): RemoteViews {
-    val size = min(width / 2, height)
+fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteViews {
+    val width = (size?.width?.value ?: 250f) * context.resources.dp
+    val height = (size?.height?.value ?: 250f) * context.resources.dp
+    val size = min(width / 2, height).roundToInt()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val isNightMode = isSystemInDarkTheme(context.resources.configuration)
     val backgroundColor = if (prefersWidgetsDynamicColors) ColorUtils.setAlphaComponent(
@@ -1050,7 +1051,9 @@ fun createMapRemoteViews(context: Context, width: Int, height: Int, now: Long): 
     return remoteViews
 }
 
-private fun createMoonRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+private fun createMoonRemoteViews(context: Context, size: DpSize?): RemoteViews {
+    val width = ((size?.width?.value ?: 250f) * context.resources.dp).roundToInt()
+    val height = ((size?.height?.value ?: 250f) * context.resources.dp).roundToInt()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_moon)
     val solarDraw = SolarDraw(context.resources)
     val bitmap = createBitmap(width, height).applyCanvas {
@@ -1080,8 +1083,7 @@ private fun RemoteViews.setTextViewTextSizeSp(@IdRes id: Int, size: Float) =
 
 fun create1x1RemoteViews(
     context: Context,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     date: AbstractDate,
     preferences: SharedPreferences,
     widgetId: Int,
@@ -1092,7 +1094,7 @@ fun create1x1RemoteViews(
         if (scale == DEFAULT_WIDGET_TEXT_SCALE) R.layout.widget1x1_autosize
         else R.layout.widget1x1,
     )
-    remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.widget_layout1x1_background, size)
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
     remoteViews.setupForegroundTextColors(R.id.textPlaceholder1_1x1, R.id.textPlaceholder2_1x1)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
@@ -1110,8 +1112,7 @@ fun create1x1RemoteViews(
 
 fun create4x1RemoteViews(
     context: Context,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     jdn: Jdn,
     date: AbstractDate,
     widgetTitle: String,
@@ -1133,7 +1134,7 @@ fun create4x1RemoteViews(
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x1)
     if (isWidgetClock.value) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
-    remoteViews.setRoundBackground(R.id.widget_layout4x1_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.widget_layout4x1_background, size)
     remoteViews.setDirection(R.id.widget_layout4x1, context.resources)
     remoteViews.setupForegroundTextColors(
         R.id.textPlaceholder1_4x1, R.id.textPlaceholder2_4x1, R.id.textPlaceholder3_4x1
@@ -1164,8 +1165,7 @@ fun create4x1RemoteViews(
 
 fun create2x2RemoteViews(
     context: Context,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     jdn: Jdn,
     date: AbstractDate,
     widgetTitle: String,
@@ -1195,7 +1195,7 @@ fun create2x2RemoteViews(
         remoteViews.setTextViewTextSizeSp(R.id.time_header_2x2, 22 * scale)
         remoteViews.configureClock(R.id.time_2x2)
     }
-    remoteViews.setRoundBackground(R.id.widget_layout2x2_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.widget_layout2x2_background, size)
     remoteViews.setDirection(R.id.widget_layout2x2, context.resources)
     remoteViews.setupForegroundTextColors(
         R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2
@@ -1250,8 +1250,7 @@ private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
 
 fun create4x2RemoteViews(
     context: Context,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     jdn: Jdn,
     date: AbstractDate,
     clock: Clock,
@@ -1283,7 +1282,7 @@ fun create4x2RemoteViews(
     remoteViews.setTextViewTextSizeSp(R.id.event_4x2, 13 * scale)
 
     if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
-    remoteViews.setRoundBackground(R.id.widget_layout4x2_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.widget_layout4x2_background, size)
     remoteViews.setDirection(R.id.widget_layout4x2, context.resources)
 
     remoteViews.setupForegroundTextColors(
@@ -1372,8 +1371,7 @@ fun create4x2RemoteViews(
 
 fun createWeekViewRemoteViews(
     context: Context,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     date: AbstractDate,
     today: Jdn,
     preferences: SharedPreferences,
@@ -1392,7 +1390,7 @@ fun createWeekViewRemoteViews(
 
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_week_view)
     remoteViews.setDirection(R.id.widget_layout_week_view, context.resources)
-    remoteViews.setRoundBackground(R.id.widget_layout_week_view_background, width, height)
+    remoteViews.setRoundBackground(context.resources, R.id.widget_layout_week_view_background, size)
 
     val weekDaysViews = weekDays.flatMap { listOf(it.second, it.third) } + R.id.textDate
     remoteViews.setupForegroundTextColors(*weekDaysViews.toIntArray())
@@ -1776,9 +1774,9 @@ private data class NotificationData(
 }
 
 private fun RemoteViews.setRoundBackground(
+    resources: Resources,
     @IdRes viewId: Int,
-    width: Int,
-    height: Int,
+    size: DpSize?,
     @ColorInt color: Int = selectedWidgetBackgroundColor
 ) {
     when {
@@ -1789,7 +1787,7 @@ private fun RemoteViews.setRoundBackground(
 
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
         else -> {
-            val roundBackground = createRoundedBitmap(width, height, color, roundPixelSize)
+            val roundBackground = createRoundedBitmap(resources, size, color, roundPixelSize)
             setImageViewBitmap(viewId, roundBackground)
         }
     }
