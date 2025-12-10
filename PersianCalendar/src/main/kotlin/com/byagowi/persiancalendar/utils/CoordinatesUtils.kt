@@ -8,9 +8,11 @@ import com.byagowi.persiancalendar.global.language
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.seconds
 
 // https://stackoverflow.com/a/62499553
 // https://en.wikipedia.org/wiki/ISO_6709#Representation_at_the_human_interface_(Annex_D)
@@ -31,15 +33,15 @@ suspend fun geocode(
     longitude: Double,
 ): Address? = withContext(Dispatchers.IO) {
     val geocoder = Geocoder(context, language.value.asSystemLocale())
-    runCatching {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            suspendCancellableCoroutine { continuation ->
-                geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
-                    if (continuation.isActive) continuation.resume(addresses.firstOrNull())
+    withTimeoutOrNull(3.seconds) {
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                suspendCancellableCoroutine { continuation ->
+                    geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+                        if (continuation.isActive) continuation.resume(addresses)
+                    }
                 }
-            }
-        } else @Suppress("DEPRECATION") {
-            geocoder.getFromLocation(latitude, longitude, 1)?.firstOrNull()
-        }
-    }.onFailure(logException).getOrNull()
+            } else @Suppress("DEPRECATION") geocoder.getFromLocation(latitude, longitude, 1)
+        }.onFailure(logException).getOrNull()
+    }?.firstOrNull()
 }
