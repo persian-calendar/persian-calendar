@@ -231,6 +231,14 @@ class CalendarViewModel() : ViewModel() {
         }
     }
 
+    fun initializeAndGetInitialSelectedTab(context: Context): CalendarScreenTab {
+        val initialTab =
+            CalendarScreenTab.entries.getOrNull(context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
+                ?: CalendarScreenTab.entries[0]
+        changeSelectedTab(initialTab)
+        return initialTab
+    }
+
     // Ugly but better than putting context on each call just because of a11y, for now
     private var accessibilityApplicationContext: Context? = null
     private var alreadyRuns = false
@@ -239,13 +247,8 @@ class CalendarViewModel() : ViewModel() {
         alreadyRuns = true
         accessibilityApplicationContext = applicationContext
         viewModelScope.launch {
-            val preferences = applicationContext.preferences
-            changeSelectedTab(
-                CalendarScreenTab.entries.getOrNull(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
-                    ?: CalendarScreenTab.entries[0]
-            )
             selectedTab.collectLatest {
-                preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it.ordinal) }
+                applicationContext.preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it.ordinal) }
             }
         }
         viewModelScope.launch {

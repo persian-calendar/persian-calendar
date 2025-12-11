@@ -587,7 +587,8 @@ private fun detailsPagerState(
     viewModel: CalendarViewModel,
     tabs: List<DetailsTab>,
 ): PagerState {
-    val selectedTab by viewModel.selectedTab.collectAsState()
+    val context = LocalContext.current
+    val selectedTab = remember { viewModel.initializeAndGetInitialSelectedTab(context) }
     val pagerState = rememberPagerState(
         initialPage = selectedTab.ordinal.coerceAtMost(tabs.size - 1),
         pageCount = tabs::size,
