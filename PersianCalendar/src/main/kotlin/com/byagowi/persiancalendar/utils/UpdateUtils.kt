@@ -30,6 +30,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
@@ -183,6 +184,12 @@ fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
 private var latestFiredUpdate = 0L
 private var latestAnyWidgetUpdate = 0L
 
+context(resources: Resources)
+private fun Dp.toPx() = this.value * resources.dp
+
+context(resources: Resources)
+private fun Dp.roundToPx() = this.toPx().roundToInt()
+
 fun hasAnyWidgetUpdateRecently(): Boolean =
     (System.currentTimeMillis() - latestAnyWidgetUpdate).milliseconds < 15.minutes
 
@@ -242,8 +249,9 @@ fun update(context: Context, updateDate: Boolean) {
     selectedWidgetTextColor = getWidgetTextColor(preferences)
     selectedWidgetBackgroundColor = getWidgetBackgroundColor(preferences)
 
-    roundPixelSize = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16 * context.resources.dp
-    else context.resources.getDimensionPixelSize(
+    roundPixelSize = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        with(context.resources) { 16.dp.toPx() }
+    } else context.resources.getDimensionPixelSize(
         android.R.dimen.system_app_widget_background_radius
     ).toFloat()
 
@@ -412,8 +420,8 @@ private fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
 private fun createRoundedBitmap(
     resources: Resources, size: DpSize?, @ColorInt color: Int, roundSize: Float
 ): Bitmap {
-    val width = (size?.width?.value ?: 250f) * resources.dp
-    val height = (size?.height?.value ?: 250f) * resources.dp
+    val width = with(resources) { size?.width?.toPx() } ?: 250f
+    val height = with(resources) { size?.height?.toPx() } ?: 250f
     val bitmap = createBitmap(width.roundToInt(), height.roundToInt())
     val rect = RectF(0f, 0f, width, height)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color }
@@ -498,8 +506,8 @@ fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTim
     remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
     sunView.layoutDirection = context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
-    val width = ((size?.width?.value ?: 250f) * context.resources.dp).roundToInt()
-    val height = ((size?.height?.value ?: 250f) * context.resources.dp).roundToInt()
+    val width = with(context.resources) { size?.width?.roundToPx() } ?: 250
+    val height = with(context.resources) { size?.height?.roundToPx() } ?: 250
     sunView.measure(
         View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
         View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
@@ -827,8 +835,8 @@ private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId:
 }
 
 fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): RemoteViews {
-    val width = ((size?.width?.value ?: 250f) * context.resources.dp).roundToInt()
-    val height = ((size?.height?.value ?: 250f) * context.resources.dp).roundToInt()
+    val width = with(context.resources) { size?.width?.roundToPx() } ?: 250
+    val height = with(context.resources) { size?.height?.roundToPx() } ?: 250
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
 
@@ -1010,8 +1018,8 @@ private val monthWidgetCells = listOf(
 )
 
 fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteViews {
-    val width = (size?.width?.value ?: 250f) * context.resources.dp
-    val height = (size?.height?.value ?: 250f) * context.resources.dp
+    val width = with(context.resources) { size?.width?.toPx() } ?: 250f
+    val height = with(context.resources) { size?.height?.toPx() } ?: 250f
     val size = min(width / 2, height).roundToInt()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val isNightMode = isSystemInDarkTheme(context.resources.configuration)
@@ -1052,8 +1060,8 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
 }
 
 private fun createMoonRemoteViews(context: Context, size: DpSize?): RemoteViews {
-    val width = ((size?.width?.value ?: 250f) * context.resources.dp).roundToInt()
-    val height = ((size?.height?.value ?: 250f) * context.resources.dp).roundToInt()
+    val width = with(context.resources) { size?.width?.roundToPx() } ?: 250
+    val height = with(context.resources) { size?.height?.roundToPx() } ?: 250
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_moon)
     val solarDraw = SolarDraw(context.resources)
     val bitmap = createBitmap(width, height).applyCanvas {
@@ -1428,7 +1436,8 @@ fun createWeekViewRemoteViews(
             )
             remoteViews.setImageViewBitmap(
                 R.id.today_background, drawable.toBitmap(
-                    (32 * context.resources.dp).toInt(), (32 * context.resources.dp).toInt()
+                    with(context.resources) { 32.dp.roundToPx() },
+                    with(context.resources) { 32.dp.roundToPx() },
                 )
             )
         } else {
