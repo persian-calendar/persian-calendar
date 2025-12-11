@@ -233,7 +233,10 @@ class CalendarViewModel() : ViewModel() {
 
     // Ugly but better than putting context on each call just because of a11y, for now
     private var accessibilityApplicationContext: Context? = null
+    private var alreadyRuns = false
     fun runFlows(applicationContext: Context) {
+        if (alreadyRuns) return
+        alreadyRuns = true
         accessibilityApplicationContext = applicationContext
         viewModelScope.launch {
             val preferences = applicationContext.preferences
