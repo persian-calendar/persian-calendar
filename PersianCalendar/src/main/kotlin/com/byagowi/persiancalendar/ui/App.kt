@@ -71,6 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -152,7 +153,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             },
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
-                // TODO: Make rememberViewModelStoreNavEntryDecorator() here also work
+                rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = entryProvider {
                 entry<Screen.Calendar> {

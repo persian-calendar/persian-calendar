@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.core.content.edit
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.Calendar
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class CalendarViewModel(application: Application) : AndroidViewModel(application) {
+class CalendarViewModel() : ViewModel() {
     private val _selectedDay = MutableStateFlow(Jdn.today())
     val selectedDay: StateFlow<Jdn> get() = _selectedDay
 
@@ -213,26 +213,30 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
         // a11y
         if (isTalkBackEnabled.value && jdn != today.value) {
-            val context = getApplication<Application>()
-            Toast.makeText(
-                context,
-                getA11yDaySummary(
-                    resources = context.resources,
-                    jdn = jdn,
-                    isToday = false,
-                    deviceCalendarEvents = EventsStore.empty(),
-                    withZodiac = true,
-                    withOtherCalendars = true,
-                    withTitle = true
-                ),
-                Toast.LENGTH_SHORT,
-            ).show()
+            accessibilityApplicationContext?.let { context ->
+                Toast.makeText(
+                    context,
+                    getA11yDaySummary(
+                        resources = context.resources,
+                        jdn = jdn,
+                        isToday = false,
+                        deviceCalendarEvents = EventsStore.empty(),
+                        withZodiac = true,
+                        withOtherCalendars = true,
+                        withTitle = true
+                    ),
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
         }
     }
 
-    init {
+    // Ugly but better than putting context on each call just because of a11y, for now
+    private var accessibilityApplicationContext: Context? = null
+    fun runFlows(applicationContext: Context) {
+        accessibilityApplicationContext = applicationContext
         viewModelScope.launch {
-            val preferences = application.preferences
+            val preferences = applicationContext.preferences
             changeSelectedTab(
                 CalendarScreenTab.entries.getOrNull(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
                     ?: CalendarScreenTab.entries[0]
@@ -269,8 +273,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             merge(searchTerm, enabledEvents).collectLatest {
-                val deviceEvents =
-                    getApplication<Application>().searchDeviceCalendarEvents(searchTerm.value)
+                val deviceEvents = applicationContext.searchDeviceCalendarEvents(searchTerm.value)
                 val events = if (searchTerm.value.isBlank()) emptyList() else {
                     val regex = createSearchRegex(searchTerm.value)
                     enabledEvents.value.asSequence().filter { regex.containsMatchIn(it.title) }
