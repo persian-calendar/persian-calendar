@@ -134,7 +134,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
         fun NavKey.navigateUp() {
             // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
-            if (this != backStack.lastOrNull()) return
+            if (!isCurrentDestination()) return
             if (backStack.size > 1) backStack.removeLastOrNull() else finish()
         }
 
