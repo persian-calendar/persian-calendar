@@ -148,7 +148,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
         NavDisplay(
             backStack = backStack,
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             predictivePopTransitionSpec = {
                 ContentTransform(fadeIn(), fadeOut())
             },
