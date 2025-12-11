@@ -17,3 +17,4 @@ rootProject.name = "persian-calendar"
 include(":PersianCalendar")
 includeBuild("gradlePlugins")
 include(":wear")
+include(":lintChecks")

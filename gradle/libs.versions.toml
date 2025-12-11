@@ -31,6 +31,7 @@ wear-compose = "1.5.6"
 wear-protolayout = "1.3.0"
 wear-tiles = "1.5.0"
 wear-tooling-preview = "1.0.0"
+lint = "31.13.2"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -83,6 +84,9 @@ wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-nav
 wear-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 wear-protolayout-material3 = { group = "androidx.wear.protolayout", name = "protolayout-material3", version.ref = "wear-protolayout" }
 wear-tiles = { group = "androidx.wear.tiles", name = "tiles", version.ref = "wear-tiles" }
+lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
+lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "lint" }
+lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "lint" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

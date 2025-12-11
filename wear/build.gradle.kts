@@ -80,6 +80,7 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+    lintChecks(project(":lintChecks"))
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("eventsgenerators", false)) }

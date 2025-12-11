@@ -289,8 +289,8 @@ class CalendarLibraryTests {
     @Test
     fun `it differentiate date object equal`() {
         assertNotEquals(
-            CivilDate(2000, 1, 1) as AbstractDate,
-            PersianDate(2000, 1, 1) as AbstractDate
+            CivilDate(2000, 1, 1) as? AbstractDate,
+            PersianDate(2000, 1, 1) as? AbstractDate
         )
         assertEquals(CivilDate(2000, 1, 1), CivilDate(2000, 1, 1))
         assertNotEquals(CivilDate(2000, 1, 1), CivilDate(2000, 2, 1))
