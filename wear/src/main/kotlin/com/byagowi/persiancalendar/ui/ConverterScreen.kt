@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -15,6 +15,7 @@ import androidx.wear.compose.material3.PickerGroup
 import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.rememberPickerState
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import io.github.persiancalendar.calendar.CivilDate
@@ -26,20 +27,24 @@ fun ConverterScreen(todayJdn: Jdn) {
     val localeUtils = LocaleUtils()
     val today = listOf(todayJdn.toPersianDate(), todayJdn.toCivilDate(), todayJdn.toIslamicDate())
 
-    var selectedIndex by remember { mutableIntStateOf(1) }
-    val calendarPickerState = remember { PickerState(3, 0, false) }
+    var selectedIndex by rememberSaveable { mutableIntStateOf(1) }
+    // This one could use rememberPickerState but the rest doesn't as we need to control the keys
+    // and it's great they were generous enough to make PickerState public say unlike pager state…
+    val calendarPickerState = rememberSaveable(saver = PickerState.Saver) {
+        PickerState(3, 0, false)
+    }
     val calendarIndex = calendarPickerState.selectedOptionIndex
     val yearsLimit = 200
-    val yearPickerState = remember(calendarIndex, yearsLimit) {
-        PickerState(yearsLimit, yearsLimit / 2)
-    }
-    val monthPickerState = remember(calendarIndex, today[calendarIndex].month) {
-        PickerState(12, today[calendarIndex].month - 1)
-    }
-    var daysOnMonth by remember { mutableIntStateOf(31) }
-    val dayPickerState = remember(calendarIndex, daysOnMonth, today[calendarIndex].dayOfMonth) {
-        PickerState(daysOnMonth, today[calendarIndex].dayOfMonth - 1)
-    }
+    val yearPickerState = rememberSaveable(
+        calendarIndex, yearsLimit, saver = PickerState.Saver
+    ) { PickerState(yearsLimit, yearsLimit / 2) }
+    val monthPickerState = rememberSaveable(
+        calendarIndex, today[calendarIndex].month, saver = PickerState.Saver
+    ) { PickerState(12, today[calendarIndex].month - 1) }
+    var daysOnMonth by rememberSaveable { mutableIntStateOf(31) }
+    val dayPickerState = rememberSaveable(
+        calendarIndex, daysOnMonth, today[calendarIndex].dayOfMonth, saver = PickerState.Saver
+    ) { PickerState(daysOnMonth, today[calendarIndex].dayOfMonth - 1) }
     val currentJdn = run {
         val year = yearPickerState.selectedOptionIndex - yearsLimit / 2 + today[calendarIndex].year
         val month = monthPickerState.selectedOptionIndex + 1
