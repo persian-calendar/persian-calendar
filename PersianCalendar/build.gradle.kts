@@ -117,7 +117,6 @@ android {
 
     kotlin {
         compilerOptions {
-            freeCompilerArgs = listOf("-XXLanguage:+ContextParameters")
             allWarningsAsErrors.set(true)
         }
     }
