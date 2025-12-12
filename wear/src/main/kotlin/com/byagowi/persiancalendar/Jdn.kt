@@ -4,10 +4,12 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.serialization.Serializable
 import java.util.GregorianCalendar
 
 // Julian day number, basically a day counter starting from some day in concept
 // https://en.wikipedia.org/wiki/Julian_day
+@Serializable
 @JvmInline
 value class Jdn(val value: Long) {
     constructor(value: AbstractDate) : this(value.toJdn())

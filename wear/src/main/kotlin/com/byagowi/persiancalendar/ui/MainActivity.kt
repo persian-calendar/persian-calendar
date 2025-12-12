@@ -14,17 +14,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.MotionScheme
 import androidx.wear.compose.material3.dynamicColorScheme
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.composable
-import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.dataStore
@@ -34,6 +34,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : ComponentActivity() {
@@ -47,8 +48,6 @@ class MainActivity : ComponentActivity() {
         setContent { WearApp() }
     }
 }
-
-private enum class Screen { MAIN, SETTINGS, UTILITIES, CALENDAR, CONVERTER, DAY }
 
 @JvmSynthetic
 @Composable
@@ -64,59 +63,71 @@ private fun WearApp() {
                 val preferences by dataStore.collectAsState(
                     remember { runBlocking { dataStore.firstOrNull() } },
                 )
-                val navController = rememberSwipeDismissableNavController()
-                val dayJdnKey = "dayJdnKey"
                 val localeUtils = LocaleUtils()
                 val today = updatedToday()
-                SwipeDismissableNavHost(
-                    navController = navController,
-                    startDestination = Screen.MAIN.name,
-                ) {
-                    fun Screen.navigate() = navController.navigate(this.name)
-                    fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
-                        val destination = navController.graph.findNode(this.name) ?: return
-                        navController.navigate(destination.id, bundleOf(*pairs))
-                    }
-
-                    composable(Screen.MAIN.name) {
-                        MainScreen(
-                            localeUtils = localeUtils,
-                            today = today,
-                            preferences = preferences,
-                            navigateToUtilities = Screen.UTILITIES::navigate,
-                            navigateToDay = { Screen.DAY.navigate(dayJdnKey to it.value) },
-                        )
-                    }
-                    composable(Screen.UTILITIES.name) {
-                        UtilitiesScreen(
-                            navigateToConverter = Screen.CONVERTER::navigate,
-                            navigateToCalendar = Screen.CALENDAR::navigate,
-                            navigateToSettings = Screen.SETTINGS::navigate,
-                        )
-                    }
-                    composable(Screen.CONVERTER.name) { ConverterScreen(today) }
-                    composable(Screen.CALENDAR.name) {
-                        CalendarScreen(
-                            today = today,
-                            localeUtils = localeUtils,
-                            preferences = preferences,
-                        ) { Screen.DAY.navigate(dayJdnKey to it.value) }
-                    }
-                    composable(Screen.DAY.name) { backStackEntry ->
-                        DayScreen(
-                            preferences = preferences,
-                            localeUtils = localeUtils,
-                            day = Jdn(
-                                backStackEntry.arguments?.getLong(dayJdnKey, today.value)
-                                    ?: today.value
-                            ),
-                        )
-                    }
-                    composable(Screen.SETTINGS.name) { SettingsScreen(preferences) }
-                }
+                val backStack = rememberNavBackStack(Screen.MAIN)
+                fun Screen.navigate() = backStack.add(this)
+                NavDisplay(
+                    backStack = backStack,
+                    onBack = { backStack.removeLastOrNull() },
+                    entryProvider = entryProvider {
+                        entry<Screen.MAIN> {
+                            MainScreen(
+                                localeUtils = localeUtils,
+                                today = today,
+                                preferences = preferences,
+                                navigateToUtilities = Screen.UTILITIES::navigate,
+                                navigateToDay = { Screen.DAY(it).navigate() },
+                            )
+                        }
+                        entry<Screen.UTILITIES> {
+                            UtilitiesScreen(
+                                navigateToConverter = Screen.CONVERTER::navigate,
+                                navigateToCalendar = Screen.CALENDAR::navigate,
+                                navigateToSettings = Screen.SETTINGS::navigate,
+                            )
+                        }
+                        entry<Screen.CONVERTER> { ConverterScreen(today) }
+                        entry<Screen.CALENDAR> {
+                            CalendarScreen(
+                                today = today,
+                                localeUtils = localeUtils,
+                                preferences = preferences,
+                            ) { Screen.DAY(it).navigate() }
+                        }
+                        entry<Screen.DAY> {
+                            DayScreen(
+                                preferences = preferences,
+                                localeUtils = localeUtils,
+                                day = it.jdn,
+                            )
+                        }
+                        entry<Screen.SETTINGS> { SettingsScreen(preferences) }
+                    },
+                )
             }
         }
     }
+}
+
+private sealed interface Screen : NavKey {
+    @Serializable
+    data object MAIN : Screen
+
+    @Serializable
+    data object SETTINGS : Screen
+
+    @Serializable
+    data object UTILITIES : Screen
+
+    @Serializable
+    data object CALENDAR : Screen
+
+    @Serializable
+    data object CONVERTER : Screen
+
+    @Serializable
+    data class DAY(val jdn: Jdn) : Screen
 }
 
 @Composable

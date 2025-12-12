@@ -9,14 +9,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
+import androidx.wear.compose.foundation.ScrollInfoProvider
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.ScreenStage
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.scrollAway
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
@@ -53,7 +55,12 @@ fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
         }
         Box(
             Modifier
-                .scrollAway(scrollState)
+                .scrollAway(
+                    scrollInfoProvider = ScrollInfoProvider(scrollState),
+                    screenStage = {
+                        if (scrollState.canScrollBackward) ScreenStage.Scrolling else ScreenStage.Idle
+                    },
+                )
                 .fillMaxSize(),
         ) {
             OtherCalendars(

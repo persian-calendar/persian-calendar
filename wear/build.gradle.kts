@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.plugin.serialization)
     id("io.github.persiancalendar.appbuildplugin")
 }
 
@@ -69,13 +70,14 @@ dependencies {
     implementation(libs.lifecycle.process)
     implementation(libs.wear.compose.foundation)
     implementation(libs.wear.compose.material3)
-    implementation(libs.wear.compose.navigation)
     implementation(libs.wear.datastore.preferences)
     implementation(libs.wear.protolayout.material3)
     implementation(libs.wear.tiles)
     implementation(libs.wear.tooling.preview)
     implementation(libs.wear.watchface.complications.data.source.ktx)
     implementation(libs.work.manager.ktx)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)

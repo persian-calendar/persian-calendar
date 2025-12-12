@@ -23,10 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
+import androidx.wear.compose.foundation.ScrollInfoProvider
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
@@ -36,7 +36,9 @@ import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListSubHeader
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.ScreenStage
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.scrollAway
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.Entry
 import com.byagowi.persiancalendar.EntryType
@@ -65,9 +67,14 @@ fun MainScreen(
             ) { Icon(Icons.Default.Construction, contentDescription = "تنظیمات") }
         },
     ) {
-        Box(Modifier.scrollAway(scrollState)) {
-            OtherCalendars(localeUtils, today, onTop = true, withWeekDayName = false)
-        }
+        Box(
+            Modifier.scrollAway(
+                scrollInfoProvider = ScrollInfoProvider(scrollState),
+                screenStage = {
+                    if (scrollState.canScrollBackward) ScreenStage.Scrolling else ScreenStage.Idle
+                },
+            )
+        ) { OtherCalendars(localeUtils, today, onTop = true, withWeekDayName = false) }
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
             val currentYear = today.toPersianDate().year
