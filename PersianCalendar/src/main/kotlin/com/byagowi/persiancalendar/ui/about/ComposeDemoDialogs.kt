@@ -479,7 +479,6 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
 
 private const val pagesCount = 20000
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FontWeightsDialog(onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) {

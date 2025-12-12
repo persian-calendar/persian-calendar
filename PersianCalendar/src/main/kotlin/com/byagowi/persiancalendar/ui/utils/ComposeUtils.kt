@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import androidx.compose.animation.BoundsTransform
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
@@ -64,8 +63,6 @@ fun Modifier.highlightItem(enabled: Boolean): Modifier {
     return background(LocalContentColor.current.copy(alpha = alpha.value))
 }
 
-
-@OptIn(ExperimentalSharedTransitionApi::class)
 val appBoundsTransform = BoundsTransform { _, _ ->
     spring(
         stiffness = Spring.StiffnessMediumLow,

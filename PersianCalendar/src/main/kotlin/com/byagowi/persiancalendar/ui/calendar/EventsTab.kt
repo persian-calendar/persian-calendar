@@ -9,7 +9,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -130,7 +129,6 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: (String?) -> Unit,
@@ -278,7 +276,6 @@ private val String.directionality
         }
     }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayEvents(
     events: List<CalendarEvent<*>>,

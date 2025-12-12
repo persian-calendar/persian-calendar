@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material3.LocalTextStyle
@@ -11,7 +10,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 fun ComposeContentTestRule.setContentWithParent(
     content: @Composable SharedTransitionScope.() -> Unit
 ) {

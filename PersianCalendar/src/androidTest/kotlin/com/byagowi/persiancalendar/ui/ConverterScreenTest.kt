@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui
 
 import android.icu.util.ChineseCalendar
 import android.os.Build
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,13 +17,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @RunWith(AndroidJUnit4::class)
 class ConverterScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @OptIn(ExperimentalSharedTransitionApi::class)
     @Test
     fun converterScreenSmokeTest() {
         composeTestRule.setContentWithParent {

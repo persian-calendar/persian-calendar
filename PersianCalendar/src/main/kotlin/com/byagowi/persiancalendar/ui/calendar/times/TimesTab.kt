@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -62,7 +61,6 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.praytimes.PrayTimes
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.TimesTab(
     navigateToSettingsLocationTab: () -> Unit,
@@ -160,7 +158,6 @@ private fun showEnableAthanForPersianUsers(): Boolean {
     return PREF_ATHAN_ALARM !in context.preferences && PREF_NOTIFICATION_ATHAN !in context.preferences
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.AstronomicalOverview(
     viewModel: CalendarViewModel,

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -13,7 +12,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_OPEN_NAVIGATION_RAIL
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.NavigationOpenNavigationRailIcon(
     openNavigationRail: () -> Unit,

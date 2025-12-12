@@ -6,7 +6,6 @@ import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
@@ -84,7 +83,6 @@ import com.byagowi.persiancalendar.utils.debugLog
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.LevelScreen(
     navigateUp: () -> Unit,

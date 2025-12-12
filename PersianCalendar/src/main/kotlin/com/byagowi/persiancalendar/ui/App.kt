@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -120,7 +119,6 @@ import kotlinx.serialization.Serializable
 import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
     val backStack = rememberNavBackStack(Screen.fromName(intentStartDestination))

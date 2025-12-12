@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
@@ -106,7 +105,7 @@ import kotlin.math.abs
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.ConverterScreen(
     openNavigationRail: () -> Unit,
@@ -243,7 +242,6 @@ private fun TimeZones(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.ConverterScreenShareActionButton(
     viewModel: ConverterViewModel,
@@ -446,7 +444,6 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ColumnScope.ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,

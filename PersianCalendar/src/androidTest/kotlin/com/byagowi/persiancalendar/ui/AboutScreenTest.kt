@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -17,7 +16,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 // Have a look at https://developer.android.com/static/images/jetpack/compose/compose-testing-cheatsheet.pdf
-@OptIn(ExperimentalSharedTransitionApi::class)
 @RunWith(AndroidJUnit4::class)
 class AboutScreenTest {
     @get:Rule

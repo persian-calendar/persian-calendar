@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -24,7 +23,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.ThreeDotsDropdownMenu(
     content: @Composable ColumnScope.(onDismissRequest: () -> Unit) -> Unit,

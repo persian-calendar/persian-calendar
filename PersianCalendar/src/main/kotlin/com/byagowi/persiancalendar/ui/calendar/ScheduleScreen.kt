@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar
 import android.content.res.Configuration
 import androidx.collection.mutableLongSetOf
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -75,7 +74,6 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,

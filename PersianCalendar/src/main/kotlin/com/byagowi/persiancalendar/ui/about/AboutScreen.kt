@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -119,7 +118,6 @@ import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.AboutScreen(
     openNavigationRail: () -> Unit,
@@ -238,9 +236,7 @@ private fun Header() {
                 },
             contentAlignment = Alignment.Center,
         ) {
-            @OptIn(ExperimentalAnimationGraphicsApi::class) CompositionLocalProvider(
-                LocalLayoutDirection provides LayoutDirection.Ltr
-            ) {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 val image =
                     AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
                 Image(
@@ -437,7 +433,6 @@ private fun launchReportIntent(context: Context) {
     }.onFailure(logException)
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun Developers() {
     val resources = LocalResources.current

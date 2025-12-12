@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,6 @@ import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.Times(
     isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -125,7 +124,6 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.AstronomyScreen(
     openNavigationRail: () -> Unit,
@@ -155,7 +153,7 @@ fun SharedTransitionScope.AstronomyScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            TopAppBar(
+            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     Text(
                         stringResource(R.string.astronomy),
@@ -346,7 +344,6 @@ fun SharedTransitionScope.AstronomyScreen(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.SliderBar(
     slider: SliderView?,
@@ -449,7 +446,6 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
     )
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
@@ -632,7 +628,6 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Stable
 @Composable
 private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState) {

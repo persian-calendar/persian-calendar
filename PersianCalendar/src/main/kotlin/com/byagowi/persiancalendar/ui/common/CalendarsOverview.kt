@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -120,7 +119,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 import java.util.Date
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.CalendarsOverview(
     jdn: Jdn,

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -12,7 +11,6 @@ import com.byagowi.persiancalendar.ui.map.MapScreen
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 class MapScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()

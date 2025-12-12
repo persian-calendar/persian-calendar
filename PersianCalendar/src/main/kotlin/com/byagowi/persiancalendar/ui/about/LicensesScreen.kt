@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -72,19 +71,17 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.LicensesScreen(navigateUp: () -> Unit) {
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class)
-            TopAppBar(
+            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.about_license_title)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             )
-        }
+        },
     ) { paddingValues ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
@@ -183,7 +180,9 @@ private fun BoxScope.Licenses() {
             )
             Column(
                 modifier = Modifier
-                    .toggleable(i == expandedItem) { expandedItem = if (it) i else -1 }
+                    .toggleable(i == expandedItem) {
+                        expandedItem = if (it) i else -1
+                    }
                     .padding(
                         start = 16.dp,
                         end = 88.dp,

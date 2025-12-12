@@ -14,7 +14,6 @@ import android.os.Build
 import android.view.InputDevice
 import android.view.RoundedCorner
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -105,7 +104,7 @@ import kotlinx.html.unsafe
 import java.util.Locale
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
     val scrollBehavior = exitUntilCollapsedScrollBehavior()
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {

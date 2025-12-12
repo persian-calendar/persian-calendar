@@ -304,7 +304,6 @@ fun needsScreenSurfaceDragHandle(): Boolean = when (effectiveTheme()) {
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun appTopAppBarColors(): TopAppBarColors {
     return TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent,

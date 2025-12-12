@@ -19,7 +19,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
@@ -210,7 +209,6 @@ import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.CalendarScreen(
     openNavigationRail: () -> Unit,
@@ -532,7 +530,6 @@ private fun enableTimesTab(): Boolean {
 
 private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
@@ -602,7 +599,6 @@ private fun detailsPagerState(
     return pagerState
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Details(
     viewModel: CalendarViewModel,
@@ -667,7 +663,6 @@ private fun Details(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.CalendarsTab(
     viewModel: CalendarViewModel,
@@ -846,7 +841,6 @@ private fun Search(viewModel: CalendarViewModel) {
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.Toolbar(
     openNavigationRail: () -> Unit,
@@ -1044,7 +1038,6 @@ private fun SharedTransitionScope.Toolbar(
     )
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.Menu(
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,

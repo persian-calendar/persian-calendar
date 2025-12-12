@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -31,7 +30,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.ScreenSurface(
     shape: CornerBasedShape = materialCornerExtraLargeTop(),

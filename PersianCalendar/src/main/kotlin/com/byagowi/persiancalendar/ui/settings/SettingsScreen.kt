@@ -20,7 +20,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -135,7 +134,7 @@ import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 fun SharedTransitionScope.SettingsScreen(
     openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
