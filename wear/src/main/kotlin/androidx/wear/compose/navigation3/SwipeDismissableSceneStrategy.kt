@@ -37,7 +37,7 @@ import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
  *   under. Defaults to null for devices running API 36+.
  */
 @Composable
-public fun rememberSwipeDismissableSceneStrategyState(
+fun rememberSwipeDismissableSceneStrategyState(
     swipeToDismissBoxState: SwipeToDismissBoxState? =
         if (Build.VERSION.SDK_INT <= 35) rememberSwipeToDismissBoxState() else null
 ): SwipeDismissableSceneStrategyState =
@@ -55,7 +55,7 @@ public fun rememberSwipeDismissableSceneStrategyState(
  * @param isUserSwipeEnabled [Boolean] Whether swipe-to-dismiss gesture is enabled.
  */
 @Composable
-public fun <T : Any> rememberSwipeDismissableSceneStrategy(
+fun <T : Any> rememberSwipeDismissableSceneStrategy(
     swipeDismissableSceneStrategyState: SwipeDismissableSceneStrategyState =
         rememberSwipeDismissableSceneStrategyState(),
     modifier: Modifier = Modifier,
@@ -76,7 +76,7 @@ public fun <T : Any> rememberSwipeDismissableSceneStrategy(
  *   swipe-to-dismiss gesture in [SwipeDismissableSceneStrategy] for devices running API 35 or
  *   under.
  */
-public class SwipeDismissableSceneStrategyState(
+class SwipeDismissableSceneStrategyState(
     internal val swipeToDismissBoxState: SwipeToDismissBoxState?
 )
 
@@ -96,10 +96,10 @@ public class SwipeDismissableSceneStrategyState(
  * @param modifier The modifier to be applied to the layout
  * @param isUserSwipeEnabled [Boolean] Whether swipe-to-dismiss gesture is enabled.
  */
-public class SwipeDismissableSceneStrategy<T : Any>(
-    public val state: SwipeDismissableSceneStrategyState,
-    public val modifier: Modifier = Modifier,
-    public val isUserSwipeEnabled: Boolean = true,
+class SwipeDismissableSceneStrategy<T : Any>(
+    val state: SwipeDismissableSceneStrategyState,
+    val modifier: Modifier = Modifier,
+    val isUserSwipeEnabled: Boolean = true,
 ) : SceneStrategy<T> {
 
     override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {

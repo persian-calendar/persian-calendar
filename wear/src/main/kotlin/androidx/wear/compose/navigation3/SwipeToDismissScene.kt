@@ -147,7 +147,7 @@ internal class SwipeToDismissScene<T : Any>(
                             tween(
                                 durationMillis =
                                     NAV_HOST_ENTER_TRANSITION_DURATION_MEDIUM +
-                                        NAV_HOST_ENTER_TRANSITION_DURATION_SHORT,
+                                            NAV_HOST_ENTER_TRANSITION_DURATION_SHORT,
                                 easing = LinearEasing,
                             ),
                     )
@@ -163,16 +163,16 @@ internal class SwipeToDismissScene<T : Any>(
         if (other !is SwipeToDismissScene<*>) return false
 
         return key == other.key &&
-            currentEntry == other.currentEntry &&
-            previousEntries == other.previousEntries &&
-            entries == other.entries
+                currentEntry == other.currentEntry &&
+                previousEntries == other.previousEntries &&
+                entries == other.entries
     }
 
     override fun hashCode(): Int {
         return key.hashCode() * 31 +
-            currentEntry.hashCode() * 31 +
-            previousEntries.hashCode() * 31 +
-            entries.hashCode() * 31
+                currentEntry.hashCode() * 31 +
+                previousEntries.hashCode() * 31 +
+                entries.hashCode() * 31
     }
 
     override fun toString(): String {

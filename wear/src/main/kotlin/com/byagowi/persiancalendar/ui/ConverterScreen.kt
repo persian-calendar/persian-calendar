@@ -15,7 +15,6 @@ import androidx.wear.compose.material3.PickerGroup
 import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.rememberPickerState
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import io.github.persiancalendar.calendar.CivilDate
