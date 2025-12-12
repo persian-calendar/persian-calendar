@@ -465,7 +465,12 @@ private fun ColumnScope.ConverterAndDistance(
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
-            CalendarsTypesPicker(calendar, calendarsList, viewModel::changeCalendar)
+            CalendarsTypesPicker(
+                value = calendar,
+                calendarsList = calendarsList,
+                inactiveButtonColor = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            ) { viewModel.changeCalendar(it) }
             DatePicker(
                 calendar = calendar,
                 jdn = jdn,
@@ -480,7 +485,7 @@ private fun ColumnScope.ConverterAndDistance(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraLarge)
                     .clickable { isExpanded = !isExpanded }
-                    .padding(top = 12.dp, bottom = 12.dp)
+                    .padding(top = 12.dp, bottom = 12.dp),
             ) {
                 sharedTransitionScope.apply {
                     CalendarsOverview(
@@ -498,7 +503,12 @@ private fun ColumnScope.ConverterAndDistance(
             }
         }
     } else {
-        CalendarsTypesPicker(calendar, calendarsList, viewModel::changeCalendar)
+        CalendarsTypesPicker(
+            value = calendar,
+            calendarsList = calendarsList,
+            inactiveButtonColor = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+        ) { viewModel.changeCalendar(it) }
         DatePicker(
             calendar = calendar,
             jdn = jdn,
@@ -584,22 +594,23 @@ private fun DaysDistanceSecondPart(
 
 @Composable
 private fun TextWithSlideAnimation(text: String) {
-    AnimatedContent(
-        text,
-        modifier = Modifier.padding(vertical = 12.dp),
-        transitionSpec = {
-            slideIntoContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(500)
-            ) togetherWith slideOutOfContainer(
-                towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(500)
-            )
-        },
-        label = "slide text",
-    ) {
-        SelectionContainer {
-            Text(it, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+    Box(Modifier.height(56.dp), contentAlignment = Alignment.Center) {
+        AnimatedContent(
+            text,
+            transitionSpec = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(500)
+                ) togetherWith slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(500)
+                )
+            },
+            label = "slide text",
+        ) {
+            SelectionContainer {
+                Text(it, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+            }
         }
     }
 }

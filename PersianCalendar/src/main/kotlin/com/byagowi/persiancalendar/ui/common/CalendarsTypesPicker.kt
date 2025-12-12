@@ -1,63 +1,101 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarsTypesPicker(
-    current: Calendar,
+    value: Calendar,
     calendarsList: List<Calendar>,
-    setCurrent: (Calendar) -> Unit,
+    inactiveButtonColor: Color,
+    modifier: Modifier = Modifier,
+    onValueChange: (Calendar) -> Unit,
 ) {
-    val selectedTabIndex = calendarsList.indexOf(current)
-        // If user returned from disabling one of the calendar, do a fallback
-        .coerceAtLeast(0)
     val selectDateTypeString = stringResource(R.string.select_type_date)
-    PrimaryTabRow(
-        selectedTabIndex = selectedTabIndex,
-        divider = {},
-        containerColor = Color.Transparent,
-        indicator = {
-            val offset = selectedTabIndex.coerceAtMost(calendarsList.size - 1)
-            TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
-        },
-        modifier = Modifier.semantics { this.contentDescription = selectDateTypeString },
+    val language by language.collectAsState()
+    val view = LocalView.current
+    val outlineColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = AppBlendAlpha)
+    SingleChoiceSegmentedButtonRow(
+        modifier = modifier
+            .shadow(
+                elevation = 8.dp,
+                shape = MaterialTheme.shapes.extraLarge,
+                ambientColor = LocalContentColor.current,
+                spotColor = LocalContentColor.current,
+            )
+            .fillMaxWidth()
+            .semantics { this.contentDescription = selectDateTypeString }
+            .drawWithContent {
+                drawContent()
+                (1..<calendarsList.size).forEach {
+                    val x = size.width / calendarsList.size * it
+                    drawLine(
+                        color = outlineColor,
+                        strokeWidth = 1.dp.toPx(),
+                        start = Offset(x, 0f),
+                        end = Offset(x, size.height),
+                    )
+                }
+            },
     ) {
-        val language by language.collectAsState()
-        val view = LocalView.current
-        calendarsList.forEach { calendar ->
+        calendarsList.forEachIndexed { index, calendar ->
             val title = stringResource(
                 if (language.betterToUseShortCalendarName) calendar.shortTitle else calendar.title
             )
-            Tab(
-                text = { Text(title) },
-                modifier = Modifier.clip(MaterialTheme.shapes.large),
-                selected = current == calendar,
-                unselectedContentColor = MaterialTheme.colorScheme.onSurface,
+            SegmentedButton(
+                border = BorderStroke(0.dp, Color.Transparent),
+                selected = value == calendar,
                 onClick = {
-                    setCurrent(calendar)
+                    onValueChange(calendar)
                     view.performHapticFeedbackVirtualKey()
                 },
-            )
+                icon = {},
+                colors = SegmentedButtonDefaults.colors().copy(
+                    inactiveContainerColor = inactiveButtonColor,
+                ),
+                shape = SegmentedButtonDefaults.itemShape(index, calendarsList.size),
+                modifier = Modifier
+                    .requiredHeight(40.dp)
+                    .weight(1f),
+            ) {
+                Text(
+                    title,
+                    maxLines = 1,
+                    softWrap = false,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 6.sp,
+                        maxFontSize = LocalTextStyle.current.fontSize,
+                    ),
+                )
+            }
         }
     }
 }

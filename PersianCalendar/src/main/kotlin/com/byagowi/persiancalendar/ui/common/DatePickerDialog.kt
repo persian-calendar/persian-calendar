@@ -12,9 +12,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -68,7 +71,10 @@ fun DatePickerDialog(
                 val title = stringResource(R.string.accept)
                 val anyPendingConfirm = pendingConfirms.isNotEmpty()
                 AnimatedVisibility(anyPendingConfirm) {
-                    AppIconButton(Icons.Default.Done, title) { pendingConfirms.forEach { it() } }
+                    AppIconButton(
+                        Icons.Default.Done,
+                        title
+                    ) { pendingConfirms.forEach { it() } }
                 }
                 AnimatedVisibility(!anyPendingConfirm) {
                     TextButton(onClick = {
@@ -78,7 +84,9 @@ fun DatePickerDialog(
                         val description = stringResource(R.string.select_date)
                         Text(
                             title,
-                            modifier = Modifier.semantics { this.contentDescription = description }
+                            modifier = Modifier.semantics {
+                                this.contentDescription = description
+                            }
                         )
                     }
                 }
@@ -98,9 +106,12 @@ fun DatePickerDialog(
     ) {
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
         val language by language.collectAsState()
+
         CalendarsTypesPicker(
+            modifier = Modifier.padding(top = 24.dp, bottom = 16.dp, start = 24.dp, end = 24.dp),
             calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
-            current = calendar,
+            inactiveButtonColor = AlertDialogDefaults.containerColor,
+            value = calendar,
         ) { calendar = it }
 
         DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
