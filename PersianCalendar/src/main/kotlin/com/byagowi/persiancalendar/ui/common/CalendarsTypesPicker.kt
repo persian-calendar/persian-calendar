@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.text.TextAutoSize
@@ -77,6 +78,12 @@ fun CalendarsTypesPicker(
                     onValueChange(calendar)
                     view.performHapticFeedbackVirtualKey()
                 },
+                contentPadding = PaddingValues(
+                    start = 12.dp,
+                    top = 0.dp,
+                    end = 12.dp,
+                    bottom = 0.dp,
+                ),
                 icon = {},
                 colors = SegmentedButtonDefaults.colors().copy(
                     inactiveContainerColor = inactiveButtonColor,
