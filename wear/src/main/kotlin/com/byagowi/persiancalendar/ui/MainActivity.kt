@@ -25,6 +25,7 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.MotionScheme
 import androidx.wear.compose.material3.dynamicColorScheme
+import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.dataStore
@@ -70,6 +71,7 @@ private fun WearApp() {
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
+                    sceneStrategy = rememberSwipeDismissableSceneStrategy(),
                     entryProvider = entryProvider {
                         entry<Screen.MAIN> {
                             MainScreen(
