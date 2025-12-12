@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -98,6 +99,7 @@ fun SharedTransitionScope.TimesTab(
     val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
     val now by viewModel.now.collectAsState()
     val today by viewModel.today.collectAsState()
+    val language by language.collectAsState()
 
     Column(
         Modifier
@@ -121,7 +123,18 @@ fun SharedTransitionScope.TimesTab(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (cityName != null) Text(
-                cityName.orEmpty(), style = MaterialTheme.typography.bodyLarge
+                text = cityName.orEmpty(),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.combinedClickable(
+                    indication = null,
+                    interactionSource = null,
+                    onClickLabel = stringResource(R.string.more),
+                    onClick = { isExpanded = !isExpanded },
+                    onLongClickLabel = if (language.isPersianOrDari) "تنظیم مکان" else {
+                        stringResource(R.string.location)
+                    },
+                    onLongClick = { navigateToSettingsLocationTab() }
+                )
             )
             ExpandArrow(
                 modifier = Modifier.size(with(LocalDensity.current) { 20.sp.toDp() }),
