@@ -130,7 +130,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
-        fun NavKey.navigate() = backStack.add(this)
+        fun NavKey.navigate() {
+            backStack += this
+        }
+
         fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
         fun NavKey.navigateUp() {
             // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
@@ -176,11 +179,15 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 settings = PREF_ATHAN_ALARM,
                             ).navigate()
                         },
-                        navigateToSchedule = { Screen.Schedule().navigate() },
-                        navigateToDays = { jdn, isWeek ->
-                            Screen.Days(jdn.value, isWeek).navigate()
+                        navigateToSchedule = {
+                            Screen.Schedule(viewModel.selectedDay.value).navigate()
                         },
-                        navigateToMonthView = { Screen.Month().navigate() },
+                        navigateToDays = { jdn, isWeek ->
+                            Screen.Days(jdn, isWeek).navigate()
+                        },
+                        navigateToMonthView = {
+                            Screen.Month(viewModel.selectedDay.value).navigate()
+                        },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
@@ -188,35 +195,23 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
                 entry<Screen.Month> {
-                    val calendarViewModel = calendarViewModel ?: viewModel()
-                    val jdn = it.selectedDay?.let(::Jdn) ?: remember {
-                        calendarViewModel.selectedDay.value
-                    }
                     MonthScreen(
-                        calendarViewModel = calendarViewModel,
+                        calendarViewModel = calendarViewModel ?: viewModel(),
                         navigateUp = it::navigateUp,
-                        initiallySelectedDay = jdn,
+                        initiallySelectedDay = it.selectedDay,
                     )
                 }
                 entry<Screen.Schedule> {
-                    val calendarViewModel = calendarViewModel ?: viewModel()
-                    val jdn = it.selectedDay?.let(::Jdn) ?: remember {
-                        calendarViewModel.selectedDay.value
-                    }
                     ScheduleScreen(
-                        calendarViewModel = calendarViewModel,
+                        calendarViewModel = calendarViewModel ?: viewModel(),
                         navigateUp = it::navigateUp,
-                        initiallySelectedDay = jdn,
+                        initiallySelectedDay = it.selectedDay,
                     )
                 }
                 entry<Screen.Days> {
-                    val calendarViewModel = calendarViewModel ?: viewModel()
-                    val jdn = it.selectedDay?.let(::Jdn) ?: remember {
-                        calendarViewModel.selectedDay.value
-                    }
                     DaysScreen(
-                        calendarViewModel = calendarViewModel,
-                        initiallySelectedDay = jdn,
+                        calendarViewModel = calendarViewModel ?: viewModel(),
+                        initiallySelectedDay = it.selectedDay,
                         isInitiallyWeek = it.isWeek,
                         navigateUp = it::navigateUp,
                     )
@@ -298,13 +293,13 @@ private sealed interface Screen : NavKey {
     data object Calendar : Screen
 
     @Serializable
-    data class Schedule(val selectedDay: Long? = null) : Screen
+    data class Schedule(val selectedDay: Jdn) : Screen
 
     @Serializable
-    data class Days(val selectedDay: Long? = null, val isWeek: Boolean = false) : Screen
+    data class Days(val selectedDay: Jdn, val isWeek: Boolean = false) : Screen
 
     @Serializable
-    data class Month(val selectedDay: Long? = null) : Screen
+    data class Month(val selectedDay: Jdn) : Screen
 
     @Serializable
     data object Converter : Screen

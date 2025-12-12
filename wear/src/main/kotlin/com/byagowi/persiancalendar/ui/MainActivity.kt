@@ -67,7 +67,9 @@ private fun WearApp() {
                 val localeUtils = LocaleUtils()
                 val today = updatedToday()
                 val backStack = rememberNavBackStack(Screen.MAIN)
-                fun Screen.navigate() = backStack.add(this)
+                fun Screen.navigate() {
+                    backStack += this
+                }
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
