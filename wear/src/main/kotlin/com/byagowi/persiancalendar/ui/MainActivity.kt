@@ -66,7 +66,7 @@ private fun WearApp() {
                 )
                 val localeUtils = LocaleUtils()
                 val today = updatedToday()
-                val backStack = rememberNavBackStack(Screen.MAIN)
+                val backStack = rememberNavBackStack(Screen.Main)
                 fun Screen.navigate() {
                     backStack += this
                 }
@@ -75,38 +75,38 @@ private fun WearApp() {
                     onBack = { backStack.removeLastOrNull() },
                     sceneStrategy = rememberSwipeDismissableSceneStrategy(),
                     entryProvider = entryProvider {
-                        entry<Screen.MAIN> {
+                        entry<Screen.Main> {
                             MainScreen(
                                 localeUtils = localeUtils,
                                 today = today,
                                 preferences = preferences,
-                                navigateToUtilities = Screen.UTILITIES::navigate,
-                                navigateToDay = { Screen.DAY(it).navigate() },
+                                navigateToUtilities = Screen.Utilities::navigate,
+                                navigateToDay = { Screen.Day(it).navigate() },
                             )
                         }
-                        entry<Screen.UTILITIES> {
+                        entry<Screen.Utilities> {
                             UtilitiesScreen(
-                                navigateToConverter = Screen.CONVERTER::navigate,
-                                navigateToCalendar = Screen.CALENDAR::navigate,
-                                navigateToSettings = Screen.SETTINGS::navigate,
+                                navigateToConverter = Screen.Converter::navigate,
+                                navigateToCalendar = Screen.Calendar::navigate,
+                                navigateToSettings = Screen.Settings::navigate,
                             )
                         }
-                        entry<Screen.CONVERTER> { ConverterScreen(today) }
-                        entry<Screen.CALENDAR> {
+                        entry<Screen.Converter> { ConverterScreen(today) }
+                        entry<Screen.Calendar> {
                             CalendarScreen(
                                 today = today,
                                 localeUtils = localeUtils,
                                 preferences = preferences,
-                            ) { Screen.DAY(it).navigate() }
+                            ) { Screen.Day(it).navigate() }
                         }
-                        entry<Screen.DAY> {
+                        entry<Screen.Day> {
                             DayScreen(
                                 preferences = preferences,
                                 localeUtils = localeUtils,
                                 day = it.jdn,
                             )
                         }
-                        entry<Screen.SETTINGS> { SettingsScreen(preferences) }
+                        entry<Screen.Settings> { SettingsScreen(preferences) }
                     },
                 )
             }
@@ -116,22 +116,22 @@ private fun WearApp() {
 
 private sealed interface Screen : NavKey {
     @Serializable
-    data object MAIN : Screen
+    data object Main : Screen
 
     @Serializable
-    data object SETTINGS : Screen
+    data object Settings : Screen
 
     @Serializable
-    data object UTILITIES : Screen
+    data object Utilities : Screen
 
     @Serializable
-    data object CALENDAR : Screen
+    data object Calendar : Screen
 
     @Serializable
-    data object CONVERTER : Screen
+    data object Converter : Screen
 
     @Serializable
-    data class DAY(val jdn: Jdn) : Screen
+    data class Day(val jdn: Jdn) : Screen
 }
 
 @Composable
