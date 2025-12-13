@@ -1,9 +1,10 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.requiredHeight
@@ -19,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -27,6 +30,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -41,6 +45,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -52,28 +57,31 @@ fun CalendarsTypesPicker(
     modifier: Modifier = Modifier,
     betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
-) {
+) = BoxWithConstraints(modifier = modifier) {
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    fun visualIndex(item: Calendar): Int {
+        val selectedIndex = calendarsList.indexOf(item)
+        return if (isRtl) calendarsList.size - 1 - selectedIndex else selectedIndex
+    }
+
     val selectDateTypeString = stringResource(R.string.select_type_date)
     val language by language.collectAsState()
     val view = LocalView.current
     val height = 40.dp
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val selectedIndex = calendarsList.indexOf(value)
-    val animatedIndex by animateFloatAsState(
-        targetValue = 0f + if (isRtl) calendarsList.size - 1 - selectedIndex else selectedIndex,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy,
-            stiffness = Spring.StiffnessLow,
-        ),
-    )
+    val maxWidth = this.maxWidth
+    val cellWidth = with(LocalDensity.current) { (maxWidth / calendarsList.size).toPx() }
+    val currentVisualIndex = visualIndex(value)
+    val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
+    val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
     val capsuleShape = RoundedCornerShape(height / 2)
     val cellColor by animateColor(MaterialTheme.colorScheme.primary.copy(alpha = .85f))
     val inactiveButtonColor by animateColor(inactiveButtonColor)
     val activeContentColor by animateColor(MaterialTheme.colorScheme.onPrimary)
     val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
     val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
+    val coroutineScope = rememberCoroutineScope()
     SingleChoiceSegmentedButtonRow(
-        modifier = modifier
+        modifier = Modifier
             .shadow(
                 elevation = 8.dp,
                 shape = capsuleShape,
@@ -85,13 +93,13 @@ fun CalendarsTypesPicker(
             .drawBehind {
                 val cornerRadius = CornerRadius(height.toPx() / 2)
                 drawRoundRect(inactiveButtonColor, cornerRadius = cornerRadius)
-                (1..<calendarsList.size).forEach {
-                    val x = size.width / calendarsList.size * it
+                (1..<calendarsList.size).forEach { i ->
+                    val x = cellWidth * i
                     drawLine(
                         color = outlineColor.copy(
                             alpha = min(
-                                abs(it - animatedIndex),
-                                abs(it - 1 - animatedIndex),
+                                abs(i - cellLeft.value / cellWidth),
+                                abs(i - cellRight.value / cellWidth),
                             ).coerceIn(0f, AppBlendAlpha)
                         ),
                         strokeWidth = 1.dp.toPx(),
@@ -99,13 +107,10 @@ fun CalendarsTypesPicker(
                         end = Offset(x, size.height),
                     )
                 }
-                val cellWidth = this.size.width / calendarsList.size
-                val cellSize = Size(width = cellWidth, height = this.size.height)
-                val topLeft = Offset(x = animatedIndex * cellWidth, y = 0f)
                 drawRoundRect(
                     cellColor,
-                    topLeft = topLeft,
-                    size = cellSize,
+                    topLeft = Offset(x = cellLeft.value, y = 0f),
+                    size = Size(cellRight.value - cellLeft.value, this.size.height),
                     cornerRadius = cornerRadius,
                 )
             },
@@ -122,6 +127,28 @@ fun CalendarsTypesPicker(
                 onClick = {
                     onValueChange(calendar)
                     view.performHapticFeedbackVirtualKey()
+                    val destinationVisualIndex = visualIndex(calendar)
+                    val isForward = visualIndex(calendar) > currentVisualIndex
+                    val first = spring<Float>(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = 150f,
+                    )
+                    val second = spring<Float>(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = 300f,
+                    )
+                    coroutineScope.launch {
+                        cellLeft.animateTo(
+                            targetValue = cellWidth * destinationVisualIndex,
+                            animationSpec = if (isForward) first else second,
+                        )
+                    }
+                    coroutineScope.launch {
+                        cellRight.animateTo(
+                            targetValue = cellWidth * (destinationVisualIndex + 1),
+                            animationSpec = if (isForward) second else first,
+                        )
+                    }
                 },
                 contentPadding = PaddingValues(
                     start = 12.dp,
