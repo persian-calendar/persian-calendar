@@ -50,6 +50,7 @@ fun CalendarsTypesPicker(
     calendarsList: List<Calendar>,
     inactiveButtonColor: Color,
     modifier: Modifier = Modifier,
+    betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
 ) {
     val selectDateTypeString = stringResource(R.string.select_type_date)
@@ -111,7 +112,9 @@ fun CalendarsTypesPicker(
     ) {
         calendarsList.forEachIndexed { index, calendar ->
             val title = stringResource(
-                if (language.betterToUseShortCalendarName) calendar.shortTitle else calendar.title
+                if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
+                    calendar.shortTitle
+                } else calendar.title
             )
             SegmentedButton(
                 border = BorderStroke(0.dp, Color.Transparent),

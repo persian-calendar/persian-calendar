@@ -112,6 +112,7 @@ fun DatePickerDialog(
             calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
             inactiveButtonColor = AlertDialogDefaults.containerColor,
             value = calendar,
+            betterToUseShortCalendarName = true,
         ) { calendar = it }
 
         DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
