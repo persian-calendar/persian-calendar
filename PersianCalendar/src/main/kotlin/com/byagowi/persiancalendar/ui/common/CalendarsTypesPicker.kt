@@ -39,7 +39,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.animateColor
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import kotlin.math.abs
+import kotlin.math.min
 
 @Composable
 fun CalendarsTypesPicker(
@@ -67,6 +70,7 @@ fun CalendarsTypesPicker(
     val inactiveButtonColor by animateColor(inactiveButtonColor)
     val activeContentColor by animateColor(MaterialTheme.colorScheme.onPrimary)
     val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
+    val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
     SingleChoiceSegmentedButtonRow(
         modifier = modifier
             .shadow(
@@ -80,6 +84,20 @@ fun CalendarsTypesPicker(
             .drawBehind {
                 val cornerRadius = CornerRadius(height.toPx() / 2)
                 drawRoundRect(inactiveButtonColor, cornerRadius = cornerRadius)
+                (1..<calendarsList.size).forEach {
+                    val x = size.width / calendarsList.size * it
+                    drawLine(
+                        color = outlineColor.copy(
+                            alpha = min(
+                                abs(it - animatedIndex),
+                                abs(it - 1 - animatedIndex),
+                            ).coerceIn(0f, AppBlendAlpha)
+                        ),
+                        strokeWidth = 1.dp.toPx(),
+                        start = Offset(x, 0f),
+                        end = Offset(x, size.height),
+                    )
+                }
                 val cellWidth = this.size.width / calendarsList.size
                 val cellSize = Size(width = cellWidth, height = this.size.height)
                 val topLeft = Offset(x = animatedIndex * cellWidth, y = 0f)
