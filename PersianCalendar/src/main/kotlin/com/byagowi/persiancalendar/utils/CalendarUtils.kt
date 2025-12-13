@@ -211,7 +211,9 @@ private fun readDeviceEvents(
             ),
             selection,
             selectionArgs,
-            CalendarContract.Instances.BEGIN + " ASC LIMIT ${limit * 3}",
+            CalendarContract.Instances.BEGIN + " ASC LIMIT ${
+                limit * if (searchTerm != null) 3 else 1
+            }",
         )?.use {
             generateSequence { if (it.moveToNext()) it else null }.filter {
                 it.getString(5) == "1" && // is visible
@@ -261,10 +263,10 @@ fun Context.readDaysDeviceEvents(
     )
 )
 
-fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days)
+fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days, 120)
 fun Context.readWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 7.days)
 fun Context.readTwoWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 14.days)
-fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32.days, 250)
+fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32.days, 750)
 fun Context.readYearDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 366.days)
 
 fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<CalendarEvent<*>>> {
