@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,133 +53,155 @@ import kotlin.math.min
 @Composable
 fun CalendarsTypesPicker(
     value: Calendar,
-    calendarsList: List<Calendar>,
-    inactiveButtonColor: Color,
+    items: List<Calendar>,
+    backgroundColor: Color,
     modifier: Modifier = Modifier,
     betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
-) = BoxWithConstraints(modifier = modifier) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    fun visualIndex(item: Calendar): Int {
-        val selectedIndex = calendarsList.indexOf(item)
-        return if (isRtl) calendarsList.size - 1 - selectedIndex else selectedIndex
-    }
-
-    val selectDateTypeString = stringResource(R.string.select_type_date)
+) {
     val language by language.collectAsState()
-    val view = LocalView.current
-    val height = calendarTypesHeight()
-    val density = LocalDensity.current
-    val capsuleShape = RoundedCornerShape(height / 2)
-    val cornerRadius = CornerRadius(with(density) { height.toPx() / 2 })
-    val maxWidth = this.maxWidth
-    val cellColor by animateColor(MaterialTheme.colorScheme.primary.copy(alpha = .85f))
-    val inactiveButtonColor by animateColor(inactiveButtonColor)
-    val activeContentColor by animateColor(MaterialTheme.colorScheme.onPrimary)
-    val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
-    val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
-    val coroutineScope = rememberCoroutineScope()
-    val cellWidth = with(density) { (maxWidth / calendarsList.size).toPx() }
-    val currentVisualIndex = visualIndex(value)
-    val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
-    val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
-    SingleChoiceSegmentedButtonRow(
-        modifier = Modifier
-            .shadow(
-                elevation = 8.dp,
-                shape = capsuleShape,
-                ambientColor = LocalContentColor.current,
-                spotColor = LocalContentColor.current,
-            )
-            .fillMaxWidth()
-            .semantics { this.contentDescription = selectDateTypeString }
-            .drawBehind {
-                drawRoundRect(inactiveButtonColor, cornerRadius = cornerRadius)
-                (1..<calendarsList.size).forEach { i ->
-                    val x = cellWidth * i
-                    drawLine(
-                        color = outlineColor.copy(
-                            alpha = min(
-                                abs(i - cellLeft.value / cellWidth),
-                                abs(i - cellRight.value / cellWidth),
-                            ).coerceAtMost(AppBlendAlpha)
+    SegmentedButtonItemsPicker(
+        value = value,
+        items = items,
+        backgroundColor = backgroundColor,
+        height = calendarTypesHeight(),
+        modifier = modifier,
+        onValueChange = onValueChange,
+    ) {
+        stringResource(
+            if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
+                it.shortTitle
+            } else it.title
+        )
+    }
+}
+
+@Composable
+fun <T> SegmentedButtonItemsPicker(
+    value: T,
+    onValueChange: (T) -> Unit,
+    items: List<T>,
+    backgroundColor: Color,
+    height: Dp,
+    modifier: Modifier = Modifier,
+    content: @Composable (T) -> String,
+) {
+    BoxWithConstraints(modifier = modifier) {
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        fun visualIndex(item: T): Int {
+            val selectedIndex = items.indexOf(item)
+            return if (isRtl) items.size - 1 - selectedIndex else selectedIndex
+        }
+
+        val selectDateTypeString = stringResource(R.string.select_type_date)
+        val view = LocalView.current
+        val density = LocalDensity.current
+        val capsuleShape = RoundedCornerShape(height / 2)
+        val cornerRadius = CornerRadius(with(density) { height.toPx() / 2 })
+        val maxWidth = this.maxWidth
+        val cellColor by animateColor(MaterialTheme.colorScheme.primary.copy(alpha = .85f))
+        val inactiveButtonColor by animateColor(backgroundColor)
+        val activeContentColor by animateColor(MaterialTheme.colorScheme.onPrimary)
+        val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
+        val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
+        val coroutineScope = rememberCoroutineScope()
+        val cellWidth = with(density) { (maxWidth / items.size).toPx() }
+        val currentVisualIndex = visualIndex(value)
+        val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
+        val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
+        SingleChoiceSegmentedButtonRow(
+            modifier = Modifier
+                .shadow(
+                    elevation = 8.dp,
+                    shape = capsuleShape,
+                    ambientColor = LocalContentColor.current,
+                    spotColor = LocalContentColor.current,
+                )
+                .fillMaxWidth()
+                .semantics { this.contentDescription = selectDateTypeString }
+                .drawBehind {
+                    drawRoundRect(inactiveButtonColor, cornerRadius = cornerRadius)
+                    (1..<items.size).forEach { i ->
+                        val x = cellWidth * i
+                        drawLine(
+                            color = outlineColor.copy(
+                                alpha = min(
+                                    abs(i - cellLeft.value / cellWidth),
+                                    abs(i - cellRight.value / cellWidth),
+                                ).coerceAtMost(AppBlendAlpha)
+                            ),
+                            strokeWidth = 1.dp.toPx(),
+                            start = Offset(x, 0f),
+                            end = Offset(x, size.height),
+                        )
+                    }
+                    drawRoundRect(
+                        cellColor,
+                        topLeft = Offset(x = cellLeft.value, y = 0f),
+                        size = Size(cellRight.value - cellLeft.value, this.size.height),
+                        cornerRadius = cornerRadius,
+                    )
+                },
+        ) {
+            items.forEachIndexed { index, item ->
+                SegmentedButton(
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    selected = value == item,
+                    onClick = {
+                        onValueChange(item)
+                        view.performHapticFeedbackVirtualKey()
+                        val destinationVisualIndex = visualIndex(item)
+                        val isForward = visualIndex(item) > currentVisualIndex
+                        val first = spring<Float>(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = 150f,
+                        )
+                        val second = spring<Float>(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = 300f,
+                        )
+                        coroutineScope.launch {
+                            cellLeft.animateTo(
+                                targetValue = cellWidth * destinationVisualIndex,
+                                animationSpec = if (isForward) first else second,
+                            )
+                        }
+                        coroutineScope.launch {
+                            cellRight.animateTo(
+                                targetValue = cellWidth * (destinationVisualIndex + 1),
+                                animationSpec = if (isForward) second else first,
+                            )
+                        }
+                    },
+                    contentPadding = PaddingValues(
+                        start = 12.dp,
+                        top = 0.dp,
+                        end = 12.dp,
+                        bottom = 0.dp,
+                    ),
+                    icon = {},
+                    colors = SegmentedButtonDefaults.colors(
+                        inactiveContainerColor = Color.Transparent,
+                        inactiveContentColor = inactiveContentColor,
+                        activeContainerColor = Color.Transparent,
+                        activeContentColor = activeContentColor,
+                    ),
+                    shape = SegmentedButtonDefaults.itemShape(index, items.size),
+                    modifier = Modifier
+                        .requiredHeight(height)
+                        .clip(capsuleShape)
+                        .weight(1f),
+                ) {
+                    Text(
+                        content(item),
+                        maxLines = 1,
+                        softWrap = false,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 6.sp,
+                            maxFontSize = LocalTextStyle.current.fontSize,
                         ),
-                        strokeWidth = 1.dp.toPx(),
-                        start = Offset(x, 0f),
-                        end = Offset(x, size.height),
                     )
                 }
-                drawRoundRect(
-                    cellColor,
-                    topLeft = Offset(x = cellLeft.value, y = 0f),
-                    size = Size(cellRight.value - cellLeft.value, this.size.height),
-                    cornerRadius = cornerRadius,
-                )
-            },
-    ) {
-        calendarsList.forEachIndexed { index, item ->
-            val title = stringResource(
-                if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
-                    item.shortTitle
-                } else item.title
-            )
-            SegmentedButton(
-                border = BorderStroke(0.dp, Color.Transparent),
-                selected = value == item,
-                onClick = {
-                    onValueChange(item)
-                    view.performHapticFeedbackVirtualKey()
-                    val destinationVisualIndex = visualIndex(item)
-                    val isForward = visualIndex(item) > currentVisualIndex
-                    val first = spring<Float>(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = 150f,
-                    )
-                    val second = spring<Float>(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = 300f,
-                    )
-                    coroutineScope.launch {
-                        cellLeft.animateTo(
-                            targetValue = cellWidth * destinationVisualIndex,
-                            animationSpec = if (isForward) first else second,
-                        )
-                    }
-                    coroutineScope.launch {
-                        cellRight.animateTo(
-                            targetValue = cellWidth * (destinationVisualIndex + 1),
-                            animationSpec = if (isForward) second else first,
-                        )
-                    }
-                },
-                contentPadding = PaddingValues(
-                    start = 12.dp,
-                    top = 0.dp,
-                    end = 12.dp,
-                    bottom = 0.dp,
-                ),
-                icon = {},
-                colors = SegmentedButtonDefaults.colors(
-                    inactiveContainerColor = Color.Transparent,
-                    inactiveContentColor = inactiveContentColor,
-                    activeContainerColor = Color.Transparent,
-                    activeContentColor = activeContentColor,
-                ),
-                shape = SegmentedButtonDefaults.itemShape(index, calendarsList.size),
-                modifier = Modifier
-                    .requiredHeight(height)
-                    .clip(capsuleShape)
-                    .weight(1f),
-            ) {
-                Text(
-                    title,
-                    maxLines = 1,
-                    softWrap = false,
-                    autoSize = TextAutoSize.StepBased(
-                        minFontSize = 6.sp,
-                        maxFontSize = LocalTextStyle.current.fontSize,
-                    ),
-                )
             }
         }
     }

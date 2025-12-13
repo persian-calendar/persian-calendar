@@ -465,8 +465,8 @@ private fun ColumnScope.ConverterAndDistance(
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(
                 value = calendar,
-                calendarsList = calendarsList,
-                inactiveButtonColor = MaterialTheme.colorScheme.surface,
+                items = calendarsList,
+                backgroundColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             ) { viewModel.changeCalendar(it) }
             DatePicker(
@@ -503,8 +503,8 @@ private fun ColumnScope.ConverterAndDistance(
     } else {
         CalendarsTypesPicker(
             value = calendar,
-            calendarsList = calendarsList,
-            inactiveButtonColor = MaterialTheme.colorScheme.surface,
+            items = calendarsList,
+            backgroundColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) { viewModel.changeCalendar(it) }
         DatePicker(

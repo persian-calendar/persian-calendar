@@ -109,8 +109,8 @@ fun DatePickerDialog(
 
         CalendarsTypesPicker(
             modifier = Modifier.padding(top = 24.dp, bottom = 16.dp, start = 24.dp, end = 24.dp),
-            calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
-            inactiveButtonColor = AlertDialogDefaults.containerColor,
+            items = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
+            backgroundColor = AlertDialogDefaults.containerColor,
             value = calendar,
             betterToUseShortCalendarName = true,
         ) { calendar = it }
