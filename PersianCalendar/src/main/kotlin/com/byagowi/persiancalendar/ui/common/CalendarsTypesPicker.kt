@@ -68,18 +68,20 @@ fun CalendarsTypesPicker(
     val language by language.collectAsState()
     val view = LocalView.current
     val height = 40.dp
-    val maxWidth = this.maxWidth
-    val cellWidth = with(LocalDensity.current) { (maxWidth / calendarsList.size).toPx() }
-    val currentVisualIndex = visualIndex(value)
-    val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
-    val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
+    val density = LocalDensity.current
     val capsuleShape = RoundedCornerShape(height / 2)
+    val cornerRadius = CornerRadius(with(density) { height.toPx() / 2 })
+    val maxWidth = this.maxWidth
     val cellColor by animateColor(MaterialTheme.colorScheme.primary.copy(alpha = .85f))
     val inactiveButtonColor by animateColor(inactiveButtonColor)
     val activeContentColor by animateColor(MaterialTheme.colorScheme.onPrimary)
     val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
     val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
     val coroutineScope = rememberCoroutineScope()
+    val cellWidth = with(density) { (maxWidth / calendarsList.size).toPx() }
+    val currentVisualIndex = visualIndex(value)
+    val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
+    val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
     SingleChoiceSegmentedButtonRow(
         modifier = Modifier
             .shadow(
@@ -91,7 +93,6 @@ fun CalendarsTypesPicker(
             .fillMaxWidth()
             .semantics { this.contentDescription = selectDateTypeString }
             .drawBehind {
-                val cornerRadius = CornerRadius(height.toPx() / 2)
                 drawRoundRect(inactiveButtonColor, cornerRadius = cornerRadius)
                 (1..<calendarsList.size).forEach { i ->
                     val x = cellWidth * i
@@ -100,7 +101,7 @@ fun CalendarsTypesPicker(
                             alpha = min(
                                 abs(i - cellLeft.value / cellWidth),
                                 abs(i - cellRight.value / cellWidth),
-                            ).coerceIn(0f, AppBlendAlpha)
+                            ).coerceAtMost(AppBlendAlpha)
                         ),
                         strokeWidth = 1.dp.toPx(),
                         start = Offset(x, 0f),
@@ -115,20 +116,20 @@ fun CalendarsTypesPicker(
                 )
             },
     ) {
-        calendarsList.forEachIndexed { index, calendar ->
+        calendarsList.forEachIndexed { index, item ->
             val title = stringResource(
                 if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
-                    calendar.shortTitle
-                } else calendar.title
+                    item.shortTitle
+                } else item.title
             )
             SegmentedButton(
                 border = BorderStroke(0.dp, Color.Transparent),
-                selected = value == calendar,
+                selected = value == item,
                 onClick = {
-                    onValueChange(calendar)
+                    onValueChange(item)
                     view.performHapticFeedbackVirtualKey()
-                    val destinationVisualIndex = visualIndex(calendar)
-                    val isForward = visualIndex(calendar) > currentVisualIndex
+                    val destinationVisualIndex = visualIndex(item)
+                    val isForward = visualIndex(item) > currentVisualIndex
                     val first = spring<Float>(
                         dampingRatio = Spring.DampingRatioLowBouncy,
                         stiffness = 150f,
