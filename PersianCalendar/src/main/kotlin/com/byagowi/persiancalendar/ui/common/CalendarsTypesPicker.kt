@@ -67,7 +67,7 @@ fun CalendarsTypesPicker(
     val selectDateTypeString = stringResource(R.string.select_type_date)
     val language by language.collectAsState()
     val view = LocalView.current
-    val height = 40.dp
+    val height = calendarTypesHeight()
     val density = LocalDensity.current
     val capsuleShape = RoundedCornerShape(height / 2)
     val cornerRadius = CornerRadius(with(density) { height.toPx() / 2 })
@@ -183,3 +183,6 @@ fun CalendarsTypesPicker(
         }
     }
 }
+
+@Composable
+fun calendarTypesHeight() = 40.dp//LocalMinimumInteractiveComponentSize.current.coerceAtLeast(48.dp)

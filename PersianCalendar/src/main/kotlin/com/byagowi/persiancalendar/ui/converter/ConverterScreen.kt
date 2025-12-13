@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.common.calendarTypesHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -591,7 +592,7 @@ private fun DaysDistanceSecondPart(
 
 @Composable
 private fun TextWithSlideAnimation(text: String) {
-    Box(Modifier.height(56.dp), contentAlignment = Alignment.Center) {
+    Box(Modifier.height(calendarTypesHeight() + 16.dp), contentAlignment = Alignment.Center) {
         AnimatedContent(
             text,
             transitionSpec = {
