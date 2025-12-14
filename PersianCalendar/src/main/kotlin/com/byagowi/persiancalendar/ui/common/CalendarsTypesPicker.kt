@@ -88,10 +88,8 @@ fun <T> SegmentedButtonItemsPicker(
 ) {
     BoxWithConstraints(modifier = modifier) {
         val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-        fun visualIndex(item: T): Int {
-            val selectedIndex = items.indexOf(item)
-            return if (isRtl) items.size - 1 - selectedIndex else selectedIndex
-        }
+        fun visualIndex(item: T) =
+            if (isRtl) items.size - 1 - items.indexOf(item) else items.indexOf(item)
 
         val selectDateTypeString = stringResource(R.string.select_type_date)
         val view = LocalView.current
