@@ -365,8 +365,8 @@ private fun AppNavigationRail(
     finish: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val dir = LocalLayoutDirection.current
-    val startPadding = WindowInsets.displayCutout.asPaddingValues().calculateStartPadding(dir)
+    val startPadding = WindowInsets.displayCutout.asPaddingValues()
+        .calculateStartPadding(layoutDirection = LocalLayoutDirection.current)
     ModalWideNavigationRail(
         hideOnCollapse = true,
         colors = run {
