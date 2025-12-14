@@ -429,7 +429,7 @@ private fun AppNavigationRail(
                         onClick = {
                             if (screen == Screen.Exit) finish() else coroutineScope.launch {
                                 railState.collapse()
-                                if (backStack.lastOrNull() != screen) backStack.add(screen)
+                                if (backStack.lastOrNull() != screen) backStack += screen
                             }
                         },
                     )
