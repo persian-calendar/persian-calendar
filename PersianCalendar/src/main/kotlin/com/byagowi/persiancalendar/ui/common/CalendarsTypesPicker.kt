@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
+import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -91,6 +92,7 @@ fun <T> SegmentedButtonItemsPicker(
     content: @Composable (T) -> String,
 ) {
     BoxWithConstraints(modifier = modifier) {
+        val isGradient by isGradient.collectAsState()
         val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         fun visualIndex(item: T) =
             if (isRtl) items.size - 1 - items.indexOf(item) else items.indexOf(item)
@@ -100,24 +102,31 @@ fun <T> SegmentedButtonItemsPicker(
         val density = LocalDensity.current
         val capsuleShape = RoundedCornerShape(height / 2)
         val cornerRadius = CornerRadius(with(density) { height.toPx() / 2 })
-        val maxWidth = this.maxWidth
         val cellColor by animateColor(MaterialTheme.colorScheme.primary.copy(alpha = .85f))
         val backgroundColor by animateColor(backgroundColor)
         val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
         val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
         val coroutineScope = rememberCoroutineScope()
-        val cellWidth = with(density) { (maxWidth / items.size).toPx() }
+        val maxWidth = with(density) { this@BoxWithConstraints.maxWidth.toPx() }
+        val cellWidth = maxWidth / items.size
         val currentVisualIndex = visualIndex(value)
         val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
         val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
         SingleChoiceSegmentedButtonRow(
             modifier = Modifier
-                .shadow(
-                    elevation = 8.dp,
-                    shape = capsuleShape,
-                    ambientColor = LocalContentColor.current,
-                    spotColor = LocalContentColor.current,
-                )
+                .dropShadow(shape = capsuleShape) {
+                    this.color = outlineColor
+                    if (isGradient) {
+                        this.offset = Offset(0f, with(this.density) { 4.dp.toPx() })
+                        this.alpha = .325f
+                        this.spread = with(this.density) { 8.dp.toPx() }
+                        this.radius = with(this.density) { 8.dp.toPx() }
+                    } else {
+                        this.offset = Offset.Zero
+                        this.alpha = AppBlendAlpha
+                        this.spread = with(this.density) { 1.dp.toPx() }
+                    }
+                }
                 .fillMaxWidth()
                 .semantics { this.contentDescription = selectDateTypeString }
                 .drawBehind {
@@ -140,10 +149,11 @@ fun <T> SegmentedButtonItemsPicker(
                 .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
                 .drawWithContent {
                     drawContent()
+                    val width = cellRight.value.coerceAtMost(maxWidth) - cellLeft.value
                     drawRoundRect(
                         cellColor,
-                        topLeft = Offset(x = cellLeft.value, y = 0f),
-                        size = Size(cellRight.value - cellLeft.value, this.size.height),
+                        topLeft = Offset(x = cellLeft.value.coerceAtLeast(0f), y = 0f),
+                        size = Size(width, this.size.height),
                         cornerRadius = cornerRadius,
                         blendMode = BlendMode.SrcOut,
                     )
