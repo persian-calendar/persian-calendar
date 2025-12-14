@@ -20,7 +20,7 @@ class DoubleBangDetector : Detector(), SourceCodeScanner {
             if (node.operator.text == "!!") context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback and consider `debugAssertNotNull`."
+                message = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback, then consider use of `.debugAssertNotNull` if is needed."
             )
         }
     }
@@ -29,7 +29,7 @@ class DoubleBangDetector : Detector(), SourceCodeScanner {
         val ISSUE = Issue.create(
             id = "DoubleBangUsage",
             briefDescription = "Not-null assertion operator usage",
-            explanation = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback and consider `debugAssertNotNull`.",
+            explanation = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback, then consider use of `.debugAssertNotNull` if is needed.",
             category = Category.CORRECTNESS,
             priority = 6,
             severity = Severity.WARNING,

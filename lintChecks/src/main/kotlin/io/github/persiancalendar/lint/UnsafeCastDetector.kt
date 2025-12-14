@@ -21,7 +21,7 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
             if (" as " in sourceText) context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException"
+                message = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException, then consider use of `.debugAssertNotNull` if is needed."
             )
         }
     }
@@ -30,7 +30,7 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
         val ISSUE = Issue.create(
             id = "UnsafeCast",
             briefDescription = "Unsafe cast usage",
-            explanation = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException",
+            explanation = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException, then consider use of `.debugAssertNotNull` if is needed.",
             category = Category.CORRECTNESS,
             priority = 6,
             severity = Severity.WARNING,
