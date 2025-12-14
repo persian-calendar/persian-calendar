@@ -25,11 +25,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -98,8 +102,7 @@ fun <T> SegmentedButtonItemsPicker(
         val cornerRadius = CornerRadius(with(density) { height.toPx() / 2 })
         val maxWidth = this.maxWidth
         val cellColor by animateColor(MaterialTheme.colorScheme.primary.copy(alpha = .85f))
-        val inactiveButtonColor by animateColor(backgroundColor)
-        val activeContentColor by animateColor(MaterialTheme.colorScheme.onPrimary)
+        val backgroundColor by animateColor(backgroundColor)
         val inactiveContentColor by animateColor(MaterialTheme.colorScheme.onSurface)
         val outlineColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
         val coroutineScope = rememberCoroutineScope()
@@ -118,7 +121,7 @@ fun <T> SegmentedButtonItemsPicker(
                 .fillMaxWidth()
                 .semantics { this.contentDescription = selectDateTypeString }
                 .drawBehind {
-                    drawRoundRect(inactiveButtonColor, cornerRadius = cornerRadius)
+                    drawRoundRect(backgroundColor, cornerRadius = cornerRadius)
                     (1..<items.size).forEach { i ->
                         val x = cellWidth * i
                         drawLine(
@@ -133,11 +136,16 @@ fun <T> SegmentedButtonItemsPicker(
                             end = Offset(x, size.height),
                         )
                     }
+                }
+                .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                .drawWithContent {
+                    drawContent()
                     drawRoundRect(
                         cellColor,
                         topLeft = Offset(x = cellLeft.value, y = 0f),
                         size = Size(cellRight.value - cellLeft.value, this.size.height),
                         cornerRadius = cornerRadius,
+                        blendMode = BlendMode.SrcOut,
                     )
                 },
         ) {
@@ -182,7 +190,7 @@ fun <T> SegmentedButtonItemsPicker(
                         inactiveContainerColor = Color.Transparent,
                         inactiveContentColor = inactiveContentColor,
                         activeContainerColor = Color.Transparent,
-                        activeContentColor = activeContentColor,
+                        activeContentColor = inactiveContentColor,
                     ),
                     shape = SegmentedButtonDefaults.itemShape(index, items.size),
                     modifier = Modifier
