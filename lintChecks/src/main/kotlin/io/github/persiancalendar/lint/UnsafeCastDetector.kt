@@ -17,7 +17,8 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitBinaryExpressionWithType(node: UBinaryExpressionWithType) {
-            if (node.sourcePsi?.text?.contains(" as ") == true) context.report(
+            val sourceText = node.sourcePsi?.text ?: return
+            if (" as " in sourceText) context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
                 message = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException"
@@ -35,7 +36,7 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
             severity = Severity.WARNING,
             implementation = Implementation(
                 UnsafeCastDetector::class.java,
-                Scope.JAVA_FILE_SCOPE
+                Scope.JAVA_FILE_SCOPE,
             )
         )
     }

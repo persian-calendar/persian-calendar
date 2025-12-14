@@ -22,7 +22,7 @@ class DebugAssertNotNullSafeCallDetector : Detector(), SourceCodeScanner {
             if (selector.identifier != "debugAssertNotNull") return
 
             val sourceText = node.sourcePsi?.text ?: return
-            if (sourceText.contains("?.debugAssertNotNull")) context.report(
+            if ("?.debugAssertNotNull" in sourceText) context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
                 message = "Use `.debugAssertNotNull` instead of `?.debugAssertNotNull`.",

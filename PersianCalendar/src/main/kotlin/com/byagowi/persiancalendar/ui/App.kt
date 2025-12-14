@@ -344,7 +344,7 @@ private sealed interface Screen : NavKey {
             Triple(Exit, Icons.Default.Cancel, R.string.exit)
         )
 
-        fun fromName(value: String?) = when (Shortcut.fromName(value)) {
+        fun fromName(value: String?): Screen = when (Shortcut.fromName(value)) {
             Shortcut.CONVERTER -> Converter
             Shortcut.COMPASS -> Compass
             Shortcut.LEVEL -> Level

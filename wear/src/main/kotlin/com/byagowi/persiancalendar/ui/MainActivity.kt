@@ -139,7 +139,7 @@ private fun updatedToday(): Jdn {
     var today by remember { mutableStateOf(Jdn.today()) }
 
     val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
-    if (currentState == Lifecycle.State.RESUMED) LaunchedEffect(Unit) {
+    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
         while (isActive) {
             today = Jdn.today()
             delay(30.seconds)
