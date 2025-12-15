@@ -130,7 +130,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
         fun NavKey.navigateUp() {
-            // Ignore double back button click to get effect
+            // Ignore back button double tap
             if (isCurrentDestination()) backStack.removeLastOrNull()
         }
         // Not the best approach to access calendar screen view model…

@@ -81,7 +81,7 @@ fun CalendarsTypesPicker(
 }
 
 @Composable
-fun <T> SegmentedButtonItemsPicker(
+private fun <T> SegmentedButtonItemsPicker(
     value: T,
     onValueChange: (T) -> Unit,
     items: List<T>,
