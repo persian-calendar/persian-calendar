@@ -54,12 +54,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun WearApp() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        val context = LocalContext.current
         MaterialTheme(
-            colorScheme = dynamicColorScheme(LocalContext.current) ?: MaterialTheme.colorScheme,
+            colorScheme = dynamicColorScheme(context) ?: MaterialTheme.colorScheme,
             motionScheme = MotionScheme.expressive(),
         ) {
             AppScaffold {
-                val context = LocalContext.current
                 val dataStore = context.dataStore.data
                 val preferences by dataStore.collectAsState(
                     remember { runBlocking { dataStore.firstOrNull() } },
@@ -67,9 +67,6 @@ private fun WearApp() {
                 val localeUtils = LocaleUtils()
                 val today = updatedToday()
                 val backStack = rememberNavBackStack(Screen.Main)
-                fun Screen.navigate() {
-                    backStack += this
-                }
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
@@ -80,15 +77,15 @@ private fun WearApp() {
                                 localeUtils = localeUtils,
                                 today = today,
                                 preferences = preferences,
-                                navigateToUtilities = Screen.Utilities::navigate,
-                                navigateToDay = { Screen.Day(it).navigate() },
+                                navigateToUtilities = { backStack += Screen.Utilities },
+                                navigateToDay = { jdn -> backStack += Screen.Day(jdn) },
                             )
                         }
                         entry<Screen.Utilities> {
                             UtilitiesScreen(
-                                navigateToConverter = Screen.Converter::navigate,
-                                navigateToCalendar = Screen.Calendar::navigate,
-                                navigateToSettings = Screen.Settings::navigate,
+                                navigateToConverter = { backStack += Screen.Converter },
+                                navigateToCalendar = { backStack += Screen.Calendar },
+                                navigateToSettings = { backStack += Screen.Settings },
                             )
                         }
                         entry<Screen.Converter> { ConverterScreen(today) }
@@ -97,7 +94,7 @@ private fun WearApp() {
                                 today = today,
                                 localeUtils = localeUtils,
                                 preferences = preferences,
-                            ) { Screen.Day(it).navigate() }
+                            ) { jdn -> backStack += Screen.Day(jdn) }
                         }
                         entry<Screen.Day> {
                             DayScreen(

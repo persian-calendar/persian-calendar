@@ -128,23 +128,11 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
-        fun NavKey.navigate() {
-            backStack += this
-        }
-
         fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
         fun NavKey.navigateUp() {
-            // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
-            if (!isCurrentDestination()) return
-            if (backStack.size > 1) backStack.removeLastOrNull() else finish()
+            // Ignore double back button click to get effect
+            if (isCurrentDestination()) backStack.removeLastOrNull()
         }
-
-        fun navigateToSettingsLocationTab() =
-            Screen.Settings(tab = SettingsTab.LocationAthan).navigate()
-
-        fun navigateToAstronomy(jdn: Jdn) =
-            Screen.Astronomy(daysOffset = jdn - Jdn.today()).navigate()
-
         // Not the best approach to access calendar screen view model…
         var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
         NavDisplay(
@@ -165,29 +153,31 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     CalendarScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToHolidaysSettings = { item ->
-                            Screen.Settings(
+                            backStack += Screen.Settings(
                                 tab = SettingsTab.InterfaceCalendar,
                                 settings = PREF_HOLIDAY_TYPES,
                                 settingsItem = item,
-                            ).navigate()
+                            )
                         },
                         navigateToSettingsLocationTabSetAthanAlarm = {
-                            Screen.Settings(
+                            backStack += Screen.Settings(
                                 tab = SettingsTab.LocationAthan,
                                 settings = PREF_ATHAN_ALARM,
-                            ).navigate()
+                            )
                         },
                         navigateToSchedule = {
-                            Screen.Schedule(viewModel.selectedDay.value).navigate()
+                            backStack += Screen.Schedule(viewModel.selectedDay.value)
                         },
                         navigateToDays = { jdn, isWeek ->
-                            Screen.Days(jdn, isWeek).navigate()
+                            backStack += Screen.Days(jdn, isWeek)
                         },
                         navigateToMonthView = {
-                            Screen.Month(viewModel.selectedDay.value).navigate()
+                            backStack += Screen.Month(viewModel.selectedDay.value)
                         },
-                        navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                        navigateToAstronomy = ::navigateToAstronomy,
+                        navigateToSettingsLocationTab = {
+                            backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
+                        },
+                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
                         viewModel = viewModel,
                         isCurrentDestination = it.isCurrentDestination(),
                     )
@@ -217,7 +207,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Converter> {
                     ConverterScreen(
                         openNavigationRail = openNavigationRail,
-                        navigateToAstronomy = ::navigateToAstronomy,
+                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
                         viewModel = viewModel<ConverterViewModel>(),
                         noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
                     )
@@ -225,28 +215,30 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Compass> {
                     CompassScreen(
                         openNavigationRail = openNavigationRail,
-                        navigateToLevel = Screen.Level::navigate,
-                        navigateToMap = { Screen.Map().navigate() },
-                        navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                        navigateToLevel = { backStack += Screen.Level },
+                        navigateToMap = { backStack += Screen.Map() },
+                        navigateToSettingsLocationTab = {
+                            backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
+                        },
                         noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
                     )
                 }
                 entry<Screen.Level> {
                     LevelScreen(
                         navigateUp = it::navigateUp,
-                        navigateToCompass = Screen.Compass::navigate,
+                        navigateToCompass = { backStack += Screen.Compass },
                     )
                 }
                 entry<Screen.Astronomy> {
                     val viewModel = viewModel<AstronomyViewModel>()
-                    it.daysOffset.let {
-                        viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
+                    LaunchedEffect(Unit) {
+                        it.day?.let { viewModel.changeToTime(it.toGregorianCalendar().timeInMillis) }
                     }
                     AstronomyScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToMap = {
                             val time = viewModel.astronomyState.value.date.timeInMillis
-                            Screen.Map(time = time).navigate()
+                            backStack += Screen.Map(time = time)
                         },
                         viewModel = viewModel,
                         noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
@@ -266,7 +258,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Settings> {
                     SettingsScreen(
                         openNavigationRail = openNavigationRail,
-                        navigateToMap = { Screen.Map(fromSettings = true).navigate() },
+                        navigateToMap = { backStack += Screen.Map(fromSettings = true) },
                         initialTab = it.tab,
                         destination = it.settings,
                         destinationItem = it.settingsItem,
@@ -275,8 +267,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.About> {
                     AboutScreen(
                         openNavigationRail = openNavigationRail,
-                        navigateToLicenses = Screen.Licenses::navigate,
-                        navigateToDeviceInformation = Screen.Device::navigate,
+                        navigateToLicenses = { backStack += Screen.Licenses },
+                        navigateToDeviceInformation = { backStack += Screen.Device },
                     )
                 }
                 entry<Screen.Licenses> { LicensesScreen(navigateUp = it::navigateUp) }
@@ -309,7 +301,7 @@ private sealed interface Screen : NavKey {
     data object Level : Screen
 
     @Serializable
-    data class Astronomy(val daysOffset: Int = 0) : Screen
+    data class Astronomy(val day: Jdn? = null) : Screen
 
     @Serializable
     data class Map(val fromSettings: Boolean = false, val time: Long? = null) : Screen
