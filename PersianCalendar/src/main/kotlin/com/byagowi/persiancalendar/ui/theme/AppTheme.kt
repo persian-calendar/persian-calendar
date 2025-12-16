@@ -90,7 +90,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.logException
 import java.io.File
 
 @Composable
