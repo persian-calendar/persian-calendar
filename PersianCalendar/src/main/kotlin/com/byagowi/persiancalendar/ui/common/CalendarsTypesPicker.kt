@@ -112,6 +112,7 @@ private fun <T> SegmentedButtonItemsPicker(
         val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
         val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
         SingleChoiceSegmentedButtonRow(
+            space = 0.dp,
             modifier = Modifier
                 .dropShadow(shape = capsuleShape) {
                     this.color = outlineColor
