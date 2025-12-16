@@ -131,7 +131,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
         fun NavKey.navigateUp() {
             // Ignore back button double tap
-            if (isCurrentDestination()) backStack.removeLastOrNull()
+            if (isCurrentDestination()) {
+                if (backStack.size > 1) backStack.removeLastOrNull() else finish()
+            }
         }
         // Not the best approach to access calendar screen view model…
         var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
