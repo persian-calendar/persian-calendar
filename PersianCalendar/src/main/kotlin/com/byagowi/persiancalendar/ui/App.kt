@@ -143,7 +143,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             },
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(
+                    removeViewModelStoreOnPop = { true },
+                ),
             ),
             entryProvider = entryProvider {
                 entry<Screen.Calendar> {
