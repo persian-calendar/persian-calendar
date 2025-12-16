@@ -132,7 +132,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         fun NavKey.navigateUp() {
             // Ignore back button double tap
             if (isCurrentDestination()) {
-                if (backStack.size > 1) backStack.removeLastOrNull() else finish()
+                // Empty back stack causes crash, what is meant is to finish the activity
+                if (backStack.size < 2) finish()
+                else backStack.removeLastOrNull()
             }
         }
         // Not the best approach to access calendar screen view model…
