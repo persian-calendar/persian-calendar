@@ -160,9 +160,7 @@ fun resolveCustomFontPath(context: Context): File? {
 @Composable
 fun resolveFontFile(): File? {
     val customFontName by customFontName.collectAsState()
-    return if (customFontName != null) runCatching {
-        resolveCustomFontPath(LocalContext.current)
-    }.onFailure(logException).getOrNull() else null
+    return if (customFontName != null) resolveCustomFontPath(LocalContext.current) else null
 }
 
 @Composable
