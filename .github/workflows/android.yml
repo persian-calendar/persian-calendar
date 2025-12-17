@@ -30,7 +30,7 @@ jobs:
 
       - name: Build debug APK and run JVM tests
         run: |
-          ./gradlew assembleDebug lintDebug testDebugUnitTest --stacktrace
+          ./gradlew assembleDebug lintDebug testDebugUnitTest :wear:testDebugUnitTest --stacktrace
 
       - name: Run lint checks
         run: |
@@ -41,6 +41,13 @@ jobs:
         with:
           name: PersianCalendar
           path: PersianCalendar/build/outputs/apk/**/*.apk
+
+      - name: Upload JVM test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: jvm-test-results
+          path: "*/build/test-results/**/*.xml"
 
       - name: Upload lint reports
         if: ${{ always() }}
