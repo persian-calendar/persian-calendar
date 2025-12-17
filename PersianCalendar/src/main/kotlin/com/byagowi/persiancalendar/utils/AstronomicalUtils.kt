@@ -63,7 +63,7 @@ fun searchMoonAgeTime(jdn: Jdn, targetDegrees: Double): Clock? {
 }
 
 // setIranTime should be used only for tests
-private fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boolean): Clock {
+fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boolean = false): Clock? {
     val startTime = jdn.toAstronomyTime(hourOfDay = 0, setIranTime = setIranTime)
     val endTime = startTime.addDays(1.0)
     return search(startTime, endTime, 1.0) { time ->
@@ -75,7 +75,7 @@ private fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boole
                 it.timeInMillis = timeInMillis
             }
         )
-    } ?: Clock.zero
+    }
 }
 
 fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioState? {
@@ -87,11 +87,11 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
 
         start -> MoonInScorpioState.Start(
-            searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime)
+            searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime) ?: Clock.zero
         )
 
         end -> MoonInScorpioState.End(
-            searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive, setIranTime)
+            searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive, setIranTime) ?: Clock.zero
         )
 
         else -> null

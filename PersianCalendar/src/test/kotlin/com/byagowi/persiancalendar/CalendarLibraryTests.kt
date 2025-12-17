@@ -277,12 +277,12 @@ class CalendarLibraryTests {
         // https://github.com/user-attachments/assets/6f236e58-a946-4235-8795-886d062868d0
         run {
             val entries = generateMoonInScorpioEntries(1404, Zodiac.SCORPIO.tropicalRange, true)
-            assertEquals(12, entries.size)
+            assertEquals(13, entries.size)
         }
         // https://github.com/user-attachments/assets/c90873ad-6e0b-4a7f-abeb-ec81a3f55f5f
         run {
             val entries = generateMoonInScorpioEntries(1404, Zodiac.SCORPIO.iauRange, true)
-            assertEquals(13, entries.size)
+            assertEquals(14, entries.size)
         }
     }
 

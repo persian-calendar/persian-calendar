@@ -84,7 +84,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
@@ -240,7 +239,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             showPlanetaryHoursDialog = true
                             closeMenu()
                         }
-                        if (BuildConfig.DEVELOPMENT) AppDropdownMenuItem({
+                        AppDropdownMenuItem({
                             Text(stringResource(R.string.moon_in_scorpio))
                         }) {
                             showMoonInScorpioDialog = true

@@ -61,7 +61,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.lunarLongitude
-import com.byagowi.persiancalendar.utils.searchMoonAgeTime
+import com.byagowi.persiancalendar.utils.searchLunarLongitude
 import com.byagowi.persiancalendar.utils.toCivilDate
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
@@ -279,11 +279,11 @@ fun generateMoonInScorpioEntries(
         var day = start
         while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
         while (day <= end) {
-            searchMoonAgeTime(day, rangeStart)?.let parent@{ startClock ->
+            searchLunarLongitude(day, rangeStart)?.let parent@{ startClock ->
 //                while (lunarLongitude(day, hourOfDay = 0) in range) day += 1
                 val startDay = day
                 while (true) {
-                    searchMoonAgeTime(day, rangeEnd)?.let { endClock ->
+                    searchLunarLongitude(day, rangeEnd)?.let { endClock ->
                         val endDay = day
                         val upcoming = if (firstComing && today <= startDay) {
                             firstComing = false
