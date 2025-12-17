@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.os.Build
-import android.view.View
-import android.view.ViewParent
-import android.view.Window
 import android.view.WindowManager
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Surface
@@ -11,7 +8,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.window.DialogWindowProvider
+import com.byagowi.persiancalendar.ui.utils.findWindow
 
 @Composable
 fun DialogSurface(content: @Composable () -> Unit) {
@@ -43,9 +40,3 @@ private fun SetupDialogBlur() {
         window.attributes = window.attributes
     }
 }
-
-private fun View.findWindow(): Window? =
-    (this as? DialogWindowProvider ?: parent?.findDialogWindowProvider())?.window
-
-private tailrec fun ViewParent.findDialogWindowProvider(): DialogWindowProvider? =
-    this as? DialogWindowProvider ?: parent?.findDialogWindowProvider()

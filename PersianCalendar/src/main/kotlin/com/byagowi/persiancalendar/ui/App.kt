@@ -47,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,12 +56,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -69,6 +76,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
@@ -112,6 +120,8 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsTab
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.utils.findWindow
+import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -381,7 +391,7 @@ private fun AppNavigationRail(
         modifier = Modifier.width(railWidth + startPadding),
         windowInsets = WindowInsets(),
     ) {
-        Box {
+        Box(Modifier.navigationRailTopGradient()) {
             val scrollState = rememberScrollState()
             Column(
                 Modifier
@@ -438,22 +448,32 @@ private fun AppNavigationRail(
     }
 }
 
-// Can't be enabled in ModalWideNavigationRail, sadly
-//@Composable
-//private fun NavigationRailTopGradient() {
-//    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-//    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-//    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
-//    val topColor by animateColor(
-//        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent
-//    )
-//    Spacer(
-//        Modifier
-//            .fillMaxWidth()
-//            .windowInsetsTopHeight(WindowInsets.systemBars)
-//            .background(Brush.verticalGradient(listOf(topColor, Color.Transparent))),
-//    )
-//}
+@Composable
+private fun Modifier.navigationRailTopGradient(): Modifier {
+    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+    val view = LocalView.current
+    LaunchedEffect(isBackgroundColorLight) {
+        view.findWindow()?.let { window ->
+            WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars =
+                isBackgroundColorLight
+        }
+    }
+    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
+    val topColor by animateColor(
+        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent
+    )
+    var height by remember { mutableFloatStateOf(0f) }
+    return this
+        .onGloballyPositioned { height = it.positionInRoot().y }
+        .drawBehind {
+            val colors = listOf(topColor, Color.Transparent)
+            drawRect(
+                Brush.verticalGradient(colors, startY = -height, endY = 0f),
+                size = this.size.copy(height = -height),
+            )
+        }
+}
 
 @Composable
 private fun NavigationRailSeasonsPager() {

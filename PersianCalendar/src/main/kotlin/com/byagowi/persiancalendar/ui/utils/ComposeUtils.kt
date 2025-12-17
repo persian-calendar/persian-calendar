@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import android.view.View
+import android.view.ViewParent
+import android.view.Window
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -24,6 +27,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.window.DialogWindowProvider
 import com.byagowi.persiancalendar.entities.Jdn
 
 /**
@@ -62,6 +66,12 @@ fun Modifier.highlightItem(enabled: Boolean): Modifier {
     LaunchedEffect(Unit) { alpha.animateTo(0f, tween(4000)) }
     return background(LocalContentColor.current.copy(alpha = alpha.value))
 }
+
+fun View.findWindow(): Window? =
+    (this as? DialogWindowProvider ?: parent?.findDialogWindowProvider())?.window
+
+private tailrec fun ViewParent.findDialogWindowProvider(): DialogWindowProvider? =
+    this as? DialogWindowProvider ?: parent?.findDialogWindowProvider()
 
 val appBoundsTransform = BoundsTransform { _, _ ->
     spring(
