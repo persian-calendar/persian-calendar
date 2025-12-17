@@ -162,7 +162,7 @@
 |    +--- androidx.lifecycle:lifecycle-common-java8:2.10.0 (c)
 |    \--- androidx.lifecycle:lifecycle-process:2.10.0 (c)
 +--- androidx.browser:browser:1.9.0
-|    +--- androidx.activity:activity:1.9.0 -> 1.12.1
+|    +--- androidx.activity:activity:1.9.0 -> 1.12.2
 |    |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |    |    +--- androidx.core:core-ktx:1.16.0 -> 1.17.0 (*)
 |    |    +--- androidx.core:core-viewtree:1.0.0 (*)
@@ -271,8 +271,8 @@
 |    |    +--- androidx.tracing:tracing:1.0.0 -> 1.2.0 (*)
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (*)
 |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 -> 1.10.2 (*)
-|    |    +--- androidx.activity:activity-compose:1.12.1 (c)
-|    |    \--- androidx.activity:activity-ktx:1.12.1 (c)
+|    |    +--- androidx.activity:activity-compose:1.12.2 (c)
+|    |    \--- androidx.activity:activity-ktx:1.12.2 (c)
 |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |    +--- androidx.annotation:annotation-experimental:1.4.1 (*)
 |    +--- androidx.collection:collection:1.4.2 -> 1.5.0 (*)
@@ -375,8 +375,8 @@
 +--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (*)
 +--- com.google.openlocationcode:openlocationcode:1.0.4
-+--- androidx.activity:activity-ktx:1.12.1
-|    +--- androidx.activity:activity:1.12.1 (*)
++--- androidx.activity:activity-ktx:1.12.2
+|    +--- androidx.activity:activity:1.12.2 (*)
 |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.6.1 -> 2.10.0 (*)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1 -> 2.10.0
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.10.0 (*)
@@ -403,9 +403,9 @@
 |    |    +--- androidx.savedstate:savedstate-compose:1.4.0 (c)
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (c)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (*)
-|    +--- androidx.activity:activity:1.12.1 (c)
-|    \--- androidx.activity:activity-compose:1.12.1 (c)
-+--- androidx.compose:compose-bom:2025.12.00
+|    +--- androidx.activity:activity:1.12.2 (c)
+|    \--- androidx.activity:activity-compose:1.12.2 (c)
++--- androidx.compose:compose-bom:2025.12.01
 |    +--- androidx.compose.animation:animation-graphics-android:1.10.0 (c)
 |    +--- androidx.compose.material:material-icons-extended:1.7.8 (c)
 |    +--- androidx.compose.material3:material3:1.4.0 (c)
@@ -445,8 +445,8 @@
 |    +--- androidx.compose.ui:ui-graphics-android:1.10.0 (c)
 |    +--- androidx.compose.ui:ui-unit-android:1.10.0 (c)
 |    \--- androidx.compose.runtime:runtime-retain-android:1.10.0 (c)
-+--- androidx.activity:activity-compose:1.12.1
-|    +--- androidx.activity:activity:1.12.1 (*)
++--- androidx.activity:activity-compose:1.12.2
+|    +--- androidx.activity:activity:1.12.2 (*)
 |    +--- androidx.compose.runtime:runtime:1.7.0 -> 1.10.0
 |    |    \--- androidx.compose.runtime:runtime-android:1.10.0
 |    |         +--- androidx.annotation:annotation-experimental:1.4.1 (*)
@@ -498,7 +498,7 @@
 |    |         \--- androidx.compose.runtime:runtime-retain:1.10.0 (c)
 |    +--- androidx.compose.ui:ui:1.0.1 -> 1.10.0
 |    |    \--- androidx.compose.ui:ui-android:1.10.0
-|    |         +--- androidx.activity:activity-ktx:1.7.0 -> 1.12.1 (*)
+|    |         +--- androidx.activity:activity-ktx:1.7.0 -> 1.12.2 (*)
 |    |         +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |    |         +--- androidx.annotation:annotation-experimental:1.4.1 (*)
 |    |         +--- androidx.autofill:autofill:1.0.0
@@ -680,12 +680,12 @@
 |    +--- androidx.savedstate:savedstate:1.2.1 -> 1.4.0 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (*)
 |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 -> 1.10.2 (*)
-|    +--- androidx.activity:activity:1.12.1 (c)
-|    \--- androidx.activity:activity-ktx:1.12.1 (c)
+|    +--- androidx.activity:activity:1.12.2 (c)
+|    \--- androidx.activity:activity-ktx:1.12.2 (c)
 +--- androidx.compose.ui:ui -> 1.10.0 (*)
 +--- androidx.compose.material3:material3 -> 1.4.0
 |    \--- androidx.compose.material3:material3-android:1.4.0
-|         +--- androidx.activity:activity-compose:1.8.2 -> 1.12.1 (*)
+|         +--- androidx.activity:activity-compose:1.8.2 -> 1.12.2 (*)
 |         +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |         +--- androidx.annotation:annotation-experimental:1.4.1 (*)
 |         +--- androidx.collection:collection:1.4.5 -> 1.5.0 (*)
@@ -775,7 +775,7 @@
 |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (c)
 +--- androidx.navigation3:navigation3-ui:1.0.0
 |    \--- androidx.navigation3:navigation3-ui-android:1.0.0
-|         +--- androidx.activity:activity-compose:1.12.0 -> 1.12.1 (*)
+|         +--- androidx.activity:activity-compose:1.12.0 -> 1.12.2 (*)
 |         +--- androidx.annotation:annotation:1.8.0 -> 1.9.1 (*)
 |         +--- androidx.collection:collection:1.4.5 -> 1.5.0 (*)
 |         +--- androidx.compose.animation:animation:1.9.5 -> 1.10.0 (*)
@@ -804,7 +804,7 @@
 +--- androidx.navigation3:navigation3-runtime:1.0.0 (*)
 +--- androidx.lifecycle:lifecycle-viewmodel-navigation3:2.10.0
 |    \--- androidx.lifecycle:lifecycle-viewmodel-navigation3-android:2.10.0
-|         +--- androidx.activity:activity-compose:1.12.0 -> 1.12.1 (*)
+|         +--- androidx.activity:activity-compose:1.12.0 -> 1.12.2 (*)
 |         +--- androidx.collection:collection:1.5.0 (*)
 |         +--- androidx.compose.runtime:runtime:1.9.0 -> 1.10.0 (*)
 |         +--- androidx.compose.runtime:runtime-saveable:1.9.0 -> 1.10.0 (*)
