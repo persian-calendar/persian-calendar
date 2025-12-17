@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
+import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
@@ -513,11 +514,12 @@ private fun ColumnScope.ConverterAndDistance(
             pendingConfirms = pendingConfirms,
             setJdn = viewModel::changeSelectedDate
         )
+        val isGradient by isGradient.collectAsState()
         this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
             val cardColors = CardDefaults.cardColors()
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
-                elevation = CardDefaults.cardElevation(8.dp),
+                elevation = CardDefaults.cardElevation(if (isGradient) 8.dp else 0.dp),
                 onClick = { isExpanded = !isExpanded },
                 modifier = Modifier.padding(top = 16.dp),
                 colors = cardColors.copy(
