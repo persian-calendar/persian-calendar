@@ -150,15 +150,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         stringResource(R.string.calendars_priority),
         stringResource(R.string.calendars_priority_summary)
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
-    run {
-        val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-        SettingsSwitch(
-            key = PREF_SHOW_WEEK_OF_YEAR_NUMBER,
-            value = isShowWeekOfYearEnabled,
-            title = stringResource(R.string.week_number),
-            summary = stringResource(R.string.week_number_summary)
-        )
-    }
+    WeekOfYearSetting()
     run {
         val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         SettingsSwitch(
@@ -255,6 +247,17 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         persistedSet = weekEnds.collectAsState().value.map { it.ordinal.toString() }.toSet(),
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
+    )
+}
+
+@Composable
+fun WeekOfYearSetting() {
+    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+    SettingsSwitch(
+        key = PREF_SHOW_WEEK_OF_YEAR_NUMBER,
+        value = isShowWeekOfYearEnabled,
+        title = stringResource(R.string.week_number),
+        summary = stringResource(R.string.week_number_summary)
     )
 }
 

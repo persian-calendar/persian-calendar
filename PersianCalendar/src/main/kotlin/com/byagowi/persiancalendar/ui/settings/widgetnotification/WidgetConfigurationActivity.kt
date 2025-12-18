@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.settings.SettingsSectionLayout
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.WeekOfYearSetting
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.create1x1RemoteViews
@@ -163,6 +164,7 @@ class WidgetMonthViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
+        WeekOfYearSetting()
         WidgetColoringSettings()
     }
 }
