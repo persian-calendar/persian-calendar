@@ -8,6 +8,8 @@
     android:minHeight="40dp"
     android:previewImage="@drawable/widget_age_preview"
     android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="3"
+    android:targetCellHeight="1"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard"
     android:widgetFeatures="reconfigurable"
