@@ -54,21 +54,21 @@ abstract class BaseConfigurationActivity(
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                     if (isLandscape) Row(modifier) { content() } else Column(modifier) { content() }
                 }
-                val shape = MaterialTheme.shapes.extraLarge
                 Linear(
                     Modifier
                         .safeDrawingPadding()
                         .padding(16.dp)
-                        .clip(shape)
                 ) {
                     Header()
                     val scrollState = rememberScrollState()
+                    val shape = MaterialTheme.shapes.extraLarge
                     Box(
                         Modifier
                             .fillMaxWidth()
                             .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
                             .alpha(AppBlendAlpha)
-                            .background(MaterialTheme.colorScheme.surfaceBright, shape),
+                            .clip(shape)
+                            .background(MaterialTheme.colorScheme.surfaceBright),
                     ) {
                         Column(
                             Modifier.verticalScroll(scrollState),
