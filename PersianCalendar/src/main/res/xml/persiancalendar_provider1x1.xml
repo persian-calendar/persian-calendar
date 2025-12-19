@@ -7,6 +7,8 @@
     android:minHeight="40dp"
     android:previewImage="@drawable/w1x1"
     android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="1"
+    android:targetCellHeight="1"
     android:updatePeriodMillis="600000"
     android:widgetCategory="keyguard|home_screen"
     android:widgetFeatures="reconfigurable|configuration_optional"
