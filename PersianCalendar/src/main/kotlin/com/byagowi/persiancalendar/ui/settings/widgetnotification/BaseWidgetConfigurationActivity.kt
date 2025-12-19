@@ -101,22 +101,22 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                 val preferences = preferences
                 var updateToken by remember { mutableIntStateOf(0) }
                 DisposableEffect(preferences) {
-                    val callback = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+                    val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
                         ++updateToken
                     }
-                    preferences.registerOnSharedPreferenceChangeListener(callback)
-                    onDispose { preferences.unregisterOnSharedPreferenceChangeListener(callback) }
+                    preferences.registerOnSharedPreferenceChangeListener(listener)
+                    onDispose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
                 }
                 AndroidView(
                     factory = ::FrameLayout,
-                    update = { frameLayout ->
+                    update = { parent ->
                         updateToken.let {}
                         val remoteViews = preview(DpSize(maxWidth, maxHeight))
-                        val context = frameLayout.context.applicationContext
-                        if (remoteViews.layoutId != frameLayout.children.firstOrNull()?.id) {
-                            frameLayout.removeAllViews()
-                            frameLayout.addView(remoteViews.apply(context, frameLayout))
-                        } else remoteViews.reapply(context, frameLayout)
+                        val context = parent.context.applicationContext
+                        if (remoteViews.layoutId != parent.children.firstOrNull()?.id) {
+                            parent.removeAllViews()
+                            parent.addView(remoteViews.apply(context, parent))
+                        } else remoteViews.reapply(context, parent)
                     },
                     modifier = Modifier.fillMaxSize(),
                 )
