@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
@@ -108,11 +109,14 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                 }
                 AndroidView(
                     factory = ::FrameLayout,
-                    update = {
+                    update = { frameLayout ->
                         updateToken.let {}
-                        it.removeAllViews()
                         val remoteViews = preview(DpSize(maxWidth, maxHeight))
-                        it.addView(remoteViews.apply(it.context.applicationContext, it))
+                        val context = frameLayout.context.applicationContext
+                        if (remoteViews.layoutId != frameLayout.children.firstOrNull()?.id) {
+                            frameLayout.removeAllViews()
+                            frameLayout.addView(remoteViews.apply(context, frameLayout))
+                        } else remoteViews.reapply(context, frameLayout)
                     },
                     modifier = Modifier.fillMaxSize(),
                 )
