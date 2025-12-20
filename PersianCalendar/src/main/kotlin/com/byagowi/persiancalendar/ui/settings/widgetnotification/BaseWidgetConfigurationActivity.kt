@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.os.bundleOf
 import androidx.core.view.children
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
@@ -44,8 +43,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
 ) {
     final override fun onAcceptClick() {
-        val bundle = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId)
-        setResult(RESULT_OK, Intent().putExtras(bundle))
+        setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId))
         updateStoredPreference(this)
         update(this, false)
         finish()
