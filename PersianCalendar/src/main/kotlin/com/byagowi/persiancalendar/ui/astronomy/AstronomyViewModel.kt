@@ -2,31 +2,26 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.util.GregorianCalendar
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 class AstronomyViewModel : ViewModel() {
-    private val _mode = MutableStateFlow(AstronomyMode.entries[0])
-    val mode: StateFlow<AstronomyMode> get() = _mode
+    var mode by mutableStateOf(AstronomyMode.entries[0])
+    var isTropical by mutableStateOf(false)
+    var isDatePickerDialogShown by mutableStateOf(false)
 
-    private val _minutesOffset = MutableStateFlow(DEFAULT_TIME)
-    val minutesOffset: StateFlow<Int> get() = _minutesOffset
+    private val _minutesOffset = mutableStateOf(DEFAULT_TIME)
+    val minutesOffset by _minutesOffset
 
     private val dateSink = GregorianCalendar() // Just to avoid recreating it everytime
-
-    private val _astronomyState = MutableStateFlow(AstronomyState(dateSink))
-    val astronomyState: StateFlow<AstronomyState> get() = _astronomyState
-
-    private val _isTropical = MutableStateFlow(false)
-    val isTropical: StateFlow<Boolean> get() = _isTropical
-
-    private val _isDatePickerDialogShown = MutableStateFlow(false)
-    val isDatePickerDialogShown: StateFlow<Boolean> get() = _isDatePickerDialogShown
+    private val _astronomyState = mutableStateOf(AstronomyState(dateSink))
+    val astronomyState by _astronomyState
 
     // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
     // is meant to be used in animation thus is the visible one and the other is to keep final
@@ -48,22 +43,6 @@ class AstronomyViewModel : ViewModel() {
         it.duration = 400 // android.R.integer.config_mediumAnimTime
         it.interpolator = AccelerateDecelerateInterpolator()
         it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
-    }
-
-    fun showDatePickerDialog() {
-        _isDatePickerDialogShown.value = true
-    }
-
-    fun dismissDatePickerDialog() {
-        _isDatePickerDialogShown.value = false
-    }
-
-    fun setMode(mode: AstronomyMode) {
-        _mode.value = mode
-    }
-
-    fun toggleIsTropical(value: Boolean) {
-        _isTropical.value = value
     }
 
     fun animateToAbsoluteMinutesOffset(value: Int) {

@@ -253,8 +253,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AstronomyScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToMap = {
-                            val time = viewModel.astronomyState.value.date.timeInMillis
-                            backStack += Screen.Map(time = time)
+                            backStack += Screen.Map(time = viewModel.astronomyState.date.timeInMillis)
                         },
                         viewModel = viewModel,
                         noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
