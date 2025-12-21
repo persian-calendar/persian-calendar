@@ -104,21 +104,19 @@ fun ColumnScope.ShiftWorkDialogContent(
     navigateCalendarToItself: () -> Unit,
 ) {
     val context = LocalContext.current
-    val isFirstSetup by viewModel.isFirstSetup.collectAsState()
-    val startingDate by viewModel.startingDate.collectAsState()
     Text(
         stringResource(
-            if (isFirstSetup) R.string.shift_work_starting_date
+            if (viewModel.isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit,
-            formatDate(startingDate on mainCalendar),
+            formatDate(viewModel.startingDate on mainCalendar),
         ),
         modifier = Modifier.padding(horizontal = 24.dp),
     )
-    val recurs by viewModel.recurs.collectAsState()
+    val recurs = viewModel.recurs
     Row(
         Modifier
             .fillMaxWidth()
-            .toggleable(recurs, role = Role.Checkbox) { viewModel.changeRecurs(it) }
+            .toggleable(recurs, role = Role.Checkbox) { viewModel.recurs = it }
             .padding(horizontal = SettingsHorizontalPaddingItem.dp)
             .height(SettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -129,8 +127,8 @@ fun ColumnScope.ShiftWorkDialogContent(
     }
     TextButton(
         onClick = {
-            viewModel.changeStartingDate(selectedJdn)
-            viewModel.changeIsFirstSetup(true)
+            viewModel.startingDate = selectedJdn
+            viewModel.isFirstSetup = true
             viewModel.changeShiftWorks(emptyList())
         },
         modifier = Modifier
@@ -138,7 +136,6 @@ fun ColumnScope.ShiftWorkDialogContent(
             .padding(horizontal = 16.dp),
     ) { Text(stringResource(R.string.shift_work_reset_button)) }
 
-    val shiftWorkRows by viewModel.shiftWorks.collectAsState()
     val lazyListState = rememberLazyListState()
     var selectedTypeDropdownIndex by remember { mutableIntStateOf(-1) }
     var selectedLengthDropdownIndex by remember { mutableIntStateOf(-1) }
@@ -154,7 +151,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         LazyColumn(state = lazyListState) {
             item {
                 @Suppress("SimplifiableCallChain") val summary =
-                    shiftWorkRows.filter { it.length != 0 }.map {
+                    viewModel.shiftWorks.filter { it.length != 0 }.map {
                         pluralStringResource(
                             R.plurals.shift_work_record_title,
                             it.length,
@@ -180,7 +177,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                     }
                 }
             }
-            itemsIndexed(shiftWorkRows) { position, (type, length) ->
+            itemsIndexed(viewModel.shiftWorks) { position, (type, length) ->
                 Row(
                     modifier = Modifier
                         .height(48.dp)
@@ -282,7 +279,7 @@ fun ColumnScope.ShiftWorkDialogContent(
     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
         TextButton(onClick = {
             viewModel.changeShiftWorks(
-                viewModel.shiftWorks.value + ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
+                viewModel.shiftWorks + ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
             )
             // TODO: Make it scroll to end?
             // scope.launch {

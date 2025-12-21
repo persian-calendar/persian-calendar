@@ -12,15 +12,15 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 
 fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
-    val result = viewModel.shiftWorks.value.filter { it.length != 0 }.joinToString(",") {
+    val result = viewModel.shiftWorks.filter { it.length != 0 }.joinToString(",") {
         "${it.type.replace("=", "").replace(",", "")}=${it.length}"
     }
 
     context.preferences.edit {
         if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
-        else putJdn(PREF_SHIFT_WORK_STARTING_JDN, viewModel.startingDate.value)
+        else putJdn(PREF_SHIFT_WORK_STARTING_JDN, viewModel.startingDate)
         putString(PREF_SHIFT_WORK_SETTING, result)
-        putBoolean(PREF_SHIFT_WORK_RECURS, viewModel.recurs.value)
+        putBoolean(PREF_SHIFT_WORK_RECURS, viewModel.recurs)
     }
 
     updateStoredPreference(context)
@@ -31,12 +31,11 @@ fun fillViewModelFromGlobalVariables(shiftWorkViewModel: ShiftWorkViewModel, sel
         com.byagowi.persiancalendar.global.shiftWorks
             .takeIf { it.isNotEmpty() } ?: listOf(ShiftWorkRecord(shiftWorkKeyToString("d"), 1))
     )
-    shiftWorkViewModel.changeIsFirstSetup(false)
-    shiftWorkViewModel.changeStartingDate(
+    shiftWorkViewModel.isFirstSetup = false
+    shiftWorkViewModel.startingDate =
         com.byagowi.persiancalendar.global.shiftWorkStartingJdn ?: shiftWorkViewModel.run {
-            shiftWorkViewModel.changeIsFirstSetup(true)
+            shiftWorkViewModel.isFirstSetup = true
             selectedJdn
         }
-    )
-    shiftWorkViewModel.changeRecurs(com.byagowi.persiancalendar.global.shiftWorkRecurs)
+    shiftWorkViewModel.recurs = com.byagowi.persiancalendar.global.shiftWorkRecurs
 }
