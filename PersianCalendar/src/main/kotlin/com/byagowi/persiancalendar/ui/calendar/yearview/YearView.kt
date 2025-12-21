@@ -87,7 +87,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val todayDate = viewModel.today on calendar
     val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
         baseJdn = viewModel.today,
-        monthsDistance = viewModel.selectedMonthOffset
+        monthsDistance = viewModel.selectedMonthOffset,
     ).year - todayDate.year
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

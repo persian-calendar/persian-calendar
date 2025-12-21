@@ -129,7 +129,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         onClick = {
             viewModel.startingDate = selectedJdn
             viewModel.isFirstSetup = true
-            viewModel.changeShiftWorks(emptyList())
+            viewModel.shiftWorks.clear()
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -191,11 +191,9 @@ fun ColumnScope.ShiftWorkDialogContent(
                             shiftWorkKeyToString(type),
                             onValueChange = { value ->
                                 selectedTypeDropdownIndex = -1
-                                viewModel.changeShiftWorkTypeOfPosition(
-                                    position,
-                                    // Don't allow inserting '=' or ',' as they have special meaning
-                                    value.replace(Regex("[=,]"), "")
-                                )
+                                // Don't allow inserting '=' or ',' as they have special meaning
+                                val type = value.replace(Regex("[=,]"), "")
+                                viewModel.updateItem(position) { it.copy(type = type) }
                             },
                             trailingIcon = {
                                 IconButton(onClick = { selectedTypeDropdownIndex = position }) {
@@ -215,10 +213,10 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 this.contentDescription = durationString
                             },
                         ) {
-                            (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
-                                AppDropdownMenuItem({ Text(it) }) {
+                            (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach { label ->
+                                AppDropdownMenuItem({ Text(label) }) {
                                     selectedTypeDropdownIndex = -1
-                                    viewModel.changeShiftWorkTypeOfPosition(position, it)
+                                    viewModel.updateItem(position) { it.copy(type = label) }
                                 }
                             }
                         }
@@ -228,12 +226,10 @@ fun ColumnScope.ShiftWorkDialogContent(
                         TextField(
                             value = numeral.format(length),
                             readOnly = true,
-                            onValueChange = {
+                            onValueChange = { text ->
                                 selectedTypeDropdownIndex = -1
-                                viewModel.changeShiftWorkLengthOfPosition(
-                                    position = position,
-                                    length = it.toIntOrNull() ?: 0,
-                                )
+                                val length = text.toIntOrNull() ?: 0
+                                viewModel.updateItem(position) { it.copy(length = length) }
                             },
                             modifier = Modifier
                                 .onFocusChanged {
@@ -256,12 +252,12 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 AppDropdownMenuItem({ Text(numeral.format(length)) }) {
                                     focusManager.clearFocus()
                                     selectedLengthDropdownIndex = -1
-                                    viewModel.changeShiftWorkLengthOfPosition(position, length)
+                                    viewModel.updateItem(position) { it.copy(length = length) }
                                 }
                             }
                         }
                     }
-                    IconButton(onClick = { viewModel.removeShiftWorkPosition(position) }) {
+                    IconButton(onClick = { viewModel.shiftWorks.removeAt(position) }) {
                         Icon(
                             imageVector = Icons.Default.RemoveCircleOutline,
                             contentDescription = stringResource(R.string.remove),
@@ -278,9 +274,7 @@ fun ColumnScope.ShiftWorkDialogContent(
     Spacer(Modifier.height(8.dp))
     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
         TextButton(onClick = {
-            viewModel.changeShiftWorks(
-                viewModel.shiftWorks + ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
-            )
+            viewModel.shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
             // TODO: Make it scroll to end?
             // scope.launch {
             //     lazyListState.animateScrollBy(viewModel.shiftWorks.value.size + 1f)

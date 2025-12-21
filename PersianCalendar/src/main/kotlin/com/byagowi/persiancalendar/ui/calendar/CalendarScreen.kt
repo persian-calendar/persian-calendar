@@ -165,8 +165,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.reports.prayTimeHtmlReport
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
-import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
-import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.getShiftWorkViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
@@ -856,7 +855,7 @@ private fun SharedTransitionScope.Toolbar(
 ) {
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
         baseJdn = today,
-        monthsDistance = viewModel.selectedMonthOffset
+        monthsDistance = viewModel.selectedMonthOffset,
     )
     val yearViewOffset = viewModel.yearViewOffset
     val yearViewIsInYearSelection = viewModel.yearViewIsInYearSelection
@@ -1090,10 +1089,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
             closeMenu()
-            val dialogViewModel = ShiftWorkViewModel()
-            // from already initialized global variable till a better solution
-            fillViewModelFromGlobalVariables(dialogViewModel, viewModel.selectedDay)
-            viewModel.setShiftWorkViewModel(dialogViewModel)
+            viewModel.setShiftWorkViewModel(getShiftWorkViewModelFromGlobalVariables(viewModel.selectedDay))
         }
 
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
