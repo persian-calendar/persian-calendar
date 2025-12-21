@@ -133,7 +133,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
             SettingsSlider(
                 title = stringResource(R.string.widget_text_size),
                 value = value,
-                valueRange = .65f..2f,
+                valueRange = .65f..3f,
                 visibleScale = 14f,
                 defaultValue = 1f,
                 onValueChange = onValueChange,
