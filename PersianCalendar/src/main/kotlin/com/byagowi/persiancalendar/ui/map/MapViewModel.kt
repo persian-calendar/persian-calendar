@@ -1,66 +1,63 @@
 package com.byagowi.persiancalendar.ui.map
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import io.github.persiancalendar.praytimes.Coordinates
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import java.util.Date
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 class MapViewModel : ViewModel() {
-    private val _state = MutableStateFlow(MapState())
-    val state: StateFlow<MapState> get() = _state
+    private val _state = mutableStateOf(MapState())
+    val state by _state
 
     // Commands
     fun subtractOneHour() {
-        _state.update { it.copy(time = it.time - 1.hours.inWholeMilliseconds) }
+        _state.value = state.copy(time = state.time - 1.hours.inWholeMilliseconds)
     }
 
     fun addOneHour() {
-        _state.update { it.copy(time = it.time + 1.hours.inWholeMilliseconds) }
+        _state.value = state.copy(time = state.time + 1.hours.inWholeMilliseconds)
     }
 
     fun addOneMinute() {
-        _state.update { it.copy(time = it.time + 1.minutes.inWholeMilliseconds) }
+        _state.value = state.copy(time = state.time + 1.minutes.inWholeMilliseconds)
     }
 
     fun addDays(days: Int) {
-        _state.update { it.copy(time = it.time + days.days.inWholeMilliseconds) }
+        _state.value = state.copy(time = state.time + days.days.inWholeMilliseconds)
     }
 
     fun changeToTime(time: Date) {
-        _state.update { it.copy(time = time.time) }
+        _state.value = state.copy(time = time.time)
     }
 
     fun changeMapType(mapType: MapType) {
-        _state.update { it.copy(mapType = mapType) }
+        _state.value = state.copy(mapType = mapType)
     }
 
     fun toggleDisplayLocation() {
-        _state.update { it.copy(displayLocation = !it.displayLocation) }
+        _state.value = state.copy(displayLocation = !state.displayLocation)
     }
 
     fun toggleDisplayGrid() {
-        _state.update { it.copy(displayGrid = !it.displayGrid) }
+        _state.value = state.copy(displayGrid = !state.displayGrid)
     }
 
     fun toggleDirectPathMode() {
-        _state.update {
-            it.copy(
-                isDirectPathMode = !it.isDirectPathMode,
-                directPathDestination = it.directPathDestination.takeIf { _ -> !it.isDirectPathMode }
-            )
-        }
+        _state.value = state.copy(
+            isDirectPathMode = !state.isDirectPathMode,
+            directPathDestination = state.directPathDestination.takeIf { _ -> !state.isDirectPathMode },
+        )
     }
 
     fun changeCurrentCoordinates(coordinates: Coordinates?) {
-        _state.update { it.copy(coordinates = coordinates, displayLocation = coordinates != null) }
+        _state.value = state.copy(coordinates = coordinates, displayLocation = coordinates != null)
     }
 
     fun changeDirectPathDestination(coordinates: Coordinates?) {
-        _state.update { it.copy(directPathDestination = coordinates) }
+        _state.value = state.copy(directPathDestination = coordinates)
     }
 }

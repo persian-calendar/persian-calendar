@@ -106,7 +106,7 @@ fun SharedTransitionScope.MapScreen(
     fromSettings: Boolean,
     viewModel: MapViewModel,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state = viewModel.state
     val resources = LocalResources.current
     val mapDraw = remember(resources) { MapDraw(resources) }
 
@@ -212,7 +212,7 @@ fun SharedTransitionScope.MapScreen(
             Icons.Default.NightlightRound, R.string.show_night_mask_label,
             { state.mapType != MapType.NONE },
         ) {
-            if (viewModel.state.value.mapType == MapType.NONE) showMapTypesDialog = true
+            if (viewModel.state.mapType == MapType.NONE) showMapTypesDialog = true
             else viewModel.changeMapType(MapType.NONE)
         },
     )
@@ -246,12 +246,12 @@ fun SharedTransitionScope.MapScreen(
                     val longitude = x / mapDraw.mapScaleFactor - 180
                     if (abs(latitude) < 90 && abs(longitude) < 180) {
                         // Easter egg like feature, bring sky renderer fragment
-                        if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.value.displayGrid) {
+                        if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.displayGrid) {
                             Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
                         } else {
                             val coordinates =
                                 Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                            if (viewModel.state.value.isDirectPathMode) viewModel.changeDirectPathDestination(
+                            if (viewModel.state.isDirectPathMode) viewModel.changeDirectPathDestination(
                                 coordinates
                             )
                             else {
