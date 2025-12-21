@@ -1,78 +1,53 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.time.Duration.Companion.seconds
 
 class ConverterViewModel : ViewModel() {
-    private val _calendar = MutableStateFlow(mainCalendar)
-    val calendar: StateFlow<Calendar> get() = _calendar
+    private val _today = mutableStateOf(Jdn.today())
+    var today: Jdn by _today
 
-    private val _today = MutableStateFlow(Jdn.today())
-    val today: StateFlow<Jdn> get() = _today
+    var calendar by mutableStateOf(mainCalendar)
+    var selectedDate by mutableStateOf(today)
+    var secondSelectedDate by mutableStateOf(today)
+    var screenMode by mutableStateOf(ConverterScreenMode.entries[0])
+    var calculatorInputText by mutableStateOf("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
+    var qrCodeInputText by mutableStateOf("https://example.com")
+    var firstTimeZone: TimeZone by mutableStateOf(TimeZone.getDefault())
+    var secondTimeZone: TimeZone by mutableStateOf(utc)
+    var clock by mutableStateOf(GregorianCalendar())
 
-    private val _selectedDate = MutableStateFlow(_today.value)
-    val selectedDate: StateFlow<Jdn> get() = _selectedDate
+    val todayButtonVisibility by derivedStateOf {
+        when (screenMode) {
+            ConverterScreenMode.CALCULATOR, ConverterScreenMode.QR_CODE -> false
 
-    private val _secondSelectedDate = MutableStateFlow(_today.value)
-    val secondSelectedDate: StateFlow<Jdn> get() = _secondSelectedDate
+            ConverterScreenMode.CONVERTER -> selectedDate != today
 
-    private val _screenMode = MutableStateFlow(ConverterScreenMode.entries[0])
-    val screenMode: StateFlow<ConverterScreenMode> get() = _screenMode
+            ConverterScreenMode.DISTANCE -> {
+                selectedDate != today || secondSelectedDate != today
+            }
 
-    private val _calculatorInputText = MutableStateFlow("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
-    val calculatorInputText: StateFlow<String> get() = _calculatorInputText
-
-    private val _qrCodeInputText = MutableStateFlow("https://example.com")
-    val qrCodeInputText: StateFlow<String> get() = _qrCodeInputText
-
-    private val _firstTimeZone = MutableStateFlow(TimeZone.getDefault())
-    val firstTimeZone: StateFlow<TimeZone> get() = _firstTimeZone
-
-    private val _secondTimeZone = MutableStateFlow(utc)
-    val secondTimeZone: StateFlow<TimeZone> get() = _secondTimeZone
-
-    private val _clock = MutableStateFlow(GregorianCalendar())
-    val clock: StateFlow<GregorianCalendar> get() = _clock
-
-    private val _todayButtonVisibility = MutableStateFlow(false)
-    val todayButtonVisibility: StateFlow<Boolean> get() = _todayButtonVisibility
-
-    init {
-        viewModelScope.launch {
-            merge(
-                selectedDate, secondSelectedDate, screenMode, today,
-                clock, firstTimeZone, secondTimeZone,
-            ).collectLatest {
-                _todayButtonVisibility.value = when (screenMode.value) {
-                    ConverterScreenMode.CALCULATOR, ConverterScreenMode.QR_CODE -> false
-
-                    ConverterScreenMode.CONVERTER -> selectedDate.value != today.value
-
-                    ConverterScreenMode.DISTANCE -> {
-                        selectedDate.value != today.value || secondSelectedDate.value != today.value
-                    }
-
-                    ConverterScreenMode.TIME_ZONES -> {
-                        !haveSameClock(
-                            clock.value,
-                            GregorianCalendar(clock.value.timeZone),
-                        ) || firstTimeZone.value != TimeZone.getDefault() || secondTimeZone.value != utc
-                    }
-                }
+            ConverterScreenMode.TIME_ZONES -> {
+                !haveSameClock(
+                    clock,
+                    GregorianCalendar(clock.timeZone),
+                ) || firstTimeZone != TimeZone.getDefault() || secondTimeZone != utc
             }
         }
+    }
+
+    init {
         viewModelScope.launch {
             while (true) {
                 delay(30.seconds)
@@ -82,47 +57,10 @@ class ConverterViewModel : ViewModel() {
         }
     }
 
-    // Commands
-    fun changeCalendar(calendar: Calendar) {
-        _calendar.value = calendar
-    }
-
-    fun changeSelectedDate(jdn: Jdn) {
-        _selectedDate.value = jdn
-    }
-
-    fun changeSecondSelectedDate(jdn: Jdn) {
-        _secondSelectedDate.value = jdn
-    }
-
-    fun changeScreenMode(value: ConverterScreenMode) {
-        _screenMode.value = value
-    }
-
-    fun changeCalculatorInput(text: String) {
-        _calculatorInputText.value = text
-    }
-
-    fun changeQrCodeInput(text: String) {
-        _qrCodeInputText.value = text
-    }
-
-    fun changeClock(newClock: GregorianCalendar) {
-        _clock.value = newClock
-    }
-
-    fun changeFirstTimeZone(timeZone: TimeZone) {
-        _firstTimeZone.value = timeZone
-    }
-
-    fun changeSecondTimeZone(timeZone: TimeZone) {
-        _secondTimeZone.value = timeZone
-    }
-
     fun resetTimeZoneClock() {
-        _firstTimeZone.value = TimeZone.getDefault()
-        _secondTimeZone.value = utc
-        _clock.value = GregorianCalendar()
+        firstTimeZone = TimeZone.getDefault()
+        secondTimeZone = utc
+        clock = GregorianCalendar()
     }
 
     companion object {
