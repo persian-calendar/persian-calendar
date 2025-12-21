@@ -140,10 +140,10 @@ fun SharedTransitionScope.EventsTab(
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
     ) {
-        val jdn by viewModel.selectedDay.collectAsState()
-
-        val refreshToken by viewModel.refreshToken.collectAsState()
-        val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
+        val refreshToken = viewModel.refreshToken
+        val shiftWorkTitle = remember(viewModel.selectedDay, refreshToken) {
+            getShiftWorkTitle(viewModel.selectedDay)
+        }
         this.AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle.orEmpty(),
@@ -162,7 +162,7 @@ fun SharedTransitionScope.EventsTab(
                 }
             }
         }
-        val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn)
+        val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(viewModel.selectedDay)
         this.AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance.orEmpty(),
@@ -182,8 +182,10 @@ fun SharedTransitionScope.EventsTab(
 
         Column(Modifier.padding(horizontal = 24.dp)) {
             val context = LocalContext.current
-            val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
-            val events = readEvents(jdn, viewModel, deviceEvents)
+            val deviceEvents = remember(viewModel.selectedDay, refreshToken) {
+                context.readDayDeviceEvents(viewModel.selectedDay)
+            }
+            val events = readEvents(viewModel.selectedDay, viewModel, deviceEvents)
             Spacer(Modifier.height(16.dp))
             this.AnimatedVisibility(events.isEmpty()) {
                 Text(
@@ -704,7 +706,7 @@ fun readEvents(
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
-            val now by viewModel.now.collectAsState()
+            val now = viewModel.now
             val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
             val title = rawTitle.split(spacedColon).mapIndexed { i, x ->
                 if (i == 0 && isAstronomicalExtraFeaturesEnabled) {

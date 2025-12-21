@@ -93,10 +93,9 @@ fun SharedTransitionScope.TimesTab(
         onDispose { context.preferences.edit { putBoolean(EXPANDED_TIME_STATE_KEY, isExpanded) } }
     }
 
-    val jdn by viewModel.selectedDay.collectAsState()
-    val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
-    val now by viewModel.now.collectAsState()
-    val today by viewModel.today.collectAsState()
+    val prayTimes = coordinates.calculatePrayTimes(viewModel.selectedDay.toGregorianCalendar())
+    val now = viewModel.now
+    val today = viewModel.today
     val language by language.collectAsState()
 
     Column(
@@ -111,7 +110,7 @@ fun SharedTransitionScope.TimesTab(
             )
     ) {
         Spacer(Modifier.height(16.dp))
-        val isToday = jdn == today
+        val isToday = viewModel.selectedDay == today
         AstronomicalOverview(viewModel, prayTimes, now, isToday, navigateToAstronomy)
         Spacer(Modifier.height(16.dp))
         Times(isExpanded, prayTimes, now, isToday)
@@ -166,7 +165,6 @@ private fun SharedTransitionScope.AstronomicalOverview(
     isToday: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
-    val jdn by viewModel.selectedDay.collectAsState()
     var needsAnimation by remember(isToday) { mutableStateOf(isToday) }
 
     Crossfade(
@@ -194,7 +192,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
         ) else Box(Modifier.fillMaxSize()) {
             AndroidView(
                 factory = ::MoonView,
-                update = { if (!isToday) it.jdn = jdn.value.toFloat() },
+                update = { if (!isToday) it.jdn = viewModel.selectedDay.value.toFloat() },
                 modifier = Modifier
                     .size(70.dp)
                     .align(Alignment.Center)
@@ -207,7 +205,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,
-                    ) { navigateToAstronomy(jdn) },
+                    ) { navigateToAstronomy(viewModel.selectedDay) },
             )
         }
     }

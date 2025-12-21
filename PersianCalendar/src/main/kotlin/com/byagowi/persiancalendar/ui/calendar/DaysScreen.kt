@@ -165,7 +165,7 @@ fun SharedTransitionScope.DaysScreen(
     isInitiallyWeek: Boolean,
 ) {
     var selectedDay by rememberSaveable(saver = JdnSaver) { mutableStateOf(initiallySelectedDay) }
-    val today by calendarViewModel.today.collectAsState()
+    val today = calendarViewModel.today
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
     val date = selectedDay on mainCalendar
     calendarViewModel.changeDaysScreenSelectedDay(selectedDay)
@@ -344,8 +344,8 @@ fun SharedTransitionScope.DaysScreen(
                     calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
                 // Don't show weeks pager if there isn't enough space
                 Column {
-                    val now by calendarViewModel.now.collectAsState()
-                    val refreshToken by calendarViewModel.refreshToken.collectAsState()
+                    val now = calendarViewModel.now
+                    val refreshToken = calendarViewModel.refreshToken
                     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
                     val daysTable = daysTable(
                         modifier = Modifier.detectSwipe { ::onSwipeDown },

@@ -83,14 +83,12 @@ import kotlin.math.floor
 
 @Composable
 fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
-    val today by viewModel.today.collectAsState()
-    val calendar = viewModel.yearViewCalendar.collectAsState().value ?: mainCalendar
-    val todayDate = today on calendar
-    val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
-    val yearOffsetInMonths = run {
-        val selectedMonth = calendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
-        selectedMonth.year - todayDate.year
-    }
+    val calendar = viewModel.yearViewCalendar ?: mainCalendar
+    val todayDate = viewModel.today on calendar
+    val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
+        baseJdn = viewModel.today,
+        monthsDistance = viewModel.selectedMonthOffset
+    ).year - todayDate.year
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -137,7 +135,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     }
 
     val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
-    val yearViewCommand by viewModel.yearViewCommand.collectAsState()
+    val yearViewCommand = viewModel.yearViewCommand
     LaunchedEffect(key1 = yearViewCommand) {
         when (yearViewCommand ?: return@LaunchedEffect) {
             YearViewCommand.ToggleYearSelection -> scale.snapTo(if (scale.value > .5f) 0.01f else 1f)
@@ -184,7 +182,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         modifier = detectZoom.detectHorizontalSwipe {
             { isLeft ->
                 val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
-                val currentCalendar = viewModel.yearViewCalendar.value
+                val currentCalendar = viewModel.yearViewCalendar
                 val index = calendars.indexOf(currentCalendar) + if (isLeft xor isRtl) 1 else -1
                 val newCalendar = calendars[index.mod(calendars.size)]
                 coroutineScope.launch { viewModel.changeYearViewCalendar(newCalendar) }
@@ -196,10 +194,13 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
             Column(Modifier.fillMaxWidth()) {
                 if (scale.value > yearSelectionModeMaxScale) {
-                    val yearDeviceEvents: DeviceCalendarEventsStore = remember(yearOffset, today) {
+                    val yearDeviceEvents: DeviceCalendarEventsStore = remember(
+                        yearOffset,
+                        viewModel.today,
+                    ) {
                         val yearStartJdn = Jdn(
                             calendar.createDate(
-                                (today on calendar).year + yearOffset, 1, 1
+                                (viewModel.today on calendar).year + yearOffset, 1, 1
                             )
                         )
                         if (isShowDeviceCalendarEvents) {
@@ -214,8 +215,10 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                             repeat(if (isLandscape) 4 else 3) { column ->
                                 val month = 1 + column + row * if (isLandscape) 4 else 3
                                 val offset = yearOffset * 12 + month - todayDate.month
-                                val monthDate =
-                                    calendar.getMonthStartFromMonthsDistance(today, offset)
+                                val monthDate = calendar.getMonthStartFromMonthsDistance(
+                                    baseJdn = viewModel.today,
+                                    monthsDistance = offset,
+                                )
                                 val title = language.my.format(
                                     monthDate.monthName,
                                     numeral.format(yearOffset + todayDate.year),
@@ -234,7 +237,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                         }
                                         .background(LocalContentColor.current.copy(alpha = .1f))
                                         .then(
-                                            if (offset != selectedMonthOffset) Modifier else Modifier.border(
+                                            if (offset != viewModel.selectedMonthOffset) Modifier else Modifier.border(
                                                 width = 2.dp,
                                                 color = LocalContentColor.current.copy(alpha = .15f),
                                                 shape = shape
@@ -254,12 +257,12 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                 dayPainter = dayPainter[this.size.height],
                                                 width = size.width,
                                                 canvas = canvas.nativeCanvas,
-                                                today = today,
+                                                today = viewModel.today,
                                                 baseDate = monthDate,
                                                 deviceEvents = yearDeviceEvents,
                                                 isRtl = isRtl,
                                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
-                                                selectedDay = viewModel.selectedDay.value,
+                                                selectedDay = viewModel.selectedDay,
                                                 calendar = calendar,
                                             )
                                         }

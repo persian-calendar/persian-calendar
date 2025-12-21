@@ -270,16 +270,15 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
             }
 
             ConverterScreenMode.DISTANCE -> {
-                val jdn = viewModel.selectedDate
                 context.shareText(
                     text = listOf(
                         calculateDaysDifference(
                             resources,
-                            jdn,
-                            viewModel.secondSelectedDate,
+                            jdn = viewModel.selectedDate,
+                            baseJdn = viewModel.secondSelectedDate,
                             calendar = viewModel.calendar,
                         ),
-                        formatDate(jdn on viewModel.calendar),
+                        formatDate(viewModel.selectedDate on viewModel.calendar),
                         formatDate(viewModel.secondSelectedDate on viewModel.calendar),
                     ).joinToString("\n"),
                     chooserTitle = chooserTitle,

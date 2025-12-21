@@ -182,14 +182,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             )
                         },
                         navigateToSchedule = {
-                            backStack += Screen.Schedule(viewModel.selectedDay.value)
+                            backStack += Screen.Schedule(viewModel.selectedDay)
                         },
                         navigateToDays = { jdn, isWeek ->
-                            backStack += Screen.Days(jdn, isWeek)
+                            backStack += Screen.Days(selectedDay = jdn, isWeek = isWeek)
                         },
-                        navigateToMonthView = {
-                            backStack += Screen.Month(viewModel.selectedDay.value)
-                        },
+                        navigateToMonthView = { backStack += Screen.Month(viewModel.selectedDay) },
                         navigateToSettingsLocationTab = {
                             backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
                         },

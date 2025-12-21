@@ -82,7 +82,7 @@ fun SharedTransitionScope.ScheduleScreen(
 ) {
     var baseJdn by remember { mutableStateOf(initiallySelectedDay) }
     val listState = rememberLazyListState(ITEMS_COUNT / 2, 0)
-    val today by calendarViewModel.today.collectAsState()
+    val today = calendarViewModel.today
     var isFirstTime by remember { mutableStateOf(true) }
     val firstVisibleItemJdn by remember {
         derivedStateOf { indexToJdn(baseJdn, listState.firstVisibleItemIndex) }
@@ -325,7 +325,7 @@ private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT
 
 @Composable
 private fun eventsCache(calendarViewModel: CalendarViewModel): @Composable (Jdn) -> List<CalendarEvent<*>> {
-    val refreshToken by calendarViewModel.refreshToken.collectAsState()
+    val refreshToken = calendarViewModel.refreshToken
     val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
     val context = LocalContext.current
     return { jdn ->
