@@ -33,7 +33,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -276,7 +275,7 @@ fun IconsDemoDialog(onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) {
         FlowRow {
             val fontFile = resolveFontFile()
-            val isBoldFont by isBoldFont.collectAsState()
+            val isBoldFont = isBoldFont
             (0..61).forEach {
                 val day = it / 2 + 1
                 Image(

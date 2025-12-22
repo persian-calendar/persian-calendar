@@ -17,7 +17,6 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -90,7 +89,7 @@ private fun <T> SegmentedButtonItemsPicker(
     content: @Composable (T) -> String,
 ) {
     BoxWithConstraints(modifier = modifier) {
-        val isGradient by isGradient.collectAsState()
+        val isGradient = isGradient
         val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         fun visualIndex(item: T) =
             if (isRtl) items.size - 1 - items.indexOf(item) else items.indexOf(item)

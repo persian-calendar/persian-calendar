@@ -30,7 +30,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -83,8 +82,6 @@ import kotlin.random.Random
 fun ThemeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     var showMore by rememberSaveable { mutableStateOf(false) }
-    val systemLightTheme by systemLightTheme.collectAsState()
-    val systemDarkTheme by systemDarkTheme.collectAsState()
     val themesToCheck = run {
         if (userSetTheme == Theme.SYSTEM_DEFAULT) listOf(systemLightTheme, systemDarkTheme)
         else listOf(userSetTheme)
@@ -176,7 +173,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
-        val isGradient by isGradient.collectAsState()
+        val isGradient = isGradient
         this.AnimatedVisibility(
             visible = (showMore || !isGradient) && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -186,7 +183,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 checked = isGradient,
             ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, it) } }
         }
-        val isRedHolidays by isRedHolidays.collectAsState()
+        val isRedHolidays = isRedHolidays
         this.AnimatedVisibility(
             visible = (showMore || isRedHolidays) && anyThemeIsDynamicColors,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -196,7 +193,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
-        val isBoldFont by isBoldFont.collectAsState()
+        val isBoldFont = isBoldFont
         this.AnimatedVisibility(
             visible = showMore || isBoldFont,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -217,7 +214,7 @@ private fun ColumnScope.FontPicker(
     onDismissRequest: () -> Unit,
     showMore: Boolean,
 ) {
-    val customFontToken by customFontName.collectAsState()
+    val customFontToken = customFontName
     val context = LocalContext.current
     val fontPicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
@@ -284,7 +281,7 @@ private fun ColumnScope.FontPicker(
 @Composable
 private fun ColumnScope.ImagePicker(showMore: Boolean) {
     if (!BuildConfig.DEVELOPMENT) return
-    val customImageName by customImageName.collectAsState()
+    val customImageName = customImageName
     val context = LocalContext.current
     val imagePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()

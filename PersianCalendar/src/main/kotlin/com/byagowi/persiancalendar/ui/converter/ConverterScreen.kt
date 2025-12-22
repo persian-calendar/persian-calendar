@@ -505,7 +505,6 @@ private fun ColumnScope.ConverterAndDistance(
             pendingConfirms = pendingConfirms,
             setJdn = { viewModel.selectedDate = it },
         )
-        val isGradient by isGradient.collectAsState()
         this.AnimatedVisibility(visible = viewModel.screenMode == ConverterScreenMode.CONVERTER) {
             val cardColors = CardDefaults.cardColors()
             Card(

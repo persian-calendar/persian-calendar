@@ -4,8 +4,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.global.isGradient
@@ -19,7 +17,6 @@ fun AppFloatingActionButton(
 ) {
     val containerColor = FloatingActionButtonDefaults.containerColor
     val contentColor = contentColorFor(containerColor)
-    val isGradient by isGradient.collectAsState()
     FloatingActionButton(
         onClick = onClick,
         containerColor = animateColor(containerColor).value,

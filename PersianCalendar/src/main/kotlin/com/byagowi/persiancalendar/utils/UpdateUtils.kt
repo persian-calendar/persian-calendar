@@ -1558,8 +1558,8 @@ private fun updateNotification(
         whatToShowOnWidgets = whatToShowOnWidgets.value,
         spacedComma = spacedComma,
         language = language,
-        customFontName = customFontName.value,
-        isBoldFont = isBoldFont.value,
+        customFontName = customFontName,
+        isBoldFont = isBoldFont,
         numeral = numeral,
         notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
     )

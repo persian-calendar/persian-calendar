@@ -352,7 +352,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.textSize = 20 * dp
         it.textAlign = Paint.Align.CENTER
         it.typeface = ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
-        if (isBoldFont.value) it.isFakeBoldText = true
+        if (isBoldFont) it.isFakeBoldText = true
     }
     private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE

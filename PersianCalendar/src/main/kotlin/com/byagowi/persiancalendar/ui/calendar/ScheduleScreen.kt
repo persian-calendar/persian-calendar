@@ -197,7 +197,6 @@ fun SharedTransitionScope.ScheduleScreen(
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface {
-                val customFontName by customFontName.collectAsState()
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
                     if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium

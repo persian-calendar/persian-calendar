@@ -642,7 +642,6 @@ private fun EquinoxCountDownContent(
     var remainedTime = event.remainingMillis.milliseconds
     if (remainedTime !in Duration.ZERO..356.days) return
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        val isGradient by isGradient.collectAsState()
         val foldedCardBrush = if (isGradient) Brush.verticalGradient(
             .25f to contentColor,
             .499f to contentColor.copy(alpha = if (contentColor.isLight) .75f else .5f),

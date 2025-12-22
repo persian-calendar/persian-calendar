@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -56,7 +54,6 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
         summary = language.nativeName,
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
     this.AnimatedVisibility(language.isPersian) {
-        val englishGregorianPersianMonths by englishGregorianPersianMonths.collectAsState()
         SettingsSwitch(
             key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             value = englishGregorianPersianMonths,
@@ -65,7 +62,6 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
         )
     }
     this.AnimatedVisibility(language.isArabic) {
-        val easternGregorianArabicMonths by easternGregorianArabicMonths.collectAsState()
         SettingsSwitch(
             key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
             value = easternGregorianArabicMonths,
@@ -74,7 +70,6 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
         )
     }
     this.AnimatedVisibility(language == Language.AZB) {
-        val alternativePersianMonthsInAzeri by alternativePersianMonthsInAzeri.collectAsState()
         SettingsSwitch(
             key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
             value = alternativePersianMonthsInAzeri,
@@ -83,7 +78,6 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
         )
     }
     this.AnimatedVisibility(language == Language.EN_IR) {
-        val englishWeekDaysInIranEnglish by englishWeekDaysInIranEnglish.collectAsState()
         SettingsSwitch(
             key = PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
             value = englishWeekDaysInIranEnglish,

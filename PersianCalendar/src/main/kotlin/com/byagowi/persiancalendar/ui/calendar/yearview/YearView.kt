@@ -114,7 +114,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     val monthColors = appMonthColors()
     val fontFile = resolveFontFile()
-    val isBoldFont by isBoldFont.collectAsState()
+    val isBoldFont = isBoldFont
     val context = LocalContext.current
     val dayPainter = remember(monthColors, widthInPx, fontFile, isBoldFont) {
         lruCache(4, create = { height: Float ->

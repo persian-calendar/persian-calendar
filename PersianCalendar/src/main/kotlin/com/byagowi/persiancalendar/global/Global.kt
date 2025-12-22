@@ -238,46 +238,46 @@ val language by language_
 private val userSetTheme_ = mutableStateOf(Theme.SYSTEM_DEFAULT)
 val userSetTheme by userSetTheme_
 
-private val systemDarkTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
-val systemDarkTheme: StateFlow<Theme> get() = systemDarkTheme_
+private val systemDarkTheme_ = mutableStateOf(Theme.SYSTEM_DEFAULT)
+val systemDarkTheme by systemDarkTheme_
 
-private val systemLightTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
-val systemLightTheme: StateFlow<Theme> get() = systemLightTheme_
+private val systemLightTheme_ = mutableStateOf(Theme.SYSTEM_DEFAULT)
+val systemLightTheme by systemLightTheme_
 
-private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
-val isGradient: StateFlow<Boolean> get() = isGradient_
+private val isGradient_ = mutableStateOf(DEFAULT_THEME_GRADIENT)
+val isGradient by isGradient_
 
-private val isCyberpunk_ = MutableStateFlow(DEFAULT_THEME_CYBERPUNK)
-val isCyberpunk: StateFlow<Boolean> get() = isCyberpunk_
+private val isCyberpunk_ = mutableStateOf(DEFAULT_THEME_CYBERPUNK)
+val isCyberpunk by isCyberpunk_
 
-private val isRedHolidays_ = MutableStateFlow(DEFAULT_RED_HOLIDAYS)
-val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
+private val isRedHolidays_ = mutableStateOf(DEFAULT_RED_HOLIDAYS)
+val isRedHolidays by isRedHolidays_
 
-private val isBoldFont_ = MutableStateFlow(DEFAULT_BOLD_FONT)
-val isBoldFont: StateFlow<Boolean> get() = isBoldFont_
+private val isBoldFont_ = mutableStateOf(DEFAULT_BOLD_FONT)
+val isBoldFont by isBoldFont_
 
-private val customFontName_ = MutableStateFlow<String?>(null)
-val customFontName: StateFlow<String?> get() = customFontName_
+private val customFontName_ = mutableStateOf<String?>(null)
+val customFontName by customFontName_
 
-private val customImageName_ = MutableStateFlow<String?>(null)
-val customImageName: StateFlow<String?> get() = customImageName_
+private val customImageName_ = mutableStateOf<String?>(null)
+val customImageName by customImageName_
 
 
 private val englishGregorianPersianMonths_ =
-    MutableStateFlow(DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS)
-val englishGregorianPersianMonths: StateFlow<Boolean> get() = englishGregorianPersianMonths_
+    mutableStateOf(DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS)
+val englishGregorianPersianMonths by englishGregorianPersianMonths_
 
 private val easternGregorianArabicMonths_ =
-    MutableStateFlow(DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS)
-val easternGregorianArabicMonths: StateFlow<Boolean> get() = easternGregorianArabicMonths_
+    mutableStateOf(DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS)
+val easternGregorianArabicMonths by easternGregorianArabicMonths_
 
 private val alternativePersianMonthsInAzeri_ =
-    MutableStateFlow(DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS)
-val alternativePersianMonthsInAzeri: StateFlow<Boolean> get() = alternativePersianMonthsInAzeri_
+    mutableStateOf(DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS)
+val alternativePersianMonthsInAzeri by alternativePersianMonthsInAzeri_
 
 private val englishWeekDaysInIranEnglish_ =
-    MutableStateFlow(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
-val englishWeekDaysInIranEnglish: StateFlow<Boolean> get() = englishWeekDaysInIranEnglish_
+    mutableStateOf(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
+val englishWeekDaysInIranEnglish by englishWeekDaysInIranEnglish_
 
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
 val coordinates: StateFlow<Coordinates?> get() = coordinates_
@@ -434,7 +434,7 @@ fun loadLanguageResources(resources: Resources) {
     val language = language
     persianMonths = language.getPersianMonths(
         resources,
-        alternativeMonthsInAzeri = alternativePersianMonthsInAzeri.value,
+        alternativeMonthsInAzeri = alternativePersianMonthsInAzeri,
         afghanistanHolidaysIsEnable = eventsRepository_.value.afghanistanHolidays && !eventsRepository_.value.iranHolidays,
     )
     oldEraPersianMonths = when {
@@ -445,13 +445,13 @@ fun loadLanguageResources(resources: Resources) {
     islamicMonths = language.getIslamicMonths(resources)
     gregorianMonths = language.getGregorianMonths(
         resources,
-        englishGregorianPersianMonths.value || easternGregorianArabicMonths.value,
+        englishGregorianPersianMonths || easternGregorianArabicMonths,
     )
     nepaliMonths = language.getNepaliMonths()
-    weekDaysTitles = if (englishWeekDaysInIranEnglish.value) Language.EN_US.getWeekDays(resources)
+    weekDaysTitles = if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDays(resources)
     else language.getWeekDays(resources)
     weekDaysTitlesInitials =
-        if (englishWeekDaysInIranEnglish.value) Language.EN_US.getWeekDaysInitials(resources)
+        if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDaysInitials(resources)
         else language.getWeekDaysInitials(resources)
     shiftWorkTitles = mapOf(
         "d" to resources.getString(R.string.shift_work_morning), // d -> day work, legacy key

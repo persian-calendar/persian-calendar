@@ -237,7 +237,7 @@ fun SharedTransitionScope.SettingsScreen(
 
             ScreenSurface {
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-                val customImageName by customImageName.collectAsState()
+                val customImageName = customImageName
                 val disableStickyHeader = isTalkBackEnabled || customImageName != null
                 HorizontalPager(state = pagerState) { index ->
                     Box(
@@ -464,7 +464,6 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         AppDropdownMenuItem({ Text("Font Weights") }) { showDialog = true }
         if (showDialog) FontWeightsDialog { showDialog = false }
     }
-    val isCyberpunk by isCyberpunk.collectAsState()
     AppDropdownMenuCheckableItem(
         text = "Cyberpunk",
         isChecked = isCyberpunk,

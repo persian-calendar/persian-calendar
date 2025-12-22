@@ -121,7 +121,7 @@ fun AppTheme(content: @Composable () -> Unit) {
                     // Don't move this upper to top of the chain so .clipToBounds can be applied to it
                     .background(appBackground()),
             ) {
-                val customImageName by customImageName.collectAsState()
+                val customImageName = customImageName
                 if (customImageName != null) {
                     val bitmap = remember(customImageName) {
                         val file = File(context.filesDir, STORED_IMAGE_NAME).takeIf { it.exists() }
@@ -151,20 +151,17 @@ fun AppTheme(content: @Composable () -> Unit) {
     }
 }
 
-fun resolveCustomFontPath(context: Context): File? {
-    return File(context.filesDir, STORED_FONT_NAME).takeIf { it.exists() }
-}
+fun resolveCustomFontPath(context: Context): File? =
+    File(context.filesDir, STORED_FONT_NAME).takeIf { it.exists() }
 
 @Composable
-fun resolveFontFile(): File? {
-    val customFontName by customFontName.collectAsState()
-    return if (customFontName != null) resolveCustomFontPath(LocalContext.current) else null
-}
+fun resolveFontFile(): File? =
+    if (customFontName != null) resolveCustomFontPath(LocalContext.current) else null
 
 @Composable
 fun resolveAndroidCustomTypeface(): Typeface? {
     val fontFile = resolveFontFile()
-    val isBoldFont by isBoldFont.collectAsState()
+    val isBoldFont = isBoldFont
     return remember(fontFile, isBoldFont) {
         fontFile?.let(Typeface::createFromFile).let {
             if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
@@ -199,7 +196,7 @@ fun resolveTypography(): Typography {
             labelSmall = typography.labelSmall.copy(fontFamily = font)
         )
     } ?: MaterialTheme.typography
-    val isBoldFont by isBoldFont.collectAsState()
+    val isBoldFont = isBoldFont
     return if (isBoldFont) result.copy(
         displayLarge = result.displayLarge.copy(fontWeight = FontWeight.Bold),
         displayMedium = result.displayMedium.copy(fontWeight = FontWeight.Bold),
@@ -229,9 +226,8 @@ private fun effectiveTheme(): Theme {
     val explicitlySetTheme = userSetTheme
     if (explicitlySetTheme != Theme.SYSTEM_DEFAULT) return explicitlySetTheme
     return if (isSystemInDarkTheme()) {
-        if (isPowerSaveMode(LocalContext.current)) Theme.BLACK
-        else systemDarkTheme.collectAsState().value
-    } else systemLightTheme.collectAsState().value
+        if (isPowerSaveMode(LocalContext.current)) Theme.BLACK else systemDarkTheme
+    } else systemLightTheme
 }
 
 private fun isPowerSaveMode(context: Context): Boolean =
@@ -281,7 +277,7 @@ private fun getResourcesColor(@ColorRes id: Int) = Color(LocalResources.current.
 @Composable
 private fun appShapes(): Shapes {
     if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
-    val isCyberpunk by isCyberpunk.collectAsState()
+    val isCyberpunk = isCyberpunk
     return if (isCyberpunk) Shapes(
         extraSmall = CutCornerShape(MaterialTheme.shapes.extraSmall.topStart),
         small = CutCornerShape(MaterialTheme.shapes.small.topStart),
@@ -294,7 +290,7 @@ private fun appShapes(): Shapes {
 @Composable
 fun needsScreenSurfaceDragHandle(): Boolean = when (effectiveTheme()) {
     Theme.BLACK -> true
-    Theme.MODERN -> !isGradient.collectAsState().value
+    Theme.MODERN -> !isGradient
     else -> false
 }
 
@@ -348,7 +344,7 @@ fun isDynamicGrayscale(): Boolean =
 private fun appBackground(): Brush {
     val backgroundColor = MaterialTheme.colorScheme.background
     val theme = effectiveTheme()
-    val isGradient by isGradient.collectAsState()
+    val isGradient = isGradient
     val backgroundGradientStart by animateColor(
         if (!isGradient) backgroundColor
         else if (theme.isDynamicColors) when (theme) {
@@ -408,7 +404,6 @@ fun appSliderColor(): SliderColors {
 fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme = effectiveTheme()
-    val isRedHolidays by isRedHolidays.collectAsState()
     val colorAppointments = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_200)
         Theme.DARK, Theme.BLACK -> getResourcesColor(android.R.color.system_accent1_200)

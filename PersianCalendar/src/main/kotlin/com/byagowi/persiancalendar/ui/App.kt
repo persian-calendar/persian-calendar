@@ -45,7 +45,6 @@ import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -538,7 +537,7 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
                 onClick = {
                     val systemTheme = if (isDark) systemLightTheme else systemDarkTheme
                     context.preferences.edit {
-                        putString(PREF_THEME, systemTheme.value.key)
+                        putString(PREF_THEME, systemTheme.key)
                         putString(
                             if (isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
                             userSetTheme.key
