@@ -139,27 +139,6 @@ fun ColumnScope.WidgetColoringSettings() {
 }
 
 @Composable
-fun WidgetPreferenceDebounce(
-    key: String,
-    flow: MutableStateFlow<Float>,
-    content: @Composable (value: Float, onValueChange: (Float) -> Unit) -> Unit,
-) {
-    val context = LocalContext.current
-    @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
-        flow
-            // Debounce to not spam preferences much but specially is needed for
-            // map widget as its expensive calculations
-            .debounce(.25.seconds).collect { context.preferences.edit { putFloat(key, it) } }
-    }
-    val value by flow.collectAsState()
-    Box(
-        Modifier
-            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-            .clearAndSetSemantics {},
-    ) { content(value) { flow.value = it } }
-}
-
-@Composable
 fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
     if (userSetTheme.isDynamicColors) Box(
         Modifier
@@ -173,15 +152,13 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
         )
     }
     this.AnimatedVisibility(prefersWidgetsDynamicColors) {
-        val widgetTransparencyFlow = remember { MutableStateFlow(widgetTransparency.value) }
         val key = PREF_WIDGET_TRANSPARENCY
-        WidgetPreferenceDebounce(key, widgetTransparencyFlow) { value, onValueChange ->
-            SettingsSlider(
-                title = stringResource(R.string.widget_background_transparency),
-                value = value,
-                defaultValue = DEFAULT_WIDGET_TRANSPARENCY,
-                onValueChange = onValueChange,
-            )
-        }
+        val context = LocalContext.current
+        SettingsSlider(
+            title = stringResource(R.string.widget_background_transparency),
+            value = widgetTransparency,
+            defaultValue = DEFAULT_WIDGET_TRANSPARENCY,
+            onValueChange = { context.preferences.edit { putFloat(key, it) } },
+        )
     }
 }

@@ -437,7 +437,12 @@ fun SettingsSlider(
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     onValueChange: (Float) -> Unit,
 ) {
-    Column(Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)) {
+    Column(
+        Modifier
+            .padding(top = 16.dp, start = 24.dp, end = 24.dp)
+            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+            .clearAndSetSemantics {},
+    ) {
         AnimatedContent(
             title,
             label = "title",

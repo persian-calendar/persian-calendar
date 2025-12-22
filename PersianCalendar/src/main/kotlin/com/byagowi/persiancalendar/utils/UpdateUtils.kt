@@ -1025,7 +1025,7 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
             if (isNightMode) android.R.color.system_accent2_800
             else android.R.color.system_accent2_50
         ),
-        (255 * (1 - widgetTransparency.value)).roundToInt().coerceIn(0, 255),
+        (255 * (1 - widgetTransparency)).roundToInt().coerceIn(0, 255),
     )
     else null
     val foregroundColor = if (prefersWidgetsDynamicColors) context.getColor(
@@ -1787,7 +1787,7 @@ private fun RemoteViews.setRoundBackground(
     when {
         prefersWidgetsDynamicColors -> {
             setImageViewResource(viewId, R.drawable.widget_background)
-            setAlpha(viewId, 1 - widgetTransparency.value)
+            setAlpha(viewId, 1 - widgetTransparency)
         }
 
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)

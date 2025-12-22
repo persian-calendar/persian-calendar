@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.edit
 import androidx.core.view.children
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
@@ -37,7 +38,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
-import kotlinx.coroutines.flow.MutableStateFlow
 
 abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
@@ -96,15 +96,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                     height = size.height.coerceAtMost(240.dp),
                 ),
             ) {
-                val preferences = preferences
-                var updateToken by remember { mutableIntStateOf(0) }
-                DisposableEffect(preferences) {
-                    val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-                        ++updateToken
-                    }
-                    preferences.registerOnSharedPreferenceChangeListener(listener)
-                    onDispose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
-                }
+                val updateToken = preferenceUpdateToken(LocalContext.current.preferences)
                 AndroidView(
                     factory = ::FrameLayout,
                     update = { parent ->
@@ -123,22 +115,31 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     }
 
     @Composable
+    private fun preferenceUpdateToken(preferences: SharedPreferences): Int {
+        var updateToken by remember { mutableIntStateOf(0) }
+        DisposableEffect(preferences) {
+            val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+                ++updateToken
+            }
+            preferences.registerOnSharedPreferenceChangeListener(listener)
+            onDispose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
+        }
+        return updateToken
+    }
+
+    @Composable
     protected fun TextScaleSettings() {
         val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
         val preferences = LocalContext.current.preferences
-        val textScale = remember {
-            MutableStateFlow(preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE))
-        }
-        WidgetPreferenceDebounce(key, textScale) { value, onValueChange ->
-            SettingsSlider(
-                title = stringResource(R.string.widget_text_size),
-                value = value,
-                valueRange = .65f..3f,
-                visibleScale = 14f,
-                defaultValue = 1f,
-                onValueChange = onValueChange,
-            )
-        }
+        val updateToken = preferenceUpdateToken(preferences)
+        SettingsSlider(
+            title = stringResource(R.string.widget_text_size),
+            value = updateToken.let { preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE) },
+            valueRange = .65f..3f,
+            visibleScale = 14f,
+            defaultValue = 1f,
+            onValueChange = { preferences.edit { putFloat(key, it) } },
+        )
     }
 
     abstract fun preview(size: DpSize): RemoteViews
