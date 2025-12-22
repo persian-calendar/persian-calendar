@@ -100,7 +100,7 @@ class CalendarViewModel() : ViewModel() {
     }
 
     fun notifyYearViewOffset(value: Int) {
-        _yearViewOffset.value = value
+        _yearViewOffset.intValue = value
     }
 
     /**
@@ -108,7 +108,7 @@ class CalendarViewModel() : ViewModel() {
      * use [changeSelectedMonthOffsetCommand] for actually altering viewpager's state
      */
     fun notifySelectedMonthOffset(offset: Int) {
-        _selectedMonthOffset.value = offset
+        _selectedMonthOffset.intValue = offset
     }
 
     fun changeSelectedDay(jdn: Jdn) {
@@ -121,7 +121,7 @@ class CalendarViewModel() : ViewModel() {
     }
 
     fun refreshCalendar() {
-        ++_refreshToken.value
+        ++_refreshToken.intValue
     }
 
     fun removeThirdTab() {
@@ -236,7 +236,7 @@ class CalendarViewModel() : ViewModel() {
         viewModelScope.launch {
             while (true) {
                 delay(30.seconds)
-                _now.value = System.currentTimeMillis()
+                _now.longValue = System.currentTimeMillis()
                 val today = Jdn.today()
                 if (_today.value != today) {
                     refreshCalendar()

@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -16,7 +17,7 @@ class AstronomyViewModel : ViewModel() {
     var isTropical by mutableStateOf(false)
     var isDatePickerDialogShown by mutableStateOf(false)
 
-    private val _minutesOffset = mutableStateOf(DEFAULT_TIME)
+    private var _minutesOffset = mutableIntStateOf(DEFAULT_TIME)
     val minutesOffset by _minutesOffset
 
     private val dateSink = GregorianCalendar() // Just to avoid recreating it everytime
@@ -49,11 +50,11 @@ class AstronomyViewModel : ViewModel() {
         animator.setIntValues(
             // If the animation is still going on use its current value to not have jumps
             if (animator.isRunning) animator.animatedValue as? Int ?: 0
-            else _minutesOffset.value,
+            else _minutesOffset.intValue,
             value
         )
         animator.start()
-        _minutesOffset.value = value
+        _minutesOffset.intValue = value
     }
 
     fun animateToAbsoluteDayOffset(dayOffset: Int) {
@@ -61,7 +62,7 @@ class AstronomyViewModel : ViewModel() {
     }
 
     fun animateToRelativeDayOffset(dayOffset: Int) {
-        animateToAbsoluteMinutesOffset(_minutesOffset.value + dayOffset * MINUTES_IN_DAY)
+        animateToAbsoluteMinutesOffset(_minutesOffset.intValue + dayOffset * MINUTES_IN_DAY)
     }
 
     fun animateToTime(time: Long) {
@@ -73,16 +74,16 @@ class AstronomyViewModel : ViewModel() {
     // This is provided to bypass view model provided animation for the screen's slider
     // which changes the values smoothly and doesn't need another filter in between.
     fun addMinutesOffset(offset: Int) {
-        _minutesOffset.value += offset
-        setAstronomyState(_minutesOffset.value)
+        _minutesOffset.intValue += offset
+        setAstronomyState(_minutesOffset.intValue)
     }
 
     // Command to be issued from MapScreen when astronomy screen is in its backstack so we like to
     // have them in sync
     fun changeToTime(time: Long) {
-        _minutesOffset.value =
+        _minutesOffset.intValue =
             ((time - System.currentTimeMillis()).milliseconds / 1.minutes).roundToInt()
-        setAstronomyState(_minutesOffset.value)
+        setAstronomyState(_minutesOffset.intValue)
     }
 
     companion object {
