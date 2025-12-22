@@ -53,7 +53,7 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
         val widgetTitle = dayTitleSummary(
             jdn,
             today,
-            calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
+            calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets,
         )
         return create4x1RemoteViews(
             this, size, jdn, today, widgetTitle, subtitle, clock,
@@ -78,7 +78,7 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
         val widgetTitle = dayTitleSummary(
             jdn,
             today,
-            calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value,
+            calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets,
         )
         return create2x2RemoteViews(
             this, size, jdn, today, widgetTitle, subtitle, prayTimes,

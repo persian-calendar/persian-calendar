@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -116,8 +115,6 @@ fun daysTable(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val fontFile = resolveFontFile()
-    val isBoldFont = isBoldFont
-    val language = language
     val monthColors = appMonthColors()
     val coroutineScope = rememberCoroutineScope()
 
@@ -148,15 +145,13 @@ fun daysTable(
     )
     val contentColor = LocalContentColor.current
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val todayIndicatorStroke = with(density) {
         Stroke(width = (if (isHighTextContrastEnabled || isBoldFont) 4 else 2).dp.toPx())
     }
     var focusedDay by remember { mutableStateOf<Jdn?>(null) }
     val focusColor = LocalContentColor.current.copy(.1f)
     val weekStart = weekStart
-    val eventsRepository by eventsRepository.collectAsState()
+    val eventsRepository = eventsRepository
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =

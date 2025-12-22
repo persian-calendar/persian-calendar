@@ -91,7 +91,6 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -491,7 +490,7 @@ fun SharedTransitionScope.CalendarScreen(
         }
     }
 
-    val eventsRepository by eventsRepository.collectAsState()
+    val eventsRepository = eventsRepository
     val resources = LocalResources.current
     LaunchedEffect(viewModel.today, eventsRepository) {
         if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && viewModel.today.toPersianDate().year > supportedYearOfIranCalendar) {
@@ -534,7 +533,6 @@ private fun SharedTransitionScope.detailsTabs(
     fabPlaceholderHeight: Dp?,
 ): List<DetailsTab> {
     val hasTimesTab = enableTimesTab() && !viewModel.removedThirdTab
-    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
     return listOfNotNull(
@@ -762,7 +760,7 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
-    val repository by eventsRepository.collectAsState()
+    val repository = eventsRepository
     val enabledEvents = remember { repository.getEnabledEvents(Jdn.today()) }
     val searchTerm = viewModel.searchTerm
     val expanded = searchTerm.isNotEmpty()
@@ -856,7 +854,6 @@ private fun SharedTransitionScope.Toolbar(
     )
     val yearViewOffset = viewModel.yearViewOffset
     val yearViewIsInYearSelection = viewModel.yearViewIsInYearSelection
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
 
     BackHandler(enabled = viewModel.isYearView, onBack = viewModel::onYearViewBackPressed)
 
@@ -1093,7 +1090,6 @@ private fun SharedTransitionScope.Menu(
             )
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
-        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem({
             Text(stringResource(R.string.planetary_hours))
         }) {

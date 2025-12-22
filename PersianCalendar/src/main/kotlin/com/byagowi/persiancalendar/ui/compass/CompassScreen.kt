@@ -37,7 +37,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -247,7 +246,6 @@ fun SharedTransitionScope.CompassScreen(
                             compassView?.isShowQibla = it
                             context.preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
-                        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersianOrDari) {
                             var value by remember { mutableStateOf<String?>(null) }
                             AppDropdownMenuItem({

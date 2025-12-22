@@ -65,7 +65,6 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -447,7 +446,6 @@ private fun Developers() {
     }
     var refreshToken by remember { mutableIntStateOf(0) }
     val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
 
     Text(
         stringResource(R.string.about_developers),

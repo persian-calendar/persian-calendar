@@ -7,7 +7,6 @@ import android.os.Build
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
-import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
 import androidx.compose.runtime.getValue
@@ -148,8 +147,6 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.util.TimeZone
 
 // Using global variable isn't really the best idea.
@@ -332,29 +329,29 @@ val preferredSwipeUpAction by preferredSwipeUpAction_
 private val preferredSwipeDownAction_ = mutableStateOf(SwipeDownAction.entries[0])
 val preferredSwipeDownAction by preferredSwipeDownAction_
 
-private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
-val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarEvents_
+private val isShowDeviceCalendarEvents_ = mutableStateOf(false)
+val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents_
 
-private val eventCalendarsIdsToExclude_ = MutableStateFlow(emptyLongSet())
-val eventCalendarsIdsToExclude: StateFlow<LongSet> get() = eventCalendarsIdsToExclude_
+private val eventCalendarsIdsToExclude_ = mutableStateOf(emptyLongSet())
+val eventCalendarsIdsToExclude by eventCalendarsIdsToExclude_
 
-private val eventCalendarsIdsAsHoliday_ = MutableStateFlow(emptyLongSet())
-val eventCalendarsIdsAsHoliday: StateFlow<LongSet> get() = eventCalendarsIdsAsHoliday_
+private val eventCalendarsIdsAsHoliday_ = mutableStateOf(emptyLongSet())
+val eventCalendarsIdsAsHoliday by eventCalendarsIdsAsHoliday_
 
-private val whatToShowOnWidgets_ = MutableStateFlow(emptySet<String>())
-val whatToShowOnWidgets get() = whatToShowOnWidgets_
+private val whatToShowOnWidgets_ = mutableStateOf(emptySet<String>())
+val whatToShowOnWidgets by whatToShowOnWidgets_
 
-private val isAstronomicalExtraFeaturesEnabled_ = MutableStateFlow(DEFAULT_ASTRONOMICAL_FEATURES)
-val isAstronomicalExtraFeaturesEnabled: StateFlow<Boolean> get() = isAstronomicalExtraFeaturesEnabled_
+private val isAstronomicalExtraFeaturesEnabled_ = mutableStateOf(DEFAULT_ASTRONOMICAL_FEATURES)
+val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled_
 
-private val showMoonInScorpio_ = MutableStateFlow(DEFAULT_SHOW_MOON_IN_SCORPIO)
-val showMoonInScorpio: StateFlow<Boolean> get() = showMoonInScorpio_
+private val showMoonInScorpio_ = mutableStateOf(DEFAULT_SHOW_MOON_IN_SCORPIO)
+val showMoonInScorpio by showMoonInScorpio_
 
-private val isTalkBackEnabled_ = MutableStateFlow(false)
-val isTalkBackEnabled: StateFlow<Boolean> get() = isTalkBackEnabled_
+private val isTalkBackEnabled_ = mutableStateOf(false)
+val isTalkBackEnabled by isTalkBackEnabled_
 
-private val isHighTextContrastEnabled_ = MutableStateFlow(false)
-val isHighTextContrastEnabled: StateFlow<Boolean> get() = isHighTextContrastEnabled_
+private val isHighTextContrastEnabled_ = mutableStateOf(false)
+val isHighTextContrastEnabled by isHighTextContrastEnabled_
 
 var shiftWorkTitles = emptyMap<String, String>()
     private set
@@ -387,14 +384,14 @@ var nothingScheduledString = ""
 var holidayString = DEFAULT_HOLIDAY
     private set
 
-private val numericalDatePreferred_ = MutableStateFlow(DEFAULT_NUMERICAL_DATE_PREFERRED)
-val numericalDatePreferred: StateFlow<Boolean> get() = numericalDatePreferred_
+private val numericalDatePreferred_ = mutableStateOf(DEFAULT_NUMERICAL_DATE_PREFERRED)
+val numericalDatePreferred by numericalDatePreferred_
 
-private val calendarsTitlesAbbr_ = MutableStateFlow(emptyMap<Calendar, String>())
-val calendarsTitlesAbbr: StateFlow<Map<Calendar, String>> get() = calendarsTitlesAbbr_
+private val calendarsTitlesAbbr_ = mutableStateOf(emptyMap<Calendar, String>())
+val calendarsTitlesAbbr by calendarsTitlesAbbr_
 
-private val eventsRepository_ = MutableStateFlow(EventsRepository.empty())
-val eventsRepository: StateFlow<EventsRepository> get() = eventsRepository_
+private val eventsRepository_ = mutableStateOf(EventsRepository.empty())
+val eventsRepository by eventsRepository_
 
 private var secondaryCalendarEnabled = false
 

@@ -47,6 +47,10 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
@@ -75,7 +79,6 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -848,7 +851,7 @@ fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
 fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
 
 fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
-    val currentSemitone = MutableStateFlow(MIDDLE_A_SEMITONE)
+    var currentSemitone by mutableStateOf(MIDDLE_A_SEMITONE)
 
     val view = object : BaseSlider(activity) {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -879,16 +882,16 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
             canvas.drawCircle(r, r, r / 1.1f, paint)
             val text = "%d Hz %s %s".format(
                 Locale.ENGLISH,
-                getStandardFrequency(currentSemitone.value).toInt(),
-                getAbcNoteLabel(currentSemitone.value.roundToInt()),
-                getSolfegeNoteLabel(currentSemitone.value.roundToInt())
+                getStandardFrequency(currentSemitone).toInt(),
+                getAbcNoteLabel(currentSemitone.roundToInt()),
+                getSolfegeNoteLabel(currentSemitone.roundToInt())
             )
             canvas.drawText(text, r, r, textPaint)
         }
     }
 
     view.onScrollListener = { dx, _ ->
-        currentSemitone.value = (currentSemitone.value - dx / 1000.0)
+        currentSemitone = (currentSemitone - dx / 1000.0)
             .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
     }
 
@@ -896,7 +899,7 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
     val buffer = ShortArray(sampleRate * 10)
     var previousAudioTrack: AudioTrack? = null
 
-    currentSemitone
+    snapshotFlow { currentSemitone }
         .map { semitone ->
             val frequency = getStandardFrequency(semitone)
             buffer.indices.forEach {

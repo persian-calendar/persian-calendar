@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
@@ -199,7 +200,7 @@ class CalendarViewModel() : ViewModel() {
         changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
 
         // a11y
-        if (isTalkBackEnabled.value && jdn != today) {
+        if (isTalkBackEnabled && jdn != today) {
             accessibilityApplicationContext?.let { context ->
                 Toast.makeText(
                     context,
@@ -246,7 +247,7 @@ class CalendarViewModel() : ViewModel() {
             }
         }
         viewModelScope.launch {
-            resumeToken.collect {
+            snapshotFlow { resumeToken }.collect {
                 delay(.5.seconds)
                 refreshCalendar()
                 delay(.5.seconds)

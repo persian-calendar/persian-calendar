@@ -21,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -70,7 +69,6 @@ fun SharedTransitionScope.MonthScreen(
         }
     }
     val focusedDate = focusedJdn on mainCalendar
-    val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     Scaffold(
         modifier = Modifier.detectSwipe {

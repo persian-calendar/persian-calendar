@@ -64,7 +64,6 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -220,7 +219,6 @@ fun SharedTransitionScope.DaysScreen(
     var addAction by remember { mutableStateOf({}) }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
     fun onSwipeDown(isUp: Boolean) {
         if (!isLandscape && !isUp) when (preferredSwipeUpAction) {
             SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
@@ -345,7 +343,6 @@ fun SharedTransitionScope.DaysScreen(
                 Column {
                     val now = calendarViewModel.now
                     val refreshToken = calendarViewModel.refreshToken
-                    val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
                     val daysTable = daysTable(
                         modifier = Modifier.detectSwipe { ::onSwipeDown },
                         suggestedPagerSize = pagerSize,
@@ -775,7 +772,6 @@ private fun DaysView(
 
                 // Time cells and table
                 val outlineVariant = MaterialTheme.colorScheme.outlineVariant
-                val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 Row(
                     Modifier.drawBehind {
                         val topLineY = 2.dp.toPx()

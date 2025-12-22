@@ -32,7 +32,6 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -117,9 +116,9 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     }
     Box(Modifier.highlightItem(destinationItem == PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
         var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
-        val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
         SettingsSwitch(
-            key = PREF_SHOW_DEVICE_CALENDAR_EVENTS, value = isShowDeviceCalendarEvents,
+            key = PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+            value = isShowDeviceCalendarEvents,
             title = stringResource(R.string.show_device_calendar_events),
             summary = stringResource(R.string.show_device_calendar_events_summary),
             onBeforeToggle = {
@@ -151,7 +150,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
     WeekOfYearSetting()
     run {
-        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
+        val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
         SettingsSwitch(
             key = PREF_ASTRONOMICAL_FEATURES,
             value = isAstronomicalExtraFeaturesEnabled,
@@ -165,7 +164,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
                 it
             },
         )
-        val showMoonInScorpio by showMoonInScorpio.collectAsState()
+        val showMoonInScorpio = showMoonInScorpio
         AnimatedVisibility(isAstronomicalExtraFeaturesEnabled) {
             SettingsSwitch(
                 key = PREF_SHOW_MOON_IN_SCORPIO,
@@ -284,10 +283,10 @@ private data class CalendarsEntry(
 private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val idsToExclude = remember {
-        buildList { eventCalendarsIdsToExclude.value.forEach { add(it) } }.toMutableStateList()
+        buildList { eventCalendarsIdsToExclude.forEach { add(it) } }.toMutableStateList()
     }
     val holidaysIds = remember {
-        buildList { eventCalendarsIdsAsHoliday.value.forEach { add(it) } }.toMutableStateList()
+        buildList { eventCalendarsIdsAsHoliday.forEach { add(it) } }.toMutableStateList()
     }
     var showHolidaysToggles by rememberSaveable { mutableStateOf(holidaysIds.isNotEmpty()) }
     val calendars = resolveDeviceCalendars {

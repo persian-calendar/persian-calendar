@@ -74,7 +74,7 @@ private class EventsViewFactory(
     private val enabledAlarms = getEnabledAlarms(context)
     private val items = run {
         val today = Jdn.today()
-        val deviceEvents = if (isShowDeviceCalendarEvents.value) {
+        val deviceEvents = if (isShowDeviceCalendarEvents) {
             context.readTwoWeekDeviceEvents(today)
         } else EventsStore.empty()
         val days = (today..<today + 14).toList()
@@ -82,7 +82,7 @@ private class EventsViewFactory(
         val secondaryDates = secondaryCalendar?.let { calendar -> days.map { it on calendar } }
         var monthChange = false
         var secondaryMonthChange = false
-        val eventsRepository = eventsRepository.value
+        val eventsRepository = eventsRepository
         days.map {
             it to sortEvents(eventsRepository.getEvents(it, deviceEvents), language)
         }.flatMapIndexed { i, (day, events) ->

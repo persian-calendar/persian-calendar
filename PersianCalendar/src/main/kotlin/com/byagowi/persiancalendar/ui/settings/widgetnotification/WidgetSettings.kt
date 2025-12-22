@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -54,15 +52,12 @@ import java.util.TimeZone
 @Composable
 fun ColumnScope.WidgetSettings() {
     WidgetColoringSettings()
-    run {
-        val numericalDatePreferred by numericalDatePreferred.collectAsState()
-        SettingsSwitch(
-            key = PREF_NUMERICAL_DATE_PREFERRED,
-            value = numericalDatePreferred,
-            title = stringResource(R.string.prefer_linear_date),
-            summary = stringResource(R.string.prefer_linear_date_summary)
-        )
-    }
+    SettingsSwitch(
+        key = PREF_NUMERICAL_DATE_PREFERRED,
+        value = numericalDatePreferred,
+        title = stringResource(R.string.prefer_linear_date),
+        summary = stringResource(R.string.prefer_linear_date_summary)
+    )
     SettingsSwitch(
         key = PREF_WIDGET_CLOCK,
         value = isWidgetClock,
@@ -102,7 +97,7 @@ fun ColumnScope.WidgetSettings() {
         key = PREF_WHAT_TO_SHOW_WIDGETS,
         entries = widgetCustomizations.values.map { stringResource(it) },
         entryValues = widgetCustomizations.keys.toList(),
-        persistedSet = whatToShowOnWidgets.collectAsState().value,
+        persistedSet = whatToShowOnWidgets,
         dialogTitleResId = R.string.which_one_to_show,
         title = stringResource(R.string.customize_widget),
         summary = stringResource(R.string.customize_widget_summary),

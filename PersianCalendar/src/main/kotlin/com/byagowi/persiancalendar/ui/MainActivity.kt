@@ -11,6 +11,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.platform.LocalView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.initGlobal
@@ -24,8 +26,6 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,9 +96,9 @@ class MainActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         update(applicationContext, false)
-        ++resumeToken_.value
+        ++resumeToken_.intValue
     }
 }
 
-private val resumeToken_ = MutableStateFlow(0)
-val resumeToken: StateFlow<Int> = resumeToken_
+private val resumeToken_ = mutableIntStateOf(0)
+val resumeToken by resumeToken_

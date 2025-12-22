@@ -72,7 +72,7 @@ fun getA11yDaySummary(
     withWeekOfYear: Boolean = isShowWeekOfYearEnabled,
 ): String = buildString {
     // It has some expensive calculations, lets not do that when not needed
-    if (!isTalkBackEnabled.value) return@buildString
+    if (!isTalkBackEnabled) return@buildString
 
     if (isToday) appendLine(resources.getString(R.string.today))
 
@@ -91,7 +91,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = eventsRepository.value.getEvents(jdn, deviceCalendarEvents)
+    val events = eventsRepository.getEvents(jdn, deviceCalendarEvents)
     val holidays = getEventsTitle(
         events,
         true,
@@ -125,7 +125,7 @@ fun getA11yDaySummary(
         )
     }
 
-    if (withZodiac && showMoonInScorpio.value) {
+    if (withZodiac && showMoonInScorpio) {
         appendLine().appendLine().appendLine(generateYearName(resources, jdn, withEmoji = false))
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))
     }
@@ -170,7 +170,7 @@ private fun readDeviceEvents(
     limit: Int,
     searchTerm: String? = null,
 ): List<CalendarEvent.DeviceCalendarEvent> {
-    if (!isShowDeviceCalendarEvents.value || ActivityCompat.checkSelfPermission(
+    if (!isShowDeviceCalendarEvents || ActivityCompat.checkSelfPermission(
             context, Manifest.permission.READ_CALENDAR
         ) != PackageManager.PERMISSION_GRANTED
     ) return emptyList()
@@ -217,7 +217,7 @@ private fun readDeviceEvents(
         )?.use {
             generateSequence { if (it.moveToNext()) it else null }.filter {
                 it.getString(5) == "1" && // is visible
-                        it.getLong(9) !in eventCalendarsIdsToExclude.value && run {
+                        it.getLong(9) !in eventCalendarsIdsToExclude && run {
                     boundaryRegex == null || boundaryRegex.containsMatchIn(
                         it.getString(1).orEmpty()
                     ) || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
@@ -239,7 +239,7 @@ private fun readDeviceEvents(
                         .orEmpty(),
                     date = start.toCivilDate(),
                     color = it.getString(7) ?: it.getString(8).orEmpty(),
-                    isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
+                    isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday,
                     source = null,
                 )
             }.take(limit).toList()
@@ -273,7 +273,7 @@ fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<C
     val baseJdn = Jdn(date)
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
     return (0..<mainCalendar.getMonthLength(date.year, date.month)).map { baseJdn + it }
-        .associateWith { eventsRepository.value.getEvents(it, deviceEvents) }
+        .associateWith { eventsRepository.getEvents(it, deviceEvents) }
 }
 
 fun Context.searchDeviceCalendarEvents(searchTerm: String?): List<CalendarEvent.DeviceCalendarEvent> {
@@ -365,7 +365,7 @@ fun calculateDaysDifference(
         ),
         run {
             if (years != 0 || isInWidget) return@run null
-            val workDays = eventsRepository.value.calculateWorkDays(
+            val workDays = eventsRepository.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn,
                 if (baseJdn > jdn) baseJdn else jdn,
             )
@@ -384,11 +384,11 @@ fun formatDate(
     calendarNameInLinear: Boolean = true,
     forceNonNumerical: Boolean = false,
 ): String {
-    return if (numericalDatePreferred.value && !forceNonNumerical) buildString {
+    return if (numericalDatePreferred && !forceNonNumerical) buildString {
         append(date.toLinearDate())
         if (calendarNameInLinear) {
             append(" ")
-            append(calendarsTitlesAbbr.value[date.calendar].orEmpty())
+            append(calendarsTitlesAbbr[date.calendar].orEmpty())
         }
     }.trim() else language.dmy.format(
         numeral.format(date.dayOfMonth),

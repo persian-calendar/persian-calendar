@@ -26,7 +26,6 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -98,7 +97,7 @@ fun SharedTransitionScope.ScheduleScreen(
     val coroutineScope = rememberCoroutineScope()
     val language = language
 
-    val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
+    val preferredSwipeUpAction = preferredSwipeUpAction
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val swipeDownModifier = Modifier.detectSwipe {
         { isUp ->
@@ -197,7 +196,6 @@ fun SharedTransitionScope.ScheduleScreen(
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface {
-                val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
                     if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge

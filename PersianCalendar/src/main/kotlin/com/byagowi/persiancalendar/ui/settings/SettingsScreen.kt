@@ -63,7 +63,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -236,8 +235,6 @@ fun SharedTransitionScope.SettingsScreen(
             }
 
             ScreenSurface {
-                val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-                val customImageName = customImageName
                 val disableStickyHeader = isTalkBackEnabled || customImageName != null
                 HorizontalPager(state = pagerState) { index ->
                     Box(

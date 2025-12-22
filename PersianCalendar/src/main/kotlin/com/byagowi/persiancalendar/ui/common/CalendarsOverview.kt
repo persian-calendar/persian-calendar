@@ -40,7 +40,6 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -131,7 +130,6 @@ fun SharedTransitionScope.CalendarsOverview(
     val resources = LocalResources.current
     val language = language
     val isToday = today == jdn
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     Column(
         Modifier.semantics {
             if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
@@ -197,8 +195,7 @@ fun SharedTransitionScope.CalendarsOverview(
             )
         }
 
-        val moonInScorpioState =
-            if (showMoonInScorpio.collectAsState().value) moonInScorpioState(jdn) else null
+        val moonInScorpioState = if (showMoonInScorpio) moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
             val text = if (language.isPersianOrDari) when (moonInScorpioState) {
                 MoonInScorpioState.Borji -> "قمر در برج عقرب"
@@ -241,7 +238,7 @@ fun SharedTransitionScope.CalendarsOverview(
             }
         }
 
-        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
+        val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
         val persianDate = jdn.toPersianDate()
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val yearName = generateYearName(
@@ -264,7 +261,6 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         if (language.isPersian) {
-            val eventsRepository by eventsRepository.collectAsState()
             val enableExtra = eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
@@ -523,7 +519,6 @@ private fun HandleSacredMonth(
     content: @Composable () -> Unit
 ) {
     val displaySacredness = isExpanded && date is IslamicDate && date.isSacredMonths && run {
-        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         isAstronomicalExtraFeaturesEnabled && language.isUserAbleToReadPersian
     }
     val backgroundColor by animateColor(

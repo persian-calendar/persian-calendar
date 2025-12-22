@@ -47,7 +47,6 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -602,7 +601,6 @@ private fun EquinoxCountDown(
     event: CalendarEvent.EquinoxCalendarEvent,
     backgroundColor: Color,
 ) {
-    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     val year = event.date.year + 1
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         CompositionLocalProvider(
@@ -652,7 +650,6 @@ private fun EquinoxCountDownContent(
             .509f to Color.Transparent,
             .51f to contentColor,
         )
-        val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
         countDownTimeParts.map { (pluralId, interval) ->
             val x = (remainedTime / interval).toInt()
             remainedTime -= interval * x
@@ -694,11 +691,11 @@ fun readEvents(
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
     val resources = LocalResources.current
-    val eventsRepository by eventsRepository.collectAsState()
+    val eventsRepository = eventsRepository
     val language = language
     val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
 
-    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
+    val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {

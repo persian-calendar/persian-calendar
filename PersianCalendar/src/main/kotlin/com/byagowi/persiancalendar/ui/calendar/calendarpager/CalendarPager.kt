@@ -5,8 +5,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
@@ -48,7 +46,6 @@ fun CalendarPager(
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
 
     val refreshToken = viewModel.refreshToken
-    val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
     val yearViewCalendar = viewModel.yearViewCalendar
     val daysTable = daysTable(
         suggestedPagerSize = suggestedPagerSize,

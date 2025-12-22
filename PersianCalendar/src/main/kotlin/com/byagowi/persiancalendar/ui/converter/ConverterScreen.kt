@@ -43,7 +43,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -545,7 +544,6 @@ private fun ColumnScope.ConverterAndDistance(
         }
     }
 
-    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     this.AnimatedVisibility(
         isAstronomicalExtraFeaturesEnabled && viewModel.screenMode == ConverterScreenMode.DISTANCE && !(viewModel.secondSelectedDate == viewModel.selectedDate && viewModel.selectedDate == viewModel.today)
     ) {

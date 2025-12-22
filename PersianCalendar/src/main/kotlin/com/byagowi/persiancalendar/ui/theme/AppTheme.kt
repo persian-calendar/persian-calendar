@@ -43,7 +43,6 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -428,7 +427,6 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color(0xFFE51C23)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val holidayCircleAlpha = if (isHighTextContrastEnabled) .2f
     else if (theme.isDynamicColors && !isRedHolidays) when (theme) {
         Theme.LIGHT -> .125f

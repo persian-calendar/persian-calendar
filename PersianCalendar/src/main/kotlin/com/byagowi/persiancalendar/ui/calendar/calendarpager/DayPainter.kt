@@ -125,7 +125,7 @@ class DayPainter(
                 paints.eventIndicatorRadius, when {
                     dayIsSelected -> paints.headerTextSelectedPaint
                     // use textPaint for holiday event when a11y's high contrast is enabled
-                    isHighTextContrastEnabled.value && holiday && paint == paints.eventIndicatorPaint ->
+                    isHighTextContrastEnabled && holiday && paint == paints.eventIndicatorPaint ->
                         paints.dayOfMonthNumberTextHolidayPaint
 
                     else -> paint
@@ -170,7 +170,7 @@ class DayPainter(
         this.holiday = isHoliday
         this.jdn = jdn
         this.isWeekNumber = isWeekNumber
-        this.isMoonInScorpio = showMoonInScorpio.value && jdn != null && isMoonInScorpio(jdn)
+        this.isMoonInScorpio = showMoonInScorpio && jdn != null && isMoonInScorpio(jdn)
         this.header = listOfNotNull(
             if (secondaryCalendar == null || jdn == null) null
             else getSecondaryCalendarNumeral(secondaryCalendar).format(
@@ -180,7 +180,7 @@ class DayPainter(
         ).joinToString(" ")
         this.indicators = listOf(
             hasAppointment to paints.appointmentIndicatorPaint,
-            (hasEvent || (isHighTextContrastEnabled.value && holiday)) to paints.eventIndicatorPaint
+            (hasEvent || (isHighTextContrastEnabled && holiday)) to paints.eventIndicatorPaint
         ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
     }
 
@@ -236,7 +236,7 @@ private class Paints(
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
-        it.strokeWidth = (if (isBoldFont || isHighTextContrastEnabled.value) 3 else 1) * dp
+        it.strokeWidth = (if (isBoldFont || isHighTextContrastEnabled) 3 else 1) * dp
         it.color = colors.currentDay.toArgb()
         if (typeface != null) it.typeface = typeface
     }

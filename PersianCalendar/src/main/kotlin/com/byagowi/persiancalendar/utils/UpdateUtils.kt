@@ -235,7 +235,7 @@ fun update(context: Context, updateDate: Boolean) {
     val title =
         dayTitleSummary(jdn, date) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val widgetTitle = dayTitleSummary(
-        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
+        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     ) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
@@ -315,7 +315,7 @@ fun getOwghat(
             append(context.getString(it.stringRes))
             append(": ")
             append(prayTimes[it].toFormattedString())
-            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets.value) {
+            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) {
                 cityName?.also { append(" ($it)") }
             }
         }
@@ -611,7 +611,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         ((bottomSpace / daysRowsCount - 14) / 14).toInt()
     } ?: 3
 
-    val deviceEvents = if (isShowDeviceCalendarEvents.value) {
+    val deviceEvents = if (isShowDeviceCalendarEvents) {
         context.readDaysDeviceEvents(
             monthStartJdn - startingWeekDay,
             (daysRowsCount * 7).days,
@@ -635,7 +635,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
         remoteViews.removeAllViews(id)
         val day = monthStartJdn + i - 7 - startingWeekDay
-        val events = sortEvents(eventsRepository.value.getEvents(day, deviceEvents), language)
+        val events = sortEvents(eventsRepository.getEvents(day, deviceEvents), language)
         val date = day on mainCalendar
         run {
             val viewId = when {
@@ -800,7 +800,7 @@ private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId:
         "updateToken",
         (System.currentTimeMillis().milliseconds / 1.hours).roundToInt(),
     )
-    adapterIntent.putExtra("appOpenCount", resumeToken.value)
+    adapterIntent.putExtra("appOpenCount", resumeToken)
     adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
     adapterIntent.putExtra("events", eventsRepository.hashCode())
     adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
@@ -867,7 +867,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
     val canvas = Canvas(bitmap)
     val baseDate = mainCalendar.getMonthStartFromMonthsDistance(today, 0)
     val monthDeviceEvents: DeviceCalendarEventsStore =
-        if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
+        if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
         else EventsStore.empty()
     val isRtl =
         language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -968,7 +968,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         val action = jdnActionKey + jdn.value
         remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
         remoteViews.setInt(id, "setBackgroundResource", R.drawable.widget_month_day_ripple)
-        if (isTalkBackEnabled.value) {
+        if (isTalkBackEnabled) {
             val daySummary = getA11yDaySummary(
                 context.resources, jdn, jdn == today, monthDeviceEvents,
                 withZodiac = false, withOtherCalendars = false, withTitle = true,
@@ -1173,7 +1173,7 @@ fun create4x1RemoteViews(
 ): RemoteViews {
     val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) {
@@ -1227,7 +1227,7 @@ fun create2x2RemoteViews(
 ): RemoteViews {
     val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) {
@@ -1258,7 +1258,7 @@ fun create2x2RemoteViews(
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
 
     val owghat = getOwghat(context, prayTimes, clock)
-    if (OWGHAT_KEY in whatToShowOnWidgets.value && owghat.isNotEmpty()) {
+    if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
         remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
     } else {
@@ -1310,7 +1310,7 @@ fun create4x2RemoteViews(
 ): RemoteViews {
     val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets.value
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val isWidgetClock = isWidgetClock
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
@@ -1358,7 +1358,7 @@ fun create4x2RemoteViews(
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })
 
-    if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets.value) {
+    if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
         val owghats = widget4x2TimesViewsIds.zip(
             timesToShow(clock, prayTimes)
@@ -1459,9 +1459,9 @@ fun createWeekViewRemoteViews(
         remoteViews.setTextViewTextSizeSp(weekDayNumberViewId, 14 * scale)
         val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day, 0)
         val deviceEvents =
-            if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
+            if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
             else EventsStore.empty()
-        val events = eventsRepository.value.getEvents(day, deviceEvents)
+        val events = eventsRepository.getEvents(day, deviceEvents)
         val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
 
         if (isHoliday) remoteViews.setTextColor(weekDayNumberViewId, holidaysColor)
@@ -1534,20 +1534,20 @@ private fun timesToShow(clock: Clock, prayTimes: PrayTimes): List<PrayTime> {
 private fun setEventsInWidget(
     resources: Resources, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
 ) {
-    val events = eventsRepository.value.getEvents(jdn, deviceCalendarEvents)
+    val events = eventsRepository.getEvents(jdn, deviceCalendarEvents)
     val holidays = getEventsTitle(
         events,
         holiday = true,
         showDeviceCalendarEvents = true,
         insertRLM = resources.isRtl,
-        addIsHoliday = isHighTextContrastEnabled.value,
+        addIsHoliday = isHighTextContrastEnabled,
     )
     remoteViews.setTextViewTextOrHideIfEmpty(holidaysId, holidays)
-    if (isTalkBackEnabled.value) remoteViews.setContentDescription(
+    if (isTalkBackEnabled) remoteViews.setContentDescription(
         holidaysId, resources.getString(R.string.holiday_reason, holidays)
     )
 
-    val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets.value) getEventsTitle(
+    val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
         events,
         holiday = false,
         showDeviceCalendarEvents = true,
@@ -1574,7 +1574,7 @@ private fun updateNotification(
         return
     }
 
-    val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets.value) {
+    val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         if (isLargeDayNumberOnNotification) listOf(
             PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB
         ) else timesToShow(clock, prayTimes)
@@ -1594,13 +1594,13 @@ private fun updateNotification(
         nextPrayTime = nextPrayTime,
         timesToShow = timesToShow,
         isRtl = context.resources.isRtl,
-        events = eventsRepository.value.getEvents(jdn, deviceCalendarEvents),
-        isTalkBackEnabled = isTalkBackEnabled.value,
-        isHighTextContrastEnabled = isHighTextContrastEnabled.value,
+        events = eventsRepository.getEvents(jdn, deviceCalendarEvents),
+        isTalkBackEnabled = isTalkBackEnabled,
+        isHighTextContrastEnabled = isHighTextContrastEnabled,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen,
         isLargeDayNumberOnNotification = isLargeDayNumberOnNotification,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
-        whatToShowOnWidgets = whatToShowOnWidgets.value,
+        whatToShowOnWidgets = whatToShowOnWidgets,
         spacedComma = spacedComma,
         language = language,
         customFontName = customFontName,
