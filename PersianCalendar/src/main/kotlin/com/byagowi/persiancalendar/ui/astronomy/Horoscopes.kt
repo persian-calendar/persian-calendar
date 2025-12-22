@@ -198,13 +198,11 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                 }
             }
         }
-        val coordinates by coordinates.collectAsState()
         coordinates?.takeIf { abs(it.latitude) <= 66 /* not useful for higher latitudes */ }?.let {
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             Text(
                 text = buildString {
                     append(date.toGregorianCalendar().formatDateAndTime())
-                    val cityName by cityName.collectAsState()
                     cityName?.let { name -> append(spacedComma); append(name) }
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -415,8 +413,8 @@ private fun ColumnScope.YearHoroscopeDialogContent(
         IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
         else -> false
     }
-    val settingsCoordinates = coordinates.collectAsState().value
-    val settingsCityName = cityName.collectAsState().value
+    val settingsCoordinates = coordinates
+    val settingsCityName = cityName
     val (coordinates, cityName) = when {
         !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
             settingsCoordinates to settingsCityName

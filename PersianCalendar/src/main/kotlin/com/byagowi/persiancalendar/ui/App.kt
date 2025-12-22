@@ -474,14 +474,14 @@ private fun Modifier.navigationRailTopGradient(): Modifier {
 @Composable
 private fun NavigationRailSeasonsPager() {
     var actualSeason by remember {
-        mutableIntStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
+        mutableIntStateOf(Season.fromDate(Date(), coordinates).ordinal)
     }
     val pageSize = 200
     val pagerState = rememberPagerState(pageSize / 2 + actualSeason, pageCount = { pageSize })
     LaunchedEffect(Unit) {
         while (true) {
             delay(30.seconds)
-            val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
+            val seasonIndex = Season.fromDate(Date(), coordinates).ordinal
             if (actualSeason != seasonIndex) {
                 actualSeason = seasonIndex
                 pagerState.animateScrollToPage(pageSize / 2 + actualSeason)

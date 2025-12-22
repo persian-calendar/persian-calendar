@@ -93,13 +93,12 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val cityName = cityName.value
         val prayTimeName = getString(prayTime.stringRes)
         val title =
             if (cityName == null) prayTimeName
             else "$prayTimeName$spacedComma${getString(R.string.in_city_time, cityName)}"
 
-        val prayTimes = coordinates.value?.calculatePrayTimes()
+        val prayTimes = coordinates?.calculatePrayTimes()
         val isJafari = calculationMethod.isJafari
         val subtitle = prayTime.upcomingTimes(isJafari).joinToString(" - ") {
             "${getString(it.stringRes)}: ${prayTimes?.get(it)?.toFormattedString().orEmpty()}"

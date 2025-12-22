@@ -55,7 +55,7 @@ fun CoordinatesDialog(
     toggleSaveCoordinates: (Boolean) -> Unit = {},
     onDismissRequest: () -> Unit,
 ) {
-    val coordinates = inputCoordinates ?: coordinates.collectAsState().value
+    val coordinates = inputCoordinates ?: coordinates
     val fields = listOf(
         R.string.latitude to PREF_LATITUDE,
         R.string.longitude to PREF_LONGITUDE,

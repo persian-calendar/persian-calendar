@@ -279,11 +279,11 @@ private val englishWeekDaysInIranEnglish_ =
     mutableStateOf(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
 val englishWeekDaysInIranEnglish by englishWeekDaysInIranEnglish_
 
-private val coordinates_ = MutableStateFlow<Coordinates?>(null)
-val coordinates: StateFlow<Coordinates?> get() = coordinates_
+private var coordinates_ = mutableStateOf<Coordinates?>(null)
+val coordinates by coordinates_
 
-private val cityName_ = MutableStateFlow<String?>(null)
-val cityName: StateFlow<String?> get() = cityName_
+private var cityName_ = mutableStateOf<String?>(null)
+val cityName by cityName_
 
 private val widgetTransparency_ = MutableStateFlow(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency: StateFlow<Float> get() = widgetTransparency_
@@ -582,7 +582,7 @@ fun updateStoredPreference(context: Context) {
             ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }
             ?: calculationMethod.defaultMidnight
     highLatitudesMethod_.value = HighLatitudesMethod.valueOf(
-        if (coordinates.value?.isHighLatitude != true) DEFAULT_HIGH_LATITUDES_METHOD
+        if (coordinates?.isHighLatitude != true) DEFAULT_HIGH_LATITUDES_METHOD
         else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)
             ?: DEFAULT_HIGH_LATITUDES_METHOD
     )

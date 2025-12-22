@@ -240,7 +240,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     // region upcoming pray time text
     val clock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
-    val prayTimes = coordinates.value?.calculatePrayTimes()
+    val prayTimes = coordinates?.calculatePrayTimes()
     // endregion
 
     selectedWidgetTextColor = getWidgetTextColor(preferences)
@@ -313,7 +313,7 @@ fun getOwghat(
             append(": ")
             append(prayTimes[it].toFormattedString())
             if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets.value) {
-                cityName.value?.also { append(" ($it)") }
+                cityName?.also { append(" ($it)") }
             }
         }
     }.orEmpty()
@@ -1043,7 +1043,7 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
             mapDraw.draw(
                 canvas = this,
                 matrix = matrix,
-                coordinates = coordinates.value,
+                coordinates = coordinates,
                 displayLocation = true,
                 directPathDestination = null,
                 displayGrid = false

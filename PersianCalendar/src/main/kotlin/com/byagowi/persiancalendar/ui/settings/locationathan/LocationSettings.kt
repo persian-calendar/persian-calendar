@@ -23,7 +23,6 @@ fun ColumnScope.LocationSettings(navigateToMap: (() -> Unit)? = null) {
         summary = stringResource(R.string.location_help),
     ) { onDismissRequest -> LocationDialog(onDismissRequest) }
 
-    val cityName by cityName.collectAsState()
     SettingsClickable(stringResource(R.string.coordinates), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
     }

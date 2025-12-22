@@ -193,7 +193,6 @@ fun SharedTransitionScope.AstronomyScreen(
                         }
                     }
 
-                    val coordinates by coordinates.collectAsState()
                     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
                     if (showPlanetaryHoursDialog) coordinates?.also {
                         PlanetaryHoursDialog(it, viewModel.astronomyState.date.timeInMillis) {
@@ -569,7 +568,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
     val seasonsCache = remember { lruCache(1024, create = ::seasons) }
     val seasonsOrder = remember {
-        if (coordinates.value?.isSouthernHemisphere == true) {
+        if (coordinates?.isSouthernHemisphere == true) {
             listOf(Season.WINTER, Season.SPRING, Season.SUMMER, Season.AUTUMN)
         } else listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
     }

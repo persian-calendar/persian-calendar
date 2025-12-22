@@ -337,7 +337,6 @@ enum class SettingsTab(
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.athan,
                 subtitle = {
-                    val coordinates by coordinates.collectAsState()
                     if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
                 },
             ) { AthanSettings(destination) }

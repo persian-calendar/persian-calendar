@@ -73,7 +73,7 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         val clock = Clock(GregorianCalendar())
-        val prayTimes = coordinates.value?.calculatePrayTimes()
+        val prayTimes = coordinates?.calculatePrayTimes()
         val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
         val widgetTitle = dayTitleSummary(
             jdn,
@@ -104,7 +104,7 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
             Jdn.today(),
             date,
             clock,
-            coordinates.value?.calculatePrayTimes(),
+            coordinates?.calculatePrayTimes(),
             preferences,
             appWidgetId,
         )
@@ -135,7 +135,7 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 
 class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize) =
-        createSunViewRemoteViews(this, size, coordinates.value?.calculatePrayTimes())
+        createSunViewRemoteViews(this, size, coordinates?.calculatePrayTimes())
 
     @Composable
     override fun ColumnScope.Settings() {

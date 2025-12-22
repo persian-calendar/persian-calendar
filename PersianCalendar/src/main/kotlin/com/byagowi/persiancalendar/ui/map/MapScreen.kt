@@ -109,7 +109,7 @@ fun SharedTransitionScope.MapScreen(
     val resources = LocalResources.current
     val mapDraw = remember(resources) { MapDraw(resources) }
 
-    LaunchedEffect(Unit) { coordinates.collect(viewModel::changeCurrentCoordinates) }
+    LaunchedEffect(coordinates) { viewModel.changeCurrentCoordinates(coordinates) }
 
     LaunchedEffect(Unit) {
         while (true) {

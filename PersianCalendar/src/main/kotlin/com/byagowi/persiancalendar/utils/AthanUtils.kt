@@ -102,7 +102,7 @@ fun startAthanActivity(context: Context, prayTime: PrayTime?) {
 }
 
 fun getEnabledAlarms(context: Context): Set<PrayTime> {
-    if (coordinates.value == null) return emptySet()
+    if (coordinates == null) return emptySet()
     return (context.preferences.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
         .splitFilterNotEmpty(",")
         .mapNotNull { PrayTime.fromName(it) }
@@ -114,7 +114,7 @@ fun scheduleAlarms(context: Context) {
     val athanGap = (context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
         ?: .0).minutes.inWholeMilliseconds
 
-    val prayTimes = coordinates.value?.calculatePrayTimes() ?: return
+    val prayTimes = coordinates?.calculatePrayTimes() ?: return
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, prayTime ->
         scheduleAlarm(context, prayTime, GregorianCalendar().also {

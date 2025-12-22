@@ -38,7 +38,7 @@ import kotlinx.html.unsafe
 @CheckResult
 fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
     return createHTML().html {
-        val coordinates = coordinates.value ?: return@html
+        val coordinates = coordinates ?: return@html
         attributes["lang"] = language.language
         attributes["dir"] = if (resources.isRtl) "rtl" else "ltr"
         head {
@@ -58,7 +58,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
         body {
             h1 {
                 +listOfNotNull(
-                    cityName.value,
+                    cityName,
                     language.my.format(date.monthName, numeral.format(date.year))
                 ).joinToString(spacedComma)
             }

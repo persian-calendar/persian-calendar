@@ -94,7 +94,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
 
-    private val observer = coordinates.value?.toObserver()
+    private val observer = coordinates?.toObserver()
     private var astronomyState = observer?.let { AstronomyState(it, GregorianCalendar()) }
 
     private var sunProgress = (Clock(GregorianCalendar()).value / 24).toFloat()
@@ -107,7 +107,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         invalidate()
     }
 
-    val qiblaHeading = coordinates.value?.run {
+    val qiblaHeading = coordinates?.run {
         val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
         EarthPosition(latitude, longitude).toEarthHeading(qibla)
     }
@@ -194,7 +194,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             canvas.withRotation(-trueNorth, cx, cy) {
                 drawDial()
                 drawPath(northwardShapePath, northArrowPaint)
-                if (coordinates.value != null) {
+                if (coordinates != null) {
                     drawMoon()
                     drawSun()
                     drawQibla()

@@ -73,7 +73,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
                 shadow = Shadow(color = Color.Black, blurRadius = 2f, offset = Offset(1f, 1f))
             )
             Text(stringResource(prayTime.stringRes), fontSize = 36.sp, style = textStyle)
-            val cityName = cityName.collectAsState().value
+            val cityName = cityName
             if (cityName != null) {
                 var visible by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) { visible = true }

@@ -274,7 +274,7 @@ private class EventsViewFactory(
         if (enabledAlarms.isEmpty()) return "" to 0
         val time = GregorianCalendar()
         val now = Clock(time)
-        return coordinates.value?.calculatePrayTimes(time)?.let { times ->
+        return coordinates?.calculatePrayTimes(time)?.let { times ->
             val next = enabledAlarms.firstOrNull { times[it] > now } ?: enabledAlarms.first()
             prayTimesTitles[next].orEmpty() + spacedColon + times[next].toFormattedString() to next.tint.toArgb()
         } ?: ("" to 0)

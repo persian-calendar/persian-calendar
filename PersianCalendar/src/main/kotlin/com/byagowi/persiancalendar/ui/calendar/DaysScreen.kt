@@ -915,7 +915,7 @@ private fun DaysView(
                     val centerOffset = with(density) {
                         IntOffset((size / 2).dp.roundToPx(), (size / 2).dp.roundToPx())
                     }
-                    val coordinates = coordinates.collectAsState().value ?: return@let
+                    val coordinates = coordinates ?: return@let
                     val circleRadius = with(density) { (size / 4).dp.toPx() }
                     val pathEffect = with(density) {
                         val dashSize = 4.dp.toPx()

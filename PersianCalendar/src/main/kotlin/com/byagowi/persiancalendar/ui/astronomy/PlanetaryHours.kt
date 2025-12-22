@@ -148,7 +148,6 @@ fun PlanetaryHoursDialog(
     onDismissRequest: () -> Unit,
 ) {
     AppDialog(onDismissRequest = onDismissRequest) {
-        val cityName by cityName.collectAsState()
         Text(
             formatDate(
                 Jdn(GregorianCalendar().also { it.timeInMillis = now }

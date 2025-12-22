@@ -512,7 +512,6 @@ enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
 
 @Composable
 private fun enableTimesTab(): Boolean {
-    val coordinates by coordinates.collectAsState()
     val preferences = LocalContext.current.preferences
     return coordinates != null || // if coordinates is set, should be shown
             (language.isPersianOrDari && // The placeholder isn't translated to other languages
@@ -1065,8 +1064,6 @@ private fun SharedTransitionScope.Menu(
             onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
         ) { viewModel.refreshCalendar() }
     }
-
-    val coordinates by coordinates.collectAsState()
 
     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
     if (showPlanetaryHoursDialog) coordinates?.also {

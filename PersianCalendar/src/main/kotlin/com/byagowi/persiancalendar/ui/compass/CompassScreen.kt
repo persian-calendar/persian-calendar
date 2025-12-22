@@ -141,7 +141,7 @@ fun SharedTransitionScope.CompassScreen(
             isTimeShiftAnimate = false
         }
     }
-    val coordinates by coordinates.collectAsState()
+    val coordinates = coordinates
     val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
     val isSliderShown = sliderValue != 0f
     var baseTime by remember { mutableStateOf(Date()) }
@@ -197,7 +197,6 @@ fun SharedTransitionScope.CompassScreen(
                                 R.string.compass
                             )
                         )
-                        val cityName by cityName.collectAsState()
                         val subtitle = cityName ?: coordinates?.run {
                             formatCoordinateISO6709(
                                 latitude,

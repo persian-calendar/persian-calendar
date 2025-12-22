@@ -294,7 +294,7 @@ fun SharedTransitionScope.CalendarsOverview(
                     }
                 }.onFailure(logException).getOrNull().orEmpty()
             }
-            val coordinates by coordinates.collectAsState()
+            val coordinates = coordinates
             AutoSizedBodyText(
                 if (language.isNepali) {
                     phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +

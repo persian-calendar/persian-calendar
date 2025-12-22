@@ -44,7 +44,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             invalidate()
         }
 
-    val isSouthernHemisphere = coordinates.value?.isSouthernHemisphere == true
+    val isSouthernHemisphere = coordinates?.isSouthernHemisphere == true
 
     override fun onDraw(canvas: Canvas) {
         val cx = width / 2f
