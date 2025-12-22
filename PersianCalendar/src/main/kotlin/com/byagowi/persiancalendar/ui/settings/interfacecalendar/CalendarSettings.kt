@@ -250,7 +250,6 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
 
 @Composable
 fun WeekOfYearSetting() {
-    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
     SettingsSwitch(
         key = PREF_SHOW_WEEK_OF_YEAR_NUMBER,
         value = isShowWeekOfYearEnabled,

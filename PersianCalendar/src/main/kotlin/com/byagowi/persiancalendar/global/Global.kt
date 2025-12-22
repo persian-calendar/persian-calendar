@@ -307,11 +307,12 @@ val isCenterAlignWidgets by isCenterAlignWidgets_
 private val weekStart_ = mutableStateOf(Language.FA.defaultWeekStart)
 val weekStart by weekStart_
 
+// mutableStateSetOf do exist but atomic updates and prohibition of out of class write is more important
 private val weekEnds_ = mutableStateOf<Set<WeekDay>>(emptySet())
 val weekEnds by weekEnds_
 
-private val isShowWeekOfYearEnabled_ = MutableStateFlow(false)
-val isShowWeekOfYearEnabled: StateFlow<Boolean> get() = isShowWeekOfYearEnabled_
+private val isShowWeekOfYearEnabled_ = mutableStateOf(false)
+val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled_
 
 private val dreamNoise_ = mutableStateOf(DEFAULT_DREAM_NOISE)
 val dreamNoise by dreamNoise_

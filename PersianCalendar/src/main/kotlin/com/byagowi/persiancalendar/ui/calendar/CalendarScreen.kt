@@ -1157,7 +1157,6 @@ private fun SharedTransitionScope.Menu(
 
         HorizontalDivider()
 
-        val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
         AppDropdownMenuCheckableItem(
             text = stringResource(R.string.week_number),
             isChecked = isShowWeekOfYearEnabled,

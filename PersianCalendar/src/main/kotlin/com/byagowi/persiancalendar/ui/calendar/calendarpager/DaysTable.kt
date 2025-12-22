@@ -105,7 +105,7 @@ fun daysTable(
     deviceEvents: DeviceCalendarEventsStore, onlyWeek: Int?,
     isHighlighted: Boolean, selectedDay: Jdn,
 ) -> Unit {
-    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
     val density = LocalDensity.current
     val (width, suggestedHeight) = suggestedPagerSize
     val cellWidth = (width - (pagerArrowSizeAndPadding * 2).dp) / 7

@@ -146,6 +146,7 @@ import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import io.github.persiancalendar.calendar.AbstractDate
+import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.lang.ref.WeakReference
 import java.util.Date
@@ -715,7 +716,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
     run {
         val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
         val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn, weekStart)
-        val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
+        val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
         if (isShowWeekOfYearEnabled) monthWidgetWeeks.drop(1).forEachIndexed { i, id ->
             val weekNumber = numeral.format(weekOfYearStart + i)
             remoteViews.setTextViewText(id, weekNumber)
@@ -870,7 +871,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         else EventsStore.empty()
     val isRtl =
         language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
-    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
+    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
     val cellWidth = width / if (isShowWeekOfYearEnabled) 8f else 7f
     val cellHeight = height.toFloat() / 7f
     val cellRadius = min(cellWidth, cellHeight) / 2
@@ -1018,6 +1019,7 @@ private val monthWidgetCells = listOf(
 private var mapWidgetCache: WeakReference<Bitmap>? = null
 private var mapWidgetCacheTimestamp = 0L
 private var mapWidgetCurrentColor: Int? = null
+private var mapWidgetCacheCoordinates: Coordinates? = null
 
 fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
@@ -1060,9 +1062,13 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
         val height = size?.height?.toPx(context.resources) ?: 250f
         min(width / 2, height).roundToInt()
     }
-    if (mapWidgetCache != null && run {
-            mapWidgetCurrentColor != foregroundColor || now - mapWidgetCacheTimestamp > 1.minutes.inWholeMilliseconds
-        }) {
+    if (mapWidgetCache != null && when {
+            mapWidgetCurrentColor != foregroundColor -> true
+            now - mapWidgetCacheTimestamp > 1.minutes.inWholeMilliseconds -> true
+            mapWidgetCacheCoordinates != coordinates -> true
+            else -> false
+        }
+    ) {
         mapWidgetCache = null
         debugLog("Map widget cache is removed so a new one can be rendered")
     }
@@ -1086,6 +1092,7 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
         mapWidgetCache = WeakReference(it)
         mapWidgetCacheTimestamp = now
         mapWidgetCurrentColor = foregroundColor
+        mapWidgetCacheCoordinates = coordinates
         debugLog("A new map is rendered and cached")
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)

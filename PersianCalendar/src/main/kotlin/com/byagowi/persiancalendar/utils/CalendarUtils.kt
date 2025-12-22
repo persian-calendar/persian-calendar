@@ -69,7 +69,7 @@ fun getA11yDaySummary(
     withZodiac: Boolean,
     withOtherCalendars: Boolean,
     withTitle: Boolean,
-    withWeekOfYear: Boolean = isShowWeekOfYearEnabled.value,
+    withWeekOfYear: Boolean = isShowWeekOfYearEnabled,
 ): String = buildString {
     // It has some expensive calculations, lets not do that when not needed
     if (!isTalkBackEnabled.value) return@buildString

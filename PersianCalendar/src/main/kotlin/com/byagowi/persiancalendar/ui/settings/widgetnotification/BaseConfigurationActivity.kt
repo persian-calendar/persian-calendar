@@ -71,7 +71,9 @@ abstract class BaseConfigurationActivity(
                             .background(MaterialTheme.colorScheme.surfaceBright),
                     ) {
                         Column(
-                            Modifier.verticalScroll(scrollState),
+                            Modifier
+                                .verticalScroll(scrollState)
+                                .fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Spacer(Modifier.height(16.dp))

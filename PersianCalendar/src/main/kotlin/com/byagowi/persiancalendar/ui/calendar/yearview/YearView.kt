@@ -121,7 +121,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
             DayPainter(
                 context = context,
                 resources = resources,
-                width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled.value) 8 else 7,
+                width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
                 height = height / 7,/* rows count*/
                 isRtl = isRtl,
                 colors = monthColors,
@@ -260,7 +260,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                 baseDate = monthDate,
                                                 deviceEvents = yearDeviceEvents,
                                                 isRtl = isRtl,
-                                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
+                                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                                                 selectedDay = viewModel.selectedDay,
                                                 calendar = calendar,
                                             )
