@@ -14,7 +14,7 @@ import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.getSystemService
@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
-    private var configurationChangeCounter by mutableStateOf(0)
+    private var configurationChangeCounter by mutableIntStateOf(0)
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         ++configurationChangeCounter

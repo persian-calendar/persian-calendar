@@ -195,7 +195,7 @@ val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification_
 
 private val prefersWidgetsDynamicColors_ = mutableStateOf(false)
 
-@get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+@delegate:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColors_
 
 private val isWidgetClock_ = mutableStateOf(DEFAULT_WIDGET_CLOCK)
