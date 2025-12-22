@@ -171,7 +171,7 @@ half4 main(vec2 fragCoord) {
                 surfaceHolder.lockCanvas()
             }
             if (canvas != null) runCatching {
-                if (wallpaperAlternative.value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (wallpaperAlternative && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     shader?.setFloatUniform(
                         "iTime",
                         System.currentTimeMillis() % 100_000L / 1000f,

@@ -434,11 +434,11 @@ fun SharedTransitionScope.CalendarScreen(
                                         { isUp: Boolean ->
                                             when {
                                                 isUp && wasAtEnd -> {
-                                                    swipeUpActions[preferredSwipeUpAction.value]
+                                                    swipeUpActions[preferredSwipeUpAction]
                                                 }
 
                                                 !isUp && wasAtTop -> {
-                                                    swipeDownActions[preferredSwipeDownAction.value]
+                                                    swipeDownActions[preferredSwipeDownAction]
                                                 }
 
                                                 else -> null
@@ -1131,7 +1131,6 @@ private fun SharedTransitionScope.Menu(
             ) { closeMenu(); action() }
         }
 
-        val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
         swipeUpActions.forEach { (item, action) ->
             if (item != SwipeUpAction.None) ActionItem(
                 item,
@@ -1143,7 +1142,6 @@ private fun SharedTransitionScope.Menu(
             ) { (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name }
         }
 
-        val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
         swipeDownActions.forEach { (item, action) ->
             if (item != SwipeDownAction.None) ActionItem(
                 item,

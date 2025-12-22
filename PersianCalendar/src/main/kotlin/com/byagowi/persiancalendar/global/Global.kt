@@ -323,14 +323,14 @@ val wallpaperDark by wallpaperDark_
 private val wallpaperAutomatic_ = mutableStateOf(DEFAULT_WALLPAPER_AUTOMATIC)
 val wallpaperAutomatic by wallpaperAutomatic_
 
-private val wallpaperAlternative_ = MutableStateFlow(DEFAULT_WALLPAPER_ALTERNATIVE)
-val wallpaperAlternative: StateFlow<Boolean> get() = wallpaperAlternative_
+private val wallpaperAlternative_ = mutableStateOf(DEFAULT_WALLPAPER_ALTERNATIVE)
+val wallpaperAlternative by wallpaperAlternative_
 
-private val preferredSwipeUpAction_ = MutableStateFlow(SwipeUpAction.entries[0])
-val preferredSwipeUpAction: StateFlow<SwipeUpAction> get() = preferredSwipeUpAction_
+private val preferredSwipeUpAction_ = mutableStateOf(SwipeUpAction.entries[0])
+val preferredSwipeUpAction by preferredSwipeUpAction_
 
-private val preferredSwipeDownAction_ = MutableStateFlow(SwipeDownAction.entries[0])
-val preferredSwipeDownAction: StateFlow<SwipeDownAction> get() = preferredSwipeDownAction_
+private val preferredSwipeDownAction_ = mutableStateOf(SwipeDownAction.entries[0])
+val preferredSwipeDownAction by preferredSwipeDownAction_
 
 private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
 val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarEvents_
