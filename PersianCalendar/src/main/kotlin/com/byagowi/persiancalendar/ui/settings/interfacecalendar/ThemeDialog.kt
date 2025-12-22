@@ -82,8 +82,6 @@ import kotlin.random.Random
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val language by language.collectAsState()
-    val userSetTheme by userSetTheme.collectAsState()
     var showMore by rememberSaveable { mutableStateOf(false) }
     val systemLightTheme by systemLightTheme.collectAsState()
     val systemDarkTheme by systemDarkTheme.collectAsState()
@@ -240,7 +238,6 @@ private fun ColumnScope.FontPicker(
         }
     }
     this.AnimatedVisibility(visible = showMore || customFontToken != null) {
-        val language by language.collectAsState()
         Column(Modifier.padding(start = 24.dp)) {
             Row {
                 Button(onClick = {

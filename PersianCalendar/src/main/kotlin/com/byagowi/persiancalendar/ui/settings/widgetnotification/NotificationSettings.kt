@@ -9,8 +9,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -33,7 +31,6 @@ import com.byagowi.persiancalendar.utils.preferences
 @Composable
 fun ColumnScope.NotificationSettings() {
     val context = LocalContext.current
-    val language by language.collectAsState()
     run {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()

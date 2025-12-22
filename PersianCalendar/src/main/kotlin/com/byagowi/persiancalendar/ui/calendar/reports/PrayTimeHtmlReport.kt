@@ -39,7 +39,7 @@ import kotlinx.html.unsafe
 fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
     return createHTML().html {
         val coordinates = coordinates.value ?: return@html
-        attributes["lang"] = language.value.language
+        attributes["lang"] = language.language
         attributes["dir"] = if (resources.isRtl) "rtl" else "ltr"
         head {
             meta(charset = "utf8")
@@ -59,7 +59,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
             h1 {
                 +listOfNotNull(
                     cityName.value,
-                    language.value.my.format(date.monthName, numeral.format(date.year))
+                    language.my.format(date.monthName, numeral.format(date.year))
                 ).joinToString(spacedComma)
             }
             table {
@@ -85,7 +85,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                         }
                     }
                 }
-                if (calculationMethod != language.value.preferredCalculationMethod) tfoot {
+                if (calculationMethod != language.preferredCalculationMethod) tfoot {
                     tr {
                         td {
                             colSpan = "10"

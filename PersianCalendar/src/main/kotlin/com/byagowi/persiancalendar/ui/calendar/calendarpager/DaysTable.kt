@@ -117,7 +117,7 @@ fun daysTable(
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val fontFile = resolveFontFile()
     val isBoldFont by isBoldFont.collectAsState()
-    val language by language.collectAsState()
+    val language = language
     val monthColors = appMonthColors()
     val coroutineScope = rememberCoroutineScope()
 

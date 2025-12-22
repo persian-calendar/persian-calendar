@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -105,8 +104,6 @@ fun DatePickerDialog(
         },
     ) {
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
-        val language by language.collectAsState()
-
         CalendarsTypesPicker(
             modifier = Modifier.padding(top = 24.dp, bottom = 16.dp, start = 24.dp, end = 24.dp),
             items = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,

@@ -154,7 +154,7 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
 fun GregorianCalendar.formatDateAndTime(withWeekDay: Boolean = false): String {
     val jdn = Jdn(this.toCivilDate())
     val weekDayName = if (withWeekDay) jdn.weekDay.title + spacedComma else ""
-    return language.value.timeAndDateFormat.format(
+    return language.timeAndDateFormat.format(
         Clock(this).toFormattedString(),
         weekDayName + formatDate(jdn on mainCalendar, forceNonNumerical = true)
     )
@@ -376,7 +376,7 @@ fun calculateDaysDifference(
         },
     )
     if (result.isEmpty()) return daysString
-    return language.value.inParentheses.format(daysString, result.joinToString(spacedOr))
+    return language.inParentheses.format(daysString, result.joinToString(spacedOr))
 }
 
 fun formatDate(
@@ -390,7 +390,7 @@ fun formatDate(
             append(" ")
             append(calendarsTitlesAbbr.value[date.calendar].orEmpty())
         }
-    }.trim() else language.value.dmy.format(
+    }.trim() else language.dmy.format(
         numeral.format(date.dayOfMonth),
         date.monthName,
         numeral.format(date.year),
@@ -398,7 +398,7 @@ fun formatDate(
 }
 
 fun AbstractDate.toLinearDate(numeral: Numeral = com.byagowi.persiancalendar.global.numeral) =
-    language.value.allNumericsDateFormat(year, month, dayOfMonth, numeral)
+    language.allNumericsDateFormat(year, month, dayOfMonth, numeral)
 
 fun monthFormatForSecondaryCalendar(
     date: AbstractDate,
@@ -416,7 +416,7 @@ fun monthFormatForSecondaryCalendar(
     ) on secondaryCalendar
     val separator = if (spaced) " $EN_DASH " else EN_DASH
     return when {
-        from.month == to.month -> language.value.my.format(
+        from.month == to.month -> language.my.format(
             from.monthName, numeral.format(from.year)
         )
 
@@ -424,12 +424,12 @@ fun monthFormatForSecondaryCalendar(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
             to.year to 1..to.month
         ).joinToString(separator) { (year, months) ->
-            language.value.my.format(months.joinToString(separator) { month ->
+            language.my.format(months.joinToString(separator) { month ->
                 from.calendar.createDate(year, month, 1).monthName
             }, numeral.format(year))
         }
 
-        else -> language.value.my.format(
+        else -> language.my.format(
             (from.month..to.month).joinToString(separator) { month ->
                 from.calendar.createDate(from.year, month, 1).monthName
             }, numeral.format(from.year)
@@ -438,7 +438,7 @@ fun monthFormatForSecondaryCalendar(
 }
 
 fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
-    !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+    !language.canHaveLocalNumeral -> Numeral.ARABIC
     numeral.isArabic -> Numeral.ARABIC
     else -> secondaryCalendar?.preferredNumeral ?: Numeral.ARABIC
 }

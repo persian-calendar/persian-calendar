@@ -253,7 +253,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
         when (viewModel.screenMode) {
             ConverterScreenMode.CONVERTER -> {
                 val calendarsList =
-                    enabledCalendars.takeIf { it.size > 1 } ?: language.value.defaultCalendars
+                    enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
                 val otherCalendars = calendarsList - viewModel.calendar
                 context.shareText(
                     text = listOf(
@@ -445,7 +445,6 @@ private fun ColumnScope.ConverterAndDistance(
     pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val language by language.collectAsState()
     val calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
     if (viewModel.calendar !in calendarsList) viewModel.calendar = mainCalendar
     var isExpanded by rememberSaveable { mutableStateOf(true) }

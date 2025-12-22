@@ -87,7 +87,6 @@ fun ColumnScope.AthanSettings(destination: String?) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val isLocationSet = coordinates != null
-    val language by language.collectAsState()
     this.AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
             key = PREF_PRAY_TIME_METHOD,

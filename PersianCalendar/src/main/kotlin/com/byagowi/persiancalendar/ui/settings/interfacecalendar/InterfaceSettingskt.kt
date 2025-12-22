@@ -51,7 +51,6 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
         }
     }
-    val language by language.collectAsState()
     SettingsClickable(
         title = stringResource(R.string.language),
         summary = language.nativeName,

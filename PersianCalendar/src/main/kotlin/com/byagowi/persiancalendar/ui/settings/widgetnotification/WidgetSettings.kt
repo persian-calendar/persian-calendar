@@ -89,7 +89,6 @@ fun ColumnScope.WidgetSettings() {
             summary = stringResource(R.string.center_align_widgets_summary)
         )
     }
-    val language by language.collectAsState()
     val isInIranTimeVisible = remember(language) {
         (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
@@ -162,7 +161,6 @@ fun WidgetPreferenceDebounce(
 
 @Composable
 fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
-    val userSetTheme by userSetTheme.collectAsState()
     if (userSetTheme.isDynamicColors) Box(
         Modifier
             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }

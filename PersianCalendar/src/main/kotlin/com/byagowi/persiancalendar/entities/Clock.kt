@@ -43,7 +43,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
         val (hours, minutes) = toHoursAndMinutesPair()
         val clockString = linearFormat((hours % 12).takeIf { it != 0 } ?: 12, minutes)
         if (!printAmPm) return clockString
-        return language.value.clockAmPmOrder.format(
+        return language.clockAmPmOrder.format(
             clockString,
             if (hours >= 12) pmString else amString
         )

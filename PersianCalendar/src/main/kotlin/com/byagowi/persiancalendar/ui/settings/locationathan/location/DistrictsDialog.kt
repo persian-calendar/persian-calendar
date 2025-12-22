@@ -59,10 +59,11 @@ fun ProvincesDialog(onDismissRequest: () -> Unit, navigateUp: () -> Unit) {
 @Composable
 fun DistrictsDialog(onSuccess: () -> Unit, navigateUp: () -> Unit, province: String) {
     val districts = remember {
+        val language = language
         (districtsStore[province] ?: emptyList()).flatMap { county ->
             val countyDetails = county.split(";")
             countyDetails.drop(1).map { it.split(":") to countyDetails[0] }
-        }.sortedBy { (district, _) -> language.value.prepareForSort(district[0/*district name*/]) }
+        }.sortedBy { (district, _) -> language.prepareForSort(district[0/*district name*/]) }
     }
     val context = LocalContext.current
     AppDialogWithLazyColumn(title = { Text(province) }, onDismissRequest = navigateUp) {

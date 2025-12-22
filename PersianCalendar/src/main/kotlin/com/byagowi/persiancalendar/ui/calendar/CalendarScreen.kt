@@ -513,7 +513,6 @@ enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
 @Composable
 private fun enableTimesTab(): Boolean {
     val coordinates by coordinates.collectAsState()
-    val language by language.collectAsState()
     val preferences = LocalContext.current.preferences
     return coordinates != null || // if coordinates is set, should be shown
             (language.isPersianOrDari && // The placeholder isn't translated to other languages
@@ -869,7 +868,6 @@ private fun SharedTransitionScope.Toolbar(
             refreshToken.run {}
 
             val yearViewCalendar = viewModel.yearViewCalendar
-            val language by language.collectAsState()
             val title: String
             val subtitle: String
             run {
@@ -1277,7 +1275,7 @@ fun addEvent(
         AskForCalendarPermissionDialog { isGranted ->
             viewModel.refreshCalendar()
             if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
-                if (language.value.isPersianOrDari) coroutineScope.launch {
+                if (language.isPersianOrDari) coroutineScope.launch {
                     if (snackbarHostState.showSnackbar(
                             "جهت افزودن رویداد نیاز است از نصب و فعال بودن تقویم گوگل اطمینان حاصل کنید",
                             duration = SnackbarDuration.Long,

@@ -129,7 +129,7 @@ fun SharedTransitionScope.CalendarsOverview(
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
     val resources = LocalResources.current
-    val language by language.collectAsState()
+    val language = language
     val isToday = today == jdn
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     Column(
@@ -523,7 +523,6 @@ private fun HandleSacredMonth(
     content: @Composable () -> Unit
 ) {
     val displaySacredness = isExpanded && date is IslamicDate && date.isSacredMonths && run {
-        val language by language.collectAsState()
         val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         isAstronomicalExtraFeaturesEnabled && language.isUserAbleToReadPersian
     }

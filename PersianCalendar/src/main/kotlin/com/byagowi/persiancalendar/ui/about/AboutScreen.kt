@@ -198,7 +198,6 @@ private fun Header() {
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = LocalContentColor.current,
                 )
-                val language by language.collectAsState()
                 Text(
                     buildString {
                         val version =
@@ -282,7 +281,6 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         )
 
         // Help
-        val language by language.collectAsState()
         if (language.isUserAbleToReadPersian) {
             Row(modifier = Modifier.padding(top = 16.dp, start = 20.dp)) {
                 Icon(

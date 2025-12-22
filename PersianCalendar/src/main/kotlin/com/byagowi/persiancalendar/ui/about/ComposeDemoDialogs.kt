@@ -329,7 +329,6 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
 @Composable
 fun ConverterDialog(onDismissRequest: () -> Unit) {
     val now = Jdn.today()
-    val language by language.collectAsState()
     val lazyListState = rememberLazyListState(pagesCount / 2)
     val textStyle = LocalTextStyle.current
     val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars

@@ -40,7 +40,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -150,7 +149,6 @@ fun SharedTransitionScope.LevelScreen(
                             if (cmInchFlip) 180f else 0f, label = "rotation",
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         )
-                        val language by language.collectAsState()
                         AppIconButton(
                             icon = Icons.Default.SyncAlt,
                             title = language.centimeter + " / " + language.inch,

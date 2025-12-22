@@ -13,7 +13,7 @@ import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
     runCatching {
-        val locale = language.value.asSystemLocale()
+        val locale = language.asSystemLocale()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.getSystemService<LocaleManager>()?.applicationLocales = LocaleList(locale)
         } else {
@@ -28,20 +28,20 @@ fun applyAppLanguage(context: Context) {
 
 fun applyLanguageToConfiguration(
     config: Configuration,
-    locale: Locale = language.value.asSystemLocale()
+    locale: Locale = language.asSystemLocale()
 ): Configuration {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return config
     config.setLocale(locale)
-    config.setLayoutDirection(if (language.value.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
+    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
     return config
 }
 
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->
-        city to language.value.getCityName(city).let { language.value.prepareForSort(it) }
+        city to language.getCityName(city).let { language.prepareForSort(it) }
     }.sortedWith { (leftCity, leftSortName), (rightCity, rightSortName) ->
-        (language.value.countriesOrder.indexOf(leftCity.countryCode) compareTo
-                language.value.countriesOrder.indexOf(rightCity.countryCode)
+        (language.countriesOrder.indexOf(leftCity.countryCode) compareTo
+                language.countriesOrder.indexOf(rightCity.countryCode)
                 ).takeIf { it != 0 } ?: (leftSortName compareTo rightSortName)
     }.map { (city, _) -> city }
 

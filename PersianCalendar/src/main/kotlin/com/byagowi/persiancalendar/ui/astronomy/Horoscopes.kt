@@ -141,7 +141,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }
-            val language by language.collectAsState()
+            val language = language
 
             @Composable
             fun format(body: Body, longitude: Double, distance: Double): String {
@@ -325,7 +325,7 @@ fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
         val action = when {
             pendingConfirms.isNotEmpty() -> FooterAction.Confirm
             state.currentPage != yearPages / 2 -> FooterAction.Reset
-            language.collectAsState().value.isArabicScript -> FooterAction.Abjad
+            language.isArabicScript -> FooterAction.Abjad
             else -> FooterAction.None
         }
         Crossfade(
@@ -381,7 +381,6 @@ private fun ColumnScope.YearHoroscopeDialogContent(
             animationProgress.animateTo(if (animationProgress.value > .5f) 0f else 1f)
         }
     }
-    val language by language.collectAsState()
     val resources = LocalResources.current
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val horoscopeString = stringResource(R.string.horoscope)

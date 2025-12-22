@@ -96,7 +96,6 @@ fun SharedTransitionScope.TimesTab(
     val prayTimes = coordinates.calculatePrayTimes(viewModel.selectedDay.toGregorianCalendar())
     val now = viewModel.now
     val today = viewModel.today
-    val language by language.collectAsState()
 
     Column(
         Modifier
@@ -150,7 +149,6 @@ fun SharedTransitionScope.TimesTab(
 
 @Composable
 private fun showEnableAthanForPersianUsers(): Boolean {
-    val language by language.collectAsState()
     // As the message is only translated in Persian
     if (!language.isPersianOrDari) return false
     val context = LocalContext.current

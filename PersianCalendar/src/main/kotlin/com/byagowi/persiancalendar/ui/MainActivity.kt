@@ -60,11 +60,9 @@ class MainActivity : BaseActivity() {
                 }
 
                 val view = LocalView.current
-                LaunchedEffect(Unit) {
-                    language.collect {
-                        onConfigurationChanged(resources.configuration)
-                        view.dispatchConfigurationChanged(resources.configuration)
-                    }
+                LaunchedEffect(language) {
+                    onConfigurationChanged(resources.configuration)
+                    view.dispatchConfigurationChanged(resources.configuration)
                 }
 
                 val initialJdn = initialDayFromIntent(intent)

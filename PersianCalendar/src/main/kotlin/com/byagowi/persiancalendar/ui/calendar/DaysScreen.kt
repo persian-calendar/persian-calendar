@@ -191,7 +191,7 @@ fun SharedTransitionScope.DaysScreen(
     val density = LocalDensity.current
     val hasWeeksPager =
         LocalWindowInfo.current.containerSize.height > with(density) { 600.dp.toPx() }
-    val language by language.collectAsState()
+    val language = language
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
 
     val todayButtonAction = {

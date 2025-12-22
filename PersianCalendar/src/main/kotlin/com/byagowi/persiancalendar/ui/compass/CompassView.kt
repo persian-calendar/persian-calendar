@@ -216,7 +216,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
 
     private val directions = (0..<24).map {
         when {
-            it % 6 == 0 -> if (language.value.isArabicScript) resources.getString(
+            it % 6 == 0 -> if (language.isArabicScript) resources.getString(
                 when (it) {
                     0 -> R.string.north
                     6 -> R.string.east
@@ -247,7 +247,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                 drawLine(cx, cy - radius, cx, cy - radius * .975f, markerPaint)
                 // Draw the cardinal points
                 drawText(directions[it], cardinalX, cardinalY, textPaint)
-                if (language.value.isArabicScript && (it == 0 || it == 6 || it == 12 || it == 18)) {
+                if (language.isArabicScript && (it == 0 || it == 6 || it == 12 || it == 18)) {
                     val label = cardinalDirection(it)
                     drawText(label, cardinalX, cardinalSecondY, textSecondPaint)
                 }

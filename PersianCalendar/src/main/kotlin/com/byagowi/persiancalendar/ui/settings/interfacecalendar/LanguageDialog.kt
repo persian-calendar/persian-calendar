@@ -12,8 +12,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,7 +33,7 @@ import java.util.TimeZone
 
 @Composable
 fun LanguageDialog(onDismissRequest: () -> Unit) {
-    val currentLanguage by language.collectAsState()
+    val currentLanguage = language
     val context = LocalContext.current
     AppDialogWithLazyColumn(
         onDismissRequest = onDismissRequest,

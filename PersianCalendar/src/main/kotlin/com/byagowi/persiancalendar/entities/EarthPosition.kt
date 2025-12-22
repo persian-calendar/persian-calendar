@@ -14,7 +14,7 @@ import kotlin.math.sqrt
 
 data class EarthPosition(val latitude: Double, val longitude: Double) {
     class EarthHeading(metres: Float, val heading: Float) {
-        val km = language.value.formatKm((metres / 1000).roundToLong())
+        val km = language.formatKm((metres / 1000).roundToLong())
     }
 
     fun toEarthHeading(target: EarthPosition): EarthHeading {

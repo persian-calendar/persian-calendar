@@ -205,9 +205,9 @@ fun update(context: Context, updateDate: Boolean) {
 
     debugLog("UpdateUtils: update")
     applyAppLanguage(context)
-    if (pastLanguage != language.value) {
+    if (pastLanguage != language) {
         loadLanguageResources(context.resources)
-        pastLanguage = language.value
+        pastLanguage = language
     }
 
     val jdn = Jdn.today()
@@ -337,7 +337,7 @@ private const val dynamicIconActivityNamePrefix = "com.byagowi.persiancalendar.D
 private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     if (!isDynamicIconEverEnabled) return
     val isDynamicIconEnabled =
-        isDynamicIconEnabled && supportsDynamicIcon(date.calendar, language.value)
+        isDynamicIconEnabled && supportsDynamicIcon(date.calendar, language)
     val dayOfMonth = date.dayOfMonth
     val actions = buildList {
         add(
@@ -574,7 +574,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
     remoteViews.setTextViewText(
         R.id.month_name,
         if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
-        else language.value.my.format(
+        else language.my.format(
             monthStartDate.monthName, numeral.format(monthStartDate.year)
         )
     )
@@ -633,7 +633,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
         remoteViews.removeAllViews(id)
         val day = monthStartJdn + i - 7 - startingWeekDay
-        val events = sortEvents(eventsRepository.value.getEvents(day, deviceEvents), language.value)
+        val events = sortEvents(eventsRepository.value.getEvents(day, deviceEvents), language)
         val date = day on mainCalendar
         run {
             val viewId = when {
@@ -868,7 +868,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
         else EventsStore.empty()
     val isRtl =
-        language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+        language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
     val cellWidth = width / if (isShowWeekOfYearEnabled) 8f else 7f
     val cellHeight = height.toFloat() / 7f
@@ -923,7 +923,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
             }.also { remoteViews.setAlpha(id, it) }
         } else null,
     )
-    val footerSize = min(width, height) / 7f * 20 / 40 * (if (language.value.isTamil) .8f else 1f)
+    val footerSize = min(width, height) / 7f * 20 / 40 * (if (language.isTamil) .8f else 1f)
     if (size != null && prefersWidgetsDynamicColors) {
         remoteViews.setTextViewText(R.id.month_year, contentDescription)
         remoteViews.setTextViewTextSize(R.id.month_year, TypedValue.COMPLEX_UNIT_PX, footerSize)
@@ -1248,7 +1248,7 @@ private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
         )
         setTextViewTextOrHideIfEmpty(
             id,
-            if (language.value.isTamil) clock.timeSlot.tamilName else "",
+            if (language.isTamil) clock.timeSlot.tamilName else "",
         )
     }
 }
@@ -1275,7 +1275,7 @@ fun create4x2RemoteViews(
         R.id.textPlaceholder0_4x2, scale * if (isWidgetClock) 48 else 40
     )
     if (isWidgetClock) remoteViews.setTextViewTextSizeSp(
-        R.id.time_header_4x2, (if (language.value.isTamil) 22f else 48f) * scale
+        R.id.time_header_4x2, (if (language.isTamil) 22f else 48f) * scale
     )
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder1_4x2, 13 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder2_4x2, 13 * scale)
@@ -1347,7 +1347,7 @@ fun create4x2RemoteViews(
             R.id.textPlaceholder2_4x2, context.getString(
                 R.string.n_till,
                 (if (difference.value < .0) difference + Clock(24.0) else difference).asRemainingTime(
-                    context.resources, short = language.value.isTamil,
+                    context.resources, short = language.isTamil,
                 ),
                 context.getString(nextOwghatId)
             )
@@ -1466,7 +1466,7 @@ fun createWeekViewRemoteViews(
     }
 
     remoteViews.setTextViewText(
-        R.id.textDate, language.value.my.format(date.monthName, numeral.format(date.year))
+        R.id.textDate, language.my.format(date.monthName, numeral.format(date.year))
     )
 
     remoteViews.setOnClickPendingIntent(
@@ -1557,7 +1557,7 @@ private fun updateNotification(
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
         whatToShowOnWidgets = whatToShowOnWidgets.value,
         spacedComma = spacedComma,
-        language = language.value,
+        language = language,
         customFontName = customFontName.value,
         isBoldFont = isBoldFont.value,
         numeral = numeral,
@@ -1801,7 +1801,7 @@ private fun RemoteViews.setRoundBackground(
 fun RemoteViews.setDirection(@IdRes viewId: Int, resources: Resources) {
     val direction = when {
         // Apply RTL for Arabic script locales anyway just in case something went wrong
-        language.value.isArabicScript -> View.LAYOUT_DIRECTION_RTL
+        language.isArabicScript -> View.LAYOUT_DIRECTION_RTL
         else -> resources.configuration.layoutDirection
     }
     setInt(viewId, "setLayoutDirection", direction)

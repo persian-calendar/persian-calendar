@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +49,6 @@ import java.io.File
 @Composable
 fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val language by language.collectAsState()
 
     fun commonDialogCallback(uri: Uri?, action: (Uri) -> (Pair<String, Uri>?)) {
         onDismissRequest()

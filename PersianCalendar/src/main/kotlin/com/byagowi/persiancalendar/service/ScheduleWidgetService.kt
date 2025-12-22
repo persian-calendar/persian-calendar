@@ -84,7 +84,7 @@ private class EventsViewFactory(
         var secondaryMonthChange = false
         val eventsRepository = eventsRepository.value
         days.map {
-            it to sortEvents(eventsRepository.getEvents(it, deviceEvents), language.value)
+            it to sortEvents(eventsRepository.getEvents(it, deviceEvents), language)
         }.flatMapIndexed { i, (day, events) ->
             val items = buildList {
                 val shiftWorkTitle = getShiftWorkTitle(day)
@@ -139,13 +139,13 @@ private class EventsViewFactory(
         (entry as? Header)?.let { header ->
             val headerContent = run {
                 val headerFirstPart = if (widthCells < 3) {
-                    header.day.weekDay.shortTitle + spacedComma + language.value.dm.format(
+                    header.day.weekDay.shortTitle + spacedComma + language.dm.format(
                         numeral.format(header.date.dayOfMonth),
                         header.date.monthName
                     )
                 } else header.date.monthName
                 header.secondaryDate?.let {
-                    language.value.inParentheses.format(
+                    language.inParentheses.format(
                         headerFirstPart,
                         if (widthCells < 3) it.calendar.preferredNumeral.format(it.dayOfMonth)
                         else it.monthName

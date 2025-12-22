@@ -48,7 +48,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             val w = when {
                 i % 4 == 0 -> {
                     val label = numeral.format(i / 4) + " " +
-                            if (i == 0) language.value.inch else ""
+                            if (i == 0) language.inch else ""
                     canvas.drawText(
                         label, if (cmInchFlip) width - textSideOffset else textSideOffset,
                         if (i == 0) topTextOffset else y + textOffset, paint
@@ -73,7 +73,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             val w = when {
                 i % 10 == 0 -> {
                     val label = numeral.format(i / 10) + " " +
-                            if (i == 0) language.value.centimeter else ""
+                            if (i == 0) language.centimeter else ""
                     canvas.drawText(
                         label, if (cmInchFlip) textSideOffset else width - textSideOffset,
                         if (i == 0) topTextOffset else y + textOffset, paint

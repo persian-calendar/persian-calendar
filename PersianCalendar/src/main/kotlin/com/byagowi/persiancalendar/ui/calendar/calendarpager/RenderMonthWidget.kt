@@ -40,8 +40,7 @@ fun renderMonthWidget(
     val cellWidth = dayPainter.width
     val cellHeight = dayPainter.height
 
-    val footer =
-        language.value.my.format(baseDate.monthName, numeral.format(baseDate.year))
+    val footer = language.my.format(baseDate.monthName, numeral.format(baseDate.year))
 
     val weekStart = weekStart.value
     val weekEnds = weekEnds.value

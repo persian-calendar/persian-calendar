@@ -70,8 +70,8 @@ class SunView(context: Context) : View(context) {
     private var sun: Ecliptic? = null
     private var moon: Spherical? = null
     private val fontSize = when {
-        language.value.isArabicScript -> 14f
-        language.value.isTamil -> 11f
+        language.isArabicScript -> 14f
+        language.isTamil -> 11f
         else -> 11.5f
     } * resources.dp
 
@@ -206,7 +206,7 @@ class SunView(context: Context) : View(context) {
             it.style = Paint.Style.FILL
             it.color = colors.textColorSecondary
         }
-        if (language.value.isTamil) {
+        if (language.isTamil) {
             val (a, b) = dayLengthString.split(spacedColon).takeIf { it.size == 2 }
                 ?: listOf("", "")
             val (c, d) = remainingString.split(spacedColon).takeIf { it.size == 2 }

@@ -213,7 +213,7 @@ private class Paints(
 ) {
     private val dp = resources.dp
     val circlePadding = .5f * dp
-    val isArabicScript = language.value.isArabicScript
+    val isArabicScript = language.isArabicScript
     val eventYOffset = diameter * 12 / 40
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40

@@ -207,7 +207,6 @@ fun SharedTransitionScope.EventsTab(
             }
         }
 
-        val language by language.collectAsState()
         val context = LocalContext.current
         if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
             Spacer(Modifier.height(16.dp))
@@ -284,7 +283,7 @@ fun DayEvents(
     navigateToHolidaysSettings: ((String?) -> Unit)? = null,
     refreshCalendar: () -> Unit,
 ) {
-    val language by language.collectAsState()
+    val language = language
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
     events.forEach { event ->
@@ -697,7 +696,7 @@ fun readEvents(
 ): List<CalendarEvent<*>> {
     val resources = LocalResources.current
     val eventsRepository by eventsRepository.collectAsState()
-    val language by language.collectAsState()
+    val language = language
     val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
 
     val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()

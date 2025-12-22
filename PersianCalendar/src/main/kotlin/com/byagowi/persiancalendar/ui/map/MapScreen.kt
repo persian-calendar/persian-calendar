@@ -50,7 +50,6 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -134,7 +133,6 @@ fun SharedTransitionScope.MapScreen(
         notifyChange = viewModel::changeCurrentCoordinates,
     )
 
-    val language by language.collectAsState()
     var showMapTypesDialog by rememberSaveable { mutableStateOf(false) }
     if (showMapTypesDialog) AppDialog(onDismissRequest = { showMapTypesDialog = false }) {
         MapType.entries.drop(1) // Hide "None" option

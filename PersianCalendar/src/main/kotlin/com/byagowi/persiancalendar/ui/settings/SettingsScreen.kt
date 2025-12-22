@@ -425,7 +425,6 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             onClick = openAddWidgetDialog,
         )
     }
-    val language by language.collectAsState()
     if (supportsDynamicIcon(mainCalendar, language)) AppDropdownMenuCheckableItem(
         text = stringResource(R.string.dynamic_icon),
         isChecked = isDynamicIconEnabled

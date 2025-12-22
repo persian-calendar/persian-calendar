@@ -147,7 +147,6 @@ fun PlanetaryHoursDialog(
     isToday: Boolean = true,
     onDismissRequest: () -> Unit,
 ) {
-    val language by language.collectAsState()
     AppDialog(onDismissRequest = onDismissRequest) {
         val cityName by cityName.collectAsState()
         Text(

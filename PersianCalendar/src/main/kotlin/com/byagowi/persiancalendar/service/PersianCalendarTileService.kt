@@ -43,7 +43,7 @@ class PersianCalendarTileService : TileService() {
         tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
         val title = jdn.weekDay.title
         tile.label = title
-        tile.contentDescription = title + spacedComma + language.value.dmy.format(
+        tile.contentDescription = title + spacedComma + language.dmy.format(
             today.dayOfMonth,
             today.monthName,
             today.year,

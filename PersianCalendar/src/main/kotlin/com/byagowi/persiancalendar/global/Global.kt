@@ -231,12 +231,12 @@ val asrMethod by asrMethod_
 private val islamicCalendarOffset_ = mutableIntStateOf(DEFAULT_ISLAMIC_OFFSET)
 val islamicCalendarOffset by islamicCalendarOffset_
 
-private val language_ = MutableStateFlow(Language.FA)
-val language: StateFlow<Language> get() = language_
+private val language_ = mutableStateOf(Language.FA)
+val language by language_
 
 // Don't use this just to detect dark mode as it's invalid in system default
-private val userSetTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
-val userSetTheme: StateFlow<Theme> get() = userSetTheme_
+private val userSetTheme_ = mutableStateOf(Theme.SYSTEM_DEFAULT)
+val userSetTheme by userSetTheme_
 
 private val systemDarkTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
 val systemDarkTheme: StateFlow<Theme> get() = systemDarkTheme_
@@ -294,7 +294,7 @@ val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
 val mainCalendarNumeral
     get() = when {
         secondaryCalendar == null -> numeral
-        numeral.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+        numeral.isArabic || !language.canHaveLocalNumeral -> Numeral.ARABIC
         else -> mainCalendar.preferredNumeral
     }
 val secondaryCalendar
@@ -410,7 +410,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     debugLog("Utils: configureCalendarsAndLoadEvents is called")
     val preferences = context.preferences
     IslamicDate.islamicOffset = getIslamicCalendarOffset(preferences)
-    eventsRepository_.value = EventsRepository(preferences, language.value)
+    eventsRepository_.value = EventsRepository(preferences, language)
 }
 
 private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
@@ -431,7 +431,7 @@ fun yearMonthNameOfDate(date: AbstractDate): List<String> {
 
 fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
-    val language = language.value
+    val language = language
     persianMonths = language.getPersianMonths(
         resources,
         alternativeMonthsInAzeri = alternativePersianMonthsInAzeri.value,
@@ -527,11 +527,10 @@ fun updateStoredPreference(context: Context) {
         PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH, DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
     )
 
-    prefersWidgetsDynamicColors_.value =
-        userSetTheme.value.isDynamicColors && preferences.getBoolean(
-            PREF_WIDGETS_PREFER_SYSTEM_COLORS,
-            true,
-        )
+    prefersWidgetsDynamicColors_.value = userSetTheme.isDynamicColors && preferences.getBoolean(
+        PREF_WIDGETS_PREFER_SYSTEM_COLORS,
+        true,
+    )
 
     localNumeralPreference_.value =
         preferences.getBoolean(PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL)

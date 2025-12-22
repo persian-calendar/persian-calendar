@@ -101,7 +101,6 @@ fun AppTheme(content: @Composable () -> Unit) {
     ) {
         val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
 
-        val language by language.collectAsState()
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
         val context = LocalContext.current
@@ -227,7 +226,7 @@ fun resolveTypography(): Typography {
 // The app's theme after custom dark/light theme is applied
 @Composable
 private fun effectiveTheme(): Theme {
-    val explicitlySetTheme = userSetTheme.collectAsState().value
+    val explicitlySetTheme = userSetTheme
     if (explicitlySetTheme != Theme.SYSTEM_DEFAULT) return explicitlySetTheme
     return if (isSystemInDarkTheme()) {
         if (isPowerSaveMode(LocalContext.current)) Theme.BLACK

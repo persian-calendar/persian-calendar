@@ -522,7 +522,6 @@ private fun NavigationRailSeasonsPager() {
 
 @Composable
 private fun BoxScope.NavigationRailDarkModeToggle() {
-    val userSetTheme by userSetTheme.collectAsState()
     // If current theme is default theme, isDark is null so no toggle is shown also
     val isDark = userSetTheme.isDark ?: return
     val context = LocalContext.current

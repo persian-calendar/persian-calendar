@@ -46,7 +46,7 @@ import kotlinx.html.unsafe
 
 @CheckResult
 fun monthHtmlReport(context: Context, date: AbstractDate, wholeYear: Boolean) = createHTML().html {
-    attributes["lang"] = language.value.language
+    attributes["lang"] = language.language
     attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"
     head {
         meta(charset = "utf8")
@@ -93,7 +93,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         ).filter { it.second }.joinToString(" ") { it.first }
     }
     h1 {
-        +language.value.my.format(date.monthName, numeral.format(date.year))
+        +language.my.format(date.monthName, numeral.format(date.year))
         val title = monthFormatForSecondaryCalendar(date, secondaryCalendar ?: return@h1)
         small { +" ($title)" }
     }

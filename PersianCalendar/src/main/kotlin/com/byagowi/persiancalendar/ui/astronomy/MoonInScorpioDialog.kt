@@ -26,7 +26,6 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -84,7 +83,6 @@ private enum class HeaderAction { DialogIcon, Reset, Confirm }
 fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     val today = Jdn(now.toCivilDate())
     val currentYear = (today on mainCalendar).year
-    val language by language.collectAsState()
     val types = listOf(
         run {
             if (language.isPersianOrDari) "صورت فلکی" else stringResource(R.string.astronomy)

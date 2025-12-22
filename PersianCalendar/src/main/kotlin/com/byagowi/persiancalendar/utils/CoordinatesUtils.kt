@@ -32,7 +32,7 @@ suspend fun geocode(
     latitude: Double,
     longitude: Double,
 ): Address? = withContext(Dispatchers.IO) {
-    val geocoder = Geocoder(context, language.value.asSystemLocale())
+    val geocoder = Geocoder(context, language.asSystemLocale())
     withTimeoutOrNull(3.seconds) {
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

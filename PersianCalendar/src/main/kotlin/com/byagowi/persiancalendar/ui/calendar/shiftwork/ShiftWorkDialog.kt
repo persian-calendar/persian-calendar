@@ -30,7 +30,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -141,7 +140,6 @@ fun ColumnScope.ShiftWorkDialogContent(
     var selectedLengthDropdownIndex by remember { mutableIntStateOf(-1) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val language by language.collectAsState()
     Box(
         Modifier
             .weight(weight = 1f, fill = false)

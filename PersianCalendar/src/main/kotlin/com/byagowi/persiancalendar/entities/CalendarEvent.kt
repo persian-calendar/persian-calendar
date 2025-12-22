@@ -42,7 +42,7 @@ sealed class CalendarEvent<T : AbstractDate>(
     val oneLinerTitleWithTime
         get() = when (this) {
             is DeviceCalendarEvent -> if (time == null) title else {
-                language.value.inParentheses.format(title, time)
+                language.inParentheses.format(title, time)
             }
 
             else -> title

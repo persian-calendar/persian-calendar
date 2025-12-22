@@ -96,7 +96,7 @@ fun SharedTransitionScope.ScheduleScreen(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    val language by language.collectAsState()
+    val language = language
 
     val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

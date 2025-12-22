@@ -103,7 +103,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
     val context = LocalContext.current
-    val language by language.collectAsState()
     run {
         var shownOnce by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
@@ -311,7 +310,6 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
             }
         }
     }
-    val language by language.collectAsState()
     val holidayLabel = if (language.isArabicScript) holidayString
     else holidayString.replaceFirstChar { it.uppercaseChar() }
     AppDialog(

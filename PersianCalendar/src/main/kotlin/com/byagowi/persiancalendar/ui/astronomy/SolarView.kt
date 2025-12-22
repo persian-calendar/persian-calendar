@@ -92,7 +92,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             if (mode == AstronomyMode.MOON) {
                 val radius = min(width, height) / 2f
                 canvas.drawText(
-                    language.value.formatAuAsKm(state.moon.dist),
+                    language.formatAuAsKm(state.moon.dist),
                     radius, radius * 1.7f, moonTextPaint
                 )
             }

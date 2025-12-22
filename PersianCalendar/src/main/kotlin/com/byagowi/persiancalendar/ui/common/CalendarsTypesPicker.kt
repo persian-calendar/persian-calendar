@@ -63,7 +63,6 @@ fun CalendarsTypesPicker(
     betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
 ) {
-    val language by language.collectAsState()
     SegmentedButtonItemsPicker(
         value = value,
         items = items,

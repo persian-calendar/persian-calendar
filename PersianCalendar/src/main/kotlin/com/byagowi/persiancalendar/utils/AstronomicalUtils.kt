@@ -107,11 +107,11 @@ fun generateYearName(
 ): String {
     val persianDate = jdn.toPersianDate()
     val yearNames = listOfNotNull(
-        language.value.inParentheses.format(
+        language.inParentheses.format(
             ChineseZodiac.fromPersianCalendar(persianDate).format(
                 resources = resources,
                 withEmoji = withEmoji,
-                isPersian = language.value.isPersianOrDari,
+                isPersian = language.isPersianOrDari,
                 withOldEraName = withOldEraName,
             ),
             resources.getString(R.string.shamsi_calendar_short)
@@ -119,7 +119,7 @@ fun generateYearName(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val date = ChineseCalendar((time ?: jdn.toGregorianCalendar()).time)
             val year = date[ChineseCalendar.YEAR]
-            language.value.inParentheses.format(
+            language.inParentheses.format(
                 ChineseZodiac.fromChineseCalendar(date).format(
                     resources = resources,
                     isPersian = false,
@@ -128,7 +128,7 @@ fun generateYearName(
                 resources.getString(R.string.chinese) + spacedComma + numeral.format(year)
             )
         } else null
-    ).let { if (language.value.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
+    ).let { if (language.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
     return "${resources.getString(R.string.year_name)}$spacedColon${yearNames}"
 }
 

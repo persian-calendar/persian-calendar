@@ -511,7 +511,6 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
         else Zodiac.fromIau(viewModel.astronomyState.moon.lon)
 
     val resources = LocalResources.current
-    val language by language.collectAsState()
     val headerCache = remember(resources, language) {
         lruCache(1024, create = { jdn: Jdn ->
             viewModel.astronomyState.generateHeader(resources, language, jdn)

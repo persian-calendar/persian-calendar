@@ -18,8 +18,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.toMutableStateList
@@ -56,7 +54,6 @@ import org.jetbrains.annotations.VisibleForTesting
 @Composable
 fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val language by language.collectAsState()
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) { EventsRepository.getEnabledTypes(context.preferences, language).toMutableStateList() }
