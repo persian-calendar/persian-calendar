@@ -12,6 +12,7 @@ import android.graphics.Rect
 import android.hardware.GeomagneticField
 import androidx.annotation.RawRes
 import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.graphics.vector.toPath
 import androidx.core.graphics.createBitmap
@@ -385,16 +386,22 @@ class MapDraw(
         it.pathEffect = DashPathEffect(floatArrayOf(dashSize, dashSize / 2), 0f)
     }
 
+    companion object {
+        val defaultBackground = androidx.compose.ui.graphics.Color(0xFF809DB5).toArgb()
+        private val defaultForeground = androidx.compose.ui.graphics.Color(0xFFFBF8E5).toArgb()
+        private val defaultMisc = androidx.compose.ui.graphics.Color(0x80393CC4).toArgb()
+    }
+
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = mapBackgroundColor ?: 0xFF809DB5.toInt()
+        color = mapBackgroundColor ?: defaultBackground
     }
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
+        color = mapForegroundColor ?: defaultForeground
     }
     private val miscPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 5 * dp
-        color = mapForegroundColor ?: 0x80393CC4.toInt()
+        color = mapForegroundColor ?: defaultMisc
     }
     private val matrixProperties = FloatArray(9)
     private val argbEvaluator = ArgbEvaluator()

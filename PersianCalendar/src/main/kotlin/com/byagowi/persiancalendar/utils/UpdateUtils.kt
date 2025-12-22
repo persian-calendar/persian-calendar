@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -146,6 +147,7 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
+import java.lang.ref.WeakReference
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.ceil
@@ -336,8 +338,7 @@ private const val dynamicIconActivityNamePrefix = "com.byagowi.persiancalendar.D
 
 private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     if (!isDynamicIconEverEnabled) return
-    val isDynamicIconEnabled =
-        isDynamicIconEnabled && supportsDynamicIcon(date.calendar, language)
+    val isDynamicIconEnabled = isDynamicIconEnabled && supportsDynamicIcon(date.calendar, language)
     val dayOfMonth = date.dayOfMonth
     val actions = buildList {
         add(
@@ -386,14 +387,14 @@ fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): DpSize?
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     context: Context,
     now: Long,
-    widgetUpdateAction: (size: DpSize?, widgetId: Int) -> RemoteViews
+    widgetUpdateAction: (size: DpSize?, widgetId: Int) -> RemoteViews,
 ) {
     runCatching {
         getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
             latestAnyWidgetUpdate = now
             updateAppWidget(
                 widgetId,
-                widgetUpdateAction(getWidgetSize(context.resources, widgetId), widgetId)
+                widgetUpdateAction(getWidgetSize(context.resources, widgetId), widgetId),
             )
         }
     }.onFailure(logException).onFailure {
@@ -1014,32 +1015,63 @@ private val monthWidgetCells = listOf(
     R.id.month_grid_cell6x7,
 )
 
+private var mapWidgetCache: WeakReference<Bitmap>? = null
+private var mapWidgetCacheTimestamp = 0L
+private var mapWidgetCurrentColor: Int? = null
+
 fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteViews {
-    val width = size?.width?.toPx(context.resources) ?: 250f
-    val height = size?.height?.toPx(context.resources) ?: 250f
-    val size = min(width / 2, height).roundToInt()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val isNightMode = isSystemInDarkTheme(context.resources.configuration)
-    val backgroundColor = if (prefersWidgetsDynamicColors) ColorUtils.setAlphaComponent(
-        context.getColor(
-            if (isNightMode) android.R.color.system_accent2_800
-            else android.R.color.system_accent2_50
-        ),
-        (255 * (1 - widgetTransparency)).roundToInt().coerceIn(0, 255),
+    val fixedSize = size?.let {
+        val shortestSide = min(it.width / 2, it.height)
+        DpSize(shortestSide * 2, shortestSide)
+    }
+    remoteViews.setRoundBackground(
+        context.resources,
+        R.id.map_background,
+        fixedSize,
+        color = if (prefersWidgetsDynamicColors) ColorUtils.setAlphaComponent(
+            context.getColor(
+                if (isNightMode) android.R.color.system_accent2_800
+                else android.R.color.system_accent2_50
+            ),
+            (255 * (1 - widgetTransparency)).roundToInt().coerceIn(0, 255),
+        ) else MapDraw.defaultBackground
     )
-    else null
+    fixedSize?.let {
+        remoteViews.setViewLayoutWidth(
+            R.id.map_background,
+            it.width.value,
+            TypedValue.COMPLEX_UNIT_DIP,
+        )
+        remoteViews.setViewLayoutHeight(
+            R.id.map_background,
+            it.height.value,
+            TypedValue.COMPLEX_UNIT_DIP,
+        )
+    }
     val foregroundColor = if (prefersWidgetsDynamicColors) context.getColor(
         if (isNightMode) android.R.color.system_accent1_50
         else android.R.color.system_accent1_600
-    )
-    else null
-    val mapDraw = MapDraw(context.resources, 4, backgroundColor, foregroundColor)
-    mapDraw.markersScale = .75f
-    mapDraw.updateMap(now, MapType.DAY_NIGHT)
-    val matrix = Matrix()
-    matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
-    val bitmap = createBitmap(size * 2, size).applyCanvas {
-        withClip(createRoundPath(size * 2, size, roundPixelSize)) {
+    ) else null
+    val mapSize = run {
+        val width = size?.width?.toPx(context.resources) ?: 250f
+        val height = size?.height?.toPx(context.resources) ?: 250f
+        min(width / 2, height).roundToInt()
+    }
+    if (mapWidgetCache != null && run {
+            mapWidgetCurrentColor != foregroundColor || now - mapWidgetCacheTimestamp > 1.minutes.inWholeMilliseconds
+        }) {
+        mapWidgetCache = null
+        debugLog("Map widget cache is removed so a new one can be rendered")
+    }
+    val bitmap = mapWidgetCache?.get() ?: createBitmap(mapSize * 2, mapSize).applyCanvas {
+        val mapDraw = MapDraw(context.resources, 4, Color.TRANSPARENT, foregroundColor)
+        mapDraw.markersScale = .75f
+        mapDraw.updateMap(now, MapType.DAY_NIGHT)
+        val matrix = Matrix()
+        matrix.setScale(mapSize * 2f / mapDraw.mapWidth, mapSize.toFloat() / mapDraw.mapHeight)
+        withClip(createRoundPath(mapSize * 2, mapSize, roundPixelSize)) {
             mapDraw.draw(
                 canvas = this,
                 matrix = matrix,
@@ -1049,6 +1081,11 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
                 displayGrid = false
             )
         }
+    }.also {
+        mapWidgetCache = WeakReference(it)
+        mapWidgetCacheTimestamp = now
+        mapWidgetCurrentColor = foregroundColor
+        debugLog("A new map is rendered and cached")
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, context.getString(R.string.map))
