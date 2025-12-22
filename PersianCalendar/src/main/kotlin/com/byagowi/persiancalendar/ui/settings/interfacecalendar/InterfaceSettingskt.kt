@@ -93,7 +93,6 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
         )
     }
     this.AnimatedVisibility(language.canHaveLocalNumeral) {
-        val localNumeralPreference by localNumeralPreference.collectAsState()
         SettingsSwitch(
             key = PREF_LOCAL_NUMERAL,
             value = localNumeralPreference,

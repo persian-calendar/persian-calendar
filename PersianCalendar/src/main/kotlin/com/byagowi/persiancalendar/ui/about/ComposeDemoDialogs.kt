@@ -330,7 +330,6 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
 fun ConverterDialog(onDismissRequest: () -> Unit) {
     val now = Jdn.today()
     val language by language.collectAsState()
-    val numeral by numeral.collectAsState()
     val lazyListState = rememberLazyListState(pagesCount / 2)
     val textStyle = LocalTextStyle.current
     val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
@@ -498,7 +497,6 @@ fun FontWeightsDialog(onDismissRequest: () -> Unit) {
             onValueChange = { weight = it },
             modifier = Modifier.padding(horizontal = 16.dp),
         )
-        val numeral by numeral.collectAsState()
         Text(
             text = numeral.format(weight.roundToInt()),
             style = MaterialTheme.typography.titleLarge,

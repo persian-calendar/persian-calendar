@@ -130,7 +130,6 @@ fun SharedTransitionScope.CalendarsOverview(
 ) {
     val resources = LocalResources.current
     val language by language.collectAsState()
-    val numeral by numeral.collectAsState()
     val isToday = today == jdn
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     Column(
@@ -166,7 +165,6 @@ fun SharedTransitionScope.CalendarsOverview(
                         .size(20.dp)
                 )
             }
-            val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
             AnimatedContent(
                 if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
                     jdn.weekDay.title,
@@ -453,7 +451,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
     val calendar = Date(timestamp).toGregorianCalendar()
     return resources.getString(
         R.string.spring_equinox,
-        numeral.value.format(equinoxYear),
+        numeral.format(equinoxYear),
         calendar.formatDateAndTime(withWeekDay = true)
     ) to timestamp
 }

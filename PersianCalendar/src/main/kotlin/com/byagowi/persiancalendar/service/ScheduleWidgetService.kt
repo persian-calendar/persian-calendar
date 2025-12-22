@@ -140,7 +140,7 @@ private class EventsViewFactory(
             val headerContent = run {
                 val headerFirstPart = if (widthCells < 3) {
                     header.day.weekDay.shortTitle + spacedComma + language.value.dm.format(
-                        numeral.value.format(header.date.dayOfMonth),
+                        numeral.format(header.date.dayOfMonth),
                         header.date.monthName
                     )
                 } else header.date.monthName
@@ -259,7 +259,7 @@ private class EventsViewFactory(
                         if (item.secondaryDate == null) R.id.today_second_line
                         else R.id.today_with_secondary_second_line
                     } else R.id.day_second_line,
-                    numeral.value.format(item.date.dayOfMonth)
+                    numeral.format(item.date.dayOfMonth)
                 )
             } else row.setViewVisibility(R.id.day_wrapper, View.INVISIBLE)
         } else row.setViewVisibility(R.id.day_wrapper, View.GONE)

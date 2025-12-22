@@ -175,7 +175,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     }
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
     val language by language.collectAsState()
-    val numeral by numeral.collectAsState()
 
     LazyColumn(
         state = lazyListState,

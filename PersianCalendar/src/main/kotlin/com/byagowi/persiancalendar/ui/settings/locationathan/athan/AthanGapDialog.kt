@@ -7,7 +7,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,7 +30,6 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
     var minutes by rememberSaveable {
         mutableStateOf(context.preferences.getString(PREF_ATHAN_GAP, null) ?: "0")
     }
-    val numeral by numeral.collectAsState()
     AppDialog(
         title = { Text(stringResource(R.string.athan_gap_summary)) },
         onDismissRequest = onDismissRequest,

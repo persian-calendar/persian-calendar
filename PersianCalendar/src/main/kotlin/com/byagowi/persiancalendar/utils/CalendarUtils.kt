@@ -120,7 +120,7 @@ fun getA11yDaySummary(
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn, weekStart.value)
         appendLine().appendLine().append(
             resources.getString(
-                R.string.nth_week_of_year, numeral.value.format(weekOfYearStart)
+                R.string.nth_week_of_year, numeral.format(weekOfYearStart)
             )
         )
     }
@@ -145,7 +145,7 @@ fun GregorianCalendar.toCivilDate(): CivilDate {
 
 fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
     val calendar = GregorianCalendar()
-    if (!forceLocalTime && isForcedIranTimeEnabled.value) calendar.timeZone =
+    if (!forceLocalTime && isForcedIranTimeEnabled) calendar.timeZone =
         TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar.time = this
     return calendar
@@ -348,20 +348,20 @@ fun calculateDaysDifference(
         if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendar
     )
     val days = abs(baseJdn - jdn)
-    val daysString = resources.getQuantityString(R.plurals.days, days, numeral.value.format(days))
+    val daysString = resources.getQuantityString(R.plurals.days, days, numeral.format(days))
     val weeks = if (isInWidget || days < 7) 0 else (days / 7.0).roundToInt()
     val result = listOfNotNull(
         if (months == 0 && years == 0) null
         else listOf(
             R.plurals.years to years, R.plurals.months to months, R.plurals.days to daysOfMonth
         ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
-            resources.getQuantityString(pluralId, n, numeral.value.format(n))
+            resources.getQuantityString(pluralId, n, numeral.format(n))
         },
         if (weeks == 0) null
         else (if (days % 7 == 0) "" else "~") + resources.getQuantityString(
             R.plurals.weeks,
             weeks,
-            numeral.value.format(weeks),
+            numeral.format(weeks),
         ),
         run {
             if (years != 0 || isInWidget) return@run null
@@ -371,7 +371,7 @@ fun calculateDaysDifference(
             )
             if (workDays == days || workDays == 0) return@run null
             resources.getQuantityString(
-                R.plurals.work_days, workDays, numeral.value.format(workDays)
+                R.plurals.work_days, workDays, numeral.format(workDays)
             )
         },
     )
@@ -391,13 +391,13 @@ fun formatDate(
             append(calendarsTitlesAbbr.value[date.calendar].orEmpty())
         }
     }.trim() else language.value.dmy.format(
-        numeral.value.format(date.dayOfMonth),
+        numeral.format(date.dayOfMonth),
         date.monthName,
-        numeral.value.format(date.year),
+        numeral.format(date.year),
     )
 }
 
-fun AbstractDate.toLinearDate(numeral: Numeral = com.byagowi.persiancalendar.global.numeral.value) =
+fun AbstractDate.toLinearDate(numeral: Numeral = com.byagowi.persiancalendar.global.numeral) =
     language.value.allNumericsDateFormat(year, month, dayOfMonth, numeral)
 
 fun monthFormatForSecondaryCalendar(
@@ -417,7 +417,7 @@ fun monthFormatForSecondaryCalendar(
     val separator = if (spaced) " $EN_DASH " else EN_DASH
     return when {
         from.month == to.month -> language.value.my.format(
-            from.monthName, numeral.value.format(from.year)
+            from.monthName, numeral.format(from.year)
         )
 
         from.year != to.year -> listOf(
@@ -426,20 +426,20 @@ fun monthFormatForSecondaryCalendar(
         ).joinToString(separator) { (year, months) ->
             language.value.my.format(months.joinToString(separator) { month ->
                 from.calendar.createDate(year, month, 1).monthName
-            }, numeral.value.format(year))
+            }, numeral.format(year))
         }
 
         else -> language.value.my.format(
             (from.month..to.month).joinToString(separator) { month ->
                 from.calendar.createDate(from.year, month, 1).monthName
-            }, numeral.value.format(from.year)
+            }, numeral.format(from.year)
         )
     }
 }
 
 fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
     !language.value.canHaveLocalNumeral -> Numeral.ARABIC
-    numeral.value.isArabic -> Numeral.ARABIC
+    numeral.isArabic -> Numeral.ARABIC
     else -> secondaryCalendar?.preferredNumeral ?: Numeral.ARABIC
 }
 
@@ -451,7 +451,7 @@ fun otherCalendarFormat(
         calendar.createDate(yearViewYear + 1, 1, 1)
     ) - 1) on otherCalendar).year
     return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) {
-        numeral.value.format(it)
+        numeral.format(it)
     }
 }
 

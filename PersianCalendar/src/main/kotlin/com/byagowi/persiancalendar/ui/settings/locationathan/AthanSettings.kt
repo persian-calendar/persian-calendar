@@ -87,9 +87,6 @@ fun ColumnScope.AthanSettings(destination: String?) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val isLocationSet = coordinates != null
-    val calculationMethod by calculationMethod.collectAsState()
-    val notificationAthan by notificationAthan.collectAsState()
-    val ascendingAthan by ascendingAthan.collectAsState()
     val language by language.collectAsState()
     this.AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
@@ -102,7 +99,6 @@ fun ColumnScope.AthanSettings(destination: String?) {
         )
     }
     this.AnimatedVisibility(coordinates?.isHighLatitude == true) {
-        val highLatitudesMethod by highLatitudesMethod.collectAsState()
         SettingsSingleSelect(
             key = PREF_HIGH_LATITUDES_METHOD,
             entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
@@ -113,7 +109,6 @@ fun ColumnScope.AthanSettings(destination: String?) {
         )
     }
     this.AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
-        val asrMethod by asrMethod.collectAsState()
         SettingsSwitch(
             key = PREF_ASR_HANAFI_JURISTIC,
             value = asrMethod == AsrMethod.Hanafi,
@@ -176,7 +171,6 @@ fun ColumnScope.AthanSettings(destination: String?) {
         }
     }
     this.AnimatedVisibility(isLocationSet) {
-        val athanSoundName by athanSoundName.collectAsState()
         SettingsClickable(
             stringResource(R.string.custom_athan),
             athanSoundName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.default_athan),
@@ -232,7 +226,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
     this.AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
             key = PREF_ATHAN_VIBRATION,
-            value = athanVibration.collectAsState().value,
+            value = athanVibration,
             title = stringResource(R.string.vibration),
             summary = language.tryTranslateAthanVibrationSummary(),
             onBeforeToggle = {
@@ -292,8 +286,8 @@ fun ColumnScope.AthanSettings(destination: String?) {
 }
 
 private fun midnightDefaultTitle(resources: Resources): String {
-    return resources.getString(calculationMethod.value.titleStringId) + spacedComma + midnightMethodToString(
-        resources, calculationMethod.value.defaultMidnight
+    return resources.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
+        resources, calculationMethod.defaultMidnight
     )
 }
 

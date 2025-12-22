@@ -83,7 +83,7 @@ fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
 private fun startAthanBody(context: Context, prayTime: PrayTime) {
     runCatching {
         debugLog("Alarms: startAthanBody for $prayTime")
-        if (notificationAthan.value || ActivityCompat.checkSelfPermission(
+        if (notificationAthan || ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) context.startService(

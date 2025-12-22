@@ -125,7 +125,7 @@ fun generateYearName(
                     isPersian = false,
                     withEmoji = withEmoji,
                 ),
-                resources.getString(R.string.chinese) + spacedComma + numeral.value.format(year)
+                resources.getString(R.string.chinese) + spacedComma + numeral.format(year)
             )
         } else null
     ).let { if (language.value.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")

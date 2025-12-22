@@ -51,8 +51,6 @@ class AthanNotification : Service() {
         intent ?: return START_STICKY
         applyAppLanguage(this)
 
-        val athanVibration = athanVibration.value
-        val notificationAthan = notificationAthan.value
         val notificationId = currentChannelId(this)
         val notificationChannelId = "$notificationId"
 
@@ -102,7 +100,7 @@ class AthanNotification : Service() {
             else "$prayTimeName$spacedComma${getString(R.string.in_city_time, cityName)}"
 
         val prayTimes = coordinates.value?.calculatePrayTimes()
-        val isJafari = calculationMethod.value.isJafari
+        val isJafari = calculationMethod.isJafari
         val subtitle = prayTime.upcomingTimes(isJafari).joinToString(" - ") {
             "${getString(it.stringRes)}: ${prayTimes?.get(it)?.toFormattedString().orEmpty()}"
         }

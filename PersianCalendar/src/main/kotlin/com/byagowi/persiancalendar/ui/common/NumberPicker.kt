@@ -32,7 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,7 +75,7 @@ import kotlin.math.roundToInt
 @Composable
 fun NumberPicker(
     modifier: Modifier = Modifier,
-    label: (Int) -> String = numeral.collectAsState().value::format,
+    label: (Int) -> String = numeral::format,
     range: IntRange,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
@@ -258,7 +257,6 @@ fun NumberEdit(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-    val numeral by numeral.collectAsState()
     var value by remember(numeral) {
         val valueText = numeral.format(initialValue)
         mutableStateOf(TextFieldValue(valueText, selection = TextRange(0, valueText.length)))

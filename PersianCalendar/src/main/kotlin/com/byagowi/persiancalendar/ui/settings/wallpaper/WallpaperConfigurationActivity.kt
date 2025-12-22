@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_WALLPAPER_ALTERNATIVE
@@ -21,14 +20,12 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseConfigurat
 class WallpaperConfigurationActivity : BaseConfigurationActivity() {
     @Composable
     override fun ColumnScope.Settings() {
-        val wallpaperAutomatic by wallpaperAutomatic.collectAsState()
         SettingsSwitch(
             key = PREF_WALLPAPER_AUTOMATIC,
             value = wallpaperAutomatic,
             title = stringResource(R.string.theme_default)
         )
         this.AnimatedVisibility(!wallpaperAutomatic) {
-            val wallpaperDark by wallpaperDark.collectAsState()
             SettingsSwitch(
                 key = PREF_WALLPAPER_DARK,
                 value = wallpaperDark,

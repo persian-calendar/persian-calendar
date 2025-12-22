@@ -285,7 +285,6 @@ fun DayEvents(
     refreshCalendar: () -> Unit,
 ) {
     val language by language.collectAsState()
-    val numeral by numeral.collectAsState()
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
     events.forEach { event ->
@@ -656,7 +655,6 @@ private fun EquinoxCountDownContent(
             .51f to contentColor,
         )
         val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-        val numeral by numeral.collectAsState()
         countDownTimeParts.map { (pluralId, interval) ->
             val x = (remainedTime / interval).toInt()
             remainedTime -= interval * x

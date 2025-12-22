@@ -153,7 +153,6 @@ fun daysTable(
     val todayIndicatorStroke = with(density) {
         Stroke(width = (if (isHighTextContrastEnabled || isBoldFont) 4 else 2).dp.toPx())
     }
-    val numeral by numeral.collectAsState()
     var focusedDay by remember { mutableStateOf<Jdn?>(null) }
     val focusColor = LocalContentColor.current.copy(.1f)
     val weekStart by weekStart.collectAsState()

@@ -37,7 +37,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -454,7 +453,6 @@ fun SettingsSlider(
             )
             Spacer(Modifier.width(16.dp))
             val roundedValue = (value * visibleScale).roundToInt()
-            val numeral by numeral.collectAsState()
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     numeral.format(100),

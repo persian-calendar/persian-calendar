@@ -154,7 +154,7 @@ class AthanActivity : ComponentActivity() {
 
         handler.postDelayed(stopTask, 10.seconds.inWholeMilliseconds)
 
-        if (ascendingAthan.value) handler.post(ascendVolume)
+        if (ascendingAthan) handler.post(ascendVolume)
 
         preventPhoneCallIntervention.startListener(this)
     }
@@ -172,7 +172,7 @@ class AthanActivity : ComponentActivity() {
         runCatching { ringtone?.stop() }.onFailure(logException)
 
         handler.removeCallbacks(stopTask)
-        if (ascendingAthan.value) handler.removeCallbacks(ascendVolume)
+        if (ascendingAthan) handler.removeCallbacks(ascendVolume)
 
         finish()
     }

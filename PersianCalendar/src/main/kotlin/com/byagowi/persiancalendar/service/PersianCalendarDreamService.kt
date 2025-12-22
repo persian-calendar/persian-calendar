@@ -80,7 +80,7 @@ class PersianCalendarDreamService : DreamService() {
             view.invalidate()
         }
 
-        runCatching { if (dreamNoise.value) audioTrack.play() }.onFailure(logException)
+        runCatching { if (dreamNoise) audioTrack.play() }.onFailure(logException)
 
         // ComposeView can't be used in DreamService in my tries
         // Even if worked someday, please test older devices also

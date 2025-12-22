@@ -147,7 +147,6 @@ fun ColumnScope.ShiftWorkDialogContent(
             .weight(weight = 1f, fill = false)
             .fillMaxWidth(),
     ) {
-        val numeral by numeral.collectAsState()
         LazyColumn(state = lazyListState) {
             item {
                 @Suppress("SimplifiableCallChain") val summary =

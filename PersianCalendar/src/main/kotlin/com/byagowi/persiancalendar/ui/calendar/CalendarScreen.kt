@@ -744,7 +744,6 @@ private fun SharedTransitionScope.CalendarsTab(
 
 @Composable
 private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
-    val isNotifyDate by isNotifyDate.collectAsState()
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
@@ -874,7 +873,6 @@ private fun SharedTransitionScope.Toolbar(
             val title: String
             val subtitle: String
             run {
-                val numeral by numeral.collectAsState()
                 val secondaryCalendar =
                     yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
                 if (viewModel.isYearView && yearViewCalendar != null) {

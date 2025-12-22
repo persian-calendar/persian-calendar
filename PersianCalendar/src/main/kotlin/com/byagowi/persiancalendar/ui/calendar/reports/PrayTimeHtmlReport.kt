@@ -59,11 +59,11 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
             h1 {
                 +listOfNotNull(
                     cityName.value,
-                    language.value.my.format(date.monthName, numeral.value.format(date.year))
+                    language.value.my.format(date.monthName, numeral.format(date.year))
                 ).joinToString(spacedComma)
             }
             table {
-                val prayTimeList = PrayTime.allTimes(calculationMethod.value.isJafari)
+                val prayTimeList = PrayTime.allTimes(calculationMethod.isJafari)
                 thead {
                     tr {
                         th { +resources.getString(R.string.day) }
@@ -78,18 +78,18 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                                     mainCalendar.createDate(date.year, date.month, day)
                                 ).toGregorianCalendar()
                             )
-                            th { +numeral.value.format(day + 1) }
+                            th { +numeral.format(day + 1) }
                             prayTimeList.forEach {
                                 td { +prayTimes[it].toBasicFormatString() }
                             }
                         }
                     }
                 }
-                if (calculationMethod.value != language.value.preferredCalculationMethod) tfoot {
+                if (calculationMethod != language.value.preferredCalculationMethod) tfoot {
                     tr {
                         td {
                             colSpan = "10"
-                            +resources.getString(calculationMethod.value.titleStringId)
+                            +resources.getString(calculationMethod.titleStringId)
                         }
                     }
                 }

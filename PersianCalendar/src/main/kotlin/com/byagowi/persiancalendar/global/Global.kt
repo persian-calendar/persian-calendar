@@ -5,10 +5,14 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Build
 import android.view.accessibility.AccessibilityManager
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
@@ -164,65 +168,68 @@ var weekDaysTitles = weekDaysEmptyList
 var weekDaysTitlesInitials = weekDaysEmptyList
     private set
 
-private val numeral_ = MutableStateFlow(Numeral.PERSIAN)
-val numeral: StateFlow<Numeral> get() = numeral_
+private val numeral_ = mutableStateOf(Numeral.PERSIAN)
+val numeral by numeral_
 
-private val localNumeralPreference_ = MutableStateFlow(DEFAULT_LOCAL_NUMERAL)
-val localNumeralPreference: StateFlow<Boolean> get() = localNumeralPreference_
+private val localNumeralPreference_ = mutableStateOf(DEFAULT_LOCAL_NUMERAL)
+val localNumeralPreference by localNumeralPreference_
 
-private val clockIn24_ = MutableStateFlow(DEFAULT_WIDGET_IN_24)
-val clockIn24: StateFlow<Boolean> get() = clockIn24_
+private val clockIn24_ = mutableStateOf(DEFAULT_WIDGET_IN_24)
+val clockIn24 by clockIn24_
 
 var isDynamicIconEverEnabled = false
     private set
 
-private val isDynamicIconEnabled_ = MutableStateFlow(DEFAULT_DYNAMIC_ICON_ENABLED)
-val isDynamicIconEnabled: StateFlow<Boolean> get() = isDynamicIconEnabled_
+private val isDynamicIconEnabled_ = mutableStateOf(DEFAULT_DYNAMIC_ICON_ENABLED)
+val isDynamicIconEnabled by isDynamicIconEnabled_
 
-private val isForcedIranTimeEnabled_ = MutableStateFlow(DEFAULT_IRAN_TIME)
-val isForcedIranTimeEnabled: StateFlow<Boolean> get() = isForcedIranTimeEnabled_
+private val isForcedIranTimeEnabled_ = mutableStateOf(DEFAULT_IRAN_TIME)
+val isForcedIranTimeEnabled by isForcedIranTimeEnabled_
 
-private val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
-val isNotifyDateOnLockScreen: StateFlow<Boolean> get() = isNotifyDateOnLockScreen_
+private val isNotifyDateOnLockScreen_ = mutableStateOf(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
+val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen_
 
-private val isLargeDayNumberOnNotification_ = MutableStateFlow(DEFAULT_LARGE_ICON_ON_NOTIFICATION)
-val isLargeDayNumberOnNotification: StateFlow<Boolean> get() = isLargeDayNumberOnNotification_
+private val isLargeDayNumberOnNotification_ = mutableStateOf(DEFAULT_LARGE_ICON_ON_NOTIFICATION)
+val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification_
 
-private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
-val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> get() = prefersWidgetsDynamicColors_
 
-private val isWidgetClock_ = MutableStateFlow(DEFAULT_WIDGET_CLOCK)
-val isWidgetClock: StateFlow<Boolean> get() = isWidgetClock_
+private val prefersWidgetsDynamicColors_ = mutableStateOf(false)
 
-private val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
-val isNotifyDate: StateFlow<Boolean> get() = isNotifyDate_
+@get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+val prefersWidgetsDynamicColors by prefersWidgetsDynamicColors_
 
-private val notificationAthan_ = MutableStateFlow(isNotifyDate.value)
-val notificationAthan: StateFlow<Boolean> get() = notificationAthan_
-private val athanVibration_ = MutableStateFlow(DEFAULT_ATHAN_VIBRATION)
-val athanVibration: StateFlow<Boolean> get() = athanVibration_
-private val ascendingAthan_ = MutableStateFlow(DEFAULT_ASCENDING_ATHAN_VOLUME)
-val ascendingAthan: StateFlow<Boolean> get() = ascendingAthan_
+private val isWidgetClock_ = mutableStateOf(DEFAULT_WIDGET_CLOCK)
+val isWidgetClock by isWidgetClock_
+
+private val isNotifyDate_ = mutableStateOf(DEFAULT_NOTIFY_DATE)
+val isNotifyDate by isNotifyDate_
+
+private val notificationAthan_ = mutableStateOf(isNotifyDate)
+val notificationAthan by notificationAthan_
+private val athanVibration_ = mutableStateOf(DEFAULT_ATHAN_VIBRATION)
+val athanVibration by athanVibration_
+private val ascendingAthan_ = mutableStateOf(DEFAULT_ASCENDING_ATHAN_VOLUME)
+val ascendingAthan by ascendingAthan_
 
 private val calculationMethod_ =
-    MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
-val calculationMethod: StateFlow<CalculationMethod> get() = calculationMethod_
+    mutableStateOf(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
+val calculationMethod by calculationMethod_
 
-private val athanSoundName_ = MutableStateFlow<String?>(null)
-val athanSoundName: StateFlow<String?> get() = athanSoundName_
+private val athanSoundName_ = mutableStateOf<String?>(null)
+val athanSoundName by athanSoundName_
 
-private val midnightMethod_ = MutableStateFlow(calculationMethod.value.defaultMidnight)
-val midnightMethod: StateFlow<MidnightMethod> get() = midnightMethod_
+private val midnightMethod_ = mutableStateOf(calculationMethod.defaultMidnight)
+val midnightMethod by midnightMethod_
 
-private val highLatitudesMethod_ = MutableStateFlow(HighLatitudesMethod.NightMiddle)
-val highLatitudesMethod: StateFlow<HighLatitudesMethod> get() = highLatitudesMethod_
+private val highLatitudesMethod_ = mutableStateOf(HighLatitudesMethod.NightMiddle)
+val highLatitudesMethod by highLatitudesMethod_
 
-private val asrMethod_ = MutableStateFlow(AsrMethod.Standard)
-val asrMethod: StateFlow<AsrMethod> get() = asrMethod_
+private val asrMethod_ = mutableStateOf(AsrMethod.Standard)
+val asrMethod by asrMethod_
 
 // Just to use in the settings
-private val islamicCalendarOffset_ = MutableStateFlow(DEFAULT_ISLAMIC_OFFSET)
-val islamicCalendarOffset: StateFlow<Int> get() = islamicCalendarOffset_
+private val islamicCalendarOffset_ = mutableIntStateOf(DEFAULT_ISLAMIC_OFFSET)
+val islamicCalendarOffset by islamicCalendarOffset_
 
 private val language_ = MutableStateFlow(Language.FA)
 val language: StateFlow<Language> get() = language_
@@ -286,8 +293,8 @@ var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLA
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
 val mainCalendarNumeral
     get() = when {
-        secondaryCalendar == null -> numeral.value
-        numeral.value.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+        secondaryCalendar == null -> numeral
+        numeral.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
         else -> mainCalendar.preferredNumeral
     }
 val secondaryCalendar
@@ -305,14 +312,14 @@ val weekEnds: StateFlow<Set<WeekDay>> get() = weekEnds_
 private val isShowWeekOfYearEnabled_ = MutableStateFlow(false)
 val isShowWeekOfYearEnabled: StateFlow<Boolean> get() = isShowWeekOfYearEnabled_
 
-private val dreamNoise_ = MutableStateFlow(DEFAULT_DREAM_NOISE)
-val dreamNoise: StateFlow<Boolean> get() = dreamNoise_
+private val dreamNoise_ = mutableStateOf(DEFAULT_DREAM_NOISE)
+val dreamNoise by dreamNoise_
 
-private val wallpaperDark_ = MutableStateFlow(DEFAULT_WALLPAPER_DARK)
-val wallpaperDark: StateFlow<Boolean> get() = wallpaperDark_
+private val wallpaperDark_ = mutableStateOf(DEFAULT_WALLPAPER_DARK)
+val wallpaperDark by wallpaperDark_
 
-private val wallpaperAutomatic_ = MutableStateFlow(DEFAULT_WALLPAPER_AUTOMATIC)
-val wallpaperAutomatic: StateFlow<Boolean> get() = wallpaperAutomatic_
+private val wallpaperAutomatic_ = mutableStateOf(DEFAULT_WALLPAPER_AUTOMATIC)
+val wallpaperAutomatic by wallpaperAutomatic_
 
 private val wallpaperAlternative_ = MutableStateFlow(DEFAULT_WALLPAPER_ALTERNATIVE)
 val wallpaperAlternative: StateFlow<Boolean> get() = wallpaperAlternative_
@@ -530,7 +537,7 @@ fun updateStoredPreference(context: Context) {
         preferences.getBoolean(PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL)
     numeral_.value = when {
         !language.canHaveLocalNumeral -> Numeral.ARABIC
-        !localNumeralPreference.value -> Numeral.ARABIC
+        !localNumeralPreference -> Numeral.ARABIC
         else -> language.preferredNumeral
     }
 
@@ -553,7 +560,7 @@ fun updateStoredPreference(context: Context) {
     notificationAthan_.value =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || preferences.getBoolean(
             PREF_NOTIFICATION_ATHAN,
-            isNotifyDate.value,
+            isNotifyDate,
         )
     athanVibration_.value = preferences.getBoolean(PREF_ATHAN_VIBRATION, DEFAULT_ATHAN_VIBRATION)
     ascendingAthan_.value =
@@ -566,15 +573,15 @@ fun updateStoredPreference(context: Context) {
     calculationMethod_.value = CalculationMethod.valueOf(
         preferences.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
     )
-    asrMethod_.value = if (calculationMethod.value.isJafari || !preferences.getBoolean(
+    asrMethod_.value = if (calculationMethod.isJafari || !preferences.getBoolean(
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
-    islamicCalendarOffset_.value = getIslamicCalendarOffset(preferences)
+    islamicCalendarOffset_.intValue = getIslamicCalendarOffset(preferences)
     midnightMethod_.value =
         preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
-            ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
-            ?: calculationMethod.value.defaultMidnight
+            ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }
+            ?: calculationMethod.defaultMidnight
     highLatitudesMethod_.value = HighLatitudesMethod.valueOf(
         if (coordinates.value?.isHighLatitude != true) DEFAULT_HIGH_LATITUDES_METHOD
         else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)

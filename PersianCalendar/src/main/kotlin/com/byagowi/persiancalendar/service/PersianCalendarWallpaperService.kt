@@ -13,6 +13,10 @@ import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
 import android.view.SurfaceHolder
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
@@ -28,8 +32,6 @@ import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.logException
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -37,10 +39,10 @@ import kotlin.time.Duration.Companion.seconds
 class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
-    private val configurationChangeCounterFlow = MutableStateFlow(0)
+    private var configurationChangeCounter by mutableStateOf(0)
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        ++configurationChangeCounterFlow.value
+        ++configurationChangeCounter
     }
 
     override fun onCreate() {
@@ -49,7 +51,9 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                merge(wallpaperDark, wallpaperAutomatic, configurationChangeCounterFlow).collect {
+                snapshotFlow {
+                    Triple(wallpaperDark, wallpaperAutomatic, configurationChangeCounter)
+                }.collect { (wallpaperDark, wallpaperAutomatic, _) ->
                     val isNightMode = isSystemInDarkTheme(resources.configuration)
                     val accentColor =
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) resources.getColor(
@@ -58,7 +62,7 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
                         ) else null
                     patternDrawable = PatternDrawable(
                         preferredTintColor = accentColor,
-                        darkBaseColor = if (wallpaperAutomatic.value) isNightMode else wallpaperDark.value,
+                        darkBaseColor = if (wallpaperAutomatic) isNightMode else wallpaperDark,
                         dp = resources.dp
                     )
                 }

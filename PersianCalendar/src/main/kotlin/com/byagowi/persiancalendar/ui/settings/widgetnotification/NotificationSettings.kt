@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.utils.preferences
 fun ColumnScope.NotificationSettings() {
     val context = LocalContext.current
     val language by language.collectAsState()
-    val isNotifyDate by isNotifyDate.collectAsState()
     run {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -56,7 +55,6 @@ fun ColumnScope.NotificationSettings() {
         )
     }
     this.AnimatedVisibility(isNotifyDate) {
-        val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen.collectAsState()
         SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,
             value = isNotifyDateOnLockScreen,
@@ -70,7 +68,6 @@ fun ColumnScope.NotificationSettings() {
                 .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                 .clearAndSetSemantics {},
         ) {
-            val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification.collectAsState()
             SettingsSwitch(
                 key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
                 value = isLargeDayNumberOnNotification,

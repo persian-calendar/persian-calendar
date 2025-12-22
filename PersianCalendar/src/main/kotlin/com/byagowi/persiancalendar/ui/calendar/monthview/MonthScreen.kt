@@ -91,7 +91,6 @@ fun SharedTransitionScope.MonthScreen(
                         Crossfade(date.monthName, label = "title") { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
                         }
-                        val numeral by numeral.collectAsState()
                         Crossfade(numeral.format(date.year), label = "subtitle") { state ->
                             Text(state, style = MaterialTheme.typography.titleMedium)
                         }

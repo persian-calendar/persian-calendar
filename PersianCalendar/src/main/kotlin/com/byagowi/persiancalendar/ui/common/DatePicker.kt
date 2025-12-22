@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -49,7 +47,6 @@ private fun RowScope.DatePickerContent(
 ) {
     val yearsLimit = 5000 // let's just don't care about accuracy of distant time
     val date = remember(jdn.value, calendar) { jdn on calendar }
-    val numeral by numeral.collectAsState()
     val daysFormat = remember(calendar, date.year, date.month) {
         val monthStart = Jdn(calendar, date.year, date.month, 1);
         { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDay.title }

@@ -39,7 +39,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     }
 
     fun toFormattedString(printAmPm: Boolean = true): String {
-        if (clockIn24.value) return toBasicFormatString()
+        if (clockIn24) return toBasicFormatString()
         val (hours, minutes) = toHoursAndMinutesPair()
         val clockString = linearFormat((hours % 12).takeIf { it != 0 } ?: 12, minutes)
         if (!printAmPm) return clockString
@@ -56,9 +56,9 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
             .ifEmpty { listOf(R.plurals.minutes to 0) }
         // if both present special casing the short form makes sense
         return if (pairs.size == 2 && short) resources.getString(
-            R.string.n_hours_minutes, numeral.value.format(hours), numeral.value.format(minutes),
+            R.string.n_hours_minutes, numeral.format(hours), numeral.format(minutes),
         ) else pairs.joinToString(spacedAndInDates) { (@PluralsRes pluralId: Int, n: Int) ->
-            resources.getQuantityString(pluralId, n, numeral.value.format(n))
+            resources.getQuantityString(pluralId, n, numeral.format(n))
         }
     }
 
@@ -80,7 +80,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     companion object {
         @JvmSynthetic
         private fun linearFormat(hours: Int, minutes: Int) =
-            numeral.value.format("%d:%02d".format(Locale.ENGLISH, hours, minutes))
+            numeral.format("%d:%02d".format(Locale.ENGLISH, hours, minutes))
 
         val zero = Clock(.0)
     }

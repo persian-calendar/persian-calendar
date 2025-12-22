@@ -31,10 +31,10 @@ fun String.splitFilterNotEmpty(delim: String) = this.split(delim).filter { it.is
 fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalendar()): PrayTimes =
     calculatePrayTimes(
         calendar = calendar,
-        calculationMethod = calculationMethod.value,
-        asrMethod = asrMethod.value,
-        highLatitudesMethod = highLatitudesMethod.value,
-        midnightMethod = midnightMethod.value,
+        calculationMethod = calculationMethod,
+        asrMethod = asrMethod,
+        highLatitudesMethod = highLatitudesMethod,
+        midnightMethod = midnightMethod,
     )
 
 @VisibleForTesting

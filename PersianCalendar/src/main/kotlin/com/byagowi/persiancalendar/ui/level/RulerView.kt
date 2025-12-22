@@ -18,7 +18,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
         it.strokeWidth = 1 * dp
-        it.textSize = textSize * if (numeral.value.isArabicIndicVariants) 1.4f else 1f
+        it.textSize = textSize * if (numeral.isArabicIndicVariants) 1.4f else 1f
     }
     private val textSideOffset = 30 * dp
     private val firstLevel = 25 * dp
@@ -47,7 +47,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             val y = steps * i
             val w = when {
                 i % 4 == 0 -> {
-                    val label = numeral.value.format(i / 4) + " " +
+                    val label = numeral.format(i / 4) + " " +
                             if (i == 0) language.value.inch else ""
                     canvas.drawText(
                         label, if (cmInchFlip) width - textSideOffset else textSideOffset,
@@ -72,7 +72,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             val y = cmSteps.toFloat() * i
             val w = when {
                 i % 10 == 0 -> {
-                    val label = numeral.value.format(i / 10) + " " +
+                    val label = numeral.format(i / 10) + " " +
                             if (i == 0) language.value.centimeter else ""
                     canvas.drawText(
                         label, if (cmInchFlip) textSideOffset else width - textSideOffset,

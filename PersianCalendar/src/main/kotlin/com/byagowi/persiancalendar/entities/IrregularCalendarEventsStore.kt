@@ -60,7 +60,7 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
         }.mapNotNull { event ->
             val date = getDateInstance(event, year, type) ?: return@mapNotNull null
             val title =
-                "${event["title"] ?: return@mapNotNull null} (${numeral.value.format(year)})"
+                "${event["title"] ?: return@mapNotNull null} (${numeral.format(year)})"
             val isHoliday = event["holiday"] == "true"
             val source = EventSource.entries.firstOrNull { it.name == event["type"] }
             when (date) {

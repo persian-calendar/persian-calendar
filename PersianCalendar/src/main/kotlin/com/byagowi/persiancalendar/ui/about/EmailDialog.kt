@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,7 +46,6 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
                 .defaultMinSize(minHeight = 200.dp)
                 .fillMaxWidth(),
         )
-        val numeral by numeral.collectAsState()
         Text(
             text = numeral.format(message.length),
             modifier = Modifier

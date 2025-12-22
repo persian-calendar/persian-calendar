@@ -84,7 +84,6 @@ private enum class HeaderAction { DialogIcon, Reset, Confirm }
 fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     val today = Jdn(now.toCivilDate())
     val currentYear = (today on mainCalendar).year
-    val numeral by numeral.collectAsState()
     val language by language.collectAsState()
     val types = listOf(
         run {

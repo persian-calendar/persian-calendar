@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 import android.widget.RemoteViews
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.DpSize
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
@@ -12,7 +10,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
+import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.settings.SettingsSectionLayout
@@ -153,7 +151,6 @@ class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
         WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     }
 }

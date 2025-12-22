@@ -40,7 +40,7 @@ import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
-import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
+import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors
 import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
@@ -68,24 +68,18 @@ fun ColumnScope.WidgetSettings() {
             summary = stringResource(R.string.prefer_linear_date_summary)
         )
     }
-    run {
-        val isWidgetClock by isWidgetClock.collectAsState()
-        SettingsSwitch(
-            key = PREF_WIDGET_CLOCK,
-            value = isWidgetClock,
-            title = stringResource(R.string.clock_on_widget),
-            summary = stringResource(R.string.showing_clock_on_widget)
-        )
-    }
-    run {
-        val clockIn24 by clockIn24.collectAsState()
-        SettingsSwitch(
-            key = PREF_WIDGET_IN_24,
-            value = clockIn24,
-            title = stringResource(R.string.clock_in_24),
-            summary = stringResource(R.string.showing_clock_in_24)
-        )
-    }
+    SettingsSwitch(
+        key = PREF_WIDGET_CLOCK,
+        value = isWidgetClock,
+        title = stringResource(R.string.clock_on_widget),
+        summary = stringResource(R.string.showing_clock_on_widget)
+    )
+    SettingsSwitch(
+        key = PREF_WIDGET_IN_24,
+        value = clockIn24,
+        title = stringResource(R.string.clock_in_24),
+        summary = stringResource(R.string.showing_clock_in_24)
+    )
     run {
         val isCenterAlignWidgets by isCenterAlignWidgets.collectAsState()
         SettingsSwitch(
@@ -99,15 +93,12 @@ fun ColumnScope.WidgetSettings() {
     val isInIranTimeVisible = remember(language) {
         (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
-    if (isInIranTimeVisible) {
-        val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
-        SettingsSwitch(
-            key = PREF_IRAN_TIME,
-            value = isForcedIranTimeEnabled,
-            title = stringResource(R.string.iran_time),
-            summary = stringResource(R.string.showing_iran_time)
-        )
-    }
+    if (isInIranTimeVisible) SettingsSwitch(
+        key = PREF_IRAN_TIME,
+        value = isForcedIranTimeEnabled,
+        title = stringResource(R.string.iran_time),
+        summary = stringResource(R.string.showing_iran_time)
+    )
     val widgetCustomizations = remember {
         mapOf(
             OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
@@ -129,7 +120,6 @@ fun ColumnScope.WidgetSettings() {
 
 @Composable
 fun ColumnScope.WidgetColoringSettings() {
-    val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsColor(

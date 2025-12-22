@@ -426,12 +426,12 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         )
     }
     val language by language.collectAsState()
-    if (supportsDynamicIcon(mainCalendar, language)) {
-        val isChecked by isDynamicIconEnabled.collectAsState()
-        AppDropdownMenuCheckableItem(stringResource(R.string.dynamic_icon), isChecked) {
-            closeMenu()
-            context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, !isChecked) }
-        }
+    if (supportsDynamicIcon(mainCalendar, language)) AppDropdownMenuCheckableItem(
+        text = stringResource(R.string.dynamic_icon),
+        isChecked = isDynamicIconEnabled
+    ) {
+        closeMenu()
+        context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, !isDynamicIconEnabled) }
     }
 
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities

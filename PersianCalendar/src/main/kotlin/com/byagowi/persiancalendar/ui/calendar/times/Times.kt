@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +48,6 @@ fun SharedTransitionScope.Times(
                 LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
             ) Int.MAX_VALUE else 3
         ) {
-            val calculationMethod by calculationMethod.collectAsState()
             val isJafari = calculationMethod.isJafari
             val times = PrayTime.allTimes(isJafari)
             val nextTimeColor = nextTimeColor()
