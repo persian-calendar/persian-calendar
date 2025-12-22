@@ -18,7 +18,7 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.jetbrains.annotations.VisibleForTesting
 
-data class EventsRepository @VisibleForTesting constructor(
+data class EventsRepository(
     private val enabledTypes: Set<String> = emptySet(),
     private val language: Language,
 ) {

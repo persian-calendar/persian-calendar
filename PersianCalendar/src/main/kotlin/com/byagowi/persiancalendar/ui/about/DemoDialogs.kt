@@ -48,7 +48,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.getSystemService
@@ -851,7 +851,7 @@ fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
 fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
 
 fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
-    var currentSemitone by mutableStateOf(MIDDLE_A_SEMITONE)
+    var currentSemitone by mutableDoubleStateOf(MIDDLE_A_SEMITONE)
 
     val view = object : BaseSlider(activity) {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
