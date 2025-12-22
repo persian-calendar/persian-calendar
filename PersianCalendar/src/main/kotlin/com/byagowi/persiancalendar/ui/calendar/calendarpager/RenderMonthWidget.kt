@@ -42,8 +42,8 @@ fun renderMonthWidget(
 
     val footer = language.my.format(baseDate.monthName, numeral.format(baseDate.year))
 
-    val weekStart = weekStart.value
-    val weekEnds = weekEnds.value
+    val weekStart = weekStart
+    val weekEnds = weekEnds
     canvas.also {
         (0..<7).forEach { column ->
             val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0

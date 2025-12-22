@@ -80,15 +80,12 @@ fun ColumnScope.WidgetSettings() {
         title = stringResource(R.string.clock_in_24),
         summary = stringResource(R.string.showing_clock_in_24)
     )
-    run {
-        val isCenterAlignWidgets by isCenterAlignWidgets.collectAsState()
-        SettingsSwitch(
-            key = PREF_CENTER_ALIGN_WIDGETS,
-            value = isCenterAlignWidgets,
-            title = stringResource(R.string.center_align_widgets),
-            summary = stringResource(R.string.center_align_widgets_summary)
-        )
-    }
+    SettingsSwitch(
+        key = PREF_CENTER_ALIGN_WIDGETS,
+        value = isCenterAlignWidgets,
+        title = stringResource(R.string.center_align_widgets),
+        summary = stringResource(R.string.center_align_widgets_summary)
+    )
     val isInIranTimeVisible = remember(language) {
         (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }

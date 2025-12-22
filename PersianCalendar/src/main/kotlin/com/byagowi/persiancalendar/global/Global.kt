@@ -11,6 +11,7 @@ import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.getSystemService
@@ -285,7 +286,7 @@ val coordinates by coordinates_
 private var cityName_ = mutableStateOf<String?>(null)
 val cityName by cityName_
 
-private val widgetTransparency_ = mutableStateOf(DEFAULT_WIDGET_TRANSPARENCY)
+private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
 
 var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
@@ -300,14 +301,14 @@ val mainCalendarNumeral
 val secondaryCalendar
     get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
 
-private val isCenterAlignWidgets_ = MutableStateFlow(DEFAULT_CENTER_ALIGN_WIDGETS)
-val isCenterAlignWidgets: StateFlow<Boolean> get() = isCenterAlignWidgets_
+private val isCenterAlignWidgets_ = mutableStateOf(DEFAULT_CENTER_ALIGN_WIDGETS)
+val isCenterAlignWidgets by isCenterAlignWidgets_
 
-private val weekStart_ = MutableStateFlow(Language.FA.defaultWeekStart)
-val weekStart: StateFlow<WeekDay> get() = weekStart_
+private val weekStart_ = mutableStateOf(Language.FA.defaultWeekStart)
+val weekStart by weekStart_
 
-private val weekEnds_ = MutableStateFlow(emptySet<WeekDay>())
-val weekEnds: StateFlow<Set<WeekDay>> get() = weekEnds_
+private val weekEnds_ = mutableStateOf<Set<WeekDay>>(emptySet())
+val weekEnds by weekEnds_
 
 private val isShowWeekOfYearEnabled_ = MutableStateFlow(false)
 val isShowWeekOfYearEnabled: StateFlow<Boolean> get() = isShowWeekOfYearEnabled_
@@ -615,7 +616,7 @@ fun updateStoredPreference(context: Context) {
         null,
     )?.takeIf { it.isNotEmpty() }
 
-    widgetTransparency_.value =
+    widgetTransparency_.floatValue =
         preferences.getFloat(PREF_WIDGET_TRANSPARENCY, DEFAULT_WIDGET_TRANSPARENCY)
 
     runCatching {

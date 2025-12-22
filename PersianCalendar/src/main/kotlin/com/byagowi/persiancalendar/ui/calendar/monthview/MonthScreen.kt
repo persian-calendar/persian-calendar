@@ -119,7 +119,7 @@ fun SharedTransitionScope.MonthScreen(
             val daysStyle = LocalTextStyle.current.copy(
                 fontSize = with(density) { daysTextSize.toSp() },
             )
-            val weekStart by weekStart.collectAsState()
+            val weekStart = weekStart
 
             Column(
                 modifier = Modifier.padding(

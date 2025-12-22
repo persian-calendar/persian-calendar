@@ -594,7 +594,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
     }
 
     val monthStartJdn = Jdn(monthStartDate)
-    val startingWeekDay = monthStartJdn.weekDay - weekStart.value
+    val startingWeekDay = monthStartJdn.weekDay - weekStart
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     remoteViews.setViewVisibility(
@@ -617,8 +617,8 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
             250,
         )
     } else EventsStore.empty()
-    val weekStart = weekStart.value
-    val weekEnds = weekEnds.value
+    val weekStart = weekStart
+    val weekEnds = weekEnds
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
@@ -950,7 +950,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
     // remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
 
     val monthStart = Jdn(baseDate)
-    val weekStart = monthStart.weekDay - weekStart.value
+    val weekStart = monthStart.weekDay - weekStart
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
     monthWidgetCells.forEachIndexed { i, id ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
@@ -1038,7 +1038,8 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
             (255 * (1 - widgetTransparency)).roundToInt().coerceIn(0, 255),
         ) else MapDraw.defaultBackground
     )
-    fixedSize?.let {
+    // setViewLayoutWidth needs Android 12
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) fixedSize?.let {
         remoteViews.setViewLayoutWidth(
             R.id.map_background,
             it.width.value,
@@ -1169,9 +1170,9 @@ fun create4x1RemoteViews(
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) {
-            if (isCenterAlignWidgets.value) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
+            if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
         } else {
-            if (isCenterAlignWidgets.value) R.layout.widget4x1_center else R.layout.widget4x1
+            if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x1)
@@ -1223,9 +1224,9 @@ fun create2x2RemoteViews(
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) {
-            if (isCenterAlignWidgets.value) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
+            if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
         } else {
-            if (isCenterAlignWidgets.value) R.layout.widget2x2_center else R.layout.widget2x2
+            if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
     remoteViews.setTextViewTextSizeSp(R.id.date_2x2, 14 * scale)
@@ -1442,7 +1443,7 @@ fun createWeekViewRemoteViews(
     } else {
         0xFFE51C23.toInt()
     }
-    val weekEnds = weekEnds.value
+    val weekEnds = weekEnds
 
     remoteViews.setTextViewTextSizeSp(R.id.textDate, 14 * scale)
 

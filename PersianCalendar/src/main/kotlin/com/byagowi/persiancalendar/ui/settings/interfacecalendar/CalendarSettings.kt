@@ -226,7 +226,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
             summaryResId = R.string.islamic_offset_summary,
         )
     }
-    val weekStart by weekStart.collectAsState()
+    val weekStart = weekStart
     val weekDays = WeekDay.entries.map { it + weekStart.ordinal }
     val weekDaysTitles = weekDays.map { it.title }
     val weekDaysValues = weekDays.map { it.ordinal.toString() }
@@ -242,7 +242,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         key = PREF_WEEK_ENDS,
         entries = weekDaysTitles,
         entryValues = weekDaysValues,
-        persistedSet = weekEnds.collectAsState().value.map { it.ordinal.toString() }.toSet(),
+        persistedSet = weekEnds.map { it.ordinal.toString() }.toSet(),
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
     )

@@ -84,7 +84,7 @@ fun monthHtmlReport(context: Context, date: AbstractDate, wholeYear: Boolean) = 
 
 private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     val events = createMonthEventsList(context, date)
-    val weekEnds = weekEnds.value
+    val weekEnds = weekEnds
     fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(
@@ -98,7 +98,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         small { +" ($title)" }
     }
     table("calendar") {
-        val weekStart = weekStart.value
+        val weekStart = weekStart
         tr {
             if (isShowWeekOfYearEnabled.value) th {}
             repeat(7) { th { +(weekStart + it).title } }

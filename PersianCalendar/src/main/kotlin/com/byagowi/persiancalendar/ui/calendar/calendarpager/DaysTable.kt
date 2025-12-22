@@ -155,8 +155,7 @@ fun daysTable(
     }
     var focusedDay by remember { mutableStateOf<Jdn?>(null) }
     val focusColor = LocalContentColor.current.copy(.1f)
-    val weekStart by weekStart.collectAsState()
-    val weekEnds by weekEnds.collectAsState()
+    val weekStart = weekStart
     val eventsRepository by eventsRepository.collectAsState()
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->

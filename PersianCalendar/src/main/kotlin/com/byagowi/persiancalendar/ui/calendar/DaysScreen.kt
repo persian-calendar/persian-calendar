@@ -366,7 +366,7 @@ fun SharedTransitionScope.DaysScreen(
                         val wasAtTop = scrollState.value == 0
                         { isUp: Boolean -> if (wasAtTop) onSwipeDown(isUp) }
                     }
-                    val weekStart by weekStart.collectAsState()
+                    val weekStart = weekStart
 
                     HorizontalPager(
                         state = weekPagerState,
@@ -528,8 +528,8 @@ fun SharedTransitionScope.DaysScreen(
 }
 
 private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
-    val daysStart = day - (day.weekDay - weekStart.value)
-    val todayStart = today - (today.weekDay - weekStart.value)
+    val daysStart = day - (day.weekDay - weekStart)
+    val todayStart = today - (today.weekDay - weekStart)
     return (daysStart - todayStart) / 7 + weeksLimit / 2
 }
 
@@ -693,7 +693,7 @@ private fun DaysView(
                         lineHeight = 24.sp,
                         textDirection = TextDirection.Content,
                     )
-                    val weekStart by weekStart.collectAsState()
+                    val weekStart = weekStart
                     eventsWithoutTime.forEachIndexed { i, dayEvents ->
                         Column(Modifier.weight(1f)) {
                             if (!hasWeekPager) {

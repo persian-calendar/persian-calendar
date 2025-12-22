@@ -308,7 +308,7 @@ fun SharedTransitionScope.CalendarsOverview(
 
         val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)
         val endOfYearJdn = Jdn(selectedCalendar, date.year + 1, 1, 1) - 1
-        val weekStart by weekStart.collectAsState()
+        val weekStart = weekStart
         val currentWeek = jdn.getWeekOfYear(startOfYearJdn, weekStart)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn, weekStart)
         val progresses = remember(jdn, selectedCalendar, weekStart) {
