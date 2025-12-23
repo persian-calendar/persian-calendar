@@ -9,6 +9,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -160,11 +161,13 @@ private var oldEraPersianMonths = monthNameEmptyList
 private var islamicMonths = monthNameEmptyList
 private var gregorianMonths = monthNameEmptyList
 private var nepaliMonths = monthNameEmptyList
+
 private val weekDaysEmptyList = List(7) { "" }
-var weekDaysTitles = weekDaysEmptyList
-    private set
-var weekDaysTitlesInitials = weekDaysEmptyList
-    private set
+private val weekDaysTitles_ = mutableStateOf(weekDaysEmptyList)
+val weekDaysTitles by weekDaysTitles_
+
+private val weekDaysTitlesInitials_ = mutableStateOf(weekDaysEmptyList)
+val weekDaysTitlesInitials by weekDaysTitlesInitials_
 
 private val numeral_ = mutableStateOf(Numeral.PERSIAN)
 val numeral by numeral_
@@ -175,8 +178,8 @@ val localNumeralPreference by localNumeralPreference_
 private val clockIn24_ = mutableStateOf(DEFAULT_WIDGET_IN_24)
 val clockIn24 by clockIn24_
 
-var isDynamicIconEverEnabled = false
-    private set
+var isDynamicIconEverEnabled_ = mutableStateOf(false)
+val isDynamicIconEverEnabled by isDynamicIconEverEnabled_
 
 private val isDynamicIconEnabled_ = mutableStateOf(DEFAULT_DYNAMIC_ICON_ENABLED)
 val isDynamicIconEnabled by isDynamicIconEnabled_
@@ -286,17 +289,21 @@ val cityName by cityName_
 private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
 
-var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
-    private set
-val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
-val mainCalendarNumeral
-    get() = when {
+var enabledCalendars_ =
+    mutableStateOf(listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
+val enabledCalendars by enabledCalendars_
+
+val mainCalendar by derivedStateOf { enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI }
+val mainCalendarNumeral by derivedStateOf {
+    when {
         secondaryCalendar == null -> numeral
         numeral.isArabic || !language.canHaveLocalNumeral -> Numeral.ARABIC
         else -> mainCalendar.preferredNumeral
     }
-val secondaryCalendar
-    get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
+}
+val secondaryCalendar by derivedStateOf {
+    if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
+}
 
 private val isCenterAlignWidgets_ = mutableStateOf(DEFAULT_CENTER_ALIGN_WIDGETS)
 val isCenterAlignWidgets by isCenterAlignWidgets_
@@ -447,9 +454,9 @@ fun loadLanguageResources(resources: Resources) {
         englishGregorianPersianMonths || easternGregorianArabicMonths,
     )
     nepaliMonths = language.getNepaliMonths()
-    weekDaysTitles = if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDays(resources)
+    weekDaysTitles_.value = if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDays(resources)
     else language.getWeekDays(resources)
-    weekDaysTitlesInitials =
+    weekDaysTitlesInitials_.value =
         if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDaysInitials(resources)
         else language.getWeekDaysInitials(resources)
     shiftWorkTitles = mapOf(
@@ -543,7 +550,7 @@ fun updateStoredPreference(context: Context) {
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
-    isDynamicIconEverEnabled = PREF_DYNAMIC_ICON_ENABLED in preferences
+    isDynamicIconEverEnabled_.value = PREF_DYNAMIC_ICON_ENABLED in preferences
     isDynamicIconEnabled_.value = preferences.getBoolean(
         PREF_DYNAMIC_ICON_ENABLED, DEFAULT_DYNAMIC_ICON_ENABLED
     ) && supportsDynamicIcon(mainCalendar, language)
@@ -625,13 +632,13 @@ fun updateStoredPreference(context: Context) {
             ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }).splitFilterNotEmpty(
             ","
         ).map(Calendar::valueOf)
-        enabledCalendars = (listOf(mainCalendar) + otherCalendars).distinct()
+        enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct()
         secondaryCalendarEnabled = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
         )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
-        enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+        enabledCalendars_.value = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
         secondaryCalendarEnabled = false
     }.getOrNull().debugAssertNotNull
 
