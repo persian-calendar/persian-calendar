@@ -368,7 +368,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             val isCurrent = runCatching {
                 WallpaperManager.getInstance(context)?.wallpaperInfo?.component == componentName
             }.getOrNull() ?: false
-            Box(Modifier.clickable {
+            if (BuildConfig.DEVELOPMENT || isCurrent) Box(Modifier.clickable {
                 closeMenu()
                 runCatching {
                     val intent = if (isCurrent) Intent(
