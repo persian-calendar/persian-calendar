@@ -7,8 +7,8 @@ class Graph(verticesCount: Int) {
     override fun toString(): String = adjacency.toString()
 
     fun addEdge(x: Int, y: Int) {
-        adjacency[x].add(y)
-        adjacency[y].add(x)
+        adjacency[x] += y
+        adjacency[y] += x
     }
 
     fun connectedComponents(): List<List<Int>> {

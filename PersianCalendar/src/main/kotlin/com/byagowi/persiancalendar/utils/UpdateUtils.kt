@@ -565,7 +565,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
     val today = Jdn.today()
     val offset = monthWidgetOffsets[widgetId]?.let {
         if (it.isExpired) {
-            monthWidgetOffsets.remove(widgetId)
+            monthWidgetOffsets -= widgetId
             0
         } else it.offset
     } ?: 0

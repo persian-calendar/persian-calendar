@@ -183,11 +183,11 @@ fun CountryEvents(
             )
             .clickable {
                 if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-                    enabledTypes.remove(holidaysKey)
-                    enabledTypes.remove(nonHolidaysKey)
+                    enabledTypes -= holidaysKey
+                    enabledTypes -= nonHolidaysKey
                 } else {
-                    if (holidaysKey !in enabledTypes) enabledTypes.add(holidaysKey)
-                    if (nonHolidaysKey !in enabledTypes) enabledTypes.add(nonHolidaysKey)
+                    if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
+                    if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
                 }
             }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
@@ -239,7 +239,7 @@ private fun IndentedCheckBox(
             .fillMaxWidth()
             .highlightItem(destinationItem == key)
             .toggleable(value = key in enabledTypes, role = Role.Checkbox) {
-                if (it) enabledTypes.add(key) else enabledTypes.remove(key)
+                if (it) enabledTypes += key else enabledTypes -= key
             }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(

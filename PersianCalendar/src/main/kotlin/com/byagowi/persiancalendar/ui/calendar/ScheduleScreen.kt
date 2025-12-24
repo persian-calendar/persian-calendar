@@ -328,7 +328,7 @@ private fun eventsCache(calendarViewModel: CalendarViewModel): @Composable (Jdn)
         if (jdn.value in emptyDays) emptyList() else {
             val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
             val events = readEvents(jdn, calendarViewModel, deviceEvents)
-            if (events.isEmpty()) emptyDays.add(jdn.value)
+            if (events.isEmpty()) emptyDays += jdn.value
             events
         }
     }

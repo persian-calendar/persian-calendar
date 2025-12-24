@@ -354,9 +354,9 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .toggleable(visibility, role = Role.Checkbox) {
-                            if (!it) idsToExclude.add(entry.id) else {
-                                idsToExclude.remove(entry.id)
-                                if (isHoliday) holidaysIds.remove(entry.id)
+                            if (!it) idsToExclude += entry.id else {
+                                idsToExclude -= entry.id
+                                if (isHoliday) holidaysIds -= entry.id
                             }
                         }
                         .height(42.dp),
@@ -380,7 +380,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                         Checkbox(
                             checked = isHoliday,
                             onCheckedChange = { value ->
-                                if (value) holidaysIds.add(entry.id) else holidaysIds.remove(entry.id)
+                                if (value) holidaysIds += entry.id else holidaysIds -= entry.id
                             },
                             modifier = Modifier
                                 .width(holidayTextWidth)

@@ -274,8 +274,8 @@ fun NumberEdit(
     }
 
     DisposableEffect(clearFocus) {
-        pendingConfirms.add(clearFocus)
-        onDispose { pendingConfirms.remove(clearFocus) }
+        pendingConfirms += clearFocus
+        onDispose { pendingConfirms -= clearFocus }
     }
     BackHandler { clearFocus() }
 
@@ -314,7 +314,7 @@ fun NumberEdit(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     if (!it.isFocused) {
-                        pendingConfirms.remove(clearFocus)
+                        pendingConfirms -= clearFocus
                         resolveValue()?.let(onValueChange)
                     }
                 },

@@ -60,7 +60,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
                 Modifier
                     .fillMaxWidth()
                     .toggleable(value = alarm in alarms, role = Role.Checkbox) {
-                        if (it) alarms.add(alarm) else alarms.remove(alarm)
+                        if (it) alarms += alarm else alarms -= alarm
                     }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     .height(SettingsItemHeight.dp),

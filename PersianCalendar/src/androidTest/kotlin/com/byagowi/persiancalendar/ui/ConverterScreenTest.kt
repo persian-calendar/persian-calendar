@@ -80,7 +80,7 @@ class ConverterScreenTest {
         val viewModel = ConverterViewModel()
         composeTestRule.setContent {
             LaunchedEffect(viewModel.todayButtonVisibility) {
-                values.add(viewModel.todayButtonVisibility)
+                values += viewModel.todayButtonVisibility
             }
         }
         listOf(
@@ -96,7 +96,7 @@ class ConverterScreenTest {
         val viewModel = ConverterViewModel()
         composeTestRule.setContent {
             LaunchedEffect(viewModel.todayButtonVisibility) {
-                values.add(viewModel.todayButtonVisibility)
+                values += viewModel.todayButtonVisibility
             }
         }
         listOf(
