@@ -11,6 +11,7 @@ compose-bom = "2025.12.01"
 coroutines = "1.10.2"
 datastore = "1.2.0"
 dynamicanimation = "1.1.0"
+espresso = "3.6.1"
 junit = "4.13.2"
 junit-runner = "1.14.1"
 junit5 = "6.0.1"
@@ -54,6 +55,7 @@ compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-mani
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5" }

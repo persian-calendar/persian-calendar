@@ -64,7 +64,7 @@ fun MainScreen(
             EdgeButton(
                 onClick = navigateToUtilities,
                 buttonSize = EdgeButtonSize.Medium,
-            ) { Icon(Icons.Default.Construction, contentDescription = "تنظیمات") }
+            ) { Icon(Icons.Default.Construction, contentDescription = "ابزارها") }
         },
     ) {
         Box(
