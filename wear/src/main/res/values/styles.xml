@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="MainActivityTheme">
+    <style name="MainActivityTheme" parent="@android:style/Theme.DeviceDefault">
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
             @drawable/splash_icon_animated
         </item>
