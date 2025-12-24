@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="MainActivityTheme">
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
+            @drawable/splash_icon_animated
+        </item>
+    </style>
+
+    <color name="splash_icon_color_1">#23a79b</color>
+    <color name="splash_icon_color_2">#2d6d68</color>
+    <color name="splash_icon_color_3">#00695c</color>
+    <color name="splash_icon_color_ribbon">#de2f14</color>
+</resources>

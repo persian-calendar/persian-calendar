@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
-    android:drawable="@drawable/splash_icon">
+    android:drawable="@drawable/ic_launcher">
     <target android:name="parent">
         <aapt:attr name="android:animation">
             <set android:ordering="together">

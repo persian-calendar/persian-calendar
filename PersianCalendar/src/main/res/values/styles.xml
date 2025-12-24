@@ -16,7 +16,6 @@
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
             @drawable/splash_icon_animation
         </item>
-        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
     </style>
 
     <style name="BaseTheme" parent="BaseDayNightTheme">
