@@ -103,7 +103,7 @@ class SwipeDismissableSceneStrategy<T : Any>(
 ) : SceneStrategy<T> {
 
     override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {
-        if (entries.isEmpty()) return null
+        if (entries.size < 2) return null
 
         val currentEntry = entries.last()
         val previousEntries = entries.dropLast(1)
