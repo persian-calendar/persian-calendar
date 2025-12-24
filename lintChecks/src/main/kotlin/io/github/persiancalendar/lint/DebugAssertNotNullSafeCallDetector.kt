@@ -45,4 +45,3 @@ class DebugAssertNotNullSafeCallDetector : Detector(), SourceCodeScanner {
         )
     }
 }
-

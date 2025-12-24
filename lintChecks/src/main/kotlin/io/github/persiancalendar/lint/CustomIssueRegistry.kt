@@ -6,9 +6,10 @@ import com.android.tools.lint.detector.api.CURRENT_API
 
 class CustomIssueRegistry : IssueRegistry() {
     override val issues = listOf(
-        UnsafeCastDetector.ISSUE,
         DoubleBangDetector.ISSUE,
         DebugAssertNotNullSafeCallDetector.ISSUE,
+        TryCatchDetector.ISSUE,
+        UnsafeCastDetector.ISSUE,
     )
 
     override val api: Int = CURRENT_API
@@ -19,4 +20,3 @@ class CustomIssueRegistry : IssueRegistry() {
         contact = "https://github.com/persian-calendar/persian-calendar"
     )
 }
-

@@ -9,32 +9,32 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
-import org.jetbrains.uast.UPostfixExpression
+import org.jetbrains.uast.UTryExpression
 
-class DoubleBangDetector : Detector(), SourceCodeScanner {
+class TryCatchDetector : Detector(), SourceCodeScanner {
 
-    override fun getApplicableUastTypes() = listOf(UPostfixExpression::class.java)
+    override fun getApplicableUastTypes() = listOf(UTryExpression::class.java)
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
-        override fun visitPostfixExpression(node: UPostfixExpression) {
-            if (node.operator.text == "!!") context.report(
+        override fun visitTryExpression(node: UTryExpression) {
+            context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback, then consider use of `.debugAssertNotNull` if is needed."
+                message = "Use `runCatching` instead of `try/catch` for better functional error handling."
             )
         }
     }
 
     companion object {
         val ISSUE = Issue.create(
-            id = "DoubleBangUsage",
-            briefDescription = "Not-null assertion operator usage",
-            explanation = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback, then consider use of `.debugAssertNotNull` if is needed.",
+            id = "TryCatchUsage",
+            briefDescription = "Try-catch block usage",
+            explanation = "Use `runCatching { }.onFailure { }` instead of `try/catch` blocks for better functional error handling and consistency with Kotlin idioms.",
             category = Category.CORRECTNESS,
             priority = 6,
             severity = Severity.WARNING,
             implementation = Implementation(
-                DoubleBangDetector::class.java,
+                TryCatchDetector::class.java,
                 Scope.JAVA_FILE_SCOPE,
             )
         )

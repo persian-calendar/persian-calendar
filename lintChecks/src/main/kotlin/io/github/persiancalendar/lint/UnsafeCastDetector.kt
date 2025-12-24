@@ -41,4 +41,3 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
         )
     }
 }
-
