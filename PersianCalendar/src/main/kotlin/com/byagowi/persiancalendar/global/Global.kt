@@ -156,11 +156,16 @@ import java.util.TimeZone
 // are avoiding storing complicated things on it.
 
 private val monthNameEmptyList = List(12) { "" }
-private var persianMonths = monthNameEmptyList
-private var oldEraPersianMonths = monthNameEmptyList
-private var islamicMonths = monthNameEmptyList
-private var gregorianMonths = monthNameEmptyList
-private var nepaliMonths = monthNameEmptyList
+private val persianMonths_ = mutableStateOf(monthNameEmptyList)
+private val persianMonths by persianMonths_
+private val oldEraPersianMonths_ = mutableStateOf(monthNameEmptyList)
+private val oldEraPersianMonths by oldEraPersianMonths_
+private val islamicMonths_ = mutableStateOf(monthNameEmptyList)
+private val islamicMonths by islamicMonths_
+private val gregorianMonths_ = mutableStateOf(monthNameEmptyList)
+private val gregorianMonths by gregorianMonths_
+private val nepaliMonths_ = mutableStateOf(monthNameEmptyList)
+private val nepaliMonths by nepaliMonths_
 
 private val weekDaysEmptyList = List(7) { "" }
 private val weekDaysTitles_ = mutableStateOf(weekDaysEmptyList)
@@ -178,7 +183,7 @@ val localNumeralPreference by localNumeralPreference_
 private val clockIn24_ = mutableStateOf(DEFAULT_WIDGET_IN_24)
 val clockIn24 by clockIn24_
 
-var isDynamicIconEverEnabled_ = mutableStateOf(false)
+private val isDynamicIconEverEnabled_ = mutableStateOf(false)
 val isDynamicIconEverEnabled by isDynamicIconEverEnabled_
 
 private val isDynamicIconEnabled_ = mutableStateOf(DEFAULT_DYNAMIC_ICON_ENABLED)
@@ -280,16 +285,16 @@ private val englishWeekDaysInIranEnglish_ =
     mutableStateOf(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
 val englishWeekDaysInIranEnglish by englishWeekDaysInIranEnglish_
 
-private var coordinates_ = mutableStateOf<Coordinates?>(null)
+private val coordinates_ = mutableStateOf<Coordinates?>(null)
 val coordinates by coordinates_
 
-private var cityName_ = mutableStateOf<String?>(null)
+private val cityName_ = mutableStateOf<String?>(null)
 val cityName by cityName_
 
 private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
 
-var enabledCalendars_ =
+private val enabledCalendars_ =
     mutableStateOf(listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
 val enabledCalendars by enabledCalendars_
 
@@ -360,36 +365,36 @@ val isTalkBackEnabled by isTalkBackEnabled_
 private val isHighTextContrastEnabled_ = mutableStateOf(false)
 val isHighTextContrastEnabled by isHighTextContrastEnabled_
 
-var shiftWorkTitles = emptyMap<String, String>()
-    private set
-var shiftWorkStartingJdn: Jdn? = null
-    private set
-var shiftWorkRecurs = true
-    private set
-var shiftWorks = emptyList<ShiftWorkRecord>()
-    private set
-var shiftWorkPeriod = 0
-    private set
-var amString = DEFAULT_AM
-    private set
-var pmString = DEFAULT_PM
-    private set
-var spacedAndInDates = " و "
-    private set
-var spacedOr = " و "
-    private set
-var spacedColon = ": "
-    private set
-var spacedComma = "، "
-    private set
+private val shiftWorkTitles_ = mutableStateOf(emptyMap<String, String>())
+val shiftWorkTitles by shiftWorkTitles_
+private val shiftWorkStartingJdn_ = mutableStateOf<Jdn?>(null)
+val shiftWorkStartingJdn by shiftWorkStartingJdn_
+private val shiftWorkRecurs_ = mutableStateOf(true)
+val shiftWorkRecurs by shiftWorkRecurs_
+private val shiftWorks_ = mutableStateOf(emptyList<ShiftWorkRecord>())
+val shiftWorks by shiftWorks_
+private val shiftWorkPeriod_ = mutableIntStateOf(0)
+val shiftWorkPeriod by shiftWorkPeriod_
+private val amString_ = mutableStateOf(DEFAULT_AM)
+val amString by amString_
+private val pmString_ = mutableStateOf(DEFAULT_PM)
+val pmString by pmString_
+private val spacedAndInDates_ = mutableStateOf(" و ")
+val spacedAndInDates by spacedAndInDates_
+private val spacedOr_ = mutableStateOf(" یا ")
+val spacedOr by spacedOr_
+private val spacedColon_ = mutableStateOf(": ")
+val spacedColon by spacedColon_
+private val spacedComma_ = mutableStateOf("، ")
+val spacedComma by spacedComma_
 
 // Otherwise WidgetService might use untranslated messages
-var prayTimesTitles: Map<PrayTime, String> = emptyMap()
-    private set
-var nothingScheduledString = ""
-    private set
-var holidayString = DEFAULT_HOLIDAY
-    private set
+private val prayTimesTitles_ = mutableStateOf(emptyMap<PrayTime, String>())
+val prayTimesTitles by prayTimesTitles_
+private val nothingScheduledString_ = mutableStateOf("")
+val nothingScheduledString by nothingScheduledString_
+private val holidayString_ = mutableStateOf(DEFAULT_HOLIDAY)
+val holidayString by holidayString_
 
 private val numericalDatePreferred_ = mutableStateOf(DEFAULT_NUMERICAL_DATE_PREFERRED)
 val numericalDatePreferred by numericalDatePreferred_
@@ -400,7 +405,8 @@ val calendarsTitlesAbbr by calendarsTitlesAbbr_
 private val eventsRepository_ = mutableStateOf(EventsRepository.empty())
 val eventsRepository by eventsRepository_
 
-private var secondaryCalendarEnabled = false
+private val secondaryCalendarEnabled_ = mutableStateOf(false)
+private val secondaryCalendarEnabled by secondaryCalendarEnabled_
 
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
@@ -438,28 +444,28 @@ fun yearMonthNameOfDate(date: AbstractDate): List<String> {
 fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
     val language = language
-    persianMonths = language.getPersianMonths(
+    persianMonths_.value = language.getPersianMonths(
         resources,
         alternativeMonthsInAzeri = alternativePersianMonthsInAzeri,
         afghanistanHolidaysIsEnable = eventsRepository_.value.afghanistanHolidays && !eventsRepository_.value.iranHolidays,
     )
-    oldEraPersianMonths = when {
+    oldEraPersianMonths_.value = when {
         language.isPersianOrDari -> Language.persianCalendarMonthsInDariOrPersianOldEra
         language == Language.EN_IR -> Language.persianCalendarMonthsInDariOrPersianOldEraTransliteration
         else -> persianMonths
     }
-    islamicMonths = language.getIslamicMonths(resources)
-    gregorianMonths = language.getGregorianMonths(
+    islamicMonths_.value = language.getIslamicMonths(resources)
+    gregorianMonths_.value = language.getGregorianMonths(
         resources,
         englishGregorianPersianMonths || easternGregorianArabicMonths,
     )
-    nepaliMonths = language.getNepaliMonths()
+    nepaliMonths_.value = language.getNepaliMonths()
     weekDaysTitles_.value = if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDays(resources)
     else language.getWeekDays(resources)
     weekDaysTitlesInitials_.value =
         if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDaysInitials(resources)
         else language.getWeekDaysInitials(resources)
-    shiftWorkTitles = mapOf(
+    shiftWorkTitles_.value = mapOf(
         "d" to resources.getString(R.string.shift_work_morning), // d -> day work, legacy key
         "r" to resources.getString(R.string.shift_work_off), // r -> rest, legacy key
         "e" to resources.getString(R.string.shift_work_evening),
@@ -471,27 +477,27 @@ fun loadLanguageResources(resources: Resources) {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two
         language.isPersianOrDari -> {
-            amString = DEFAULT_AM
-            pmString = DEFAULT_PM
+            amString_.value = DEFAULT_AM
+            pmString_.value = DEFAULT_PM
         }
 
         else -> {
-            amString = resources.getString(R.string.am)
-            pmString = resources.getString(R.string.pm)
+            amString_.value = resources.getString(R.string.am)
+            pmString_.value = resources.getString(R.string.pm)
         }
     }
-    holidayString = when {
+    holidayString_.value = when {
         language.isPersian -> DEFAULT_HOLIDAY
         language.isDari -> "رخصتی"
         else -> resources.getString(R.string.holiday)
     }
-    nothingScheduledString = resources.getString(R.string.nothing_scheduled)
-    prayTimesTitles = PrayTime.entries.associateWith { resources.getString(it.stringRes) }
-    spacedOr = resources.getString(R.string.spaced_or)
-    spacedAndInDates = if (language.languagePrefersHalfSpaceAndInDates) " "
+    nothingScheduledString_.value = resources.getString(R.string.nothing_scheduled)
+    prayTimesTitles_.value = PrayTime.entries.associateWith { resources.getString(it.stringRes) }
+    spacedOr_.value = resources.getString(R.string.spaced_or)
+    spacedAndInDates_.value = if (language.languagePrefersHalfSpaceAndInDates) " "
     else resources.getString(R.string.spaced_and)
-    spacedColon = resources.getString(R.string.spaced_colon)
-    spacedComma = resources.getString(R.string.spaced_comma)
+    spacedColon_.value = resources.getString(R.string.spaced_colon)
+    spacedComma_.value = resources.getString(R.string.spaced_comma)
 }
 
 fun updateStoredPreference(context: Context) {
@@ -633,13 +639,13 @@ fun updateStoredPreference(context: Context) {
             ","
         ).map(Calendar::valueOf)
         enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct()
-        secondaryCalendarEnabled = preferences.getBoolean(
+        secondaryCalendarEnabled_.value = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
         )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
         enabledCalendars_.value = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
-        secondaryCalendarEnabled = false
+        secondaryCalendarEnabled_.value = false
     }.getOrNull().debugAssertNotNull
 
     isShowWeekOfYearEnabled_.value = preferences.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
@@ -680,13 +686,13 @@ fun updateStoredPreference(context: Context) {
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)
 
-    shiftWorks =
+    shiftWorks_.value =
         (preferences.getString(PREF_SHIFT_WORK_SETTING, null).orEmpty()).splitFilterNotEmpty(",")
             .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
             .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
-    shiftWorkPeriod = shiftWorks.sumOf { it.length }
-    shiftWorkStartingJdn = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
-    shiftWorkRecurs = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
+    shiftWorkPeriod_.intValue = shiftWorks.sumOf { it.length }
+    shiftWorkStartingJdn_.value = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
+    shiftWorkRecurs_.value = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
 
     context.getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
 }
@@ -713,7 +719,7 @@ fun changeWeekDaysForTest(weekEnds: Set<WeekDay>, action: () -> Unit) {
 
 @VisibleForTesting
 fun initiateMonthNamesForTest() {
-    oldEraPersianMonths = Language.persianCalendarMonthsInDariOrPersianOldEra
+    oldEraPersianMonths_.value = Language.persianCalendarMonthsInDariOrPersianOldEra
 }
 
 // A very special case to trig coordinates mechanism in saveLocation
