@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
@@ -333,18 +334,20 @@ private fun Calculator(viewModel: ConverterViewModel) {
             modifier = Modifier.weight(1f),
             colors = textFieldColors,
         )
-        AnimatedContent(
+        Crossfade(
             result,
             label = "calculator result",
             modifier = Modifier.weight(1f),
         ) {
-            Text(
-                it,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-            )
+            SelectionContainer {
+                Text(
+                    it,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                )
+            }
         }
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TextField(
@@ -355,14 +358,16 @@ private fun Calculator(viewModel: ConverterViewModel) {
             colors = textFieldColors,
         )
         Spacer(Modifier.height(16.dp))
-        AnimatedContent(result, label = "calculator result") {
-            Text(
-                it,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-            )
+        Crossfade(result, label = "calculator result") {
+            SelectionContainer {
+                Text(
+                    it,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                )
+            }
         }
     }
 }
