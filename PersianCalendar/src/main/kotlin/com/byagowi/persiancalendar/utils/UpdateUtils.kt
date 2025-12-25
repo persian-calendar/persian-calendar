@@ -953,10 +953,11 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
     val monthStart = Jdn(baseDate)
     val weekStart = monthStart.weekDay - weekStart
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
+        monthWidgetCells.forEach { remoteViews.setTextViewText(it, "") }
+        monthWidgetWeeks.forEach { remoteViews.setTextViewText(it, "") }
+    }
     monthWidgetCells.forEachIndexed { i, id ->
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
-            remoteViews.setTextViewText(id, "")
-        }
         if (i !in weekStart + 7..<weekStart + 7 + monthLength) {
             if (i >= 7) {
                 remoteViews.setTextViewText(id, "")
