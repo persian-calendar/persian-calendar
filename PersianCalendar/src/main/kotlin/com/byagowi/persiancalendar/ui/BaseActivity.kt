@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_JDN
 import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.PREF_CALCULATOR_INPUT
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
@@ -64,6 +65,7 @@ abstract class BaseActivity : ComponentActivity(),
     final override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
         if (this !is MainActivity && !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
         when (key) {
+            PREF_CALCULATOR_INPUT -> return // nothing needs to be updated
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             EXPANDED_TIME_STATE_KEY -> return // nothing needs to be updated
             LAST_PLAYED_ATHAN_JDN, LAST_PLAYED_ATHAN_KEY -> return // nothing needs to be updated

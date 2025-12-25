@@ -44,6 +44,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -67,6 +68,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.edit
+import com.byagowi.persiancalendar.PREF_CALCULATOR_INPUT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
@@ -99,6 +102,7 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.calculator.eval
 import java.util.GregorianCalendar
 import java.util.Locale
@@ -136,10 +140,28 @@ fun SharedTransitionScope.ConverterScreen(
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
                     TodayActionButton(visible = viewModel.todayButtonVisibility && !anyPendingConfirm) {
-                        val todayJdn = Jdn.today()
-                        viewModel.selectedDate = todayJdn
-                        viewModel.secondSelectedDate = todayJdn
-                        viewModel.resetTimeZoneClock()
+                        when (viewModel.screenMode) {
+                            ConverterScreenMode.CALCULATOR -> {
+                                viewModel.calculatorInputText = ""
+                            }
+
+                            ConverterScreenMode.CONVERTER -> {
+                                val todayJdn = Jdn.today()
+                                viewModel.selectedDate = todayJdn
+                            }
+
+                            ConverterScreenMode.DISTANCE -> {
+                                val todayJdn = Jdn.today()
+                                viewModel.selectedDate = todayJdn
+                                viewModel.secondSelectedDate = todayJdn
+                            }
+
+                            ConverterScreenMode.TIME_ZONES -> {
+                                viewModel.resetTimeZoneClock()
+                            }
+
+                            ConverterScreenMode.QR_CODE -> {}
+                        }
                     }
                     AnimatedVisibility(anyPendingConfirm) {
                         AppIconButton(
@@ -148,7 +170,7 @@ fun SharedTransitionScope.ConverterScreen(
                             onClick = { pendingConfirms.forEach { it() } },
                         )
                     }
-                    AnimatedVisibility(!anyPendingConfirm) {
+                    AnimatedVisibility(visible = !anyPendingConfirm) {
                         ConverterScreenShareActionButton(viewModel, qrShareAction)
                     }
                 },
@@ -316,6 +338,20 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
 
 @Composable
 private fun Calculator(viewModel: ConverterViewModel) {
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val preferences = context.preferences
+        val currentInput = viewModel.calculatorInputText
+        if (currentInput.isEmpty()) {
+            val storedInput = preferences.getString(PREF_CALCULATOR_INPUT, "") ?: ""
+            viewModel.calculatorInputText = storedInput.ifEmpty {
+                "1d 2h 3m 4s + 4h 5s - 2030s + 28h"
+            }
+        }
+        onDispose {
+            preferences.edit { putString(PREF_CALCULATOR_INPUT, viewModel.calculatorInputText) }
+        }
+    }
     val result = runCatching {
         // running this inside a runCatching block is absolutely important
         eval(viewModel.calculatorInputText)

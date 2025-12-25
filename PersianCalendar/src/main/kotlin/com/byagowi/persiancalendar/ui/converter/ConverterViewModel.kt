@@ -22,7 +22,7 @@ class ConverterViewModel : ViewModel() {
     var selectedDate by mutableStateOf(today)
     var secondSelectedDate by mutableStateOf(today)
     var screenMode by mutableStateOf(ConverterScreenMode.entries[0])
-    var calculatorInputText by mutableStateOf("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
+    var calculatorInputText by mutableStateOf("")
     var qrCodeInputText by mutableStateOf("https://example.com")
     var firstTimeZone: TimeZone by mutableStateOf(TimeZone.getDefault())
     var secondTimeZone: TimeZone by mutableStateOf(utc)
@@ -30,13 +30,11 @@ class ConverterViewModel : ViewModel() {
 
     val todayButtonVisibility by derivedStateOf {
         when (screenMode) {
-            ConverterScreenMode.CALCULATOR, ConverterScreenMode.QR_CODE -> false
-
+            ConverterScreenMode.CALCULATOR -> calculatorInputText.isNotEmpty()
+            ConverterScreenMode.QR_CODE -> false
             ConverterScreenMode.CONVERTER -> selectedDate != today
-
-            ConverterScreenMode.DISTANCE -> {
+            ConverterScreenMode.DISTANCE ->
                 selectedDate != today || secondSelectedDate != today
-            }
 
             ConverterScreenMode.TIME_ZONES -> {
                 !haveSameClock(

@@ -89,6 +89,7 @@ const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
 const val PREF_DYNAMIC_ICON_ENABLED = "DynamicIconEnabled"
 const val PREF_CUSTOM_FONT_NAME = "CustomFontName"
 const val PREF_CUSTOM_IMAGE_NAME = "CustomImageName"
+const val PREF_CALCULATOR_INPUT = "CalculatorInput"
 const val STORED_FONT_NAME = "font.ttf"
 const val STORED_IMAGE_NAME = "image.jpg"
 
