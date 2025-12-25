@@ -948,7 +948,8 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         R.id.week_number_column, if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
     )
     remoteViews.setDirection(R.id.month_grid_parent, context.resources)
-    // remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
+    val launchAppIntent = context.launchAppPendingIntent()
+    remoteViews.setOnClickPendingIntent(R.id.image, launchAppIntent)
 
     val monthStart = Jdn(baseDate)
     val weekStart = monthStart.weekDay - weekStart
@@ -961,7 +962,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         if (i !in weekStart + 7..<weekStart + 7 + monthLength) {
             if (i >= 7) {
                 remoteViews.setTextViewText(id, "")
-                remoteViews.setOnClickPendingIntent(id, null)
+                remoteViews.setOnClickPendingIntent(id, launchAppIntent)
             }
             return@forEachIndexed
         }
