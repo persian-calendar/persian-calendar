@@ -157,7 +157,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -203,7 +202,6 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
-import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
@@ -692,11 +690,7 @@ private fun SharedTransitionScope.CalendarsTab(
         ) {
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
-            ) { isGranted ->
-                context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
-                updateStoredPreference(context)
-                if (isGranted) update(context, updateDate = true)
-            }
+            ) { isGranted -> context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
             EncourageActionLayout(
                 header = stringResource(R.string.enable_notification),
                 acceptButton = stringResource(R.string.yes),
@@ -1176,8 +1170,7 @@ private fun SharedTransitionScope.Menu(
                     stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar
                 ) {
                     context.preferences.edit {
-                        if (calendar == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
-                        else {
+                        if (calendar == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE) else {
                             putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
                             val newOtherCalendars =
                                 listOf(calendar) + (enabledCalendars.drop(1) - calendar)
@@ -1188,8 +1181,6 @@ private fun SharedTransitionScope.Menu(
                             )
                         }
                     }
-                    updateStoredPreference(context)
-                    viewModel.refreshCalendar()
                     closeMenu()
                 }
             }
