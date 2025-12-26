@@ -107,8 +107,8 @@ private fun <T> SegmentedButtonItemsPicker(
         val maxWidth = with(density) { this@BoxWithConstraints.maxWidth.toPx() }
         val cellWidth = maxWidth / items.size
         val currentVisualIndex = visualIndex(value)
-        val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
-        val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
+        val cellLeft = remember(items) { Animatable(cellWidth * currentVisualIndex) }
+        val cellRight = remember(items) { Animatable(cellWidth * (currentVisualIndex + 1)) }
         SingleChoiceSegmentedButtonRow(
             space = 0.dp,
             modifier = Modifier

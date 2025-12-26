@@ -57,8 +57,8 @@ private fun RowScope.DatePickerContent(
     val yearMonths = remember(calendar, date.year) {
         calendar.getYearMonths(date.year)
     }
-    val monthsFormat = remember(calendar, date.year) {
-        val months = yearMonthNameOfDate(date);
+    val months = yearMonthNameOfDate(date)
+    val monthsFormat = remember(numeral, months) {
         { item: Int -> numeral.format(item) + " / " + months[item - 1] }
     }
     val todayYear = remember(calendar) { (Jdn.today() on calendar).year }
