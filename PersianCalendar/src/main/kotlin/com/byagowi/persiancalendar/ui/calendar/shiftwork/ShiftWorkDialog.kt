@@ -100,7 +100,7 @@ fun ColumnScope.ShiftWorkDialogContent(
     viewModel: ShiftWorkViewModel,
     selectedJdn: Jdn,
     onDismissRequest: () -> Unit,
-    navigateCalendarToItself: () -> Unit,
+    refreshCalendar: () -> Unit,
 ) {
     val context = LocalContext.current
     Text(
@@ -285,7 +285,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         TextButton(onClick = {
             onDismissRequest()
             saveShiftWorkState(context, viewModel)
-            navigateCalendarToItself()
+            refreshCalendar()
         }) { Text(stringResource(R.string.accept)) }
     }
 }
