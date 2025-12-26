@@ -154,6 +154,10 @@ import java.util.TimeZone
 // Somehow it's a legacy thing for this now aged project.
 // We have limited most of global variable to this package and
 // are avoiding storing complicated things on it.
+// Changes to their values are limited to this file so these
+// are only readable outside the file but writable only inside the file.
+// They are all are Compose states so the UI can trace their uses
+// and react on their changes if they are used on the UI.
 
 private val monthNameEmptyList = List(12) { "" }
 private val persianMonths_ = mutableStateOf(monthNameEmptyList)
