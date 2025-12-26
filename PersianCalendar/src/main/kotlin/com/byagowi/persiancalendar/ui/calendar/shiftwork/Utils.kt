@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 
-fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
+fun persistShiftWork(context: Context, viewModel: ShiftWorkViewModel) {
     val result = viewModel.shiftWorks.filter { it.length != 0 }.joinToString(",") {
         "${it.type.replace("=", "").replace(",", "")}=${it.length}"
     }
@@ -22,8 +22,6 @@ fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
         putString(PREF_SHIFT_WORK_SETTING, result)
         putBoolean(PREF_SHIFT_WORK_RECURS, viewModel.recurs)
     }
-
-    updateStoredPreference(context)
 }
 
 fun getShiftWorkViewModelFromGlobalVariables(selectedJdn: Jdn): ShiftWorkViewModel {

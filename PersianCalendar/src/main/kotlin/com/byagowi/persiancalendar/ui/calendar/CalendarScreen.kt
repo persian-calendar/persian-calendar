@@ -1059,7 +1059,7 @@ private fun SharedTransitionScope.Menu(
             viewModel = it,
             selectedJdn = viewModel.selectedDay,
             onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
-        ) { viewModel.refreshCalendar() }
+        )
     }
 
     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }

@@ -74,7 +74,6 @@ fun ShiftWorkDialog(
     viewModel: ShiftWorkViewModel,
     selectedJdn: Jdn,
     onDismissRequest: () -> Unit,
-    refreshCalendar: () -> Unit,
 ) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         DialogSurface {
@@ -84,10 +83,9 @@ fun ShiftWorkDialog(
                     LocalTextStyle provides MaterialTheme.typography.bodyMedium
                 ) {
                     ShiftWorkDialogContent(
-                        viewModel,
-                        selectedJdn,
-                        onDismissRequest,
-                        refreshCalendar,
+                        viewModel = viewModel,
+                        selectedJdn = selectedJdn,
+                        onDismissRequest = onDismissRequest,
                     )
                 }
             }
@@ -100,7 +98,6 @@ fun ColumnScope.ShiftWorkDialogContent(
     viewModel: ShiftWorkViewModel,
     selectedJdn: Jdn,
     onDismissRequest: () -> Unit,
-    refreshCalendar: () -> Unit,
 ) {
     val context = LocalContext.current
     Text(
@@ -284,8 +281,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         Spacer(Modifier.width(8.dp))
         TextButton(onClick = {
             onDismissRequest()
-            saveShiftWorkState(context, viewModel)
-            refreshCalendar()
+            persistShiftWork(context, viewModel)
         }) { Text(stringResource(R.string.accept)) }
     }
 }

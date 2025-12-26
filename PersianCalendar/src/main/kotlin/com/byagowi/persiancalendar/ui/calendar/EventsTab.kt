@@ -139,10 +139,7 @@ fun SharedTransitionScope.EventsTab(
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
     ) {
-        val refreshToken = viewModel.refreshToken
-        val shiftWorkTitle = remember(viewModel.selectedDay, refreshToken) {
-            getShiftWorkTitle(viewModel.selectedDay)
-        }
+        val shiftWorkTitle = getShiftWorkTitle(viewModel.selectedDay)
         this.AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle.orEmpty(),
@@ -181,7 +178,7 @@ fun SharedTransitionScope.EventsTab(
 
         Column(Modifier.padding(horizontal = 24.dp)) {
             val context = LocalContext.current
-            val deviceEvents = remember(viewModel.selectedDay, refreshToken) {
+            val deviceEvents = remember(viewModel.selectedDay, viewModel.refreshToken) {
                 context.readDayDeviceEvents(viewModel.selectedDay)
             }
             val events = readEvents(viewModel.selectedDay, viewModel, deviceEvents)
