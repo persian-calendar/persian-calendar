@@ -7,8 +7,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:drawablePadding="2dp"
         android:drawableEnd="@drawable/ic_widget_refresh"
+        android:drawablePadding="2dp"
         android:textAlignment="center" />
 
     <TextView

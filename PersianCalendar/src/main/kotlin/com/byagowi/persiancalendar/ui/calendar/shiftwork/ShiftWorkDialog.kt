@@ -280,8 +280,8 @@ fun ColumnScope.ShiftWorkDialogContent(
         }
         Spacer(Modifier.width(8.dp))
         TextButton(onClick = {
+            viewModel.persist(context)
             onDismissRequest()
-            persistShiftWork(context, viewModel)
         }) { Text(stringResource(R.string.accept)) }
     }
 }

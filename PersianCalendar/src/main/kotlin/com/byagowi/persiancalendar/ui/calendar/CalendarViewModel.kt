@@ -138,8 +138,12 @@ class CalendarViewModel() : ViewModel() {
         changeSearchTerm("")
     }
 
-    fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
-        _shiftWorkViewModel.value = shiftWorkViewModel
+    fun openShiftWorkDialog() {
+        _shiftWorkViewModel.value = ShiftWorkViewModel.initiateFromGlobalVariables(selectedDay)
+    }
+
+    fun closeShiftWorkDialog() {
+        _shiftWorkViewModel.value = null
     }
 
     fun openYearView() {

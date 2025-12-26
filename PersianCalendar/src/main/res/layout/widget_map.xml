@@ -10,9 +10,9 @@
 
     <ImageView
         android:id="@+id/map_background"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:importantForAccessibility="no"
         android:scaleType="fitCenter" />
 

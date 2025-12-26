@@ -163,7 +163,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.reports.prayTimeHtmlReport
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
-import com.byagowi.persiancalendar.ui.calendar.shiftwork.getShiftWorkViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
@@ -1052,7 +1051,7 @@ private fun SharedTransitionScope.Menu(
         ShiftWorkDialog(
             viewModel = it,
             selectedJdn = viewModel.selectedDay,
-            onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
+            onDismissRequest = { viewModel.closeShiftWorkDialog() },
         )
     }
 
@@ -1073,7 +1072,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
             closeMenu()
-            viewModel.setShiftWorkViewModel(getShiftWorkViewModelFromGlobalVariables(viewModel.selectedDay))
+            viewModel.openShiftWorkDialog()
         }
 
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
