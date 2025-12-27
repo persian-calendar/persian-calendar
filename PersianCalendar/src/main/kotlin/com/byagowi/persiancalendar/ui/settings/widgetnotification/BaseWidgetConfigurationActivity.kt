@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.widget.FrameLayout
 import android.widget.RemoteViews
@@ -14,11 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -34,6 +28,7 @@ import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.preferences
@@ -96,11 +91,10 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
                     height = size.height.coerceAtMost(240.dp),
                 ),
             ) {
-                val updateToken = preferenceUpdateToken(LocalContext.current.preferences)
                 AndroidView(
                     factory = ::FrameLayout,
                     update = { parent ->
-                        updateToken.let {}
+                        preferencesUpdateToken.let {}
                         val remoteViews = preview(DpSize(maxWidth, maxHeight))
                         val context = parent.context.applicationContext
                         if (remoteViews.layoutId != parent.children.firstOrNull()?.id) {
@@ -115,26 +109,14 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     }
 
     @Composable
-    private fun preferenceUpdateToken(preferences: SharedPreferences): Int {
-        var updateToken by remember { mutableIntStateOf(0) }
-        DisposableEffect(preferences) {
-            val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-                ++updateToken
-            }
-            preferences.registerOnSharedPreferenceChangeListener(listener)
-            onDispose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
-        }
-        return updateToken
-    }
-
-    @Composable
     protected fun TextScaleSettings() {
         val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
         val preferences = LocalContext.current.preferences
-        val updateToken = preferenceUpdateToken(preferences)
         SettingsSlider(
             title = stringResource(R.string.widget_text_size),
-            value = updateToken.let { preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE) },
+            value = preferencesUpdateToken.let {
+                preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE)
+            },
             valueRange = .65f..3f,
             visibleScale = 14f,
             defaultValue = 1f,

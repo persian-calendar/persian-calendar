@@ -68,6 +68,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.common.ColorBox
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -174,13 +175,12 @@ fun SettingsColor(
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
-    var persistedColor by remember {
-        val initialColor = Color(
+    val currentColor = remember(preferencesUpdateToken) {
+        Color(
             context.preferences.getString(key, null)?.toColorInt()
                 ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
                 else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
         )
-        mutableStateOf(initialColor)
     }
     SettingsLayout(
         title = title,
@@ -191,7 +191,7 @@ fun SettingsColor(
             .clearAndSetSemantics {},
     ) {
         ColorBox(
-            color = animateColor(persistedColor).value,
+            color = animateColor(currentColor).value,
             size = widgetSize.dp,
             shape = MaterialTheme.shapes.large,
             outlineColor = MaterialTheme.colorScheme.outline,
@@ -201,9 +201,8 @@ fun SettingsColor(
     if (showDialog) ColorPickerDialog(
         title = title,
         isBackgroundPick = isBackgroundPick,
-        initialColor = persistedColor,
+        initialColor = currentColor,
         persistColor = { color ->
-            persistedColor = color
             val colorResult = if (isBackgroundPick) "#%08X".format(
                 Locale.ENGLISH, 0xFFFFFFFF and color.toArgb().toLong()
             ) else "#%06X".format(Locale.ENGLISH, 0xFFFFFF and color.toArgb())
@@ -225,8 +224,9 @@ fun SettingsSingleSelect(
     val context = LocalContext.current
     SettingsClickable(
         title = title,
-        summary = summaryResId?.let { stringResource(it) }
-            ?: entries[entryValues.indexOf(persistedValue)],
+        summary = summaryResId?.let { stringResource(it) } ?: entries[entryValues.indexOf(
+            persistedValue
+        )],
     ) { onDismissRequest ->
         AppDialog(
             title = { Text(stringResource(dialogTitleResId)) },
@@ -367,7 +367,7 @@ fun SettingsHelp(title: String) {
                 modifier = Modifier.size(40.dp),
                 tint = MaterialTheme.colorScheme.primary,
             )
-        }
+        },
     )
 }
 
@@ -385,8 +385,8 @@ fun SettingsLayout(
             .then(modifier)
             .padding(horizontal = 8.dp),
     ) {
-        val endPadding = 16 + (if (widget != null) widgetSize + 16f else 0f) +
-                (if (extraWidget != null) widgetSize + 8f else 0f)
+        val endPadding =
+            16 + (if (widget != null) widgetSize + 16f else 0f) + (if (extraWidget != null) widgetSize + 8f else 0f)
         Column(
             Modifier
                 .align(alignment = Alignment.CenterStart)

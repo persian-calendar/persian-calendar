@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
 import androidx.annotation.CallSuper
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
@@ -64,6 +66,7 @@ abstract class BaseActivity : ComponentActivity(),
 
     final override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
         if (this !is MainActivity && !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
+        ++preferencesUpdateToken_.intValue
         when (key) {
             PREF_CALCULATOR_INPUT -> return // nothing needs to be updated
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
@@ -71,12 +74,7 @@ abstract class BaseActivity : ComponentActivity(),
             LAST_PLAYED_ATHAN_JDN, LAST_PLAYED_ATHAN_KEY -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET -> {
-                this.preferences.edit {
-                    putJdn(
-                        PREF_ISLAMIC_OFFSET_SET_DATE,
-                        Jdn.today()
-                    )
-                }
+                this.preferences.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
             }
 
             PREF_PRAY_TIME_METHOD -> this.preferences.edit { remove(PREF_MIDNIGHT_METHOD) }
@@ -96,11 +94,14 @@ abstract class BaseActivity : ComponentActivity(),
             loadLanguageResources(this.resources)
         }
 
-        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS ||
-            key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS ||
-            key == PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS ||
-            key == PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH ||
-            key == PREF_HOLIDAY_TYPES
+        if (when (key) {
+                PREF_EASTERN_GREGORIAN_ARABIC_MONTHS -> true
+                PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS -> true
+                PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS -> true
+                PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH -> true
+                PREF_HOLIDAY_TYPES -> true
+                else -> false
+            }
         ) loadLanguageResources(this.resources)
 
         update(this, true)
@@ -115,9 +116,7 @@ abstract class BaseActivity : ComponentActivity(),
             touchExplorationStateChangeListener
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
-            accessibilityService?.addHighContrastTextStateChangeListener(
-                mainExecutor, it
-            )
+            accessibilityService?.addHighContrastTextStateChangeListener(mainExecutor, it)
         }
     }
 
@@ -144,3 +143,6 @@ abstract class BaseActivity : ComponentActivity(),
             }
         } else null
 }
+
+private val preferencesUpdateToken_ = mutableIntStateOf(0)
+val preferencesUpdateToken by preferencesUpdateToken_
