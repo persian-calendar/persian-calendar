@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.utils.updateMonthWidget
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
-        when (val action = intent?.action) {
+        when (val action = intent?.action ?: return) {
             Intent.ACTION_BOOT_COMPLETED,
             TelephonyManager.ACTION_PHONE_STATE_CHANGED,
             BROADCAST_RESTART_APP -> startWorker(context)
@@ -48,7 +48,6 @@ class BroadcastReceivers : BroadcastReceiver() {
                 startAthan(context, key, intendedTime)
             }
 
-            null -> Unit
             else -> {
                 if (action.startsWith(MONTH_PREV_COMMAND)) {
                     action.replace(MONTH_PREV_COMMAND, "").toIntOrNull()?.let { id ->
