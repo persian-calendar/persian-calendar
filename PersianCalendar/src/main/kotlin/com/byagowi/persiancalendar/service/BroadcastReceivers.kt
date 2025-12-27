@@ -31,8 +31,8 @@ class BroadcastReceivers : BroadcastReceiver() {
             TelephonyManager.ACTION_PHONE_STATE_CHANGED,
             BROADCAST_RESTART_APP -> startWorker(context)
 
-            Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> update(context, true)
-            Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON -> update(context, false)
+            Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED,
+            Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON -> update(context, true)
 
             BROADCAST_UPDATE_APP -> update(context, true)
 
