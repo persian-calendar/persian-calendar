@@ -17,6 +17,7 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -107,8 +108,33 @@ private fun <T> SegmentedButtonItemsPicker(
         val maxWidth = with(density) { this@BoxWithConstraints.maxWidth.toPx() }
         val cellWidth = maxWidth / items.size
         val currentVisualIndex = visualIndex(value)
-        val cellLeft = remember(items) { Animatable(cellWidth * currentVisualIndex) }
-        val cellRight = remember(items) { Animatable(cellWidth * (currentVisualIndex + 1)) }
+        val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
+        val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
+        fun updateCellPosition(item: T) {
+            val destinationVisualIndex = visualIndex(item)
+            val isForward = visualIndex(item) > currentVisualIndex
+            val first = spring<Float>(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = 150f,
+            )
+            val second = spring<Float>(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = 300f,
+            )
+            coroutineScope.launch {
+                cellLeft.animateTo(
+                    targetValue = cellWidth * destinationVisualIndex,
+                    animationSpec = if (isForward) first else second,
+                )
+            }
+            coroutineScope.launch {
+                cellRight.animateTo(
+                    targetValue = cellWidth * (destinationVisualIndex + 1),
+                    animationSpec = if (isForward) second else first,
+                )
+            }
+        }
+        LaunchedEffect(items) { updateCellPosition(value) }
         SingleChoiceSegmentedButtonRow(
             space = 0.dp,
             modifier = Modifier
@@ -164,28 +190,7 @@ private fun <T> SegmentedButtonItemsPicker(
                     onClick = {
                         onValueChange(item)
                         view.performHapticFeedbackVirtualKey()
-                        val destinationVisualIndex = visualIndex(item)
-                        val isForward = visualIndex(item) > currentVisualIndex
-                        val first = spring<Float>(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = 150f,
-                        )
-                        val second = spring<Float>(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = 300f,
-                        )
-                        coroutineScope.launch {
-                            cellLeft.animateTo(
-                                targetValue = cellWidth * destinationVisualIndex,
-                                animationSpec = if (isForward) first else second,
-                            )
-                        }
-                        coroutineScope.launch {
-                            cellRight.animateTo(
-                                targetValue = cellWidth * (destinationVisualIndex + 1),
-                                animationSpec = if (isForward) second else first,
-                            )
-                        }
+                        updateCellPosition(item)
                     },
                     contentPadding = PaddingValues(
                         start = 12.dp,
