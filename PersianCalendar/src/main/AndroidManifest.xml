@@ -449,12 +449,6 @@
         </receiver>
 
         <service
-            android:name=".service.ApplicationService"
-            android:enabled="true"
-            android:exported="false"
-            android:label="Calendar Service" />
-
-        <service
             android:name=".service.AthanNotification"
             android:exported="false"
             android:label="Athan Service" />
