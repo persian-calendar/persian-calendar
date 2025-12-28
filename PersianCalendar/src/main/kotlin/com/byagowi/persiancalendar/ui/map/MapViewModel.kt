@@ -49,7 +49,9 @@ class MapViewModel : ViewModel() {
     fun toggleDirectPathMode() {
         _state.value = state.copy(
             isDirectPathMode = !state.isDirectPathMode,
-            directPathDestination = state.directPathDestination.takeIf { _ -> !state.isDirectPathMode },
+            directPathDestination = state.directPathDestination.takeIf { _ ->
+                !state.isDirectPathMode
+            },
         )
     }
 

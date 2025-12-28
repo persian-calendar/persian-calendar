@@ -172,12 +172,11 @@ class SunView(context: Context) : View(context) {
             val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
             if (value in .17f..0.83f) withRotation(animatedFraction * 900f, cx, cy) {
                 solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
-            } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
-                run {
-                    solarDraw.moon(
-                        canvas, sun ?: return@run, moon ?: return@run, cx, cy, radius,
-                    )
-                }
+            } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) scale@{
+                // cancel parent flip
+                solarDraw.moon(
+                    canvas, sun ?: return@scale, moon ?: return@scale, cx, cy, radius,
+                )
             }
         }
 

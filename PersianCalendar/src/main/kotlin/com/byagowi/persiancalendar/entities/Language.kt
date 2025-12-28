@@ -26,7 +26,6 @@ import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.roundToLong
 
-
 enum class Language(val code: String, val nativeName: String) {
     // The following order is used for language change dialog also
     // Official languages

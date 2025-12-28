@@ -845,10 +845,10 @@ fun getStandardFrequency(note: Double): Double {
     return MIDDLE_A_FREQUENCY * 2.0.pow((note - MIDDLE_A_SEMITONE) / 12)
 }
 
-//fun getNote(frequency: Double): Double {
-//    val note = 12 * (ln(frequency / MIDDLE_A_FREQUENCY) / ln(2.0))
-//    return note.roundToInt() + MIDDLE_A_SEMITONE
-//}
+// fun getNote(frequency: Double): Double {
+//     val note = 12 * (ln(frequency / MIDDLE_A_FREQUENCY) / ln(2.0))
+//     return note.roundToInt() + MIDDLE_A_SEMITONE
+// }
 
 val ABC_NOTATION = listOf(
     "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B",
@@ -1068,104 +1068,104 @@ private fun getRandomTransparentColor(): Int {
     return Color.argb(0x10, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 }
 
-//fun showViewDragHelperDemoDialog(activity: ComponentActivity) {
-//    // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
-//    val view = object : ViewGroup(activity) {
-//        private val bounds = List(9) { Rect() }
-//        override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
-//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-//            super.onSizeChanged(w, h, oldw, oldh)
-//            val w3 = w / 3
-//            val h3 = h / 3
-//            bounds.forEachIndexed { i, r ->
-//                r.set(0, 0, w3, h3)
-//                r.offset(w3 * (i % 3), h3 * (i / 3))
-//                getChildAt(i).layout(r.left, r.top, r.right, r.bottom)
-//            }
-//        }
+// fun showViewDragHelperDemoDialog(activity: ComponentActivity) {
+//     // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
+//     val view = object : ViewGroup(activity) {
+//         private val bounds = List(9) { Rect() }
+//         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+//         override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//             super.onSizeChanged(w, h, oldw, oldh)
+//             val w3 = w / 3
+//             val h3 = h / 3
+//             bounds.forEachIndexed { i, r ->
+//                 r.set(0, 0, w3, h3)
+//                 r.offset(w3 * (i % 3), h3 * (i / 3))
+//                 getChildAt(i).layout(r.left, r.top, r.right, r.bottom)
+//             }
+//         }
 //
-//        private val callback = object : ViewDragHelper.Callback() {
-//            override fun tryCaptureView(view: View, i: Int): Boolean = true
-//            override fun onViewPositionChanged(
-//                changedView: View, left: Int, top: Int, dx: Int, dy: Int
-//            ) = invalidate()
+//         private val callback = object : ViewDragHelper.Callback() {
+//             override fun tryCaptureView(view: View, i: Int): Boolean = true
+//             override fun onViewPositionChanged(
+//                 changedView: View, left: Int, top: Int, dx: Int, dy: Int
+//             ) = invalidate()
 //
-//            override fun getViewHorizontalDragRange(child: View): Int = width
-//            override fun getViewVerticalDragRange(child: View): Int = height
-//            override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
-//                bringChildToFront(capturedChild)
+//             override fun getViewHorizontalDragRange(child: View): Int = width
+//             override fun getViewVerticalDragRange(child: View): Int = height
+//             override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
+//                 bringChildToFront(capturedChild)
 //
-//            override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-//                val (x, y) = computeFinalPosition(releasedChild, xvel, yvel)
-//                dragHelper.settleCapturedViewAt(x, y)
-//                invalidate()
-//            }
+//             override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+//                 val (x, y) = computeFinalPosition(releasedChild, xvel, yvel)
+//                 dragHelper.settleCapturedViewAt(x, y)
+//                 invalidate()
+//             }
 //
-//            private fun computeFinalPosition(child: View, xvel: Float, yvel: Float): Point {
-//                val r = Rect()
-//                child.getHitRect(r)
-//                var cx = r.centerX()
-//                var cy = r.centerY()
-//                if (xvel != 0f || yvel != 0f) {
-//                    val s =
-//                        Scroller(context) // Creating a view just to use its computation doesn't look cool
-//                    val w2: Int = r.width() / 2
-//                    val h2: Int = r.height() / 2
-//                    s.fling(cx, cy, xvel.toInt(), yvel.toInt(), w2, width - w2, h2, height - h2)
-//                    cx = s.finalX
-//                    cy = s.finalY
-//                }
-//                bounds.forEach { if (it.contains(cx, cy)) return Point(it.left, it.top) }
-//                return Point()
-//            }
+//             private fun computeFinalPosition(child: View, xvel: Float, yvel: Float): Point {
+//                 val r = Rect()
+//                 child.getHitRect(r)
+//                 var cx = r.centerX()
+//                 var cy = r.centerY()
+//                 if (xvel != 0f || yvel != 0f) {
+//                     val s =
+//                         Scroller(context) // Creating a view just to use its computation doesn't look cool
+//                     val w2: Int = r.width() / 2
+//                     val h2: Int = r.height() / 2
+//                     s.fling(cx, cy, xvel.toInt(), yvel.toInt(), w2, width - w2, h2, height - h2)
+//                     cx = s.finalX
+//                     cy = s.finalY
+//                 }
+//                 bounds.forEach { if (it.contains(cx, cy)) return Point(it.left, it.top) }
+//                 return Point()
+//             }
 //
-//            override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
-//                left.coerceIn(0, width - child.width)
+//             override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
+//                 left.coerceIn(0, width - child.width)
 //
-//            override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
-//                top.coerceIn(0, height - child.height)
-//        }
-//        private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
+//             override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
+//                 top.coerceIn(0, height - child.height)
+//         }
+//         private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
 //
-//        override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-//            val action = event.action
-//            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-//                dragHelper.cancel()
-//                return false
-//            }
-//            return dragHelper.shouldInterceptTouchEvent(event)
-//        }
+//         override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+//             val action = event.action
+//             if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+//                 dragHelper.cancel()
+//                 return false
+//             }
+//             return dragHelper.shouldInterceptTouchEvent(event)
+//         }
 //
-//        @SuppressLint("ClickableViewAccessibility")
-//        override fun onTouchEvent(event: MotionEvent): Boolean {
-//            dragHelper.processTouchEvent(event)
-//            return true
-//        }
+//         @SuppressLint("ClickableViewAccessibility")
+//         override fun onTouchEvent(event: MotionEvent): Boolean {
+//             dragHelper.processTouchEvent(event)
+//             return true
+//         }
 //
-//        override fun computeScroll() {
-//            if (dragHelper.continueSettling(true)) invalidate()
-//        }
+//         override fun computeScroll() {
+//             if (dragHelper.continueSettling(true)) invalidate()
+//         }
 //
-//        init {
-//            (0..<360 step 40)
-//                .map { Color.HSVToColor(floatArrayOf(it.toFloat(), 100f, 1f)) }
-//                .shuffled()
-//                .mapIndexed { i, color ->
-//                    TextView(context).also {
-//                        it.textSize = 32f
-//                        it.textAlignment = View.TEXT_ALIGNMENT_CENTER
-//                        it.setBackgroundColor(color)
-//                        var clickedCount = i
-//                        it.text = clickedCount.toString()
-//                        it.setOnClickListener { _ -> it.text = (++clickedCount).toString() }
-//                    }
-//                }.forEach(::addView)
-//        }
-//    }
-//    AlertDialog.Builder(activity)
-//        .setView(view)
-//        .show()
-//}
+//         init {
+//             (0..<360 step 40)
+//                 .map { Color.HSVToColor(floatArrayOf(it.toFloat(), 100f, 1f)) }
+//                 .shuffled()
+//                 .mapIndexed { i, color ->
+//                     TextView(context).also {
+//                         it.textSize = 32f
+//                         it.textAlignment = View.TEXT_ALIGNMENT_CENTER
+//                         it.setBackgroundColor(color)
+//                         var clickedCount = i
+//                         it.text = clickedCount.toString()
+//                         it.setOnClickListener { _ -> it.text = (++clickedCount).toString() }
+//                     }
+//                 }.forEach(::addView)
+//         }
+//     }
+//     AlertDialog.Builder(activity)
+//         .setView(view)
+//         .show()
+// }
 
 // Based on https://habr.com/ru/post/514844/ and https://timiskhakov.github.io/posts/programming-guitar-music
 private fun guitarString(
@@ -1395,24 +1395,24 @@ fun showInputDeviceTestDialog(activity: Activity) {
         .show()
 }
 
-//fun showCarouselDialog(activity: ComponentActivity) {
-//    AlertDialog.Builder(activity)
-//        .setView(FrameLayout(activity).also { root ->
-//            root.addView(RecyclerView(activity).also {
-//                it.layoutManager = CarouselLayoutManager()
-//                it.adapter = SeasonsAdapter()
-//                it.setHasFixedSize(true) // Just as an optimization
-//                it.layoutParams = ViewGroup.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    (196 * activity.resources.dp).toInt()
-//                )
-//                // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
-//                PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
-//                it.scrollToPosition(0)
-//                it.smoothScrollToPosition(12)
-//            })
-//        }).show()
-//}
+// fun showCarouselDialog(activity: ComponentActivity) {
+//     AlertDialog.Builder(activity)
+//         .setView(FrameLayout(activity).also { root ->
+//             root.addView(RecyclerView(activity).also {
+//                 it.layoutManager = CarouselLayoutManager()
+//                 it.adapter = SeasonsAdapter()
+//                 it.setHasFixedSize(true) // Just as an optimization
+//                 it.layoutParams = ViewGroup.LayoutParams(
+//                     ViewGroup.LayoutParams.MATCH_PARENT,
+//                     (196 * activity.resources.dp).toInt()
+//                 )
+//                 // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
+//                 PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
+//                 it.scrollToPosition(0)
+//                 it.smoothScrollToPosition(12)
+//             })
+//         }).show()
+// }
 
 // Lindenmayer system: https://en.wikipedia.org/wiki/L-system
 class LSystem(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {

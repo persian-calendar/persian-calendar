@@ -52,6 +52,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) :
     /**
      * Returns true if the manager is listening to orientation changes
      */
+
     /**
      * indicates whether or not Accelerometer Sensor is running
      */

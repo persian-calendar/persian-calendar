@@ -55,7 +55,8 @@ private fun solvePlacidusCusp(
     val referenceRaRad = ramcRad + if (isNocturnalCusp) PI else .0
     var y = sin(referenceRaRad)
     var x = cos(referenceRaRad) * cosOb
-    repeat(8) { // It's more than enough iterations to reach to the needed accuracy
+    // It's more than enough iterations to reach to the needed accuracy
+    repeat(8) {
         val dec = y / hypot(x, y) * sinOb // Declination (δ) of the current longitude guess (λ)
         val ad = asin((dec / sqrt(1 - dec * dec) * tanPhi).coerceIn(-1.0, 1.0)) // Ascensional diff
         val requiredRa = referenceRaRad + (ad + PI / if (isNocturnalCusp) -2 else 2) * cuspRatio

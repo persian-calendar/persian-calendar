@@ -600,9 +600,11 @@ fun toAbjad(number: Int): String {
     if (number == 0) return "۰" // It is like this though https://imgur.com/a/0eMBO2c
     var n = number
     return buildString {
-        for (value in abjadMap.keys) while (n >= value) {
-            append(abjadMap[value])
-            n -= value
+        for (value in abjadMap.keys) {
+            while (n >= value) {
+                append(abjadMap[value])
+                n -= value
+            }
         }
     }
 }

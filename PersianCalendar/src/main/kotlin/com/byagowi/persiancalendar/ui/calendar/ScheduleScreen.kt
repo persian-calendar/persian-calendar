@@ -336,4 +336,3 @@ private fun eventsCache(calendarViewModel: CalendarViewModel): @Composable (Jdn)
         }
     }
 }
-

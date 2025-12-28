@@ -48,8 +48,8 @@ fun Bitmap.toPngByteArray(): ByteArray {
     return buffer.toByteArray()
 }
 
-//fun Bitmap.toPngBase64(): String =
-//    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
+// fun Bitmap.toPngBase64(): String =
+//     "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
 
 inline fun Context.saveAsCacheFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(

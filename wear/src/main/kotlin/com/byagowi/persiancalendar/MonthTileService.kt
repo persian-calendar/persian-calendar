@@ -286,8 +286,7 @@ class MonthTileService : TileService() {
         )
     }
 
-    override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest)
-            : ListenableFuture<ResourceBuilders.Resources> {
+    override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ListenableFuture<ResourceBuilders.Resources> {
         return ImmediateFuture(
             ResourceBuilders.Resources.Builder()
                 .setVersion(RESOURCES_VERSION)

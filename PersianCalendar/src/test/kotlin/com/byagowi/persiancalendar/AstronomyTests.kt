@@ -522,7 +522,7 @@ class AstronomyTests {
             29 to "کط",
             30 to "ل",
             31 to "لا",
-            //360 to "سش"
+            // 360 to "سش"
         ).map { (input, expected) ->
             { assertEquals(expected, toAbjad(input), "$input") }
         }.let(::assertAll)

@@ -233,26 +233,26 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
 }
 
 // https://stackoverflow.com/a/52557989
-//fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
-//    post {
-//        val viewWidth = width
-//        val viewHeight = height
-//        val diagonal = hypot(viewWidth.toDouble(), viewHeight.toDouble()).toInt()
-//        AnimatorSet().also {
-//            it.playTogether(
-//                CircularRevealCompat.createCircularReveal(
-//                    this, viewWidth / 2f, viewHeight / 2f, 10f, diagonal / 2f
-//                ),
-//                ObjectAnimator.ofArgb(
-//                    this,
-//                    CircularRevealWidget.CircularRevealScrimColorProperty.CIRCULAR_REVEAL_SCRIM_COLOR,
-//                    Color.GRAY, Color.TRANSPARENT
-//                )
-//            )
-//            it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
-//        }.start()
-//    }
-//}
+// fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
+//     post {
+//         val viewWidth = width
+//         val viewHeight = height
+//         val diagonal = hypot(viewWidth.toDouble(), viewHeight.toDouble()).toInt()
+//         AnimatorSet().also {
+//             it.playTogether(
+//                 CircularRevealCompat.createCircularReveal(
+//                     this, viewWidth / 2f, viewHeight / 2f, 10f, diagonal / 2f
+//                 ),
+//                 ObjectAnimator.ofArgb(
+//                     this,
+//                     CircularRevealWidget.CircularRevealScrimColorProperty.CIRCULAR_REVEAL_SCRIM_COLOR,
+//                     Color.GRAY, Color.TRANSPARENT
+//                 )
+//             )
+//             it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+//         }.start()
+//     }
+// }
 
 // @Language("AGSL")
 // private const val demoRuntimeShader = """
@@ -278,51 +278,51 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
 // }
 // """
 
-//class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-//    private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
-//    // private val startTime = System.nanoTime()
-//    // private val shader by lazy(LazyThreadSafetyMode.NONE) {
-//    //     runCatching {
-//    //         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return@runCatching null
-//    //         RuntimeShader(demoRuntimeShader).also {
-//    //             val width = context.resources?.displayMetrics?.widthPixels?.toFloat() ?: 800f
-//    //             val height = context.resources?.displayMetrics?.heightPixels?.toFloat() ?: 800f
-//    //             it.setFloatUniform("iResolution", width, height)
-//    //         }
-//    //     }.onFailure(logException).getOrNull().debugAssertNotNull
-//    // }
-//    // private val shaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-//    //     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//    //         it.shader = shader
-//    //     }
-//    // }
+// class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+//     private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
+//     // private val startTime = System.nanoTime()
+//     // private val shader by lazy(LazyThreadSafetyMode.NONE) {
+//     //     runCatching {
+//     //         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return@runCatching null
+//     //         RuntimeShader(demoRuntimeShader).also {
+//     //             val width = context.resources?.displayMetrics?.widthPixels?.toFloat() ?: 800f
+//     //             val height = context.resources?.displayMetrics?.heightPixels?.toFloat() ?: 800f
+//     //             it.setFloatUniform("iResolution", width, height)
+//     //         }
+//     //     }.onFailure(logException).getOrNull().debugAssertNotNull
+//     // }
+//     // private val shaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//     //     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//     //         it.shader = shader
+//     //     }
+//     // }
 //
-//    override fun onDraw(canvas: Canvas) {
-//        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//        //     shader?.setFloatUniform("iTime", (System.nanoTime() - startTime) / 1e9f)
-//        //     canvas.drawPaint(shaderPaint)
-//        //     invalidate()
-//        // } else
-//        canvas.drawPaint(checkerBoard)
-//    }
-//}
+//     override fun onDraw(canvas: Canvas) {
+//         // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//         //     shader?.setFloatUniform("iTime", (System.nanoTime() - startTime) / 1e9f)
+//         //     canvas.drawPaint(shaderPaint)
+//         //     invalidate()
+//         // } else
+//         canvas.drawPaint(checkerBoard)
+//     }
+// }
 
 // https://stackoverflow.com/a/58471997
-//@Suppress("SameParameterValue")
-//private fun createCheckerRoundedBoard(
-//    tileSize: Float, r: Float, @ColorInt color: Int
-//) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
-//    val tileSize2x = tileSize.toInt() * 2
-//    val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
-//        it.style = Paint.Style.FILL
-//        it.color = color
-//    }
-//    val bitmap = createBitmap(tileSize2x, tileSize2x).applyCanvas {
-//        drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
-//        drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
-//    }
-//    paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-//}
+// @Suppress("SameParameterValue")
+// private fun createCheckerRoundedBoard(
+//     tileSize: Float, r: Float, @ColorInt color: Int
+// ) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
+//     val tileSize2x = tileSize.toInt() * 2
+//     val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//         it.style = Paint.Style.FILL
+//         it.color = color
+//     }
+//     val bitmap = createBitmap(tileSize2x, tileSize2x).applyCanvas {
+//         drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
+//         drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
+//     }
+//     paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+// }
 
 // https://stackoverflow.com/a/68822715
 // instead android.text.format.Formatter.formatShortFileSize() to control its locale

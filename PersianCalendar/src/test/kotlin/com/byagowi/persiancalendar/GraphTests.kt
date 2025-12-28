@@ -4,7 +4,7 @@ import com.byagowi.persiancalendar.ui.calendar.Graph
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class GraphTest {
+class GraphTests {
     @Test
     fun empty() {
         val g = Graph(0)

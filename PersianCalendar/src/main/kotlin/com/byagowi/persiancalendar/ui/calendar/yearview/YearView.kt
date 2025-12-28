@@ -123,7 +123,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                     context = context,
                     resources = resources,
                     width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
-                    height = height / 7,/* rows count*/
+                    height = height / 7, /* rows count*/
                     isRtl = isRtl,
                     colors = monthColors,
                     fontFile = fontFile,

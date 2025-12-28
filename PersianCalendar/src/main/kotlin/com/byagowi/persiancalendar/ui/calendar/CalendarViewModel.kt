@@ -155,7 +155,6 @@ class CalendarViewModel() : ViewModel() {
         _isYearView.value = false
     }
 
-
     fun changeSearchTerm(query: String) {
         _searchTerm.value = query
     }

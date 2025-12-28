@@ -32,7 +32,6 @@ private fun scheduleWorkManager(context: Context) {
     }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
-
 private fun scheduleThreeHoursAlarmManager(context: Context) {
     context.getSystemService<AlarmManager>()?.setInexactRepeating(
         AlarmManager.RTC,

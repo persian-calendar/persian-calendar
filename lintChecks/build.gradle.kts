@@ -7,7 +7,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-
 dependencies {
     compileOnly(libs.lint.api)
     compileOnly(libs.lint.checks)
@@ -22,4 +21,3 @@ kotlin {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
     }
 }
-

@@ -15,7 +15,6 @@ import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-
 // Based on https://stackoverflow.com/a/17649895 but modified to draw itself instead
 open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val scaleDetector = ScaleGestureDetector(context, ScaleListener())

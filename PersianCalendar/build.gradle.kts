@@ -35,8 +35,28 @@ android {
         // It lowers the APK size and prevents crash in AboutScreen in API 21-23
         vectorDrawables.useSupportLibrary = true
         androidResources.localeFilters += listOf(
-            "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
-            "ne", "zh-rCN", "ru", "pt", "it", "ta", "de", "ota",
+            "en",
+            "fa",
+            "ckb",
+            "ar",
+            "ur",
+            "ps",
+            "glk",
+            "azb",
+            "ja",
+            "fr",
+            "es",
+            "tr",
+            "kmr",
+            "tg",
+            "ne",
+            "zh-rCN",
+            "ru",
+            "pt",
+            "it",
+            "ta",
+            "de",
+            "ota",
         )
         base.archivesName.set("PersianCalendar-$versionName-$gitInfo")
     }
@@ -71,7 +91,8 @@ android {
 
         getByName("release") {
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro",
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
             )
             isMinifyEnabled = true
             isShrinkResources = true

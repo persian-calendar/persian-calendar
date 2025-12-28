@@ -117,4 +117,3 @@ fun renderMonthWidget(
 
     return footer
 }
-

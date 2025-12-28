@@ -22,7 +22,11 @@ package com.byagowi.persiancalendar.ui.level
 import kotlin.math.abs
 
 enum class Orientation(val reverse: Int, val rotation: Int) {
-    LANDING(1, 0), TOP(1, 0), RIGHT(1, 90), BOTTOM(-1, 180), LEFT(-1, -90);
+    LANDING(1, 0),
+    TOP(1, 0),
+    RIGHT(1, 90),
+    BOTTOM(-1, 180),
+    LEFT(-1, -90);
 
     fun isLevel(pitch: Float, roll: Float, balance: Float, sensibility: Float) = when (this) {
         BOTTOM, TOP -> balance <= sensibility && balance >= -sensibility

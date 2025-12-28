@@ -313,8 +313,8 @@ class MapDraw(
                 ).radiansToDegrees()
                 val W_topo = SD_topo * (1 - (cos(ARCL.degreesToRadians())))
                 if (isYallop) {
-                    val q = (ARCV - (11.8371 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
-                            - .1018 * W_topo.pow(3))) / 10
+                    val q = (ARCV - (11.8371 - 6.3226 * W_topo + .7319 * W_topo.pow(2) -
+                            .1018 * W_topo.pow(3))) / 10
                     maskMapCrescentVisibility[x, y] = when {
                         q > .216 -> 0x7F3EFF00 // Crescent easily visible
                         q > -.014 -> 0x7F3EFF6D // Crescent visible under perfect conditions
@@ -324,8 +324,8 @@ class MapDraw(
                         else -> Color.TRANSPARENT
                     }
                 } else {
-                    val V = ARCV - (7.1651 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
-                            - .1018 * W_topo.pow(3))
+                    val V = ARCV - (7.1651 - 6.3226 * W_topo + .7319 * W_topo.pow(2) -
+                            .1018 * W_topo.pow(3))
                     maskMapCrescentVisibility[x, y] = when {
                         V >= 5.65 -> 0x7F3EFF00 // Crescent is visible by naked eye
                         V >= 2.00 -> 0x7F00FF9E // Crescent is visible by optical aid

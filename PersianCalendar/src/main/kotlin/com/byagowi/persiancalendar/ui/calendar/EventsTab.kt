@@ -127,7 +127,6 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
-
 @Composable
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: (String?) -> Unit,
@@ -255,7 +254,6 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
 
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
 fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
-
 
 private val String.directionality
     get() = this.firstNotNullOfOrNull {

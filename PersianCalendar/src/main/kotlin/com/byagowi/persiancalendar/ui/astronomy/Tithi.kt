@@ -84,7 +84,7 @@ object Tithi {
      * Linear interpolation for theta in Hindu table.
      */
     private fun hinduSine(theta: Double): Double {
-        val entry = theta / angle(0, 225, 0.0)  // Interpolate in table
+        val entry = theta / angle(0, 225, 0.0) // Interpolate in table
         val fraction = entry % 1
         return fraction * hinduSineTable(ceil(entry).toInt()) +
                 (1 - fraction) * hinduSineTable(floor(entry).toInt())
@@ -108,8 +108,8 @@ object Tithi {
         if (amp < 0) return -hinduArcsin(-amp)
 
         val pos = next(0) { k -> amp <= hinduSineTable(k) }
-        val below = hinduSineTable(pos - 1)  // Lower value in table
-        return angle(0, 225, 0.0) * (pos - 1 +  // Interpolate
+        val below = hinduSineTable(pos - 1) // Lower value in table
+        return angle(0, 225, 0.0) * (pos - 1 + // Interpolate
                 (amp - below) / (hinduSineTable(pos) - below))
     }
 
@@ -126,10 +126,10 @@ object Tithi {
         anomalistic: Double,
         change: Double,
     ): Double {
-        val lambda = hinduMeanPosition(tee, period)  // Position of epicycle center
-        val offset = hinduSine(hinduMeanPosition(tee, anomalistic))  // Sine of anomaly
+        val lambda = hinduMeanPosition(tee, period) // Position of epicycle center
+        val offset = hinduSine(hinduMeanPosition(tee, anomalistic)) // Sine of anomaly
         val contraction = abs(offset) * change * size
-        val equation = hinduArcsin(offset * (size - contraction))  // Equation of center
+        val equation = hinduArcsin(offset * (size - contraction)) // Equation of center
         return (lambda - equation) % 360.0
     }
 

@@ -98,4 +98,3 @@ class JdnTest {
         assertTrue(civilDate.dayOfMonth in 1..31)
     }
 }
-

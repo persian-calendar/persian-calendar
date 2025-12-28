@@ -1102,7 +1102,7 @@ private fun DaysView(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
                                                 newValueY.coerceIn(
                                                     0f,
-                                                    cellHeightPx * 24 - duration
+                                                    cellHeightPx * 24 - duration,
                                                 ),
                                             )
 

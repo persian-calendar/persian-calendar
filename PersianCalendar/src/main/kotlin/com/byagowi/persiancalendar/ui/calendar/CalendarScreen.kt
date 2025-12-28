@@ -503,7 +503,9 @@ fun SharedTransitionScope.CalendarScreen(
 }
 
 enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
-    CALENDAR(R.string.calendar), EVENT(R.string.events), TIMES(R.string.times)
+    CALENDAR(R.string.calendar),
+    EVENT(R.string.events),
+    TIMES(R.string.times)
 }
 
 @Composable

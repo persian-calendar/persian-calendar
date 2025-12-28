@@ -202,7 +202,6 @@ val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen_
 private val isLargeDayNumberOnNotification_ = mutableStateOf(DEFAULT_LARGE_ICON_ON_NOTIFICATION)
 val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification_
 
-
 private val prefersWidgetsDynamicColors_ = mutableStateOf(false)
 
 @delegate:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
@@ -271,7 +270,6 @@ val customFontName by customFontName_
 
 private val customImageName_ = mutableStateOf<String?>(null)
 val customImageName by customImageName_
-
 
 private val englishGregorianPersianMonths_ =
     mutableStateOf(DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS)

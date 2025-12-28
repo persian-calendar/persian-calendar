@@ -137,7 +137,8 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
     debugLog("Alarms: $prayTime in ${remainedMillis / 60000} minutes")
     if (remainedMillis < 0) return // Don't set alarm in past
 
-    run { // Schedule in both alarmmanager and workmanager, startAthan has the logic to skip duplicated calls
+    // Schedule in both alarmmanager and workmanager, startAthan has the logic to skip duplicated calls
+    run {
         val workerInputData = Data.Builder().putLong(KEY_EXTRA_PRAYER_TIME, timeInMillis)
             .putString(KEY_EXTRA_PRAYER, prayTime.name).build()
         val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>()

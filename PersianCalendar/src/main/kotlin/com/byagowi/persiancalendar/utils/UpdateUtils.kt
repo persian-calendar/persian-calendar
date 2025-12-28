@@ -216,7 +216,6 @@ fun update(context: Context, updateDate: Boolean) {
     val jdn = Jdn.today()
     val date = jdn on mainCalendar
     if (jdn != latestJdnUpdate || updateDate) {
-
         debugLog("UpdateUtils: date has changed")
         scheduleAlarms(context)
         latestJdnUpdate = jdn

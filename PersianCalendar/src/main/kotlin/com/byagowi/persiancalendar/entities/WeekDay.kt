@@ -7,7 +7,13 @@ import com.byagowi.persiancalendar.global.weekDaysTitlesInitials
 // Order of this enum is a legacy for this codebase and it
 // *DIFFERS* from ISO-8601 standard and isn't 1 (Monday) to 7 (Sunday), unfortunately
 enum class WeekDay {
-    SATURDAY, SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY;
+    SATURDAY,
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY;
 
     operator fun minus(other: WeekDay): Int = (ordinal + 7 - other.ordinal) % 7
     operator fun plus(other: Int): WeekDay = entries[(ordinal + other) % 7]
