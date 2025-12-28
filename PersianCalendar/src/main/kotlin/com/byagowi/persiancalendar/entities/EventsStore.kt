@@ -15,14 +15,14 @@ private constructor(private val store: Map<Int, List<T>>) {
     } ?: emptyList()
 
     fun getEvents(
-        date: AbstractDate, irregularCalendarEventsStore: IrregularCalendarEventsStore
+        date: AbstractDate, irregularCalendarEventsStore: IrregularCalendarEventsStore,
     ): List<T> {
         return getEventsEntry(date) + irregularCalendarEventsStore.getEvents(date)
     }
 
     fun getEvents(
         date: CivilDate, irregularCalendarEventsStore: IrregularCalendarEventsStore,
-        deviceEvents: DeviceCalendarEventsStore
+        deviceEvents: DeviceCalendarEventsStore,
     ): List<CalendarEvent<*>> {
         return deviceEvents.getEventsEntry(date).sortedBy { it.start.timeInMillis } +
                 getEvents(date, irregularCalendarEventsStore)

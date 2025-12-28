@@ -24,7 +24,7 @@ fun DatePicker(
     calendar: Calendar,
     pendingConfirms: MutableCollection<() -> Unit>,
     jdn: Jdn,
-    setJdn: (Jdn) -> Unit
+    setJdn: (Jdn) -> Unit,
 ) {
     Crossfade(targetState = calendar, label = "day picker") { calendarState ->
         Row(modifier = Modifier.fillMaxWidth()) {

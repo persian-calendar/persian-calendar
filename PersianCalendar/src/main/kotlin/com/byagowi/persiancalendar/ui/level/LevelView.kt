@@ -160,12 +160,12 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             middleX - halfMarkerGap - markerThickness,
             middleY - halfMarkerGap - markerThickness,
             middleX + halfMarkerGap + markerThickness,
-            middleY + halfMarkerGap + markerThickness
+            middleY + halfMarkerGap + markerThickness,
         )
     }
 
     fun setOrientation(
-        newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float
+        newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float,
     ) {
         if (orientation == null || orientation != newOrientation) {
             onOrientationChange(newOrientation)
@@ -226,7 +226,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvasHeight = h
         levelMaxDimension = min(
             min(h, w) - 2 * angleDisplay.displayGap,
-            max(h, w) - 2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight)
+            max(h, w) - 2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight),
         )
         angleDisplay.updatePlacement(canvasWidth / 2, canvasHeight)
         onOrientationChange(orientation ?: Orientation.LANDING)
@@ -282,32 +282,32 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 (x - halfBubbleWidth).toInt(),
                 (y - halfBubbleHeight).toInt(),
                 (x + halfBubbleWidth).toInt(),
-                (y + halfBubbleHeight).toInt()
+                (y + halfBubbleHeight).toInt(),
             )
             level2D.draw(canvas)
             bubble2D.draw(canvas)
             marker2D.draw(canvas)
             canvas.drawLine(
                 minLevelX.toFloat(), middleY.toFloat(),
-                (middleX - halfMarkerGap).toFloat(), middleY.toFloat(), infoPaint
+                (middleX - halfMarkerGap).toFloat(), middleY.toFloat(), infoPaint,
             )
             canvas.drawLine(
                 (middleX + halfMarkerGap).toFloat(), middleY.toFloat(),
-                maxLevelX.toFloat(), middleY.toFloat(), infoPaint
+                maxLevelX.toFloat(), middleY.toFloat(), infoPaint,
             )
             canvas.drawLine(
                 middleX.toFloat(), minLevelY.toFloat(),
-                middleX.toFloat(), (middleY - halfMarkerGap).toFloat(), infoPaint
+                middleX.toFloat(), (middleY - halfMarkerGap).toFloat(), infoPaint,
             )
             canvas.drawLine(
                 middleX.toFloat(), (middleY + halfMarkerGap).toFloat(),
-                middleX.toFloat(), maxLevelY.toFloat(), infoPaint
+                middleX.toFloat(), maxLevelY.toFloat(), infoPaint,
             )
 
             angleDisplay.draw(canvas, angleToShow1, offsetXFactor = -1)
             angleDisplay.draw(canvas, angleToShow2, offsetXFactor = 1)
         } else canvas.withRotation(
-            orientation.rotation.toFloat(), middleX.toFloat(), middleY.toFloat()
+            orientation.rotation.toFloat(), middleX.toFloat(), middleY.toFloat(),
         ) {
             angleDisplay.draw(canvas, angleToShow1)
             // level
@@ -315,22 +315,22 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             // bubble
             canvas.clipRect(
                 minLevelX + levelBorderWidth, minLevelY + levelBorderHeight,
-                maxLevelX - levelBorderWidth, maxLevelY - levelBorderHeight
+                maxLevelX - levelBorderWidth, maxLevelY - levelBorderHeight,
             )
             bubble1D.setBounds(
                 (x - halfBubbleWidth).toInt(), minBubble,
-                (x + halfBubbleWidth).toInt(), maxBubble
+                (x + halfBubbleWidth).toInt(), maxBubble,
             )
             bubble1D.draw(canvas)
             // marker
             marker1D.setBounds(
                 middleX - halfMarkerGap - markerThickness, minLevelY,
-                middleX - halfMarkerGap, maxLevelY
+                middleX - halfMarkerGap, maxLevelY,
             )
             marker1D.draw(canvas)
             marker1D.setBounds(
                 middleX + halfMarkerGap, minLevelY,
-                middleX + halfMarkerGap + markerThickness, maxLevelY
+                middleX + halfMarkerGap + markerThickness, maxLevelY,
             )
             marker1D.draw(canvas)
         }

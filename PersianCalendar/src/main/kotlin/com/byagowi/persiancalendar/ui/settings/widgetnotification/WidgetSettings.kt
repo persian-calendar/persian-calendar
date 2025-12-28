@@ -56,25 +56,25 @@ fun ColumnScope.WidgetSettings() {
         key = PREF_NUMERICAL_DATE_PREFERRED,
         value = numericalDatePreferred,
         title = stringResource(R.string.prefer_linear_date),
-        summary = stringResource(R.string.prefer_linear_date_summary)
+        summary = stringResource(R.string.prefer_linear_date_summary),
     )
     SettingsSwitch(
         key = PREF_WIDGET_CLOCK,
         value = isWidgetClock,
         title = stringResource(R.string.clock_on_widget),
-        summary = stringResource(R.string.showing_clock_on_widget)
+        summary = stringResource(R.string.showing_clock_on_widget),
     )
     SettingsSwitch(
         key = PREF_WIDGET_IN_24,
         value = clockIn24,
         title = stringResource(R.string.clock_in_24),
-        summary = stringResource(R.string.showing_clock_in_24)
+        summary = stringResource(R.string.showing_clock_in_24),
     )
     SettingsSwitch(
         key = PREF_CENTER_ALIGN_WIDGETS,
         value = isCenterAlignWidgets,
         title = stringResource(R.string.center_align_widgets),
-        summary = stringResource(R.string.center_align_widgets_summary)
+        summary = stringResource(R.string.center_align_widgets_summary),
     )
     val isInIranTimeVisible = remember(language) {
         (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
@@ -83,14 +83,14 @@ fun ColumnScope.WidgetSettings() {
         key = PREF_IRAN_TIME,
         value = isForcedIranTimeEnabled,
         title = stringResource(R.string.iran_time),
-        summary = stringResource(R.string.showing_iran_time)
+        summary = stringResource(R.string.showing_iran_time),
     )
     val widgetCustomizations = remember {
         mapOf(
             OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
             NON_HOLIDAYS_EVENTS_KEY to R.string.widget_customization_non_holiday_events,
             OWGHAT_KEY to R.string.widget_customization_owghat,
-            OWGHAT_LOCATION_KEY to R.string.widget_customization_owghat_location
+            OWGHAT_LOCATION_KEY to R.string.widget_customization_owghat_location,
         )
     }
     SettingsMultiSelect(
@@ -112,7 +112,7 @@ fun ColumnScope.WidgetColoringSettings() {
             title = stringResource(R.string.widget_text_color),
             summary = stringResource(R.string.select_widgets_text_color),
             isBackgroundPick = false,
-            key = PREF_SELECTED_WIDGET_TEXT_COLOR
+            key = PREF_SELECTED_WIDGET_TEXT_COLOR,
         )
     }
     this.AnimatedVisibility(!prefersWidgetsDynamicColors) {

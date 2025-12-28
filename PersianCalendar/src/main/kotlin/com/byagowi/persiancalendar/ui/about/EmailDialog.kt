@@ -28,10 +28,12 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         confirmButton = {
             val context = LocalContext.current
-            TextButton(onClick = {
-                onDismissRequest()
-                launchEmailIntent(context, message)
-            }) { Text(stringResource(R.string.continue_button)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    launchEmailIntent(context, message)
+                },
+            ) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }

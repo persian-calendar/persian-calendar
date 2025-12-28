@@ -29,7 +29,7 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
     val context = LocalContext.current
 
     if (ActivityCompat.checkSelfPermission(
-            context, Manifest.permission.READ_CALENDAR
+            context, Manifest.permission.READ_CALENDAR,
         ) == PackageManager.PERMISSION_GRANTED
     ) {
         context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) }
@@ -38,7 +38,7 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
     }
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
         context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
         updateStoredPreference(context)
@@ -52,22 +52,26 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
     if (showDialog) AppDialog(
         title = { Text(stringResource(R.string.calendar_access)) },
         confirmButton = {
-            TextButton(onClick = {
-                showDialog = false
-                launcher.launch(Manifest.permission.READ_CALENDAR)
-            }) { Text(stringResource(R.string.continue_button)) }
+            TextButton(
+                onClick = {
+                    showDialog = false
+                    launcher.launch(Manifest.permission.READ_CALENDAR)
+                },
+            ) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
-            TextButton(onClick = {
-                context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
-                setGranted(false)
-            }) { Text(stringResource(R.string.cancel)) }
+            TextButton(
+                onClick = {
+                    context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                    setGranted(false)
+                },
+            ) { Text(stringResource(R.string.cancel)) }
         },
         onDismissRequest = { setGranted(false) },
     ) {
         Text(
             stringResource(R.string.phone_calendar_required),
-            Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp)
+            Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
         )
     }
 }

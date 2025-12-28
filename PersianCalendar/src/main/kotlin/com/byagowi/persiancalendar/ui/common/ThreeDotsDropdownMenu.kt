@@ -32,7 +32,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
             rememberSharedContentState(key = SHARED_CONTENT_KEY_THREE_DOTS_MENU),
             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,
-        )
+        ),
     ) {
         var expanded by rememberSaveable { mutableStateOf(false) }
         run {

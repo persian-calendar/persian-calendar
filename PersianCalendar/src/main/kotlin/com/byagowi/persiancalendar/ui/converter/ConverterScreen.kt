@@ -182,7 +182,7 @@ fun SharedTransitionScope.ConverterScreen(
                 Box(
                     Modifier
                         .fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
+                        .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
                 ) {
                     val scrollState = rememberScrollState()
                     Column(Modifier.verticalScroll(scrollState)) {
@@ -195,7 +195,7 @@ fun SharedTransitionScope.ConverterScreen(
                         }
 
                         this.AnimatedVisibility(
-                            screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
+                            screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE,
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
                                 ConverterAndDistance(
@@ -221,8 +221,8 @@ fun SharedTransitionScope.ConverterScreen(
 
                         Spacer(
                             Modifier.height(
-                                paddingValues.calculateBottomPadding().coerceAtLeast(24.dp)
-                            )
+                                paddingValues.calculateBottomPadding().coerceAtLeast(24.dp),
+                            ),
                         )
                     }
                     ScrollShadow(scrollState)
@@ -281,12 +281,13 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                     text = listOf(
                         dayTitleSummary(
                             jdn = viewModel.selectedDate,
-                            date = viewModel.selectedDate on viewModel.calendar
+                            date = viewModel.selectedDate on viewModel.calendar,
                         ),
                         resources.getString(R.string.equivalent_to),
                         otherCalendars.joinToString(spacedComma) {
                             formatDate(date = viewModel.selectedDate on it)
-                        }).joinToString(separator = " "),
+                        },
+                    ).joinToString(separator = " "),
                     chooserTitle = chooserTitle,
                 )
             }
@@ -323,9 +324,11 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                         viewModel.firstTimeZone,
                         viewModel.secondTimeZone,
                     ).joinToString("\n") { timeZone ->
-                        timeZone.displayName + ": " + Clock(GregorianCalendar(timeZone).also {
-                            it.time = viewModel.clock.time
-                        }).toBasicFormatString()
+                        timeZone.displayName + ": " + Clock(
+                            GregorianCalendar(timeZone).also {
+                                it.time = viewModel.clock.time
+                            },
+                        ).toBasicFormatString()
                     },
                     chooserTitle,
                 )
@@ -557,7 +560,7 @@ private fun ColumnScope.ConverterAndDistance(
                     contentColor = animateColor(cardColors.contentColor).value,
                     disabledContainerColor = animateColor(cardColors.disabledContainerColor).value,
                     disabledContentColor = animateColor(cardColors.disabledContentColor).value,
-                )
+                ),
             ) {
                 Spacer(Modifier.height(20.dp))
                 Box(Modifier.fillMaxWidth()) {
@@ -586,7 +589,7 @@ private fun ColumnScope.ConverterAndDistance(
     }
 
     this.AnimatedVisibility(
-        isAstronomicalExtraFeaturesEnabled && viewModel.screenMode == ConverterScreenMode.DISTANCE && !(viewModel.secondSelectedDate == viewModel.selectedDate && viewModel.selectedDate == viewModel.today)
+        isAstronomicalExtraFeaturesEnabled && viewModel.screenMode == ConverterScreenMode.DISTANCE && !(viewModel.secondSelectedDate == viewModel.selectedDate && viewModel.selectedDate == viewModel.today),
     ) {
         val isPersian = viewModel.calendar == Calendar.SHAMSI
         val zodiacs = listOf(viewModel.selectedDate, viewModel.secondSelectedDate).map {
@@ -595,9 +598,11 @@ private fun ColumnScope.ConverterAndDistance(
             } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
         }
         val resources = LocalResources.current
-        TextWithSlideAnimation(zodiacs.joinToString(spacedComma) {
-            it.format(resources, true, isPersian)
-        } + spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1]))
+        TextWithSlideAnimation(
+            zodiacs.joinToString(spacedComma) {
+                it.format(resources, true, isPersian)
+            } + spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1]),
+        )
     }
 }
 
@@ -614,8 +619,8 @@ private fun DaysDistanceSecondPart(
                 resources = LocalResources.current,
                 jdn = jdn,
                 baseJdn = viewModel.secondSelectedDate,
-                calendar = calendar
-            )
+                calendar = calendar,
+            ),
         )
         DatePicker(
             calendar = calendar,
@@ -634,10 +639,10 @@ private fun TextWithSlideAnimation(text: String) {
             transitionSpec = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(500)
+                    animationSpec = tween(500),
                 ) togetherWith slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(500)
+                    animationSpec = tween(500),
                 )
             },
             label = "slide text",

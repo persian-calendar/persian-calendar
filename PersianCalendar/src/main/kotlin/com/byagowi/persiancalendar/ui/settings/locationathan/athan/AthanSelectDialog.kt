@@ -72,7 +72,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
         Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
     }
     val soundFilePicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocument()
+        ActivityResultContracts.OpenDocument(),
     ) {
         commonDialogCallback(it) callback@{ uri ->
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -102,7 +102,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                 R.string.default_athan to R.raw.special,
                 R.string.abdulbasit to R.raw.abdulbasit,
                 R.string.moazzenzadeh to R.raw.moazzenzadeh,
-                R.string.entezar to R.raw.entezar
+                R.string.entezar to R.raw.entezar,
             ).map { (stringId, rawId) ->
                 stringId to {
                     AthanNotification.invalidateChannel(context)
@@ -132,12 +132,12 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                                 "audio/ogg", // oga ogg opus spx
                                 "audio/mp4", // m4a
                                 "audio/x-wav", // wav
-                            )
+                            ),
                         )
                         if (language.isPersianOrDari) Toast.makeText(
                             context,
                             "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_LONG,
                         ).show()
                     }.onFailure(logException).onFailure {
                         showUnsupportedActionToast(context)
@@ -165,7 +165,7 @@ private class PickRingtoneContract : ActivityResultContract<Unit, Uri?>() {
                 RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT to true,
                 RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT to true,
                 RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI to Settings.System.DEFAULT_NOTIFICATION_URI,
-            )
+            ),
         )
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

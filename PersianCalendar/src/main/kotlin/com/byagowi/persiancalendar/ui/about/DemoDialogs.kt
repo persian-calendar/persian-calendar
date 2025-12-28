@@ -172,21 +172,23 @@ fun showShaderSandboxDialog(activity: Activity) {
         val linear = LinearLayout(activity).also { it.orientation = LinearLayout.VERTICAL }
         val inputText = EditText(activity).also {
             it.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 0
+                LinearLayout.LayoutParams.MATCH_PARENT, 0,
             ).apply { weight = 1f }
             it.layoutDirection = View.LAYOUT_DIRECTION_LTR
             linear.addView(it)
         }
         val glView = GLSurfaceView(activity).also {
             it.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 0
+                LinearLayout.LayoutParams.MATCH_PARENT, 0,
             ).apply { weight = 1f }
             linear.addView(it)
         }
         glView.setEGLContextClientVersion(2)
-        val renderer = GLRenderer(onError = {
-            activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
-        })
+        val renderer = GLRenderer(
+            onError = {
+                activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
+            },
+        )
         glView.setRenderer(renderer)
         glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         inputText.doAfterTextChanged {
@@ -201,7 +203,7 @@ fun showShaderSandboxDialog(activity: Activity) {
         .show()
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
     (activity as? ComponentActivity).debugAssertNotNull?.lifecycle?.addObserver(
-        LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel() }
+        LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel() },
     )
 }
 
@@ -210,20 +212,24 @@ fun showColorPickerDialog(activity: Activity) {
         orientation = LinearLayout.VERTICAL
         val layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
         )
         val colorCircle = CircleColorPickerView(activity).also { it.layoutParams = layoutParams }
         addView(colorCircle)
-        addView(SeekBar(activity).also {
-            it.layoutParams = layoutParams
-            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-                override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-                override fun onProgressChanged(
-                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
-                ) = colorCircle.setBrightness(progress.toFloat())
-            })
-        })
+        addView(
+            SeekBar(activity).also {
+                it.layoutParams = layoutParams
+                it.setOnSeekBarChangeListener(
+                    object : SeekBar.OnSeekBarChangeListener {
+                        override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+                        override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+                        override fun onProgressChanged(
+                            seekBar: SeekBar?, progress: Int, fromUser: Boolean,
+                        ) = colorCircle.setBrightness(progress.toFloat())
+                    },
+                )
+            },
+        )
     }
     AlertDialog.Builder(activity)
         .setView(view)
@@ -254,7 +260,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
         val width = MeasureSpec.getSize(widthMeasureSpec)
         super.onMeasure(
             MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
         )
     }
 
@@ -268,7 +274,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
         strokePaint.strokeWidth = bitmap.width / 100f
         shadowPaint.shader = RadialGradient(
             0f, 0f, bitmap.height / 15f,
-            Color.BLACK, Color.TRANSPARENT, Shader.TileMode.CLAMP
+            Color.BLACK, Color.TRANSPARENT, Shader.TileMode.CLAMP,
         )
     }
 
@@ -279,7 +285,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         val radialGradient = RadialGradient(
             radius, radius, radius * PADDING_FACTOR, Color.WHITE,
-            0x00FFFFFF, Shader.TileMode.CLAMP
+            0x00FFFFFF, Shader.TileMode.CLAMP,
         )
         val saturation = (100 - brightness) / 100f
         val colors = (0..<360 step 30)
@@ -539,15 +545,15 @@ fun showPeriodicTableDialog(activity: Activity) {
         return Html.fromHtml(
             "<small><small>$input</small></small>"
                 .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>"),
-            Html.FROM_HTML_MODE_LEGACY
+            Html.FROM_HTML_MODE_LEGACY,
         )
     }
 
     val dialog = AlertDialog.Builder(activity)
         .setTitle(
             formatTitle(
-                "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6"
-            )
+                "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6",
+            ),
         )
         .setView(zoomableView)
         .show()
@@ -560,27 +566,31 @@ fun showPeriodicTableDialog(activity: Activity) {
         }
         if (index == 161) {
             AlertDialog.Builder(activity)
-                .setView(EditText(activity).also {
-                    it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-                    it.textDirection = View.TEXT_DIRECTION_LTR
-                    it.setText(
-                        elements
-                            .asReversed()
-                            .mapIndexed { index, s -> "${elements.size - index},$s" }
-                            .joinToString("\n"),
-                    )
-                })
+                .setView(
+                    EditText(activity).also {
+                        it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+                        it.textDirection = View.TEXT_DIRECTION_LTR
+                        it.setText(
+                            elements
+                                .asReversed()
+                                .mapIndexed { index, s -> "${elements.size - index},$s" }
+                                .joinToString("\n"),
+                        )
+                    },
+                )
                 .show()
         } else if (index == 144) {
             // https://commons.wikimedia.org/wiki/File:Ave_Maria_(Bach-Gounod).mid
             val mediaPlayer = MediaPlayer.create(activity, R.raw.avemaria)
             runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(logException)
             AlertDialog.Builder(activity).create().apply {
-                setView(Button(context).also {
-                    @SuppressLint("SetTextI18n")
-                    it.text = "Stop"
-                    it.setOnClickListener { dismiss() }
-                })
+                setView(
+                    Button(context).also {
+                        @SuppressLint("SetTextI18n")
+                        it.text = "Stop"
+                        it.setOnClickListener { dismiss() }
+                    },
+                )
                 setOnDismissListener { runCatching { mediaPlayer.stop() }.onFailure(logException) }
                 show()
             }
@@ -841,10 +851,10 @@ fun getStandardFrequency(note: Double): Double {
 //}
 
 val ABC_NOTATION = listOf(
-    "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"
+    "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B",
 )
 var SOLFEGE_NOTATION = listOf(
-    "Do", "Do♯", "Re", "Re♯", "Mi", "Fa", "Fa♯", "Sol", "Sol♯", "La", "La♯", "Si"
+    "Do", "Do♯", "Re", "Re♯", "Mi", "Fa", "Fa♯", "Sol", "Sol♯", "La", "La♯", "Si",
 )
 
 fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
@@ -868,7 +878,7 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
             val width = MeasureSpec.getSize(widthMeasureSpec)
             super.onMeasure(
                 MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
             )
         }
 
@@ -884,7 +894,7 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
                 Locale.ENGLISH,
                 getStandardFrequency(currentSemitone).toInt(),
                 getAbcNoteLabel(currentSemitone.roundToInt()),
-                getSolfegeNoteLabel(currentSemitone.roundToInt())
+                getSolfegeNoteLabel(currentSemitone.roundToInt()),
             )
             canvas.drawText(text, r, r, textPaint)
         }
@@ -916,14 +926,14 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
                     AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_MEDIA)
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build()
+                        .build(),
                 )
                 .setAudioFormat(
                     AudioFormat.Builder()
                         .setSampleRate(sampleRate)
                         .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                         .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                        .build()
+                        .build(),
                 )
                 .setBufferSizeInBytes(buffer.size)
                 .setTransferMode(AudioTrack.MODE_STATIC)
@@ -945,9 +955,11 @@ fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecy
         .setOnCancelListener { previousAudioTrack?.stop() }
         .show()
 
-    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
-    })
+    activity.lifecycle.addObserver(
+        LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+        },
+    )
 }
 
 fun showSpringDemoDialog(activity: Activity) {
@@ -1164,7 +1176,7 @@ private fun guitarString(
     beta: Double = .1,
     s: Double = .1,
     c: Double = .1,
-    l: Double = .1
+    l: Double = .1,
 ): ShortArray {
     val n = (sampleRate / frequency).roundToInt()
 
@@ -1212,21 +1224,21 @@ suspend fun playSoundTick(offset: Double) {
         val buffer = guitarString(
             getStandardFrequency(offset + MIDDLE_A_SEMITONE),
             sampleRate = sampleRate,
-            duration = 4.0
+            duration = 4.0,
         )
         val audioTrack = AudioTrack.Builder()
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
+                    .build(),
             )
             .setAudioFormat(
                 AudioFormat.Builder()
                     .setSampleRate(sampleRate)
                     .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                     .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                    .build()
+                    .build(),
             )
             .setBufferSizeInBytes(buffer.size)
             .setTransferMode(AudioTrack.MODE_STATIC)
@@ -1291,7 +1303,7 @@ fun showSensorTestDialog(activity: Activity) {
     val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
     spinner.adapter = ArrayAdapter(
         spinner.context, android.R.layout.simple_spinner_dropdown_item,
-        listOf("Select a sensor") + sensors
+        listOf("Select a sensor") + sensors,
     )
     textView.setPadding((8 * activity.resources.dp).toInt())
     textView.isVisible = false
@@ -1378,7 +1390,8 @@ fun showInputDeviceTestDialog(activity: Activity) {
                     log(event)
                     return super.onKeyUp(keyCode, event)
                 }
-            })
+            },
+        )
         .show()
 }
 

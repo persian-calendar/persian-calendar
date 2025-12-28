@@ -92,7 +92,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
             entryValues = CalculationMethod.entries.map { it.name },
             persistedValue = calculationMethod.name,
             dialogTitleResId = R.string.pray_methods_calculation,
-            title = stringResource(R.string.pray_methods)
+            title = stringResource(R.string.pray_methods),
         )
     }
     this.AnimatedVisibility(coordinates?.isHighLatitude == true) {
@@ -102,14 +102,14 @@ fun ColumnScope.AthanSettings(destination: String?) {
             entryValues = HighLatitudesMethod.entries.map { it.name },
             persistedValue = highLatitudesMethod.name,
             dialogTitleResId = R.string.high_latitudes_method,
-            title = stringResource(R.string.high_latitudes_method)
+            title = stringResource(R.string.high_latitudes_method),
         )
     }
     this.AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
         SettingsSwitch(
             key = PREF_ASR_HANAFI_JURISTIC,
             value = asrMethod == AsrMethod.Hanafi,
-            title = stringResource(R.string.asr_hanafi_juristic)
+            title = stringResource(R.string.asr_hanafi_juristic),
         )
     }
     this.AnimatedVisibility(isLocationSet) {
@@ -125,19 +125,19 @@ fun ColumnScope.AthanSettings(destination: String?) {
             mutableStateOf(
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
                         ActivityCompat.checkSelfPermission(
-                            context, Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
+                            context, Manifest.permission.POST_NOTIFICATIONS,
+                        ) == PackageManager.PERMISSION_GRANTED,
             )
         }
         if (result) return true
         val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission(),
         ) { isGranted ->
             if (!isGranted) {
                 Toast.makeText(
                     context,
                     "اگر امکان فعال‌سازی اعلان وجود ندارد احتمالاً نیاز باشد برنامه را حذف و مجدداً نصب کنید.",
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_LONG,
                 ).show()
                 onDismissRequest()
             }
@@ -149,7 +149,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
             if (language.isPersianOrDari) Toast.makeText(
                 context,
                 "جهت عملکرد صحیح اذان برنامه به دسترسی اعلان نیاز دارد.",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_LONG,
             ).show()
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -182,7 +182,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
     }
     this.AnimatedVisibility(isLocationSet && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission(),
         ) { isGranted ->
             context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
             updateStoredPreference(context)
@@ -195,7 +195,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
             onBeforeToggle = { value ->
                 AthanNotification.invalidateChannel(context)
                 if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                        context, Manifest.permission.POST_NOTIFICATIONS
+                        context, Manifest.permission.POST_NOTIFICATIONS,
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -217,7 +217,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
     }
     this.AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
         SettingsClickable(
-            stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary)
+            stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary),
         ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }
     }
     this.AnimatedVisibility(isLocationSet) {
@@ -284,7 +284,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
 
 private fun midnightDefaultTitle(resources: Resources): String {
     return resources.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
-        resources, calculationMethod.defaultMidnight
+        resources, calculationMethod.defaultMidnight,
     )
 }
 

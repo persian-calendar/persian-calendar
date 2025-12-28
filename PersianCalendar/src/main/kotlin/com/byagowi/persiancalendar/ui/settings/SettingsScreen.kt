@@ -201,7 +201,7 @@ fun SharedTransitionScope.SettingsScreen(
                     TabRowDefaults.PrimaryIndicator(
                         Modifier.tabIndicatorOffset(pagerState.currentPage),
                         width = if (isLandscape) 92.dp else 64.dp,
-                        color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
+                        color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
                     )
                 },
             ) {
@@ -241,8 +241,8 @@ fun SharedTransitionScope.SettingsScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .windowInsetsPadding(
-                                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
-                            )
+                                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+                            ),
                     ) {
                         val listState = rememberLazyListState()
                         LazyColumn(
@@ -344,8 +344,8 @@ enum class SettingsTab(
     fun Title() {
         Text(
             stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
-                secondTitle
-            )
+                secondTitle,
+            ),
         )
     }
 
@@ -368,19 +368,21 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             val isCurrent = runCatching {
                 WallpaperManager.getInstance(context)?.wallpaperInfo?.component == componentName
             }.getOrNull() ?: false
-            if (BuildConfig.DEVELOPMENT || isCurrent) Box(Modifier.clickable {
-                closeMenu()
-                runCatching {
-                    val intent = if (isCurrent) Intent(
-                        context,
-                        WallpaperConfigurationActivity::class.java,
-                    ) else Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).putExtra(
-                        WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                        componentName,
-                    )
-                    context.startActivity(intent)
-                }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
-            }) {
+            if (BuildConfig.DEVELOPMENT || isCurrent) Box(
+                Modifier.clickable {
+                    closeMenu()
+                    runCatching {
+                        val intent = if (isCurrent) Intent(
+                            context,
+                            WallpaperConfigurationActivity::class.java,
+                        ) else Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).putExtra(
+                            WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                            componentName,
+                        )
+                        context.startActivity(intent)
+                    }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
+                },
+            ) {
                 val icon = if (isCurrent) Icons.Default.Settings else Icons.Default.Check
                 Icon(imageVector = icon, contentDescription = stringResource(R.string.accept))
             }
@@ -413,7 +415,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && runCatching {
             AppWidgetManager.getInstance(
-                context
+                context,
             ).isRequestPinAppWidgetSupported
         }.getOrNull() == true) {
         AppDropdownMenuItem(
@@ -423,7 +425,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     }
     if (supportsDynamicIcon(mainCalendar, language)) AppDropdownMenuCheckableItem(
         text = stringResource(R.string.dynamic_icon),
-        isChecked = isDynamicIconEnabled
+        isChecked = isDynamicIconEnabled,
     ) {
         closeMenu()
         context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, !isDynamicIconEnabled) }
@@ -468,7 +470,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             preferences.edit {
                 putBoolean(
                     PREF_THEME_CYBERPUNK,
-                    !preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
+                    !preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK),
                 )
             }
             closeMenu()
@@ -501,18 +503,24 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
                 context.shareTextFile(result, "log.txt", "text/plain")
             }
         }
-        dialogBuilder.setCustomTitle(LinearLayout(context).also {
-            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-            it.addView(button)
-        })
-        dialogBuilder.setView(ScrollView(context).also { scrollView ->
-            scrollView.addView(TextView(context).also {
-                it.text = result
-                it.textDirection = View.TEXT_DIRECTION_LTR
-            })
-            // Scroll to bottom, https://stackoverflow.com/a/3080483
-            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-        })
+        dialogBuilder.setCustomTitle(
+            LinearLayout(context).also {
+                it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+                it.addView(button)
+            },
+        )
+        dialogBuilder.setView(
+            ScrollView(context).also { scrollView ->
+                scrollView.addView(
+                    TextView(context).also {
+                        it.text = result
+                        it.textDirection = View.TEXT_DIRECTION_LTR
+                    },
+                )
+                // Scroll to bottom, https://stackoverflow.com/a/3080483
+                scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+            },
+        )
         dialogBuilder.show()
     }
     listOf(
@@ -537,8 +545,8 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         runCatching {
             context.startActivity(
                 Intent(Intent.ACTION_MAIN).setClassName(
-                    "com.android.systemui", "com.android.systemui.Somnambulator"
-                )
+                    "com.android.systemui", "com.android.systemui.Somnambulator",
+                ),
             )
         }.onFailure(logException).getOrNull().debugAssertNotNull
     }

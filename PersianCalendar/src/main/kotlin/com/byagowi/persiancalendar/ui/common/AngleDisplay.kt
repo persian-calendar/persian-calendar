@@ -16,7 +16,7 @@ import java.util.Locale
 
 class AngleDisplay(
     context: Context, defaultFormat: String = "00.0",
-    private val backgroundText: String = "88.8"
+    private val backgroundText: String = "88.8",
 ) {
     private val lcd = ResourcesCompat.getFont(context, R.font.dseg7classicminibolditalicsubset)
 
@@ -55,7 +55,7 @@ class AngleDisplay(
             x - lcdWidth / 2 - displayPadding,
             y - displayGap - 2 * displayPadding - lcdHeight,
             x + lcdWidth / 2 + displayPadding,
-            y - displayGap
+            y - displayGap,
         )
     }
 
@@ -66,12 +66,12 @@ class AngleDisplay(
             drawText(
                 backgroundText,
                 displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
-                lcdBackgroundPaint
+                lcdBackgroundPaint,
             )
             drawText(
                 displayFormat.format(angle).padStart(backgroundText.length, whiteSpace),
                 displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
-                lcdForegroundPaint
+                lcdForegroundPaint,
             )
         }
     }

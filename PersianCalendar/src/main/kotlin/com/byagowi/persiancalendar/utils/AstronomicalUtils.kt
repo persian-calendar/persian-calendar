@@ -73,7 +73,7 @@ fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boolean = fal
             GregorianCalendar().also {
                 if (setIranTime) it.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
                 it.timeInMillis = timeInMillis
-            }
+            },
         )
     }
 }
@@ -87,11 +87,11 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
 
         start -> MoonInScorpioState.Start(
-            searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime) ?: Clock.zero
+            searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime) ?: Clock.zero,
         )
 
         end -> MoonInScorpioState.End(
-            searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive, setIranTime) ?: Clock.zero
+            searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive, setIranTime) ?: Clock.zero,
         )
 
         else -> null
@@ -114,7 +114,7 @@ fun generateYearName(
                 isPersian = language.isPersianOrDari,
                 withOldEraName = withOldEraName,
             ),
-            resources.getString(R.string.shamsi_calendar_short)
+            resources.getString(R.string.shamsi_calendar_short),
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val date = ChineseCalendar((time ?: jdn.toGregorianCalendar()).time)
@@ -125,9 +125,9 @@ fun generateYearName(
                     isPersian = false,
                     withEmoji = withEmoji,
                 ),
-                resources.getString(R.string.chinese) + spacedComma + numeral.format(year)
+                resources.getString(R.string.chinese) + spacedComma + numeral.format(year),
             )
-        } else null
+        } else null,
     ).let { if (language.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
     return "${resources.getString(R.string.year_name)}$spacedColon${yearNames}"
 }

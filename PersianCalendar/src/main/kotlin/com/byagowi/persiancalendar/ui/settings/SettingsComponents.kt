@@ -96,10 +96,10 @@ fun LazyListScope.settingsSection(
             if (canScrollBackward) Modifier.background(
                 Brush.verticalGradient(
                     .75f to animateColor(
-                        MaterialTheme.colorScheme.surface.copy(alpha = .9f)
+                        MaterialTheme.colorScheme.surface.copy(alpha = .9f),
                     ).value,
                     1f to Color.Transparent,
-                )
+                ),
             ) else Modifier,
         ) { SettingsSectionLayout(title, subtitle) }
     }
@@ -139,7 +139,7 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
                 subtitle.orEmpty(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.alpha(AppBlendAlpha)
+                modifier = Modifier.alpha(AppBlendAlpha),
             )
         }
     }
@@ -179,7 +179,7 @@ fun SettingsColor(
         Color(
             context.preferences.getString(key, null)?.toColorInt()
                 ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-                else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+                else DEFAULT_SELECTED_WIDGET_TEXT_COLOR,
         )
     }
     SettingsLayout(
@@ -204,7 +204,7 @@ fun SettingsColor(
         initialColor = currentColor,
         persistColor = { color ->
             val colorResult = if (isBackgroundPick) "#%08X".format(
-                Locale.ENGLISH, 0xFFFFFFFF and color.toArgb().toLong()
+                Locale.ENGLISH, 0xFFFFFFFF and color.toArgb().toLong(),
             ) else "#%06X".format(Locale.ENGLISH, 0xFFFFFF and color.toArgb())
             context.preferences.edit { putString(key, colorResult) }
         },
@@ -219,14 +219,16 @@ fun SettingsSingleSelect(
     persistedValue: String,
     dialogTitleResId: Int,
     title: String,
-    summaryResId: Int? = null
+    summaryResId: Int? = null,
 ) {
     val context = LocalContext.current
     SettingsClickable(
         title = title,
-        summary = summaryResId?.let { stringResource(it) } ?: entries[entryValues.indexOf(
-            persistedValue
-        )],
+        summary = summaryResId?.let { stringResource(it) } ?: entries[
+            entryValues.indexOf(
+                persistedValue,
+            ),
+        ],
     ) { onDismissRequest ->
         AppDialog(
             title = { Text(stringResource(dialogTitleResId)) },
@@ -282,7 +284,7 @@ fun SettingsMultiSelect(
             .joinToString(spacedComma) { entries[it] },
     ) { onDismissRequest ->
         val result = rememberSaveable(
-            saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
+            saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
         ) {
             (context.preferences.getStringSet(key, null) ?: persistedSet).toList()
                 .toMutableStateList()
@@ -294,10 +296,12 @@ fun SettingsMultiSelect(
                 TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
             },
             confirmButton = {
-                TextButton(onClick = {
-                    onDismissRequest()
-                    context.preferences.edit { putStringSet(key, result.toSet()) }
-                }) { Text(stringResource(R.string.accept)) }
+                TextButton(
+                    onClick = {
+                        onDismissRequest()
+                        context.preferences.edit { putStringSet(key, result.toSet()) }
+                    },
+                ) { Text(stringResource(R.string.accept)) }
             },
         ) {
             entries.zip(entryValues) { entry, entryValue ->

@@ -32,14 +32,14 @@ fun BoxScope.OtherCalendars(
             0 -> day.toCivilDate()
             1 -> day.toPersianDate()
             else -> day.toPersianDate()
-        }
+        },
     )
     val secondText = localeUtils.format(
         when (calendarIndex) {
             0 -> day.toIslamicDate()
             1 -> day.toIslamicDate()
             else -> day.toCivilDate()
-        }
+        },
     )
     val weekDayColor = MaterialTheme.colorScheme.primaryDim
     val othersColor = MaterialTheme.colorScheme.secondaryDim

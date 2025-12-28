@@ -184,7 +184,7 @@ fun SharedTransitionScope.LevelScreen(
                             .fillMaxSize()
                             .then(
                                 if (isFullscreen) Modifier.safeDrawingPadding()
-                                else Modifier.padding(top = topCornersRoundness)
+                                else Modifier.padding(top = topCornersRoundness),
                             ),
                         factory = ::RulerView,
                         update = {
@@ -241,7 +241,7 @@ fun SharedTransitionScope.LevelScreen(
                                     rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
                                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                     boundsTransform = appBoundsTransform,
-                                )
+                                ),
                             ) { StopButton(isStopped) { isStopped = it } }
                         }
                     }

@@ -59,7 +59,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
             h1 {
                 +listOfNotNull(
                     cityName,
-                    language.my.format(date.monthName, numeral.format(date.year))
+                    language.my.format(date.monthName, numeral.format(date.year)),
                 ).joinToString(spacedComma)
             }
             table {
@@ -75,8 +75,8 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                         tr {
                             val prayTimes = coordinates.calculatePrayTimes(
                                 Jdn(
-                                    mainCalendar.createDate(date.year, date.month, day)
-                                ).toGregorianCalendar()
+                                    mainCalendar.createDate(date.year, date.month, day),
+                                ).toGregorianCalendar(),
                             )
                             th { +numeral.format(day + 1) }
                             prayTimeList.forEach {

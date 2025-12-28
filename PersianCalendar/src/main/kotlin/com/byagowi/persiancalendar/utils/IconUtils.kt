@@ -64,7 +64,7 @@ private val DAYS_ICONS_PERSIAN = listOf31Items(
     R.drawable.day16, R.drawable.day17, R.drawable.day18, R.drawable.day19, R.drawable.day20,
     R.drawable.day21, R.drawable.day22, R.drawable.day23, R.drawable.day24, R.drawable.day25,
     R.drawable.day26, R.drawable.day27, R.drawable.day28, R.drawable.day29, R.drawable.day30,
-    R.drawable.day31
+    R.drawable.day31,
 )
 
 // No Urdu ones are provided as they use Arabic ones nowadays
@@ -76,7 +76,7 @@ private val DAYS_ICONS_ARABIC = listOf31Items(
     R.drawable.day17_ar, R.drawable.day18_ar, R.drawable.day19_ar, R.drawable.day20_ar,
     R.drawable.day21_ar, R.drawable.day22_ar, R.drawable.day23_ar, R.drawable.day24_ar,
     R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar, R.drawable.day28_ar,
-    R.drawable.day29_ar, R.drawable.day30_ar, R.drawable.day31_ar
+    R.drawable.day29_ar, R.drawable.day30_ar, R.drawable.day31_ar,
 )
 
 private val DAYS_ICONS_ARABIC_INDIC = listOf31Items(
@@ -86,5 +86,5 @@ private val DAYS_ICONS_ARABIC_INDIC = listOf31Items(
     R.drawable.day15_ckb, R.drawable.day16_ckb, R.drawable.day17, R.drawable.day18,
     R.drawable.day19, R.drawable.day20, R.drawable.day21, R.drawable.day22, R.drawable.day23,
     R.drawable.day24_ckb, R.drawable.day25_ckb, R.drawable.day26_ckb, R.drawable.day27,
-    R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31
+    R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31,
 )

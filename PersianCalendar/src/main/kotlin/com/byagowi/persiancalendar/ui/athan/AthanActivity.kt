@@ -77,7 +77,7 @@ class AthanActivity : ComponentActivity() {
             SystemBarStyle.dark(Color.TRANSPARENT),
             if (isSystemInDarkTheme(resources.configuration))
                 SystemBarStyle.dark(Color.TRANSPARENT)
-            else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+            else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
         )
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
@@ -96,7 +96,7 @@ class AthanActivity : ComponentActivity() {
         }
 
         val prayTime = PrayTime.fromName(
-            intent?.getStringExtra(KEY_EXTRA_PRAYER)
+            intent?.getStringExtra(KEY_EXTRA_PRAYER),
         ).debugAssertNotNull ?: PrayTime.FAJR
         var goMute = false
 
@@ -136,14 +136,14 @@ class AthanActivity : ComponentActivity() {
             getSystemService<KeyguardManager>()?.requestDismissKeyguard(this, null)
             window.addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-                        WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+                        WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON,
             )
         } else {
             @Suppress("DEPRECATION")
             window.addFlags(
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
             )
         }
 

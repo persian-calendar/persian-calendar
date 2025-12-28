@@ -180,7 +180,7 @@ val prefersWidgetsDynamicColors: Boolean get() = prefersWidgetsDynamicColors
 // Is called from MainActivity to make sure is updated, probably should be removed however
 fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
     runCatching { deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today()) }.onFailure(
-        logException
+        logException,
     )
 }
 
@@ -235,7 +235,7 @@ fun update(context: Context, updateDate: Boolean) {
     val title =
         dayTitleSummary(jdn, date) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val widgetTitle = dayTitleSummary(
-        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets,
     ) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
@@ -252,7 +252,7 @@ fun update(context: Context, updateDate: Boolean) {
     roundPixelSize = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
         16.dp.toPx(context.resources)
     } else context.resources.getDimensionPixelSize(
-        android.R.dimen.system_app_widget_background_radius
+        android.R.dimen.system_app_widget_background_radius,
     ).toFloat()
 
     // Widgets
@@ -265,7 +265,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
         updateFromRemoteViews<Widget4x1>(context, now) { size, widgetId ->
             create4x1RemoteViews(
-                context, size, jdn, date, widgetTitle, subtitle, clock, preferences, widgetId
+                context, size, jdn, date, widgetTitle, subtitle, clock, preferences, widgetId,
             )
         }
         updateFromRemoteViews<Widget2x2>(context, now) { size, widgetId ->
@@ -276,7 +276,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
         updateFromRemoteViews<Widget4x2>(context, now) { size, widgetId ->
             create4x2RemoteViews(
-                context, size, jdn, date, clock, prayTimes, preferences, widgetId
+                context, size, jdn, date, clock, prayTimes, preferences, widgetId,
             )
         }
         updateFromRemoteViews<WidgetSunView>(context, now) { size, _ ->
@@ -344,9 +344,9 @@ private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     val actions = buildList {
         add(
             ComponentName(
-                context, MainActivity::class.java
+                context, MainActivity::class.java,
             ) to (if (!isDynamicIconEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
+            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED),
         )
 
         (1..31).forEach {
@@ -361,7 +361,8 @@ private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pm.setComponentEnabledSettings(
         actions.map { (name, newState) ->
             PackageManager.ComponentEnabledSetting(name, newState, flags)
-        }) else actions.forEach { (name, newState) ->
+        },
+    ) else actions.forEach { (name, newState) ->
         pm.setComponentEnabledSetting(name, newState, flags)
     }
 }
@@ -379,7 +380,7 @@ fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): DpSize?
         if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
         else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
         if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
-        else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
+        else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
     ).map { getAppWidgetOptions(widgetId).getInt(it, 0) }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
     return DpSize(width.dp, height.dp).takeIf { width > 10 && height > 10 }
@@ -403,7 +404,7 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
             Toast.makeText(
                 context,
                 "An error has happened, see the in-app log and post it to me",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_LONG,
             ).show()
         }
     }
@@ -417,7 +418,7 @@ private fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
 }
 
 private fun createRoundedBitmap(
-    resources: Resources, size: DpSize?, @ColorInt color: Int, roundSize: Float
+    resources: Resources, size: DpSize?, @ColorInt color: Int, roundSize: Float,
 ): Bitmap {
     val width = size?.width?.toPx(resources) ?: 250f
     val height = size?.height?.toPx(resources) ?: 250f
@@ -429,11 +430,11 @@ private fun createRoundedBitmap(
 }
 
 private fun getWidgetBackgroundColor(
-    preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
+    preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
 ) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 private fun getWidgetTextColor(
-    preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
+    preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR,
 ) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(
@@ -449,11 +450,11 @@ fun createAgeRemoteViews(
     val subtitle = calculateDaysDifference(context.resources, primary, today, isInWidget = true)
     val textColor = getWidgetTextColor(preferences, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(
-        preferences, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
+        preferences, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId,
     )
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
     remoteViews.setRoundBackground(
-        context.resources, R.id.age_widget_background, size, backgroundColor
+        context.resources, R.id.age_widget_background, size, backgroundColor,
     )
     remoteViews.setDirection(R.id.age_widget_root, context.resources)
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title)
@@ -468,7 +469,7 @@ fun createAgeRemoteViews(
         remoteViews.setProgressBar(R.id.progress, primary - secondary, today - secondary, false)
     } else remoteViews.setViewVisibility(R.id.progress, View.GONE)
     remoteViews.setOnClickPendingIntent(
-        R.id.age_widget_root, context.launchAgeWidgetConfigurationAppPendingIntent(widgetId)
+        R.id.age_widget_root, context.launchAgeWidgetConfigurationAppPendingIntent(widgetId),
     )
     remoteViews.setTextViewTextSizeDp(R.id.textview_age_widget_title, 12 * scale)
     remoteViews.setTextViewTextSizeDp(R.id.textview_age_widget, 18 * scale)
@@ -485,22 +486,25 @@ fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTim
     val sunView = SunView(context)
     sunView.colors = SunViewColors(
         nightColor = ContextCompat.getColor(
-            context, if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_night_color
-            else R.color.sun_view_night_color
+            context,
+            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_night_color
+            else R.color.sun_view_night_color,
         ),
         dayColor = ContextCompat.getColor(
-            context, if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_day_color
-            else R.color.sun_view_day_color
+            context,
+            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_day_color
+            else R.color.sun_view_day_color,
         ),
         middayColor = ContextCompat.getColor(
-            context, if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_midday_color
-            else R.color.sun_view_midday_color
+            context,
+            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_midday_color
+            else R.color.sun_view_midday_color,
         ),
         sunriseTextColor = color,
         middayTextColor = color,
         sunsetTextColor = color,
         textColorSecondary = color,
-        linesColor = ColorUtils.setAlphaComponent(color, 0x60)
+        linesColor = ColorUtils.setAlphaComponent(color, 0x60),
     )
     remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
     sunView.layoutDirection = context.resources.configuration.layoutDirection
@@ -509,7 +513,7 @@ fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTim
     val height = size?.height?.roundToPx(context.resources) ?: 250
     sunView.measure(
         View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
-        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
+        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST),
     )
     sunView.layout(0, 0, width, height)
     sunView.prayTimes = prayTimes
@@ -521,7 +525,7 @@ fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTim
     remoteViews.setTextColor(R.id.message, color)
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
-        if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else ""
+        if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else "",
     )
 
     // These are used to generate preview,
@@ -534,7 +538,7 @@ fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTim
     remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
     remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
     remoteViews.setOnClickPendingIntent(
-        R.id.widget_layout_sun_view, context.launchAppPendingIntent()
+        R.id.widget_layout_sun_view, context.launchAppPendingIntent(),
     )
     return remoteViews
 }
@@ -553,7 +557,7 @@ fun updateMonthWidget(context: Context, widgetId: Int, command: Int) {
     val appWidgetManager = AppWidgetManager.getInstance(context)
     val size = appWidgetManager.getWidgetSize(context.resources, widgetId)
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
-        if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command)
+        if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command),
     )
     val views = createMonthRemoteViews(context, size, widgetId)
     appWidgetManager?.updateAppWidget(widgetId, views)
@@ -577,19 +581,20 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         R.id.month_name,
         if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
         else language.my.format(
-            monthStartDate.monthName, numeral.format(monthStartDate.year)
-        )
+            monthStartDate.monthName, numeral.format(monthStartDate.year),
+        ),
     )
     remoteViews.setTextViewTextOrHideIfEmpty(
-        R.id.month_name_secondary, secondaryCalendar?.let {
+        R.id.month_name_secondary,
+        secondaryCalendar?.let {
             monthFormatForSecondaryCalendar(monthStartDate, it, true)
-        }.orEmpty()
+        }.orEmpty(),
     )
 
     // Round the background better
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         remoteViews.setViewOutlinePreferredRadiusDimen(
-            R.id.widget_month, android.R.dimen.system_app_widget_background_radius
+            R.id.widget_month, android.R.dimen.system_app_widget_background_radius,
         )
         remoteViews.setBoolean(R.id.widget_month, "setClipToOutline", true)
     }
@@ -599,12 +604,12 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     remoteViews.setViewVisibility(
-        R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
+        R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE,
     )
     remoteViews.setInt(
         R.id.week5,
         "setBackgroundResource",
-        if (daysRowsCount > 5) R.drawable.widget_month_bottom_border else 0
+        if (daysRowsCount > 5) R.drawable.widget_month_bottom_border else 0,
     )
     val eventsCountToShow = size?.let {
         val bottomSpace = it.height.value - 52 - 20
@@ -687,11 +692,11 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
                             android.R.attr.colorAccent,
                         )
                         eventView.setColorInt(
-                            R.id.title, "setTextColor", Color.WHITE, Color.WHITE
+                            R.id.title, "setTextColor", Color.WHITE, Color.WHITE,
                         )
                     } else {
                         eventView.setInt(
-                            R.id.title_background, "setColorFilter", 0xFFFF8A65.toInt()
+                            R.id.title_background, "setColorFilter", 0xFFFF8A65.toInt(),
                         )
                         eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                     }
@@ -732,35 +737,37 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
             context,
             0,
             Intent(
-                context, BroadcastReceivers::class.java
+                context, BroadcastReceivers::class.java,
             ).setAction(if (offset == 0) ADD_EVENT else (MONTH_RESET_COMMAND + widgetId)),
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE,
         )
         remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
         remoteViews.setContentDescription(
             R.id.add_event,
-            context.getString(if (offset == 0) R.string.add_event else R.string.return_to_today)
+            context.getString(if (offset == 0) R.string.add_event else R.string.return_to_today),
         )
         remoteViews.setImageViewResource(
             R.id.add_event,
-            if (offset == 0) R.drawable.widget_add_event_icon else R.drawable.ic_restore
+            if (offset == 0) R.drawable.widget_add_event_icon else R.drawable.ic_restore,
         )
     }
     run {
         val previousPendingIntent = PendingIntent.getBroadcast(
-            context, 0, Intent(
-                context, BroadcastReceivers::class.java
-            ).setAction(MONTH_PREV_COMMAND + widgetId), PendingIntent.FLAG_IMMUTABLE
+            context, 0,
+            Intent(
+                context, BroadcastReceivers::class.java,
+            ).setAction(MONTH_PREV_COMMAND + widgetId),
+            PendingIntent.FLAG_IMMUTABLE,
         )
         remoteViews.setOnClickPendingIntent(R.id.previous_month, previousPendingIntent)
         remoteViews.setContentDescription(
             R.id.previous_month,
-            context.getString(R.string.previous_x, context.getString(R.string.month))
+            context.getString(R.string.previous_x, context.getString(R.string.month)),
         )
         val nextPendingIntent = PendingIntent.getBroadcast(
             context, 0,
             Intent(
-                context, BroadcastReceivers::class.java
+                context, BroadcastReceivers::class.java,
             ).setAction(MONTH_NEXT_COMMAND + widgetId),
             PendingIntent.FLAG_IMMUTABLE,
         )
@@ -819,14 +826,14 @@ private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId:
         context,
         0,
         Intent(context, BroadcastReceivers::class.java).setAction(ADD_EVENT),
-        PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_IMMUTABLE,
     )
     remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
 
     // Round the background better
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         remoteViews.setViewOutlinePreferredRadiusDimen(
-            R.id.widget_schedule, android.R.dimen.system_app_widget_background_radius
+            R.id.widget_schedule, android.R.dimen.system_app_widget_background_radius,
         )
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
     }
@@ -844,17 +851,17 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
             prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
 
             else -> selectedWidgetTextColor
-        }
+        },
     )
     val holidaysColor = androidx.compose.ui.graphics.Color(
         if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
-        else 0xFFE51C23.toInt()
+        else 0xFFE51C23.toInt(),
     )
     val colors = MonthColors(
         contentColor = contentColor,
         appointments = androidx.compose.ui.graphics.Color(
             if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
-            else 0xFF376E9F.toInt()
+            else 0xFF376E9F.toInt(),
         ),
         holidays = holidaysColor,
         holidaysCircle = holidaysColor.copy(alpha = .175f),
@@ -945,7 +952,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)
     remoteViews.setViewVisibility(
-        R.id.week_number_column, if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
+        R.id.week_number_column, if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE,
     )
     remoteViews.setDirection(R.id.month_grid_parent, context.resources)
     val launchAppIntent = context.launchAppPendingIntent()
@@ -1037,10 +1044,10 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
         color = if (prefersWidgetsDynamicColors) ColorUtils.setAlphaComponent(
             context.getColor(
                 if (isNightMode) android.R.color.system_accent2_800
-                else android.R.color.system_accent2_50
+                else android.R.color.system_accent2_50,
             ),
             (255 * (1 - widgetTransparency)).roundToInt().coerceIn(0, 255),
-        ) else MapDraw.defaultBackground
+        ) else MapDraw.defaultBackground,
     )
     // setViewLayoutWidth needs Android 12
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) fixedSize?.let {
@@ -1057,7 +1064,7 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
     }
     val foregroundColor = if (prefersWidgetsDynamicColors) context.getColor(
         if (isNightMode) android.R.color.system_accent1_50
-        else android.R.color.system_accent1_600
+        else android.R.color.system_accent1_600,
     ) else null
     val mapSize = run {
         val width = size?.width?.toPx(context.resources) ?: 250f
@@ -1087,7 +1094,7 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
                 coordinates = coordinates,
                 displayLocation = true,
                 directPathDestination = null,
-                displayGrid = false
+                displayGrid = false,
             )
         }
     }.also {
@@ -1118,7 +1125,7 @@ private fun createMoonRemoteViews(context: Context, size: DpSize?): RemoteViews 
             height / 2f,
             min(width, height) / 2f,
             state.moonTilt,
-            null /* make it always fully visible */
+            null, /* make it always fully visible */
         )
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
@@ -1150,7 +1157,7 @@ fun create1x1RemoteViews(
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
     remoteViews.setupForegroundTextColors(R.id.textPlaceholder1_1x1, R.id.textPlaceholder2_1x1)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder1_1x1, android.R.attr.colorAccent
+        R.id.textPlaceholder1_1x1, android.R.attr.colorAccent,
     )
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
@@ -1178,38 +1185,42 @@ fun create4x1RemoteViews(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
-        context.packageName, if (isWidgetClock) {
+        context.packageName,
+        if (isWidgetClock) {
             if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
         } else {
             if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
-        }
+        },
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x1)
     if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     remoteViews.setRoundBackground(context.resources, R.id.widget_layout4x1_background, size)
     remoteViews.setDirection(R.id.widget_layout4x1, context.resources)
     remoteViews.setupForegroundTextColors(
-        R.id.textPlaceholder1_4x1, R.id.textPlaceholder2_4x1, R.id.textPlaceholder3_4x1
+        R.id.textPlaceholder1_4x1, R.id.textPlaceholder2_4x1, R.id.textPlaceholder3_4x1,
     )
     remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder1_4x1, 30 * scale)
     remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder2_4x1, 14 * scale)
     remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder3_4x1, 12 * scale)
     if (isWidgetClock) remoteViews.setTextViewTextSizeDp(R.id.time_header_4x1, 22 * scale)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder1_4x1, android.R.attr.colorAccent
+        R.id.textPlaceholder1_4x1, android.R.attr.colorAccent,
     )
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
-    remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
-        append(if (isWidgetClock) widgetTitle else mainDateString)
-        if (showOtherCalendars) append(spacedComma + subtitle)
-    })
+    remoteViews.setTextViewText(
+        R.id.textPlaceholder2_4x1,
+        buildString {
+            append(if (isWidgetClock) widgetTitle else mainDateString)
+            if (showOtherCalendars) append(spacedComma + subtitle)
+        },
+    )
     remoteViews.setInt(
-        R.id.textPlaceholder2_4x1, "setMaxLines", if (showOtherCalendars) 10 else 1
+        R.id.textPlaceholder2_4x1, "setMaxLines", if (showOtherCalendars) 10 else 1,
     )
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
-        if (isWidgetClock && isForcedIranTimeEnabled) "(" + context.getString(R.string.iran_time) + ")" else ""
+        if (isWidgetClock && isForcedIranTimeEnabled) "(" + context.getString(R.string.iran_time) + ")" else "",
     )
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, context.launchAppPendingIntent())
     return remoteViews
@@ -1232,11 +1243,12 @@ fun create2x2RemoteViews(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
-        context.packageName, if (isWidgetClock) {
+        context.packageName,
+        if (isWidgetClock) {
             if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
         } else {
             if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
-        }
+        },
     )
     remoteViews.setTextViewTextSizeSp(R.id.date_2x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.owghat_2x2, 14 * scale)
@@ -1250,11 +1262,11 @@ fun create2x2RemoteViews(
     remoteViews.setRoundBackground(context.resources, R.id.widget_layout2x2_background, size)
     remoteViews.setDirection(R.id.widget_layout2x2, context.resources)
     remoteViews.setupForegroundTextColors(
-        R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2
+        R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2,
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_2x2)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.time_2x2, android.R.attr.colorAccent
+        R.id.time_2x2, android.R.attr.colorAccent,
     )
 
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
@@ -1268,10 +1280,13 @@ fun create2x2RemoteViews(
     }
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
-    remoteViews.setTextViewText(R.id.date_2x2, buildString {
-        append(if (isWidgetClock) widgetTitle else mainDateString)
-        if (showOtherCalendars) appendLine().append(subtitle)
-    })
+    remoteViews.setTextViewText(
+        R.id.date_2x2,
+        buildString {
+            append(if (isWidgetClock) widgetTitle else mainDateString)
+            if (showOtherCalendars) appendLine().append(subtitle)
+        },
+    )
 
     remoteViews.setOnClickPendingIntent(R.id.widget_layout2x2, context.launchAppPendingIntent())
     return remoteViews
@@ -1283,7 +1298,7 @@ private val widget4x2TimesViewsIds = listOf(
     R.id.textPlaceholder4owghat_2_4x2,
     R.id.textPlaceholder4owghat_3_4x2,
     R.id.textPlaceholder4owghat_4_4x2,
-    R.id.textPlaceholder4owghat_5_4x2
+    R.id.textPlaceholder4owghat_5_4x2,
 )
 
 private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
@@ -1315,14 +1330,14 @@ fun create4x2RemoteViews(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val isWidgetClock = isWidgetClock
     val remoteViews = RemoteViews(
-        context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
+        context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2,
     )
 
     remoteViews.setTextViewTextSizeSp(
-        R.id.textPlaceholder0_4x2, scale * if (isWidgetClock) 48 else 40
+        R.id.textPlaceholder0_4x2, scale * if (isWidgetClock) 48 else 40,
     )
     if (isWidgetClock) remoteViews.setTextViewTextSizeSp(
-        R.id.time_header_4x2, (if (language.isTamil) 22f else 48f) * scale
+        R.id.time_header_4x2, (if (language.isTamil) 22f else 48f) * scale,
     )
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder1_4x2, 13 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder2_4x2, 13 * scale)
@@ -1346,29 +1361,32 @@ fun create4x2RemoteViews(
         R.id.textPlaceholder4owghat_4_4x2,
         R.id.textPlaceholder4owghat_2_4x2,
         R.id.textPlaceholder4owghat_5_4x2,
-        R.id.event_4x2
+        R.id.event_4x2,
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x2)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder0_4x2, android.R.attr.colorAccent
+        R.id.textPlaceholder0_4x2, android.R.attr.colorAccent,
     )
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
-    remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
-        if (isWidgetClock) append(jdn.weekDay.title + "\n")
-        append(formatDate(date, calendarNameInLinear = showOtherCalendars))
-        if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
-    })
+    remoteViews.setTextViewText(
+        R.id.textPlaceholder1_4x2,
+        buildString {
+            if (isWidgetClock) append(jdn.weekDay.title + "\n")
+            append(formatDate(date, calendarNameInLinear = showOtherCalendars))
+            if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
+        },
+    )
 
     if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
         val owghats = widget4x2TimesViewsIds.zip(
-            timesToShow(clock, prayTimes)
+            timesToShow(clock, prayTimes),
         ) { textHolderViewId, prayTime ->
             val timeClock = prayTimes[prayTime]
             remoteViews.setTextViewText(
                 textHolderViewId,
-                context.getString(prayTime.stringRes) + "\n" + timeClock.toFormattedString(printAmPm = false)
+                context.getString(prayTime.stringRes) + "\n" + timeClock.toFormattedString(printAmPm = false),
             )
             remoteViews.setupForegroundTextColors(textHolderViewId)
             Triple(textHolderViewId, prayTime.stringRes, timeClock)
@@ -1384,27 +1402,28 @@ fun create4x2RemoteViews(
                     remoteViews.setAlpha(viewId, .6f)
                     remoteViews.setDynamicTextColor(viewId)
                 } else remoteViews.setTextColor(
-                    viewId, ColorUtils.setAlphaComponent(selectedWidgetTextColor, 180)
+                    viewId, ColorUtils.setAlphaComponent(selectedWidgetTextColor, 180),
                 )
             } else remoteViews.setupForegroundTextColors(viewId)
         }
 
         val difference = timeClock - clock
         remoteViews.setTextViewText(
-            R.id.textPlaceholder2_4x2, context.getString(
+            R.id.textPlaceholder2_4x2,
+            context.getString(
                 R.string.n_till,
                 (if (difference.value < .0) difference + Clock(24.0) else difference).asRemainingTime(
                     context.resources, short = language.isTamil,
                 ),
-                context.getString(nextOwghatId)
-            )
+                context.getString(nextOwghatId),
+            ),
         )
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             0,
             Intent(context, Widget4x2::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
 
@@ -1476,13 +1495,15 @@ fun createWeekViewRemoteViews(
                     if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
                 } else {
                     selectedWidgetTextColor
-                }, BlendModeCompat.SRC_ATOP
+                },
+                BlendModeCompat.SRC_ATOP,
             )
             remoteViews.setImageViewBitmap(
-                R.id.today_background, drawable.toBitmap(
+                R.id.today_background,
+                drawable.toBitmap(
                     32.dp.roundToPx(context.resources),
                     32.dp.roundToPx(context.resources),
-                )
+                ),
             )
         } else {
             val weekDayNameColor = when {
@@ -1505,19 +1526,19 @@ fun createWeekViewRemoteViews(
 
         val action = jdnActionKey + day.value
         remoteViews.setOnClickPendingIntent(
-            weekDayNumberViewId, context.launchAppPendingIntent(action)
+            weekDayNumberViewId, context.launchAppPendingIntent(action),
         )
         remoteViews.setInt(
-            weekDayNumberViewId, "setBackgroundResource", R.drawable.widget_month_day_ripple
+            weekDayNumberViewId, "setBackgroundResource", R.drawable.widget_month_day_ripple,
         )
     }
 
     remoteViews.setTextViewText(
-        R.id.textDate, language.my.format(date.monthName, numeral.format(date.year))
+        R.id.textDate, language.my.format(date.monthName, numeral.format(date.year)),
     )
 
     remoteViews.setOnClickPendingIntent(
-        R.id.widget_layout_week_view, context.launchAppPendingIntent()
+        R.id.widget_layout_week_view, context.launchAppPendingIntent(),
     )
     return remoteViews
 }
@@ -1534,7 +1555,7 @@ private fun timesToShow(clock: Clock, prayTimes: PrayTimes): List<PrayTime> {
 }
 
 private fun setEventsInWidget(
-    resources: Resources, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
+    resources: Resources, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int,
 ) {
     val events = eventsRepository.getEvents(jdn, deviceCalendarEvents)
     val holidays = getEventsTitle(
@@ -1546,7 +1567,7 @@ private fun setEventsInWidget(
     )
     remoteViews.setTextViewTextOrHideIfEmpty(holidaysId, holidays)
     if (isTalkBackEnabled) remoteViews.setContentDescription(
-        holidaysId, resources.getString(R.string.holiday_reason, holidays)
+        holidaysId, resources.getString(R.string.holiday_reason, holidays),
     )
 
     val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
@@ -1554,12 +1575,12 @@ private fun setEventsInWidget(
         holiday = false,
         showDeviceCalendarEvents = true,
         insertRLM = resources.isRtl,
-        addIsHoliday = false
+        addIsHoliday = false,
     ) else ""
     remoteViews.setTextViewTextOrHideIfEmpty(eventsId, nonHolidays)
 
     if (!prefersWidgetsDynamicColors) remoteViews.setInt(
-        holidaysId, "setTextColor", 0xFFFF8A65.toInt()
+        holidaysId, "setTextColor", 0xFFFF8A65.toInt(),
     )
 }
 
@@ -1578,7 +1599,7 @@ private fun updateNotification(
 
     val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         if (isLargeDayNumberOnNotification) listOf(
-            PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB
+            PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB,
         ) else timesToShow(clock, prayTimes)
     } else null
 
@@ -1608,7 +1629,7 @@ private fun updateNotification(
         customFontName = customFontName,
         isBoldFont = isBoldFont,
         numeral = numeral,
-        notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
+        notificationId = if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY,
     )
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || // always update as complains in 8.3.0
         latestPostedNotification != notificationData
@@ -1622,7 +1643,7 @@ private val notificationTimesViewsIds = listOf(
     R.id.head4 to R.id.time4, R.id.head5 to R.id.time5,
 )
 private val notificationTimesColumnsIds = listOf(
-    R.id.column1, R.id.column2, R.id.column3, R.id.column4, R.id.column5
+    R.id.column1, R.id.column2, R.id.column3, R.id.column4, R.id.column5,
 )
 
 private data class NotificationData(
@@ -1657,7 +1678,7 @@ private data class NotificationData(
                 notificationId.toString(),
                 context.getString(R.string.app_name),
                 if (useDefaultPriority) NotificationManager.IMPORTANCE_DEFAULT
-                else NotificationManager.IMPORTANCE_LOW
+                else NotificationManager.IMPORTANCE_LOW,
             )
             if (useDefaultPriority) {
                 channel.setSound(null, null)
@@ -1671,7 +1692,7 @@ private data class NotificationData(
             .setPriority(NotificationCompat.PRIORITY_LOW).setOngoing(true).setWhen(0)
             .setContentIntent(context.launchAppPendingIntent()).setVisibility(
                 if (isNotifyDateOnLockScreen) NotificationCompat.VISIBILITY_PUBLIC
-                else NotificationCompat.VISIBILITY_SECRET
+                else NotificationCompat.VISIBILITY_SECRET,
             ).setContentTitle(title).setContentText(
                 when {
                     isTalkBackEnabled -> getA11yDaySummary(
@@ -1681,7 +1702,7 @@ private data class NotificationData(
                         deviceCalendarEvents = deviceCalendarEvents,
                         withZodiac = true,
                         withOtherCalendars = true,
-                        withTitle = false
+                        withTitle = false,
                     ) + if (owghat.isEmpty()) "" else spacedComma + owghat
 
                     else -> subtitle
@@ -1712,8 +1733,8 @@ private data class NotificationData(
                     customFontFile = customFontFile,
                     isBoldFont = isBoldFont,
                     color = 0xFF929292.toInt(),
-                    addShadow = true
-                )
+                    addShadow = true,
+                ),
             )
         }
 
@@ -1730,7 +1751,7 @@ private data class NotificationData(
                 holiday = true,
                 showDeviceCalendarEvents = true,
                 insertRLM = isRtl,
-                addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
+                addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled,
             )
 
             val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
@@ -1738,20 +1759,20 @@ private data class NotificationData(
                 holiday = false,
                 showDeviceCalendarEvents = true,
                 insertRLM = isRtl,
-                addIsHoliday = false
+                addIsHoliday = false,
             ) else ""
 
             val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
 
             if (shouldDisableCustomNotification) {
                 val content = listOf(
-                    subtitle, holidays.trim(), nonHolidays, notificationOwghat
+                    subtitle, holidays.trim(), nonHolidays, notificationOwghat,
                 ).filter { it.isNotBlank() }.joinToString("\n")
                 builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
             } else {
                 builder.setCustomContentView(
                     RemoteViews(
-                        context.packageName, R.layout.custom_notification
+                        context.packageName, R.layout.custom_notification,
                     ).also {
                         it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
@@ -1761,7 +1782,7 @@ private data class NotificationData(
 
                 if (holidays.isNotBlank() || nonHolidays.isNotBlank() || timesToShow != null) builder.setCustomBigContentView(
                     RemoteViews(
-                        context.packageName, R.layout.custom_notification_big
+                        context.packageName, R.layout.custom_notification_big,
                     ).also {
                         it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
@@ -1769,18 +1790,18 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
                         it.setViewVisibility(
-                            R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
+                            R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE,
                         )
                         if (timesToShow != null && prayTimes != null) {
                             notificationTimesViewsIds.zip(
                                 timesToShow,
                             ) { (headViewId, timeViewId), prayTime ->
                                 it.setTextViewText(
-                                    headViewId, context.getString(prayTime.stringRes)
+                                    headViewId, context.getString(prayTime.stringRes),
                                 )
                                 it.setTextViewText(
                                     timeViewId,
-                                    prayTimes[prayTime].toFormattedString(printAmPm = false)
+                                    prayTimes[prayTime].toFormattedString(printAmPm = false),
                                 )
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                                     val alpha = if (prayTime == nextPrayTime) 1f else .6f
@@ -1829,7 +1850,7 @@ private fun RemoteViews.setRoundBackground(
     resources: Resources,
     @IdRes viewId: Int,
     size: DpSize?,
-    @ColorInt color: Int = selectedWidgetBackgroundColor
+    @ColorInt color: Int = selectedWidgetBackgroundColor,
 ) {
     when {
         prefersWidgetsDynamicColors -> {
@@ -1863,7 +1884,7 @@ private fun RemoteViews.configureClock(@IdRes viewId: Int) {
 
 @RequiresApi(Build.VERSION_CODES.S)
 private fun RemoteViews.setDynamicTextColor(
-    @IdRes id: Int, @AttrRes attr: Int = android.R.attr.colorForeground
+    @IdRes id: Int, @AttrRes attr: Int = android.R.attr.colorForeground,
 ): Unit = setColorAttr(id, "setTextColor", attr)
 
 @JvmSynthetic
@@ -1894,16 +1915,20 @@ fun Context.launchAppPendingIntent(
     val activityIntent = if (isDynamicIconEnabled) {
         val (_, _, dayOfMonth) = Jdn.today() on mainCalendar
         Intent.makeMainActivity(
-            ComponentName(this, "$dynamicIconActivityNamePrefix$dayOfMonth")
+            ComponentName(this, "$dynamicIconActivityNamePrefix$dayOfMonth"),
         )
     } else Intent(this, MainActivity::class.java)
     return PendingIntent.getActivity(
-        this, 0, activityIntent.setAction(action).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
-            if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
-        }), PendingIntent.FLAG_UPDATE_CURRENT or when {
+        this, 0,
+        activityIntent.setAction(action).addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK.let {
+                if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
+            },
+        ),
+        PendingIntent.FLAG_UPDATE_CURRENT or when {
             isMutable -> PendingIntent.FLAG_MUTABLE
             else -> PendingIntent.FLAG_IMMUTABLE
-        }
+        },
     )
 }
 
@@ -1912,9 +1937,9 @@ private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int):
         this,
         0,
         Intent(
-            this, WidgetAgeConfigureActivity::class.java
+            this, WidgetAgeConfigureActivity::class.java,
         ).setAction(AppWidgetManager.EXTRA_APPWIDGET_ID + widgetId)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 }

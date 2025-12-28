@@ -89,7 +89,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(
             "holiday" to ((jdn.weekDay in weekEnds && weekEndsAsHoliday) || dayEvents.any { it.isHoliday }),
-            "hasEvents" to dayEvents.isNotEmpty()
+            "hasEvents" to dayEvents.isNotEmpty(),
         ).filter { it.second }.joinToString(" ") { it.first }
     }
     h1 {
@@ -129,7 +129,8 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                                 val secondaryDateDay = (jdn on it).dayOfMonth
                                 val numeral = getSecondaryCalendarNumeral(it)
                                 numeral.format(secondaryDateDay)
-                            }, getShiftWorkTitle(jdn)
+                            },
+                            getShiftWorkTitle(jdn),
                         ).joinToString(" ").takeIf { it.isNotEmpty() }?.let { sup { +" $it" } }
                     }
                 }
@@ -168,14 +169,14 @@ private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): Lis
             holiday = true,
             showDeviceCalendarEvents = false,
             insertRLM = false,
-            addIsHoliday = true
+            addIsHoliday = true,
         )
         val nonHolidays = getEventsTitle(
             events,
             holiday = false,
             showDeviceCalendarEvents = true,
             insertRLM = false,
-            addIsHoliday = true
+            addIsHoliday = true,
         )
         if (holidays.isEmpty() && nonHolidays.isEmpty()) null
         else jdn to buildSpannedString {

@@ -57,7 +57,7 @@ abstract class BaseConfigurationActivity(
                 Linear(
                     Modifier
                         .safeDrawingPadding()
-                        .padding(16.dp)
+                        .padding(16.dp),
                 ) {
                     Header()
                     val scrollState = rememberScrollState()

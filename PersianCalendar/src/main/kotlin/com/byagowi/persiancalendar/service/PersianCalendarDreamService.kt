@@ -36,14 +36,14 @@ class PersianCalendarDreamService : DreamService() {
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
+                    .build(),
             )
             .setAudioFormat(
                 AudioFormat.Builder()
                     .setSampleRate(sampleRate)
                     .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                     .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                    .build()
+                    .build(),
             )
             .setBufferSizeInBytes(buffer.size * 2)
             .setTransferMode(AudioTrack.MODE_STATIC)
@@ -60,7 +60,7 @@ class PersianCalendarDreamService : DreamService() {
         val isNightMode = isSystemInDarkTheme(resources.configuration)
         val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) getColor(
             if (isNightMode) android.R.color.system_accent1_200
-            else android.R.color.system_accent1_400
+            else android.R.color.system_accent1_400,
         ) else null
         val pattern = PatternDrawable(
             preferredTintColor = accentColor,

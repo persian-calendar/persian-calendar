@@ -35,7 +35,7 @@ class AstronomyState(observer: Observer, date: GregorianCalendar) {
     val moonTiltAngle = sunlitSideMoonTiltAngle(time, observer).toFloat()
     val declination = GeomagneticField(
         observer.latitude.toFloat(), observer.longitude.toFloat(), observer.height.toFloat(),
-        date.time.time
+        date.time.time,
     ).declination
 
     companion object {

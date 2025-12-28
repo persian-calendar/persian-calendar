@@ -24,6 +24,6 @@ fun AppIconButton(
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(title) } },
-        state = rememberTooltipState()
+        state = rememberTooltipState(),
     ) { IconButton(onClick = onClick) { Icon(icon, contentDescription = title, modifier) } }
 }

@@ -22,19 +22,19 @@ class WallpaperConfigurationActivity : BaseConfigurationActivity() {
         SettingsSwitch(
             key = PREF_WALLPAPER_AUTOMATIC,
             value = wallpaperAutomatic,
-            title = stringResource(R.string.theme_default)
+            title = stringResource(R.string.theme_default),
         )
         this.AnimatedVisibility(!wallpaperAutomatic) {
             SettingsSwitch(
                 key = PREF_WALLPAPER_DARK,
                 value = wallpaperDark,
-                title = stringResource(R.string.theme_dark)
+                title = stringResource(R.string.theme_dark),
             )
         }
         if (BuildConfig.DEVELOPMENT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) SettingsSwitch(
             key = PREF_WALLPAPER_ALTERNATIVE,
             value = wallpaperAlternative,
-            title = "Alternative"
+            title = "Alternative",
         )
     }
 }

@@ -58,7 +58,7 @@ fun CalendarScreen(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 4.dp)
+                        .padding(bottom = 4.dp),
                 ) {
                     repeat(7) { weekDay ->
                         val jdn = weekStartJdn + weekDay + (row - initialItem) * 7
@@ -79,7 +79,7 @@ fun CalendarScreen(
                                     shape = RoundedCornerShape(50),
                                 )
                                 .alpha(if (isFocusedMonth) 1f else .5f),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Box(
                                 Modifier
@@ -103,7 +103,7 @@ fun CalendarScreen(
                             Canvas(
                                 Modifier
                                     .padding(top = 16.dp)
-                                    .size(2.dp)
+                                    .size(2.dp),
                             ) { if (events.isNotEmpty()) drawCircle(foregroundColor) }
                         }
                     }
@@ -119,12 +119,12 @@ fun CalendarScreen(
             ListHeader(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
             ) {
                 val formattedYear = localeUtils.format(focusedPersianDate.year)
                 AnimatedContent(
                     targetState = localeUtils.persianMonth(focusedPersianDate) + " " + formattedYear,
-                    transitionSpec = appCrossfadeSpec
+                    transitionSpec = appCrossfadeSpec,
                 ) { Text(it) }
             }
             Row(

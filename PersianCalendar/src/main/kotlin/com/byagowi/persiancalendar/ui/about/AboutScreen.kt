@@ -189,7 +189,7 @@ private fun Header() {
                 .weight(1f)
                 .fillMaxSize()
                 .padding(horizontal = MaterialIconDimension.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Column {
                 Text(
@@ -210,8 +210,8 @@ private fun Header() {
                                 stringResource(
                                     R.string.about_help_subtitle,
                                     numeral.format(supportedYearOfIranCalendar - 1),
-                                    numeral.format(supportedYearOfIranCalendar)
-                                )
+                                    numeral.format(supportedYearOfIranCalendar),
+                                ),
                             )
                         }
                     },
@@ -250,13 +250,18 @@ private fun Header() {
 
 private fun shareApplication(context: Context) {
     runCatching {
-        context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
-            val textToShare = """${context.getString(R.string.app_name)}
+        context.startActivity(
+            Intent.createChooser(
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
+                    val textToShare = """${context.getString(R.string.app_name)}
 https://github.com/persian-calendar/persian-calendar"""
-            putExtra(Intent.EXTRA_TEXT, textToShare)
-        }, context.getString(R.string.share)))
+                    putExtra(Intent.EXTRA_TEXT, textToShare)
+                },
+                context.getString(R.string.share),
+            ),
+        )
     }.onFailure(logException).onFailure { context.bringMarketPage() }
 }
 
@@ -264,8 +269,8 @@ https://github.com/persian-calendar/persian-calendar"""
 private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
     Column(
         Modifier.windowInsetsPadding(
-            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
-        )
+            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+        ),
     ) {
         // Licenses
         Text(
@@ -289,7 +294,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
                 )
                 Column(Modifier.padding(start = 4.dp)) {
                     Text(
-                        stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge
+                        stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge,
                     )
                 }
             }
@@ -308,7 +313,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             icon = Icons.Default.BugReport,
             action = ::launchReportIntent,
             title = R.string.about_report_bug,
-            summary = R.string.about_report_bug_sum
+            summary = R.string.about_report_bug_sum,
         )
         run {
             var showDialog by rememberSaveable { mutableStateOf(false) }
@@ -316,7 +321,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
                 icon = Icons.Default.Email,
                 action = { showDialog = true },
                 title = R.string.about_send_mail,
-                summary = R.string.about_email_sum
+                summary = R.string.about_email_sum,
             )
             if (showDialog) EmailDialog { showDialog = false }
         }
@@ -414,7 +419,7 @@ private fun AboutScreenButton(
                 Text(
                     stringResource(summary),
                     style = MaterialTheme.typography.bodySmall,
-                    lineHeight = 16.sp
+                    lineHeight = 16.sp,
                 )
             }
         }
@@ -483,7 +488,7 @@ private fun Developers() {
                         Icon(
                             icon,
                             contentDescription = displayName,
-                            Modifier.size(AssistChipDefaults.IconSize)
+                            Modifier.size(AssistChipDefaults.IconSize),
                         )
                     },
                 )

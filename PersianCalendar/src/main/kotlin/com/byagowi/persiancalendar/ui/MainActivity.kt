@@ -38,7 +38,7 @@ class MainActivity : BaseActivity() {
 
         intent.getLongExtra(eventKey, -1L).takeIf { it != -1L }?.let { eventId ->
             val intent = Intent(Intent.ACTION_VIEW).setData(
-                ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId)
+                ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId),
             )
             runCatching { startActivity(intent) }.onFailure(logException)
             return finish()

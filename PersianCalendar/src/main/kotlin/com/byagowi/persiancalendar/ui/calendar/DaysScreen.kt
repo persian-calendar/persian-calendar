@@ -251,8 +251,8 @@ fun SharedTransitionScope.DaysScreen(
                                 interactionSource = null,
                                 indication = ripple(bounded = false),
                                 onClickLabel = stringResource(
-                                    if (!isWeekView) R.string.week_view else R.string.calendar
-                                )
+                                    if (!isWeekView) R.string.week_view else R.string.calendar,
+                                ),
                             ) { if (!isWeekView) isWeekView = true else navigateUp() },
                         ) {
                             val secondaryCalendar = secondaryCalendar
@@ -260,7 +260,7 @@ fun SharedTransitionScope.DaysScreen(
                             val subtitle: String
                             if (secondaryCalendar == null) {
                                 title = if (hasWeeksPager) date.monthName else language.dm.format(
-                                    numeral.format(date.dayOfMonth), date.monthName
+                                    numeral.format(date.dayOfMonth), date.monthName,
                                 )
                                 subtitle = numeral.format(date.year)
                             } else {
@@ -321,10 +321,10 @@ fun SharedTransitionScope.DaysScreen(
                             else stringResource(R.string.week_view)
                             TooltipBox(
                                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                    TooltipAnchorPosition.Above
+                                    TooltipAnchorPosition.Above,
                                 ),
                                 tooltip = { PlainTooltip { Text(title) } },
-                                state = rememberTooltipState()
+                                state = rememberTooltipState(),
                             ) {
                                 if (isWeekViewState) Icon(Icons.Default.CalendarViewDay, title)
                                 else Icon(Icons.Default.CalendarViewWeek, title)
@@ -392,7 +392,7 @@ fun SharedTransitionScope.DaysScreen(
 
                             val context = LocalContext.current
                             val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(
-                                today, mainCalendar.getMonthsDistance(today, selectedDay)
+                                today, mainCalendar.getMonthsDistance(today, selectedDay),
                             )
                             val monthStartJdn = Jdn(monthStartDate)
                             val pageWeekStart = (today + (page - weeksLimit / 2) * 7).let {
@@ -483,7 +483,7 @@ fun SharedTransitionScope.DaysScreen(
 
                             val context = LocalContext.current
                             val dayDeviceEvents = remember(
-                                refreshToken, isShowDeviceCalendarEvents, pageDay
+                                refreshToken, isShowDeviceCalendarEvents, pageDay,
                             ) {
                                 if (isShowDeviceCalendarEvents) {
                                     context.readDayDeviceEvents(pageDay)
@@ -536,7 +536,7 @@ private fun hoursFractionOfDay(date: GregorianCalendar): Float =
     date[GregorianCalendar.HOUR_OF_DAY] + date[GregorianCalendar.MINUTE] / 60f
 
 private data class EventDivision(
-    val event: CalendarEvent.DeviceCalendarEvent, val column: Int, val columnsCount: Int
+    val event: CalendarEvent.DeviceCalendarEvent, val column: Int, val columnsCount: Int,
 )
 
 private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<EventDivision> {
@@ -599,7 +599,7 @@ private fun DaysView(
                 }
             },
             onRelease = { if (interaction == Interaction.Zoom) interaction = null },
-        )
+        ),
     ) {
         val events = (startingDay..<startingDay + days).toList().map { jdn ->
             readEvents(jdn, calendarViewModel, deviceEvents)
@@ -659,7 +659,7 @@ private fun DaysView(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
+                        .padding(horizontal = 24.dp),
                 )
                 Column(Modifier.animateContentSize(appContentSizeAnimationSpec)) {
                     DayEvents(eventsWithoutTime[0].let { if (isExpanded) it else it.take(3) }) {
@@ -673,7 +673,7 @@ private fun DaysView(
                 } else Spacer(Modifier.height(12.dp))
             } else if (maxDayAllDayEvents != 0) Row(
                 verticalAlignment = Alignment.Bottom,
-                modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier
+                modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier,
             ) {
                 Box(
                     Modifier
@@ -765,9 +765,12 @@ private fun DaysView(
                 val heightSizeReduction = 3.dp
                 val heightSizeReductionPx = with(density) { heightSizeReduction.toPx() }
                 val clockCache = remember {
-                    lruCache(1024, create = { minutes: Int ->
-                        Clock(minutes / 60.0).toBasicFormatString()
-                    })
+                    lruCache(
+                        1024,
+                        create = { minutes: Int ->
+                            Clock(minutes / 60.0).toBasicFormatString()
+                        },
+                    )
                 }
 
                 // Time cells and table
@@ -809,7 +812,7 @@ private fun DaysView(
                                             ) {
                                                 offset = Offset(
                                                     cellWidthPx * (column - 1),
-                                                    cellHeightPx * row / scale.value
+                                                    cellHeightPx * row / scale.value,
                                                 )
                                                 setAddEventBoxEnabled()
                                                 duration = cellHeightPx / scale.value
@@ -820,7 +823,7 @@ private fun DaysView(
                                                     this.contentDescription = listOf(
                                                         (startingDay + (column - 1)).weekDay.title,
                                                         clockCache[row * 60],
-                                                        clockCache[(row + 1) * 60]
+                                                        clockCache[(row + 1) * 60],
                                                     ).joinToString(" ")
                                                 }
                                             }
@@ -862,7 +865,7 @@ private fun DaysView(
                                 .offset {
                                     IntOffset(
                                         (firstColumnPx + cellWidthPx * i + cellWidthPx / columnsCount * column).roundToInt(),
-                                        (start * cellHeightPx).roundToInt()
+                                        (start * cellHeightPx).roundToInt(),
                                     )
                                 }
                                 .requiredSize(
@@ -886,7 +889,7 @@ private fun DaysView(
                             .offset {
                                 IntOffset(
                                     (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                    (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                                    (hoursFractionOfDay(time) * cellHeightPx).roundToInt(),
                                 )
                             }
                             .size(1.dp),
@@ -897,9 +900,9 @@ private fun DaysView(
                             start = Offset(if (isRtl) this.size.width else 0f, 0f),
                             end = Offset(
                                 directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
-                                0f
+                                0f,
                             ),
-                            strokeWidth = 1.dp.toPx()
+                            strokeWidth = 1.dp.toPx(),
                         )
                     }
                 }
@@ -938,7 +941,7 @@ private fun DaysView(
                                     start = Offset(if (isRtl) this.size.width else 0f, 0f),
                                     end = Offset(
                                         directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
-                                        0f
+                                        0f,
                                     ),
                                     pathEffect = pathEffect,
                                     strokeWidth = strokeWidth,
@@ -973,13 +976,13 @@ private fun DaysView(
                     animationSpec = if (interaction == Interaction.Zoom) snap() else {
                         spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
                     },
-                    label = "offset"
+                    label = "offset",
                 ).value
                 val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
                     animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
-                    label = "duration"
+                    label = "duration",
                 )
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val widthReduction = remember { Animatable(defaultWidthReductionPx) }
@@ -988,7 +991,7 @@ private fun DaysView(
                     if (offset == null) {
                         offset = Offset(
                             cellWidthPx * (selectedDay - startingDay),
-                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.value
+                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.value,
                         )
                         setAddEventBoxEnabled()
                     } else {
@@ -1016,7 +1019,7 @@ private fun DaysView(
                                     selectedDay,
                                     selectedDay on mainCalendar,
                                 ),
-                            )
+                            ),
                         )
                         resetOnNextRefresh = true
                     }
@@ -1057,7 +1060,7 @@ private fun DaysView(
                         .clickable(
                             indication = null,
                             interactionSource = null,
-                            onClickLabel = stringResource(R.string.add_event)
+                            onClickLabel = stringResource(R.string.add_event),
                         ) { addAction() }
                         .pointerInput(Unit) {
                             awaitEachGesture {
@@ -1077,18 +1080,18 @@ private fun DaysView(
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
                                                 maximumValue = ((ySteps * 24 * 4) - position.y).coerceAtLeast(
-                                                    ySteps * 1f
-                                                )
+                                                    ySteps * 1f,
+                                                ),
                                             )
 
                                         Interaction.ExtendUp -> {
                                             val newValueY = position.y + delta.y / scale.value
                                             offset = position.copy(
-                                                y = newValueY.coerceIn(0f, cellHeightPx * 23)
+                                                y = newValueY.coerceIn(0f, cellHeightPx * 23),
                                             )
                                             duration =
                                                 (duration - delta.y / scale.value).coerceAtLeast(
-                                                    ySteps * 1f
+                                                    ySteps * 1f,
                                                 )
                                         }
 
@@ -1097,7 +1100,10 @@ private fun DaysView(
                                             val newValueY = position.y + delta.y / scale.value
                                             offset = Offset(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
-                                                newValueY.coerceIn(0f, cellHeightPx * 24 - duration)
+                                                newValueY.coerceIn(
+                                                    0f,
+                                                    cellHeightPx * 24 - duration
+                                                ),
                                             )
 
                                             val effectiveColumn =
@@ -1120,9 +1126,11 @@ private fun DaysView(
                     contentAlignment = Alignment.Center,
                 ) addEventBox@{
                     val alpha by animateFloatAsState(
-                        if (offset == null) 0f else 1f, animationSpec = spring(
-                            Spring.DampingRatioNoBouncy, Spring.StiffnessLow
-                        ), label = "alpha"
+                        if (offset == null) 0f else 1f,
+                        animationSpec = spring(
+                            Spring.DampingRatioNoBouncy, Spring.StiffnessLow,
+                        ),
+                        label = "alpha",
                     )
                     if (offset == null) return@addEventBox
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
@@ -1140,7 +1148,7 @@ private fun DaysView(
                         )
                         val rectSize = Size(
                             width = this.size.width - widthReduction.value,
-                            height = this.size.height - heightSizeReductionPx
+                            height = this.size.height - heightSizeReductionPx,
                         )
                         drawRoundRect(
                             background,
@@ -1158,14 +1166,14 @@ private fun DaysView(
                         val circleOffset = this.size.width * .05f
                         val offset1 = Offset(
                             x = this.center.x - (this.size.width / 2 - radius - circleOffset) * directionSign,
-                            y = if (animatedOffset.y < radius) radius - animatedOffset.y else 0f
+                            y = if (animatedOffset.y < radius) radius - animatedOffset.y else 0f,
                         )
                         val circleBorderSize = 2.dp.toPx()
                         drawCircle(circleBorder, radius + circleBorderSize, offset1)
                         drawCircle(primaryWithAlpha, radius, offset1)
                         val offset2 = Offset(
                             x = this.center.x + (this.size.width / 2 - widthReduction.value - radius - circleOffset) * directionSign,
-                            y = this.size.height - heightSizeReduction.toPx()
+                            y = this.size.height - heightSizeReduction.toPx(),
                         )
                         drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)

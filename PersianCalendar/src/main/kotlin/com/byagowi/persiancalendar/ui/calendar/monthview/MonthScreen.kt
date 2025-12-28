@@ -159,7 +159,7 @@ fun SharedTransitionScope.MonthScreen(
 //                                val weekNumber = monthStartWeekOfYear
                                 Box(
                                     contentAlignment = Alignment.Center,
-                                    modifier = cellsSizeModifier
+                                    modifier = cellsSizeModifier,
 //                                        .then(
 //                                        if (true) Modifier.sharedBounds(
 //                                            rememberSharedContentState(
@@ -174,9 +174,9 @@ fun SharedTransitionScope.MonthScreen(
                                         style = daysStyle,
                                         modifier = Modifier.alpha(
                                             if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year)
-                                                1f else AppBlendAlpha
+                                                1f else AppBlendAlpha,
 
-                                        ),
+                                            ),
                                     )
                                 }
                             }

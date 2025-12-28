@@ -33,7 +33,7 @@ fun ColumnScope.NotificationSettings() {
     val context = LocalContext.current
     run {
         val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission(),
         ) { isGranted -> context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
         SettingsSwitch(
             key = PREF_NOTIFY_DATE,
@@ -42,7 +42,7 @@ fun ColumnScope.NotificationSettings() {
             summary = stringResource(R.string.enable_notify),
             onBeforeToggle = { value: Boolean ->
                 if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                        context, Manifest.permission.POST_NOTIFICATIONS
+                        context, Manifest.permission.POST_NOTIFICATIONS,
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)

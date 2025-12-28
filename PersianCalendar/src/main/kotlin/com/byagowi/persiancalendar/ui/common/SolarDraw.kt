@@ -21,7 +21,7 @@ class SolarDraw(resources: Resources) {
 
     fun sun(
         canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false,
-        alpha: Int = 255
+        alpha: Int = 255,
     ) {
         val drawable = if (small) smallSunDrawable else sunDrawable
         drawable.alpha = alpha
@@ -41,8 +41,9 @@ class SolarDraw(resources: Resources) {
             if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(127, 255)
         moonShadowPaint.alpha = alpha
         moonDrawable.alpha = alpha
-        moonDrawable.setBounds( // same as above
-            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
+        moonDrawable.setBounds(
+            // same as above
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt(),
         )
         moonDrawable.draw(canvas)
         val phase = (moon.lon - sun.elon)
@@ -64,7 +65,7 @@ class SolarDraw(resources: Resources) {
     fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
         moonDrawable.alpha = 255
         moonDrawable.setBounds(
-            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt(),
         )
         moonDrawable.draw(canvas)
     }
@@ -84,7 +85,7 @@ class SolarDraw(resources: Resources) {
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
         earthDrawable.setBounds(
-            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt(),
         )
         earthDrawable.draw(canvas)
         earthRect.inset(r / 18, r / 18)

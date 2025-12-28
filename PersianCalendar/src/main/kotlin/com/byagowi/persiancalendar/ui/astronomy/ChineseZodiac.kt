@@ -97,7 +97,7 @@ enum class ChineseZodiac(
 
     companion object {
         private val zodiacToElement = listOf(
-            WATER, EARTH, WOOD, WOOD, EARTH, FIRE, FIRE, EARTH, METAL, METAL, EARTH, WATER
+            WATER, EARTH, WOOD, WOOD, EARTH, FIRE, FIRE, EARTH, METAL, METAL, EARTH, WATER,
         )
 
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =

@@ -37,7 +37,7 @@ import kotlin.math.min
 
 class MonthTileService : TileService() {
     override fun onRecentInteractionEventsAsync(
-        events: MutableList<EventBuilders.TileInteractionEvent?>
+        events: MutableList<EventBuilders.TileInteractionEvent?>,
     ): ListenableFuture<Void?> {
         if (events.any { it?.eventType == EventBuilders.TileInteractionEvent.ENTER }) {
             getUpdater(this).requestUpdate(MainTileService::class.java)
@@ -66,7 +66,7 @@ class MonthTileService : TileService() {
                     )
                 },
                 mainSlot = { LayoutElementBuilders.Box.Builder().build() },
-            )
+            ),
         )
         val activityComponent = ComponentName(applicationContext, MainActivity::class.java)
         root.addContent(
@@ -77,10 +77,10 @@ class MonthTileService : TileService() {
                     ModifiersBuilders.Modifiers.Builder()
                         .setClickable(clickable(launchAction(activityComponent)))
                         .setPadding(padding(start = 32f, end = 32f, top = 36f))
-                        .build()
+                        .build(),
                 )
                 .addContent(calendarTable(today, persianDate, localeUtils))
-                .build()
+                .build(),
         )
         root.build()
     }
@@ -97,9 +97,9 @@ class MonthTileService : TileService() {
                     LayoutElementBuilders.FontStyle.Builder()
                         .setColor(colorScheme.secondaryDim.colorProp)
                         .setSize(sp(12f))
-                        .build()
+                        .build(),
                 )
-                .build()
+                .build(),
         )
         .build()
 
@@ -128,11 +128,11 @@ class MonthTileService : TileService() {
                         it.setBackground(
                             ModifiersBuilders.Background.Builder()
                                 .setColor(colorScheme.secondaryContainer.colorProp)
-                                .setCorner(shapes.full).build()
+                                .setCorner(shapes.full).build(),
                         )
                         it.setPadding(padding(start = 4f, end = 4f, bottom = 4f))
                     } else it.setPadding(padding(start = 4f, end = 4f, top = 1f))
-                }.build()
+                }.build(),
             )
             val cellFontSize = dpToSp(screenMinDp / (if (y == 0) 17f else 16.5f))
             repeat(7) { x ->
@@ -147,7 +147,7 @@ class MonthTileService : TileService() {
                         monthLength,
                         monthStartJdn,
                         screenMinDp,
-                    )
+                    ),
                 )
             }
             column.addContent(row.build())
@@ -191,7 +191,7 @@ class MonthTileService : TileService() {
                                 ModifiersBuilders.Border.Builder()
                                     .setWidth(dp(2f))
                                     .setColor(colorScheme.primary.colorProp)
-                                    .build()
+                                    .build(),
                             )
                             val background = ModifiersBuilders.Background.Builder()
                             background.setCorner(shapes.full)
@@ -202,15 +202,15 @@ class MonthTileService : TileService() {
                                         (isHoliday || x == 0) && y != 0 && text.isNotEmpty() ->
                                             ColorUtils.setAlphaComponent(
                                                 colorScheme.primaryContainer.staticArgb,
-                                                180
+                                                180,
                                             )
 
                                         else -> Color.TRANSPARENT
-                                    }
-                                ).build()
+                                    },
+                                ).build(),
                             )
                             it.setBackground(background.build())
-                        }.build()
+                        }.build(),
                     )
                     .setWidth(dp(screenMinDp / 12f))
                     .setHeight(dp(screenMinDp / 12f))
@@ -225,12 +225,12 @@ class MonthTileService : TileService() {
                                         isToday -> colorScheme.onPrimary
                                         isHoliday || x == 0 -> colorScheme.onPrimaryContainer
                                         else -> colorScheme.onBackground
-                                    }.colorProp
+                                    }.colorProp,
                                 )
                                 .build(),
-                        )
+                        ),
                     )
-                    .build()
+                    .build(),
             )
             .apply {
                 if (isHoliday) addContent(
@@ -238,7 +238,7 @@ class MonthTileService : TileService() {
                         .setModifiers(
                             ModifiersBuilders.Modifiers.Builder()
                                 .setPadding(padding(top = screenMinDp / 18f))
-                                .build()
+                                .build(),
                         )
                         .addContent(
                             LayoutElementBuilders.Box.Builder()
@@ -248,18 +248,18 @@ class MonthTileService : TileService() {
                                             ModifiersBuilders.Background.Builder()
                                                 .setColor(
                                                     if (isToday) colorScheme.onPrimary.colorProp
-                                                    else colorScheme.onPrimaryContainer.colorProp
+                                                    else colorScheme.onPrimaryContainer.colorProp,
                                                 )
                                                 .setCorner(shapes.full)
-                                                .build()
+                                                .build(),
                                         )
-                                        .build()
+                                        .build(),
                                 )
                                 .setWidth(dp(2f))
                                 .setHeight(dp(2f))
-                                .build()
+                                .build(),
                         )
-                        .build()
+                        .build(),
                 )
             }
             .build()
@@ -280,9 +280,9 @@ class MonthTileService : TileService() {
             TileBuilders.Tile.Builder()
                 .setResourcesVersion(RESOURCES_VERSION)
                 .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams))
+                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams)),
                 )
-                .build()
+                .build(),
         )
     }
 
@@ -291,7 +291,7 @@ class MonthTileService : TileService() {
         return ImmediateFuture(
             ResourceBuilders.Resources.Builder()
                 .setVersion(RESOURCES_VERSION)
-                .build()
+                .build(),
         )
     }
 

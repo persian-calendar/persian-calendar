@@ -58,12 +58,13 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
                     val accentColor =
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) resources.getColor(
                             if (isNightMode) android.R.color.system_accent1_500
-                            else android.R.color.system_accent1_300, null
+                            else android.R.color.system_accent1_300,
+                            null,
                         ) else null
                     patternDrawable = PatternDrawable(
                         preferredTintColor = accentColor,
                         darkBaseColor = if (wallpaperAutomatic) isNightMode else wallpaperDark,
-                        dp = resources.dp
+                        dp = resources.dp,
                     )
                 }
             }
@@ -90,7 +91,7 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
 
             if (sensor != null) {
                 if (visible) sensorManager?.registerListener(
-                    sensorListener, sensor, SensorManager.SENSOR_DELAY_UI
+                    sensorListener, sensor, SensorManager.SENSOR_DELAY_UI,
                 ) else sensorManager?.unregisterListener(sensorListener)
             }
 
@@ -123,7 +124,7 @@ half4 main(vec2 fragCoord) {
     }
     return ((sin(p) + vec3(2, 5, 12)) / length(p)).xyz1;
 }
-"""
+""",
             ) else null
         private val shaderPaint = Paint().also {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) it.shader = shader
@@ -215,7 +216,7 @@ half4 main(vec2 fragCoord) {
             xOffsetStep: Float,
             yOffsetStep: Float,
             xPixelOffset: Int,
-            yPixelOffset: Int
+            yPixelOffset: Int,
         ) {
             this.slideRotation = (xPixelOffset + yPixelOffset) / 2000f
             fasterUpdateTimestamp = System.currentTimeMillis()
@@ -223,7 +224,7 @@ half4 main(vec2 fragCoord) {
 
         private var scale = 1f
         override fun onZoomChanged(
-            zoom: Float // [0-1], indicating fully zoomed in to fully zoomed out
+            zoom: Float, // [0-1], indicating fully zoomed in to fully zoomed out
         ) {
             this.scale = 1 - zoom / 5
             fasterUpdateTimestamp = System.currentTimeMillis()

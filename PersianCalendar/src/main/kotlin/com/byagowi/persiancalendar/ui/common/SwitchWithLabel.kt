@@ -30,7 +30,7 @@ fun SwitchWithLabel(
             value = checked,
             indication = ripple(bounded = false),
             interactionSource = null,
-            role = Role.Switch
+            role = Role.Switch,
         ) { hapticFeedback.performLongPress(); onValueChange(it) },
         verticalAlignment = Alignment.CenterVertically,
     ) {

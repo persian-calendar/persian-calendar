@@ -23,7 +23,7 @@ class MainApplication : Application() {
             ExistingPeriodicWorkPolicy.KEEP,
             PeriodicWorkRequestBuilder<UpdateWorker>(1.hours.toJavaDuration())
                 .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
-                .build()
+                .build(),
         )
     }
 }

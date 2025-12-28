@@ -301,7 +301,7 @@ fun SharedTransitionScope.CalendarScreen(
                 Box(
                     (if (searchBoxIsOpenState) {
                         if (viewModel.searchTerm.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
-                            toolbarHeight
+                            toolbarHeight,
                         ) else Modifier
                     } else if (viewModel.isYearView) {
                         if (toolbarHeight > 0.dp) {
@@ -366,7 +366,7 @@ fun SharedTransitionScope.CalendarScreen(
         BoxWithConstraints(
             Modifier
                 .padding(top = paddingValues.calculateTopPadding())
-                .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start))
+                .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start)),
         ) {
             val maxWidth = this.maxWidth
             val maxHeight = this.maxHeight
@@ -412,8 +412,8 @@ fun SharedTransitionScope.CalendarScreen(
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
                                         WindowInsets.displayCutout.only(
-                                            WindowInsetsSides.End
-                                        )
+                                            WindowInsetsSides.End,
+                                        ),
                                     ),
                             )
                         }
@@ -580,7 +580,7 @@ private fun detailsPagerState(
     LaunchedEffect(key1 = pagerState.currentPage) {
         viewModel.changeSelectedTab(
             CalendarScreenTab.entries.getOrNull(pagerState.currentPage)
-                ?: CalendarScreenTab.entries[0]
+                ?: CalendarScreenTab.entries[0],
         )
     }
     return pagerState
@@ -670,7 +670,7 @@ private fun SharedTransitionScope.CalendarsTab(
                 interactionSource = interactionSource,
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
-            )
+            ),
     ) {
         Spacer(Modifier.height(24.dp))
         CalendarsOverview(
@@ -684,11 +684,11 @@ private fun SharedTransitionScope.CalendarsTab(
 
         val context = LocalContext.current
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
+                context, Manifest.permission.POST_NOTIFICATIONS,
             ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences
         ) {
             val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
+                ActivityResultContracts.RequestPermission(),
             ) { isGranted -> context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
             EncourageActionLayout(
                 header = stringResource(R.string.enable_notification),
@@ -713,7 +713,7 @@ private fun SharedTransitionScope.CalendarsTab(
             }
 
             val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
+                ActivityResultContracts.RequestPermission(),
             ) { requestExemption() }
 
             EncourageActionLayout(
@@ -723,7 +723,7 @@ private fun SharedTransitionScope.CalendarsTab(
             ) {
                 val alarmManager = context.getSystemService<AlarmManager>()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
-                    Manifest.permission.SCHEDULE_EXACT_ALARM
+                    Manifest.permission.SCHEDULE_EXACT_ALARM,
                 ) else requestExemption()
             }
         }
@@ -745,7 +745,7 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     return runCatching {
         context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(
-            context.applicationContext.packageName
+            context.applicationContext.packageName,
         )
     }.onFailure(logException).getOrNull() == true
 }
@@ -798,7 +798,7 @@ private fun Search(viewModel: CalendarViewModel) {
                 LazyColumn(
                     state = lazyListState,
                     contentPadding = WindowInsets.safeDrawing.only(
-                        sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                        sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
                     ).asPaddingValues(),
                 ) {
                     items(items) {
@@ -864,7 +864,7 @@ private fun SharedTransitionScope.Toolbar(
                     yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
                 if (viewModel.isYearView && yearViewCalendar != null) {
                     title = stringResource(
-                        if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
+                        if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view,
                     )
                     subtitle = if (!isTalkBackEnabled && run {
                             yearViewOffset == 0 || yearViewIsInYearSelection
@@ -886,7 +886,7 @@ private fun SharedTransitionScope.Toolbar(
                     subtitle = numeral.format(selectedMonth.year)
                 } else {
                     title = language.my.format(
-                        selectedMonth.monthName, numeral.format(selectedMonth.year)
+                        selectedMonth.monthName, numeral.format(selectedMonth.year),
                     )
                     val selectedDay = viewModel.selectedDay
                     val selectedDate = selectedDay on mainCalendar
@@ -897,7 +897,7 @@ private fun SharedTransitionScope.Toolbar(
                         val selectedSecondaryDate = selectedDay on secondaryCalendar
                         subtitle = language.my.format(
                             selectedSecondaryDate.monthName,
-                            numeral.format(selectedSecondaryDate.year)
+                            numeral.format(selectedSecondaryDate.year),
                         )
                     } else {
                         subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
@@ -911,7 +911,7 @@ private fun SharedTransitionScope.Toolbar(
                         interactionSource = null,
                         onClickLabel = stringResource(
                             if (viewModel.isYearView && !yearViewIsInYearSelection) R.string.select_year
-                            else R.string.year_view
+                            else R.string.year_view,
                         ),
                     ) {
                         if (viewModel.isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
@@ -919,7 +919,7 @@ private fun SharedTransitionScope.Toolbar(
                     }
                     .then(
                         // Toolbar height might not exist if screen rotated while being in year view
-                        if (viewModel.isYearView && hasToolbarHeight) Modifier.fillMaxSize() else Modifier
+                        if (viewModel.isYearView && hasToolbarHeight) Modifier.fillMaxSize() else Modifier,
                     ),
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -939,7 +939,7 @@ private fun SharedTransitionScope.Toolbar(
                 this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(subtitle, label = "subtitle") { subtitle ->
                         val fraction by animateFloatAsState(
-                            targetValue = if (viewModel.isYearView) 1f else 0f, label = "font size"
+                            targetValue = if (viewModel.isYearView) 1f else 0f, label = "font size",
                         )
                         Text(
                             if (isTalkBackEnabled && viewModel.isYearView) "$subtitle ${
@@ -1083,9 +1083,11 @@ private fun SharedTransitionScope.Menu(
             )
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
-        if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem({
-            Text(stringResource(R.string.planetary_hours))
-        }) {
+        if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem(
+            {
+                Text(stringResource(R.string.planetary_hours))
+            },
+        ) {
             showPlanetaryHoursDialog = true
             closeMenu()
         }
@@ -1106,9 +1108,11 @@ private fun SharedTransitionScope.Menu(
                 text = { Text(stringResource(title)) },
                 trailingIcon = icon@{
                     if (isLandscape || isTalkBackEnabled) return@icon
-                    Box(Modifier.clickable(null, ripple(bounded = false)) {
-                        context.preferences.edit { putString(prefKey, valueToStoreOnClick()) }
-                    }) {
+                    Box(
+                        Modifier.clickable(null, ripple(bounded = false)) {
+                            context.preferences.edit { putString(prefKey, valueToStoreOnClick()) }
+                        },
+                    ) {
                         val alpha by animateFloatAsState(
                             targetValue = if (preferredAction == item) 1f else .2f,
                             label = "alpha",
@@ -1166,7 +1170,7 @@ private fun SharedTransitionScope.Menu(
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
             this.AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
-                    stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar
+                    stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar,
                 ) {
                     context.preferences.edit {
                         if (calendar == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE) else {
@@ -1176,7 +1180,7 @@ private fun SharedTransitionScope.Menu(
                             putString(
                                 PREF_OTHER_CALENDARS_KEY,
                                 // Put the chosen calendars at the first of calendars priorities
-                                newOtherCalendars.joinToString(",")
+                                newOtherCalendars.joinToString(","),
                             )
                         }
                     }
@@ -1196,7 +1200,7 @@ data class AddEventData(
     fun asIntent(): Intent {
         return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).also {
             if (description != null) it.putExtra(
-                CalendarContract.Events.DESCRIPTION, description
+                CalendarContract.Events.DESCRIPTION, description,
             )
         }.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
@@ -1241,7 +1245,7 @@ private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
 
 @Composable
 fun addEvent(
-    viewModel: CalendarViewModel, snackbarHostState: SnackbarHostState
+    viewModel: CalendarViewModel, snackbarHostState: SnackbarHostState,
 ): (AddEventData) -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
         viewModel.refreshCalendar()

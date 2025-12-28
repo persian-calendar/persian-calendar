@@ -80,7 +80,7 @@ fun ShiftWorkDialog(
             Column {
                 Spacer(Modifier.height(16.dp))
                 CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium,
                 ) {
                     ShiftWorkDialogContent(
                         viewModel = viewModel,
@@ -150,7 +150,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                             R.plurals.shift_work_record_title,
                             it.length,
                             numeral.format(it.length),
-                            shiftWorkKeyToString(it.type)
+                            shiftWorkKeyToString(it.type),
                         )
                     }.joinToString(spacedComma)
                 Column {
@@ -267,22 +267,26 @@ fun ColumnScope.ShiftWorkDialogContent(
 
     Spacer(Modifier.height(8.dp))
     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
-        TextButton(onClick = {
-            viewModel.shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
-            // TODO: Make it scroll to end?
-            // scope.launch {
-            //     lazyListState.animateScrollBy(viewModel.shiftWorks.value.size + 1f)
-            // }
-        }) { Text(stringResource(R.string.add)) }
+        TextButton(
+            onClick = {
+                viewModel.shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
+                // TODO: Make it scroll to end?
+                // scope.launch {
+                //     lazyListState.animateScrollBy(viewModel.shiftWorks.value.size + 1f)
+                // }
+            },
+        ) { Text(stringResource(R.string.add)) }
         Spacer(Modifier.weight(1f))
         TextButton(onClick = onDismissRequest) {
             Text(stringResource(R.string.cancel))
         }
         Spacer(Modifier.width(8.dp))
-        TextButton(onClick = {
-            viewModel.persist(context)
-            onDismissRequest()
-        }) { Text(stringResource(R.string.accept)) }
+        TextButton(
+            onClick = {
+                viewModel.persist(context)
+                onDismissRequest()
+            },
+        ) { Text(stringResource(R.string.accept)) }
     }
 }
 

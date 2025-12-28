@@ -89,12 +89,12 @@ val appContentSizeAnimationSpec = spring(
 
 val JdnSaver = Saver<MutableState<Jdn>, Long>(
     save = { it.value.value },
-    restore = { mutableStateOf(Jdn(it)) }
+    restore = { mutableStateOf(Jdn(it)) },
 )
 
 val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(
     save = { it.value },
-    restore = { Animatable(it) }
+    restore = { Animatable(it) },
 )
 
 // When something needs to match with Material default theme corner sizes

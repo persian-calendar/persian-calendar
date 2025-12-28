@@ -39,7 +39,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     var showProvincesDialog by rememberSaveable { mutableStateOf(false) }
     if (showProvincesDialog) return ProvincesDialog(
         onDismissRequest = onDismissRequest,
-        navigateUp = { showProvincesDialog = false }
+        navigateUp = { showProvincesDialog = false },
     )
     val cities = remember { citiesStore.values.sortCityNames }
     val context = LocalContext.current
@@ -71,10 +71,10 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
                         append(" ")
                         withStyle(
                             LocalTextStyle.current.toSpanStyle().copy(
-                                color = LocalContentColor.current.copy(alpha = .5f)
-                            )
+                                color = LocalContentColor.current.copy(alpha = .5f),
+                            ),
                         ) { append(language.getCountryName(city)) }
-                    }
+                    },
                 )
             }
         }

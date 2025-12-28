@@ -35,7 +35,7 @@ fun UtilitiesScreen(
                     Triple(navigateToConverter, Icons.Default.SwapVerticalCircle, "مبدل"),
                     Triple(navigateToCalendar, Icons.Default.CalendarMonth, "تقویم"),
                     Triple(navigateToSettings, Icons.Default.Settings, "تنظیمات"),
-                )
+                ),
             ) { (action, icon, title) ->
                 FilledTonalButton(
                     action,

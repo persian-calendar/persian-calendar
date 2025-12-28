@@ -28,7 +28,7 @@ import kotlinx.coroutines.runBlocking
 
 class MainTileService : TileService() {
     override fun onRecentInteractionEventsAsync(
-        events: MutableList<EventBuilders.TileInteractionEvent?>
+        events: MutableList<EventBuilders.TileInteractionEvent?>,
     ): ListenableFuture<Void?> {
         if (events.any { it?.eventType == EventBuilders.TileInteractionEvent.ENTER }) {
             getUpdater(this).requestUpdate(MainTileService::class.java)
@@ -50,9 +50,9 @@ class MainTileService : TileService() {
                         .setLength(degrees(360f))
                         .setThickness(dp(2f))
                         .setColor(colorScheme.primaryContainer.colorProp)
-                        .build()
+                        .build(),
                 )
-                .build()
+                .build(),
         )
         val sweepAngle = run {
             val date = today.toPersianDate()
@@ -69,9 +69,9 @@ class MainTileService : TileService() {
                         .setLength(degrees(sweepAngle))
                         .setThickness(dp(2f))
                         .setColor(colorScheme.primaryDim.colorProp)
-                        .build()
+                        .build(),
                 )
-                .build()
+                .build(),
         )
 
         val todayEntries = run {
@@ -95,7 +95,7 @@ class MainTileService : TileService() {
                         .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
                     todayEntries.drop(1).take(if (todayEntries.size > 4) 2 else 3).map {
                         if (it.type is EntryType.Holiday) text(
-                            it.title.layoutString, color = colorScheme.primary
+                            it.title.layoutString, color = colorScheme.primary,
                         ) else text(it.title.layoutString)
                     }.forEach(column::addContent)
                     if (todayEntries.size > 4) column.addContent(text("…".layoutString))
@@ -108,7 +108,7 @@ class MainTileService : TileService() {
                         onClick = clickable(launchAction(activityComponent)),
                     ) { text("تقویم".layoutString, typography = Typography.BODY_SMALL) }
                 },
-            )
+            ),
         )
         root.build()
     }
@@ -118,9 +118,9 @@ class MainTileService : TileService() {
             TileBuilders.Tile.Builder()
                 .setResourcesVersion(RESOURCES_VERSION)
                 .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams))
+                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams)),
                 )
-                .build()
+                .build(),
         )
     }
 
@@ -129,7 +129,7 @@ class MainTileService : TileService() {
         return ImmediateFuture(
             ResourceBuilders.Resources.Builder()
                 .setVersion(RESOURCES_VERSION)
-                .build()
+                .build(),
         )
     }
 

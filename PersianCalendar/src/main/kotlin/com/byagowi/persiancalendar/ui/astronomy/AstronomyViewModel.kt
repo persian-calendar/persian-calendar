@@ -51,7 +51,7 @@ class AstronomyViewModel : ViewModel() {
             // If the animation is still going on use its current value to not have jumps
             if (animator.isRunning) animator.animatedValue as? Int ?: 0
             else _minutesOffset.intValue,
-            value
+            value,
         )
         animator.start()
         _minutesOffset.intValue = value
@@ -67,7 +67,7 @@ class AstronomyViewModel : ViewModel() {
 
     fun animateToTime(time: Long) {
         animateToAbsoluteMinutesOffset(
-            ((time - System.currentTimeMillis()).milliseconds / 1.minutes).roundToInt()
+            ((time - System.currentTimeMillis()).milliseconds / 1.minutes).roundToInt(),
         )
     }
 

@@ -124,7 +124,7 @@ object Tithi {
         period: Double,
         size: Double,
         anomalistic: Double,
-        change: Double
+        change: Double,
     ): Double {
         val lambda = hinduMeanPosition(tee, period)  // Position of epicycle center
         val offset = hinduSine(hinduMeanPosition(tee, anomalistic))  // Sine of anomaly
@@ -148,7 +148,7 @@ object Tithi {
     private fun hinduLunarLongitude(tee: Double): Double {
         return hinduTruePosition(
             tee, hinduSiderealMonth,
-            32.0 / 360.0, hinduAnomalisticMonth, 1.0 / 96.0
+            32.0 / 360.0, hinduAnomalisticMonth, 1.0 / 96.0,
         )
     }
 
@@ -163,7 +163,7 @@ object Tithi {
     private fun hinduSolarLongitude(tee: Double): Double {
         return hinduTruePosition(
             tee, hinduSiderealYear,
-            14.0 / 360.0, hinduAnomalisticYear, 1.0 / 42.0
+            14.0 / 360.0, hinduAnomalisticYear, 1.0 / 42.0,
         )
     }
 
@@ -186,7 +186,7 @@ object Tithi {
         "नवमी", "दशमी", "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "पूर्णिमा",
 
         "प्रतिपदा", "द्वितीया", "तृतीया", "चतुर्थी (चौथी)", "पञ्चमी", "षष्ठी", "सप्तमी", "अष्टमी",
-        "नवमी", "दशमी", "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "अमावश्या (औंसी)"
+        "नवमी", "दशमी", "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "अमावश्या (औंसी)",
     )
 
     fun tithiName(timeMillis: Long): String {

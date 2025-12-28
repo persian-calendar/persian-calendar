@@ -21,7 +21,7 @@ abstract class BaseShortcut(val shortcut: Shortcut) : Activity() {
             .setIntent(
                 Intent(this, MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .setAction(shortcut.name)
+                    .setAction(shortcut.name),
             )
             .setIcon(IconCompat.createWithResource(this, shortcut.icon))
             .build()

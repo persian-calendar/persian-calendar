@@ -17,6 +17,6 @@ class CustomIssueRegistry : IssueRegistry() {
     override val vendor = Vendor(
         vendorName = "Persian Calendar",
         feedbackUrl = "https://github.com/persian-calendar/persian-calendar",
-        contact = "https://github.com/persian-calendar/persian-calendar"
+        contact = "https://github.com/persian-calendar/persian-calendar",
     )
 }

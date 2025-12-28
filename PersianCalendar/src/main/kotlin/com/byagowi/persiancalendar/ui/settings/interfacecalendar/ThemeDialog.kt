@@ -106,7 +106,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             .semantics { this.hideFromAccessibility() }
         val systemThemeOptions = listOf(
             Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
-            Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)
+            Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme),
         )
         Theme.entries.forEach { entry ->
             Row(
@@ -217,7 +217,7 @@ private fun ColumnScope.FontPicker(
     val customFontToken = customFontName
     val context = LocalContext.current
     val fontPicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocument()
+        ActivityResultContracts.OpenDocument(),
     ) { uri ->
         if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
             File(context.filesDir, STORED_FONT_NAME).outputStream().use(inputStream::copyTo)
@@ -237,38 +237,44 @@ private fun ColumnScope.FontPicker(
     this.AnimatedVisibility(visible = showMore || customFontToken != null) {
         Column(Modifier.padding(start = 24.dp)) {
             Row {
-                Button(onClick = {
-                    runCatching {
-                        fontPicker.launch(
-                            listOf(
-                                "font/ttf",
-                                "font/otf",
-                                "font/sfnt",
-                                "font/collection",
-                                "font/truetype",
-                                "font/opentype",
-                                "application/x-font-ttf",
-                                "application/x-font-otf",
-                            ).let {
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) it + "application/octet-stream"
-                                else it
-                            }.toTypedArray()
-                        )
-                        if (language.isPersianOrDari) Toast.makeText(
-                            context, "پرونده‌ای در قالب ttf یا otf انتخاب کنید", Toast.LENGTH_LONG
-                        ).show()
-                    }.onFailure(logException).onFailure {
-                        showUnsupportedActionToast(context)
-                    }.getOrNull().debugAssertNotNull
-                }) { Text(stringResource(R.string.select_font)) }
+                Button(
+                    onClick = {
+                        runCatching {
+                            fontPicker.launch(
+                                listOf(
+                                    "font/ttf",
+                                    "font/otf",
+                                    "font/sfnt",
+                                    "font/collection",
+                                    "font/truetype",
+                                    "font/opentype",
+                                    "application/x-font-ttf",
+                                    "application/x-font-otf",
+                                ).let {
+                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) it + "application/octet-stream"
+                                    else it
+                                }.toTypedArray(),
+                            )
+                            if (language.isPersianOrDari) Toast.makeText(
+                                context,
+                                "پرونده‌ای در قالب ttf یا otf انتخاب کنید",
+                                Toast.LENGTH_LONG,
+                            ).show()
+                        }.onFailure(logException).onFailure {
+                            showUnsupportedActionToast(context)
+                        }.getOrNull().debugAssertNotNull
+                    },
+                ) { Text(stringResource(R.string.select_font)) }
                 this.AnimatedVisibility(
                     customFontToken != null,
                     Modifier.padding(start = 8.dp),
                 ) {
-                    OutlinedIconButton({
-                        context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
-                        File(context.filesDir, STORED_FONT_NAME).delete()
-                    }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                    OutlinedIconButton(
+                        {
+                            context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
+                            File(context.filesDir, STORED_FONT_NAME).delete()
+                        },
+                    ) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
                 }
             }
             AnimatedVisibility(customFontToken != null) {
@@ -284,7 +290,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
     val customImageName = customImageName
     val context = LocalContext.current
     val imagePicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
+        ActivityResultContracts.PickVisualMedia(),
     ) { uri ->
         if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
             File(context.filesDir, STORED_IMAGE_NAME).outputStream().use(inputStream::copyTo)
@@ -296,22 +302,26 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
     this.AnimatedVisibility(visible = showMore || customImageName != null) {
         Column(Modifier.padding(start = 24.dp)) {
             Row {
-                FilledIconButton(onClick = {
-                    val mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
-                    runCatching {
-                        imagePicker.launch(PickVisualMediaRequest(mediaType))
-                    }.onFailure(logException).onFailure {
-                        showUnsupportedActionToast(context)
-                    }.getOrNull().debugAssertNotNull
-                }) { Icon(Icons.Default.Image, null) }
+                FilledIconButton(
+                    onClick = {
+                        val mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                        runCatching {
+                            imagePicker.launch(PickVisualMediaRequest(mediaType))
+                        }.onFailure(logException).onFailure {
+                            showUnsupportedActionToast(context)
+                        }.getOrNull().debugAssertNotNull
+                    },
+                ) { Icon(Icons.Default.Image, null) }
                 this.AnimatedVisibility(
                     customImageName != null,
                     Modifier.padding(start = 8.dp),
                 ) {
-                    OutlinedIconButton({
-                        context.preferences.edit { remove(PREF_CUSTOM_IMAGE_NAME) }
-                        File(context.filesDir, STORED_FONT_NAME).delete()
-                    }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                    OutlinedIconButton(
+                        {
+                            context.preferences.edit { remove(PREF_CUSTOM_IMAGE_NAME) }
+                            File(context.filesDir, STORED_FONT_NAME).delete()
+                        },
+                    ) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
                 }
             }
             AnimatedVisibility(customImageName != null) {

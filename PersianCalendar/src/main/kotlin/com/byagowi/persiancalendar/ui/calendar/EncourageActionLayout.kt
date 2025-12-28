@@ -43,7 +43,7 @@ fun ColumnScope.EncourageActionLayout(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
-                .semantics { this.isTraversalGroup = true }
+                .semantics { this.isTraversalGroup = true },
         ) {
             Text(
                 header,
@@ -73,7 +73,7 @@ fun ColumnScope.EncourageActionLayout(
                         contentColor = animateColor(defaultButtonColors.contentColor).value,
                         disabledContainerColor = animateColor(defaultButtonColors.disabledContainerColor).value,
                         disabledContentColor = animateColor(defaultButtonColors.disabledContentColor).value,
-                    )
+                    ),
                 ) { Text(acceptButton) }
             }
         }

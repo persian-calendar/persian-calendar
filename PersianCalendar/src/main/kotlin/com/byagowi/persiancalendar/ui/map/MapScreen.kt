@@ -157,7 +157,7 @@ fun SharedTransitionScope.MapScreen(
         val icon: ImageVector,
         @get:StringRes val titleId: Int,
         val isEnabled: () -> Boolean = { false },
-        val onClick: () -> Unit
+        val onClick: () -> Unit,
     ) {
         val title
             @Composable get() = language.mapButtons(titleId) ?: stringResource(titleId)
@@ -181,7 +181,7 @@ fun SharedTransitionScope.MapScreen(
                 displayLocation = state.displayLocation,
                 coordinates = state.coordinates,
                 directPathDestination = state.directPathDestination,
-                displayGrid = state.displayGrid
+                displayGrid = state.displayGrid,
             )
             showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
             // DO NOT use bitmap after this
@@ -189,7 +189,8 @@ fun SharedTransitionScope.MapScreen(
         MenuItem(
             Icons.Default.SocialDistance,
             R.string.show_direct_path_label,
-            { state.isDirectPathMode }) {
+            { state.isDirectPathMode },
+        ) {
             if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDirectPathMode()
         },
@@ -202,7 +203,8 @@ fun SharedTransitionScope.MapScreen(
         MenuItem(
             Icons.Default.LocationOn,
             R.string.show_location_label,
-            { state.coordinates != null && state.displayLocation }) {
+            { state.coordinates != null && state.displayLocation },
+        ) {
             if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDisplayLocation()
         },
@@ -250,7 +252,7 @@ fun SharedTransitionScope.MapScreen(
                             val coordinates =
                                 Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
                             if (viewModel.state.isDirectPathMode) viewModel.changeDirectPathDestination(
-                                coordinates
+                                coordinates,
                             )
                             else {
                                 clickedCoordinates = coordinates
@@ -269,7 +271,7 @@ fun SharedTransitionScope.MapScreen(
                         displayLocation = state.displayLocation,
                         coordinates = state.coordinates,
                         directPathDestination = state.directPathDestination,
-                        displayGrid = state.displayGrid
+                        displayGrid = state.displayGrid,
                     )
                 }
                 mapDraw.drawKaaba = state.coordinates != null && state.displayLocation && showKaaba
@@ -312,14 +314,14 @@ fun SharedTransitionScope.MapScreen(
                     icon = {
                         TooltipBox(
                             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                TooltipAnchorPosition.Above
+                                TooltipAnchorPosition.Above,
                             ),
                             tooltip = { PlainTooltip { Text(it.title) } },
-                            state = rememberTooltipState()
+                            state = rememberTooltipState(),
                         ) {
                             val tint by animateColor(
                                 if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
-                                else LocalContentColor.current
+                                else LocalContentColor.current,
                             )
                             Icon(it.icon, it.title, tint = tint)
                         }

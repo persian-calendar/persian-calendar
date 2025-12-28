@@ -101,7 +101,7 @@ abstract class BaseActivity : ComponentActivity(),
         applyAppLanguage(this)
         val accessibilityService = getSystemService<AccessibilityManager>()
         accessibilityService?.addTouchExplorationStateChangeListener(
-            touchExplorationStateChangeListener
+            touchExplorationStateChangeListener,
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
             accessibilityService?.addHighContrastTextStateChangeListener(mainExecutor, it)
@@ -112,7 +112,7 @@ abstract class BaseActivity : ComponentActivity(),
         super.onPause()
         val accessibilityService = getSystemService<AccessibilityManager>()
         accessibilityService?.removeTouchExplorationStateChangeListener(
-            touchExplorationStateChangeListener
+            touchExplorationStateChangeListener,
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
             accessibilityService?.removeHighContrastTextStateChangeListener(it)

@@ -227,7 +227,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when {
             this == FA -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
             prefersGregorianCalendar -> listOf(
-                Calendar.GREGORIAN, Calendar.ISLAMIC, Calendar.SHAMSI
+                Calendar.GREGORIAN, Calendar.ISLAMIC, Calendar.SHAMSI,
             )
 
             prefersIslamicCalendar -> listOf(Calendar.ISLAMIC, Calendar.GREGORIAN, Calendar.SHAMSI)
@@ -414,9 +414,13 @@ enum class Language(val code: String, val nativeName: String) {
             AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> $$"%3$s$$sep%2$s$$sep%1$s"
         }
         return format.format(
-            numeral.format(year), numeral.format(
-                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it }), numeral.format(
-                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it })
+            numeral.format(year),
+            numeral.format(
+                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it },
+            ),
+            numeral.format(
+                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it },
+            ),
         )
     }
 
@@ -577,7 +581,7 @@ enum class Language(val code: String, val nativeName: String) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
 
                 "en", EN_US.code -> guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(
-                    context
+                    context,
                 )
 
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
@@ -604,7 +608,7 @@ enum class Language(val code: String, val nativeName: String) {
                         debugLog("Language: '$locale' is available in keyboards")
                         if (locale.isEmpty()) return@forEach
                         val language = valueOfLanguageCode(locale) ?: valueOfLanguageCode(
-                            locale.split("-").firstOrNull().orEmpty()
+                            locale.split("-").firstOrNull().orEmpty(),
                         )
                         // Use the knowledge only to detect Persian language
                         // as others might be surprising
@@ -642,26 +646,26 @@ enum class Language(val code: String, val nativeName: String) {
             R.string.farvardin, R.string.ordibehesht, R.string.khordad,
             R.string.tir, R.string.mordad, R.string.shahrivar,
             R.string.mehr, R.string.aban, R.string.azar, R.string.dey,
-            R.string.bahman, R.string.esfand
+            R.string.bahman, R.string.esfand,
         )
         private val islamicCalendarMonths = listOf12Items(
             R.string.muharram, R.string.safar, R.string.rabi_alawwal,
             R.string.rabi_althani, R.string.jumada_al_awwal, R.string.jumada_al_thani,
             R.string.rajab, R.string.shabaan, R.string.ramadan, R.string.shawwal,
-            R.string.dhu_al_qidah, R.string.dhu_al_hijjah
+            R.string.dhu_al_qidah, R.string.dhu_al_hijjah,
         )
         private val gregorianCalendarMonths = listOf12Items(
             R.string.january, R.string.february, R.string.march,
             R.string.april, R.string.may, R.string.june, R.string.july,
             R.string.august, R.string.september, R.string.october,
-            R.string.november, R.string.december
+            R.string.november, R.string.december,
         )
 
         // These are special cases and new ones should be translated in strings.xml of the language
         private val persianCalendarMonthsInPersian = listOf12Items(
             "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد",
             "شهریور", "مهر", "آبان", "آذر", "دی",
-            "بهمن", "اسفند"
+            "بهمن", "اسفند",
         )
         private val persianCalendarMonthsInArabicIran = listOf12Items(
             "فروردین", "أرديبهشت", "خرداد", "تير", "مرداد",
@@ -674,15 +678,15 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val islamicCalendarMonthsInPersian = listOf12Items(
             "مُحَرَّم", "صَفَر", "ربیع‌الاول", "ربیع‌الثانی", "جمادى‌الاولى", "جمادی‌الثانیه",
-            "رجب", "شعبان", "رمضان", "شوال", "ذی‌القعده", "ذی‌الحجه"
+            "رجب", "شعبان", "رمضان", "شوال", "ذی‌القعده", "ذی‌الحجه",
         )
         private val gregorianCalendarMonthsInPersian = listOf12Items(
             "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن",
-            "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
+            "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر",
         )
         val persianCalendarMonthsInDariOrPersianOldEra = listOf12Items(
             "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
-            "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
+            "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت",
         )
         val persianCalendarMonthsInDariOrPersianOldEraTransliteration = listOf12Items(
             // https://www.evertype.com/standards/af/af-locales.pdf
@@ -695,39 +699,39 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val gregorianCalendarMonthsInPersianEnglishPronunciation = listOf12Items(
             "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون",
-            "جولای", "آگوست", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
+            "جولای", "آگوست", "سپتامبر", "اکتبر", "نوامبر", "دسامبر",
         )
         private val easternGregorianCalendarMonths = listOf12Items(
             "كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول",
-            "تشرين الأول", "تشرين الثاني", "كانون الأول"
+            "تشرين الأول", "تشرين الثاني", "كانون الأول",
         )
         private val weekDaysInPersian = listOf7Items(
             // https://apll.ir/wp-content/uploads/2018/10/D-1394.pdf
             // advices to use یکشنبه and پنجشنبه on "مرکبهایی که بسیطگونه است"
             // The updated version https://www.ekhtebar.ir/wp-content/uploads/2023/07/Dastour-e-Khat-17.04.1402-3.pdf
             // doesn't have it though
-            "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
+            "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه",
         )
         private val weekDaysInitialsInPersian = listOf7Items(
-            "ش", "ی", "د", "س", "چ", "پ", "ج"
+            "ش", "ی", "د", "س", "چ", "پ", "ج",
         )
         private val weekDaysInEnglishIran = listOf7Items(
             "Shanbe", "Yekshanbe", "Doshanbe", "Seshanbe", "Chahaarshanbe",
-            "Panjshanbe", "Jom’e"
+            "Panjshanbe", "Jom’e",
         )
         private val weekDaysInitialsInEnglishIran = listOf7Items(
-            "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"
+            "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo",
         )
 
         // https://github.com/techgaun/ad-bs-converter/blob/4731f2c/src/converter.js
         // https://en.wikipedia.org/wiki/Vikram_Samvat
         val nepaliMonths = listOf12Items(
             "बैशाख", "जेष्ठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन",
-            "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत्र"
+            "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत्र",
         )
         val nepaliMonthsInEnglish = listOf12Items(
             "Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin",
-            "Kartik", "Mangsir", "Paush", "Mangh", "Falgun", "Chaitra"
+            "Kartik", "Mangsir", "Paush", "Mangh", "Falgun", "Chaitra",
         )
 
         private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")

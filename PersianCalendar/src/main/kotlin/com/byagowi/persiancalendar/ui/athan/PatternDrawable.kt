@@ -52,7 +52,7 @@ class PatternDrawable(
         backgroundPaint.shader = LinearGradient(
             0f, 0f, 0f, height.toFloat(),
             tintColor, if (darkBaseColor) Color.BLACK else Color.WHITE,
-            Shader.TileMode.CLAMP
+            Shader.TileMode.CLAMP,
         )
         val pattern = listOf(
             ::FirstPattern,
@@ -185,7 +185,7 @@ private class FourthPattern(@get:ColorInt private val tintColor: Int, size: Floa
         val lines = floatArrayOf(
             width / 2, 0f, width, height / 2,
             0f, height / 2, width / 4, height / 4,
-            width / 4, height / 4, width, height / 4
+            width / 4, height / 4, width, height / 4,
         )
         canvas.drawLines(lines, paint)
         canvas.withRotation(180f, width / 2, height / 2) { drawLines(lines, paint) }

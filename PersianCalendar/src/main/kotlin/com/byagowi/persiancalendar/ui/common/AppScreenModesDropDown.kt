@@ -72,7 +72,7 @@ fun <T> AppScreenModesDropDown(
                     MaterialTheme.typography.titleLarge,
                     animateFloatAsState(
                         targetValue = if (small) 0f else 1f,
-                        label = "fraction"
+                        label = "fraction",
                     ).value,
                 ),
                 maxLines = 1,

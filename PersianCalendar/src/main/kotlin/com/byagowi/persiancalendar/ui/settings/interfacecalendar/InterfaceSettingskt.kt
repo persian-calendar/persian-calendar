@@ -33,10 +33,12 @@ import com.byagowi.persiancalendar.utils.preferences
 fun ColumnScope.InterfaceSettings(destination: String? = null) {
     val context = LocalContext.current
     run {
-        val themeDisplayName = stringResource(run {
-            val currentKey = context.preferences.getString(PREF_THEME, null)
-            Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
-        }.title)
+        val themeDisplayName = stringResource(
+            run {
+                val currentKey = context.preferences.getString(PREF_THEME, null)
+                Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
+            }.title,
+        )
         Box(
             Modifier
                 .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
@@ -58,7 +60,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             value = englishGregorianPersianMonths,
             title = "ماه‌های میلادی با نام انگلیسی",
-            summary = "جون، جولای، آگوست، …"
+            summary = "جون، جولای، آگوست، …",
         )
     }
     this.AnimatedVisibility(language.isArabic) {
@@ -66,7 +68,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
             value = easternGregorianArabicMonths,
             title = "السنة الميلادية بالاسماء الشرقية",
-            summary = "كانون الثاني، شباط، آذار، …"
+            summary = "كانون الثاني، شباط، آذار، …",
         )
     }
     this.AnimatedVisibility(language == Language.AZB) {
@@ -74,7 +76,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
             value = alternativePersianMonthsInAzeri,
             title = "آذربایجان دیلینده ایل آیلار",
-            summary = "آغلارگۆلر، گۆلن، قیزاران، …"
+            summary = "آغلارگۆلر، گۆلن، قیزاران، …",
         )
     }
     this.AnimatedVisibility(language == Language.EN_IR) {
@@ -82,7 +84,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             key = PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
             value = englishWeekDaysInIranEnglish,
             title = "English weekday names",
-            summary = "Sunday, Monday, Tuesday, …"
+            summary = "Sunday, Monday, Tuesday, …",
         )
     }
     this.AnimatedVisibility(language.canHaveLocalNumeral) {
@@ -90,7 +92,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             key = PREF_LOCAL_NUMERAL,
             value = localNumeralPreference,
             title = stringResource(R.string.native_digits),
-            summary = stringResource(R.string.enable_native_digits)
+            summary = stringResource(R.string.enable_native_digits),
         )
     }
 }

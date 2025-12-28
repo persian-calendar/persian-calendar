@@ -81,11 +81,11 @@ internal class PredictiveBackScene<T : Any>(
     // transitions (if any) to allow users to override Wear's defaults.
     override val metadata: Map<String, Any> =
         NavDisplay.transitionSpec { ENTER_TRANSITION togetherWith EXIT_TRANSITION } +
-            NavDisplay.popTransitionSpec { POP_ENTER_TRANSITION togetherWith POP_EXIT_TRANSITION } +
-            NavDisplay.predictivePopTransitionSpec {
-                PREDICTIVE_BACK_ENTER_TRANSITION togetherWith PREDICTIVE_BACK_EXIT_TRANSITION
-            } +
-            currentEntry.metadata
+                NavDisplay.popTransitionSpec { POP_ENTER_TRANSITION togetherWith POP_EXIT_TRANSITION } +
+                NavDisplay.predictivePopTransitionSpec {
+                    PREDICTIVE_BACK_ENTER_TRANSITION togetherWith PREDICTIVE_BACK_EXIT_TRANSITION
+                } +
+                currentEntry.metadata
 
     override val content: @Composable (() -> Unit) = {
         NavigationBackHandler(
@@ -113,7 +113,7 @@ internal class PredictiveBackScene<T : Any>(
                         .clip(if (isRoundDevice) CircleShape else RectangleShape)
                         .background(scrimColor)
                         .fillMaxSize()
-                        .hierarchicalFocusGroup(shouldFocus)
+                        .hierarchicalFocusGroup(shouldFocus),
             ) {
                 currentEntry.Content()
             }
@@ -127,16 +127,16 @@ internal class PredictiveBackScene<T : Any>(
         if (other !is PredictiveBackScene<*>) return false
 
         return key == other.key &&
-            currentEntry == other.currentEntry &&
-            previousEntries == other.previousEntries &&
-            entries == other.entries
+                currentEntry == other.currentEntry &&
+                previousEntries == other.previousEntries &&
+                entries == other.entries
     }
 
     override fun hashCode(): Int {
         return key.hashCode() * 31 +
-            currentEntry.hashCode() * 31 +
-            previousEntries.hashCode() * 31 +
-            entries.hashCode() * 31
+                currentEntry.hashCode() * 31 +
+                previousEntries.hashCode() * 31 +
+                entries.hashCode() * 31
     }
 
     override fun toString(): String {
@@ -146,22 +146,22 @@ internal class PredictiveBackScene<T : Any>(
 
 private val ENTER_TRANSITION =
     slideInHorizontally(initialOffsetX = { it / 2 }, animationSpec = spring(0.8f, 300f)) +
-        scaleIn(initialScale = 0.8f, animationSpec = spring(1f, 500f)) +
-        fadeIn(animationSpec = spring(1f, 1500f))
+            scaleIn(initialScale = 0.8f, animationSpec = spring(1f, 500f)) +
+            fadeIn(animationSpec = spring(1f, 1500f))
 private val EXIT_TRANSITION =
     scaleOut(targetScale = 0.85f, animationSpec = spring(1f, 150f)) +
-        slideOutHorizontally(targetOffsetX = { -it / 2 }, animationSpec = spring(0.8f, 200f)) +
-        fadeOut(targetAlpha = 0.6f, animationSpec = spring(1f, 1400f))
+            slideOutHorizontally(targetOffsetX = { -it / 2 }, animationSpec = spring(0.8f, 200f)) +
+            fadeOut(targetAlpha = 0.6f, animationSpec = spring(1f, 1400f))
 private val POP_ENTER_TRANSITION =
     scaleIn(initialScale = 0.8f, animationSpec = tween(easing = LinearEasing)) +
-        slideInHorizontally(
-            initialOffsetX = { -it / 2 },
-            animationSpec = tween(easing = LinearEasing),
-        ) +
-        fadeIn(initialAlpha = 0.5f, animationSpec = tween(easing = LinearEasing))
+            slideInHorizontally(
+                initialOffsetX = { -it / 2 },
+                animationSpec = tween(easing = LinearEasing),
+            ) +
+            fadeIn(initialAlpha = 0.5f, animationSpec = tween(easing = LinearEasing))
 private val POP_EXIT_TRANSITION =
     slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(easing = LinearEasing)) +
-        scaleOut(targetScale = 0.8f, animationSpec = tween(easing = LinearEasing))
+            scaleOut(targetScale = 0.8f, animationSpec = tween(easing = LinearEasing))
 
 // same as popEnter / popExit transitions
 private val PREDICTIVE_BACK_ENTER_TRANSITION = POP_ENTER_TRANSITION

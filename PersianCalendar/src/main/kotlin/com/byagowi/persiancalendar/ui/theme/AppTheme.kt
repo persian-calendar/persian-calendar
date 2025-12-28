@@ -192,7 +192,7 @@ fun resolveTypography(): Typography {
 
             labelLarge = typography.labelLarge.copy(fontFamily = font),
             labelMedium = typography.labelMedium.copy(fontFamily = font),
-            labelSmall = typography.labelSmall.copy(fontFamily = font)
+            labelSmall = typography.labelSmall.copy(fontFamily = font),
         )
     } ?: MaterialTheme.typography
     val isBoldFont = isBoldFont
@@ -215,7 +215,7 @@ fun resolveTypography(): Typography {
 
         labelLarge = result.labelLarge.copy(fontWeight = FontWeight.Bold),
         labelMedium = result.labelMedium.copy(fontWeight = FontWeight.Bold),
-        labelSmall = result.labelSmall.copy(fontWeight = FontWeight.Bold)
+        labelSmall = result.labelSmall.copy(fontWeight = FontWeight.Bold),
     ) else result
 }
 
@@ -359,7 +359,7 @@ private fun appBackground(): Brush {
             Theme.AQUA -> Color(0xFF00838F)
             Theme.MODERN -> Color.White
             else -> null.debugAssertNotNull ?: Color.Transparent
-        }
+        },
     )
     val backgroundGradientEnd by animateColor(
         if (!isGradient) backgroundColor
@@ -376,7 +376,7 @@ private fun appBackground(): Brush {
             Theme.AQUA -> Color(0xFF1A237E)
             Theme.MODERN -> Color(0xFFE1E3E5)
             else -> null.debugAssertNotNull ?: Color.Transparent
-        }
+        },
     )
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     return Brush.linearGradient(
@@ -524,15 +524,15 @@ fun appSunViewColors(): SunViewColors {
     val context = LocalContext.current
     var nightColor = ContextCompat.getColor(
         context,
-        if (theme.isDynamicColors) R.color.sun_view_dynamic_night_color else R.color.sun_view_night_color
+        if (theme.isDynamicColors) R.color.sun_view_dynamic_night_color else R.color.sun_view_night_color,
     )
     var dayColor = ContextCompat.getColor(
         context,
-        if (theme.isDynamicColors) R.color.sun_view_dynamic_day_color else R.color.sun_view_day_color
+        if (theme.isDynamicColors) R.color.sun_view_dynamic_day_color else R.color.sun_view_day_color,
     )
     var midDayColor = ContextCompat.getColor(
         context,
-        if (theme.isDynamicColors) R.color.sun_view_dynamic_midday_color else R.color.sun_view_midday_color
+        if (theme.isDynamicColors) R.color.sun_view_dynamic_midday_color else R.color.sun_view_midday_color,
     )
     if (theme == Theme.BLACK && theme.isDynamicColors) {
         nightColor = ContextCompat.getColor(context, android.R.color.system_accent1_900)

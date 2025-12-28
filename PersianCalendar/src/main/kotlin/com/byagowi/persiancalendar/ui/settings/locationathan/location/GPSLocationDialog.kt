@@ -60,27 +60,30 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
+        ActivityResultContracts.RequestMultiplePermissions(),
     ) { setGranted(it.entries.any()) }
 
     var showDialog by rememberSaveable { mutableStateOf(true) }
     if (showDialog) AppDialog(
         title = { Text(stringResource(R.string.location_access)) },
         confirmButton = {
-            TextButton(onClick = {
-                showDialog = false
-                launcher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
+            TextButton(
+                onClick = {
+                    showDialog = false
+                    launcher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                        ),
                     )
-                )
-            }) { Text(stringResource(R.string.continue_button)) }
+                },
+            ) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
             TextButton(onClick = { setGranted(false) }) { Text(stringResource(R.string.cancel)) }
         },
-        onDismissRequest = { setGranted(false) }) {
+        onDismissRequest = { setGranted(false) },
+    ) {
         Text(
             stringResource(R.string.phone_location_required),
             Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
@@ -94,9 +97,9 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     val resources = LocalResources.current
     var isGranted by remember { mutableStateOf<Boolean?>(null) }
     if (ActivityCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_FINE_LOCATION
+            context, Manifest.permission.ACCESS_FINE_LOCATION,
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_COARSE_LOCATION
+            context, Manifest.permission.ACCESS_COARSE_LOCATION,
         ) != PackageManager.PERMISSION_GRANTED
     ) {
         return if (isGranted == null) AskForLocationPermissionDialog { isGranted = it }
@@ -124,14 +127,18 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         }
         if (showPhoneSettingsDialog) {
             return AppDialog(
-                onDismissRequest = onDismissRequest, confirmButton = {
-                    TextButton(onClick = {
-                        onDismissRequest()
-                        runCatching {
-                            context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                        }.onFailure(logException)
-                    }) { Text(stringResource(R.string.accept)) }
-                }) {
+                onDismissRequest = onDismissRequest,
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            onDismissRequest()
+                            runCatching {
+                                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            }.onFailure(logException)
+                        },
+                    ) { Text(stringResource(R.string.accept)) }
+                },
+            ) {
                 Text(
                     stringResource(R.string.gps_internet_description),
                     modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
@@ -163,20 +170,20 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
 
         if (LocationManager.GPS_PROVIDER in locationManager.allProviders) {
             locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, 0, 0f, locationListener
+                LocationManager.GPS_PROVIDER, 0, 0f, locationListener,
             )
         }
         if (LocationManager.NETWORK_PROVIDER in locationManager.allProviders) {
             locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener
+                LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener,
             )
         }
 
         onDispose {
             @SuppressLint("MissingPermission") if (ActivityCompat.checkSelfPermission(
-                    context, Manifest.permission.ACCESS_FINE_LOCATION
+                    context, Manifest.permission.ACCESS_FINE_LOCATION,
                 ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                    context, Manifest.permission.ACCESS_COARSE_LOCATION
+                    context, Manifest.permission.ACCESS_COARSE_LOCATION,
                 ) == PackageManager.PERMISSION_GRANTED
             ) locationManager.removeUpdates(locationListener)
         }
@@ -228,19 +235,21 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                     coord.latitude,
                     "\n",
                     stringResource(R.string.longitude),
-                    coord.longitude
-                )
+                    coord.longitude,
+                ),
             )
             val geoLink = "geo:${coord.latitude},${coord.longitude}"
             withLink(
                 link = LinkAnnotation.Clickable(
-                    tag = "pluscode", styles = TextLinkStyles(
+                    tag = "pluscode",
+                    styles = TextLinkStyles(
                         SpanStyle(
                             color = MaterialTheme.colorScheme.primary,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    )
-                ) { context.shareText(geoLink, cityName.orEmpty()) }) { appendLine(geoLink) }
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                    ),
+                ) { context.shareText(geoLink, cityName.orEmpty()) },
+            ) { appendLine(geoLink) }
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
             cityName?.also(::appendLine)
             countryCode?.also(::appendLine)
@@ -248,13 +257,15 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                 "https://plus.codes/" + OpenLocationCode.encode(coord.latitude, coord.longitude)
             withLink(
                 link = LinkAnnotation.Clickable(
-                    tag = "pluscode", styles = TextLinkStyles(
+                    tag = "pluscode",
+                    styles = TextLinkStyles(
                         SpanStyle(
                             color = MaterialTheme.colorScheme.primary,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    )
-                ) { context.shareText(plusLink, cityName.orEmpty()) }) { append(plusLink) }
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                    ),
+                ) { context.shareText(plusLink, cityName.orEmpty()) },
+            ) { append(plusLink) }
         }
         SelectionContainer { Text(text, modifier = textModifier, textAlign = TextAlign.Center) }
     }

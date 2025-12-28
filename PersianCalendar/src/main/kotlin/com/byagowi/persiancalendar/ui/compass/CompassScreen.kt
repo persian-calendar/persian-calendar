@@ -193,8 +193,8 @@ fun SharedTransitionScope.CompassScreen(
                     Column {
                         Text(
                             if (isSliderShown) Clock(time).toBasicFormatString() else stringResource(
-                                R.string.compass
-                            )
+                                R.string.compass,
+                            ),
                         )
                         val subtitle = cityName ?: coordinates?.run {
                             formatCoordinateISO6709(
@@ -229,12 +229,12 @@ fun SharedTransitionScope.CompassScreen(
                     }
                     var showTrueNorth by rememberSaveable {
                         mutableStateOf(
-                            context.preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
+                            context.preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false),
                         )
                     }
                     if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
-                            stringResource(R.string.true_north), showTrueNorth
+                            stringResource(R.string.true_north), showTrueNorth,
                         ) {
                             showTrueNorth = it
                             closeMenu()
@@ -248,12 +248,14 @@ fun SharedTransitionScope.CompassScreen(
                         }
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersianOrDari) {
                             var value by remember { mutableStateOf<String?>(null) }
-                            AppDropdownMenuItem({
-                                Crossfade(
-                                    value ?: "مزبوره/مذکوره",
-                                    Modifier.animateContentSize(appContentSizeAnimationSpec),
-                                ) { Text(it) }
-                            }) {
+                            AppDropdownMenuItem(
+                                {
+                                    Crossfade(
+                                        value ?: "مزبوره/مذکوره",
+                                        Modifier.animateContentSize(appContentSizeAnimationSpec),
+                                    ) { Text(it) }
+                                },
+                            ) {
                                 val dayOfMonth = Jdn.today().toIslamicDate().dayOfMonth
                                 value = if (value == null) "مزبوره: " + when (dayOfMonth) {
                                     1, 9, 17, 25 -> "شرق"
@@ -371,7 +373,7 @@ fun SharedTransitionScope.CompassScreen(
                             } else showSnackbarMessage(
                                 resources.getString(
                                     if (sensorNotFound) R.string.compass_not_found
-                                    else R.string.calibrate_compass_summary
+                                    else R.string.calibrate_compass_summary,
                                 ),
                                 SnackbarDuration.Long,
                             )
@@ -382,7 +384,7 @@ fun SharedTransitionScope.CompassScreen(
                                 rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
-                            )
+                            ),
                         ) { StopButton(isStopped) { isStopped = it } }
                     }
                 }
@@ -445,24 +447,24 @@ fun SharedTransitionScope.CompassScreen(
                     sensorManager.registerListener(
                         orientationSensorListener,
                         orientationSensor,
-                        SensorManager.SENSOR_DELAY_FASTEST
+                        SensorManager.SENSOR_DELAY_FASTEST,
                     )
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
-                        context, "dev: orientation", Toast.LENGTH_SHORT
+                        context, "dev: orientation", Toast.LENGTH_SHORT,
                     ).show()
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
                         accelerometerSensor,
-                        SensorManager.SENSOR_DELAY_GAME
+                        SensorManager.SENSOR_DELAY_GAME,
                     )
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
                         magnetometerSensor,
-                        SensorManager.SENSOR_DELAY_GAME
+                        SensorManager.SENSOR_DELAY_GAME,
                     )
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
-                        context, "dev: acc+magnet", Toast.LENGTH_SHORT
+                        context, "dev: acc+magnet", Toast.LENGTH_SHORT,
                     ).show()
                 } else if (coordinates != null) {
                     showSnackbarMessage(
@@ -551,7 +553,7 @@ private abstract class AccelerometerMagneticSensorListener : BaseSensorListener(
         }
 
         if (isAccelerationsAvailable && isMagneticFieldAvailable && SensorManager.getRotationMatrix(
-                rotationMatrix, null, acceleration, magneticField
+                rotationMatrix, null, acceleration, magneticField,
             )
         ) {
             SensorManager.getOrientation(rotationMatrix, orientationMatrix)

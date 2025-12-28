@@ -171,7 +171,7 @@ const val OWGHAT_LOCATION_KEY = "owghat_location"
 
 // A new one can't be added and should be default off unfortunately as users might have set it already
 val DEFAULT_WIDGET_CUSTOMIZATIONS = setOf(
-    OTHER_CALENDARS_KEY, NON_HOLIDAYS_EVENTS_KEY, OWGHAT_KEY, OWGHAT_LOCATION_KEY
+    OTHER_CALENDARS_KEY, NON_HOLIDAYS_EVENTS_KEY, OWGHAT_KEY, OWGHAT_LOCATION_KEY,
 )
 
 const val QIBLA_LATITUDE = 21.422522

@@ -39,7 +39,7 @@ import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
 @Composable
 fun rememberSwipeDismissableSceneStrategyState(
     swipeToDismissBoxState: SwipeToDismissBoxState? =
-        if (Build.VERSION.SDK_INT <= 35) rememberSwipeToDismissBoxState() else null
+        if (Build.VERSION.SDK_INT <= 35) rememberSwipeToDismissBoxState() else null,
 ): SwipeDismissableSceneStrategyState =
     remember(swipeToDismissBoxState) { SwipeDismissableSceneStrategyState(swipeToDismissBoxState) }
 
@@ -77,7 +77,7 @@ fun <T : Any> rememberSwipeDismissableSceneStrategy(
  *   under.
  */
 class SwipeDismissableSceneStrategyState(
-    internal val swipeToDismissBoxState: SwipeToDismissBoxState?
+    internal val swipeToDismissBoxState: SwipeToDismissBoxState?,
 )
 
 /**

@@ -91,7 +91,7 @@ fun SharedTransitionScope.LicensesScreen(navigateUp: () -> Unit) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .windowInsetsPadding(
-                                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
+                                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
                             )
                             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                             .clearAndSetSemantics {},
@@ -126,20 +126,24 @@ private fun Sidebar(modifier: Modifier = Modifier) {
             Triple(
                 "GPLv3",
                 { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
-                ::showShaderSandboxDialog
+                ::showShaderSandboxDialog,
             ),
             Triple(
-                KotlinVersion.CURRENT.toString(), {
+                KotlinVersion.CURRENT.toString(),
+                {
                     Text("Kotlin", style = MaterialTheme.typography.bodySmall)
-                }, ::showSpringDemoDialog
+                },
+                ::showSpringDemoDialog,
             ),
             Triple(
-                "API ${Build.VERSION.SDK_INT}", {
+                "API ${Build.VERSION.SDK_INT}",
+                {
                     Icon(
                         imageVector = Icons.Default.Motorcycle,
                         contentDescription = "API",
                     )
-                }, ::showFlingDemoDialog
+                },
+                ::showFlingDemoDialog,
             ),
         ).forEachIndexed { i, (title, icon, action) ->
             val clickHandler = remember { createEasterEggClickHandler(action) }
@@ -166,7 +170,7 @@ private fun BoxScope.Licenses() {
     LazyColumn(
         state = listState,
         contentPadding = WindowInsets.safeDrawing.only(
-            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
         ).asPaddingValues(),
     ) {
         itemsIndexed(sections) { i, (title, license, text) ->

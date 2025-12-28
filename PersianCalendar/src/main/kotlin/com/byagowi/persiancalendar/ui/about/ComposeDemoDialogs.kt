@@ -141,17 +141,19 @@ fun TypographyDemoDialog(onDismissRequest: () -> Unit) {
             "LabelMedium" to MaterialTheme.typography.labelMedium,
             "LabelSmall" to MaterialTheme.typography.labelSmall,
         ).map { (title, style) ->
-            Text(buildAnnotatedString {
-                withStyle(style.toSpanStyle()) {
-                    append(title)
-                }
-                append(" w=${style.fontWeight?.weight} ")
-                when {
-                    style.fontSize.isSp -> append("${style.fontSize.value}sp")
-                    style.fontSize.isEm -> append("${style.fontSize.value}em")
-                    else -> append("${style.fontSize.value} UNKNOWN!")
-                }
-            })
+            Text(
+                buildAnnotatedString {
+                    withStyle(style.toSpanStyle()) {
+                        append(title)
+                    }
+                    append(" w=${style.fontWeight?.weight} ")
+                    when {
+                        style.fontSize.isSp -> append("${style.fontSize.value}sp")
+                        style.fontSize.isEm -> append("${style.fontSize.value}em")
+                        else -> append("${style.fontSize.value} UNKNOWN!")
+                    }
+                },
+            )
         }
     }
 }
@@ -180,7 +182,7 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
                     Text(
                         text = "$title topStart=${f(shape.topStart)} topEnd=${f(shape.topEnd)} bottomStart=${
                             f(
-                                shape.bottomStart
+                                shape.bottomStart,
                             )
                         } topEnd=${f(shape.bottomEnd)}",
                         modifier = Modifier.align(Alignment.Center),
@@ -235,7 +237,7 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
         )
     }
     val rows = listOf(
-        "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"
+        "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000",
     )
     val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
     val resources = LocalResources.current
@@ -256,11 +258,11 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
                                     Color(
                                         resources.getColor(
                                             dynamicColors[rows.size * j + i],
-                                            null
-                                        )
-                                    )
+                                            null,
+                                        ),
+                                    ),
                                 )
-                                .weight(1f)
+                                .weight(1f),
                         ) { Text(" ") }
                     }
                 }
@@ -304,10 +306,10 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
                     onDismissRequest()
                     seconds.toIntOrNull()?.let { value ->
                         val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>().setInitialDelay(
-                            value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS
+                            value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS,
                         ).build()
                         WorkManager.getInstance(context).beginUniqueWork(
-                            "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
+                            "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker,
                         ).enqueue()
                         Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
                     }
@@ -409,7 +411,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
         },
         dismissButton = {
             TextButton(onDismissRequest) { Text(stringResource(R.string.close)) }
-        }
+        },
     ) {
         items(pagesCount) {
             Row(
@@ -452,7 +454,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                     sourceCalendar.getMonthStartFromMonthsDistance(
                         baseJdn = now,
                         monthsDistance = it - pagesCount / 2 + 1,
-                    )
+                    ),
                 ) - 1) on destinationCalendar
                 Text(
                     language.dmy.format(

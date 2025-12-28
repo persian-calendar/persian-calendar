@@ -51,7 +51,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                             if (i == 0) language.inch else ""
                     canvas.drawText(
                         label, if (cmInchFlip) width - textSideOffset else textSideOffset,
-                        if (i == 0) topTextOffset else y + textOffset, paint
+                        if (i == 0) topTextOffset else y + textOffset, paint,
                     )
                     firstLevel
                 }
@@ -61,7 +61,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }
             canvas.drawLine(
                 if (cmInchFlip) width * 1f else 0f, y,
-                if (cmInchFlip) width - w else w, y, paint
+                if (cmInchFlip) width - w else w, y, paint,
             )
         }
 
@@ -76,7 +76,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                             if (i == 0) language.centimeter else ""
                     canvas.drawText(
                         label, if (cmInchFlip) textSideOffset else width - textSideOffset,
-                        if (i == 0) topTextOffset else y + textOffset, paint
+                        if (i == 0) topTextOffset else y + textOffset, paint,
                     )
                     firstLevel
                 }
@@ -86,7 +86,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }
             canvas.drawLine(
                 if (cmInchFlip) 0f else width * 1f, y,
-                if (cmInchFlip) w else width - w, y, paint
+                if (cmInchFlip) w else width - w, y, paint,
             )
         }
     }

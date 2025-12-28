@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -50,7 +49,7 @@ fun ProvincesDialog(onDismissRequest: () -> Unit, navigateUp: () -> Unit) {
                     .fillMaxWidth()
                     .clickable { province = provinceName }
                     .height(SettingsItemHeight.dp)
-                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) { Text(provinceName) }
         }
     }
@@ -82,7 +81,7 @@ fun DistrictsDialog(onSuccess: () -> Unit, navigateUp: () -> Unit, province: Str
                         context.preferences.saveLocation(coordinates, districts[index].first[0])
                     }
                     .height(SettingsItemHeight.dp)
-                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) {
                 Text(
                     buildAnnotatedString {
@@ -90,10 +89,10 @@ fun DistrictsDialog(onSuccess: () -> Unit, navigateUp: () -> Unit, province: Str
                         append(" ")
                         withStyle(
                             LocalTextStyle.current.toSpanStyle().copy(
-                                color = LocalContentColor.current.copy(alpha = .5f)
-                            )
+                                color = LocalContentColor.current.copy(alpha = .5f),
+                            ),
                         ) { append(county) }
-                    }
+                    },
                 )
             }
         }

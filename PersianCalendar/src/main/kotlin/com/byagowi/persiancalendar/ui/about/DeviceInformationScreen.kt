@@ -134,8 +134,8 @@ fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
                     runCatching {
                         context.startActivity(
                             Intent(Intent.ACTION_MAIN).setClassName(
-                                "com.android.systemui", "com.android.systemui.egg.MLandActivity"
-                            ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                "com.android.systemui", "com.android.systemui.egg.MLandActivity",
+                            ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                         )
                     }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
                 }
@@ -148,7 +148,7 @@ fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
                     LazyColumn(
                         state = listState,
                         contentPadding = WindowInsets.safeDrawing.only(
-                            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
                         ).asPaddingValues(),
                     ) {
                         item {
@@ -162,7 +162,7 @@ fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
                         itemsIndexed(items) { i, item ->
                             if (i > 0) HorizontalDivider(
                                 Modifier.padding(horizontal = 20.dp),
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
                             )
                             Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
                                 Text(item.title, fontWeight = FontWeight.Bold)
@@ -199,13 +199,13 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
             listOf<Triple<ImageVector, String, (Activity) -> Unit>>(
                 Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(
-                    Icons.Default.Settings, "API " + Build.VERSION.SDK_INT, ::showSensorTestDialog
+                    Icons.Default.Settings, "API " + Build.VERSION.SDK_INT, ::showSensorTestDialog,
                 ),
                 Triple(
-                    Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0], ::showInputDeviceTestDialog
+                    Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0], ::showInputDeviceTestDialog,
                 ),
                 Triple(
-                    Icons.Default.PermDeviceInformation, Build.MODEL, ::showColorPickerDialog
+                    Icons.Default.PermDeviceInformation, Build.MODEL, ::showColorPickerDialog,
                 ),
             )
         }
@@ -350,7 +350,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             "%d*%d pixels".format(
                 Locale.ENGLISH,
                 activity.resources?.displayMetrics?.widthPixels ?: 0,
-                activity.resources?.displayMetrics?.heightPixels ?: 0
+                activity.resources?.displayMetrics?.heightPixels ?: 0,
             )
         },
         "%.1fHz".format(
@@ -379,11 +379,15 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
         "RAM",
         buildString {
             val activityManager = activity.getSystemService<ActivityManager>()
-            appendLine(humanReadableByteCountBin(ActivityManager.MemoryInfo().also {
-                activityManager?.getMemoryInfo(it)
-            }.totalMem))
+            appendLine(
+                humanReadableByteCountBin(
+                    ActivityManager.MemoryInfo().also {
+                        activityManager?.getMemoryInfo(it)
+                    }.totalMem,
+                ),
+            )
             append("Is Low Ram Device: ${activityManager?.isLowRamDevice}")
-        }
+        },
     ),
     Item(
         "Battery",
@@ -393,7 +397,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                 "Charge Counter" to BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
                 "Current Avg" to BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
                 "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
-                "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
+                "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER,
             ).map { (title: String, id: Int) -> "$title: ${it.getLongProperty(id)}" }
         }?.joinToString("\n"),
     ),
@@ -409,7 +413,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                 "Safe Inset Right" to cutout.safeInsetRight,
                 "Safe Inset Bottom" to cutout.safeInsetBottom,
                 "Safe Inset Left" to cutout.safeInsetLeft,
-                "Rects" to cutout.boundingRects.joinToString(",")
+                "Rects" to cutout.boundingRects.joinToString(","),
             ).joinToString("\n") { (key, value) -> "$key: $value" }
         } else "None",
     ),
@@ -453,7 +457,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                     |Initiating Package Signing Info: $initiatingPackageSigningInfo
                     |Installer Package Name: ${
                         @Suppress("DEPRECATION") activity.packageManager?.getInstallerPackageName(
-                            activity.packageName
+                            activity.packageName,
                         ).orEmpty()
                     }
                     """.trimMargin("|").trim()
@@ -466,17 +470,17 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
     Item(
         "Sensors",
         activity.getSystemService<SensorManager>()?.getSensorList(Sensor.TYPE_ALL)
-            ?.joinToString("\n")
+            ?.joinToString("\n"),
     ),
     Item("Input Device", InputDevice.getDeviceIds().map(InputDevice::getDevice).joinToString()),
     Item(
-        "System Features", activity.packageManager?.systemAvailableFeatures?.joinToString("\n")
+        "System Features", activity.packageManager?.systemAvailableFeatures?.joinToString("\n"),
     ),
 ) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) listOf(
     Item(
         "Is Cross Window Blur Enabled",
-        activity.window?.windowManager?.isCrossWindowBlurEnabled.toString()
-    )
+        activity.window?.windowManager?.isCrossWindowBlurEnabled.toString(),
+    ),
 ) else emptyList()) + (runCatching {
     // Quick Kung-fu to create a gl context, https://stackoverflow.com/a/27092070
     val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
@@ -491,7 +495,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
         EGL14.EGL_OPENGL_ES2_BIT,
         EGL14.EGL_SURFACE_TYPE,
         EGL14.EGL_PBUFFER_BIT,
-        EGL14.EGL_NONE
+        EGL14.EGL_NONE,
     )
     val configs = arrayOfNulls<EGLConfig?>(1)
     val configsCount = IntArray(1)
@@ -501,16 +505,17 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             display,
             configs[0],
             intArrayOf(EGL14.EGL_WIDTH, 64, EGL14.EGL_HEIGHT, 64, EGL14.EGL_NONE),
-            0
+            0,
         )
         EGL14.eglMakeCurrent(
-            display, surf, surf, EGL14.eglCreateContext(
+            display, surf, surf,
+            EGL14.eglCreateContext(
                 display,
                 configs[0],
                 EGL14.EGL_NO_CONTEXT,
                 intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 2, EGL14.EGL_NONE),
-                0
-            )
+                0,
+            ),
         )
     }
     listOf(
@@ -519,7 +524,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             (listOf(
                 "GL_VERSION" to GLES20.GL_VERSION,
                 "GL_RENDERER" to GLES20.GL_RENDERER,
-                "GL_VENDOR" to GLES20.GL_VENDOR
+                "GL_VENDOR" to GLES20.GL_VENDOR,
             ).map { (title: String, id: Int) -> "$title: ${GLES20.glGetString(id)}" } + listOf(
                 "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
                 "GL_MAX_CUBE_MAP_TEXTURE_SIZE" to GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE,
@@ -531,7 +536,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                 "GL_MAX_VERTEX_ATTRIBS" to GLES20.GL_MAX_VERTEX_ATTRIBS,
                 "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
                 "GL_MAX_VERTEX_UNIFORM_VECTORS" to GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS,
-                "GL_MAX_VIEWPORT_DIMS" to GLES20.GL_MAX_VIEWPORT_DIMS
+                "GL_MAX_VIEWPORT_DIMS" to GLES20.GL_MAX_VIEWPORT_DIMS,
             ).map { (title: String, id: Int) ->
                 val intBuffer = IntArray(1)
                 GLES10.glGetIntegerv(id, intBuffer, 0)
@@ -550,15 +555,15 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                         LinkAnnotation.Url(
                             url = it.replace(
                                 regex,
-                                "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
+                                "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt",
                             ),
                             styles = TextLinkStyles(
                                 SpanStyle(
                                     color = primaryColor,
                                     textDecoration = TextDecoration.Underline,
-                                )
+                                ),
                             ),
-                        )
+                        ),
                     ) { append(it) }
                 }
             },

@@ -73,7 +73,7 @@ fun MainScreen(
                 screenStage = {
                     if (scrollState.canScrollBackward) ScreenStage.Scrolling else ScreenStage.Idle
                 },
-            )
+            ),
         ) { OtherCalendars(localeUtils, today, onTop = true, withWeekDayName = false) }
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
@@ -89,7 +89,7 @@ fun MainScreen(
         )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
             val entries = generateEntries(
-                localeUtils, today, enabledEvents, days = 14, withYear = true
+                localeUtils, today, enabledEvents, days = 14, withYear = true,
             )
             items(items = entries) {
                 if (it.type == EntryType.Date) ListSubHeader {
@@ -116,7 +116,7 @@ fun EventView(it: Entry) {
         isHoliday = isHoliday,
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Column {
             AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
@@ -126,7 +126,7 @@ fun EventView(it: Entry) {
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 )
             }
             when (val type = it.type) {

@@ -20,7 +20,7 @@ class TryCatchDetector : Detector(), SourceCodeScanner {
             context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "Use `runCatching` instead of `try/catch` for better functional error handling."
+                message = "Use `runCatching` instead of `try/catch` for better functional error handling.",
             )
         }
     }
@@ -36,7 +36,7 @@ class TryCatchDetector : Detector(), SourceCodeScanner {
             implementation = Implementation(
                 TryCatchDetector::class.java,
                 Scope.JAVA_FILE_SCOPE,
-            )
+            ),
         )
     }
 }

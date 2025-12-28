@@ -170,7 +170,7 @@ fun SharedTransitionScope.EventsTab(
                         state,
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
@@ -195,7 +195,7 @@ fun SharedTransitionScope.EventsTab(
                     rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
-                )
+                ),
             ) {
                 DayEvents(events, navigateToHolidaysSettings) {
                     viewModel.refreshCalendar()
@@ -246,7 +246,7 @@ fun eventColor(event: CalendarEvent<*>): Color {
 }
 
 fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
-    event: CalendarEvent.DeviceCalendarEvent, context: Context
+    event: CalendarEvent.DeviceCalendarEvent, context: Context,
 ) {
     runCatching { this@viewEvent.launch(event.id) }.onFailure {
         showUnsupportedActionToast(context)
@@ -357,7 +357,7 @@ private fun DayEventContent(
             .focusable(true)
             .semantics {
                 this.contentDescription = if (event.isHoliday) resources.getString(
-                    R.string.holiday_reason, event.title
+                    R.string.holiday_reason, event.title,
                 ) else event.oneLinerTitleWithTime
             }
             .padding(8.dp),
@@ -385,7 +385,7 @@ private fun DayEventContent(
                 is CalendarEvent.DeviceCalendarEvent -> !language.isPersianOrDari
                 is CalendarEvent.EquinoxCalendarEvent -> true
                 else -> false
-            }
+            },
         ) {
             Icon(
                 if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
@@ -398,7 +398,7 @@ private fun DayEventContent(
         this.AnimatedVisibility(hasTooltip) {
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                    TooltipAnchorPosition.Above
+                    TooltipAnchorPosition.Above,
                 ),
                 tooltip = {
                     val text = when {
@@ -421,7 +421,7 @@ private fun DayEventContent(
                         tonalElevation = 12.dp,
                         action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) ({
                             CompositionLocalProvider(
-                                LocalLayoutDirection provides originalLayoutDirection
+                                LocalLayoutDirection provides originalLayoutDirection,
                             ) {
                                 Box(
                                     Modifier
@@ -433,13 +433,15 @@ private fun DayEventContent(
                                     // It won't use the theme level defined uri handler but it's ok
                                     // since it's a PDF
                                     val uriHandler = LocalUriHandler.current
-                                    FilledTonalButton(onClick = {
-                                        if (event.source == EventSource.Iran) {
-                                            uriHandler.openUri(event.source.link)
-                                        } else if (event is CalendarEvent.DeviceCalendarEvent) {
-                                            launcher.viewEvent(event, context)
-                                        }
-                                    }) {
+                                    FilledTonalButton(
+                                        onClick = {
+                                            if (event.source == EventSource.Iran) {
+                                                uriHandler.openUri(event.source.link)
+                                            } else if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                launcher.viewEvent(event, context)
+                                            }
+                                        },
+                                    ) {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             Text(stringResource(R.string.view_source))
                                             Icon(
@@ -459,7 +461,7 @@ private fun DayEventContent(
                             CompositionLocalProvider(
                                 LocalLayoutDirection provides if (event.source == EventSource.AncientIran) {
                                     LocalLayoutDirection.current
-                                } else originalLayoutDirection
+                                } else originalLayoutDirection,
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
@@ -473,7 +475,7 @@ private fun DayEventContent(
                                                     language.dm.format(
                                                         numeral.format(event.date.dayOfMonth),
                                                         event.date.monthName,
-                                                    ) + spacedComma
+                                                    ) + spacedComma,
                                                 )
                                                 append(stringResource(event.date.calendar.shortTitle))
                                             }
@@ -485,7 +487,7 @@ private fun DayEventContent(
                                     )
                                     if (navigateToHolidaysSettings != null) OutlineSettingsButton(
                                         modifier = Modifier.padding(
-                                            top = 8.dp, start = 4.dp, bottom = 8.dp
+                                            top = 8.dp, start = 4.dp, bottom = 8.dp,
                                         ),
                                     ) {
                                         coroutineScope.launch {
@@ -494,7 +496,7 @@ private fun DayEventContent(
                                                 EventsRepository.keyFromDetails(
                                                     event.source,
                                                     event.isHoliday,
-                                                ) ?: PREF_SHOW_DEVICE_CALENDAR_EVENTS
+                                                ) ?: PREF_SHOW_DEVICE_CALENDAR_EVENTS,
                                             )
                                         }
                                     }
@@ -541,7 +543,7 @@ private fun DayEventContent(
                     else -> false
                 }
                 val clickModifier = if (isClickable) Modifier.clickable(
-                    onClickLabel = stringResource(R.string.view_source)
+                    onClickLabel = stringResource(R.string.view_source),
                 ) {
                     coroutineScope.launch {
                         if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
@@ -601,7 +603,7 @@ private fun EquinoxCountDown(
     val year = event.date.year + 1
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         CompositionLocalProvider(
-            LocalLayoutDirection provides LayoutDirection.Ltr
+            LocalLayoutDirection provides LayoutDirection.Ltr,
         ) { EquinoxCountDownContent(contentColor, event, backgroundColor) }
         var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
         if (showHoroscopeDialog) YearHoroscopeDialog(year) {
@@ -609,10 +611,10 @@ private fun EquinoxCountDown(
         }
         if (isAstronomicalExtraFeaturesEnabled) TooltipBox(
             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                TooltipAnchorPosition.Above
+                TooltipAnchorPosition.Above,
             ),
             tooltip = { PlainTooltip { Text(stringResource(R.string.horoscope)) } },
-            state = rememberTooltipState()
+            state = rememberTooltipState(),
         ) {
             Surface(
                 shape = CircleShape,
@@ -654,7 +656,7 @@ private fun EquinoxCountDownContent(
         }.dropWhile { it.first == 0 }.forEach { (_, x) ->
             val parts = x.split(" ")
             if (parts.size == 2 && parts[0].length <= 3 && !isTalkBackEnabled) Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                     val digits = parts[0].padStart(2, numeral.format(0)[0])
@@ -674,7 +676,7 @@ private fun EquinoxCountDownContent(
                     }
                 }
                 Text(
-                    parts[1], color = contentColor, style = MaterialTheme.typography.bodyMedium
+                    parts[1], color = contentColor, style = MaterialTheme.typography.bodyMedium,
                 )
             } else Text(x, color = contentColor, style = MaterialTheme.typography.bodyMedium)
         }
@@ -732,7 +734,7 @@ class ViewEventContract : ActivityResultContract<Long, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?) = null
     override fun createIntent(context: Context, input: Long): Intent {
         return Intent(Intent.ACTION_VIEW).setData(
-            ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input)
+            ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input),
         )
     }
 }

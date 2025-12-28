@@ -345,7 +345,7 @@ private sealed interface Screen : NavKey {
             Triple(Astronomy(), AstrologyIcon, R.string.astronomy),
             Triple(Settings(), Icons.Default.Settings, R.string.settings),
             Triple(About, Icons.Default.Info, R.string.about),
-            Triple(Exit, Icons.Default.Cancel, R.string.exit)
+            Triple(Exit, Icons.Default.Cancel, R.string.exit),
         )
 
         fun fromName(value: String?): Screen = when (Shortcut.fromName(value)) {
@@ -457,7 +457,7 @@ private fun Modifier.navigationRailTopGradient(): Modifier {
     val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
     val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
     val topColor by animateColor(
-        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent
+        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
     )
     var height by remember { mutableFloatStateOf(0f) }
     return this
@@ -540,14 +540,14 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
                         putString(PREF_THEME, systemTheme.key)
                         putString(
                             if (isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
-                            userSetTheme.key
+                            userSetTheme.key,
                         )
                     }
                 },
             )
             .background(
                 animateColor(MaterialTheme.colorScheme.surface.copy(alpha = .5f)).value,
-                MaterialTheme.shapes.extraLarge
+                MaterialTheme.shapes.extraLarge,
             )
             .padding(8.dp),
     ) {

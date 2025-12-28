@@ -50,7 +50,7 @@ fun renderMonthWidget(
             it.withTranslation(
                 if (isRtl) width - cellWidth * (column + 1) - xStart
                 else cellWidth * column + xStart,
-                0f
+                0f,
             ) {
                 val text = (weekStart + column).shortTitle
                 setText?.invoke(column, text, false) ?: dayPainter.setInitialOfWeekDay(text)

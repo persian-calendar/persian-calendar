@@ -140,9 +140,12 @@ fun SharedTransitionScope.ScheduleScreen(
 
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
                     if (showDatePickerDialog) {
-                        DatePickerDialog(firstVisibleItemJdn, {
-                            showDatePickerDialog = false
-                        }) { jdn ->
+                        DatePickerDialog(
+                            firstVisibleItemJdn,
+                            {
+                                showDatePickerDialog = false
+                            },
+                        ) { jdn ->
                             if (abs(firstVisibleItemJdn - jdn) > 30 || abs(baseJdn - jdn) > 30) {
                                 baseJdn = jdn
                             }
@@ -164,7 +167,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             val date = firstVisibleItemJdn on mainCalendar
                             runCatching {
                                 context.openHtmlInBrowser(
-                                    monthHtmlReport(context, date, wholeYear = isWholeYear)
+                                    monthHtmlReport(context, date, wholeYear = isWholeYear),
                                 )
                             }.onFailure(logException)
                         }
@@ -183,7 +186,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                             onLongClick = { showPrintReport(true) },
                                             onLongClickLabel = language.inParentheses.format(
                                                 stringResource(R.string.print),
-                                                stringResource(R.string.year)
+                                                stringResource(R.string.year),
                                             ),
                                         ),
                                 ) { /*Icon(Icons.Default.Print, contentDescription = "Print")*/ }
@@ -209,7 +212,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                     top = if (index == 0) 20.dp else 16.dp,
                                     bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
                                     start = 24.dp,
-                                )
+                                ),
                             ) {
                                 MoreButton(stringResource(R.string.more)) {
                                     baseJdn = jdn
@@ -236,7 +239,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                             .background(
                                                 when {
                                                     jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
-                                                        alpha = .6f
+                                                        alpha = .6f,
                                                     )
 
                                                     jdn > today -> MaterialTheme.colorScheme.primaryContainer
@@ -275,7 +278,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                     ) == date.dayOfMonth
                                 ) {
                                     val nextMonth = mainCalendar.getMonthStartFromMonthsDistance(
-                                        jdn, 1
+                                        jdn, 1,
                                     )
                                     Text(
                                         if (nextMonth.month == 1) language.my.format(
@@ -285,7 +288,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         fontSize = 24.sp,
                                         modifier = Modifier
                                             .padding(
-                                                start = 24.dp, end = 24.dp, top = 24.dp
+                                                start = 24.dp, end = 24.dp, top = 24.dp,
                                             )
                                             .clickable(
                                                 interactionSource = null,
@@ -296,10 +299,10 @@ fun SharedTransitionScope.ScheduleScreen(
                                                     Jdn(nextMonth),
                                                 )
                                                 calendarViewModel.changeSelectedMonthOffsetCommand(
-                                                    monthOffset
+                                                    monthOffset,
                                                 )
                                                 calendarViewModel.notifySelectedMonthOffset(
-                                                    monthOffset
+                                                    monthOffset,
                                                 )
                                                 calendarViewModel.openYearView()
                                                 navigateUp()

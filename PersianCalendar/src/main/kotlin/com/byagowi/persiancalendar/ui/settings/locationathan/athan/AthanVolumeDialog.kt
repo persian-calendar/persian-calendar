@@ -65,10 +65,12 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                context.preferences.edit { putInt(PREF_ATHAN_VOLUME, volume) }
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    context.preferences.edit { putInt(PREF_ATHAN_VOLUME, volume) }
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
     ) {

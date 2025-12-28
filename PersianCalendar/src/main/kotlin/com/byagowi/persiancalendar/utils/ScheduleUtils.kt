@@ -27,7 +27,7 @@ private fun scheduleWorkManager(context: Context) {
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             UPDATE_TAG, ExistingPeriodicWorkPolicy.UPDATE,
             // An hourly task to call UpdateWorker.doWork
-            PeriodicWorkRequestBuilder<UpdateWorker>(1L, TimeUnit.HOURS).build()
+            PeriodicWorkRequestBuilder<UpdateWorker>(1L, TimeUnit.HOURS).build(),
         )
     }.onFailure(logException).getOrNull().debugAssertNotNull
 }

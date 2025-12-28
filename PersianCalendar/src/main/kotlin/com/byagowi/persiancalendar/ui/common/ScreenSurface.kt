@@ -40,55 +40,57 @@ fun SharedTransitionScope.ScreenSurface(
     drawBehindSurface: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Layout(content = {
-        // Parent
-        run {
-            val outlineColor = MaterialTheme.colorScheme.outline
-            val needsScreenSurfaceDragHandle =
-                mayNeedDragHandleToDivide && needsScreenSurfaceDragHandle()
-            val customImageName = customImageName
-            val surfaceColor by animateColor(
-                MaterialTheme.colorScheme.surface.let {
-                    if (customImageName == null) it else it.copy(AppBlendAlpha)
+    Layout(
+        content = {
+            // Parent
+            run {
+                val outlineColor = MaterialTheme.colorScheme.outline
+                val needsScreenSurfaceDragHandle =
+                    mayNeedDragHandleToDivide && needsScreenSurfaceDragHandle()
+                val customImageName = customImageName
+                val surfaceColor by animateColor(
+                    MaterialTheme.colorScheme.surface.let {
+                        if (customImageName == null) it else it.copy(AppBlendAlpha)
+                    },
+                )
+                val density = LocalDensity.current
+                Canvas(
+                    modifier = if (disableSharedContent) Modifier else Modifier.sharedElement(
+                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                        boundsTransform = appBoundsTransform,
+                    ),
+                ) {
+                    val size = this.size
+                    if (needsScreenSurfaceDragHandle) drawRoundRect(
+                        outlineColor,
+                        Offset(size.width / 2f - 24.dp.toPx(), -6.dp.toPx()),
+                        Size(48.dp.toPx(), 4.dp.toPx()),
+                        CornerRadius(4.dp.toPx()),
+                        alpha = .375f,
+                    )
+                    run {
+                        val outline = shape.createOutline(size, this.layoutDirection, density)
+                        drawOutline(outline, surfaceColor)
+                    }
+                    // Ugly but in order to support overshoot animations let's draw surface color
+                    // under the content
+                    if (drawBehindSurface) drawRect(surfaceColor, Offset(0f, size.height), size)
                 }
-            )
-            val density = LocalDensity.current
-            Canvas(
-                modifier = if (disableSharedContent) Modifier else Modifier.sharedElement(
-                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+            }
+            // Content
+            Box(
+                (if (disableSharedContent) Modifier else Modifier.sharedBounds(
+                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
-                )
+                )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape),
             ) {
-                val size = this.size
-                if (needsScreenSurfaceDragHandle) drawRoundRect(
-                    outlineColor,
-                    Offset(size.width / 2f - 24.dp.toPx(), -6.dp.toPx()),
-                    Size(48.dp.toPx(), 4.dp.toPx()),
-                    CornerRadius(4.dp.toPx()),
-                    alpha = .375f,
-                )
-                run {
-                    val outline = shape.createOutline(size, this.layoutDirection, density)
-                    drawOutline(outline, surfaceColor)
-                }
-                // Ugly but in order to support overshoot animations let's draw surface color
-                // under the content
-                if (drawBehindSurface) drawRect(surfaceColor, Offset(0f, size.height), size)
+                val onSurface by animateColor(MaterialTheme.colorScheme.onSurface)
+                CompositionLocalProvider(LocalContentColor provides onSurface, content)
             }
-        }
-        // Content
-        Box(
-            (if (disableSharedContent) Modifier else Modifier.sharedBounds(
-                rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
-                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                boundsTransform = appBoundsTransform,
-            )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)
-        ) {
-            val onSurface by animateColor(MaterialTheme.colorScheme.onSurface)
-            CompositionLocalProvider(LocalContentColor provides onSurface, content)
-        }
-    }) { (parent, content), constraints ->
+        },
+    ) { (parent, content), constraints ->
         val placeableContent = content.measure(constraints)
         val childConstraints = Constraints.fixed(placeableContent.width, placeableContent.height)
         val placeableParent = parent.measure(childConstraints)

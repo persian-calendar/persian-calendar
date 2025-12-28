@@ -20,7 +20,7 @@ class DoubleBangDetector : Detector(), SourceCodeScanner {
             if (node.operator.text == "!!") context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback, then consider use of `.debugAssertNotNull` if is needed."
+                message = "Avoid Use of `!!`, use (`?.`) or (`?:`) with proper fallback, then consider use of `.debugAssertNotNull` if is needed.",
             )
         }
     }
@@ -36,7 +36,7 @@ class DoubleBangDetector : Detector(), SourceCodeScanner {
             implementation = Implementation(
                 DoubleBangDetector::class.java,
                 Scope.JAVA_FILE_SCOPE,
-            )
+            ),
         )
     }
 }

@@ -23,7 +23,7 @@ abstract class WidgetProvider : AppWidgetProvider() {
 
     override fun onAppWidgetOptionsChanged(
         context: Context?, appWidgetManager: AppWidgetManager?, appWidgetId: Int,
-        newOptions: Bundle?
+        newOptions: Bundle?,
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
         // set updateDate to make sure it passes throttle and gets updated

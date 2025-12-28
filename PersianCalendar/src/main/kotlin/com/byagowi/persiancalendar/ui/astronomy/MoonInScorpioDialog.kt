@@ -106,7 +106,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                         pendingConfirms.isNotEmpty() -> HeaderAction.Confirm
                         yearPagerState.currentPage != yearPages / 2 -> HeaderAction.Reset
                         else -> HeaderAction.DialogIcon
-                    }
+                    },
                 ) { action ->
                     when (action) {
                         HeaderAction.Confirm -> AppIconButton(
@@ -122,7 +122,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                         HeaderAction.DialogIcon -> Text(
                             Zodiac.SCORPIO.symbol,
                             fontFamily = FontFamily(
-                                Font(R.font.notosanssymbolsregularzodiacsubset)
+                                Font(R.font.notosanssymbolsregularzodiacsubset),
                             ),
                             fontSize = 20.sp,
                         )
@@ -151,7 +151,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                             }
                             Text(
                                 stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(
-                                    year
+                                    year,
                                 ),
                                 maxLines = 1,
                                 modifier = Modifier
@@ -243,7 +243,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                                         if (entry.upcoming) Modifier.background(
                                             MaterialTheme.colorScheme.surfaceContainerLowest,
                                             MaterialTheme.shapes.medium,
-                                        ) else Modifier
+                                        ) else Modifier,
                                     )
                                     .padding(vertical = 2.dp, horizontal = 4.dp),
                             ) {
@@ -293,7 +293,7 @@ fun generateMoonInScorpioEntries(
                                 endClock = endClock.toFormattedString(),
                                 endDate = formatDate(endDay on mainCalendar),
                                 upcoming = upcoming,
-                            )
+                            ),
                         )
                         return@parent
                     }

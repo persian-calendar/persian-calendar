@@ -54,7 +54,7 @@ private val chaldeanOrder = listOf(
     Planet(Body.Sun, en = "Auspicious", fa = "سعد"),
     Planet(Body.Venus, en = "Lesser Auspicious", fa = "سعد اصغر"),
     Planet(Body.Mercury, en = "Mixed", fa = "ممترج"),
-    Planet(Body.Moon, en = "Ascendant", fa = "طالع")
+    Planet(Body.Moon, en = "Ascendant", fa = "طالع"),
 )
 
 // This is different level of sky that is used in Astronomy screen in geocentric mode,
@@ -121,18 +121,21 @@ fun getDaySplits(
             val groupOffset = ((i - 1) % 2) * 12
             val distance = (clock - previous) / 12
             val chaldeanIndex = daysChaldeanIndices[dayIndex]
-            if (dayIndex == currentDayIndex) addAll((0..<12).mapNotNull {
-                val from = previous + distance * it
-                val to = previous + distance * (it + 1)
-                val planet = chaldeanOrder[(chaldeanIndex + it + groupOffset) % chaldeanOrder.size]
-                PlanetaryHourRow(
-                    planet = planet,
-                    isDay = isDay,
-                    from = Clock(from % 24),
-                    to = Clock(to % 24),
-                    upcoming = isToday && nowClock.value in from..to,
-                )
-            })
+            if (dayIndex == currentDayIndex) addAll(
+                (0..<12).mapNotNull {
+                    val from = previous + distance * it
+                    val to = previous + distance * (it + 1)
+                    val planet =
+                        chaldeanOrder[(chaldeanIndex + it + groupOffset) % chaldeanOrder.size]
+                    PlanetaryHourRow(
+                        planet = planet,
+                        isDay = isDay,
+                        from = Clock(from % 24),
+                        to = Clock(to % 24),
+                        upcoming = isToday && nowClock.value in from..to,
+                    )
+                },
+            )
             clock
         }
     }
@@ -148,8 +151,10 @@ fun PlanetaryHoursDialog(
     AppDialog(onDismissRequest = onDismissRequest) {
         Text(
             formatDate(
-                Jdn(GregorianCalendar().also { it.timeInMillis = now }
-                    .toCivilDate()) on mainCalendar,
+                Jdn(
+                    GregorianCalendar().also { it.timeInMillis = now }
+                        .toCivilDate(),
+                ) on mainCalendar,
             ) + cityName?.let { spacedComma + it }.orEmpty(),
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -166,7 +171,7 @@ fun PlanetaryHoursDialog(
                         if (row.upcoming) Modifier.background(
                             MaterialTheme.colorScheme.surfaceContainerLowest,
                             MaterialTheme.shapes.medium,
-                        ) else Modifier
+                        ) else Modifier,
                     )
                     .padding(vertical = 2.dp),
                 horizontalArrangement = Arrangement.Center,
@@ -177,7 +182,7 @@ fun PlanetaryHoursDialog(
                 )
                 Icon(
                     if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
-                    null
+                    null,
                 )
                 AutoSizedText(
                     stringResource(row.planet.body.titleStringId) + " " + row.planet.body.symbol,

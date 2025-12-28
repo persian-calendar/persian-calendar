@@ -73,16 +73,18 @@ fun ColorPickerDialog(
     onDismissRequest: () -> Unit,
 ) {
     val color = rememberSaveable(
-        saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
+        saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) }),
     ) { Animatable(initialColor) }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     AppDialog(
         title = { if (!isLandscape) Text(title) },
         confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                persistColor(color.value)
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    persistColor(color.value)
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
@@ -102,10 +104,10 @@ fun ColorPickerDialog(
             shape = MaterialTheme.shapes.large,
             background = background,
             outlineWidth = 2.dp,
-            onClick = { showEditor = !showEditor }
+            onClick = { showEditor = !showEditor },
         ) {
             if (showEditor) CompositionLocalProvider(
-                LocalLayoutDirection provides LayoutDirection.Ltr
+                LocalLayoutDirection provides LayoutDirection.Ltr,
             ) {
                 var transientValue by remember { mutableStateOf<String?>(null) }
                 BasicTextField(
@@ -125,10 +127,10 @@ fun ColorPickerDialog(
                         textAlign = TextAlign.Center,
                         color = animateColor(
                             if (color.value.compositeOver(Color.White).isLight) Color.Black
-                            else Color.White
+                            else Color.White,
                         ).value,
                         fontSize = if (isLandscape) MaterialTheme.typography.labelSmall.fontSize
-                        else TextStyle.Default.fontSize
+                        else TextStyle.Default.fontSize,
                     ),
                 )
             }
@@ -197,7 +199,7 @@ fun ColorBox(
     outlineWidth: Dp,
     outlineColor: Color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
     onClick: (() -> Unit)? = null,
-    content: (@Composable BoxScope.() -> Unit)? = null
+    content: (@Composable BoxScope.() -> Unit)? = null,
 ) {
     Box(
         modifier
@@ -208,7 +210,7 @@ fun ColorBox(
                     .background(Color.White)
                     .background(background)
                     .background(color)
-                    .size(size)
+                    .size(size),
             )
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
     ) { if (content != null) content() }

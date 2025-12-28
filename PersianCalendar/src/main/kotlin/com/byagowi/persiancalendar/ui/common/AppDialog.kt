@@ -42,7 +42,7 @@ private fun BaseAppDialog(
             Column {
                 title?.also { title ->
                     CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.headlineSmall
+                        LocalTextStyle provides MaterialTheme.typography.headlineSmall,
                     ) {
                         Box(
                             Modifier.padding(
@@ -56,7 +56,7 @@ private fun BaseAppDialog(
                 }
 
                 CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium,
                 ) {
                     Box(
                         Modifier

@@ -50,7 +50,7 @@ import kotlin.time.Duration.Companion.minutes
 @SuppressLint("StringFormatTrivial")
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
     ContentResolver.SCHEME_ANDROID_RESOURCE, this.getResourcePackageName(rawRes),
-    this.getResourceTypeName(rawRes), this.getResourceEntryName(rawRes)
+    this.getResourceTypeName(rawRes), this.getResourceEntryName(rawRes),
 )
 
 fun getAthanUri(context: Context): Uri =
@@ -84,11 +84,11 @@ private fun startAthanBody(context: Context, prayTime: PrayTime) {
     runCatching {
         debugLog("Alarms: startAthanBody for $prayTime")
         if (notificationAthan || ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
+                context, Manifest.permission.POST_NOTIFICATIONS,
             ) == PackageManager.PERMISSION_GRANTED
         ) context.startService(
             Intent(context, AthanNotification::class.java)
-                .putExtra(KEY_EXTRA_PRAYER, prayTime.name)
+                .putExtra(KEY_EXTRA_PRAYER, prayTime.name),
         ) else startAthanActivity(context, prayTime)
     }.onFailure(logException)
 }
@@ -97,7 +97,7 @@ fun startAthanActivity(context: Context, prayTime: PrayTime?) {
     context.startActivity(
         Intent(context, AthanActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .putExtra(KEY_EXTRA_PRAYER, prayTime?.name)
+            .putExtra(KEY_EXTRA_PRAYER, prayTime?.name),
     )
 }
 
@@ -117,14 +117,18 @@ fun scheduleAlarms(context: Context) {
     val prayTimes = coordinates?.calculatePrayTimes() ?: return
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, prayTime ->
-        scheduleAlarm(context, prayTime, GregorianCalendar().also {
-            // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
-            it[GregorianCalendar.HOUR_OF_DAY] = 0
-            it[GregorianCalendar.MINUTE] = 0
-            it[GregorianCalendar.SECOND] = 0
-            it[GregorianCalendar.MILLISECOND] = 0
-            it.timeInMillis += prayTimes[prayTime].toMillis()
-        }.timeInMillis - athanGap, i)
+        scheduleAlarm(
+            context, prayTime,
+            GregorianCalendar().also {
+                // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
+                it[GregorianCalendar.HOUR_OF_DAY] = 0
+                it[GregorianCalendar.MINUTE] = 0
+                it[GregorianCalendar.SECOND] = 0
+                it[GregorianCalendar.MILLISECOND] = 0
+                it.timeInMillis += prayTimes[prayTime].toMillis()
+            }.timeInMillis - athanGap,
+            i,
+        )
     }
 }
 
@@ -152,7 +156,7 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
             .putExtra(KEY_EXTRA_PRAYER, prayTime.name)
             .putExtra(KEY_EXTRA_PRAYER_TIME, timeInMillis)
             .setAction(BROADCAST_ALARM),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
     if (AlarmManagerCompat.canScheduleExactAlarms(am)) AlarmManagerCompat.setExactAndAllowWhileIdle(
         am,
@@ -163,6 +167,6 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
         am,
         AlarmManager.RTC_WAKEUP,
         timeInMillis,
-        pendingIntent
+        pendingIntent,
     )
 }

@@ -43,7 +43,7 @@ class ShiftWorkViewModel() : ViewModel() {
             val viewModel = ShiftWorkViewModel()
             viewModel.shiftWorks.addAll(
                 com.byagowi.persiancalendar.global.shiftWorks.takeIf { it.isNotEmpty() } ?: listOf(
-                    ShiftWorkRecord(shiftWorkKeyToString("d"), 1)
+                    ShiftWorkRecord(shiftWorkKeyToString("d"), 1),
                 ),
             )
             viewModel.isFirstSetup = false

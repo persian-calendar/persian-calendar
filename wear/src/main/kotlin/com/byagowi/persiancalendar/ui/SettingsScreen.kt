@@ -118,7 +118,7 @@ fun SettingsScreen(preferences: Preferences?) {
                                 Text("روز هفتهٔ کوتاه")
                                 AnimatedContent(
                                     if (checked) "چ" else "چهارشنبه",
-                                    transitionSpec = appCrossfadeSpec
+                                    transitionSpec = appCrossfadeSpec,
                                 ) { Text(it) }
                             }
                         }
@@ -133,7 +133,7 @@ fun SettingsScreen(preferences: Preferences?) {
                                 Text("نمایش عددی ماه")
                                 AnimatedContent(
                                     if (checked) "۱/۳۱" else "۳۱ فروردین",
-                                    transitionSpec = appCrossfadeSpec
+                                    transitionSpec = appCrossfadeSpec,
                                 ) { Text(it) }
                             }
                         }

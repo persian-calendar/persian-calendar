@@ -10,7 +10,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import java.util.GregorianCalendar
 
 sealed class CalendarEvent<T : AbstractDate>(
-    val title: String, val isHoliday: Boolean, val date: T, val source: EventSource?
+    val title: String, val isHoliday: Boolean, val date: T, val source: EventSource?,
 ) {
     class GregorianCalendarEvent(
         title: String, isHoliday: Boolean, date: CivilDate, source: EventSource?,
@@ -26,11 +26,11 @@ sealed class CalendarEvent<T : AbstractDate>(
 
     class EquinoxCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
-        val remainingMillis: Long
+        val remainingMillis: Long,
     ) : CalendarEvent<PersianDate>(title, isHoliday, date, source)
 
     class NepaliCalendarEvent(
-        title: String, isHoliday: Boolean, date: NepaliDate, source: EventSource?
+        title: String, isHoliday: Boolean, date: NepaliDate, source: EventSource?,
     ) : CalendarEvent<NepaliDate>(title, isHoliday, date, source)
 
     class DeviceCalendarEvent(

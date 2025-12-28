@@ -129,13 +129,13 @@ class MapDraw(
                     canvas,
                     maskMoonX * scale,
                     maskMoonY * scale,
-                    mapWidth * .02f * matrixScale * markersScale
+                    mapWidth * .02f * matrixScale * markersScale,
                 )
                 solarDraw.sun(
                     canvas,
                     maskSunX * scale,
                     maskSunY * scale,
-                    mapWidth * .025f * matrixScale * markersScale
+                    mapWidth * .025f * matrixScale * markersScale,
                 )
             }
 
@@ -178,7 +178,7 @@ class MapDraw(
             MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH -> {
                 maskFormattedTime = formatDate(
                     Jdn(maskDateSink.toCivilDate()) on mainCalendar,
-                    forceNonNumerical = true
+                    forceNonNumerical = true,
                 )
                 maskMapCrescentVisibility.eraseColor(Color.TRANSPARENT)
                 writeCrescentVisibilityMap(maskDateSink, mapType)
@@ -267,7 +267,7 @@ class MapDraw(
         val isEvening = mapType == MapType.EVENING_YALLOP || mapType == MapType.EVENING_ODEH
         val baseTime = Time(
             date[GregorianCalendar.YEAR], date[GregorianCalendar.MONTH] + 1,
-            date[GregorianCalendar.DAY_OF_MONTH], 0, 0, .0
+            date[GregorianCalendar.DAY_OF_MONTH], 0, 0, .0,
         )
         val direction = if (isEvening) Direction.Set else Direction.Rise
         val multiplier = if (isEvening) 1 else -1
@@ -288,13 +288,13 @@ class MapDraw(
                 }
                 val bestTime = sunRiseSet.addDays(lagTime * 4.0 / 9 * multiplier)
                 val sunEquator = equator(
-                    Body.Sun, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected
+                    Body.Sun, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected,
                 )
                 val sunHorizon =
                     horizon(bestTime, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
                 val sunAz = sunHorizon.azimuth
                 val moonEquator = equator(
-                    Body.Moon, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected
+                    Body.Moon, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected,
                 )
                 val liberation = libration(bestTime)
                 val moonHorizon =
@@ -309,7 +309,7 @@ class MapDraw(
                 else sunEquator.vec.angleWith(moonEquator.vec)
                 val DAZ = sunAz - moonAz
                 val ARCV = acos(
-                    cos(ARCL.degreesToRadians()) / cos(DAZ.degreesToRadians()).coerceIn(-1.0, 1.0)
+                    cos(ARCL.degreesToRadians()) / cos(DAZ.degreesToRadians()).coerceIn(-1.0, 1.0),
                 ).radiansToDegrees()
                 val W_topo = SD_topo * (1 - (cos(ARCL.degreesToRadians())))
                 if (isYallop) {
@@ -463,7 +463,7 @@ class MapDraw(
                     "🦘",
                     userX,
                     userY + 2.5f,
-                    biggerEmojiPaint
+                    biggerEmojiPaint,
                 ) // Australia pole of inaccessibility
             }
             if (coordinates != null && displayLocation) {
@@ -473,7 +473,7 @@ class MapDraw(
                     (userX - 240 * markersScale * scaleBack / 2).roundToInt(),
                     (userY - 220 * markersScale * scaleBack).roundToInt(),
                     (userX + 240 * markersScale * scaleBack / 2).roundToInt(),
-                    userY.toInt()
+                    userY.toInt(),
                 )
                 pinDrawable.draw(this)
             }
@@ -481,7 +481,7 @@ class MapDraw(
                 val from = EarthPosition(coordinates.latitude, coordinates.longitude)
                 val to = EarthPosition(
                     directPathDestination.latitude,
-                    directPathDestination.longitude
+                    directPathDestination.longitude,
                 )
                 val points = from.intermediatePoints(to, 24).map { (latitude, longitude) ->
                     val userX = (longitude.toFloat() + 180) * mapScaleFactor
@@ -493,7 +493,7 @@ class MapDraw(
                     val (x2, y2) = points[i + 1]
                     if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
                     pathPaint.color = (argbEvaluator.evaluate(
-                        i.toFloat() / points.size, Color.BLACK, Color.RED
+                        i.toFloat() / points.size, Color.BLACK, Color.RED,
                     ) as? Int) ?: 0
                     drawLine(x1, y1, x2, y2, pathPaint)
                 }
@@ -501,7 +501,7 @@ class MapDraw(
                 val centerPlus1 = points[points.size / 2 + 1]
                 val textDegree = Math.toDegrees(
                     atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
-                        .toDouble()
+                        .toDouble(),
                 ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
                 val heading = from.toEarthHeading(to)
                 withRotation(textDegree, center.first, center.second) {

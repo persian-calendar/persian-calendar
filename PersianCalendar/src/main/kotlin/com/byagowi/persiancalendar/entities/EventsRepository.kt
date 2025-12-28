@@ -24,7 +24,7 @@ data class EventsRepository(
 ) {
     constructor(
         preferences: SharedPreferences, language: Language,
-        enabledTypes: Set<String> = getEnabledTypes(preferences, language)
+        enabledTypes: Set<String> = getEnabledTypes(preferences, language),
     ) : this(enabledTypes, language)
 
     val afghanistanHolidays = afghanistanHolidaysKey in enabledTypes
@@ -71,18 +71,26 @@ data class EventsRepository(
 
     @VisibleForTesting
     val irregularCalendarEventsStore = IrregularCalendarEventsStore(this)
-    private val persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull {
-        createEvent(it, Calendar.SHAMSI)
-    })
-    private val islamicCalendarEvents = IslamicCalendarEventsStore(islamicEvents.mapNotNull {
-        createEvent(it, Calendar.ISLAMIC)
-    })
-    private val gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull {
-        createEvent(it, Calendar.GREGORIAN)
-    })
-    private val nepaliCalendarEvents = NepaliCalendarEventsStore(nepaliEvents.mapNotNull {
-        createEvent(it, Calendar.NEPALI)
-    })
+    private val persianCalendarEvents = PersianCalendarEventsStore(
+        persianEvents.mapNotNull {
+            createEvent(it, Calendar.SHAMSI)
+        },
+    )
+    private val islamicCalendarEvents = IslamicCalendarEventsStore(
+        islamicEvents.mapNotNull {
+            createEvent(it, Calendar.ISLAMIC)
+        },
+    )
+    private val gregorianCalendarEvents = GregorianCalendarEventsStore(
+        gregorianEvents.mapNotNull {
+            createEvent(it, Calendar.GREGORIAN)
+        },
+    )
+    private val nepaliCalendarEvents = NepaliCalendarEventsStore(
+        nepaliEvents.mapNotNull {
+            createEvent(it, Calendar.NEPALI)
+        },
+    )
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
         return listOf(
@@ -90,7 +98,7 @@ data class EventsRepository(
             islamicCalendarEvents.getEvents(jdn.toIslamicDate(), irregularCalendarEventsStore),
             nepaliCalendarEvents.getEvents(jdn.toNepaliDate(), irregularCalendarEventsStore),
             gregorianCalendarEvents
-                .getEvents(jdn.toCivilDate(), irregularCalendarEventsStore, deviceEvents)
+                .getEvents(jdn.toCivilDate(), irregularCalendarEventsStore, deviceEvents),
         ).flatten()
     }
 
@@ -99,12 +107,12 @@ data class EventsRepository(
             persianCalendarEvents.getAllEvents(),
             islamicCalendarEvents.getAllEvents(),
             nepaliCalendarEvents.getAllEvents(),
-            gregorianCalendarEvents.getAllEvents()
+            gregorianCalendarEvents.getAllEvents(),
         ).flatten() + listOf(
             jdn.toPersianDate(),
             jdn.toCivilDate(),
             jdn.toIslamicDate(),
-            jdn.toNepaliDate()
+            jdn.toNepaliDate(),
         ).flatMap {
             val store = irregularCalendarEventsStore
             val thisYear = store.getEventsList<CalendarEvent<*>>(it.year, it.calendar)
@@ -116,7 +124,7 @@ data class EventsRepository(
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
-        record: CalendarRecord, calendar: Calendar
+        record: CalendarRecord, calendar: Calendar,
     ): T? {
         if (skipEvent(record, calendar)) return null
 
@@ -150,7 +158,7 @@ data class EventsRepository(
         return (fromJdn + 1..toJdn).count {
             it.weekDay !in weekEnds && getEvents(
                 it,
-                emptyDeviceCalendar
+                emptyDeviceCalendar,
             ).none(CalendarEvent<*>::isHoliday)
         }
     }

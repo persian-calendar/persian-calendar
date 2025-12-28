@@ -139,13 +139,13 @@ fun SharedTransitionScope.CalendarsOverview(
                 EventsStore.empty(),
                 withZodiac = true,
                 withOtherCalendars = true,
-                withTitle = true
+                withTitle = true,
             )
         },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             this.AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
                 AndroidView(
@@ -160,13 +160,13 @@ fun SharedTransitionScope.CalendarsOverview(
                             boundsTransform = appBoundsTransform,
                         )
                         .clickable { navigateToAstronomy(jdn) }
-                        .size(20.dp)
+                        .size(20.dp),
                 )
             }
             AnimatedContent(
                 if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
                     jdn.weekDay.title,
-                    stringResource(R.string.iran_time)
+                    stringResource(R.string.iran_time),
                 ) else jdn.weekDay.title,
                 transitionSpec = appCrossfadeSpec,
                 label = "weekday name",
@@ -190,8 +190,8 @@ fun SharedTransitionScope.CalendarsOverview(
                 listOf(
                     stringResource(R.string.days_distance),
                     spacedColon,
-                    calculateDaysDifference(resources, jdn, today)
-                ).joinToString("")
+                    calculateDaysDifference(resources, jdn, today),
+                ).joinToString(""),
             )
         }
 
@@ -223,9 +223,9 @@ fun SharedTransitionScope.CalendarsOverview(
                             withStyle(
                                 MaterialTheme.typography.bodyMedium.toSpanStyle().copy(
                                     fontFamily = FontFamily(
-                                        Font(R.font.notosanssymbolsregularzodiacsubset)
+                                        Font(R.font.notosanssymbolsregularzodiacsubset),
                                     ),
-                                )
+                                ),
                             ) { append(Zodiac.SCORPIO.symbol) }
                         },
                         style = MaterialTheme.typography.bodyMedium,
@@ -245,7 +245,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 resources,
                 jdn,
                 withOldEraName = persianDate.isOldEra && language.isUserAbleToReadPersian,
-                withEmoji = true
+                withEmoji = true,
             )
             AutoSizedBodyText(yearName)
         }
@@ -271,7 +271,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         this.AnimatedVisibility(
-            isExpanded && (isAstronomicalExtraFeaturesEnabled || language.isNepali)
+            isExpanded && (isAstronomicalExtraFeaturesEnabled || language.isNepali),
         ) {
             val time = jdn.toAstronomyTime(hourOfDay = 12)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
@@ -298,7 +298,7 @@ fun SharedTransitionScope.CalendarsOverview(
                             " ~" + Tithi.tithiName(System.currentTimeMillis())
                 } else {
                     phase.emoji(coordinates) + " " + language.moonNames(phase) + exactTime
-                }
+                },
             )
         }
 
@@ -353,7 +353,7 @@ fun SharedTransitionScope.CalendarsOverview(
                                 dampingRatio = Spring.DampingRatioMediumBouncy,
                                 stiffness = Spring.StiffnessLow,
                             ),
-                            label = "progress"
+                            label = "progress",
                         )
                         CircularProgressIndicator(
                             modifier = Modifier.semantics { this.hideFromAccessibility() },
@@ -375,8 +375,8 @@ fun SharedTransitionScope.CalendarsOverview(
                     R.string.start_of_year_diff,
                     numeral.format(jdn - startOfYearJdn + 1),
                     numeral.format(currentWeek),
-                    numeral.format(date.month)
-                )
+                    numeral.format(date.month),
+                ),
             )
         }
         this.AnimatedVisibility(isExpanded) {
@@ -385,7 +385,7 @@ fun SharedTransitionScope.CalendarsOverview(
                     R.string.end_of_year_diff,
                     numeral.format(endOfYearJdn - jdn),
                     numeral.format(weeksCount - currentWeek),
-                    numeral.format(12 - date.month)
+                    numeral.format(12 - date.month),
                 ),
                 topPadding = 0.dp,
             )
@@ -413,7 +413,7 @@ private fun AutoSizedBodyText(
         modifier = Modifier
             .padding(top = topPadding, start = 24.dp, end = 24.dp)
             .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         SelectionContainer {
             Text(
@@ -448,7 +448,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
     return resources.getString(
         R.string.spring_equinox,
         numeral.format(equinoxYear),
-        calendar.formatDateAndTime(withWeekDay = true)
+        calendar.formatDateAndTime(withWeekDay = true),
     ) to timestamp
 }
 
@@ -496,14 +496,14 @@ private fun CalendarsFlow(
                             date.monthName,
                             modifier = Modifier
                                 .animateContentSize(appContentSizeAnimationSpec)
-                                .semantics { this.hideFromAccessibility() }
+                                .semantics { this.hideFromAccessibility() },
                         )
                     }
                 }
                 SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                     Text(
                         date.toLinearDate(),
-                        modifier = Modifier.animateContentSize(appContentSizeAnimationSpec)
+                        modifier = Modifier.animateContentSize(appContentSizeAnimationSpec),
                     )
                 }
             }
@@ -516,14 +516,14 @@ private fun CalendarsFlow(
 private fun HandleSacredMonth(
     isExpanded: Boolean,
     date: AbstractDate,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val displaySacredness = isExpanded && date is IslamicDate && date.isSacredMonths && run {
         isAstronomicalExtraFeaturesEnabled && language.isUserAbleToReadPersian
     }
     val backgroundColor by animateColor(
         if (displaySacredness) MaterialTheme.colorScheme.error.copy(alpha = .1f)
-        else Color.Transparent
+        else Color.Transparent,
     )
     val tooltipState = rememberTooltipState()
     val coroutine = rememberCoroutineScope()

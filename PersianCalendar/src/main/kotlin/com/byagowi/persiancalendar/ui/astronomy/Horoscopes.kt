@@ -148,7 +148,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                     formatAngle(longitude % 30), // Remaining angle
                     Zodiac.fromTropical(longitude).symbol,
                     if (language.isArabicScript) RLM else "",
-                    language.formatAuAsKm(distance)
+                    language.formatAuAsKm(distance),
                 )
             }
 
@@ -209,7 +209,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                 autoSize = TextAutoSize.StepBased(
                     maxFontSize = LocalTextStyle.current.fontSize,
                     minFontSize = 9.sp,
-                )
+                ),
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             AscendantZodiac(time, it, abjad = false, isYearEquinox = false)
@@ -447,7 +447,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
             val lines = listOf(
                 if (language.isPersianOrDari) {
                     "لحظهٔ تحویل سال " + numeral.format(persianYear) + spacedComma + ChineseZodiac.fromPersianCalendar(
-                        PersianDate(persianYear, 1, 1)
+                        PersianDate(persianYear, 1, 1),
                     ).format(
                         resources,
                         withEmoji = true,

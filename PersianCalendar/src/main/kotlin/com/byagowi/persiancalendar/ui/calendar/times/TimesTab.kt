@@ -105,7 +105,7 @@ fun SharedTransitionScope.TimesTab(
                 interactionSource = interactionSource,
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
-            )
+            ),
     ) {
         Spacer(Modifier.height(16.dp))
         val isToday = viewModel.selectedDay == today
@@ -128,13 +128,13 @@ fun SharedTransitionScope.TimesTab(
                     onLongClickLabel = if (language.isPersianOrDari) "تنظیم مکان" else {
                         stringResource(R.string.location)
                     },
-                    onLongClick = { navigateToSettingsLocationTab() }
-                )
+                    onLongClick = { navigateToSettingsLocationTab() },
+                ),
             )
             ExpandArrow(
                 modifier = Modifier.size(with(LocalDensity.current) { 20.sp.toDp() }),
                 isExpanded = isExpanded,
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
             )
         }
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(

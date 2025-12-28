@@ -217,23 +217,31 @@ fun SharedTransitionScope.AstronomyScreen(
                             showHoroscopeDialog = true
                             closeMenu()
                         }
-                        AppDropdownMenuItem({
-                            Text(
-                                stringResource(R.string.horoscope) + spacedComma + stringResource(R.string.year)
-                            )
-                        }) {
+                        AppDropdownMenuItem(
+                            {
+                                Text(
+                                    stringResource(R.string.horoscope) + spacedComma + stringResource(
+                                        R.string.year,
+                                    ),
+                                )
+                            },
+                        ) {
                             showYearHoroscopeDialog = true
                             closeMenu()
                         }
-                        if (coordinates != null) AppDropdownMenuItem({
-                            Text(stringResource(R.string.planetary_hours))
-                        }) {
+                        if (coordinates != null) AppDropdownMenuItem(
+                            {
+                                Text(stringResource(R.string.planetary_hours))
+                            },
+                        ) {
                             showPlanetaryHoursDialog = true
                             closeMenu()
                         }
-                        AppDropdownMenuItem({
-                            Text(stringResource(R.string.moon_in_scorpio))
-                        }) {
+                        AppDropdownMenuItem(
+                            {
+                                Text(stringResource(R.string.moon_in_scorpio))
+                            },
+                        ) {
                             showMoonInScorpioDialog = true
                             closeMenu()
                         }
@@ -248,7 +256,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 if (isLandscape) BoxWithConstraints(
                     Modifier
                         .fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
+                        .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
                 ) {
                     val maxHeight = this.maxHeight
                     val maxWidth = this.maxWidth
@@ -314,7 +322,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                 val space = availableHeight / 2 - placeableContent.height / 2
                                 needsScroll = space <= 0
                                 placeableContent.placeRelative(
-                                    0, placeableHeader.height + space.coerceAtLeast(0)
+                                    0, placeableHeader.height + space.coerceAtLeast(0),
                                 )
                             }
                         }
@@ -388,7 +396,7 @@ private fun SharedTransitionScope.SliderBar(
                                     latestVibration = current
                                 }
                                 viewModel.addMinutesOffset(
-                                    (dx * if (isRtl) 1 else -1).toInt()
+                                    (dx * if (isRtl) 1 else -1).toInt(),
                                 )
                             }
                         }
@@ -426,7 +434,7 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
             onLongClick = { buttonScrollSlider(if (isPrevious) -365 else 365) },
             onLongClickLabel = stringResource(
                 if (isPrevious) R.string.previous_x else R.string.next_x,
-                stringResource(R.string.year)
+                stringResource(R.string.year),
             ),
         ),
         tint = MaterialTheme.colorScheme.primary,
@@ -510,9 +518,12 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 
     val resources = LocalResources.current
     val headerCache = remember(resources, language) {
-        lruCache(1024, create = { jdn: Jdn ->
-            viewModel.astronomyState.generateHeader(resources, language, jdn)
-        })
+        lruCache(
+            1024,
+            create = { jdn: Jdn ->
+                viewModel.astronomyState.generateHeader(resources, language, jdn)
+            },
+        )
     }
 
     Column(modifier) {
@@ -573,16 +584,18 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
     }
     val equinoxes = (1..4).map { i ->
         Date(
-            seasonsCache[CivilDate(
-                PersianDate(jdn.toPersianDate().year, i * 3, 29)
-            ).year].let {
+            seasonsCache[
+                CivilDate(
+                    PersianDate(jdn.toPersianDate().year, i * 3, 29),
+                ).year,
+            ].let {
                 when (i) {
                     1 -> it.juneSolstice
                     2 -> it.septemberEquinox
                     3 -> it.decemberSolstice
                     else -> it.marchEquinox
                 }
-            }.toMillisecondsSince1970()
+            }.toMillisecondsSince1970(),
         ).let { it.time to it.toGregorianCalendar().formatDateAndTime() }
     }
     repeat(2) { row ->

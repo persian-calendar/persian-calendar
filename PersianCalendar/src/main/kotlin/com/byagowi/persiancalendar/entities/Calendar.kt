@@ -15,16 +15,16 @@ enum class Calendar(
 ) {
     // So vital, don't ever change names of these
     SHAMSI(
-        R.string.shamsi_calendar, R.string.shamsi_calendar_short, Numeral.PERSIAN
+        R.string.shamsi_calendar, R.string.shamsi_calendar_short, Numeral.PERSIAN,
     ),
     ISLAMIC(
-        R.string.islamic_calendar, R.string.islamic_calendar_short, Numeral.ARABIC_INDIC
+        R.string.islamic_calendar, R.string.islamic_calendar_short, Numeral.ARABIC_INDIC,
     ),
     GREGORIAN(
-        R.string.gregorian_calendar, R.string.gregorian_calendar_short, Numeral.ARABIC
+        R.string.gregorian_calendar, R.string.gregorian_calendar_short, Numeral.ARABIC,
     ),
     NEPALI(
-        R.string.nepali_calendar, R.string.nepali_calendar_short, Numeral.DEVANAGARI
+        R.string.nepali_calendar, R.string.nepali_calendar_short, Numeral.DEVANAGARI,
     );
 
     fun createDate(year: Int, month: Int, day: Int): AbstractDate = when (this) {
@@ -53,7 +53,7 @@ enum class Calendar(
         ((Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - 1) on this).dayOfMonth
 
     private fun getMonthStartFromMonthsDistance(
-        baseYear: Int, baseMonth: Int, monthsDistance: Int
+        baseYear: Int, baseMonth: Int, monthsDistance: Int,
     ): AbstractDate = when (this) {
         ISLAMIC -> IslamicDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
         GREGORIAN -> CivilDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)

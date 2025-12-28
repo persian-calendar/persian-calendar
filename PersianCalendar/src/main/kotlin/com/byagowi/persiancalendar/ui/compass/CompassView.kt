@@ -223,7 +223,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                     12 -> R.string.south
                     18 -> R.string.west
                     else -> R.string.empty
-                }
+                },
             ) else cardinalDirection(it)
 
             it % 3 == 0 -> numeral.format(it * 15) + "°" // Draw the text every alternate 45deg
@@ -284,7 +284,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             withRotation(-azimuth + trueNorth, cx, cy + moonHeight) {
                 solarDraw.moon(
                     this, astronomyState.sun, astronomyState.moon, cx, cy + moonHeight,
-                    r * .8f, astronomyState.moonTiltAngle
+                    r * .8f, astronomyState.moonTiltAngle,
                 )
             }
         }
@@ -301,7 +301,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                 withRotation(-azimuth + trueNorth, cx, cy + planetHeight) {
                     drawText(
                         resources.getString(title), cx, cy + planetHeight - radius / 40,
-                        planetsPaint
+                        planetsPaint,
                     )
                 }
             }

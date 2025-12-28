@@ -34,11 +34,18 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
         title = { Text(stringResource(R.string.athan_gap_summary)) },
         onDismissRequest = onDismissRequest,
         confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                val value = numeral.parseDouble(minutes)
-                if (value != null) context.preferences.edit { putString(PREF_ATHAN_GAP, "$value") }
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    val value = numeral.parseDouble(minutes)
+                    if (value != null) context.preferences.edit {
+                        putString(
+                            PREF_ATHAN_GAP,
+                            "$value",
+                        )
+                    }
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }

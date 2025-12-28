@@ -473,7 +473,7 @@ fun loadLanguageResources(resources: Resources) {
         "d" to resources.getString(R.string.shift_work_morning), // d -> day work, legacy key
         "r" to resources.getString(R.string.shift_work_off), // r -> rest, legacy key
         "e" to resources.getString(R.string.shift_work_evening),
-        "n" to resources.getString(R.string.shift_work_night)
+        "n" to resources.getString(R.string.shift_work_night),
     )
     calendarsTitlesAbbr_.value =
         Calendar.entries.associateWith { resources.getString(it.shortTitle) }
@@ -531,16 +531,16 @@ fun updateStoredPreference(context: Context) {
     customFontName_.value = preferences.getString(PREF_CUSTOM_FONT_NAME, null)
     customImageName_.value = preferences.getString(PREF_CUSTOM_IMAGE_NAME, null)
     englishGregorianPersianMonths_.value = language.isPersian && preferences.getBoolean(
-        PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+        PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
     )
     easternGregorianArabicMonths_.value = language.isArabic && preferences.getBoolean(
-        PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
+        PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
     )
     alternativePersianMonthsInAzeri_.value = language == Language.AZB && preferences.getBoolean(
-        PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS, DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+        PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS, DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
     )
     englishWeekDaysInIranEnglish_.value = language == Language.EN_IR && preferences.getBoolean(
-        PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH, DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
+        PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH, DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
     )
 
     prefersWidgetsDynamicColors_.value = userSetTheme.isDynamicColors && preferences.getBoolean(
@@ -558,17 +558,17 @@ fun updateStoredPreference(context: Context) {
 
     clockIn24_.value = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(
-        PREF_IRAN_TIME, DEFAULT_IRAN_TIME
+        PREF_IRAN_TIME, DEFAULT_IRAN_TIME,
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     isDynamicIconEverEnabled_.value = PREF_DYNAMIC_ICON_ENABLED in preferences
     isDynamicIconEnabled_.value = preferences.getBoolean(
-        PREF_DYNAMIC_ICON_ENABLED, DEFAULT_DYNAMIC_ICON_ENABLED
+        PREF_DYNAMIC_ICON_ENABLED, DEFAULT_DYNAMIC_ICON_ENABLED,
     ) && supportsDynamicIcon(mainCalendar, language)
     isNotifyDateOnLockScreen_.value = preferences.getBoolean(
-        PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
+        PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN,
     )
     isLargeDayNumberOnNotification_.value = preferences.getBoolean(
-        PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION, DEFAULT_LARGE_ICON_ON_NOTIFICATION
+        PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION, DEFAULT_LARGE_ICON_ON_NOTIFICATION,
     )
     isWidgetClock_.value = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
@@ -586,10 +586,10 @@ fun updateStoredPreference(context: Context) {
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
     calculationMethod_.value = CalculationMethod.valueOf(
-        preferences.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
+        preferences.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD,
     )
     asrMethod_.value = if (calculationMethod.isJafari || !preferences.getBoolean(
-            PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
+            PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority,
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
     islamicCalendarOffset_.intValue = getIslamicCalendarOffset(preferences)
@@ -600,7 +600,7 @@ fun updateStoredPreference(context: Context) {
     highLatitudesMethod_.value = HighLatitudesMethod.valueOf(
         if (coordinates?.isHighLatitude != true) DEFAULT_HIGH_LATITUDES_METHOD
         else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)
-            ?: DEFAULT_HIGH_LATITUDES_METHOD
+            ?: DEFAULT_HIGH_LATITUDES_METHOD,
     )
     athanSoundName_.value = preferences.getString(PREF_ATHAN_NAME, null)
 
@@ -636,15 +636,16 @@ fun updateStoredPreference(context: Context) {
 
     runCatching {
         val mainCalendar = Calendar.valueOf(
-            preferences.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultCalendars[0].name
+            preferences.getString(PREF_MAIN_CALENDAR_KEY, null)
+                ?: language.defaultCalendars[0].name,
         )
         val otherCalendars = (preferences.getString(PREF_OTHER_CALENDARS_KEY, null)
             ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }).splitFilterNotEmpty(
-            ","
+            ",",
         ).map(Calendar::valueOf)
         enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct()
         secondaryCalendarEnabled_.value = preferences.getBoolean(
-            PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
+            PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE,
         )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
@@ -665,13 +666,13 @@ fun updateStoredPreference(context: Context) {
         preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     eventCalendarsIdsToExclude_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
         *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null).orEmpty()).splitFilterNotEmpty(
-            ","
-        ).mapNotNull { it.toLongOrNull() }.toLongArray()
+            ",",
+        ).mapNotNull { it.toLongOrNull() }.toLongArray(),
     ) else emptyLongSet()
     eventCalendarsIdsAsHoliday_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
         *(preferences.getString(PREF_CALENDARS_IDS_AS_HOLIDAY, null).orEmpty()).splitFilterNotEmpty(
-            ","
-        ).mapNotNull { it.toLongOrNull() }.toLongArray()
+            ",",
+        ).mapNotNull { it.toLongOrNull() }.toLongArray(),
     ) else emptyLongSet()
 
     whatToShowOnWidgets_.value =
@@ -682,7 +683,7 @@ fun updateStoredPreference(context: Context) {
     showMoonInScorpio_.value = isAstronomicalExtraFeaturesEnabled_.value && preferences.getBoolean(
         PREF_SHOW_MOON_IN_SCORPIO,
         // It's true for the older users but the moment user enables astronomical features it disables this
-        true
+        true,
     )
     numericalDatePreferred_.value =
         preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, DEFAULT_NUMERICAL_DATE_PREFERRED)

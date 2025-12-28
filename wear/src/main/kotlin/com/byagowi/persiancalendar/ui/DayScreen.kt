@@ -46,7 +46,7 @@ fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
                         Text(
                             localeUtils.persianMonth(persianDate),
                             modifier = Modifier.padding(top = 44.dp),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }

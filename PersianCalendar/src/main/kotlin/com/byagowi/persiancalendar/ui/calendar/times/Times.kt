@@ -37,7 +37,7 @@ import java.util.Date
 
 @Composable
 fun SharedTransitionScope.Times(
-    isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
+    isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean,
 ) {
     AnimatedContent(isExpanded) { isExpandedState ->
         FlowRow(
@@ -46,7 +46,7 @@ fun SharedTransitionScope.Times(
             verticalArrangement = Arrangement.SpaceEvenly,
             maxItemsInEachRow = if (
                 LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-            ) Int.MAX_VALUE else 3
+            ) Int.MAX_VALUE else 3,
         ) {
             val isJafari = calculationMethod.isJafari
             val times = PrayTime.allTimes(isJafari)
@@ -61,7 +61,7 @@ fun SharedTransitionScope.Times(
                         .defaultMinSize(minWidth = ItemWidth.dp)
                         .sharedBounds(
                             rememberSharedContentState(
-                                key = SHARED_CONTENT_KEY_TIME + prayTime.name
+                                key = SHARED_CONTENT_KEY_TIME + prayTime.name,
                             ),
                             animatedVisibilityScope = this@AnimatedContent,
                             boundsTransform = appBoundsTransform,
@@ -69,7 +69,7 @@ fun SharedTransitionScope.Times(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val textColor by animateColor(
-                        if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current
+                        if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current,
                     )
                     Text(stringResource(prayTime.stringRes), color = textColor)
                     AnimatedContent(

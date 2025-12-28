@@ -123,7 +123,7 @@ fun NumberPicker(
                             adjustTarget = { target ->
                                 val coercedTarget = target % halfNumbersColumnHeightPx
                                 val coercedAnchors = listOf(
-                                    -halfNumbersColumnHeightPx, 0f, halfNumbersColumnHeightPx
+                                    -halfNumbersColumnHeightPx, 0f, halfNumbersColumnHeightPx,
                                 )
                                 val coercedPoint =
                                     coercedAnchors.minByOrNull { abs(it - coercedTarget) } ?: 0f
@@ -139,7 +139,7 @@ fun NumberPicker(
                                 value,
                                 endValue,
                                 halfNumbersColumnHeightPx,
-                            )
+                            ),
                         )
                         animatedOffset.snapTo(0f)
                     }
@@ -161,7 +161,7 @@ fun NumberPicker(
                         .height(numbersColumnHeight / 3)
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
-                            maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
+                            maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx),
                         )
                         .clickable(
                             onClickLabel = onPreviousLabel,
@@ -201,8 +201,8 @@ fun NumberPicker(
                             .alpha(
                                 maxOf(
                                     minimumAlpha,
-                                    1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
-                                )
+                                    1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx,
+                                ),
                             )
                             .then(
                                 if (disableEdit) Modifier else Modifier.clickable(
@@ -219,7 +219,7 @@ fun NumberPicker(
                         .height(numbersColumnHeight / 3)
                         .offset(y = halfNumbersColumnHeight)
                         .alpha(
-                            maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
+                            maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx),
                         )
                         .clickable(
                             onClickLabel = onNextLabel,
@@ -293,7 +293,7 @@ fun NumberEdit(
         }
         val textBackground by animateColor(
             if (inError) MaterialTheme.colorScheme.error.copy(alpha = .1f)
-            else Color.Transparent
+            else Color.Transparent,
         )
         BasicTextField(
             value = value,
@@ -343,7 +343,7 @@ private fun Label(text: String, modifier: Modifier) {
             autoSize = TextAutoSize.StepBased(
                 minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                 maxFontSize = LocalTextStyle.current.fontSize,
-            )
+            ),
         )
     }
 }

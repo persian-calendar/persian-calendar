@@ -13,7 +13,7 @@ import javax.microedition.khronos.opengles.GL10
 
 class GLRenderer(
     val onError: (String) -> Unit = { debugLog(it) },
-    val onSurfaceCreated: (GLRenderer) -> Unit = {}
+    val onSurfaceCreated: (GLRenderer) -> Unit = {},
 ) : GLSurfaceView.Renderer {
     var overriddenTime = 0f
     var overriddenY = 0f
@@ -55,7 +55,7 @@ class GLRenderer(
         val floatBuffer = buffer.asFloatBuffer().put(rectangleVertices).position(0)
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayBufferHandle)
         GLES20.glBufferData(
-            GLES20.GL_ARRAY_BUFFER, buffer.limit(), floatBuffer, GLES20.GL_STATIC_DRAW
+            GLES20.GL_ARRAY_BUFFER, buffer.limit(), floatBuffer, GLES20.GL_STATIC_DRAW,
         )
     }
 
@@ -81,7 +81,7 @@ class GLRenderer(
         GLES20.glEnableVertexAttribArray(positionHandle)
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayBufferHandle)
         GLES20.glVertexAttribPointer(
-            positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0
+            positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0,
         )
         GLES20.glUniform2f(resolutionHandle, width, height)
         val time = System.nanoTime() / 1e9f
@@ -138,10 +138,10 @@ class GLRenderer(
         if (textureHandle[0] != 0) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0])
             GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR
+                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR,
             )
             GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR
+                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR,
             )
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
         }

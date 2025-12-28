@@ -98,7 +98,7 @@ class SunView(context: Context) : View(context) {
 
         dayPaint.shader = LinearGradient(
             width * .17f, 0f, width / 2f, 0f, colors.dayColor, colors.middayColor,
-            Shader.TileMode.MIRROR
+            Shader.TileMode.MIRROR,
         )
 
         if (width != 0) segmentByPixel = 2 * PI / width
@@ -175,7 +175,7 @@ class SunView(context: Context) : View(context) {
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
                 run {
                     solarDraw.moon(
-                        canvas, sun ?: return@run, moon ?: return@run, cx, cy, radius
+                        canvas, sun ?: return@run, moon ?: return@run, cx, cy, radius,
                     )
                 }
             }
@@ -190,13 +190,13 @@ class SunView(context: Context) : View(context) {
             it.color = colors.sunriseTextColor
         }
         canvas.drawText(
-            sunriseString, width * if (isRtl) .83f else .17f, height * .2f, paint
+            sunriseString, width * if (isRtl) .83f else .17f, height * .2f, paint,
         )
         paint.color = colors.middayTextColor
         canvas.drawText(middayString, width / 2f, height * .94f, paint)
         paint.color = colors.sunsetTextColor
         canvas.drawText(
-            sunsetString, width * if (isRtl) .17f else .83f, height * .2f, paint
+            sunsetString, width * if (isRtl) .17f else .83f, height * .2f, paint,
         )
 
         // draw remaining time

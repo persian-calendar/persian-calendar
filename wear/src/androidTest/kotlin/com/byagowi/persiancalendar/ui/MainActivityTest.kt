@@ -70,7 +70,7 @@ class MainActivityTest {
             .assertIsNotDisplayed()
         assertTrue(
             "Activity should not be finishing after back press on nested screen",
-            !composeTestRule.activity.isFinishing
+            !composeTestRule.activity.isFinishing,
         )
     }
 
@@ -86,7 +86,7 @@ class MainActivityTest {
             composeTestRule.waitForIdle()
             assertTrue(
                 "Activity should be finishing after back press on root screen",
-                composeTestRule.activity.isFinishing
+                composeTestRule.activity.isFinishing,
             )
         }.onFailure { exception ->
             if (exception !is NoActivityResumedException) {

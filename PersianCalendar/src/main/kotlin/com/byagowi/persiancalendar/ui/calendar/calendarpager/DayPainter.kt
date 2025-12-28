@@ -49,8 +49,8 @@ class DayPainter(
         isBoldFont = isBoldFont,
         zodiacFont = ResourcesCompat.getFont(
             context,
-            R.font.notosanssymbolsregularzodiacsubset
-        )
+            R.font.notosanssymbolsregularzodiacsubset,
+        ),
     )
     private var text = ""
     private var today = false
@@ -84,7 +84,7 @@ class DayPainter(
                 width / 2,
                 height / 2,
                 min(width, height) / 2 - paints.circlePadding,
-                selectedDayPaint
+                selectedDayPaint,
             )
         }
         if (today) canvas.drawCircle(
@@ -122,14 +122,15 @@ class DayPainter(
                     (i - (indicators.size - 1) / 2f) * offsetDirection
             canvas.drawCircle(
                 width / 2f + xOffset, height / 2 + paints.eventYOffset,
-                paints.eventIndicatorRadius, when {
+                paints.eventIndicatorRadius,
+                when {
                     dayIsSelected -> paints.headerTextSelectedPaint
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     isHighTextContrastEnabled && holiday && paint == paints.eventIndicatorPaint ->
                         paints.dayOfMonthNumberTextHolidayPaint
 
                     else -> paint
-                }
+                },
             )
         }
     }
@@ -148,7 +149,7 @@ class DayPainter(
             header,
             (width - lineWidth) / 2 + if (isRtl) -spaceWidth else zodiacWidth + spaceWidth,
             height / 2 + paints.headerYOffset,
-            if (dayIsSelected) paints.headerTextSelectedPaint else paints.headerTextPaint
+            if (dayIsSelected) paints.headerTextSelectedPaint else paints.headerTextPaint,
         )
         if (isMoonInScorpio) canvas.drawText(
             Zodiac.SCORPIO.symbol,
@@ -174,13 +175,13 @@ class DayPainter(
         this.header = listOfNotNull(
             if (secondaryCalendar == null || jdn == null) null
             else getSecondaryCalendarNumeral(secondaryCalendar).format(
-                (jdn on secondaryCalendar).dayOfMonth
+                (jdn on secondaryCalendar).dayOfMonth,
             ),
             header,
         ).joinToString(" ")
         this.indicators = listOf(
             hasAppointment to paints.appointmentIndicatorPaint,
-            (hasEvent || (isHighTextContrastEnabled && holiday)) to paints.eventIndicatorPaint
+            (hasEvent || (isHighTextContrastEnabled && holiday)) to paints.eventIndicatorPaint,
         ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
     }
 

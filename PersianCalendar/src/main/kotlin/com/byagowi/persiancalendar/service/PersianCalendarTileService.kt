@@ -30,7 +30,7 @@ class PersianCalendarTileService : TileService() {
             } else @SuppressLint("StartActivityAndCollapseDeprecated") {
                 @Suppress("DEPRECATION")
                 startActivityAndCollapse(
-                    Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                 )
             }
         }.onFailure(logException)

@@ -53,7 +53,7 @@ fun Bitmap.toPngByteArray(): ByteArray {
 
 inline fun Context.saveAsCacheFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
-        applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action)
+        applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action),
     )
 }
 
@@ -74,10 +74,15 @@ fun Context.shareText(text: String, chooserTitle: String) {
 
 private fun Context.shareUriFile(uri: Uri, mime: String) {
     runCatching {
-        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
-            it.type = mime
-            it.putExtra(Intent.EXTRA_STREAM, uri)
-        }, getString(R.string.share)))
+        startActivity(
+            Intent.createChooser(
+                Intent(Intent.ACTION_SEND).also {
+                    it.type = mime
+                    it.putExtra(Intent.EXTRA_STREAM, uri)
+                },
+                getString(R.string.share),
+            ),
+        )
     }.onFailure(logException)
 }
 
@@ -89,7 +94,7 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 
 fun getFileName(context: Context, uri: Uri): String? {
     if (uri.scheme == ContentResolver.SCHEME_CONTENT) context.contentResolver.query(
-        uri, null, null, null, null
+        uri, null, null, null, null,
     )?.use { cursor ->
         if (cursor.moveToFirst()) {
             val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -104,11 +109,11 @@ fun getFileName(context: Context, uri: Uri): String? {
 }
 
 fun createFlingDetector(
-    context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean
+    context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean,
 ): GestureDetector {
     class FlingListener : GestureDetector.SimpleOnGestureListener() {
         override fun onFling(
-            e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float
+            e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float,
         ): Boolean = callback(velocityX, velocityY)
     }
 

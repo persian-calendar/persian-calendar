@@ -74,7 +74,7 @@ fun CalendarsTypesPicker(
         stringResource(
             if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
                 it.shortTitle
-            } else it.title
+            } else it.title,
         )
     }
 }
@@ -162,7 +162,7 @@ private fun <T> SegmentedButtonItemsPicker(
                                 alpha = min(
                                     abs(i - cellLeft.value / cellWidth),
                                     abs(i - cellRight.value / cellWidth),
-                                ).coerceAtMost(AppBlendAlpha)
+                                ).coerceAtMost(AppBlendAlpha),
                             ),
                             strokeWidth = 1.dp.toPx(),
                             start = Offset(x, 0f),

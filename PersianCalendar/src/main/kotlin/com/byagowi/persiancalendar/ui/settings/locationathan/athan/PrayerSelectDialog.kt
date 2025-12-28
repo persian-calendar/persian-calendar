@@ -37,7 +37,7 @@ import com.byagowi.persiancalendar.utils.startAthan
 fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val alarms = rememberSaveable(
-        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
+        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
     ) {
         context.preferences.getString(PREF_ATHAN_ALARM, null).orEmpty()
             .splitFilterNotEmpty(",").mapNotNull(PrayTime::fromName).toMutableStateList()
@@ -46,10 +46,17 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.athan_alarm)) },
         confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                context.preferences.edit { putString(PREF_ATHAN_ALARM, alarms.joinToString(",")) }
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    context.preferences.edit {
+                        putString(
+                            PREF_ATHAN_ALARM,
+                            alarms.joinToString(","),
+                        )
+                    }
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
@@ -94,7 +101,7 @@ fun PrayerSelectPreviewDialog(onDismissRequest: () -> Unit) {
                         startAthan(context, it, null)
                     }
                     .height(SettingsItemHeight.dp)
-                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) { Text(stringResource(it.stringRes)) }
         }
     }

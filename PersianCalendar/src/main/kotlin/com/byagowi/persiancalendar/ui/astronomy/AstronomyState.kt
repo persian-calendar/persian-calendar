@@ -83,7 +83,7 @@ class AstronomyState(val date: GregorianCalendar) {
             jdn = jdn,
             withOldEraName = language.isPersianOrDari,
             withEmoji = true,
-            time = date
+            time = date,
         )
     }
 
@@ -96,7 +96,7 @@ class AstronomyState(val date: GregorianCalendar) {
             Body.Jupiter,
             Body.Saturn,
             Body.Uranus,
-            Body.Neptune
+            Body.Neptune,
         )
     }
 }

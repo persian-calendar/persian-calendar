@@ -123,7 +123,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
             summary = stringResource(R.string.show_device_calendar_events_summary),
             onBeforeToggle = {
                 if (it && ActivityCompat.checkSelfPermission(
-                        context, Manifest.permission.READ_CALENDAR
+                        context, Manifest.permission.READ_CALENDAR,
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     showPermissionDialog = true
@@ -134,7 +134,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
                 var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                 Row {
                     this.AnimatedVisibility(
-                        isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty()
+                        isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty(),
                     ) { FilledSettingsButton { showEventsSettingsDialog = true } }
                 }
                 if (showEventsSettingsDialog) EventsSettingsDialog {
@@ -146,7 +146,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     }
     SettingsClickable(
         stringResource(R.string.calendars_priority),
-        stringResource(R.string.calendars_priority_summary)
+        stringResource(R.string.calendars_priority_summary),
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
     WeekOfYearSetting()
     run {
@@ -181,7 +181,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
                             val tooltipState = rememberTooltipState()
                             TooltipBox(
                                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                    TooltipAnchorPosition.Above
+                                    TooltipAnchorPosition.Above,
                                 ),
                                 tooltip = { PlainTooltip { Text("نشان عقرب در ستاره‌شناسی") } },
                                 state = tooltipState,
@@ -194,7 +194,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
                                 Text(
                                     Zodiac.SCORPIO.symbol,
                                     fontFamily = FontFamily(
-                                        Font(R.font.notosanssymbolsregularzodiacsubset)
+                                        Font(R.font.notosanssymbolsregularzodiacsubset),
                                     ),
                                     fontSize = 20.sp,
                                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -253,7 +253,7 @@ fun WeekOfYearSetting() {
         key = PREF_SHOW_WEEK_OF_YEAR_NUMBER,
         value = isShowWeekOfYearEnabled,
         title = stringResource(R.string.week_number),
-        summary = stringResource(R.string.week_number_summary)
+        summary = stringResource(R.string.week_number_summary),
     )
 }
 
@@ -399,13 +399,15 @@ private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, 
     val calendars = remember {
         runCatching {
             context.contentResolver.query(
-                CalendarContract.Calendars.CONTENT_URI.buildUpon().build(), arrayOf(
+                CalendarContract.Calendars.CONTENT_URI.buildUpon().build(),
+                arrayOf(
                     CalendarContract.Calendars._ID, // 0
                     CalendarContract.Calendars.ACCOUNT_NAME, // 1
                     CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, // 2
                     CalendarContract.Calendars.CALENDAR_COLOR, // 3
                     CalendarContract.Calendars.VISIBLE, // 4
-                ), null, null, null
+                ),
+                null, null, null,
             )?.use {
                 generateSequence { if (it.moveToNext()) it else null }.filter {
                     it.getString(4) == "1"

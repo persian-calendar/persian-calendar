@@ -67,7 +67,7 @@ private inline fun <T> List<T>.lastIndexOfIndexed(predicate: (Int, T) -> Boolean
 }
 
 private val animationSpec = spring<Float>(
-    stiffness = Spring.StiffnessMediumLow
+    stiffness = Spring.StiffnessMediumLow,
 )
 
 class ReorderableListState internal constructor(
@@ -75,7 +75,7 @@ class ReorderableListState internal constructor(
     spacing: Float = 0f,
     private val onMove: () -> Unit,
     private val onSettle: (fromIndex: Int, toIndex: Int) -> Unit,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) {
     internal val itemIntervals = MutableList(listSize) { ItemInterval() }
     internal val itemOffsets = List(listSize) {
@@ -272,7 +272,7 @@ fun <T> ReorderableColumn(
                 modifier = Modifier
                     .onGloballyPositioned { cord ->
                         reorderableListState.itemIntervals[i] = ItemInterval(
-                            start = cord.positionInParent().y, size = cord.size.height
+                            start = cord.positionInParent().y, size = cord.size.height,
                         )
                     }
                     .graphicsLayer { translationY = reorderableListState.itemOffsets[i].value }

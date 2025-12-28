@@ -80,7 +80,7 @@ fun AppDropdownMenuCheckableItem(
         modifier = Modifier.toggleable(
             value = isChecked,
             onValueChange = onValueChange,
-            role = Role.Checkbox
+            role = Role.Checkbox,
         ),
         text = { Text(text) },
         trailingIcon = { Checkbox(checked = isChecked, onCheckedChange = null) },

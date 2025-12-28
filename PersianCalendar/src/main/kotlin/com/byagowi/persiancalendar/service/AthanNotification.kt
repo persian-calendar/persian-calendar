@@ -57,7 +57,7 @@ class AthanNotification : Service() {
         val notificationManager = getSystemService<NotificationManager>()
 
         val prayTime = PrayTime.fromName(
-            intent.getStringExtra(KEY_EXTRA_PRAYER)
+            intent.getStringExtra(KEY_EXTRA_PRAYER),
         ).debugAssertNotNull ?: PrayTime.FAJR
         if (!notificationAthan) startAthanActivity(this, prayTime)
 
@@ -65,7 +65,7 @@ class AthanNotification : Service() {
         if (soundUri != null) runCatching {
             // ensure custom reminder sounds play well
             grantUriPermission(
-                "com.android.systemui", soundUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+                "com.android.systemui", soundUri, Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
         }.onFailure(logException)
 
@@ -73,7 +73,7 @@ class AthanNotification : Service() {
             val notificationChannel = NotificationChannel(
                 notificationChannelId, getString(R.string.athan),
                 if (notificationAthan) NotificationManager.IMPORTANCE_HIGH
-                else NotificationManager.IMPORTANCE_DEFAULT
+                else NotificationManager.IMPORTANCE_DEFAULT,
             ).also {
                 it.description = getString(R.string.athan)
                 it.enableLights(true)
@@ -82,12 +82,13 @@ class AthanNotification : Service() {
                 it.enableVibration(athanVibration)
                 it.setBypassDnd(prayTime.isBypassDnd)
                 if (soundUri == null) it.setSound(null, null) else it.setSound(
-                    soundUri, AudioAttributes.Builder()
+                    soundUri,
+                    AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
                         .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-                        .build()
+                        .build(),
                 )
             }
             notificationManager?.createNotificationChannel(notificationChannel)
@@ -118,8 +119,8 @@ class AthanNotification : Service() {
                         .setAction(CANCEL_ATHAN_NOTIFICATION)
                         .putExtra(KEY_EXTRA_PRAYER, prayTime)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                ),
             )
 
         if (notificationAthan) {

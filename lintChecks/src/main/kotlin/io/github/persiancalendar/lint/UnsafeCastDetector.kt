@@ -21,7 +21,7 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
             if (" as " in sourceText) context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException, then consider use of `.debugAssertNotNull` if is needed."
+                message = "Use safe cast `as?` instead of unsafe cast `as` to avoid ClassCastException, then consider use of `.debugAssertNotNull` if is needed.",
             )
         }
     }
@@ -37,7 +37,7 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
             implementation = Implementation(
                 UnsafeCastDetector::class.java,
                 Scope.JAVA_FILE_SCOPE,
-            )
+            ),
         )
     }
 }

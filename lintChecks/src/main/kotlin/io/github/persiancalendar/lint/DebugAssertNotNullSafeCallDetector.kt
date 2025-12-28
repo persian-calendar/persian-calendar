@@ -41,7 +41,7 @@ class DebugAssertNotNullSafeCallDetector : Detector(), SourceCodeScanner {
             implementation = Implementation(
                 DebugAssertNotNullSafeCallDetector::class.java,
                 Scope.JAVA_FILE_SCOPE,
-            )
+            ),
         )
     }
 }

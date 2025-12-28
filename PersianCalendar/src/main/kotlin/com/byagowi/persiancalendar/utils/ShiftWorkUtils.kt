@@ -49,7 +49,7 @@ fun getShiftWorksInDaysDistance(jdn: Jdn): String? {
     @Suppress("SimplifiableCallChain")
     return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
         pluralStringResource(
-            R.plurals.days, days.size, numeral.format(days.size)
+            R.plurals.days, days.size, numeral.format(days.size),
         ) + " " + title
     }.joinToString(spacedComma)
 }

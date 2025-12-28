@@ -53,7 +53,7 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
     ): ShortTextComplicationData.Builder {
         return ShortTextComplicationData.Builder(
             text = PlainComplicationText.Builder(body).build(),
-            contentDescription = PlainComplicationText.Builder("$title\n$body").build()
+            contentDescription = PlainComplicationText.Builder("$title\n$body").build(),
         ).setTitle(PlainComplicationText.Builder(title).build())
     }
 }
@@ -100,7 +100,7 @@ private fun Context.getTapAction(): PendingIntent? {
         this,
         0,
         Intent(this, MainActivity::class.java),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 }
 

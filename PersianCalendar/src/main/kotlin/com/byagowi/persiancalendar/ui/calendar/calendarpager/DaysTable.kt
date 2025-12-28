@@ -167,7 +167,7 @@ fun daysTable(
             modifier
                 .height(
                     if (onlyWeek != null) suggestedHeight + 8.dp
-                    else (cellHeight * (daysRowsCount + 1) + 12.dp)
+                    else (cellHeight * (daysRowsCount + 1) + 12.dp),
                 )
                 .semantics { this.isTraversalGroup = true },
         ) {
@@ -212,7 +212,7 @@ fun daysTable(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = cellsSizeModifier.offset(
-                        x = pagerArrowSizeAndPadding.dp + cellWidth * column
+                        x = pagerArrowSizeAndPadding.dp + cellWidth * column,
                     ),
                 ) {
                     val weekDay = weekStart + column
@@ -323,7 +323,7 @@ fun daysTable(
                                 )
                                 .then(
                                     if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f)
-                                    else Modifier
+                                    else Modifier,
                                 ),
                         ) {
                             val isSelected = isHighlighted && selectedDay == day
@@ -355,7 +355,7 @@ fun daysTable(
                                 )
                                 if (day == focusedDay) drawCircle(
                                     focusColor,
-                                    radius = cellRadius * 1.5f
+                                    radius = cellRadius * 1.5f,
                                 )
                             }
                             Text(
@@ -364,7 +364,7 @@ fun daysTable(
                                         previousMonthLength - (startingWeekDay - dayOffset) + 1
                                     } else if (onlyWeek != null && isAfterMonth) {
                                         dayOffset + 1 - monthLength - startingWeekDay
-                                    } else dayOffset + 1 - startingWeekDay
+                                    } else dayOffset + 1 - startingWeekDay,
                                 ),
                                 color = when {
                                     isHoliday -> monthColors.holidays
@@ -395,7 +395,7 @@ fun daysTable(
                 Canvas(
                     Modifier
                         .fillMaxSize()
-                        .zIndex(-1f)
+                        .zIndex(-1f),
                 ) {
                     holidaysPositions.forEach { row, column ->
                         val center = Offset(

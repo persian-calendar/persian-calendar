@@ -69,7 +69,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     @Composable
     final override fun Header() {
         val size = AppWidgetManager.getInstance(this)?.getWidgetSize(
-            LocalResources.current, appWidgetId
+            LocalResources.current, appWidgetId,
         ) ?: DpSize(100.dp, 100.dp)
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

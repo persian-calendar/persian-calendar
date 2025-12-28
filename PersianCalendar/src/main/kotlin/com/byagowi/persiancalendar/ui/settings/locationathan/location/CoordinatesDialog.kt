@@ -79,10 +79,12 @@ fun CoordinatesDialog(
         title = { Text(stringResource(R.string.coordinates)) },
         neutralButton = {
             navigateToMap?.also {
-                TextButton(onClick = {
-                    onDismissRequest()
-                    navigateToMap()
-                }) { Text(stringResource(R.string.map)) }
+                TextButton(
+                    onClick = {
+                        onDismissRequest()
+                        navigateToMap()
+                    },
+                ) { Text(stringResource(R.string.map)) }
             }
             if (isFromMap) SwitchWithLabel(
                 stringResource(R.string.save),
@@ -94,25 +96,27 @@ fun CoordinatesDialog(
         },
         confirmButton = {
             val context = LocalContext.current
-            TextButton(onClick = {
-                onDismissRequest()
-                val parts = state.mapIndexed { i, x ->
-                    // Replace empty elevation with zero
-                    if (i == 2 && x.value.isEmpty()) "0" else x.value
-                }.mapIndexedNotNull { i, coordinate ->
-                    // Make sure coordinates array has both parsable and in range numbers
-                    parseDouble(coordinate)?.takeIf { isValidPart(it, i) }
-                }
-                if (parts.size == 3) {
-                    val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
-                    if (saveCoordinates) context.preferences.saveLocation(
-                        coordinates = newCoordinates,
-                        cityName = cityName.orEmpty(),
-                        countryCode = countryCode.orEmpty()
-                    )
-                    notifyChange(newCoordinates)
-                } else context.preferences.edit { fields.map { it.second }.forEach(::remove) }
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    val parts = state.mapIndexed { i, x ->
+                        // Replace empty elevation with zero
+                        if (i == 2 && x.value.isEmpty()) "0" else x.value
+                    }.mapIndexedNotNull { i, coordinate ->
+                        // Make sure coordinates array has both parsable and in range numbers
+                        parseDouble(coordinate)?.takeIf { isValidPart(it, i) }
+                    }
+                    if (parts.size == 3) {
+                        val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
+                        if (saveCoordinates) context.preferences.saveLocation(
+                            coordinates = newCoordinates,
+                            cityName = cityName.orEmpty(),
+                            countryCode = countryCode.orEmpty(),
+                        )
+                        notifyChange(newCoordinates)
+                    } else context.preferences.edit { fields.map { it.second }.forEach(::remove) }
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
     ) {

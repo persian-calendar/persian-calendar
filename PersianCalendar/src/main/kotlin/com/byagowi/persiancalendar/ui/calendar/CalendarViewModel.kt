@@ -215,7 +215,7 @@ class CalendarViewModel() : ViewModel() {
                         deviceCalendarEvents = EventsStore.empty(),
                         withZodiac = true,
                         withOtherCalendars = true,
-                        withTitle = true
+                        withTitle = true,
                     ),
                     Toast.LENGTH_SHORT,
                 ).show()

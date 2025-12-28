@@ -66,7 +66,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     private val path = Path()
     private fun drawQr(
         canvas: Canvas, size: Int, factor: Float,
-        qr: List<List<Boolean>>, previousQr: List<List<Boolean>>
+        qr: List<List<Boolean>>, previousQr: List<List<Boolean>>,
     ) {
         val cells = qr.size // cells in a row or a column
         val cellSize = size.toFloat() / (qr.size.takeIf { it != 0 } ?: return)
@@ -121,11 +121,11 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
             resources.displayMetrics.let {
                 if (it.heightPixels > it.widthPixels) it.widthPixels
                 else it.heightPixels * 2 / 3
-            }
+            },
         )
         super.onMeasure(
             MeasureSpec.makeMeasureSpec(viewSize, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(viewSize, MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(viewSize, MeasureSpec.EXACTLY),
         )
     }
 

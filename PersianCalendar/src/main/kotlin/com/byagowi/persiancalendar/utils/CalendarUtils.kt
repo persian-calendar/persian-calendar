@@ -120,8 +120,8 @@ fun getA11yDaySummary(
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn, weekStart)
         appendLine().appendLine().append(
             resources.getString(
-                R.string.nth_week_of_year, numeral.format(weekOfYearStart)
-            )
+                R.string.nth_week_of_year, numeral.format(weekOfYearStart),
+            ),
         )
     }
 
@@ -139,7 +139,7 @@ fun GregorianCalendar.toCivilDate(): CivilDate {
     return CivilDate(
         this[GregorianCalendar.YEAR],
         this[GregorianCalendar.MONTH] + 1,
-        this[GregorianCalendar.DAY_OF_MONTH]
+        this[GregorianCalendar.DAY_OF_MONTH],
     )
 }
 
@@ -156,7 +156,7 @@ fun GregorianCalendar.formatDateAndTime(withWeekDay: Boolean = false): String {
     val weekDayName = if (withWeekDay) jdn.weekDay.title + spacedComma else ""
     return language.timeAndDateFormat.format(
         Clock(this).toFormattedString(),
-        weekDayName + formatDate(jdn on mainCalendar, forceNonNumerical = true)
+        weekDayName + formatDate(jdn on mainCalendar, forceNonNumerical = true),
     )
 }
 
@@ -171,7 +171,7 @@ private fun readDeviceEvents(
     searchTerm: String? = null,
 ): List<CalendarEvent.DeviceCalendarEvent> {
     if (!isShowDeviceCalendarEvents || ActivityCompat.checkSelfPermission(
-            context, Manifest.permission.READ_CALENDAR
+            context, Manifest.permission.READ_CALENDAR,
         ) != PackageManager.PERMISSION_GRANTED
     ) return emptyList()
 
@@ -194,7 +194,7 @@ private fun readDeviceEvents(
             CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
                 ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
                 ContentUris.appendId(
-                    this, startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds
+                    this, startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds,
                 )
             }.build(),
             arrayOf(
@@ -219,7 +219,7 @@ private fun readDeviceEvents(
                 it.getString(5) == "1" && // is visible
                         it.getLong(9) !in eventCalendarsIdsToExclude && run {
                     boundaryRegex == null || boundaryRegex.containsMatchIn(
-                        it.getString(1).orEmpty()
+                        it.getString(1).orEmpty(),
                     ) || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
                 }
             }.map {
@@ -229,7 +229,7 @@ private fun readDeviceEvents(
                     id = it.getLong(0),
                     title = it.getString(1),
                     time = if (it.getString(6/*ALL_DAY*/) == "1") null else Clock(start).toBasicFormatString() + (if (it.getLong(
-                            3
+                            3,
                         ) != it.getLong(4) && it.getLong(4) != 0L
                     ) " $EN_DASH ${Clock(end).toBasicFormatString()}"
                     else ""),
@@ -260,7 +260,7 @@ fun Context.readDaysDeviceEvents(
         jdn.toGregorianCalendar(),
         duration,
         limit = limit,
-    )
+    ),
 )
 
 fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days, 120)
@@ -298,7 +298,7 @@ fun getEventsTitle(
     holiday: Boolean,
     showDeviceCalendarEvents: Boolean,
     insertRLM: Boolean,
-    addIsHoliday: Boolean
+    addIsHoliday: Boolean,
 ) =
     dayEvents.filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
         .map {
@@ -319,7 +319,7 @@ val AbstractDate.calendar: Calendar
     }
 
 fun calculateDatePartsDifference(
-    fromDate: AbstractDate, toDate: AbstractDate, calendar: Calendar
+    fromDate: AbstractDate, toDate: AbstractDate, calendar: Calendar,
 ): Triple<Int, Int, Int> {
     var y = toDate.year - fromDate.year
     var m = toDate.month - fromDate.month
@@ -340,12 +340,12 @@ fun calculateDaysDifference(
     jdn: Jdn,
     baseJdn: Jdn,
     calendar: Calendar = mainCalendar,
-    isInWidget: Boolean = false
+    isInWidget: Boolean = false,
 ): String {
     val baseDate = baseJdn on calendar
     val date = jdn on calendar
     val (years, months, daysOfMonth) = calculateDatePartsDifference(
-        if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendar
+        if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendar,
     )
     val days = abs(baseJdn - jdn)
     val daysString = resources.getQuantityString(R.plurals.days, days, numeral.format(days))
@@ -353,7 +353,7 @@ fun calculateDaysDifference(
     val result = listOfNotNull(
         if (months == 0 && years == 0) null
         else listOf(
-            R.plurals.years to years, R.plurals.months to months, R.plurals.days to daysOfMonth
+            R.plurals.years to years, R.plurals.months to months, R.plurals.days to daysOfMonth,
         ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
             resources.getQuantityString(pluralId, n, numeral.format(n))
         },
@@ -371,7 +371,7 @@ fun calculateDaysDifference(
             )
             if (workDays == days || workDays == 0) return@run null
             resources.getQuantityString(
-                R.plurals.work_days, workDays, numeral.format(workDays)
+                R.plurals.work_days, workDays, numeral.format(workDays),
             )
         },
     )
@@ -407,32 +407,36 @@ fun monthFormatForSecondaryCalendar(
 ): String {
     val mainCalendar = date.calendar
     val from = Jdn(
-        mainCalendar.createDate(date.year, date.month, 1)
+        mainCalendar.createDate(date.year, date.month, 1),
     ) on secondaryCalendar
     val to = Jdn(
         mainCalendar.createDate(
-            date.year, date.month, date.calendar.getMonthLength(date.year, date.month)
-        )
+            date.year, date.month, date.calendar.getMonthLength(date.year, date.month),
+        ),
     ) on secondaryCalendar
     val separator = if (spaced) " $EN_DASH " else EN_DASH
     return when {
         from.month == to.month -> language.my.format(
-            from.monthName, numeral.format(from.year)
+            from.monthName, numeral.format(from.year),
         )
 
         from.year != to.year -> listOf(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
-            to.year to 1..to.month
+            to.year to 1..to.month,
         ).joinToString(separator) { (year, months) ->
-            language.my.format(months.joinToString(separator) { month ->
-                from.calendar.createDate(year, month, 1).monthName
-            }, numeral.format(year))
+            language.my.format(
+                months.joinToString(separator) { month ->
+                    from.calendar.createDate(year, month, 1).monthName
+                },
+                numeral.format(year),
+            )
         }
 
         else -> language.my.format(
             (from.month..to.month).joinToString(separator) { month ->
                 from.calendar.createDate(from.year, month, 1).monthName
-            }, numeral.format(from.year)
+            },
+            numeral.format(from.year),
         )
     }
 }
@@ -444,11 +448,11 @@ fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
 }
 
 fun otherCalendarFormat(
-    yearViewYear: Int, calendar: Calendar, otherCalendar: Calendar
+    yearViewYear: Int, calendar: Calendar, otherCalendar: Calendar,
 ): String {
     val startOfYear = (Jdn(calendar.createDate(yearViewYear, 1, 1)) on otherCalendar).year
     val endOfYear = ((Jdn(
-        calendar.createDate(yearViewYear + 1, 1, 1)
+        calendar.createDate(yearViewYear + 1, 1, 1),
     ) - 1) on otherCalendar).year
     return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) {
         numeral.format(it)

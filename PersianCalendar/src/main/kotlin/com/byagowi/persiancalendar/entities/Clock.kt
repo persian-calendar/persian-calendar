@@ -23,7 +23,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
         (date[GregorianCalendar.HOUR_OF_DAY].hours +
                 date[GregorianCalendar.MINUTE].minutes +
                 date[GregorianCalendar.SECOND].seconds +
-                date[GregorianCalendar.MILLISECOND].milliseconds) / 1.hours
+                date[GregorianCalendar.MILLISECOND].milliseconds) / 1.hours,
     )
 
     fun toMillis() = if (value.isNaN()) 0L else value.hours.inWholeMilliseconds
@@ -45,7 +45,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
         if (!printAmPm) return clockString
         return language.clockAmPmOrder.format(
             clockString,
-            if (hours >= 12) pmString else amString
+            if (hours >= 12) pmString else amString,
         )
     }
 

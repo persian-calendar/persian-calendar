@@ -72,20 +72,22 @@ fun DatePickerDialog(
                 AnimatedVisibility(anyPendingConfirm) {
                     AppIconButton(
                         Icons.Default.Done,
-                        title
+                        title,
                     ) { pendingConfirms.forEach { it() } }
                 }
                 AnimatedVisibility(!anyPendingConfirm) {
-                    TextButton(onClick = {
-                        onDismissRequest()
-                        onSuccess(jdn)
-                    }) {
+                    TextButton(
+                        onClick = {
+                            onDismissRequest()
+                            onSuccess(jdn)
+                        },
+                    ) {
                         val description = stringResource(R.string.select_date)
                         Text(
                             title,
                             modifier = Modifier.semantics {
                                 this.contentDescription = description
-                            }
+                            },
                         )
                     }
                 }
@@ -97,7 +99,7 @@ fun DatePickerDialog(
                     val description = stringResource(R.string.return_to_today)
                     Text(
                         stringResource(R.string.today),
-                        modifier = Modifier.semantics { this.contentDescription = description }
+                        modifier = Modifier.semantics { this.contentDescription = description },
                     )
                 }
             }
@@ -135,10 +137,10 @@ fun DatePickerDialog(
                     transitionSpec = {
                         slideIntoContainer(
                             towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                            animationSpec = tween(500)
+                            animationSpec = tween(500),
                         ) togetherWith slideOutOfContainer(
                             towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                            animationSpec = tween(500)
+                            animationSpec = tween(500),
                         )
                     },
                     label = "days distance",

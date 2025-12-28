@@ -112,11 +112,11 @@ internal class SwipeToDismissScene<T : Any>(
                         modifier.graphicsLayer {
                             val scaleProgression =
                                 NAV_HOST_ENTER_TRANSITION_EASING_STANDARD.transform(
-                                    (animationProgress.value / 0.75f)
+                                    (animationProgress.value / 0.75f),
                                 )
                             val alphaProgression =
                                 NAV_HOST_ENTER_TRANSITION_EASING_STANDARD.transform(
-                                    (animationProgress.value / 0.25f)
+                                    (animationProgress.value / 0.25f),
                                 )
                             val scale = lerp(0.75f, 1f, scaleProgression).coerceAtMost(1f)
                             val alpha = lerp(0.1f, 1f, alphaProgression).coerceIn(0f, 1f)
@@ -147,7 +147,7 @@ internal class SwipeToDismissScene<T : Any>(
                             tween(
                                 durationMillis =
                                     NAV_HOST_ENTER_TRANSITION_DURATION_MEDIUM +
-                                        NAV_HOST_ENTER_TRANSITION_DURATION_SHORT,
+                                            NAV_HOST_ENTER_TRANSITION_DURATION_SHORT,
                                 easing = LinearEasing,
                             ),
                     )
@@ -163,16 +163,16 @@ internal class SwipeToDismissScene<T : Any>(
         if (other !is SwipeToDismissScene<*>) return false
 
         return key == other.key &&
-            currentEntry == other.currentEntry &&
-            previousEntries == other.previousEntries &&
-            entries == other.entries
+                currentEntry == other.currentEntry &&
+                previousEntries == other.previousEntries &&
+                entries == other.entries
     }
 
     override fun hashCode(): Int {
         return key.hashCode() * 31 +
-            currentEntry.hashCode() * 31 +
-            previousEntries.hashCode() * 31 +
-            entries.hashCode() * 31
+                currentEntry.hashCode() * 31 +
+                previousEntries.hashCode() * 31 +
+                entries.hashCode() * 31
     }
 
     override fun toString(): String {

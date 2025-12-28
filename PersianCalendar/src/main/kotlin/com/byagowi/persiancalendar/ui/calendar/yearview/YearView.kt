@@ -116,21 +116,24 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val isBoldFont = isBoldFont
     val context = LocalContext.current
     val dayPainter = remember(monthColors, widthInPx, fontFile, isBoldFont) {
-        lruCache(4, create = { height: Float ->
-            DayPainter(
-                context = context,
-                resources = resources,
-                width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
-                height = height / 7,/* rows count*/
-                isRtl = isRtl,
-                colors = monthColors,
-                fontFile = fontFile,
-                isYearView = true,
-                selectedDayColor = monthColors.indicator.toArgb(),
-                holidayCircleColor = monthColors.holidaysCircle.toArgb(),
-                isBoldFont = isBoldFont,
-            )
-        })
+        lruCache(
+            4,
+            create = { height: Float ->
+                DayPainter(
+                    context = context,
+                    resources = resources,
+                    width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
+                    height = height / 7,/* rows count*/
+                    isRtl = isRtl,
+                    colors = monthColors,
+                    fontFile = fontFile,
+                    isYearView = true,
+                    selectedDayColor = monthColors.indicator.toArgb(),
+                    holidayCircleColor = monthColors.holidaysCircle.toArgb(),
+                    isBoldFont = isBoldFont,
+                )
+            },
+        )
     }
 
     val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
@@ -141,7 +144,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
             YearViewCommand.PreviousMonth -> {
                 lazyListState.animateScrollToItem(
-                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0)
+                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0),
                 )
             }
 
@@ -168,7 +171,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         coroutineScope.launch {
             val value = scale.value * it
             scale.snapTo(
-                value.coerceIn(yearSelectionModeMaxScale, horizontalDivisions.toFloat())
+                value.coerceIn(yearSelectionModeMaxScale, horizontalDivisions.toFloat()),
             )
         }
     }
@@ -184,7 +187,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 val newCalendar = calendars[index.mod(calendars.size)]
                 coroutineScope.launch { viewModel.changeYearViewCalendar(newCalendar) }
             }
-        }
+        },
     ) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
@@ -197,8 +200,8 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                     ) {
                         val yearStartJdn = Jdn(
                             calendar.createDate(
-                                (viewModel.today on calendar).year + yearOffset, 1, 1
-                            )
+                                (viewModel.today on calendar).year + yearOffset, 1, 1,
+                            ),
                         )
                         if (isShowDeviceCalendarEvents) {
                             context.readYearDeviceEvents(yearStartJdn)
@@ -237,8 +240,8 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                             if (offset != viewModel.selectedMonthOffset) Modifier else Modifier.border(
                                                 width = 2.dp,
                                                 color = LocalContentColor.current.copy(alpha = .15f),
-                                                shape = shape
-                                            )
+                                                shape = shape,
+                                            ),
                                         ),
                                 ) {
                                     Text(
@@ -286,7 +289,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                             }.joinToString("\n")
                     @OptIn(ExperimentalMaterial3Api::class) TooltipBox(
                         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                            TooltipAnchorPosition.Above
+                            TooltipAnchorPosition.Above,
                         ),
                         tooltip = { PlainTooltip { Text(tooltip, textAlign = TextAlign.Center) } },
                         state = rememberTooltipState(),
@@ -303,7 +306,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                 .clickable(onClickLabel = stringResource(R.string.select_year)) {
                                     coroutineScope.launch {
                                         if (scale.value <= yearSelectionModeMaxScale) scale.snapTo(
-                                            1f
+                                            1f,
                                         )
                                         lazyListState.animateScrollToItem(halfPages + yearOffset + 1)
                                     }

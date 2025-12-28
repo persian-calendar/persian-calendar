@@ -33,7 +33,7 @@ import java.util.GregorianCalendar
 class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         return create1x1RemoteViews(
-            this, size, Jdn.today() on mainCalendar, preferences, appWidgetId
+            this, size, Jdn.today() on mainCalendar, preferences, appWidgetId,
         )
     }
 

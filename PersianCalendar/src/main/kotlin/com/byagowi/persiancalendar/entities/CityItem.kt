@@ -13,5 +13,5 @@ data class CityItem(
     val countryFa: String,
     val countryCkb: String,
     val countryAr: String,
-    val coordinates: Coordinates
+    val coordinates: Coordinates,
 )

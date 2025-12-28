@@ -14,8 +14,8 @@ fun StopButton(isStopped: Boolean, setStop: (Boolean) -> Unit) {
         Icon(
             if (isStopped) Icons.Default.PlayArrow else Icons.Default.Stop,
             contentDescription = stringResource(
-                if (isStopped) R.string.resume else R.string.stop
-            )
+                if (isStopped) R.string.resume else R.string.stop,
+            ),
         )
     }
 }

@@ -45,7 +45,7 @@ fun generateEntries(
             }
             previousYear = persianDate.year
             listOf(
-                Entry(dateTitle, EntryType.Date, jdn)
+                Entry(dateTitle, EntryType.Date, jdn),
             ) + events.ifEmpty { listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday(null))) }
         } else emptyList()
     }
@@ -76,8 +76,8 @@ private fun MutableList<Entry>.eventsOfCalendar(
             Entry(
                 it.title,
                 if (it.isHoliday) EntryType.Holiday(it.source)
-                else EntryType.NonHoliday(it.source)
-            )
+                else EntryType.NonHoliday(it.source),
+            ),
         )
     }
 }
@@ -96,14 +96,14 @@ fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry
             irregularRecurringEvents.forEach {
                 val type = EventSource.entries.firstOrNull { entry -> entry.name == it["type"] }
                 if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && it["month"]?.toIntOrNull() == islamicDate.month && IslamicDate(
-                        jdn + 1
+                        jdn + 1,
                     ).month != islamicDate.month && (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
                         it["title"].orEmpty(),
                         if (it["holiday"] == "true") EntryType.Holiday(type)
-                        else EntryType.NonHoliday(type)
-                    )
+                        else EntryType.NonHoliday(type),
+                    ),
                 )
             }
         }

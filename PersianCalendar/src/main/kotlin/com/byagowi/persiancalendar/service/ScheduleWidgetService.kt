@@ -59,7 +59,7 @@ private class EventsViewFactory(
         val day: Jdn,
         val date: AbstractDate,
         val secondaryDate: AbstractDate?,
-        val withMonth: Boolean
+        val withMonth: Boolean,
     )
 
     private data class Item(
@@ -68,7 +68,7 @@ private class EventsViewFactory(
         val date: AbstractDate,
         val secondaryDate: AbstractDate?,
         val today: Boolean,
-        val first: Boolean
+        val first: Boolean,
     )
 
     private val enabledAlarms = getEnabledAlarms(context)
@@ -141,14 +141,14 @@ private class EventsViewFactory(
                 val headerFirstPart = if (widthCells < 3) {
                     header.day.weekDay.shortTitle + spacedComma + language.dm.format(
                         numeral.format(header.date.dayOfMonth),
-                        header.date.monthName
+                        header.date.monthName,
                     )
                 } else header.date.monthName
                 header.secondaryDate?.let {
                     language.inParentheses.format(
                         headerFirstPart,
                         if (widthCells < 3) it.calendar.preferredNumeral.format(it.dayOfMonth)
-                        else it.monthName
+                        else it.monthName,
                     )
                 } ?: headerFirstPart
             }
@@ -200,7 +200,7 @@ private class EventsViewFactory(
                     ContextCompat.getColor(
                         context,
                         if (event.isHoliday) android.R.color.system_accent1_200
-                        else android.R.color.system_accent1_100
+                        else android.R.color.system_accent1_100,
                     )
                 } else if (event.isHoliday) 0xFFB0C6FF.toInt() else 0xFFD9E2FF.toInt()
             } else null.debugAssertNotNull ?: Color.TRANSPARENT
@@ -224,7 +224,7 @@ private class EventsViewFactory(
                         row.setViewVisibility(R.id.day_second_line, View.GONE)
                         row.setInt(
                             R.id.day_wrapper, "setBackgroundResource",
-                            R.drawable.widget_schedule_day_today
+                            R.drawable.widget_schedule_day_today,
                         )
                     } else {
                         row.setViewVisibility(R.id.today_first_line, View.GONE)
@@ -259,7 +259,7 @@ private class EventsViewFactory(
                         if (item.secondaryDate == null) R.id.today_second_line
                         else R.id.today_with_secondary_second_line
                     } else R.id.day_second_line,
-                    numeral.format(item.date.dayOfMonth)
+                    numeral.format(item.date.dayOfMonth),
                 )
             } else row.setViewVisibility(R.id.day_wrapper, View.INVISIBLE)
         } else row.setViewVisibility(R.id.day_wrapper, View.GONE)

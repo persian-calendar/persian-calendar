@@ -55,7 +55,7 @@ import org.jetbrains.annotations.VisibleForTesting
 fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val enabledTypes = rememberSaveable(
-        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
+        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
     ) { EventsRepository.getEnabledTypes(context.preferences, language).toMutableStateList() }
     AppDialog(
         title = { Text(stringResource(R.string.events)) },
@@ -65,15 +65,22 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
             }
         },
         confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                context.preferences.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    context.preferences.edit {
+                        putStringSet(
+                            PREF_HOLIDAY_TYPES,
+                            enabledTypes.toSet(),
+                        )
+                    }
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
     ) {
         CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.bodyMedium
+            LocalTextStyle provides MaterialTheme.typography.bodyMedium,
         ) {
             if (!language.showNepaliCalendar) {
                 @Composable
@@ -129,7 +136,7 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
             }
             Box(
                 Modifier.defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
-                contentAlignment = Alignment.CenterStart
+                contentAlignment = Alignment.CenterStart,
             ) {
                 Text(
                     stringResource(R.string.other_holidays),
@@ -205,23 +212,25 @@ fun CountryEvents(
             modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
         )
         Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-        Text(buildAnnotatedString {
-            append(calendarCenterName)
-            if (sourceLink.isNotEmpty()) {
-                append(spacedComma)
-                withLink(
-                    link = LinkAnnotation.Url(
-                        url = sourceLink,
-                        styles = TextLinkStyles(
-                            SpanStyle(
-                                color = MaterialTheme.colorScheme.primary,
-                                textDecoration = TextDecoration.Underline,
+        Text(
+            buildAnnotatedString {
+                append(calendarCenterName)
+                if (sourceLink.isNotEmpty()) {
+                    append(spacedComma)
+                    withLink(
+                        link = LinkAnnotation.Url(
+                            url = sourceLink,
+                            styles = TextLinkStyles(
+                                SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textDecoration = TextDecoration.Underline,
+                                ),
                             ),
                         ),
-                    ),
-                ) { append(stringResource(R.string.view_source)) }
-            }
-        })
+                    ) { append(stringResource(R.string.view_source)) }
+                }
+            },
+        )
     }
     IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
     IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)

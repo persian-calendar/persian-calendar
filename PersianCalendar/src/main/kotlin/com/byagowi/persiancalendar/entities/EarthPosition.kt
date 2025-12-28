@@ -25,7 +25,7 @@ data class EarthPosition(val latitude: Double, val longitude: Double) {
 
     // Ported from https://www.movable-type.co.uk/scripts/latlong.html MIT License
     fun intermediatePoints(
-        target: EarthPosition, pointsCount: Int
+        target: EarthPosition, pointsCount: Int,
     ): Sequence<EarthPosition> = sequence {
         val φ1 = Math.toRadians(latitude)
         val λ1 = Math.toRadians(longitude)
@@ -72,10 +72,10 @@ data class EarthPosition(val latitude: Double, val longitude: Double) {
         }.getOrNull() ?: PI
         return EarthPosition(
             Math.toDegrees(lat - latRadius).coerceAtLeast(-90.0),
-            Math.toDegrees(lon - lonRadius).coerceAtLeast(-180.0)
+            Math.toDegrees(lon - lonRadius).coerceAtLeast(-180.0),
         ) to EarthPosition(
             Math.toDegrees(lat + latRadius).coerceAtMost(90.0),
-            Math.toDegrees(lon + lonRadius).coerceAtMost(180.0)
+            Math.toDegrees(lon + lonRadius).coerceAtMost(180.0),
         )
     }
 

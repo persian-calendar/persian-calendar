@@ -69,20 +69,22 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                val result = list.mapNotNull { if (it.second) it.first.name else null }
-                if (result.isEmpty()) {
-                    val animator = ValueAnimator.ofFloat(0f, 1f)
-                    animator.duration = 3000L
-                    animator.interpolator = AccelerateDecelerateInterpolator()
-                    animator.addUpdateListener { view.rotation = it.animatedFraction * 360f }
-                    if (Random.nextBoolean()) animator.start() else animator.reverse()
-                } else context.preferences.edit {
-                    putString(PREF_MAIN_CALENDAR_KEY, result.first())
-                    putString(PREF_OTHER_CALENDARS_KEY, result.drop(1).joinToString(","))
-                }
-            }) { Text(stringResource(R.string.accept)) }
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                    val result = list.mapNotNull { if (it.second) it.first.name else null }
+                    if (result.isEmpty()) {
+                        val animator = ValueAnimator.ofFloat(0f, 1f)
+                        animator.duration = 3000L
+                        animator.interpolator = AccelerateDecelerateInterpolator()
+                        animator.addUpdateListener { view.rotation = it.animatedFraction * 360f }
+                        if (Random.nextBoolean()) animator.start() else animator.reverse()
+                    } else context.preferences.edit {
+                        putString(PREF_MAIN_CALENDAR_KEY, result.first())
+                        putString(PREF_OTHER_CALENDARS_KEY, result.drop(1).joinToString(","))
+                    }
+                },
+            ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
     ) {
@@ -150,7 +152,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                         .height(SettingsItemHeight.dp)
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                         .fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(checked = checked, onCheckedChange = null)
                     Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))

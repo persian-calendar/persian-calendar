@@ -63,13 +63,13 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
         val direction = remember { listOf(1, -1).random() }
         val infiniteTransition = rememberInfiniteTransition(label = "rotation")
         val animationSpec = infiniteRepeatable<Float>(
-            animation = tween(durationMillis = 180_000, easing = LinearEasing)
+            animation = tween(durationMillis = 180_000, easing = LinearEasing),
         )
         DrawBackground(patternDrawable, direction, infiniteTransition, animationSpec)
         Column(modifier = Modifier.padding(horizontal = 30.dp, vertical = 80.dp)) {
             val textStyle = LocalTextStyle.current.copy(
                 color = Color.White, fontWeight = FontWeight.Bold,
-                shadow = Shadow(color = Color.Black, blurRadius = 2f, offset = Offset(1f, 1f))
+                shadow = Shadow(color = Color.Black, blurRadius = 2f, offset = Offset(1f, 1f)),
             )
             Text(stringResource(prayTime.stringRes), fontSize = 36.sp, style = textStyle)
             val cityName = cityName
@@ -83,12 +83,12 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
                     enter = slideInVertically(
                         animationSpec = keyframes {
                             durationMillis = 2.seconds.inWholeMilliseconds.toInt()
-                        }
+                        },
                     ) { with(density) { -20.dp.roundToPx() } } + fadeIn(
                         initialAlpha = 0f,
                         animationSpec = keyframes {
                             durationMillis = 2.seconds.inWholeMilliseconds.toInt()
-                        }
+                        },
                     ),
                 ) {
                     Text(
@@ -114,7 +114,7 @@ private fun DrawBackground(
     animationSpec: InfiniteRepeatableSpec<Float>,
 ) {
     val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f, targetValue = 360f, animationSpec = animationSpec, label = "Rotation"
+        initialValue = 0f, targetValue = 360f, animationSpec = animationSpec, label = "Rotation",
     )
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawIntoCanvas { patternDrawable.draw(it.nativeCanvas, rotation * direction) }

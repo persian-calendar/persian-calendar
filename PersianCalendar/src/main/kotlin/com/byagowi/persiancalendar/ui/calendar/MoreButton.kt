@@ -27,7 +27,7 @@ fun MoreButton(title: String, action: () -> Unit) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(title) } },
-        state = rememberTooltipState()
+        state = rememberTooltipState(),
     ) {
         Box(
             Modifier
