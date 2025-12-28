@@ -11,8 +11,26 @@ plugins {
     `kotlin-dsl` apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.plugin.serialization) apply false
+    alias(libs.plugins.spotless)
 }
 
-tasks.register("clean") {
-    delete(rootProject.layout.buildDirectory)
-}
+//spotless {
+//    kotlin {
+//        target("**/*.kt")
+//        targetExclude("**/build/**")
+//        ktlint()
+// standard:trailing-comma-on-call-site,standard:trailing-comma-on-declaration-site,standard:comment-wrapping,standard:filename,standard:function-naming,standard:if-else-wrapping,standard:max-line-length,standard:property-naming
+//    }
+//
+//    kotlinGradle {
+//        target("**/*.gradle.kts")
+//        targetExclude("**/build/**")
+//        ktlint()
+//    }
+//
+//    format("misc") {
+//        target("**/*.md", "**/.gitignore")
+//        trimTrailingWhitespace()
+//        endWithNewline()
+//    }
+//}

@@ -20,3 +20,5 @@ ij_kotlin_variable_annotation_wrap = off
 # Disable wildcard imports
 ij_kotlin_name_count_to_use_star_import = 200
 ij_kotlin_name_count_to_use_star_import_for_members = 200
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
