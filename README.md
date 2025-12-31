@@ -17,7 +17,7 @@ A simple, free and open-source Android calendar
 
 ## License
 
-Copyright (C) 2012-2025  Android Persian Calendar Developers
+Copyright (C) 2012-2026  Android Persian Calendar Developers
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
