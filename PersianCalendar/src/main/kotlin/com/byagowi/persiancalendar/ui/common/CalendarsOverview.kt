@@ -257,7 +257,7 @@ fun SharedTransitionScope.CalendarsOverview(
             isExpanded && isAstronomicalExtraFeaturesEnabled && !persianDate.isOldEra,
         ) {
             val zodiacString =
-                if (language.isPersianOrDari) "برجی" else stringResource(R.string.zodiac)
+                if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
             val borji = PersianDate.borjiFromJdn(jdn.value)
             val zodiac = Zodiac.entries.getOrNull(borji.month - 1) ?: Zodiac.ARIES
             val zodiacTitle = language.dm.format(
@@ -545,9 +545,11 @@ private fun HandleSacredMonth(
         modifier = Modifier
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
-                if (displaySacredness) Modifier.clip(shape = MaterialTheme.shapes.small)
-                    .clickable { coroutine.launch { tooltipState.show() } }
-                else Modifier,
+                if (displaySacredness) {
+                    Modifier
+                        .clip(shape = MaterialTheme.shapes.small)
+                        .clickable { coroutine.launch { tooltipState.show() } }
+                } else Modifier,
             )
             .padding(horizontal = 4.dp),
         content = content,
