@@ -695,14 +695,14 @@ fun readEvents(
     val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
-        val nextYear = PersianDate(date.year + 1, 1, 1)
-        if (jdn + 1 == Jdn(nextYear)) {
+        val nextPersianYearDate = PersianDate(date.year + 1, 1, 1)
+        if (jdn + 1 == Jdn(nextPersianYearDate)) {
             val now = viewModel.now
             val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
             val title = rawTitle.split(spacedColon).mapIndexed { i, x ->
                 if (i == 0 && isAstronomicalExtraFeaturesEnabled) {
                     val yearString = stringResource(R.string.year)
-                    val zodiac = ChineseZodiac.fromPersianCalendar(nextYear)
+                    val zodiac = ChineseZodiac.fromPersianCalendar(nextPersianYearDate)
                     val title = zodiac.format(resources, withEmoji = false, isPersian = true)
                     val symbol = zodiac.resolveEmoji(true)
                     language.inParentheses.format(x, "$yearString $title $symbol")
