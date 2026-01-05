@@ -346,7 +346,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
         val preferences = context.preferences
         val currentInput = viewModel.calculatorInputText
         if (currentInput.isEmpty()) {
-            val storedInput = preferences.getString(PREF_CALCULATOR_INPUT, "") ?: ""
+            val storedInput = preferences.getString(PREF_CALCULATOR_INPUT, "").orEmpty()
             viewModel.calculatorInputText = storedInput.ifEmpty {
                 "1d 2h 3m 4s + 4h 5s - 2030s + 28h"
             }
