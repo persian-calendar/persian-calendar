@@ -258,6 +258,9 @@
     { "holiday": false, "month": 2, "day": 30, "type": "Iran",
       "title": "روز ملی جمعیت" },
 
+    { "holiday": false, "month": 2, "day": 30, "type": "Iran",
+      "title": "روز شهدای خدمت" },
+
     { "holiday": false, "month": 2, "day": 31, "type": "Iran",
       "title": "روز اهدای عضو، اهدای زندگی" },
 
