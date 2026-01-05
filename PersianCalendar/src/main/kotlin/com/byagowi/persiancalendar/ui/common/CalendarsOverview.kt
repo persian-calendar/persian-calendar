@@ -190,7 +190,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 listOf(
                     stringResource(R.string.days_distance),
                     spacedColon,
-                    calculateDaysDifference(resources, jdn, today),
+                    calculateDaysDifference(resources, jdn, today, selectedCalendar),
                 ).joinToString(""),
             )
         }
