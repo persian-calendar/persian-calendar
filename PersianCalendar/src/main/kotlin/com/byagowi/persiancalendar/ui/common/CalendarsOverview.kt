@@ -179,8 +179,11 @@ fun SharedTransitionScope.CalendarsOverview(
         val date = jdn on selectedCalendar
         val equinox = remember(selectedCalendar, jdn, resources) {
             if (date !is PersianDate) return@remember null
-            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1)
-                equinoxTitle(date, jdn, resources).first else null
+            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) equinoxTitle(
+                date,
+                jdn,
+                resources,
+            ).first else null
         }
 
         this.AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
@@ -250,10 +253,17 @@ fun SharedTransitionScope.CalendarsOverview(
             AutoSizedBodyText(yearName)
         }
 
-        this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            val zodiacString = stringResource(R.string.zodiac)
-            val zodiac = Zodiac.fromTropical(sunPosition(jdn.toAstronomyTime(hourOfDay = 12)).elon)
-            val zodiacTitle = stringResource(zodiac.titleId)
+        this.AnimatedVisibility(
+            isExpanded && isAstronomicalExtraFeaturesEnabled && !persianDate.isOldEra,
+        ) {
+            val zodiacString =
+                if (language.isPersianOrDari) "برجی" else stringResource(R.string.zodiac)
+            val borji = PersianDate.borjiFromJdn(jdn.value)
+            val zodiac = Zodiac.entries.getOrNull(borji.month - 1) ?: Zodiac.ARIES
+            val zodiacTitle = language.dm.format(
+                numeral.format(borji.dayOfMonth),
+                stringResource(zodiac.titleId),
+            )
             AutoSizedBodyText(
                 text = zodiacString + spacedColon + zodiac.symbol + " " + zodiacTitle,
                 contentDescriptionOverride = zodiacString + spacedColon + zodiacTitle,
@@ -293,9 +303,9 @@ fun SharedTransitionScope.CalendarsOverview(
             val coordinates = coordinates
             AutoSizedBodyText(
                 if (language.isNepali) {
-                    phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +
-                            language.moonNames(phase) +
-                            " ~" + Tithi.tithiName(System.currentTimeMillis())
+                    phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " + language.moonNames(
+                        phase,
+                    ) + " ~" + Tithi.tithiName(System.currentTimeMillis())
                 } else {
                     phase.emoji(coordinates) + " " + language.moonNames(phase) + exactTime
                 },
@@ -535,8 +545,7 @@ private fun HandleSacredMonth(
         modifier = Modifier
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
-                if (displaySacredness) Modifier
-                    .clip(shape = MaterialTheme.shapes.small)
+                if (displaySacredness) Modifier.clip(shape = MaterialTheme.shapes.small)
                     .clickable { coroutine.launch { tooltipState.show() } }
                 else Modifier,
             )

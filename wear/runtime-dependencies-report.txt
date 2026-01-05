@@ -1,8 +1,8 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.3.0 (c)
-+--- com.github.persian-calendar:calendar:652d510f7075daf0ca66a778287d87205196b34d
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.3.0 (*)
++--- com.github.persian-calendar:calendar:6e54d1ce5044bf751ed1c0ef8faa9c4a95b55ee3
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 (*)
 +--- androidx.compose:compose-bom:2025.12.01
 |    +--- androidx.compose.material:material-icons-extended:1.7.8 (c)
 |    +--- androidx.compose.ui:ui:1.10.0 (c)
