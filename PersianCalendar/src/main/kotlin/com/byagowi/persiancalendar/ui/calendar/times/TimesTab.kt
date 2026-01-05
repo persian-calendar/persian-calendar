@@ -71,7 +71,6 @@ fun SharedTransitionScope.TimesTab(
     bottomPadding: Dp,
 ) {
     val context = LocalContext.current
-    val cityName = cityName
     val coordinates = coordinates ?: return Column(Modifier.fillMaxWidth()) {
         EncourageActionLayout(
             modifier = Modifier.padding(top = 24.dp),
