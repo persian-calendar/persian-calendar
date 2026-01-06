@@ -52,12 +52,9 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
                     it % (steps / 2) == 0 -> 15.dp
                     else -> 8.dp
                 }.toPx()
-                drawLine(
-                    color = color,
-                    start = Offset(x = if (end) size.width else 0f, y = y),
-                    end = Offset(x = if (end) size.width - w else w, y = y),
-                    strokeWidth = 1.dp.toPx(),
-                )
+                val start = Offset(x = if (end) size.width else 0f, y = y)
+                val end = Offset(x = if (end) size.width - w else w, y = y)
+                drawLine(color = color, start = start, end = end, strokeWidth = 1.dp.toPx())
             }
         }
         ruler(gap = dpi, end = cmInchFlip, unit = language.inch, steps = 4)
