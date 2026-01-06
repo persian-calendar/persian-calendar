@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -187,10 +186,8 @@ private fun SharedTransitionScope.AstronomicalOverview(
             },
             modifier = Modifier.fillMaxHeight(),
         ) else Box(Modifier.fillMaxSize()) {
-            var jdn by remember(viewModel.today) { mutableStateOf(viewModel.today) }
-            LaunchedEffect(viewModel.selectedDay) { jdn = viewModel.selectedDay }
             MoonView(
-                jdn = jdn,
+                jdn = viewModel.selectedDay,
                 modifier = Modifier
                     .size(70.dp)
                     .align(Alignment.Center)
