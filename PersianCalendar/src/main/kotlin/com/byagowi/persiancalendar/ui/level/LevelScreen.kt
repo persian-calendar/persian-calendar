@@ -177,20 +177,15 @@ fun SharedTransitionScope.LevelScreen(
             ),
         ) {
             Box {
-                val typeface = resolveAndroidCustomTypeface()
-                Crossfade(targetState = cmInchFlip, label = "ruler") { state ->
-                    AndroidView(
+                Crossfade(targetState = cmInchFlip, label = "ruler") { cmInchFlip ->
+                    RulerView(
                         modifier = Modifier
                             .fillMaxSize()
                             .then(
                                 if (isFullscreen) Modifier.safeDrawingPadding()
                                 else Modifier.padding(top = topCornersRoundness),
                             ),
-                        factory = ::RulerView,
-                        update = {
-                            it.cmInchFlip = state
-                            it.setFont(typeface)
-                        },
+                        cmInchFlip = cmInchFlip,
                     )
                 }
                 Column {
