@@ -34,7 +34,7 @@ class SolarDraw(resources: Resources) {
     private val smallSunDrawable = resources.getDrawable(R.drawable.ic_sun_small, null)
 
     fun moon(
-        canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
+        canvas: Canvas, phase: Double, cx: Float, cy: Float, r: Float,
         angle: Float? = null, moonAltitude: Double? = null, flipHorizontally: Boolean = false,
     ) {
         val alpha =
@@ -46,7 +46,7 @@ class SolarDraw(resources: Resources) {
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt(),
         )
         moonDrawable.draw(canvas)
-        val phase = (moon.lon - sun.elon)
+        val phase = phase
             .let { it + if (it < 0) 360 else 0 }
             .let { if (flipHorizontally) 360 - it else it }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
@@ -61,6 +61,11 @@ class SolarDraw(resources: Resources) {
             drawPath(ovalPath, moonShadowPaint)
         }
     }
+
+    fun moon(
+        canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
+        angle: Float? = null, moonAltitude: Double? = null, flipHorizontally: Boolean = false,
+    ) = moon(canvas, moon.lon - sun.elon, cx, cy, r, angle, moonAltitude, flipHorizontally)
 
     fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
         moonDrawable.alpha = 255

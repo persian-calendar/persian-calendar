@@ -67,7 +67,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
@@ -148,9 +147,8 @@ fun SharedTransitionScope.CalendarsOverview(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             this.AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
-                AndroidView(
-                    factory = ::MoonView,
-                    update = { it.jdn = jdn.value.toFloat() },
+                MoonView(
+                    jdn = jdn,
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .semantics { this.hideFromAccessibility() }
