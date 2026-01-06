@@ -245,7 +245,7 @@ class SunView(context: Context) : View(context) {
         dayLengthString = context.getString(R.string.length_of_day) + spacedColon +
                 dayLength.asRemainingTime(resources, short = true)
 
-        val remaining = if (now > sunset || now < sunrise) null else Clock(sunset - now)
+        val remaining = if (now !in sunrise..sunset) null else Clock(sunset - now)
         remainingString = if (remaining == null) "" else
             context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(resources, short = true)
