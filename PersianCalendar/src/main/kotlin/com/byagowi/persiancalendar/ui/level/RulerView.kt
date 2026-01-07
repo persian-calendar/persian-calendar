@@ -1,13 +1,11 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -19,9 +17,7 @@ import com.byagowi.persiancalendar.global.numeral
 
 @Composable
 fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
-    val dpi = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        LocalResources.current.displayMetrics.xdpi
-    } else LocalResources.current.displayMetrics.ydpi
+    val ydpi = LocalResources.current.displayMetrics.ydpi
     val textMeasurer = rememberTextMeasurer()
     val textStyle = LocalTextStyle.current.copy(
         fontSize = 12.sp * if (numeral.isArabicIndicVariants) 1.4f else 1f,
@@ -57,7 +53,7 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
                 drawLine(color = color, start = start, end = end, strokeWidth = 1.dp.toPx())
             }
         }
-        ruler(gap = dpi, end = cmInchFlip, unit = language.inch, steps = 4)
-        ruler(gap = dpi / 2.54f, end = !cmInchFlip, unit = language.centimeter, steps = 10)
+        ruler(gap = ydpi, end = cmInchFlip, unit = language.inch, steps = 4)
+        ruler(gap = ydpi / 2.54f, end = !cmInchFlip, unit = language.centimeter, steps = 10)
     }
 }

@@ -358,7 +358,12 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             ActivityCompat.getDisplayOrDefault(activity).refreshRate,
         ),
     ),
-    Item("DPI", activity.resources?.displayMetrics?.densityDpi?.toString()),
+    Item(
+        "DPI",
+        """${activity.resources?.displayMetrics?.densityDpi}
+xdpi: ${activity.resources?.displayMetrics?.xdpi}
+ydpi: ${activity.resources?.displayMetrics?.ydpi}""",
+    ),
     Item("Available Processors", Runtime.getRuntime()?.availableProcessors()?.toString()),
     Item("Instruction Architecture", Build.DEVICE),
     Item("Manufacturer", Build.MANUFACTURER),
