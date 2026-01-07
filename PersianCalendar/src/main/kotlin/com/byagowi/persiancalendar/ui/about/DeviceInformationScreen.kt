@@ -360,9 +360,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
     ),
     Item(
         "DPI",
-        """${activity.resources?.displayMetrics?.densityDpi}
-xdpi: ${activity.resources?.displayMetrics?.xdpi}
-ydpi: ${activity.resources?.displayMetrics?.ydpi}""",
+        "${activity.resources?.displayMetrics?.densityDpi}, xdpi: ${activity.resources?.displayMetrics?.xdpi}, ydpi: ${activity.resources?.displayMetrics?.ydpi}",
     ),
     Item("Available Processors", Runtime.getRuntime()?.availableProcessors()?.toString()),
     Item("Instruction Architecture", Build.DEVICE),

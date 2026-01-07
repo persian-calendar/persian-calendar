@@ -22,20 +22,19 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
     val textStyle = LocalTextStyle.current.copy(
         fontSize = 12.sp * if (numeral.isArabicIndicVariants) 1.4f else 1f,
     )
-    val color = Color.Gray
     Canvas(modifier) {
-        fun ruler(gap: Float, end: Boolean, unit: String, steps: Int) {
-            repeat(times = (size.height / gap * steps).fastRoundToInt()) {
-                val y = gap * it / steps
+        fun ruler(gap: Float, end: Boolean, unit: String, subdivisions: Int) {
+            repeat(times = (size.height / gap * subdivisions).fastRoundToInt()) {
+                val y = gap * it / subdivisions
                 val w = when {
-                    it % steps == 0 -> {
+                    it % subdivisions == 0 -> {
                         val textLayoutResult = textMeasurer.measure(
-                            text = numeral.format(it / steps) + " " + if (it == 0) unit else "",
+                            text = numeral.format(it / subdivisions) + " " + if (it == 0) unit else "",
                             style = textStyle,
                         )
                         drawText(
                             textLayoutResult = textLayoutResult,
-                            color = color,
+                            color = Color.Gray,
                             topLeft = Offset(
                                 x = if (end) size.width - 30.dp.toPx() - textLayoutResult.size.width
                                 else 30.dp.toPx(),
@@ -45,15 +44,18 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
                         25.dp
                     }
 
-                    it % (steps / 2) == 0 -> 15.dp
+                    it % (subdivisions / 2) == 0 -> 15.dp
                     else -> 8.dp
                 }.toPx()
-                val start = Offset(x = if (end) size.width else 0f, y = y)
-                val end = Offset(x = if (end) size.width - w else w, y = y)
-                drawLine(color = color, start = start, end = end, strokeWidth = 1.dp.toPx())
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(x = if (end) size.width else 0f, y = y),
+                    end = Offset(x = if (end) size.width - w else w, y = y),
+                    strokeWidth = 1.dp.toPx(),
+                )
             }
         }
-        ruler(gap = ydpi, end = cmInchFlip, unit = language.inch, steps = 4)
-        ruler(gap = ydpi / 2.54f, end = !cmInchFlip, unit = language.centimeter, steps = 10)
+        ruler(gap = ydpi, end = cmInchFlip, unit = language.inch, subdivisions = 4)
+        ruler(gap = ydpi / 2.54f, end = !cmInchFlip, unit = language.centimeter, subdivisions = 10)
     }
 }
