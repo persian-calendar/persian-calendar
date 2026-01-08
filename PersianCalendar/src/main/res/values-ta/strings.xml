@@ -161,7 +161,7 @@
     <string name="friday_short">வெ</string>
     <string name="sun_view">ஞாயிறு பார்வை</string>
     <string name="asr_hanafi_juristic">அனாஃபி எச்ஆர் சூரிக் முறை</string>
-    <string name="month_pray_times">திங்களின் தொழுகை நேரம்</string>
+    <string name="month_pray_times">திங்களின் தொழுகை நேரங்கள்</string>
     <string name="high_latitudes_method">உயர் குறுங்கோடுகள் முறை</string>
     <string name="high_latitudes_night_middle">நடுஇரவு முறை</string>
     <string name="high_latitudes_angle_based">கோணம் அடிப்படையிலானது</string>
@@ -418,4 +418,6 @@
     <string name="large_day_number_on_notification">அறிவிப்பில் பெரிய நாள் எண்</string>
     <string name="pref_ui">பயனர் இடைமுகம்</string>
     <string name="week">வாரம்</string>
+    <string name="bold_text">தடி உரை</string>
+    <string name="widget_text_size">உரை அளவு</string>
 </resources>
