@@ -92,8 +92,8 @@ fun <T> AppScreenModesDropDown(
         ) {
             values.forEach { entry ->
                 AppDropdownMenuRadioItem(
-                    label(entry),
-                    value == entry,
+                    text = { Text(label(entry)) },
+                    isSelected = value == entry,
                     withRadio = false,
                 ) {
                     showMenu = false

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -10,7 +11,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -56,23 +56,25 @@ fun AppDropdownMenuItem(
     }
 }
 
+@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuRadioItem(
-    text: String,
+    text: @Composable () -> Unit,
     isSelected: Boolean,
     withRadio: Boolean = true,
     setSelected: () -> Unit,
 ) {
     AppDropdownMenuItem(
         modifier = Modifier.selectable(isSelected, onClick = setSelected, role = Role.RadioButton),
-        text = { Text(text) },
+        text = text,
         trailingIcon = { if (withRadio) RadioButton(selected = isSelected, onClick = null) },
     ) { setSelected() }
 }
 
+@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuCheckableItem(
-    text: String,
+    text: @Composable () -> Unit,
     isChecked: Boolean,
     onValueChange: (Boolean) -> Unit,
 ) {
@@ -82,19 +84,20 @@ fun AppDropdownMenuCheckableItem(
             onValueChange = onValueChange,
             role = Role.Checkbox,
         ),
-        text = { Text(text) },
+        text = text,
         trailingIcon = { Checkbox(checked = isChecked, onCheckedChange = null) },
     ) { onValueChange(!isChecked) }
 }
 
+@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuExpandableItem(
-    text: String,
+    text: @Composable () -> Unit,
     isExpanded: Boolean,
     onClick: () -> Unit,
 ) {
     AppDropdownMenuItem(
-        text = { Text(text) },
+        text = text,
         trailingIcon = { ExpandArrow(isExpanded = isExpanded) },
         onClick = onClick,
     )

@@ -424,7 +424,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         )
     }
     if (supportsDynamicIcon(mainCalendar, language)) AppDropdownMenuCheckableItem(
-        text = stringResource(R.string.dynamic_icon),
+        text = { Text(stringResource(R.string.dynamic_icon)) },
         isChecked = isDynamicIconEnabled,
     ) {
         closeMenu()
@@ -463,7 +463,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         if (showDialog) FontWeightsDialog { showDialog = false }
     }
     AppDropdownMenuCheckableItem(
-        text = "Cyberpunk",
+        text = { Text("Cyberpunk") },
         isChecked = isCyberpunk,
         onValueChange = {
             val preferences = context.preferences

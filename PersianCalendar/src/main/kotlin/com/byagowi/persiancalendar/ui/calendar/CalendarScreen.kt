@@ -1151,7 +1151,7 @@ private fun SharedTransitionScope.Menu(
         HorizontalDivider()
 
         AppDropdownMenuCheckableItem(
-            text = stringResource(R.string.week_number),
+            text = { Text(stringResource(R.string.week_number)) },
             isChecked = isShowWeekOfYearEnabled,
             onValueChange = {
                 context.preferences.edit { putBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, it) }
@@ -1164,7 +1164,7 @@ private fun SharedTransitionScope.Menu(
 
         var showSecondaryCalendarSubMenu by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuExpandableItem(
-            text = stringResource(R.string.show_secondary_calendar),
+            text = { Text(stringResource(R.string.show_secondary_calendar)) },
             isExpanded = showSecondaryCalendarSubMenu,
             onClick = { showSecondaryCalendarSubMenu = !showSecondaryCalendarSubMenu },
         )
@@ -1172,7 +1172,8 @@ private fun SharedTransitionScope.Menu(
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
             this.AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
-                    stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar,
+                    text = { Text(stringResource(calendar?.title ?: R.string.none)) },
+                    isSelected = calendar == secondaryCalendar,
                 ) {
                     context.preferences.edit {
                         if (calendar == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE) else {

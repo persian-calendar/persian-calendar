@@ -234,13 +234,17 @@ fun SharedTransitionScope.CompassScreen(
                     }
                     if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
-                            stringResource(R.string.true_north), showTrueNorth,
+                            text = { Text(stringResource(R.string.true_north)) },
+                            isChecked = showTrueNorth,
                         ) {
                             showTrueNorth = it
                             closeMenu()
                             compassView?.isTrueNorth = it
                         }
-                        AppDropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
+                        AppDropdownMenuCheckableItem(
+                            text = { Text(stringResource(R.string.qibla)) },
+                            isChecked = showQibla,
+                        ) {
                             showQibla = it
                             closeMenu()
                             compassView?.isShowQibla = it
