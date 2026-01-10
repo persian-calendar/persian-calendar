@@ -181,7 +181,7 @@ fun daysTable(
             val animatedRadius = remember { Animatable(if (indicatorCenter == null) 0f else 1f) }
 
             // Handles circle radius change animation, initial selection reveal and hide
-            LaunchedEffect(key1 = indicatorCenter != null) {
+            LaunchedEffect(key1 = indicatorCenter != null, key2 = width, key3 = suggestedHeight) {
                 if (indicatorCenter != null) animatedCenter.snapTo(indicatorCenter)
                 val target = if (indicatorCenter != null) 1f else 0f
                 if (animatedRadius.value != target || animatedRadius.isRunning) animatedRadius.animateTo(
