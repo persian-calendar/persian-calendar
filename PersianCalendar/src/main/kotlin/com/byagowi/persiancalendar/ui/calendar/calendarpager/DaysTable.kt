@@ -59,7 +59,6 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isBoldFont
-import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
@@ -143,7 +142,7 @@ fun daysTable(
     val contentColor = LocalContentColor.current
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
     val todayIndicatorStroke = with(density) {
-        Stroke(width = (if (isHighTextContrastEnabled || isBoldFont) 4 else 2).dp.toPx())
+        Stroke(width = (if (isBoldFont) 3 else 2).dp.toPx())
     }
     val weekStart = weekStart
     val eventsRepository = eventsRepository
