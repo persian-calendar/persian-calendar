@@ -26,16 +26,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -112,6 +108,7 @@ fun daysTable(
     val cellHeight = suggestedHeight / if (isWeekMode) 2 else 7
     val cellHeightPx = with(density) { cellHeight.toPx() }
     val cellRadius = min(cellWidthPx, cellHeightPx) / 2 - with(density) { .5f.dp.toPx() }
+    val cellRipple = ripple(radius = min(cellHeight, cellWidth) / 2, bounded = false)
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val fontFile = resolveFontFile()
@@ -148,8 +145,6 @@ fun daysTable(
     val todayIndicatorStroke = with(density) {
         Stroke(width = (if (isHighTextContrastEnabled || isBoldFont) 4 else 2).dp.toPx())
     }
-    var focusedDay by remember { mutableStateOf<Jdn?>(null) }
-    val focusColor = LocalContentColor.current.copy(.1f)
     val weekStart = weekStart
     val eventsRepository = eventsRepository
 
@@ -271,7 +266,7 @@ fun daysTable(
                                     .then(
                                         if (onWeekClick != null) Modifier.clickable(
                                             onClickLabel = stringResource(R.string.week_view),
-                                            indication = ripple(bounded = false),
+                                            indication = cellRipple,
                                             interactionSource = null,
                                         ) {
                                             onWeekClick(
@@ -306,12 +301,8 @@ fun daysTable(
                             contentAlignment = Alignment.Center,
                             modifier = cellsSizeModifier
                                 .offset(x = pagerArrowSizeAndPadding.dp + cellWidth * column)
-                                .onFocusChanged {
-                                    if (it.isFocused) focusedDay = day
-                                    else if (!it.hasFocus && focusedDay == day) focusedDay = null
-                                }
                                 .combinedClickable(
-                                    indication = null,
+                                    indication = cellRipple,
                                     interactionSource = null,
                                     onClick = { setSelectedDay(day) },
                                     onClickLabel = stringResource(R.string.select_day),
@@ -352,10 +343,6 @@ fun daysTable(
                                     monthColors.currentDay,
                                     radius = cellRadius,
                                     style = todayIndicatorStroke,
-                                )
-                                if (day == focusedDay) drawCircle(
-                                    focusColor,
-                                    radius = cellRadius * 1.5f,
                                 )
                             }
                             Text(
