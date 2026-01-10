@@ -5,6 +5,8 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Build
@@ -236,6 +238,7 @@ private class Paints(
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
             it.color = selectedDayColor
+            it.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             if (typeface != null) it.typeface = typeface
         }
     }

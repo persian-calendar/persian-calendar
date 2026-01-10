@@ -26,15 +26,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -224,20 +227,30 @@ fun daysTable(
                 }
             }
 
-            Box(Modifier.fillMaxSize()) {
-                // Invalidate the indicator state on table size changes
-                key(width, suggestedHeight) {
-                    Canvas(Modifier.fillMaxSize()) {
+            val holidaysPositions = remember { DayTablePositions() }
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .drawWithContent {
+                        drawContent()
+                        holidaysPositions.forEach { row, column ->
+                            val center = Offset(
+                                x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
+                                // +1 for weekday names initials row, .5f for center of the circle
+                                y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
+                            )
+                            drawCircle(monthColors.holidaysCircle, center = center, radius = cellRadius)
+                        }
                         val radiusFraction = animatedRadius.value
                         if (radiusFraction > 0f) drawCircle(
                             color = monthColors.indicator,
                             center = animatedCenter.value,
                             radius = cellRadius * radiusFraction,
+                            blendMode = BlendMode.SrcOut,
                         )
-                    }
-                }
-
-                val holidaysPositions = remember { DayTablePositions() }
+                    },
+            ) {
                 repeat(daysRowsCount * 7) { dayOffset ->
                     if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
                     val row = if (onlyWeek == null) dayOffset / 7 else 0
@@ -371,21 +384,6 @@ fun daysTable(
                                     },
                             )
                         }
-                    }
-                }
-
-                Canvas(
-                    Modifier
-                        .fillMaxSize()
-                        .zIndex(-1f),
-                ) {
-                    holidaysPositions.forEach { row, column ->
-                        val center = Offset(
-                            x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
-                            // +1 for weekday names initials row, .5f for center of the circle
-                            y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
-                        )
-                        drawCircle(monthColors.holidaysCircle, center = center, radius = cellRadius)
                     }
                 }
             }

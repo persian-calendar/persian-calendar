@@ -465,19 +465,6 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val indicator = if (theme.isDynamicColors) when (theme) {
-        Theme.LIGHT -> getResourcesColor(android.R.color.system_neutral1_800)
-        Theme.DARK -> getResourcesColor(android.R.color.system_neutral1_500)
-        Theme.BLACK -> getResourcesColor(android.R.color.system_neutral1_600)
-        Theme.MODERN -> getResourcesColor(android.R.color.system_accent2_200)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (theme) {
-        Theme.LIGHT -> Color(0xFF2F3036)
-        Theme.DARK, Theme.BLACK -> Color(0xFF76777D)
-        Theme.AQUA -> Color(0xFF2F3036)
-        Theme.MODERN -> Color(0xFFC0C6DC)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    }
     return MonthColors(
         contentColor = contentColor,
         appointments = colorAppointments,
@@ -485,7 +472,7 @@ fun appMonthColors(): MonthColors {
         holidaysCircle = colorHolidaysCircle,
         currentDay = colorCurrentDay,
         eventIndicator = colorEventIndicator,
-        indicator = indicator,
+        indicator = contentColor,
     )
 }
 
