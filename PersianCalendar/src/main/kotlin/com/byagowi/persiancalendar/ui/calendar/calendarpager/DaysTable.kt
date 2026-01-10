@@ -189,7 +189,7 @@ fun daysTable(
                 val target = if (indicatorCenter != null) 1f else 0f
                 if (animatedRadius.value != target || animatedRadius.isRunning) animatedRadius.animateTo(
                     targetValue = target,
-                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
+                    animationSpec = spring(Spring.DampingRatioMediumBouncy, 150f),
                 )
             }
 
