@@ -640,7 +640,7 @@ private fun DaysView(
         val cellWidth = tableWidth / days
 
         // Header
-        this.AnimatedVisibility(hasHeader) {
+        AnimatedVisibility(hasHeader) {
             var isExpanded by rememberSaveable { mutableStateOf(false) }
             val clickToExpandModifier = Modifier.clickable(
                 onClickLabel = stringResource(R.string.more),

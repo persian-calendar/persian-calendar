@@ -133,7 +133,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
             extraWidget = {
                 var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                 Row {
-                    this.AnimatedVisibility(
+                    AnimatedVisibility(
                         isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty(),
                     ) { FilledSettingsButton { showEventsSettingsDialog = true } }
                 }
@@ -317,7 +317,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
         },
         neutralButton = {
             Row {
-                this.AnimatedVisibility(!showHolidaysToggles) {
+                AnimatedVisibility(!showHolidaysToggles) {
                     TextButton(onClick = { showHolidaysToggles = true }) { Text(holidayLabel) }
                 }
             }
@@ -335,7 +335,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                         .weight(1f),
                     style = MaterialTheme.typography.titleMedium,
                 )
-                this.AnimatedVisibility(i == 0 && showHolidaysToggles, Modifier.alignByBaseline()) {
+                AnimatedVisibility(i == 0 && showHolidaysToggles, Modifier.alignByBaseline()) {
                     val density = LocalDensity.current
                     Text(
                         holidayLabel,
@@ -376,7 +376,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                         )
                         Text(entry.displayName)
                     }
-                    this.AnimatedVisibility(showHolidaysToggles && visibility) {
+                    AnimatedVisibility(showHolidaysToggles && visibility) {
                         Checkbox(
                             checked = isHoliday,
                             onCheckedChange = { value ->

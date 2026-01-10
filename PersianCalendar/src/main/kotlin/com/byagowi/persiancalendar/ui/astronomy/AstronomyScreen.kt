@@ -172,7 +172,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     TodayActionButton(visible = viewModel.minutesOffset != 0) {
                         viewModel.animateToAbsoluteMinutesOffset(0)
                     }
-                    this.AnimatedVisibility(visible = viewModel.mode == AstronomyMode.EARTH) {
+                    AnimatedVisibility(visible = viewModel.mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
                             label = stringResource(R.string.tropical),
                             checked = viewModel.isTropical,
@@ -545,7 +545,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
             }
         }
         Seasons(jdn, viewModel)
-        this.AnimatedVisibility(visible = viewModel.mode == AstronomyMode.EARTH) {
+        AnimatedVisibility(visible = viewModel.mode == AstronomyMode.EARTH) {
             Row(Modifier.padding(top = 8.dp)) {
                 listOf(
                     // ☉☀️

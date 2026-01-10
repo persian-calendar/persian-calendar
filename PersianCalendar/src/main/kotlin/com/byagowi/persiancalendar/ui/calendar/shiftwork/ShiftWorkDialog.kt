@@ -154,7 +154,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                         )
                     }.joinToString(spacedComma)
                 Column {
-                    this.AnimatedVisibility(summary.isNotEmpty()) {
+                    AnimatedVisibility(summary.isNotEmpty()) {
                         AnimatedContent(
                             summary,
                             transitionSpec = appCrossfadeSpec,

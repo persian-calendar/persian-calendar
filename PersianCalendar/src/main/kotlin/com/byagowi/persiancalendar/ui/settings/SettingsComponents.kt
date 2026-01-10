@@ -134,7 +134,7 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
             HorizontalDivider(color = dividerColor, modifier = Modifier.weight(1f))
         }
         val subtitle = subtitle()
-        this.AnimatedVisibility(visible = subtitle != null) {
+        AnimatedVisibility(visible = subtitle != null) {
             Text(
                 subtitle.orEmpty(),
                 textAlign = TextAlign.Center,

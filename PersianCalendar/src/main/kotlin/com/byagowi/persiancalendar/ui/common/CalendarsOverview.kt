@@ -146,7 +146,7 @@ fun SharedTransitionScope.CalendarsOverview(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
-            this.AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
+            AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
                 MoonView(
                     jdn = jdn,
                     modifier = Modifier
@@ -184,9 +184,9 @@ fun SharedTransitionScope.CalendarsOverview(
             ).first else null
         }
 
-        this.AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
+        AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
 
-        this.AnimatedVisibility(!isToday) {
+        AnimatedVisibility(!isToday) {
             AutoSizedBodyText(
                 listOf(
                     stringResource(R.string.days_distance),
@@ -197,7 +197,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         val moonInScorpioState = if (showMoonInScorpio) moonInScorpioState(jdn) else null
-        this.AnimatedVisibility(moonInScorpioState != null) {
+        AnimatedVisibility(moonInScorpioState != null) {
             val text = if (language.isPersianOrDari) when (moonInScorpioState) {
                 MoonInScorpioState.Borji -> "قمر در برج عقرب"
                 MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
@@ -241,7 +241,7 @@ fun SharedTransitionScope.CalendarsOverview(
 
         val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
         val persianDate = jdn.toPersianDate()
-        this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+        AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val yearName = generateYearName(
                 resources,
                 jdn,
@@ -251,7 +251,7 @@ fun SharedTransitionScope.CalendarsOverview(
             AutoSizedBodyText(yearName)
         }
 
-        this.AnimatedVisibility(
+        AnimatedVisibility(
             isExpanded && isAstronomicalExtraFeaturesEnabled && !persianDate.isOldEra,
         ) {
             val zodiacString =
@@ -270,15 +270,15 @@ fun SharedTransitionScope.CalendarsOverview(
 
         if (language.isPersian) {
             val enableExtra = eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled
-            this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
+            AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
-            this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
+            AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
                 AutoSizedBodyText(formatAsSeleucidAndYazdegerdDate(jdn))
             }
         }
 
-        this.AnimatedVisibility(
+        AnimatedVisibility(
             isExpanded && (isAstronomicalExtraFeaturesEnabled || language.isNepali),
         ) {
             val time = jdn.toAstronomyTime(hourOfDay = 12)
@@ -334,7 +334,7 @@ fun SharedTransitionScope.CalendarsOverview(
             label = "stroke width",
         )
 
-        this.AnimatedVisibility(isExpanded) {
+        AnimatedVisibility(isExpanded) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
@@ -377,7 +377,7 @@ fun SharedTransitionScope.CalendarsOverview(
             }
         }
 
-        this.AnimatedVisibility(isExpanded) {
+        AnimatedVisibility(isExpanded) {
             AutoSizedBodyText(
                 stringResource(
                     R.string.start_of_year_diff,
@@ -387,7 +387,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 ),
             )
         }
-        this.AnimatedVisibility(isExpanded) {
+        AnimatedVisibility(isExpanded) {
             AutoSizedBodyText(
                 stringResource(
                     R.string.end_of_year_diff,

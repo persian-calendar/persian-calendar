@@ -24,7 +24,7 @@ class WallpaperConfigurationActivity : BaseConfigurationActivity() {
             value = wallpaperAutomatic,
             title = stringResource(R.string.theme_default),
         )
-        this.AnimatedVisibility(!wallpaperAutomatic) {
+        AnimatedVisibility(!wallpaperAutomatic) {
             SettingsSwitch(
                 key = PREF_WALLPAPER_DARK,
                 value = wallpaperDark,

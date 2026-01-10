@@ -97,7 +97,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
             }
         }
 
-        this.AnimatedVisibility(primaryJdn > today) {
+        AnimatedVisibility(primaryJdn > today) {
             val secondaryKey = PREF_SELECTED_DATE_AGE_WIDGET_START + appWidgetId
             var jdn by remember {
                 mutableStateOf(context.preferences.getJdnOrNull(secondaryKey) ?: today)
@@ -113,7 +113,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         TextScaleSettings()
 
         WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
-        this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+        AnimatedVisibility(!prefersWidgetsDynamicColors) {
             SettingsColor(
                 title = stringResource(R.string.widget_text_color),
                 summary = stringResource(R.string.select_widgets_text_color),
@@ -121,7 +121,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
                 key = PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
             )
         }
-        this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+        AnimatedVisibility(!prefersWidgetsDynamicColors) {
             SettingsColor(
                 title = stringResource(R.string.widget_background_color),
                 summary = stringResource(R.string.select_widgets_background_color),

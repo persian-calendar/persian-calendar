@@ -383,7 +383,7 @@ private fun HelpItems() {
                         ),
                     )
                 }
-                this.AnimatedVisibility(visible = expandedItem == i) {
+                AnimatedVisibility(visible = expandedItem == i) {
                     SelectionContainer { Text(body, Modifier.padding(horizontal = 16.dp)) }
                 }
             }

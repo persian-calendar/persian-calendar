@@ -78,7 +78,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
                 LaunchedEffect(Unit) { visible = true }
                 val density = LocalDensity.current
                 // Just an exaggerated demo for https://developer.android.com/jetpack/compose/animation#animatedvisibility
-                this.AnimatedVisibility(
+                AnimatedVisibility(
                     visible = visible,
                     enter = slideInVertically(
                         animationSpec = keyframes {

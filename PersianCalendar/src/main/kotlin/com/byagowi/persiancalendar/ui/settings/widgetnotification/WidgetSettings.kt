@@ -107,7 +107,7 @@ fun ColumnScope.WidgetSettings() {
 @Composable
 fun ColumnScope.WidgetColoringSettings() {
     WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
-    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+    AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsColor(
             title = stringResource(R.string.widget_text_color),
             summary = stringResource(R.string.select_widgets_text_color),
@@ -115,7 +115,7 @@ fun ColumnScope.WidgetColoringSettings() {
             key = PREF_SELECTED_WIDGET_TEXT_COLOR,
         )
     }
-    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
+    AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsColor(
             title = stringResource(R.string.widget_background_color),
             summary = stringResource(R.string.select_widgets_background_color),
@@ -138,7 +138,7 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
             title = stringResource(R.string.widget_prefer_device_colors),
         )
     }
-    this.AnimatedVisibility(prefersWidgetsDynamicColors) {
+    AnimatedVisibility(prefersWidgetsDynamicColors) {
         val key = PREF_WIDGET_TRANSPARENCY
         val context = LocalContext.current
         SettingsSlider(

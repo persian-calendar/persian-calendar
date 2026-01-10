@@ -85,7 +85,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val isLocationSet = coordinates != null
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
             key = PREF_PRAY_TIME_METHOD,
             entries = CalculationMethod.entries.map { stringResource(it.titleStringId) },
@@ -95,7 +95,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
             title = stringResource(R.string.pray_methods),
         )
     }
-    this.AnimatedVisibility(coordinates?.isHighLatitude == true) {
+    AnimatedVisibility(coordinates?.isHighLatitude == true) {
         SettingsSingleSelect(
             key = PREF_HIGH_LATITUDES_METHOD,
             entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
@@ -105,14 +105,14 @@ fun ColumnScope.AthanSettings(destination: String?) {
             title = stringResource(R.string.high_latitudes_method),
         )
     }
-    this.AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
+    AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
         SettingsSwitch(
             key = PREF_ASR_HANAFI_JURISTIC,
             value = asrMethod == AsrMethod.Hanafi,
             title = stringResource(R.string.asr_hanafi_juristic),
         )
     }
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.athan_gap),
             stringResource(R.string.athan_gap_summary),
@@ -156,7 +156,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
         return false
     }
 
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),
@@ -167,20 +167,20 @@ fun ColumnScope.AthanSettings(destination: String?) {
             }
         }
     }
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.custom_athan),
             athanSoundName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.default_athan),
         ) { onDismissRequest -> AthanSelectDialog(onDismissRequest) }
     }
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
             if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
                 PrayerSelectPreviewDialog(onDismissRequest)
             }
         }
     }
-    this.AnimatedVisibility(isLocationSet && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+    AnimatedVisibility(isLocationSet && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission(),
         ) { isGranted ->
@@ -204,10 +204,10 @@ fun ColumnScope.AthanSettings(destination: String?) {
             },
         )
     }
-    this.AnimatedVisibility(isLocationSet && notificationAthan && language.isPersianOrDari) {
+    AnimatedVisibility(isLocationSet && notificationAthan && language.isPersianOrDari) {
         SettingsHelp(stringResource(R.string.notification_athan_help))
     }
-    this.AnimatedVisibility(isLocationSet && !notificationAthan) {
+    AnimatedVisibility(isLocationSet && !notificationAthan) {
         SettingsSwitch(
             key = PREF_ASCENDING_ATHAN_VOLUME,
             value = ascendingAthan,
@@ -215,12 +215,12 @@ fun ColumnScope.AthanSettings(destination: String?) {
             summary = stringResource(R.string.enable_ascending_athan_volume),
         )
     }
-    this.AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
+    AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
         SettingsClickable(
             stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary),
         ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }
     }
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
             key = PREF_ATHAN_VIBRATION,
             value = athanVibration,
@@ -232,7 +232,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
             },
         )
     }
-    this.AnimatedVisibility(isLocationSet) {
+    AnimatedVisibility(isLocationSet) {
         var midnightSummary by remember(resources) {
             mutableStateOf(getMidnightMethodPreferenceSummary(context, resources))
         }

@@ -139,7 +139,7 @@ fun SharedTransitionScope.EventsTab(
             .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
     ) {
         val shiftWorkTitle = getShiftWorkTitle(viewModel.selectedDay)
-        this.AnimatedVisibility(visible = shiftWorkTitle != null) {
+        AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle.orEmpty(),
                 label = "shift work title",
@@ -158,7 +158,7 @@ fun SharedTransitionScope.EventsTab(
             }
         }
         val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(viewModel.selectedDay)
-        this.AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
+        AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance.orEmpty(),
                 label = "shift work days diff",
@@ -182,7 +182,7 @@ fun SharedTransitionScope.EventsTab(
             }
             val events = readEvents(viewModel.selectedDay, viewModel, deviceEvents)
             Spacer(Modifier.height(16.dp))
-            this.AnimatedVisibility(events.isEmpty()) {
+            AnimatedVisibility(events.isEmpty()) {
                 Text(
                     stringResource(R.string.no_event),
                     Modifier.fillMaxWidth(),
@@ -378,7 +378,7 @@ private fun DayEventContent(
                 EquinoxCountDown(contentColor, event, backgroundColor)
             }
         }
-        this.AnimatedVisibility(
+        AnimatedVisibility(
             when (event) {
                 is CalendarEvent.DeviceCalendarEvent -> !language.isPersianOrDari
                 is CalendarEvent.EquinoxCalendarEvent -> true
@@ -393,7 +393,7 @@ private fun DayEventContent(
                 modifier = Modifier.padding(start = 8.dp),
             )
         }
-        this.AnimatedVisibility(hasTooltip) {
+        AnimatedVisibility(hasTooltip) {
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                     TooltipAnchorPosition.Above,

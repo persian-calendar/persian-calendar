@@ -373,7 +373,7 @@ fun SharedTransitionScope.CalendarScreen(
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
             Column(Modifier.fillMaxSize()) {
-                this.AnimatedVisibility(viewModel.isYearView) {
+                AnimatedVisibility(viewModel.isYearView) {
                     YearView(viewModel, maxWidth, maxHeight, bottomPaddingWithMinimum)
                 }
 
@@ -381,7 +381,7 @@ fun SharedTransitionScope.CalendarScreen(
                 val pagerState = calendarPagerState()
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
-                this.AnimatedVisibility(
+                AnimatedVisibility(
                     !viewModel.isYearView,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
                 ) {
@@ -938,7 +938,7 @@ private fun SharedTransitionScope.Toolbar(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
+                AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(subtitle, label = "subtitle") { subtitle ->
                         val fraction by animateFloatAsState(
                             targetValue = if (viewModel.isYearView) 1f else 0f, label = "font size",
@@ -985,39 +985,39 @@ private fun SharedTransitionScope.Toolbar(
             }
         },
         actions = {
-            this.AnimatedVisibility(viewModel.isYearView) {
+            AnimatedVisibility(viewModel.isYearView) {
                 TodayActionButton(yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     viewModel.changeYearViewCalendar(mainCalendar)
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
-            this.AnimatedVisibility(viewModel.isYearView && !yearViewIsInYearSelection) {
+            AnimatedVisibility(viewModel.isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.NextMonth) }
             }
-            this.AnimatedVisibility(viewModel.isYearView && !yearViewIsInYearSelection) {
+            AnimatedVisibility(viewModel.isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.PreviousMonth) }
             }
 
-            this.AnimatedVisibility(!viewModel.isYearView) {
+            AnimatedVisibility(!viewModel.isYearView) {
                 val todayButtonVisibility = viewModel.todayButtonVisibility
                 TodayActionButton(todayButtonVisibility) {
                     viewModel.changeYearViewCalendar(null)
                     viewModel.bringDay(Jdn.today(), highlight = false)
                 }
             }
-            this.AnimatedVisibility(!viewModel.isYearView) {
+            AnimatedVisibility(!viewModel.isYearView) {
                 AppIconButton(
                     icon = Icons.Default.Search,
                     title = stringResource(R.string.search_in_events),
                 ) { viewModel.openSearch() }
             }
-            this.AnimatedVisibility(!viewModel.isYearView) {
+            AnimatedVisibility(!viewModel.isYearView) {
                 Menu(
                     viewModel = viewModel,
                     isLandscape = isLandscape,
@@ -1170,7 +1170,7 @@ private fun SharedTransitionScope.Menu(
         )
 
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
-            this.AnimatedVisibility(showSecondaryCalendarSubMenu) {
+            AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
                     text = { Text(stringResource(calendar?.title ?: R.string.none)) },
                     isSelected = calendar == secondaryCalendar,

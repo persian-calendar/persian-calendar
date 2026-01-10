@@ -51,7 +51,7 @@ fun ColumnScope.NotificationSettings() {
             },
         )
     }
-    this.AnimatedVisibility(isNotifyDate) {
+    AnimatedVisibility(isNotifyDate) {
         SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,
             value = isNotifyDateOnLockScreen,
@@ -59,7 +59,7 @@ fun ColumnScope.NotificationSettings() {
             summary = stringResource(R.string.notify_date_lock_screen_summary),
         )
     }
-    this.AnimatedVisibility(isNotifyDate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    AnimatedVisibility(isNotifyDate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Box(
             Modifier
                 .semantics(mergeDescendants = true) { this.hideFromAccessibility() }

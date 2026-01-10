@@ -139,7 +139,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
-                this.AnimatedVisibility(visible = showMore) {
+                AnimatedVisibility(visible = showMore) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
@@ -174,7 +174,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             }
         }
         val isGradient = isGradient
-        this.AnimatedVisibility(
+        AnimatedVisibility(
             visible = (showMore || !isGradient) && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
@@ -184,7 +184,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, it) } }
         }
         val isRedHolidays = isRedHolidays
-        this.AnimatedVisibility(
+        AnimatedVisibility(
             visible = (showMore || isRedHolidays) && anyThemeIsDynamicColors,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
@@ -194,7 +194,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
         val isBoldFont = isBoldFont
-        this.AnimatedVisibility(
+        AnimatedVisibility(
             visible = showMore || isBoldFont,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
@@ -234,7 +234,7 @@ private fun ColumnScope.FontPicker(
             }
         }
     }
-    this.AnimatedVisibility(visible = showMore || customFontToken != null) {
+    AnimatedVisibility(visible = showMore || customFontToken != null) {
         Column(Modifier.padding(start = 24.dp)) {
             Row {
                 Button(
@@ -265,7 +265,7 @@ private fun ColumnScope.FontPicker(
                         }.getOrNull().debugAssertNotNull
                     },
                 ) { Text(stringResource(R.string.select_font)) }
-                this.AnimatedVisibility(
+                AnimatedVisibility(
                     customFontToken != null,
                     Modifier.padding(start = 8.dp),
                 ) {
@@ -299,7 +299,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
             }
         }
     }
-    this.AnimatedVisibility(visible = showMore || customImageName != null) {
+    AnimatedVisibility(visible = showMore || customImageName != null) {
         Column(Modifier.padding(start = 24.dp)) {
             Row {
                 FilledIconButton(
@@ -312,7 +312,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                         }.getOrNull().debugAssertNotNull
                     },
                 ) { Icon(Icons.Default.Image, null) }
-                this.AnimatedVisibility(
+                AnimatedVisibility(
                     customImageName != null,
                     Modifier.padding(start = 8.dp),
                 ) {

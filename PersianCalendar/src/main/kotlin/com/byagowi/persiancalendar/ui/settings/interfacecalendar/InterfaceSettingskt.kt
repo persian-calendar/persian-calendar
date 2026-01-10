@@ -55,7 +55,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
         title = stringResource(R.string.language),
         summary = language.nativeName,
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
-    this.AnimatedVisibility(language.isPersian) {
+    AnimatedVisibility(language.isPersian) {
         SettingsSwitch(
             key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             value = englishGregorianPersianMonths,
@@ -63,7 +63,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             summary = "جون، جولای، آگوست، …",
         )
     }
-    this.AnimatedVisibility(language.isArabic) {
+    AnimatedVisibility(language.isArabic) {
         SettingsSwitch(
             key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
             value = easternGregorianArabicMonths,
@@ -71,7 +71,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             summary = "كانون الثاني، شباط، آذار، …",
         )
     }
-    this.AnimatedVisibility(language == Language.AZB) {
+    AnimatedVisibility(language == Language.AZB) {
         SettingsSwitch(
             key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
             value = alternativePersianMonthsInAzeri,
@@ -79,7 +79,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             summary = "آغلارگۆلر، گۆلن، قیزاران، …",
         )
     }
-    this.AnimatedVisibility(language == Language.EN_IR) {
+    AnimatedVisibility(language == Language.EN_IR) {
         SettingsSwitch(
             key = PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
             value = englishWeekDaysInIranEnglish,
@@ -87,7 +87,7 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             summary = "Sunday, Monday, Tuesday, …",
         )
     }
-    this.AnimatedVisibility(language.canHaveLocalNumeral) {
+    AnimatedVisibility(language.canHaveLocalNumeral) {
         SettingsSwitch(
             key = PREF_LOCAL_NUMERAL,
             value = localNumeralPreference,

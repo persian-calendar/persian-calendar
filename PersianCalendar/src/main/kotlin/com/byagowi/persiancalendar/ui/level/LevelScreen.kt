@@ -137,7 +137,7 @@ fun SharedTransitionScope.LevelScreen(
     }
 
     Column {
-        this.AnimatedVisibility(visible = !isFullscreen) {
+        AnimatedVisibility(visible = !isFullscreen) {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.level)) },
                 colors = appTopAppBarColors(),
@@ -217,7 +217,7 @@ fun SharedTransitionScope.LevelScreen(
                             }
                         },
                     )
-                    this.AnimatedVisibility(visible = !isFullscreen) {
+                    AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
                             AppIconButton(
                                 icon = Icons.Default.Explore,
@@ -293,7 +293,7 @@ private fun ShrinkingFloatingActionButton(
                     delay(3.5.seconds)
                     showLabel = false
                 }
-                this.AnimatedVisibility(showLabel) { Text(title) }
+                AnimatedVisibility(showLabel) { Text(title) }
             }
         }
     }
