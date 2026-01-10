@@ -353,11 +353,7 @@ fun daysTable(
                                         dayOffset + 1 - monthLength - startingWeekDay
                                     } else dayOffset + 1 - startingWeekDay,
                                 ),
-                                color = when {
-                                    isHoliday -> monthColors.holidays
-                                    isSelected -> monthColors.textDaySelected
-                                    else -> contentColor
-                                },
+                                color = if (isHoliday) monthColors.holidays else contentColor,
                                 style = daysStyle,
                                 modifier = Modifier
                                     .padding(top = cellHeight / 15)

@@ -98,11 +98,9 @@ class DayPainter(
     private val textBounds = Rect()
     private fun drawText(canvas: Canvas) {
         val textPaint = when {
-            jdn != null -> when {
-                holiday -> paints.dayOfMonthNumberTextHolidayPaint
-                dayIsSelected -> paints.dayOfMonthNumberTextSelectedPaint
-                else /*!dayIsSelected*/ -> paints.dayOfMonthNumberTextPaint
-            }
+            jdn != null -> if (holiday) {
+                paints.dayOfMonthNumberTextHolidayPaint
+            } else paints.dayOfMonthNumberTextPaint
 
             isWeekNumber -> paints.weekNumberTextPaint
             else -> paints.weekDayInitialsTextPaint
@@ -118,19 +116,12 @@ class DayPainter(
     private fun drawIndicators(canvas: Canvas) {
         val offsetDirection = if (isRtl) -1 else 1
         indicators.forEachIndexed { i, paint ->
-            val xOffset = paints.eventIndicatorsCentersDistance *
-                    (i - (indicators.size - 1) / 2f) * offsetDirection
+            val xOffset =
+                paints.eventIndicatorsCentersDistance * (i - (indicators.size - 1) / 2f) * offsetDirection
             canvas.drawCircle(
                 width / 2f + xOffset, height / 2 + paints.eventYOffset,
                 paints.eventIndicatorRadius,
-                when {
-                    dayIsSelected -> paints.headerTextSelectedPaint
-                    // use textPaint for holiday event when a11y's high contrast is enabled
-                    isHighTextContrastEnabled && holiday && paint == paints.eventIndicatorPaint ->
-                        paints.dayOfMonthNumberTextHolidayPaint
-
-                    else -> paint
-                },
+                paints.dayOfMonthNumberTextHolidayPaint,
             )
         }
     }
@@ -139,23 +130,23 @@ class DayPainter(
         // The logic has become tedious as it tries to renders with two different fonts…
         val spaceWidth = if (header.isNotEmpty() && isMoonInScorpio) width / 25f else 0f
         val headerWidth = if (header.isNotEmpty()) {
-            paints.headerTextSelectedPaint.measureText(header)
+            paints.headerTextPaint.measureText(header)
         } else 0f
-        val zodiacWidth = if (isMoonInScorpio) run {
-            paints.zodiacHeaderTextSelectedPaint.measureText(Zodiac.SCORPIO.symbol)
+        val zodiacWidth = if (isMoonInScorpio) {
+            paints.zodiacHeaderTextPaint.measureText(Zodiac.SCORPIO.symbol)
         } else 0f
         val lineWidth = headerWidth + zodiacWidth + spaceWidth
         if (header.isNotEmpty()) canvas.drawText(
             header,
             (width - lineWidth) / 2 + if (isRtl) -spaceWidth else zodiacWidth + spaceWidth,
             height / 2 + paints.headerYOffset,
-            if (dayIsSelected) paints.headerTextSelectedPaint else paints.headerTextPaint,
+            paints.headerTextPaint,
         )
         if (isMoonInScorpio) canvas.drawText(
             Zodiac.SCORPIO.symbol,
             (width - lineWidth) / 2 + if (isRtl) headerWidth + spaceWidth else -spaceWidth,
             height / 2 + paints.headerScorpioYOffset,
-            if (dayIsSelected) paints.zodiacHeaderTextSelectedPaint else paints.zodiacHeaderTextPaint,
+            paints.zodiacHeaderTextPaint,
         )
     }
 
@@ -221,8 +212,9 @@ private class Paints(
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
 
     private fun addShadowIfNeeded(paint: Paint) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
+        }
     }
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -289,27 +281,6 @@ private class Paints(
         if (typeface != null) it.typeface = typeface
     }
 
-    val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
-        it.textSize = textSize
-        it.color = colors.textDaySelected.toArgb()
-        if (isWidget) addShadowIfNeeded(it)
-        if (typeface != null) it.typeface = typeface
-    }
-
-    val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textSize = headerTextSize
-        it.color = colors.textDaySelected.toArgb()
-        if (isWidget) addShadowIfNeeded(it)
-        if (typeface != null) it.typeface = typeface
-    }
-    val zodiacHeaderTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textSize = zodiacHeaderTextSize
-        it.color = colors.textDaySelected.toArgb()
-        if (isWidget) addShadowIfNeeded(it)
-        it.typeface = zodiacFont
-        if (isBoldFont) it.isFakeBoldText = true
-    }
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = headerTextSize
         it.color = colors.colorTextDayName.toArgb()

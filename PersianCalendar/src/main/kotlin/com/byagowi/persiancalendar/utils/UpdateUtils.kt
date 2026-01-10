@@ -866,7 +866,6 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         holidaysCircle = holidaysColor.copy(alpha = .175f),
         eventIndicator = contentColor,
         currentDay = contentColor,
-        textDaySelected = contentColor,
         indicator = androidx.compose.ui.graphics.Color.Transparent,
     )
     val bitmap = createBitmap(width, height)

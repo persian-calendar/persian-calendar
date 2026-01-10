@@ -9,7 +9,6 @@ data class MonthColors(
     val holidays: Color,
     val eventIndicator: Color,
     val currentDay: Color,
-    val textDaySelected: Color,
     val indicator: Color,
     val holidaysCircle: Color,
 ) {

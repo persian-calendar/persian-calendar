@@ -467,19 +467,6 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorTextDaySelected = if (theme.isDynamicColors) when (theme) {
-        Theme.LIGHT -> getResourcesColor(android.R.color.system_accent2_0)
-        Theme.DARK, Theme.BLACK -> getResourcesColor(android.R.color.system_accent2_0)
-        Theme.MODERN -> getResourcesColor(android.R.color.system_accent2_900)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (theme) {
-        Theme.LIGHT -> Color(0xFF2F3133)
-        Theme.DARK -> Color(0xFF2F3133)
-        Theme.BLACK -> Color.Black
-        Theme.AQUA -> Color(0xFF2F3133)
-        Theme.MODERN -> Color.Black
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    }
     val indicator = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> getResourcesColor(android.R.color.system_neutral1_800)
         Theme.DARK -> getResourcesColor(android.R.color.system_neutral1_500)
@@ -487,10 +474,10 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> getResourcesColor(android.R.color.system_accent2_200)
         else -> null.debugAssertNotNull ?: Color.Transparent
     } else when (theme) {
-        Theme.LIGHT -> Color(0xFFEFF2F1)
-        Theme.DARK, Theme.BLACK -> Color(0xFFE0E0E0)
-        Theme.AQUA -> Color(0xFFF5F5F5)
-        Theme.MODERN -> Color(0xFFDDDEE2)
+        Theme.LIGHT -> Color(0xFF2F3036)
+        Theme.DARK, Theme.BLACK -> Color(0xFF76777D)
+        Theme.AQUA -> Color(0xFF2F3036)
+        Theme.MODERN -> Color(0xFFC0C6DC)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
     return MonthColors(
@@ -500,7 +487,6 @@ fun appMonthColors(): MonthColors {
         holidaysCircle = colorHolidaysCircle,
         currentDay = colorCurrentDay,
         eventIndicator = colorEventIndicator,
-        textDaySelected = colorTextDaySelected,
         indicator = indicator,
     )
 }
