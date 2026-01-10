@@ -3,10 +3,10 @@ package com.byagowi.persiancalendar.ui.level
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.drawText
@@ -28,6 +28,7 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
     val textStyle = LocalTextStyle.current.copy(
         fontSize = 12.sp * if (numeral.isArabicIndicVariants) 1.4f else 1f,
     )
+    val outlineColor = MaterialTheme.colorScheme.outline
     Canvas(modifier) {
         fun ruler(gap: Float, end: Boolean, unit: String, subdivisions: Int) {
             repeat(times = (size.height / gap * subdivisions).fastRoundToInt()) {
@@ -40,7 +41,7 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
                         )
                         drawText(
                             textLayoutResult = textLayoutResult,
-                            color = Color.Gray,
+                            color = outlineColor,
                             topLeft = Offset(
                                 x = if (end) size.width - 30.dp.toPx() - textLayoutResult.size.width
                                 else 30.dp.toPx(),
@@ -54,7 +55,7 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
                     else -> 8.dp
                 }.toPx()
                 drawLine(
-                    color = Color.Gray,
+                    color = outlineColor,
                     start = Offset(x = if (end) size.width else 0f, y = y),
                     end = Offset(x = if (end) size.width - w else w, y = y),
                     strokeWidth = 1.dp.toPx(),
