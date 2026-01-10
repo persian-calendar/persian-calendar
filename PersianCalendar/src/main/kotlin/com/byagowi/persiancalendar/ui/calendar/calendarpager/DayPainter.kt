@@ -14,7 +14,6 @@ import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
@@ -172,7 +171,7 @@ class DayPainter(
         ).joinToString(" ")
         this.indicators = listOf(
             hasAppointment to paints.appointmentIndicatorPaint,
-            (hasEvent || (isHighTextContrastEnabled && holiday)) to paints.eventIndicatorPaint,
+            hasEvent to paints.eventIndicatorPaint,
         ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
     }
 
@@ -229,7 +228,7 @@ private class Paints(
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
-        it.strokeWidth = (if (isBoldFont || isHighTextContrastEnabled) 3 else 1) * dp
+        it.strokeWidth = 1 * dp
         it.color = colors.currentDay.toArgb()
         if (typeface != null) it.typeface = typeface
     }
