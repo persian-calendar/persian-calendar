@@ -11,6 +11,7 @@
         android:id="@+id/widget_layout4x1_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foreground="@drawable/widget_root_click_ripple_effect"
         android:importantForAccessibility="no"
         android:scaleType="fitXY" />
 

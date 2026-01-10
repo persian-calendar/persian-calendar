@@ -248,11 +248,8 @@ fun update(context: Context, updateDate: Boolean) {
     selectedWidgetTextColor = getWidgetTextColor(preferences)
     selectedWidgetBackgroundColor = getWidgetBackgroundColor(preferences)
 
-    roundPixelSize = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-        16.dp.toPx(context.resources)
-    } else context.resources.getDimensionPixelSize(
-        android.R.dimen.system_app_widget_background_radius,
-    ).toFloat()
+    roundPixelSize =
+        context.resources.getDimensionPixelSize(R.dimen.widget_background_radius).toFloat()
 
     // Widgets
     AppWidgetManager.getInstance(context)?.run {
