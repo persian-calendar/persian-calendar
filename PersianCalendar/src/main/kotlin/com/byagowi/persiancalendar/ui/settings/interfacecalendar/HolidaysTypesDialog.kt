@@ -259,7 +259,7 @@ private fun IndentedCheckBox(
     ) {
         Checkbox(key in enabledTypes, onCheckedChange = null)
         Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-        Crossfade(label) { Text(it) }
+        Crossfade(targetState = label) { Text(it) }
     }
 }
 

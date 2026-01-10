@@ -145,7 +145,7 @@ fun SharedTransitionScope.LevelScreen(
                 actions = {
                     run {
                         val rotation by animateFloatAsState(
-                            if (cmInchFlip) 180f else 0f, label = "rotation",
+                            targetValue = if (cmInchFlip) 180f else 0f,
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         )
                         AppIconButton(
@@ -163,9 +163,8 @@ fun SharedTransitionScope.LevelScreen(
         }
 
         val topCornersRoundness by animateDpAsState(
-            if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
+            targetValue = if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
             animationSpec = tween(durationMillis = 500, easing = LinearEasing),
-            label = "corner",
         )
         ScreenSurface(
             shape = MaterialTheme.shapes.large.copy(
@@ -176,7 +175,7 @@ fun SharedTransitionScope.LevelScreen(
             ),
         ) {
             Box {
-                Crossfade(targetState = cmInchFlip, label = "ruler") { cmInchFlip ->
+                Crossfade(targetState = cmInchFlip) { cmInchFlip ->
                     RulerView(
                         modifier = Modifier
                             .fillMaxSize()

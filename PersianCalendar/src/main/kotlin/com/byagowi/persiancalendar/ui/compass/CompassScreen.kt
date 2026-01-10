@@ -131,9 +131,8 @@ fun SharedTransitionScope.CompassScreen(
     var timeShift by remember { mutableFloatStateOf(0f) }
     var isTimeShiftAnimate by remember { mutableStateOf(false) }
     val timeShiftAnimate by animateFloatAsState(
-        if (isTimeShiftAnimate) 24f else 0f,
+        targetValue = if (isTimeShiftAnimate) 24f else 0f,
         animationSpec = tween(durationMillis = if (isTimeShiftAnimate) 10.seconds.inWholeMilliseconds.toInt() else 0),
-        label = "time shift",
     ) {
         if (isTimeShiftAnimate) {
             timeShift = 0f
@@ -255,7 +254,7 @@ fun SharedTransitionScope.CompassScreen(
                             AppDropdownMenuItem(
                                 {
                                     Crossfade(
-                                        value ?: "مزبوره/مذکوره",
+                                        targetState = value ?: "مزبوره/مذکوره",
                                         Modifier.animateContentSize(appContentSizeAnimationSpec),
                                     ) { Text(it) }
                                 },

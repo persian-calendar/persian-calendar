@@ -373,11 +373,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             modifier = Modifier.weight(1f),
             colors = textFieldColors,
         )
-        Crossfade(
-            result,
-            label = "calculator result",
-            modifier = Modifier.weight(1f),
-        ) {
+        Crossfade(targetState = result, modifier = Modifier.weight(1f)) {
             SelectionContainer {
                 Text(
                     it,
@@ -397,7 +393,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             colors = textFieldColors,
         )
         Spacer(Modifier.height(16.dp))
-        Crossfade(result, label = "calculator result") {
+        Crossfade(targetState = result) {
             SelectionContainer {
                 Text(
                     it,
@@ -635,7 +631,7 @@ private fun DaysDistanceSecondPart(
 private fun TextWithSlideAnimation(text: String) {
     Box(Modifier.height(calendarTypesHeight() + 16.dp), contentAlignment = Alignment.Center) {
         AnimatedContent(
-            text,
+            targetState = text,
             transitionSpec = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
@@ -645,7 +641,6 @@ private fun TextWithSlideAnimation(text: String) {
                     animationSpec = tween(500),
                 )
             },
-            label = "slide text",
         ) {
             SelectionContainer {
                 Text(it, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())

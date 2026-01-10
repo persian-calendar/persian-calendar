@@ -226,11 +226,7 @@ fun SharedTransitionScope.DaysScreen(
         }
     }
 
-    AnimatedContent(
-        isWeekView,
-        label = "is week view",
-        transitionSpec = noTransitionSpec,
-    ) { isWeekViewState ->
+    AnimatedContent(isWeekView, transitionSpec = noTransitionSpec) { isWeekViewState ->
         Scaffold(
             containerColor = Color.Transparent,
             snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -283,10 +279,10 @@ fun SharedTransitionScope.DaysScreen(
                                 )
                             }
 
-                            Crossfade(title, label = "title") { state ->
+                            Crossfade(targetState = title) { state ->
                                 Text(state, style = MaterialTheme.typography.titleLarge)
                             }
-                            Crossfade(subtitle, label = "subtitle") { state ->
+                            Crossfade(targetState = subtitle) { state ->
                                 Text(state, style = MaterialTheme.typography.titleMedium)
                             }
                         }
@@ -972,17 +968,15 @@ private fun DaysView(
                 val y = offset?.let { (it.y * scale.value / ySteps).roundToInt() } ?: 0
                 val animatedOffset = if (offset == null) Offset.Zero
                 else animateOffsetAsState(
-                    Offset(x * cellWidthPx, y * ySteps.toFloat()),
+                    targetValue = Offset(x * cellWidthPx, y * ySteps.toFloat()),
                     animationSpec = if (interaction == Interaction.Zoom) snap() else {
                         spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
                     },
-                    label = "offset",
                 ).value
                 val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
                     animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
-                    label = "duration",
                 )
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val widthReduction = remember { Animatable(defaultWidthReductionPx) }
@@ -1126,11 +1120,10 @@ private fun DaysView(
                     contentAlignment = Alignment.Center,
                 ) addEventBox@{
                     val alpha by animateFloatAsState(
-                        if (offset == null) 0f else 1f,
+                        targetValue = if (offset == null) 0f else 1f,
                         animationSpec = spring(
                             Spring.DampingRatioNoBouncy, Spring.StiffnessLow,
                         ),
-                        label = "alpha",
                     )
                     if (offset == null) return@addEventBox
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)

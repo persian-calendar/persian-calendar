@@ -68,12 +68,9 @@ fun <T> AppScreenModesDropDown(
             Text(
                 label(value),
                 style = lerp(
-                    MaterialTheme.typography.titleMedium,
-                    MaterialTheme.typography.titleLarge,
-                    animateFloatAsState(
-                        targetValue = if (small) 0f else 1f,
-                        label = "fraction",
-                    ).value,
+                    start = MaterialTheme.typography.titleMedium,
+                    stop = MaterialTheme.typography.titleLarge,
+                    fraction = animateFloatAsState(targetValue = if (small) 0f else 1f).value,
                 ),
                 maxLines = 1,
                 modifier = Modifier

@@ -102,7 +102,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Crossfade(
-                    when {
+                    targetState = when {
                         pendingConfirms.isNotEmpty() -> HeaderAction.Confirm
                         yearPagerState.currentPage != yearPages / 2 -> HeaderAction.Reset
                         else -> HeaderAction.DialogIcon
@@ -131,7 +131,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
                 HorizontalPager(yearPagerState) { page ->
                     val year = page - yearPages / 2 + currentYear
                     var showTextEdit by remember { mutableStateOf(false) }
-                    Crossfade(showTextEdit) { state ->
+                    Crossfade(targetState = showTextEdit) { state ->
                         Box(contentAlignment = Alignment.Center) {
                             if (state) NumberEdit(
                                 dismissNumberEdit = { showTextEdit = false },

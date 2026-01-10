@@ -142,7 +142,6 @@ fun SharedTransitionScope.EventsTab(
         AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle.orEmpty(),
-                label = "shift work title",
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer {
@@ -161,7 +160,6 @@ fun SharedTransitionScope.EventsTab(
         AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance.orEmpty(),
-                label = "shift work days diff",
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer {
@@ -286,7 +284,6 @@ fun DayEvents(
             targetState = event.title.let { title ->
                 (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "$title\n$it" } ?: title
             },
-            label = "event title",
             transitionSpec = {
                 when (event) {
                     is CalendarEvent.EquinoxCalendarEvent -> noTransitionSpec

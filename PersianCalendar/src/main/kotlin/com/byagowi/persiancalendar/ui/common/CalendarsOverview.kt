@@ -167,7 +167,6 @@ fun SharedTransitionScope.CalendarsOverview(
                     stringResource(R.string.iran_time),
                 ) else jdn.weekDay.title,
                 transitionSpec = appCrossfadeSpec,
-                label = "weekday name",
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
         }
         Spacer(Modifier.height(8.dp))
@@ -329,9 +328,8 @@ fun SharedTransitionScope.CalendarsOverview(
         var firstShow by rememberSaveable { mutableStateOf(true) }
         LaunchedEffect(Unit) { firstShow = false }
         val indicatorStrokeWidth by animateDpAsState(
-            if (isExpanded && !firstShow) ProgressIndicatorDefaults.CircularStrokeWidth else 0.dp,
-            animationSpec = tween(800),
-            label = "stroke width",
+            targetValue = if (isExpanded && !firstShow) ProgressIndicatorDefaults.CircularStrokeWidth else 0.dp,
+            animationSpec = tween(delayMillis = 800),
         )
 
         AnimatedVisibility(isExpanded) {
@@ -356,12 +354,11 @@ fun SharedTransitionScope.CalendarsOverview(
                             .padding(all = 8.dp),
                     ) {
                         val progress by animateFloatAsState(
-                            current.toFloat() / max,
+                            targetValue = current.toFloat() / max,
                             animationSpec = spring(
                                 dampingRatio = Spring.DampingRatioMediumBouncy,
                                 stiffness = Spring.StiffnessLow,
                             ),
-                            label = "progress",
                         )
                         CircularProgressIndicator(
                             modifier = Modifier.semantics { this.hideFromAccessibility() },

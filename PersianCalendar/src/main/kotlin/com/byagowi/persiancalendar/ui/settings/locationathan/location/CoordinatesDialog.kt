@@ -158,8 +158,7 @@ fun CoordinatesDialog(
                 .padding(horizontal = 16.dp),
         ) {
             AnimatedContent(
-                cityName.orEmpty(),
-                label = "summary",
+                targetState = cityName.orEmpty(),
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer { Text(state, style = MaterialTheme.typography.titleSmall) }

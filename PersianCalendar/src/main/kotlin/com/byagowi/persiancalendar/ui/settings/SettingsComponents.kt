@@ -119,9 +119,8 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
             val dividerColor by animateColor(MaterialTheme.colorScheme.outlineVariant)
             HorizontalDivider(color = dividerColor, modifier = Modifier.weight(1f))
             AnimatedContent(
-                stringResource(title),
+                targetState = stringResource(title),
                 contentAlignment = Alignment.Center,
-                label = "title",
                 transitionSpec = appCrossfadeSpec,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) { state ->
@@ -393,17 +392,11 @@ fun SettingsLayout(
                 .align(alignment = Alignment.CenterStart)
                 .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = endPadding.dp),
         ) {
-            AnimatedContent(
-                title,
-                label = "title",
-                transitionSpec = appCrossfadeSpec,
-            ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
+            AnimatedContent(title, transitionSpec = appCrossfadeSpec) { state ->
+                Text(state, style = MaterialTheme.typography.bodyLarge)
+            }
             if (summary != null) {
-                AnimatedContent(
-                    summary,
-                    label = "summary",
-                    transitionSpec = appCrossfadeSpec,
-                ) { state ->
+                AnimatedContent(summary, transitionSpec = appCrossfadeSpec) { state ->
                     Text(
                         state,
                         style = MaterialTheme.typography.bodyMedium,
@@ -444,11 +437,9 @@ fun SettingsSlider(
             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
             .clearAndSetSemantics {},
     ) {
-        AnimatedContent(
-            title,
-            label = "title",
-            transitionSpec = appCrossfadeSpec,
-        ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
+        AnimatedContent(title, transitionSpec = appCrossfadeSpec) { state ->
+            Text(state, style = MaterialTheme.typography.bodyLarge)
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Slider(
                 value = animateFloatAsState(value).value.coerceIn(valueRange),

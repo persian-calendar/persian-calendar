@@ -359,7 +359,6 @@ fun SharedTransitionScope.MapScreen(
                 AnimatedContent(
                     modifier = Modifier.weight(1f, fill = false),
                     targetState = formattedTime,
-                    label = "time",
                     transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Text(

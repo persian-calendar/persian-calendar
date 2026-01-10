@@ -297,7 +297,7 @@ fun SharedTransitionScope.CalendarScreen(
         topBar = {
             BackHandler(enabled = viewModel.isSearchOpen, onBack = viewModel::closeSearch)
             var toolbarHeight by remember { mutableStateOf(0.dp) }
-            Crossfade(viewModel.isSearchOpen, label = "toolbar") { searchBoxIsOpenState ->
+            Crossfade(targetState = viewModel.isSearchOpen) { searchBoxIsOpenState ->
                 Box(
                     (if (searchBoxIsOpenState) {
                         if (viewModel.searchTerm.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
@@ -373,7 +373,7 @@ fun SharedTransitionScope.CalendarScreen(
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
             Column(Modifier.fillMaxSize()) {
-                AnimatedVisibility(viewModel.isYearView) {
+                AnimatedVisibility(visible = viewModel.isYearView) {
                     YearView(viewModel, maxWidth, maxHeight, bottomPaddingWithMinimum)
                 }
 
@@ -382,7 +382,7 @@ fun SharedTransitionScope.CalendarScreen(
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
                 AnimatedVisibility(
-                    !viewModel.isYearView,
+                    visible = !viewModel.isYearView,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
                 ) {
                     if (isLandscape) Row {
@@ -505,7 +505,7 @@ fun SharedTransitionScope.CalendarScreen(
 enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
     CALENDAR(R.string.calendar),
     EVENT(R.string.events),
-    TIMES(R.string.times)
+    TIMES(R.string.times),
 }
 
 @Composable
@@ -767,7 +767,7 @@ private fun Search(viewModel: CalendarViewModel) {
             regex.containsMatchIn(it.title)
         }.take(50).toList()
     }
-    val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
+    val padding by animateDpAsState(targetValue = if (expanded) 0.dp else 32.dp)
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     SearchBar(
@@ -815,7 +815,6 @@ private fun Search(viewModel: CalendarViewModel) {
                         ) {
                             AnimatedContent(
                                 targetState = it.title,
-                                label = "title",
                                 transitionSpec = appCrossfadeSpec,
                             ) { title ->
                                 Text(
@@ -930,7 +929,7 @@ private fun SharedTransitionScope.Toolbar(
                     onValueChange = viewModel::changeYearViewCalendar,
                     values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
                     small = subtitle.isNotEmpty(),
-                ) { stringResource(it.title) } else Crossfade(title, label = "title") { title ->
+                ) { stringResource(it.title) } else Crossfade(targetState = title) { title ->
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleLarge,
@@ -939,10 +938,8 @@ private fun SharedTransitionScope.Toolbar(
                     )
                 }
                 AnimatedVisibility(visible = subtitle.isNotEmpty()) {
-                    Crossfade(subtitle, label = "subtitle") { subtitle ->
-                        val fraction by animateFloatAsState(
-                            targetValue = if (viewModel.isYearView) 1f else 0f, label = "font size",
-                        )
+                    Crossfade(targetState = subtitle) { subtitle ->
+                        val fraction by animateFloatAsState(if (viewModel.isYearView) 1f else 0f)
                         Text(
                             if (isTalkBackEnabled && viewModel.isYearView) "$subtitle ${
                                 stringResource(R.string.year_view)
@@ -976,7 +973,7 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            Crossfade(targetState = viewModel.isYearView, label = "nav icon") { state ->
+            Crossfade(targetState = viewModel.isYearView) { state ->
                 if (state) AppIconButton(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
@@ -985,13 +982,13 @@ private fun SharedTransitionScope.Toolbar(
             }
         },
         actions = {
-            AnimatedVisibility(viewModel.isYearView) {
-                TodayActionButton(yearViewOffset != 0 && !yearViewIsInYearSelection) {
+            AnimatedVisibility(visible = viewModel.isYearView) {
+                TodayActionButton(visible = yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     viewModel.changeYearViewCalendar(mainCalendar)
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
-            AnimatedVisibility(viewModel.isYearView && !yearViewIsInYearSelection) {
+            AnimatedVisibility(visible = viewModel.isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
@@ -1115,10 +1112,7 @@ private fun SharedTransitionScope.Menu(
                             context.preferences.edit { putString(prefKey, valueToStoreOnClick()) }
                         },
                     ) {
-                        val alpha by animateFloatAsState(
-                            targetValue = if (preferredAction == item) 1f else .2f,
-                            label = "alpha",
-                        )
+                        val alpha by animateFloatAsState(if (preferredAction == item) 1f else .2f)
                         val color = LocalContentColor.current.copy(alpha = alpha)
                         Icon(swipeIcon, null, tint = color)
                     }

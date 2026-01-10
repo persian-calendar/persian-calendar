@@ -432,7 +432,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
 
     val time = seasons(gregorianYear).marchEquinox
     var showTextEdit by remember { mutableStateOf(false) }
-    Crossfade(showTextEdit) { state ->
+    Crossfade(targetState = showTextEdit) { state ->
         val gregorianCalendar = Date(time.toMillisecondsSince1970()).toGregorianCalendar()
         Box(contentAlignment = Alignment.Center) {
             if (state) NumberEdit(
