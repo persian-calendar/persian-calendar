@@ -84,7 +84,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
@@ -427,8 +426,8 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         text = { Text(stringResource(R.string.dynamic_icon)) },
         isChecked = isDynamicIconEnabled,
     ) {
+        context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, it) }
         closeMenu()
-        context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, !isDynamicIconEnabled) }
     }
 
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
@@ -466,13 +465,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         text = { Text("Cyberpunk") },
         isChecked = isCyberpunk,
         onValueChange = {
-            val preferences = context.preferences
-            preferences.edit {
-                putBoolean(
-                    PREF_THEME_CYBERPUNK,
-                    !preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK),
-                )
-            }
+            context.preferences.edit { putBoolean(PREF_THEME_CYBERPUNK, it) }
             closeMenu()
         },
     )

@@ -926,7 +926,7 @@ private fun SharedTransitionScope.Toolbar(
                 verticalArrangement = Arrangement.Center,
             ) {
                 if (viewModel.isYearView && yearViewCalendar != null) AppScreenModesDropDown(
-                    yearViewCalendar,
+                    value = yearViewCalendar,
                     onValueChange = viewModel::changeYearViewCalendar,
                     values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
                     small = subtitle.isNotEmpty(),

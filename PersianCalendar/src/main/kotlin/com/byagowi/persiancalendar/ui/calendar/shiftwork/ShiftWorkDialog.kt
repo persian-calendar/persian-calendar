@@ -182,7 +182,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                     Text(text = numeral.format(position + 1) + spacedColon)
                     Box(Modifier.weight(70f)) {
                         TextField(
-                            shiftWorkKeyToString(type),
+                            value = shiftWorkKeyToString(type),
                             onValueChange = { value ->
                                 selectedTypeDropdownIndex = -1
                                 // Don't allow inserting '=' or ',' as they have special meaning

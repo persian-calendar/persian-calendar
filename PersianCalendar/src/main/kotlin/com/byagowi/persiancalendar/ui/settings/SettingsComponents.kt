@@ -245,8 +245,8 @@ fun SettingsSingleSelect(
                             .fillMaxWidth()
                             .height(SettingsItemHeight.dp)
                             .selectable(entryValue == persistedValue, role = Role.RadioButton) {
-                                onDismissRequest()
                                 context.preferences.edit { putString(key, entryValue) }
+                                onDismissRequest()
                             }
                             .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                     ) {
@@ -342,18 +342,15 @@ fun SettingsSwitch(
     onBeforeToggle: (Boolean) -> Boolean = { it },
 ) {
     val context = LocalContext.current
-    val toggle = { newValue: Boolean ->
-        val finalValue = onBeforeToggle(newValue)
-        if (value != finalValue) context.preferences.edit { putBoolean(key, finalValue) }
-    }
     val hapticFeedback = LocalHapticFeedback.current
     SettingsLayout(
         title = title,
         summary = summary,
         extraWidget = extraWidget,
-        modifier = Modifier.toggleable(value, role = Role.Switch) {
+        modifier = Modifier.toggleable(value, role = Role.Switch) { newValue ->
             hapticFeedback.performLongPress()
-            toggle(it)
+            val finalValue = onBeforeToggle(newValue)
+            if (value != finalValue) context.preferences.edit { putBoolean(key, finalValue) }
         },
     ) { Switch(checked = value, onCheckedChange = null, colors = appSwitchColors()) }
 }

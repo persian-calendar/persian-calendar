@@ -270,7 +270,7 @@ private fun ColumnScope.FontPicker(
                     Modifier.padding(start = 8.dp),
                 ) {
                     OutlinedIconButton(
-                        {
+                        onClick = {
                             context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
                             File(context.filesDir, STORED_FONT_NAME).delete()
                         },
@@ -317,7 +317,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                     Modifier.padding(start = 8.dp),
                 ) {
                     OutlinedIconButton(
-                        {
+                        onClick = {
                             context.preferences.edit { remove(PREF_CUSTOM_IMAGE_NAME) }
                             File(context.filesDir, STORED_FONT_NAME).delete()
                         },
