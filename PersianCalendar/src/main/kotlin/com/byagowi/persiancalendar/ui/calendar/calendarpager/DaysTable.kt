@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import androidx.compose.ui.zIndex
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
@@ -150,6 +149,14 @@ fun daysTable(
     val weekStart = weekStart
     val eventsRepository = eventsRepository
 
+    fun positionToOffset(row: Int, column: Int): Offset {
+        return Offset(
+            x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
+            // +1 for weekday names initials row, .5f for center of the circle
+            y = cellHeightPx * (1.5f + row),
+        )
+    }
+
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =
             if (onlyWeek == null) null else ((monthStartJdn - 1) on mainCalendar).dayOfMonth
@@ -171,12 +178,9 @@ fun daysTable(
             val highlightedDayOfMonth = selectedDay - monthStartJdn
             val indicatorCenter = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) {
                 val cellIndex = selectedDay - monthStartJdn + startingWeekDay
-                Offset(
-                    x = cellWidthPx * (cellIndex % 7).let {
-                        .5f + if (isRtl) 6 - it else it
-                    } + pagerArrowSizeAndPaddingPx,
-                    // +1 for weekday names initials row, .5f for center of the circle
-                    y = cellHeightPx * (1.5f + if (onlyWeek == null) cellIndex / 7 else 0),
+                positionToOffset(
+                    row = if (onlyWeek != null) 0 else cellIndex / 7,
+                    column = cellIndex % 7,
                 )
             } else null
 
@@ -235,12 +239,11 @@ fun daysTable(
                     .drawWithContent {
                         drawContent()
                         holidaysPositions.forEach { row, column ->
-                            val center = Offset(
-                                x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
-                                // +1 for weekday names initials row, .5f for center of the circle
-                                y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
+                            drawCircle(
+                                color = monthColors.holidaysCircle,
+                                center = positionToOffset(row, column),
+                                radius = cellRadius,
                             )
-                            drawCircle(monthColors.holidaysCircle, center = center, radius = cellRadius)
                         }
                         val radiusFraction = animatedRadius.value
                         if (radiusFraction > 0f) drawCircle(
