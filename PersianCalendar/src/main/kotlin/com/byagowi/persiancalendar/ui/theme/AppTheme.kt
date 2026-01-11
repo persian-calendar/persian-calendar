@@ -64,7 +64,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.text.layoutDirection
@@ -270,7 +269,10 @@ private fun appColorScheme(): ColorScheme {
 }
 
 @Composable
-private fun getResourcesColor(@ColorRes id: Int) = Color(LocalResources.current.getColor(id, null))
+private fun getResourcesColorInt(@ColorRes id: Int) = LocalResources.current.getColor(id, null)
+
+@Composable
+private fun getResourcesColor(@ColorRes id: Int) = Color(getResourcesColorInt(id))
 
 @Composable
 private fun appShapes(): Shapes {
@@ -492,32 +494,29 @@ fun scrollShadowColor(): Color =
 @Composable
 fun appSunViewColors(): SunViewColors {
     val theme = effectiveTheme()
-    val context = LocalContext.current
-    var nightColor = ContextCompat.getColor(
-        context,
-        if (theme.isDynamicColors) R.color.sun_view_dynamic_night_color else R.color.sun_view_night_color,
-    )
-    var dayColor = ContextCompat.getColor(
-        context,
-        if (theme.isDynamicColors) R.color.sun_view_dynamic_day_color else R.color.sun_view_day_color,
-    )
-    var midDayColor = ContextCompat.getColor(
-        context,
-        if (theme.isDynamicColors) R.color.sun_view_dynamic_midday_color else R.color.sun_view_midday_color,
-    )
-    if (theme == Theme.BLACK && theme.isDynamicColors) {
-        nightColor = ContextCompat.getColor(context, android.R.color.system_accent1_900)
-        dayColor = ContextCompat.getColor(context, android.R.color.system_accent1_800)
-        midDayColor = ContextCompat.getColor(context, android.R.color.system_accent1_600)
-    }
+    val nightColor = if (theme.isDynamicColors) when (theme) {
+        Theme.DARK -> android.R.color.system_accent1_800
+        Theme.BLACK -> android.R.color.system_accent1_900
+        else -> android.R.color.system_accent1_700
+    } else R.color.sun_view_night_color
+    val dayColor = if (theme.isDynamicColors) when (theme) {
+        Theme.DARK -> android.R.color.system_accent1_600
+        Theme.BLACK -> android.R.color.system_accent1_800
+        else -> android.R.color.system_accent1_300
+    } else R.color.sun_view_day_color
+    val midDayColor = if (theme.isDynamicColors) when (theme) {
+        Theme.DARK -> android.R.color.system_accent1_400
+        Theme.BLACK -> android.R.color.system_accent1_600
+        else -> android.R.color.system_accent1_100
+    } else R.color.sun_view_midday_color
     return SunViewColors(
-        nightColor = nightColor,
-        dayColor = dayColor,
-        middayColor = midDayColor,
+        nightColor = getResourcesColorInt(nightColor),
+        dayColor = getResourcesColorInt(dayColor),
+        middayColor = getResourcesColorInt(midDayColor),
         sunriseTextColor = 0xFFFF9800.toInt(),
         middayTextColor = 0xFFFFC107.toInt(),
         sunsetTextColor = 0xFFF22424.toInt(),
         textColorSecondary = LocalContentColor.current.copy(alpha = AppBlendAlpha).toArgb(),
-        linesColor = 0x60888888,
+        linesColor = MaterialTheme.colorScheme.outlineVariant.toArgb(),
     )
 }
