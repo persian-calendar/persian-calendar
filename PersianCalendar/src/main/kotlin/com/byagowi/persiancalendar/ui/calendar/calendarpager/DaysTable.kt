@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -327,8 +328,12 @@ fun daysTable(
                                     },
                                 )
                                 .then(
-                                    if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f)
-                                    else Modifier,
+                                    if (onlyWeek != null) Modifier.alpha(
+                                        alpha = animateFloatAsState(
+                                            targetValue = if (isBeforeMonth || isAfterMonth) .5f else 1f,
+                                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                        ).value,
+                                    ) else Modifier,
                                 ),
                         ) {
                             val isSelected = isHighlighted && selectedDay == day
