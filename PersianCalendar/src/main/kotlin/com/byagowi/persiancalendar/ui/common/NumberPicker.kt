@@ -285,7 +285,7 @@ fun NumberEdit(
         val inError = resolveValue() == null
         val context = LocalContext.current
         LaunchedEffect(inError) {
-            if (inError) Toast.makeText(
+            if (value.text.isNotEmpty() && inError) Toast.makeText(
                 context,
                 R.string.incorrect_date,
                 Toast.LENGTH_SHORT,
