@@ -188,14 +188,16 @@ fun daysTable(
                 )
             } else null
 
-            val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
+            val animatedCenter = remember(key1 = width, key2 = suggestedHeight) {
+                Animatable(indicatorCenter ?: Offset.Zero, Offset.VectorConverter)
+            }
             val animatedRadius = remember { Animatable(if (indicatorCenter == null) 0f else 1f) }
             val cellRipple = cellRippleBase.takeIf {
                 !animatedCenter.isRunning && !animatedRadius.isRunning
             }
 
             // Handles circle radius change animation, initial selection reveal and hide
-            LaunchedEffect(key1 = indicatorCenter != null, key2 = width, key3 = suggestedHeight) {
+            LaunchedEffect(key1 = indicatorCenter != null) {
                 if (indicatorCenter != null) animatedCenter.snapTo(indicatorCenter)
                 val target = if (indicatorCenter != null) 1f else 0f
                 if (animatedRadius.value != target || animatedRadius.isRunning) animatedRadius.animateTo(
