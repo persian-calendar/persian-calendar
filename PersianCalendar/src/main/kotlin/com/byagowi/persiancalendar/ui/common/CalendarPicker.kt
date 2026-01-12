@@ -115,11 +115,11 @@ private fun <T> SegmentedButtonItemsPicker(
             val isForward = visualIndex(item) > currentVisualIndex
             val first = spring<Float>(
                 dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = 150f,
+                stiffness = Spring.StiffnessLow,
             )
             val second = spring<Float>(
                 dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = 300f,
+                stiffness = Spring.StiffnessMediumLow,
             )
             coroutineScope.launch {
                 cellLeft.animateTo(
@@ -161,7 +161,7 @@ private fun <T> SegmentedButtonItemsPicker(
                             color = cellColor,
                             topLeft = Offset(x = cellLeft.value.coerceAtLeast(0f), y = 0f),
                             size = this.size.copy(
-                                width = cellRight.value.coerceAtMost(maxWidth) - cellLeft.value
+                                width = cellRight.value.coerceAtMost(maxWidth) - cellLeft.value,
                             ),
                             cornerRadius = cornerRadius,
                             blendMode = BlendMode.SrcOut,
