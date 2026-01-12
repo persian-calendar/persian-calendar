@@ -221,7 +221,6 @@ fun SharedTransitionScope.CalendarScreen(
     isCurrentDestination: Boolean,
 ) {
     val context = LocalContext.current
-    LaunchedEffect(Unit) { viewModel.runFlows(context.applicationContext) }
     val snackbarHostState = remember { SnackbarHostState() }
     val addEvent = addEvent(viewModel, snackbarHostState)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

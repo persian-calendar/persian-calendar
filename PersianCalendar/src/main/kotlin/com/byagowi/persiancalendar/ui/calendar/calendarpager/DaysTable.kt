@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -152,6 +153,7 @@ fun daysTable(
     val eventsRepository = eventsRepository
     val shiftWorkSettings = shiftWorkSettings
     val shiftWorkTitles = shiftWorkTitles
+    val isTalkBackEnabled = isTalkBackEnabled
 
     fun positionToOffset(row: Int, column: Int): Offset {
         return Offset(
@@ -212,6 +214,23 @@ fun daysTable(
                     targetValue = indicatorCenter,
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
                 )
+            }
+
+            // a11y
+            if (isTalkBackEnabled) LaunchedEffect(key1 = indicatorCenter) {
+                if (indicatorCenter != null) Toast.makeText(
+                    context,
+                    getA11yDaySummary(
+                        resources = context.resources,
+                        jdn = selectedDay,
+                        isToday = false,
+                        deviceCalendarEvents = EventsStore.empty(),
+                        withZodiac = true,
+                        withOtherCalendars = true,
+                        withTitle = true,
+                    ),
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
 
             val arrowOffsetY =
@@ -390,8 +409,8 @@ fun daysTable(
                                 modifier = Modifier
                                     .padding(top = cellHeight / 15)
                                     .semantics {
-                                        if (isTalkBackEnabled) this.contentDescription =
-                                            getA11yDaySummary(
+                                        if (isTalkBackEnabled) {
+                                            this.contentDescription = getA11yDaySummary(
                                                 resources = resources,
                                                 jdn = day,
                                                 isToday = isToday,
@@ -401,6 +420,7 @@ fun daysTable(
                                                 withTitle = true,
                                                 withWeekOfYear = false,
                                             )
+                                        }
                                     },
                             )
                         }

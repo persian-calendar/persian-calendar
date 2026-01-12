@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -13,16 +12,13 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
-import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -202,25 +198,6 @@ class CalendarViewModel() : ViewModel() {
         changeSelectedDay(jdn)
         if (!highlight) _isHighlighted.value = false
         changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
-
-        // a11y
-        if (isTalkBackEnabled && jdn != today) {
-            accessibilityApplicationContext?.let { context ->
-                Toast.makeText(
-                    context,
-                    getA11yDaySummary(
-                        resources = context.resources,
-                        jdn = jdn,
-                        isToday = false,
-                        deviceCalendarEvents = EventsStore.empty(),
-                        withZodiac = true,
-                        withOtherCalendars = true,
-                        withTitle = true,
-                    ),
-                    Toast.LENGTH_SHORT,
-                ).show()
-            }
-        }
     }
 
     fun initializeAndGetInitialSelectedTab(context: Context): CalendarScreenTab {
@@ -231,13 +208,10 @@ class CalendarViewModel() : ViewModel() {
         return initialTab
     }
 
-    // Ugly but better than putting context on each call just because of a11y, for now
-    private var accessibilityApplicationContext: Context? = null
     private var alreadyRuns = false
-    fun runFlows(applicationContext: Context) {
+    fun runFlows() {
         if (alreadyRuns) return
         alreadyRuns = true
-        accessibilityApplicationContext = applicationContext
         viewModelScope.launch {
             while (true) {
                 delay(30.seconds)
