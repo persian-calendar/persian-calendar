@@ -110,7 +110,7 @@ fun daysTable(
     val cellHeight = suggestedHeight / if (isWeekMode) 2 else 7
     val cellHeightPx = with(density) { cellHeight.toPx() }
     val cellRadius = min(cellWidthPx, cellHeightPx) / 2 - with(density) { .5f.dp.toPx() }
-    val cellRipple = ripple(radius = min(cellHeight, cellWidth) / 2, bounded = false)
+    val cellRippleBase = ripple(radius = min(cellHeight, cellWidth) / 2, bounded = false)
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val fontFile = resolveFontFile()
@@ -187,6 +187,9 @@ fun daysTable(
 
             val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
             val animatedRadius = remember { Animatable(if (indicatorCenter == null) 0f else 1f) }
+            val cellRipple = cellRippleBase.takeIf {
+                !animatedCenter.isRunning && !animatedRadius.isRunning
+            }
 
             // Handles circle radius change animation, initial selection reveal and hide
             LaunchedEffect(key1 = indicatorCenter != null, key2 = width, key3 = suggestedHeight) {
