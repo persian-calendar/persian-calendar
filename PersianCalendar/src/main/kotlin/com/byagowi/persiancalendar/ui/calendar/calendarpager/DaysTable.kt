@@ -337,13 +337,13 @@ fun daysTable(
                                         addEvent(AddEventData.fromJdn(day))
                                     },
                                 )
-                                .then(
-                                    if (onlyWeek != null) Modifier.alpha(
-                                        alpha = animateFloatAsState(
-                                            targetValue = if (isBeforeMonth || isAfterMonth) .5f else 1f,
+                                .alpha(
+                                    alpha = (if (isBeforeMonth || isAfterMonth) .5f else 1f).let {
+                                        if (onlyWeek != null) animateFloatAsState(
+                                            targetValue = it,
                                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-                                        ).value,
-                                    ) else Modifier,
+                                        ).value else it
+                                    },
                                 ),
                         ) {
                             val events = remember(eventsRepository, deviceEvents) {
