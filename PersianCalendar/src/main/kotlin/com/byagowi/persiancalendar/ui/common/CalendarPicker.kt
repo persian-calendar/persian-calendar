@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.CornerRadius
@@ -155,34 +154,38 @@ private fun <T> SegmentedButtonItemsPicker(
                 }
                 .fillMaxWidth()
                 .semantics { this.contentDescription = selectDateTypeString }
-                .drawBehind {
-                    drawRoundRect(backgroundColor, cornerRadius = cornerRadius)
-                    (1..<items.size).forEach { i ->
-                        val x = cellWidth * i
-                        drawLine(
-                            color = outlineColor.copy(
-                                alpha = min(
-                                    abs(i - cellLeft.value / cellWidth),
-                                    abs(i - cellRight.value / cellWidth),
-                                ).coerceAtMost(AppBlendAlpha),
-                            ),
-                            strokeWidth = 1.dp.toPx(),
-                            start = Offset(x, 0f),
-                            end = Offset(x, size.height),
-                        )
-                    }
-                }
                 .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
                 .drawWithCache {
                     onDrawWithContent {
                         drawContent()
-                        val width = cellRight.value.coerceAtMost(maxWidth) - cellLeft.value
                         drawRoundRect(
                             color = cellColor,
                             topLeft = Offset(x = cellLeft.value.coerceAtLeast(0f), y = 0f),
-                            size = Size(width, this.size.height),
+                            size = this.size.copy(
+                                width = cellRight.value.coerceAtMost(maxWidth) - cellLeft.value
+                            ),
                             cornerRadius = cornerRadius,
                             blendMode = BlendMode.SrcOut,
+                        )
+                        (1..<items.size).forEach { i ->
+                            val x = cellWidth * i
+                            drawLine(
+                                color = outlineColor.copy(
+                                    alpha = min(
+                                        abs(i - cellLeft.value / cellWidth),
+                                        abs(i - cellRight.value / cellWidth),
+                                    ).coerceAtMost(AppBlendAlpha),
+                                ),
+                                strokeWidth = 1.dp.toPx(),
+                                start = Offset(x, 0f),
+                                end = Offset(x, size.height),
+                                blendMode = BlendMode.DstOver,
+                            )
+                        }
+                        drawRoundRect(
+                            color = backgroundColor,
+                            cornerRadius = cornerRadius,
+                            blendMode = BlendMode.DstOver,
                         )
                     }
                 },
