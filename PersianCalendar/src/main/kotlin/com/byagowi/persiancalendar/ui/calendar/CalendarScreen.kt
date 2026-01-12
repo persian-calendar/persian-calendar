@@ -181,7 +181,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -202,13 +201,11 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun SharedTransitionScope.CalendarScreen(
@@ -265,15 +262,6 @@ fun SharedTransitionScope.CalendarScreen(
             if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay + 7)
         },
     )
-
-    LaunchedEffect(resumeToken) {
-        if (resumeToken > 1) {
-            delay(.5.seconds)
-            viewModel.refreshCalendar()
-            delay(.5.seconds)
-            viewModel.refreshCalendar()
-        }
-    }
 
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
