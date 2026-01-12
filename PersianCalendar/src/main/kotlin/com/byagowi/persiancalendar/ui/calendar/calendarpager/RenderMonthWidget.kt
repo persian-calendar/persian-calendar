@@ -12,10 +12,10 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
-import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
 
@@ -80,7 +80,7 @@ fun renderMonthWidget(
                     isHoliday = isHoliday,
                     jdn = day,
                     dayOfMonth = if (setText == null) text else "",
-                    header = getShiftWorkTitle(day, true),
+                    header = shiftWorkSettings.workTitle(day, true),
                     secondaryCalendar = secondaryCalendar,
                 )
                 if (setText != null) setText((row + 1) * 7 + column, text, isHoliday)

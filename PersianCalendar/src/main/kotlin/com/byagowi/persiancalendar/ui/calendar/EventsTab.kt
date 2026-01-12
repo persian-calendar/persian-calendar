@@ -97,6 +97,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
@@ -110,8 +111,6 @@ import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.calendar
-import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
@@ -138,7 +137,7 @@ fun SharedTransitionScope.EventsTab(
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
     ) {
-        val shiftWorkTitle = getShiftWorkTitle(viewModel.selectedDay)
+        val shiftWorkTitle = shiftWorkSettings.workTitle(viewModel.selectedDay)
         AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle.orEmpty(),
@@ -156,7 +155,8 @@ fun SharedTransitionScope.EventsTab(
                 }
             }
         }
-        val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(viewModel.selectedDay)
+        val shiftWorkInDaysDistance =
+            shiftWorkSettings.getShiftWorksInDaysDistance(viewModel.selectedDay)
         AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance.orEmpty(),

@@ -90,9 +90,6 @@ import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
-import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
-import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
-import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
@@ -116,20 +113,18 @@ import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.SwipeUpAction
 import com.byagowi.persiancalendar.ui.theme.Theme
+import com.byagowi.persiancalendar.utils.ShiftWorkSettings
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
-import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.isOldEra
@@ -369,14 +364,8 @@ val isHighTextContrastEnabled by isHighTextContrastEnabled_
 
 private val shiftWorkTitles_ = mutableStateOf(emptyMap<String, String>())
 val shiftWorkTitles by shiftWorkTitles_
-private val shiftWorkStartingJdn_ = mutableStateOf<Jdn?>(null)
-val shiftWorkStartingJdn by shiftWorkStartingJdn_
-private val shiftWorkRecurs_ = mutableStateOf(true)
-val shiftWorkRecurs by shiftWorkRecurs_
-private val shiftWorks_ = mutableStateOf(emptyList<ShiftWorkRecord>())
-val shiftWorks by shiftWorks_
-private val shiftWorkPeriod_ = mutableIntStateOf(0)
-val shiftWorkPeriod by shiftWorkPeriod_
+private val shiftWorkSettings_ = mutableStateOf(ShiftWorkSettings.empty)
+val shiftWorkSettings by shiftWorkSettings_
 private val amString_ = mutableStateOf(DEFAULT_AM)
 val amString by amString_
 private val pmString_ = mutableStateOf(DEFAULT_PM)
@@ -689,13 +678,7 @@ fun updateStoredPreference(context: Context) {
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)
 
-    shiftWorks_.value =
-        (preferences.getString(PREF_SHIFT_WORK_SETTING, null).orEmpty()).splitFilterNotEmpty(",")
-            .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
-            .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
-    shiftWorkPeriod_.intValue = shiftWorks.sumOf { it.length }
-    shiftWorkStartingJdn_.value = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
-    shiftWorkRecurs_.value = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
+    shiftWorkSettings_.value = ShiftWorkSettings(preferences)
 
     context.getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
 }

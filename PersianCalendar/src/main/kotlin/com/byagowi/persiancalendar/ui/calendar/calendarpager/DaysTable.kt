@@ -68,6 +68,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.shiftWorkSettings
+import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -76,7 +78,6 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -149,6 +150,8 @@ fun daysTable(
     }
     val weekStart = weekStart
     val eventsRepository = eventsRepository
+    val shiftWorkSettings = shiftWorkSettings
+    val shiftWorkTitles = shiftWorkTitles
 
     fun positionToOffset(row: Int, column: Int): Offset {
         return Offset(
@@ -341,17 +344,19 @@ fun daysTable(
                                     ) else Modifier,
                                 ),
                         ) {
-                            val events = remember(eventsRepository, day, deviceEvents) {
+                            val events = remember(eventsRepository, deviceEvents) {
                                 eventsRepository.getEvents(day, deviceEvents)
                             }
                             val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                             if (isHoliday) holidaysPositions.add(row = row, column = column)
+                            val shiftWorkTitle = remember(shiftWorkTitles, shiftWorkSettings) {
+                                shiftWorkSettings.workTitle(day, true)
+                            }
                             Canvas(cellsSizeModifier) {
                                 val hasEvents =
                                     events.any { it !is CalendarEvent.DeviceCalendarEvent }
                                 val hasAppointments =
                                     events.any { it is CalendarEvent.DeviceCalendarEvent }
-                                val shiftWorkTitle = getShiftWorkTitle(day, true)
                                 dayPainter.setDayOfMonthItem(
                                     isToday = false,
                                     isSelected = false,

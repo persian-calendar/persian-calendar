@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
@@ -139,7 +140,7 @@ class CalendarViewModel() : ViewModel() {
     }
 
     fun openShiftWorkDialog() {
-        _shiftWorkViewModel.value = ShiftWorkViewModel.initiateFromGlobalVariables(selectedDay)
+        _shiftWorkViewModel.value = ShiftWorkViewModel.initiate(selectedDay, shiftWorkSettings)
     }
 
     fun closeShiftWorkDialog() {

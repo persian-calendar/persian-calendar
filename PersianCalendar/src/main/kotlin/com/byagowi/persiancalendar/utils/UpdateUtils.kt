@@ -117,6 +117,7 @@ import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
@@ -230,7 +231,7 @@ fun update(context: Context, updateDate: Boolean) {
         updateLauncherIcon(date, context)
     }
 
-    val shiftWorkTitle = getShiftWorkTitle(jdn)
+    val shiftWorkTitle = shiftWorkSettings.workTitle(jdn)
     val title =
         dayTitleSummary(jdn, date) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val widgetTitle = dayTitleSummary(
@@ -660,7 +661,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
             // TODO: Consider use of addStableView
             remoteViews.addView(id, dayView)
         }
-        val shiftWork = getShiftWorkTitle(day)
+        val shiftWork = shiftWorkSettings.workTitle(day)
         shiftWork?.let {
             val shiftWorkView = RemoteViews(context.packageName, R.layout.widget_month_shift_work)
             shiftWorkView.setTextViewText(R.id.title, it)

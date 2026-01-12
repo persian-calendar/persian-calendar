@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.prayTimesTitles
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
@@ -35,7 +36,6 @@ import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.eventKey
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
-import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readTwoWeekDeviceEvents
@@ -87,7 +87,7 @@ private class EventsViewFactory(
             it to sortEvents(eventsRepository.getEvents(it, deviceEvents), language)
         }.flatMapIndexed { i, (day, events) ->
             val items = buildList {
-                val shiftWorkTitle = getShiftWorkTitle(day)
+                val shiftWorkTitle = shiftWorkSettings.workTitle(day)
                 if (shiftWorkTitle != null) add(shiftWorkTitle)
                 if (events.isEmpty() && shiftWorkTitle == null && i == 0) {
                     add(nothingScheduledString)

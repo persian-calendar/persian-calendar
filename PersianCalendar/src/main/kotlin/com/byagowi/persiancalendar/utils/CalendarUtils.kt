@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.numericalDatePreferred
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
@@ -80,7 +81,7 @@ fun getA11yDaySummary(
 
     if (withTitle) appendLine().append(dayTitleSummary(jdn, mainDate))
 
-    val shift = getShiftWorkTitle(jdn)
+    val shift = shiftWorkSettings.workTitle(jdn)
     if (shift != null) appendLine().append(shift)
 
     if (withOtherCalendars) {

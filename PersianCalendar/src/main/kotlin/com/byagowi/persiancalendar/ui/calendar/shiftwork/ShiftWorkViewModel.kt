@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.utils.ShiftWorkSettings
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 
@@ -39,20 +40,22 @@ class ShiftWorkViewModel() : ViewModel() {
     }
 
     companion object {
-        fun initiateFromGlobalVariables(selectedJdn: Jdn): ShiftWorkViewModel {
+        fun initiate(
+            selectedJdn: Jdn,
+            shiftWorkSettings: ShiftWorkSettings,
+        ): ShiftWorkViewModel {
             val viewModel = ShiftWorkViewModel()
             viewModel.shiftWorks.addAll(
-                com.byagowi.persiancalendar.global.shiftWorks.takeIf { it.isNotEmpty() } ?: listOf(
+                shiftWorkSettings.records.takeIf { it.isNotEmpty() } ?: listOf(
                     ShiftWorkRecord(shiftWorkKeyToString("d"), 1),
                 ),
             )
             viewModel.isFirstSetup = false
-            viewModel.startingDate =
-                com.byagowi.persiancalendar.global.shiftWorkStartingJdn ?: viewModel.run {
-                    viewModel.isFirstSetup = true
-                    selectedJdn
-                }
-            viewModel.recurs = com.byagowi.persiancalendar.global.shiftWorkRecurs
+            viewModel.startingDate = shiftWorkSettings.startingJdn ?: viewModel.run {
+                viewModel.isFirstSetup = true
+                selectedJdn
+            }
+            viewModel.recurs = shiftWorkSettings.recurs
             return viewModel
         }
     }
