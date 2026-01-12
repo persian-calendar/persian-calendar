@@ -106,7 +106,7 @@ fun DatePickerDialog(
         },
     ) {
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
-        CalendarsTypesPicker(
+        CalendarPicker(
             modifier = Modifier.padding(top = 24.dp, bottom = 16.dp, start = 24.dp, end = 24.dp),
             items = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
             backgroundColor = AlertDialogDefaults.containerColor,

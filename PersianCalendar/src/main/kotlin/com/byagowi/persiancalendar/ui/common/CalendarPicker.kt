@@ -55,7 +55,7 @@ import kotlin.math.abs
 import kotlin.math.min
 
 @Composable
-fun CalendarsTypesPicker(
+fun CalendarPicker(
     value: Calendar,
     items: List<Calendar>,
     backgroundColor: Color,

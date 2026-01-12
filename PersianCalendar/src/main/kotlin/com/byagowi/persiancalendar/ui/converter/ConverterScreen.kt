@@ -84,8 +84,8 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
+import com.byagowi.persiancalendar.ui.common.CalendarPicker
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
-import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
@@ -489,7 +489,7 @@ private fun ColumnScope.ConverterAndDistance(
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
-            CalendarsTypesPicker(
+            CalendarPicker(
                 value = viewModel.calendar,
                 items = calendarsList,
                 backgroundColor = MaterialTheme.colorScheme.surface,
@@ -532,7 +532,7 @@ private fun ColumnScope.ConverterAndDistance(
             }
         }
     } else {
-        CalendarsTypesPicker(
+        CalendarPicker(
             value = viewModel.calendar,
             items = calendarsList,
             backgroundColor = MaterialTheme.colorScheme.surface,
