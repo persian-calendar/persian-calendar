@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -266,17 +267,28 @@ fun daysTable(
                     .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
                     .drawWithCache {
                         onDrawWithContent {
-                            drawContent()
+                            var holidayFraction = 1f
                             holidaysPositions.forEach { row, column ->
+                                val center = positionToOffset(row, column)
+                                val normalizedDistance = run {
+                                    (center - animatedCenter.value).getDistance() / cellRadius / 2
+                                }.coerceAtMost(1f)
                                 drawCircle(
                                     color = monthColors.holidaysCircle,
-                                    center = positionToOffset(row, column),
+                                    center = center,
                                     radius = cellRadius,
+                                    alpha = normalizedDistance,
                                 )
+                                holidayFraction = min(holidayFraction, normalizedDistance)
                             }
+                            drawContent()
                             val radiusFraction = animatedRadius.value
                             if (radiusFraction > 0f) drawCircle(
-                                color = monthColors.indicator,
+                                color = lerp(
+                                    start = monthColors.holidays,
+                                    stop = monthColors.indicator,
+                                    fraction = holidayFraction,
+                                ),
                                 center = animatedCenter.value,
                                 radius = cellRadius * radiusFraction,
                                 blendMode = BlendMode.SrcOut,
