@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
@@ -17,7 +16,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
-import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
@@ -208,10 +206,7 @@ class CalendarViewModel() : ViewModel() {
         return initialTab
     }
 
-    private var alreadyRuns = false
-    fun runFlows() {
-        if (alreadyRuns) return
-        alreadyRuns = true
+    init {
         viewModelScope.launch {
             while (true) {
                 delay(30.seconds)
@@ -222,14 +217,6 @@ class CalendarViewModel() : ViewModel() {
                     _today.value = today
                     if (!isHighlighted) _selectedDay.value = today
                 }
-            }
-        }
-        viewModelScope.launch {
-            snapshotFlow { resumeToken }.collect {
-                delay(.5.seconds)
-                refreshCalendar()
-                delay(.5.seconds)
-                refreshCalendar()
             }
         }
     }

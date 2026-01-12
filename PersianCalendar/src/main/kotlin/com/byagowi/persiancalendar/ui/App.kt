@@ -163,7 +163,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             entryProvider = entryProvider {
                 entry<Screen.Calendar> {
                     val viewModel = viewModel<CalendarViewModel>()
-                    LaunchedEffect(Unit) { viewModel.runFlows() }
                     calendarViewModel = viewModel
                     appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
                     CalendarScreen(
