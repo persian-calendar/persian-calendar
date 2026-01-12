@@ -341,7 +341,6 @@ fun daysTable(
                                     ) else Modifier,
                                 ),
                         ) {
-                            val isSelected = isHighlighted && selectedDay == day
                             val events = eventsRepository.getEvents(day, deviceEvents)
                             val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                             if (isHoliday) holidaysPositions.add(row = row, column = column)
@@ -353,7 +352,7 @@ fun daysTable(
                                 val shiftWorkTitle = getShiftWorkTitle(day, true)
                                 dayPainter.setDayOfMonthItem(
                                     isToday = false,
-                                    isSelected = isSelected,
+                                    isSelected = false,
                                     hasEvent = hasEvents,
                                     hasAppointment = hasAppointments,
                                     isHoliday = isHoliday,
