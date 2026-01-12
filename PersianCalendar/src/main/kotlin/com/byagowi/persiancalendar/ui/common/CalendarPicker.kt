@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
@@ -68,7 +67,7 @@ fun CalendarPicker(
         value = value,
         items = items,
         backgroundColor = backgroundColor,
-        height = calendarTypesHeight(),
+        height = calendarPickerHeight(),
         modifier = modifier,
         onValueChange = onValueChange,
     ) {
@@ -236,5 +235,5 @@ private fun <T> SegmentedButtonItemsPicker(
 }
 
 @Composable
-fun calendarTypesHeight() =
+fun calendarPickerHeight() =
     40.dp // LocalMinimumInteractiveComponentSize.current.coerceAtLeast(48.dp)
