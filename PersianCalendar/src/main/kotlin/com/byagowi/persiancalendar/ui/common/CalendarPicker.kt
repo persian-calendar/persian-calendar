@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
@@ -17,6 +18,7 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -185,43 +187,45 @@ private fun <T> SegmentedButtonItemsPicker(
                     }
                 },
         ) {
-            items.forEachIndexed { index, item ->
-                SegmentedButton(
-                    border = BorderStroke(0.dp, Color.Transparent),
-                    selected = value == item,
-                    onClick = {
-                        onValueChange(item)
-                        view.performHapticFeedbackVirtualKey()
-                        updateCellPosition(item)
-                    },
-                    contentPadding = PaddingValues(
-                        start = 12.dp,
-                        top = 0.dp,
-                        end = 12.dp,
-                        bottom = 0.dp,
-                    ),
-                    icon = {},
-                    colors = SegmentedButtonDefaults.colors(
-                        inactiveContainerColor = Color.Transparent,
-                        inactiveContentColor = inactiveContentColor,
-                        activeContainerColor = Color.Transparent,
-                        activeContentColor = inactiveContentColor,
-                    ),
-                    shape = SegmentedButtonDefaults.itemShape(index, items.size),
-                    modifier = Modifier
-                        .requiredHeight(height)
-                        .clip(capsuleShape)
-                        .weight(1f),
-                ) {
-                    Text(
-                        content(item),
-                        maxLines = 1,
-                        softWrap = false,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 6.sp,
-                            maxFontSize = LocalTextStyle.current.fontSize,
+            CompositionLocalProvider(
+                LocalRippleConfiguration provides when {
+                    cellLeft.isRunning || cellRight.isRunning -> null
+                    else -> LocalRippleConfiguration.current
+                },
+            ) {
+                items.forEachIndexed { index, item ->
+                    SegmentedButton(
+                        border = BorderStroke(0.dp, Color.Transparent),
+                        selected = value == item,
+                        onClick = {
+                            onValueChange(item)
+                            view.performHapticFeedbackVirtualKey()
+                            updateCellPosition(item)
+                        },
+                        contentPadding = PaddingValues(horizontal = 12.dp),
+                        icon = {},
+                        colors = SegmentedButtonDefaults.colors(
+                            inactiveContainerColor = Color.Transparent,
+                            inactiveContentColor = inactiveContentColor,
+                            activeContainerColor = Color.Transparent,
+                            activeContentColor = inactiveContentColor,
                         ),
-                    )
+                        shape = SegmentedButtonDefaults.itemShape(index, items.size),
+                        modifier = Modifier
+                            .requiredHeight(height)
+                            .clip(capsuleShape)
+                            .weight(1f),
+                    ) {
+                        Text(
+                            text = content(item),
+                            maxLines = 1,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 6.sp,
+                                maxFontSize = LocalTextStyle.current.fontSize,
+                            ),
+                        )
+                    }
                 }
             }
         }

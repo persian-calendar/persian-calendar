@@ -49,7 +49,7 @@ fun AppDropdownMenuItem(
             text = text,
             onClick = onClick,
             trailingIcon = trailingIcon,
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 0.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp),
             enabled = enabled,
             modifier = modifier,
         )
