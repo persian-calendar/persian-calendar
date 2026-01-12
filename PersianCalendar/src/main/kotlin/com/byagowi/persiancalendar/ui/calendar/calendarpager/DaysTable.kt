@@ -32,7 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.CompositingStrategy
@@ -240,22 +240,24 @@ fun daysTable(
                 Modifier
                     .fillMaxSize()
                     .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
-                    .drawWithContent {
-                        drawContent()
-                        holidaysPositions.forEach { row, column ->
-                            drawCircle(
-                                color = monthColors.holidaysCircle,
-                                center = positionToOffset(row, column),
-                                radius = cellRadius,
+                    .drawWithCache {
+                        onDrawWithContent {
+                            drawContent()
+                            holidaysPositions.forEach { row, column ->
+                                drawCircle(
+                                    color = monthColors.holidaysCircle,
+                                    center = positionToOffset(row, column),
+                                    radius = cellRadius,
+                                )
+                            }
+                            val radiusFraction = animatedRadius.value
+                            if (radiusFraction > 0f) drawCircle(
+                                color = monthColors.indicator,
+                                center = animatedCenter.value,
+                                radius = cellRadius * radiusFraction,
+                                blendMode = BlendMode.SrcOut,
                             )
                         }
-                        val radiusFraction = animatedRadius.value
-                        if (radiusFraction > 0f) drawCircle(
-                            color = monthColors.indicator,
-                            center = animatedCenter.value,
-                            radius = cellRadius * radiusFraction,
-                            blendMode = BlendMode.SrcOut,
-                        )
                     },
             ) {
                 repeat(daysRowsCount * 7) { dayOffset ->
