@@ -65,10 +65,10 @@ class DayPainter(
     private var header = ""
 
     fun drawDay(canvas: Canvas) {
-        drawCircle(canvas) // background circle, if is needed
         drawText(canvas) // can be a day number, week day name abbr or week number of year
         drawIndicators(canvas) // whether a day has event or appointment
         drawHeader(canvas) // shift work header
+        drawCircle(canvas) // background circle, if is needed
     }
 
     private fun drawCircle(canvas: Canvas) {
@@ -238,7 +238,7 @@ private class Paints(
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
             it.color = selectedDayColor
-            it.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+            it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
             if (typeface != null) it.typeface = typeface
         }
     }

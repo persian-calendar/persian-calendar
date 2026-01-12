@@ -38,7 +38,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
@@ -176,6 +178,10 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         }
     }
     val language = language
+    val selectedDayMonth = calendar.getMonthStartFromMonthsDistance(
+        baseJdn = viewModel.selectedDay,
+        monthsDistance = 0,
+    )
 
     LazyColumn(
         state = lazyListState,
@@ -251,7 +257,15 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                         textAlign = TextAlign.Center,
                                         lineHeight = titleLineHeight,
                                     )
-                                    Canvas(Modifier.fillMaxSize()) {
+                                    Canvas(
+                                        Modifier
+                                            .fillMaxSize()
+                                            .then(
+                                                if (monthDate == selectedDayMonth) Modifier.graphicsLayer(
+                                                    compositingStrategy = CompositingStrategy.Offscreen,
+                                                ) else Modifier,
+                                            ),
+                                    ) {
                                         drawIntoCanvas { canvas ->
                                             renderMonthWidget(
                                                 dayPainter = dayPainter[this.size.height],
