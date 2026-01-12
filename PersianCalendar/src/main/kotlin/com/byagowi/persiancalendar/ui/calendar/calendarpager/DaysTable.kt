@@ -341,7 +341,9 @@ fun daysTable(
                                     ) else Modifier,
                                 ),
                         ) {
-                            val events = eventsRepository.getEvents(day, deviceEvents)
+                            val events = remember(eventsRepository, day, deviceEvents) {
+                                eventsRepository.getEvents(day, deviceEvents)
+                            }
                             val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                             if (isHoliday) holidaysPositions.add(row = row, column = column)
                             Canvas(cellsSizeModifier) {
