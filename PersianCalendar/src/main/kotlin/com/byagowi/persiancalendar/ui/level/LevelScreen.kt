@@ -166,6 +166,8 @@ fun SharedTransitionScope.LevelScreen(
             targetValue = if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
             animationSpec = tween(durationMillis = 500, easing = LinearEasing),
         )
+        var everWentFullscreen by remember { mutableStateOf(false) }
+        if (isFullscreen) everWentFullscreen = true
         ScreenSurface(
             shape = MaterialTheme.shapes.large.copy(
                 topStart = CornerSize(topCornersRoundness),
@@ -173,6 +175,7 @@ fun SharedTransitionScope.LevelScreen(
                 bottomStart = ZeroCornerSize,
                 bottomEnd = ZeroCornerSize,
             ),
+            disableSharedContent = everWentFullscreen,
         ) {
             Box {
                 Crossfade(targetState = cmInchFlip) { cmInchFlip ->
