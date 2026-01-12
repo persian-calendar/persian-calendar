@@ -130,7 +130,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                     colors = monthColors,
                     fontFile = fontFile,
                     isYearView = true,
-                    selectedDayColor = monthColors.indicator.toArgb(),
                     holidayCircleColor = monthColors.holidaysCircle.toArgb(),
                     isBoldFont = isBoldFont,
                 )

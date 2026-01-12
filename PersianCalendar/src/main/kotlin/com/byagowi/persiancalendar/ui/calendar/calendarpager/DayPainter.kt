@@ -38,12 +38,11 @@ class DayPainter(
     isBoldFont: Boolean = false,
     isWidget: Boolean = false,
     isYearView: Boolean = false,
-    selectedDayColor: Int? = null,
     holidayCircleColor: Int? = null,
 ) {
     private val paints = Paints(
         resources, min(width, height), colors, isWidget, isYearView,
-        selectedDayColor, holidayCircleColor,
+        holidayCircleColor,
         typeface = fontFile?.let(Typeface::createFromFile).let {
             if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
         },
@@ -80,14 +79,12 @@ class DayPainter(
                 it,
             )
         }
-        if (dayIsSelected) paints.selectedDayPaint?.let { selectedDayPaint ->
-            canvas.drawCircle(
-                width / 2,
-                height / 2,
-                min(width, height) / 2 - paints.circlePadding,
-                selectedDayPaint,
-            )
-        }
+        if (dayIsSelected) canvas.drawCircle(
+            width / 2,
+            height / 2,
+            min(width, height) / 2 - paints.circlePadding,
+            if (holiday) paints.selectedDayPaintHoliday else paints.selectedDayPaint,
+        )
         if (today) canvas.drawCircle(
             width / 2,
             height / 2,
@@ -198,7 +195,6 @@ private class Paints(
     colors: MonthColors,
     isWidget: Boolean,
     isYearView: Boolean,
-    @ColorInt selectedDayColor: Int?,
     @ColorInt holidayCircleColor: Int?,
     typeface: Typeface?,
     zodiacFont: Typeface?,
@@ -230,17 +226,21 @@ private class Paints(
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 1 * dp
+        it.strokeWidth = 1.5f * dp
         it.color = colors.currentDay.toArgb()
         if (typeface != null) it.typeface = typeface
     }
-    val selectedDayPaint = selectedDayColor?.let {
-        Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.FILL
-            it.color = selectedDayColor
-            it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
-            if (typeface != null) it.typeface = typeface
-        }
+    val selectedDayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.color = colors.indicator.toArgb()
+        it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
+        if (typeface != null) it.typeface = typeface
+    }
+    val selectedDayPaintHoliday = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.color = colors.holidays.toArgb()
+        it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
+        if (typeface != null) it.typeface = typeface
     }
     val holidayPaint = holidayCircleColor?.let { color ->
         Paint(Paint.ANTI_ALIAS_FLAG).also {
