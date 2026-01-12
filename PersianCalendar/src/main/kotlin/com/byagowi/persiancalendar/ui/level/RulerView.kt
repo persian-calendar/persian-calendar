@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 
 @Composable
-fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
+fun RulerView(modifier: Modifier, cmInchFlip: Boolean, isFullscreen: Boolean) {
     // xdpi/ydpi doesn't swap on screen rotation so a logic like this is needed though it isn't
     // obvious for me yet whether this is a correct one.
     val dpi = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -45,7 +45,9 @@ fun RulerView(modifier: Modifier, cmInchFlip: Boolean) {
                             topLeft = Offset(
                                 x = if (end) size.width - 30.dp.toPx() - textLayoutResult.size.width
                                 else 30.dp.toPx(),
-                                y = y - textLayoutResult.size.height / 2,
+                                y = y - textLayoutResult.size.height * run {
+                                    if (isFullscreen && it == 0) .25f else .5f
+                                },
                             ),
                         )
                         25.dp

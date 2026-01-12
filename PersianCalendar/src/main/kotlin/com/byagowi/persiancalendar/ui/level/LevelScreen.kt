@@ -184,6 +184,7 @@ fun SharedTransitionScope.LevelScreen(
                                 else Modifier.padding(top = topCornersRoundness),
                             ),
                         cmInchFlip = cmInchFlip,
+                        isFullscreen = isFullscreen,
                     )
                 }
                 Column {
