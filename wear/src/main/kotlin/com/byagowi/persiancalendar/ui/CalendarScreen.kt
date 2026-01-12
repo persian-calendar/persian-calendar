@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -84,11 +85,11 @@ fun CalendarScreen(
                             Box(
                                 Modifier
                                     .fillParentMaxSize()
+                                    .clip(RoundedCornerShape(50))
                                     .background(
                                         color = if (isHoliday) {
                                             MaterialTheme.colorScheme.primaryContainer.copy(alpha = .7f)
                                         } else Color.Transparent,
-                                        shape = RoundedCornerShape(50),
                                     )
                                     .clickable { navigateToDay(jdn) },
                             )
