@@ -222,7 +222,7 @@ fun daysTable(
                 if (indicatorCenter != null) Toast.makeText(
                     context,
                     getA11yDaySummary(
-                        resources = context.resources,
+                        resources = resources,
                         jdn = selectedDay,
                         isToday = false,
                         deviceCalendarEvents = EventsStore.empty(),
@@ -264,7 +264,11 @@ fun daysTable(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .then(
+                        if (animatedRadius.value == 0f) Modifier else {
+                            Modifier.graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                        },
+                    )
                     .drawWithCache {
                         onDrawWithContent {
                             var holidayFraction = 1f
