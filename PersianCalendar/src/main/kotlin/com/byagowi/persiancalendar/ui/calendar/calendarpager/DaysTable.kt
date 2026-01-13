@@ -184,7 +184,7 @@ fun daysTable(
         ) {
             val highlightedDayOfMonth = selectedDay - monthStartJdn
             val indicatorCenter = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) {
-                val cellIndex = selectedDay - monthStartJdn + startingWeekDay
+                val cellIndex = highlightedDayOfMonth + startingWeekDay
                 positionToOffset(
                     row = if (onlyWeek != null) 0 else cellIndex / 7,
                     column = cellIndex % 7,
@@ -251,7 +251,7 @@ fun daysTable(
                         weekDay.title,
                     )
                     Text(
-                        weekDay.shortTitle,
+                        text = weekDay.shortTitle,
                         fontSize = with(density) { (diameter * .5f).toSp() },
                         modifier = Modifier
                             .alpha(AppBlendAlpha)
@@ -272,7 +272,7 @@ fun daysTable(
                                 val center = positionToOffset(row, column)
                                 val normalizedDistance = run {
                                     (center - animatedCenter.value).getDistance() / cellRadius / 2
-                                }.coerceAtMost(1f)
+                                }.coerceIn(1 - animatedRadius.value.coerceIn(0f, 1f), 1f)
                                 drawCircle(
                                     color = monthColors.holidaysCircle,
                                     center = center,
