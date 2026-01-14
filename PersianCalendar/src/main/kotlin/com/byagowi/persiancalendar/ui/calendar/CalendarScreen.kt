@@ -181,6 +181,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -612,7 +613,11 @@ private fun Details(
             containerColor = Color.Transparent,
             indicator = {
                 val offset = viewModel.selectedTab.ordinal.coerceAtMost(tabs.size - 1)
-                TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
+                val tabIndicatorColor by animateColor(MaterialTheme.colorScheme.primary)
+                TabRowDefaults.PrimaryIndicator(
+                    modifier = Modifier.tabIndicatorOffset(selectedTabIndex = offset),
+                    color = tabIndicatorColor,
+                )
             },
         ) {
             tabs.forEachIndexed { index, (tab, _) ->
