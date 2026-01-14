@@ -455,10 +455,12 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color(0xFF42AFBF)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val indicatorFillColor = when (theme) {
-        Theme.DARK, Theme.BLACK -> contentColor.copy(AppBlendAlpha)
-        else -> contentColor
-    }
+    val indicatorFillColor = contentColor.copy(
+        alpha = when (theme) {
+            Theme.DARK, Theme.BLACK -> AppBlendAlpha
+            else -> .85f
+        },
+    )
     return MonthColors(
         contentColor = contentColor,
         appointments = colorAppointments,
