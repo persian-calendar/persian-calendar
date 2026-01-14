@@ -25,7 +25,6 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
-import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
@@ -174,9 +173,6 @@ private var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 @ColorInt
 private var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-
-@get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-val prefersWidgetsDynamicColors: Boolean get() = prefersWidgetsDynamicColors
 
 // Is called from MainActivity to make sure is updated, probably should be removed however
 fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
