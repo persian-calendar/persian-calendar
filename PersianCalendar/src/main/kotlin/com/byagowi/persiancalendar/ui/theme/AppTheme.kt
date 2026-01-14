@@ -467,6 +467,10 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
+    val indicatorFillColor = when (theme) {
+        Theme.DARK, Theme.BLACK -> contentColor.copy(AppBlendAlpha)
+        else -> contentColor
+    }
     return MonthColors(
         contentColor = contentColor,
         appointments = colorAppointments,
@@ -474,7 +478,7 @@ fun appMonthColors(): MonthColors {
         holidaysFill = holidaysFillColor,
         todayOutline = todayOutlineColor,
         eventIndicator = colorEventIndicator,
-        indicatorFill = contentColor,
+        indicatorFill = indicatorFillColor,
     )
 }
 
