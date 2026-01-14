@@ -119,7 +119,7 @@ class DayPainter(
             canvas.drawCircle(
                 width / 2f + xOffset, height / 2 + paints.eventYOffset,
                 paints.eventIndicatorRadius,
-                paints.dayOfMonthNumberTextHolidayPaint,
+                paint,
             )
         }
     }
@@ -217,7 +217,6 @@ private class Paints(
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.appointments.toArgb()
         if (typeface != null) it.typeface = typeface
-        if (isBoldFont) it.isFakeBoldText = true
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.eventIndicator.toArgb()
