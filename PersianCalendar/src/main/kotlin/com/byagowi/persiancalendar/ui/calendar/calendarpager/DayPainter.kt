@@ -27,31 +27,42 @@ import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import java.io.File
 import kotlin.math.min
 
-class DayPainter(
-    context: Context,
-    resources: Resources,
+class DayPainter private constructor(
     val width: Float,
     val height: Float,
+    private val paints: Paints,
     private val isRtl: Boolean,
-    colors: MonthColors,
-    fontFile: File? = null,
-    isBoldFont: Boolean = false,
-    isWidget: Boolean = false,
-    isYearView: Boolean = false,
-    holidayCircleColor: Int? = null,
 ) {
-    private val paints = Paints(
-        resources, min(width, height), colors, isWidget, isYearView,
-        holidayCircleColor,
-        typeface = fontFile?.let(Typeface::createFromFile).let {
-            if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
-        },
-        isBoldFont = isBoldFont,
-        zodiacFont = ResourcesCompat.getFont(
-            context,
-            R.font.notosanssymbolsregularzodiacsubset,
+    constructor(
+        context: Context,
+        resources: Resources,
+        width: Float,
+        height: Float,
+        isRtl: Boolean,
+        colors: MonthColors,
+        fontFile: File? = null,
+        isBoldFont: Boolean = false,
+        isWidget: Boolean = false,
+        isYearView: Boolean = false,
+        holidayCircleColor: Int? = null,
+    ) : this(
+        paints = Paints(
+            resources, min(width, height), colors, isWidget, isYearView,
+            holidayCircleColor,
+            typeface = fontFile?.let(Typeface::createFromFile).let {
+                if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
+            },
+            isBoldFont = isBoldFont,
+            zodiacFont = ResourcesCompat.getFont(
+                context,
+                R.font.notosanssymbolsregularzodiacsubset,
+            ),
         ),
+        width = width,
+        height = height,
+        isRtl = isRtl,
     )
+
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -92,6 +103,8 @@ class DayPainter(
             paints.todayPaint,
         )
     }
+
+    fun copy() = DayPainter(width = width, height = height, paints = paints, isRtl = isRtl)
 
     private val textBounds = Rect()
     private fun drawText(canvas: Canvas) {
@@ -153,7 +166,7 @@ class DayPainter(
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
         jdn: Jdn? = null, header: String? = null, isWeekNumber: Boolean = false,
         secondaryCalendar: Calendar? = null,
-    ) {
+    ): DayPainter {
         this.text = text
         this.today = isToday
         this.dayIsSelected = isSelected
@@ -172,6 +185,7 @@ class DayPainter(
             hasAppointment to paints.appointmentIndicatorPaint,
             hasEvent to paints.eventIndicatorPaint,
         ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
+        return this
     }
 
     fun setDayOfMonthItem(

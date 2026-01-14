@@ -125,7 +125,7 @@ fun daysTable(
     val resources = LocalResources.current
     val diameter = min(cellWidth, cellHeight)
     val context = LocalContext.current
-    val dayPainter = remember(
+    val baseDayPainter = remember(
         cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile, isBoldFont,
     ) {
         DayPainter(
@@ -392,25 +392,27 @@ fun daysTable(
                             }
                             val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                             if (isHoliday) holidaysPositions.add(row = row, column = column)
-                            val shiftWorkTitle = remember(shiftWorkTitles, shiftWorkSettings) {
-                                shiftWorkSettings.workTitle(day, true)
-                            }
-                            Canvas(cellsSizeModifier) {
-                                val hasEvents =
-                                    events.any { it !is CalendarEvent.DeviceCalendarEvent }
-                                val hasAppointments =
-                                    events.any { it is CalendarEvent.DeviceCalendarEvent }
-                                dayPainter.setDayOfMonthItem(
+                            val dayPainter = remember(
+                                baseDayPainter,
+                                events,
+                                secondaryCalendar,
+                                shiftWorkSettings,
+                                // titles is used inside the settings object
+                                shiftWorkTitles,
+                            ) {
+                                baseDayPainter.copy().setDayOfMonthItem(
                                     isToday = false,
                                     isSelected = false,
-                                    hasEvent = hasEvents,
-                                    hasAppointment = hasAppointments,
+                                    hasEvent = events.any { it !is CalendarEvent.DeviceCalendarEvent },
+                                    hasAppointment = events.any { it is CalendarEvent.DeviceCalendarEvent },
                                     isHoliday = isHoliday,
                                     jdn = day,
                                     dayOfMonth = "",
-                                    header = shiftWorkTitle,
+                                    header = shiftWorkSettings.workTitle(day, true),
                                     secondaryCalendar = secondaryCalendar,
                                 )
+                            }
+                            Canvas(cellsSizeModifier) {
                                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                                 if (isToday) drawCircle(
                                     color = todayOutlineColor,
