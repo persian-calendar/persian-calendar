@@ -227,12 +227,12 @@ private class Paints(
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1.5f * dp
-        it.color = colors.currentDay.toArgb()
+        it.color = colors.todayOutline.toArgb()
         if (typeface != null) it.typeface = typeface
     }
     val selectedDayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
-        it.color = colors.indicator.toArgb()
+        it.color = colors.indicatorFill.toArgb()
         it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
         if (typeface != null) it.typeface = typeface
     }

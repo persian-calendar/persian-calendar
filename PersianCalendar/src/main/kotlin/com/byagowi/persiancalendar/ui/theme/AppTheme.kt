@@ -442,8 +442,8 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> .075f
         else -> null.debugAssertNotNull ?: 0f
     }
-    val colorHolidaysCircle = colorHolidays.copy(alpha = holidayCircleAlpha)
-    val colorCurrentDay = if (theme.isDynamicColors) when (theme) {
+    val holidaysFillColor = colorHolidays.copy(alpha = holidayCircleAlpha)
+    val todayOutlineColor = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_400)
         Theme.DARK, Theme.BLACK -> getResourcesColor(android.R.color.system_accent1_200)
         Theme.MODERN -> getResourcesColor(android.R.color.system_accent1_600)
@@ -471,10 +471,10 @@ fun appMonthColors(): MonthColors {
         contentColor = contentColor,
         appointments = colorAppointments,
         holidays = colorHolidays,
-        holidaysCircle = colorHolidaysCircle,
-        currentDay = colorCurrentDay,
+        holidaysFill = holidaysFillColor,
+        todayOutline = todayOutlineColor,
         eventIndicator = colorEventIndicator,
-        indicator = contentColor,
+        indicatorFill = contentColor,
     )
 }
 

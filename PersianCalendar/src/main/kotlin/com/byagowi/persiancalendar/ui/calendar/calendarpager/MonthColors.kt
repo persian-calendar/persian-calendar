@@ -8,9 +8,9 @@ data class MonthColors(
     val appointments: Color,
     val holidays: Color,
     val eventIndicator: Color,
-    val currentDay: Color,
-    val indicator: Color,
-    val holidaysCircle: Color,
+    val todayOutline: Color,
+    val indicatorFill: Color,
+    val holidaysFill: Color,
 ) {
     val colorTextDayName = contentColor.copy(alpha = AppBlendAlpha)
 }

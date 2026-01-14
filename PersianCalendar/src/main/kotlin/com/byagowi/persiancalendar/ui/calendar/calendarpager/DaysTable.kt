@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -76,6 +77,7 @@ import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -150,6 +152,10 @@ fun daysTable(
     val todayIndicatorStroke = with(density) {
         Stroke(width = (if (isBoldFont) 3 else 2).dp.toPx())
     }
+    val indicatorFillColor by animateColor(monthColors.indicatorFill)
+    val todayOutlineColor by animateColor(monthColors.todayOutline)
+    val holidaysColor by animateColor(monthColors.holidays)
+    val holidaysFillColor by animateColor(monthColors.holidaysFill)
     val weekStart = weekStart
     val eventsRepository = eventsRepository
     val shiftWorkSettings = shiftWorkSettings
@@ -278,7 +284,7 @@ fun daysTable(
                                     (center - animatedCenter.value).getDistance() / cellRadius / 2
                                 }.coerceIn(1 - animatedRadius.value.coerceIn(0f, 1f), 1f)
                                 drawCircle(
-                                    color = monthColors.holidaysCircle,
+                                    color = holidaysFillColor,
                                     center = center,
                                     radius = cellRadius,
                                     alpha = normalizedDistance,
@@ -289,8 +295,8 @@ fun daysTable(
                             val radiusFraction = animatedRadius.value
                             if (radiusFraction > 0f) drawCircle(
                                 color = lerp(
-                                    start = monthColors.holidays,
-                                    stop = monthColors.indicator,
+                                    start = holidaysColor,
+                                    stop = indicatorFillColor,
                                     fraction = holidayFraction,
                                 ),
                                 center = animatedCenter.value,
@@ -407,7 +413,7 @@ fun daysTable(
                                 )
                                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                                 if (isToday) drawCircle(
-                                    monthColors.currentDay,
+                                    color = todayOutlineColor,
                                     radius = cellRadius,
                                     style = todayIndicatorStroke,
                                 )
@@ -420,7 +426,7 @@ fun daysTable(
                                         dayOffset + 1 - monthLength - startingWeekDay
                                     } else dayOffset + 1 - startingWeekDay,
                                 ),
-                                color = if (isHoliday) monthColors.holidays else contentColor,
+                                color = if (isHoliday) holidaysColor else contentColor,
                                 style = daysStyle,
                                 modifier = Modifier
                                     .padding(top = cellHeight / 15)

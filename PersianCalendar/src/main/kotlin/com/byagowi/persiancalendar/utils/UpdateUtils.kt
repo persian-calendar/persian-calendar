@@ -861,10 +861,10 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
             else 0xFF376E9F.toInt(),
         ),
         holidays = holidaysColor,
-        holidaysCircle = holidaysColor.copy(alpha = .175f),
+        holidaysFill = holidaysColor.copy(alpha = .175f),
         eventIndicator = contentColor,
-        currentDay = contentColor,
-        indicator = androidx.compose.ui.graphics.Color.Transparent,
+        todayOutline = contentColor,
+        indicatorFill = androidx.compose.ui.graphics.Color.Transparent,
     )
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
@@ -892,7 +892,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
             isRtl = isRtl,
             colors = colors,
             isWidget = true,
-            holidayCircleColor = colors.holidaysCircle.toArgb(),
+            holidayCircleColor = colors.holidaysFill.toArgb(),
         ),
         calendar = mainCalendar,
         width = width.toFloat(),
