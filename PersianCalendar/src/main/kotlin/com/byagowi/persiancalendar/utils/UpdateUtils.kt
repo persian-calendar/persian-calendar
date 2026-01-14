@@ -862,7 +862,6 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         ),
         holidays = holidaysColor,
         holidaysFill = holidaysColor.copy(alpha = .175f),
-        eventIndicator = contentColor,
         todayOutline = contentColor,
         indicatorFill = androidx.compose.ui.graphics.Color.Transparent,
     )

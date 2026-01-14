@@ -7,7 +7,6 @@ data class MonthColors(
     val contentColor: Color,
     val appointments: Color,
     val holidays: Color,
-    val eventIndicator: Color,
     val todayOutline: Color,
     val indicatorFill: Color,
     val holidaysFill: Color,

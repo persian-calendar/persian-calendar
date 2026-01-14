@@ -219,7 +219,7 @@ private class Paints(
         if (typeface != null) it.typeface = typeface
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = colors.eventIndicator.toArgb()
+        it.color = colors.contentColor.toArgb()
         if (typeface != null) it.typeface = typeface
     }
 
