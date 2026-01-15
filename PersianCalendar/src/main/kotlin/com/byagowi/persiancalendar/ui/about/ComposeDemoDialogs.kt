@@ -46,7 +46,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
@@ -70,6 +69,7 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
+import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
@@ -240,7 +240,6 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
         "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000",
     )
     val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
-    val resources = LocalResources.current
     AppDialog(onDismissRequest = onDismissRequest) {
         Column {
             Row {
@@ -254,14 +253,7 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
                     cols.drop(1).forEachIndexed { j, _ ->
                         Box(
                             Modifier
-                                .background(
-                                    Color(
-                                        resources.getColor(
-                                            dynamicColors[rows.size * j + i],
-                                            null,
-                                        ),
-                                    ),
-                                )
+                                .background(getResourcesColor(dynamicColors[rows.size * j + i]))
                                 .weight(1f),
                         ) { Text(" ") }
                     }

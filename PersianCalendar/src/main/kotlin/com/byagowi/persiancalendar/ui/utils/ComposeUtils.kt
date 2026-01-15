@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.utils
 import android.view.View
 import android.view.ViewParent
 import android.view.Window
+import androidx.annotation.ColorRes
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
 import com.byagowi.persiancalendar.entities.Jdn
@@ -39,6 +41,9 @@ import com.byagowi.persiancalendar.entities.Jdn
  */
 @Stable
 val Color.isLight: Boolean get() = this.luminance() > .5
+
+@Composable
+fun getResourcesColor(@ColorRes id: Int) = Color(LocalResources.current.getColor(id, null))
 
 /**
  * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently

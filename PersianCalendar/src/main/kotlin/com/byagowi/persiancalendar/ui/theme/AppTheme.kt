@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.os.PowerManager
 import android.view.View
-import androidx.annotation.ColorRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
@@ -84,6 +83,7 @@ import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -269,12 +269,6 @@ private fun appColorScheme(): ColorScheme {
 }
 
 @Composable
-private fun getResourcesColorInt(@ColorRes id: Int) = LocalResources.current.getColor(id, null)
-
-@Composable
-private fun getResourcesColor(@ColorRes id: Int) = Color(getResourcesColorInt(id))
-
-@Composable
 private fun appShapes(): Shapes {
     if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
     val isCyberpunk = isCyberpunk
@@ -347,13 +341,15 @@ private fun appBackground(): Brush {
     val isGradient = isGradient
     val backgroundGradientStart by animateColor(
         if (!isGradient) backgroundColor
-        else if (theme.isDynamicColors) when (theme) {
-            Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_500)
-            Theme.DARK -> getResourcesColor(android.R.color.system_neutral1_700)
-            Theme.BLACK -> getResourcesColor(android.R.color.system_neutral1_1000)
-            Theme.MODERN -> getResourcesColor(android.R.color.system_accent1_0)
-            else -> null.debugAssertNotNull ?: Color.Transparent
-        } else when (theme) {
+        else if (theme.isDynamicColors) getResourcesColor(
+            when (theme) {
+                Theme.LIGHT -> android.R.color.system_accent1_500
+                Theme.DARK -> android.R.color.system_neutral1_700
+                Theme.BLACK -> android.R.color.system_neutral1_1000
+                Theme.MODERN -> android.R.color.system_accent1_0
+                else -> null.debugAssertNotNull ?: android.R.color.transparent
+            },
+        ) else when (theme) {
             Theme.LIGHT -> Color(0xFF00796B)
             Theme.DARK -> Color(0xFF3E4042)
             Theme.BLACK -> Color.Black
@@ -364,13 +360,15 @@ private fun appBackground(): Brush {
     )
     val backgroundGradientEnd by animateColor(
         if (!isGradient) backgroundColor
-        else if (theme.isDynamicColors) when (theme) {
-            Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_900)
-            Theme.DARK -> getResourcesColor(android.R.color.system_neutral1_900)
-            Theme.BLACK -> getResourcesColor(android.R.color.system_neutral1_1000)
-            Theme.MODERN -> getResourcesColor(android.R.color.system_accent1_100)
-            else -> null.debugAssertNotNull ?: Color.Transparent
-        } else when (theme) {
+        else if (theme.isDynamicColors) getResourcesColor(
+            when (theme) {
+                Theme.LIGHT -> android.R.color.system_accent1_900
+                Theme.DARK -> android.R.color.system_neutral1_900
+                Theme.BLACK -> android.R.color.system_neutral1_1000
+                Theme.MODERN -> android.R.color.system_accent1_100
+                else -> null.debugAssertNotNull ?: android.R.color.transparent
+            },
+        ) else when (theme) {
             Theme.LIGHT -> Color(0xFF004D40)
             Theme.DARK -> Color(0xFF191C1E)
             Theme.BLACK -> Color.Black
@@ -404,24 +402,28 @@ fun appSliderColor(): SliderColors {
 fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme = effectiveTheme()
-    val colorAppointments = if (theme.isDynamicColors) when (theme) {
-        Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_200)
-        Theme.DARK, Theme.BLACK -> getResourcesColor(android.R.color.system_accent1_200)
-        Theme.MODERN -> getResourcesColor(android.R.color.system_accent1_400)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (theme) {
+    val colorAppointments = if (theme.isDynamicColors) getResourcesColor(
+        when (theme) {
+            Theme.LIGHT -> android.R.color.system_accent1_200
+            Theme.DARK, Theme.BLACK -> android.R.color.system_accent1_200
+            Theme.MODERN -> android.R.color.system_accent1_400
+            else -> null.debugAssertNotNull ?: android.R.color.transparent
+        },
+    ) else when (theme) {
         Theme.LIGHT -> Color(0xFF74BBEF)
         Theme.DARK, Theme.BLACK -> Color(0xFF74BBEF)
         Theme.AQUA -> Color(0xFF74BBEF)
         Theme.MODERN -> Color(0xFF376E9F)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorHolidays = if (theme.isDynamicColors && !isRedHolidays) when (theme) {
-        Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_200)
-        Theme.DARK, Theme.BLACK -> getResourcesColor(android.R.color.system_accent1_200)
-        Theme.MODERN -> getResourcesColor(android.R.color.system_accent1_400)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (theme) {
+    val colorHolidays = if (theme.isDynamicColors && !isRedHolidays) getResourcesColor(
+        when (theme) {
+            Theme.LIGHT -> android.R.color.system_accent1_200
+            Theme.DARK, Theme.BLACK -> android.R.color.system_accent1_200
+            Theme.MODERN -> android.R.color.system_accent1_400
+            else -> null.debugAssertNotNull ?: android.R.color.transparent
+        },
+    ) else when (theme) {
         Theme.LIGHT -> Color(0xFFFF8A65)
         Theme.DARK, Theme.BLACK -> Color(0xFFE65100)
         Theme.AQUA -> Color(0xFFFF8A65)
@@ -443,12 +445,14 @@ fun appMonthColors(): MonthColors {
         else -> null.debugAssertNotNull ?: 0f
     }
     val holidaysFillColor = colorHolidays.copy(alpha = holidayCircleAlpha)
-    val todayOutlineColor = if (theme.isDynamicColors) when (theme) {
-        Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_400)
-        Theme.DARK, Theme.BLACK -> getResourcesColor(android.R.color.system_accent1_200)
-        Theme.MODERN -> getResourcesColor(android.R.color.system_accent1_600)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (theme) {
+    val todayOutlineColor = if (theme.isDynamicColors) getResourcesColor(
+        when (theme) {
+            Theme.LIGHT -> android.R.color.system_accent1_400
+            Theme.DARK, Theme.BLACK -> android.R.color.system_accent1_200
+            Theme.MODERN -> android.R.color.system_accent1_600
+            else -> null.debugAssertNotNull ?: android.R.color.transparent
+        },
+    ) else when (theme) {
         Theme.LIGHT -> Color(0xFFFF7043)
         Theme.DARK, Theme.BLACK -> Color(0xFF82B1FF)
         Theme.AQUA -> Color(0xFFFF7043)
@@ -503,12 +507,12 @@ fun appSunViewColors(): SunViewColors {
         else -> android.R.color.system_accent1_100
     } else R.color.sun_view_midday_color
     return SunViewColors(
-        nightColor = getResourcesColorInt(nightColor),
-        dayColor = getResourcesColorInt(dayColor),
-        middayColor = getResourcesColorInt(midDayColor),
-        sunriseTextColor = 0xFFFF9800.toInt(),
-        middayTextColor = 0xFFFFC107.toInt(),
-        sunsetTextColor = 0xFFF22424.toInt(),
+        nightColor = getResourcesColor(nightColor).toArgb(),
+        dayColor = getResourcesColor(dayColor).toArgb(),
+        middayColor = getResourcesColor(midDayColor).toArgb(),
+        sunriseTextColor = Color(0xFFFF9800).toArgb(),
+        middayTextColor = Color(0xFFFFC107).toArgb(),
+        sunsetTextColor = Color(0xFFF22424).toArgb(),
         textColorSecondary = LocalContentColor.current.copy(alpha = AppBlendAlpha).toArgb(),
         linesColor = MaterialTheme.colorScheme.outlineVariant.toArgb(),
     )
