@@ -4,7 +4,7 @@ import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.lifecycle.ViewModel
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
@@ -14,10 +14,8 @@ class AstronomyViewModel : ViewModel() {
     private var _minutesOffset = mutableIntStateOf(DEFAULT_TIME)
     val minutesOffset by _minutesOffset
 
-    private val _astronomyState = mutableStateOf(
-        AstronomyState(System.currentTimeMillis()),
-    )
-    val astronomyState by _astronomyState
+    private val _timeInMillis = mutableLongStateOf(System.currentTimeMillis())
+    val timeInMillis by _timeInMillis
 
     // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
     // is meant to be used in animation thus is the visible one and the other is to keep final
@@ -29,16 +27,15 @@ class AstronomyViewModel : ViewModel() {
 
     // Commands
 
-    private fun setAstronomyState(value: Int) {
-        _astronomyState.value = AstronomyState(
-            (System.currentTimeMillis().milliseconds + value.minutes).inWholeMilliseconds,
-        )
+    private fun setTime(value: Int) {
+        _timeInMillis.value =
+            (System.currentTimeMillis().milliseconds + value.minutes).inWholeMilliseconds
     }
 
     private val animator = ValueAnimator().also {
         it.duration = 400 // android.R.integer.config_mediumAnimTime
         it.interpolator = AccelerateDecelerateInterpolator()
-        it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
+        it.addUpdateListener { _ -> setTime(it.animatedValue as? Int ?: 0) }
     }
 
     fun animateToAbsoluteMinutesOffset(value: Int) {
@@ -70,7 +67,7 @@ class AstronomyViewModel : ViewModel() {
     // which changes the values smoothly and doesn't need another filter in between.
     fun addMinutesOffset(offset: Int) {
         _minutesOffset.intValue += offset
-        setAstronomyState(_minutesOffset.intValue)
+        setTime(_minutesOffset.intValue)
     }
 
     // Command to be issued from MapScreen when astronomy screen is in its backstack so we like to
@@ -78,7 +75,7 @@ class AstronomyViewModel : ViewModel() {
     fun changeToTime(time: Long) {
         _minutesOffset.intValue =
             ((time - System.currentTimeMillis()).milliseconds / 1.minutes).roundToInt()
-        setAstronomyState(_minutesOffset.intValue)
+        setTime(_minutesOffset.intValue)
     }
 
     companion object {

@@ -28,7 +28,7 @@ import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.cosinekitty.astronomy.sunPosition
 import java.util.Date
 
-class AstronomyState(val timeInMillis: Long) {
+class AstronomyState(timeInMillis: Long) {
     private val time = Time.fromMillisecondsSince1970(timeInMillis)
     val sun = sunPosition(time)
     val moon = eclipticGeoMoon(time)
