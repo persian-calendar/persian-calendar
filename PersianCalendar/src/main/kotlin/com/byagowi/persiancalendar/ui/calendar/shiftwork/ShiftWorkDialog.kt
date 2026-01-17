@@ -32,7 +32,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,12 +51,17 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
+import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
+import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
+import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
@@ -63,18 +71,17 @@ import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.putJdn
 import org.jetbrains.annotations.VisibleForTesting
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShiftWorkDialog(
-    viewModel: ShiftWorkViewModel,
-    selectedJdn: Jdn,
-    onDismissRequest: () -> Unit,
-) {
+fun ShiftWorkDialog(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         DialogSurface {
             Column {
@@ -83,7 +90,6 @@ fun ShiftWorkDialog(
                     LocalTextStyle provides MaterialTheme.typography.bodyMedium,
                 ) {
                     ShiftWorkDialogContent(
-                        viewModel = viewModel,
                         selectedJdn = selectedJdn,
                         onDismissRequest = onDismissRequest,
                     )
@@ -94,25 +100,32 @@ fun ShiftWorkDialog(
 }
 
 @Composable
-fun ColumnScope.ShiftWorkDialogContent(
-    viewModel: ShiftWorkViewModel,
-    selectedJdn: Jdn,
-    onDismissRequest: () -> Unit,
-) {
+private fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
+    val shiftWorks = rememberSaveable(saver = ShiftWorkRecord.saver) {
+        val items = shiftWorkSettings.records.takeIf { it.isNotEmpty() } ?: listOf(
+            ShiftWorkRecord(shiftWorkKeyToString("d"), 1),
+        )
+        mutableStateListOf<ShiftWorkRecord>().apply { addAll(items) }
+    }
+    var isFirstSetup by rememberSaveable { mutableStateOf(shiftWorkSettings.startingJdn == null) }
+    var startingDate by rememberSaveable(saver = JdnSaver) {
+        mutableStateOf(shiftWorkSettings.startingJdn ?: selectedJdn)
+    }
+    var recurs by rememberSaveable { mutableStateOf(shiftWorkSettings.recurs) }
+
     val context = LocalContext.current
     Text(
         stringResource(
-            if (viewModel.isFirstSetup) R.string.shift_work_starting_date
+            if (isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit,
-            formatDate(viewModel.startingDate on mainCalendar),
+            formatDate(startingDate on mainCalendar),
         ),
         modifier = Modifier.padding(horizontal = 24.dp),
     )
-    val recurs = viewModel.recurs
     Row(
         Modifier
             .fillMaxWidth()
-            .toggleable(recurs, role = Role.Checkbox) { viewModel.recurs = it }
+            .toggleable(recurs, role = Role.Checkbox) { recurs = it }
             .padding(horizontal = SettingsHorizontalPaddingItem.dp)
             .height(SettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -123,9 +136,9 @@ fun ColumnScope.ShiftWorkDialogContent(
     }
     TextButton(
         onClick = {
-            viewModel.startingDate = selectedJdn
-            viewModel.isFirstSetup = true
-            viewModel.shiftWorks.clear()
+            startingDate = selectedJdn
+            isFirstSetup = true
+            shiftWorks.clear()
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +158,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         LazyColumn(state = lazyListState) {
             item {
                 @Suppress("SimplifiableCallChain") val summary =
-                    viewModel.shiftWorks.filter { it.length != 0 }.map {
+                    shiftWorks.filter { it.length != 0 }.map {
                         pluralStringResource(
                             R.plurals.shift_work_record_title,
                             it.length,
@@ -167,7 +180,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                     }
                 }
             }
-            itemsIndexed(viewModel.shiftWorks) { position, (type, length) ->
+            itemsIndexed(shiftWorks) { position, (type, length) ->
                 Row(
                     modifier = Modifier
                         .height(48.dp)
@@ -183,7 +196,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 selectedTypeDropdownIndex = -1
                                 // Don't allow inserting '=' or ',' as they have special meaning
                                 val type = value.replace(Regex("[=,]"), "")
-                                viewModel.updateItem(position) { it.copy(type = type) }
+                                shiftWorks[position] = shiftWorks[position].copy(type = type)
                             },
                             trailingIcon = {
                                 IconButton(onClick = { selectedTypeDropdownIndex = position }) {
@@ -206,7 +219,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                             (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach { label ->
                                 AppDropdownMenuItem({ Text(label) }) {
                                     selectedTypeDropdownIndex = -1
-                                    viewModel.updateItem(position) { it.copy(type = label) }
+                                    shiftWorks[position] = shiftWorks[position].copy(type = label)
                                 }
                             }
                         }
@@ -219,7 +232,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                             onValueChange = { text ->
                                 selectedTypeDropdownIndex = -1
                                 val length = text.toIntOrNull() ?: 0
-                                viewModel.updateItem(position) { it.copy(length = length) }
+                                shiftWorks[position] = shiftWorks[position].copy(length = length)
                             },
                             modifier = Modifier
                                 .onFocusChanged {
@@ -242,12 +255,13 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 AppDropdownMenuItem({ Text(numeral.format(length)) }) {
                                     focusManager.clearFocus()
                                     selectedLengthDropdownIndex = -1
-                                    viewModel.updateItem(position) { it.copy(length = length) }
+                                    shiftWorks[position] =
+                                        shiftWorks[position].copy(length = length)
                                 }
                             }
                         }
                     }
-                    IconButton(onClick = { viewModel.shiftWorks.removeAt(position) }) {
+                    IconButton(onClick = { shiftWorks.removeAt(position) }) {
                         Icon(
                             imageVector = Icons.Default.RemoveCircleOutline,
                             contentDescription = stringResource(R.string.remove),
@@ -265,7 +279,7 @@ fun ColumnScope.ShiftWorkDialogContent(
     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
         TextButton(
             onClick = {
-                viewModel.shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
+                shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
                 // TODO: Make it scroll to end?
                 // scope.launch {
                 //     lazyListState.animateScrollBy(viewModel.shiftWorks.value.size + 1f)
@@ -279,7 +293,15 @@ fun ColumnScope.ShiftWorkDialogContent(
         Spacer(Modifier.width(8.dp))
         TextButton(
             onClick = {
-                viewModel.persist(context)
+                context.preferences.edit {
+                    val result = shiftWorks.filter { it.length != 0 }.joinToString(",") {
+                        "${it.type.replace("=", "").replace(",", "")}=${it.length}"
+                    }
+                    if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
+                    else putJdn(PREF_SHIFT_WORK_STARTING_JDN, startingDate)
+                    putString(PREF_SHIFT_WORK_SETTING, result)
+                    putBoolean(PREF_SHIFT_WORK_RECURS, recurs)
+                }
                 onDismissRequest()
             },
         ) { Text(stringResource(R.string.accept)) }

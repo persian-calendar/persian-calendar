@@ -1050,13 +1050,11 @@ private fun SharedTransitionScope.Menu(
         }
     }
 
-    viewModel.shiftWorkViewModel?.let {
-        ShiftWorkDialog(
-            viewModel = it,
-            selectedJdn = viewModel.selectedDay,
-            onDismissRequest = { viewModel.closeShiftWorkDialog() },
-        )
-    }
+    var showShiftWorkDialog by rememberSaveable { mutableStateOf(false) }
+    if (showShiftWorkDialog) ShiftWorkDialog(
+        selectedJdn = viewModel.selectedDay,
+        onDismissRequest = { showShiftWorkDialog = false },
+    )
 
     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
     if (showPlanetaryHoursDialog) coordinates?.also {
@@ -1075,7 +1073,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
             closeMenu()
-            viewModel.openShiftWorkDialog()
+            showShiftWorkDialog = true
         }
 
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {

@@ -14,8 +14,6 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.shiftWorkSettings
-import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
@@ -51,9 +49,6 @@ class CalendarViewModel() : ViewModel() {
 
     private val _removedThirdTab = mutableStateOf(false)
     val removedThirdTab by _removedThirdTab
-
-    private val _shiftWorkViewModel = mutableStateOf<ShiftWorkViewModel?>(null)
-    val shiftWorkViewModel by _shiftWorkViewModel
 
     private val _now = mutableLongStateOf(System.currentTimeMillis())
     val now by _now
@@ -133,14 +128,6 @@ class CalendarViewModel() : ViewModel() {
     fun closeSearch() {
         _isSearchOpen.value = false
         changeSearchTerm("")
-    }
-
-    fun openShiftWorkDialog() {
-        _shiftWorkViewModel.value = ShiftWorkViewModel.initiate(selectedDay, shiftWorkSettings)
-    }
-
-    fun closeShiftWorkDialog() {
-        _shiftWorkViewModel.value = null
     }
 
     fun openYearView() {
