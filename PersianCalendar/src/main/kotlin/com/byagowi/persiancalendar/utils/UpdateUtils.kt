@@ -150,7 +150,6 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.lang.ref.WeakReference
 import java.util.Date
-import java.util.GregorianCalendar
 import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -285,7 +284,7 @@ fun update(context: Context, updateDate: Boolean) {
             createMapRemoteViews(context, size, now)
         }
         updateFromRemoteViews<WidgetMoon>(context, now) { size, _ ->
-            createMoonRemoteViews(context, size)
+            createMoonRemoteViews(context, size, now)
         }
         updateFromRemoteViews<WidgetSchedule>(context, now) { size, widgetId ->
             createScheduleRemoteViews(context, size, widgetId)
@@ -1101,13 +1100,13 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
     return remoteViews
 }
 
-private fun createMoonRemoteViews(context: Context, size: DpSize?): RemoteViews {
+private fun createMoonRemoteViews(context: Context, size: DpSize?, now: Long): RemoteViews {
     val width = size?.width?.roundToPx(context.resources) ?: 250
     val height = size?.height?.roundToPx(context.resources) ?: 250
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_moon)
     val solarDraw = SolarDraw(context.resources)
     val bitmap = createBitmap(width, height).applyCanvas {
-        val state = AstronomyState(GregorianCalendar())
+        val state = AstronomyState(timeInMillis = now)
         solarDraw.moon(
             this,
             state.sun,

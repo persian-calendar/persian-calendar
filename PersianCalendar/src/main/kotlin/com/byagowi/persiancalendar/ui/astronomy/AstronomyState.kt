@@ -27,10 +27,9 @@ import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.cosinekitty.astronomy.sunPosition
 import java.util.Date
-import java.util.GregorianCalendar
 
-class AstronomyState(val date: GregorianCalendar) {
-    private val time = Time.fromMillisecondsSince1970(date.time.time)
+class AstronomyState(val timeInMillis: Long) {
+    private val time = Time.fromMillisecondsSince1970(timeInMillis)
     val sun = sunPosition(time)
     val moon = eclipticGeoMoon(time)
     private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates?.toObserver() }
@@ -58,7 +57,7 @@ class AstronomyState(val date: GregorianCalendar) {
         }
     }
 
-    fun generateHeader(resources: Resources, language: Language, jdn: Jdn): List<String> {
+    fun generateHeader(resources: Resources, language: Language): List<String> {
         val observer = coordinates?.toObserver()
         return listOf(
             if (observer != null) searchLocalSolarEclipse(time, observer).run {
@@ -78,13 +77,7 @@ class AstronomyState(val date: GregorianCalendar) {
                 language.isPersianOrDari -> "$type بعدی"
                 else -> resources.getString(R.string.next_x, type)
             } + spacedColon + formattedDate
-        } + generateYearName(
-            resources = resources,
-            jdn = jdn,
-            withOldEraName = language.isPersianOrDari,
-            withEmoji = true,
-            time = date,
-        )
+        }
     }
 
     companion object {

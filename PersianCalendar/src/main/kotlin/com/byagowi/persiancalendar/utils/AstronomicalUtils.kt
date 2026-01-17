@@ -26,6 +26,7 @@ import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.search
 import io.github.cosinekitty.astronomy.sunPosition
+import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.atan2
@@ -82,9 +83,12 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
     val end = isMoonInScorpio(jdn, 0, setIranTime)
     val start = isMoonInScorpio(jdn + 1, 0, setIranTime)
     return when {
-        start && end ->
-            if (lunarLongitude(jdn, setIranTime, hourOfDay = 12) <= Zodiac.SCORPIO.tropicalRange[1])
-                MoonInScorpioState.Borji else MoonInScorpioState.Falaki
+        start && end -> if (lunarLongitude(
+                jdn,
+                setIranTime,
+                hourOfDay = 12,
+            ) <= Zodiac.SCORPIO.tropicalRange[1]
+        ) MoonInScorpioState.Borji else MoonInScorpioState.Falaki
 
         start -> MoonInScorpioState.Start(
             searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime) ?: Clock.zero,
@@ -102,7 +106,7 @@ fun generateYearName(
     resources: Resources,
     jdn: Jdn,
     withEmoji: Boolean,
-    time: GregorianCalendar? = null,
+    timeInMillis: Long? = null,
     withOldEraName: Boolean = false,
 ): String {
     val persianDate = jdn.toPersianDate()
@@ -117,7 +121,9 @@ fun generateYearName(
             resources.getString(R.string.shamsi_calendar_short),
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val date = ChineseCalendar((time ?: jdn.toGregorianCalendar()).time)
+            val date = ChineseCalendar(
+                Date(timeInMillis ?: jdn.toGregorianCalendar().timeInMillis),
+            )
             val year = date[ChineseCalendar.YEAR]
             language.inParentheses.format(
                 ChineseZodiac.fromChineseCalendar(date).format(
@@ -136,18 +142,14 @@ fun generateYearName(
 fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
     val moonEquator = equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
     val sunEquator = equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
-    val moonHorizontal =
-        horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
-    val vec = rotationEqdHor(time, observer)
-        .pivot(2, moonHorizontal.azimuth)
-        .pivot(1, moonHorizontal.altitude)
-        .rotate(sunEquator.vec)
+    val moonHorizontal = horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+    val vec = rotationEqdHor(time, observer).pivot(2, moonHorizontal.azimuth)
+        .pivot(1, moonHorizontal.altitude).rotate(sunEquator.vec)
     return Math.toDegrees(atan2(vec.z, vec.y))
 }
 
 val Body.titleStringId
-    @StringRes
-    get(): Int = when (this) {
+    @StringRes get(): Int = when (this) {
         Body.Mercury -> R.string.mercury
         Body.Venus -> R.string.venus
         Body.Earth -> R.string.earth

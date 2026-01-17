@@ -29,7 +29,6 @@ import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
-import java.util.GregorianCalendar
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
@@ -38,7 +37,7 @@ import kotlin.math.roundToInt
 import kotlin.math.sign
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
-    private var state = AstronomyState(GregorianCalendar())
+    private var state = AstronomyState(System.currentTimeMillis())
 
     var mode: AstronomyMode = AstronomyMode.entries[0]
         set(value) {

@@ -5,9 +5,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import java.util.GregorianCalendar
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -16,8 +14,9 @@ class AstronomyViewModel : ViewModel() {
     private var _minutesOffset = mutableIntStateOf(DEFAULT_TIME)
     val minutesOffset by _minutesOffset
 
-    private val dateSink = GregorianCalendar() // Just to avoid recreating it everytime
-    private val _astronomyState = mutableStateOf(AstronomyState(dateSink))
+    private val _astronomyState = mutableStateOf(
+        AstronomyState(System.currentTimeMillis()),
+    )
     val astronomyState by _astronomyState
 
     // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
@@ -31,9 +30,9 @@ class AstronomyViewModel : ViewModel() {
     // Commands
 
     private fun setAstronomyState(value: Int) {
-        dateSink.timeInMillis =
-            (System.currentTimeMillis().milliseconds + value.minutes).inWholeMilliseconds
-        _astronomyState.value = AstronomyState(dateSink)
+        _astronomyState.value = AstronomyState(
+            (System.currentTimeMillis().milliseconds + value.minutes).inWholeMilliseconds,
+        )
     }
 
     private val animator = ValueAnimator().also {
