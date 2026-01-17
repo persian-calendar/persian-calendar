@@ -13,10 +13,6 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 class AstronomyViewModel : ViewModel() {
-    var mode by mutableStateOf(AstronomyMode.entries[0])
-    var isTropical by mutableStateOf(false)
-    var isDatePickerDialogShown by mutableStateOf(false)
-
     private var _minutesOffset = mutableIntStateOf(DEFAULT_TIME)
     val minutesOffset by _minutesOffset
 

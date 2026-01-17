@@ -46,6 +46,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -146,6 +147,9 @@ fun SharedTransitionScope.AstronomyScreen(
 
     // Port SliderView to Compose maybe sometime
     var slider by remember { mutableStateOf<SliderView?>(null) }
+    val mode = rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
+    var isTropical by rememberSaveable { mutableStateOf(false) }
+    val isDatePickerDialogShown = rememberSaveable { mutableStateOf(false) }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -172,12 +176,12 @@ fun SharedTransitionScope.AstronomyScreen(
                     TodayActionButton(visible = viewModel.minutesOffset != 0) {
                         viewModel.animateToAbsoluteMinutesOffset(0)
                     }
-                    AnimatedVisibility(visible = viewModel.mode == AstronomyMode.EARTH) {
+                    AnimatedVisibility(visible = mode.value == AstronomyMode.EARTH) {
                         SwitchWithLabel(
                             label = stringResource(R.string.tropical),
-                            checked = viewModel.isTropical,
+                            checked = isTropical,
                             labelBeforeSwitch = true,
-                            onValueChange = { viewModel.isTropical = it },
+                            onValueChange = { isTropical = it },
                         )
                     }
 
@@ -207,7 +211,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
                             closeMenu()
-                            viewModel.isDatePickerDialogShown = true
+                            isDatePickerDialogShown.value = true
                         }
                         AppDropdownMenuItem({ Text(stringResource(R.string.map)) }) {
                             closeMenu()
@@ -271,16 +275,16 @@ fun SharedTransitionScope.AstronomyScreen(
                                     bottom = bottomPadding + 16.dp,
                                 ),
                         ) {
-                            Header(Modifier, viewModel)
+                            Header(Modifier, mode.value, isTropical, viewModel)
                             Spacer(Modifier.weight(1f))
-                            SliderBar(slider, viewModel) { slider = it }
+                            SliderBar(slider, viewModel, isDatePickerDialogShown) { slider = it }
                         }
                         SolarDisplay(
                             Modifier
                                 .weight(1f)
                                 .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
                                 .height(maxHeight - bottomPadding),
-                            viewModel, slider, navigateToMap,
+                            viewModel, mode, isTropical, slider, navigateToMap,
                         )
                     }
                 } else Column {
@@ -295,6 +299,8 @@ fun SharedTransitionScope.AstronomyScreen(
                                 // Header
                                 Header(
                                     Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                                    mode.value,
+                                    isTropical,
                                     viewModel,
                                 )
                                 // Content
@@ -302,7 +308,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                     Modifier
                                         .fillMaxWidth()
                                         .height(maxWidth - (56 * 2 + 8).dp),
-                                    viewModel, slider, navigateToMap,
+                                    viewModel, mode, isTropical, slider, navigateToMap,
                                 )
                             },
                         ) { (header, content), constraints ->
@@ -327,16 +333,16 @@ fun SharedTransitionScope.AstronomyScreen(
                             }
                         }
                     }
-                    SliderBar(slider, viewModel) { slider = it }
+                    SliderBar(slider, viewModel, isDatePickerDialogShown) { slider = it }
                     Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
         }
     }
 
-    if (viewModel.isDatePickerDialogShown) DatePickerDialog(
+    if (isDatePickerDialogShown.value) DatePickerDialog(
         initialJdn = Jdn(viewModel.astronomyState.date.toCivilDate()),
-        onDismissRequest = { viewModel.isDatePickerDialogShown = false },
+        onDismissRequest = { isDatePickerDialogShown.value = false },
     ) { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }
 }
 
@@ -344,6 +350,7 @@ fun SharedTransitionScope.AstronomyScreen(
 private fun SharedTransitionScope.SliderBar(
     slider: SliderView?,
     viewModel: AstronomyViewModel,
+    isDatePickerDialogShown: MutableState<Boolean>,
     setSlider: (SliderView) -> Unit,
 ) {
     var lastButtonClickTimestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
@@ -361,7 +368,7 @@ private fun SharedTransitionScope.SliderBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .combinedClickable(
-                    onClick = { viewModel.isDatePickerDialogShown = true },
+                    onClick = { isDatePickerDialogShown.value = true },
                     onClickLabel = stringResource(R.string.select_date),
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
@@ -445,6 +452,8 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
 private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
     viewModel: AstronomyViewModel,
+    mode: MutableState<AstronomyMode>,
+    isTropical: Boolean,
     slider: SliderView?,
     navigateToMap: () -> Unit,
 ) {
@@ -453,8 +462,8 @@ private fun SharedTransitionScope.SolarDisplay(
             AstronomyMode.entries.forEach {
                 NavigationRailItem(
                     modifier = Modifier.size(56.dp),
-                    selected = viewModel.mode == it,
-                    onClick = { viewModel.mode = it },
+                    selected = mode.value == it,
+                    onClick = { mode.value = it },
                     icon = {
                         if (it == AstronomyMode.MOON) MoonIcon(viewModel.astronomyState) else Icon(
                             ImageVector.vectorResource(it.icon),
@@ -499,21 +508,26 @@ private fun SharedTransitionScope.SolarDisplay(
             update = {
                 it.setSurfaceColor(surfaceColor.toArgb())
                 it.setContentColor(contentColor.toArgb())
-                it.isTropicalDegree = viewModel.isTropical
+                it.isTropicalDegree = isTropical
                 it.setTime(viewModel.astronomyState)
                 it.setFont(typeface)
-                it.mode = viewModel.mode
+                it.mode = mode.value
             },
         )
     }
 }
 
 @Composable
-private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
-    val sunZodiac = if (viewModel.isTropical) Zodiac.fromTropical(viewModel.astronomyState.sun.elon)
+private fun Header(
+    modifier: Modifier,
+    mode: AstronomyMode,
+    isTropical: Boolean,
+    viewModel: AstronomyViewModel,
+) {
+    val sunZodiac = if (isTropical) Zodiac.fromTropical(viewModel.astronomyState.sun.elon)
     else Zodiac.fromIau(viewModel.astronomyState.sun.elon)
     val moonZodiac =
-        if (viewModel.isTropical) Zodiac.fromTropical(viewModel.astronomyState.moon.lon)
+        if (isTropical) Zodiac.fromTropical(viewModel.astronomyState.moon.lon)
         else Zodiac.fromIau(viewModel.astronomyState.moon.lon)
 
     val resources = LocalResources.current
@@ -545,7 +559,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
             }
         }
         Seasons(jdn, viewModel)
-        AnimatedVisibility(visible = viewModel.mode == AstronomyMode.EARTH) {
+        AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
             Row(Modifier.padding(top = 8.dp)) {
                 listOf(
                     // ☉☀️
