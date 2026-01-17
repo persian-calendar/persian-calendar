@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
+import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
@@ -287,6 +288,9 @@ val coordinates by coordinates_
 
 private val cityName_ = mutableStateOf<String?>(null)
 val cityName by cityName_
+
+private val showQibla_ = mutableStateOf(true)
+val showQibla by showQibla_
 
 private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
@@ -674,6 +678,7 @@ fun updateStoredPreference(context: Context) {
     )
     numericalDatePreferred_.value =
         preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, DEFAULT_NUMERICAL_DATE_PREFERRED)
+    showQibla_.value = preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
 
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)

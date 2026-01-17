@@ -5,7 +5,6 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.map.MapScreen
 import org.junit.Rule
@@ -21,7 +20,8 @@ class MapScreenTest {
         var navigateUpString = ""
         composeTestRule.setContentWithParent {
             navigateUpString = stringResource(R.string.navigate_up)
-            MapScreen({ navigateUpIsCalled = true }, false, viewModel())
+            val time = System.currentTimeMillis()
+            MapScreen({ navigateUpIsCalled = true }, false, time)
         }
         composeTestRule.onNodeWithContentDescription(navigateUpString)
             .assertHasClickAction()

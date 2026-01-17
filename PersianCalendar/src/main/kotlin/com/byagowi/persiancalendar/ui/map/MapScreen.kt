@@ -50,7 +50,9 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,13 +73,13 @@ import androidx.core.graphics.createBitmap
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -89,13 +91,14 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,34 +106,44 @@ import kotlin.time.Duration.Companion.minutes
 fun SharedTransitionScope.MapScreen(
     navigateUp: () -> Unit,
     fromSettings: Boolean,
-    viewModel: MapViewModel,
+    initialTime: Long,
 ) {
-    val state = viewModel.state
     val resources = LocalResources.current
     val mapDraw = remember(resources) { MapDraw(resources) }
 
-    LaunchedEffect(coordinates) { viewModel.changeCurrentCoordinates(coordinates) }
+    val time = rememberSaveable { mutableLongStateOf(initialTime) }
+    var mapType by rememberSaveable { mutableStateOf(MapType.DAY_NIGHT) }
+    var displayLocation by rememberSaveable { mutableStateOf(true) }
+    var displayGrid by rememberSaveable { mutableStateOf(false) }
+    var isDirectPathMode by rememberSaveable { mutableStateOf(false) }
+    var markedCoordinates by remember { mutableStateOf(coordinates) }
+    var dialogInputCoordinates by remember { mutableStateOf<Coordinates?>(null) }
+    var directPathDestination by remember { mutableStateOf<Coordinates?>(null) }
+
+    LaunchedEffect(key1 = coordinates) { markedCoordinates = coordinates }
 
     LaunchedEffect(Unit) {
         while (true) {
             delay(1.minutes)
-            viewModel.addOneMinute()
+            time.longValue += 1.minutes.inWholeMilliseconds
         }
     }
 
     var showGpsDialog by rememberSaveable { mutableStateOf(false) }
     if (showGpsDialog) GPSLocationDialog { showGpsDialog = false }
 
-    var clickedCoordinates by remember { mutableStateOf<Coordinates?>(null) }
     var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
     var saveCoordinates by rememberSaveable { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
-        inputCoordinates = clickedCoordinates,
+        inputCoordinates = dialogInputCoordinates,
         isFromMap = true,
         onDismissRequest = { showCoordinatesDialog = false },
         saveCoordinates = saveCoordinates,
         toggleSaveCoordinates = { saveCoordinates = it },
-        notifyChange = viewModel::changeCurrentCoordinates,
+        notifyChange = {
+            markedCoordinates = it
+            displayLocation = true
+        },
     )
 
     var showMapTypesDialog by rememberSaveable { mutableStateOf(false) }
@@ -144,7 +157,7 @@ fun SharedTransitionScope.MapScreen(
                         .fillMaxWidth()
                         .clickable {
                             showMapTypesDialog = false
-                            viewModel.changeMapType(it)
+                            mapType = it
                         }
                         .padding(vertical = 16.dp, horizontal = 24.dp),
                 )
@@ -165,7 +178,10 @@ fun SharedTransitionScope.MapScreen(
 
     val context = LocalContext.current
     val menu = listOf(
-        MenuItem(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
+        MenuItem(
+            icon = Icons.Default._3dRotation,
+            titleId = R.string.show_globe_view_label,
+        ) onClick@{
             val textureSize = 2048
             val bitmap =
                 runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
@@ -178,60 +194,61 @@ fun SharedTransitionScope.MapScreen(
             mapDraw.draw(
                 canvas = Canvas(bitmap),
                 matrix = matrix,
-                displayLocation = state.displayLocation,
-                coordinates = state.coordinates,
-                directPathDestination = state.directPathDestination,
-                displayGrid = state.displayGrid,
+                displayLocation = displayLocation,
+                coordinates = markedCoordinates,
+                directPathDestination = directPathDestination,
+                displayGrid = displayGrid,
             )
             showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
             // DO NOT use bitmap after this
         },
         MenuItem(
-            Icons.Default.SocialDistance,
-            R.string.show_direct_path_label,
-            { state.isDirectPathMode },
+            icon = Icons.Default.SocialDistance,
+            titleId = R.string.show_direct_path_label,
+            isEnabled = { isDirectPathMode },
         ) {
-            if (state.coordinates == null) showGpsDialog = true
-            else viewModel.toggleDirectPathMode()
-        },
-        MenuItem(Icons.Default.Grid3x3, R.string.show_grid_label, { state.displayGrid }) {
-            viewModel.toggleDisplayGrid()
-        },
-        MenuItem(Icons.Default.MyLocation, R.string.show_my_location_label) {
-            showGpsDialog = true
+            if (markedCoordinates == null) showGpsDialog = true else {
+                directPathDestination = directPathDestination.takeIf { !isDirectPathMode }
+                isDirectPathMode = !isDirectPathMode
+            }
         },
         MenuItem(
-            Icons.Default.LocationOn,
-            R.string.show_location_label,
-            { state.coordinates != null && state.displayLocation },
+            icon = Icons.Default.Grid3x3,
+            titleId = R.string.show_grid_label,
+            isEnabled = { displayGrid },
+        ) { displayGrid = !displayGrid },
+        MenuItem(
+            icon = Icons.Default.MyLocation,
+            titleId = R.string.show_my_location_label,
+        ) { showGpsDialog = true },
+        MenuItem(
+            icon = Icons.Default.LocationOn,
+            titleId = R.string.show_location_label,
+            isEnabled = { markedCoordinates != null && displayLocation },
         ) {
-            if (state.coordinates == null) showGpsDialog = true
-            else viewModel.toggleDisplayLocation()
+            if (markedCoordinates == null) {
+                showGpsDialog = true
+            } else displayLocation = !displayLocation
         },
         MenuItem(
-            Icons.Default.NightlightRound, R.string.show_night_mask_label,
-            { state.mapType != MapType.NONE },
-        ) {
-            if (viewModel.state.mapType == MapType.NONE) showMapTypesDialog = true
-            else viewModel.changeMapType(MapType.NONE)
-        },
+            icon = Icons.Default.NightlightRound,
+            titleId = R.string.show_night_mask_label,
+            isEnabled = { mapType != MapType.NONE },
+        ) { if (mapType == MapType.NONE) showMapTypesDialog = true else mapType = MapType.NONE },
     )
-    val showKaaba = remember { context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true) }
     var formattedTime by remember { mutableStateOf("") }
     Box {
         // Best effort solution for landscape view till figuring out something better
-        if (LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            Column {
-                Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
-                Spacer(Modifier.height((16 + menuHeight + 16).dp))
-                ScreenSurface { Box(Modifier.fillMaxSize()) }
-            }
+        if (LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE) Column {
+            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+            Spacer(Modifier.height((16 + menuHeight + 16).dp))
+            ScreenSurface { Box(Modifier.fillMaxSize()) }
         }
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                    sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
@@ -246,16 +263,12 @@ fun SharedTransitionScope.MapScreen(
                     val longitude = x / mapDraw.mapScaleFactor - 180
                     if (abs(latitude) < 90 && abs(longitude) < 180) {
                         // Easter egg like feature, bring sky renderer fragment
-                        if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.displayGrid) {
+                        if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
                             Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
                         } else {
-                            val coordinates =
-                                Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                            if (viewModel.state.isDirectPathMode) viewModel.changeDirectPathDestination(
-                                coordinates,
-                            )
-                            else {
-                                clickedCoordinates = coordinates
+                            val coords = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                            if (isDirectPathMode) directPathDestination = coords else {
+                                dialogInputCoordinates = coords
                                 showCoordinatesDialog = true
                             }
                         }
@@ -264,18 +277,23 @@ fun SharedTransitionScope.MapScreen(
                 root
             },
             update = {
+                displayLocation.let {}
+                markedCoordinates.let {}
+                directPathDestination.let {}
+                displayGrid.let {}
+
                 it.onDraw = { canvas, matrix ->
                     mapDraw.draw(
                         canvas = canvas,
                         matrix = matrix,
-                        displayLocation = state.displayLocation,
-                        coordinates = state.coordinates,
-                        directPathDestination = state.directPathDestination,
-                        displayGrid = state.displayGrid,
+                        displayLocation = displayLocation,
+                        coordinates = markedCoordinates,
+                        directPathDestination = directPathDestination,
+                        displayGrid = displayGrid,
                     )
                 }
-                mapDraw.drawKaaba = state.coordinates != null && state.displayLocation && showKaaba
-                mapDraw.updateMap(state.time, state.mapType)
+                mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+                mapDraw.updateMap(time.longValue, mapType)
                 formattedTime = mapDraw.maskFormattedTime
                 it.invalidate()
             },
@@ -333,9 +351,9 @@ fun SharedTransitionScope.MapScreen(
 
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
-        val currentJdn = Jdn(Date(state.time).toGregorianCalendar().toCivilDate())
+        val currentJdn = Jdn(Date(time.longValue).toGregorianCalendar().toCivilDate())
         DatePickerDialog(currentJdn, { showDatePickerDialog = false }) { jdn ->
-            viewModel.addDays(jdn - currentJdn)
+            time.longValue += (jdn - currentJdn).days.inWholeMilliseconds
         }
     }
 
@@ -355,7 +373,7 @@ fun SharedTransitionScope.MapScreen(
                     .height(46.dp)
                     .fillMaxWidth(),
             ) {
-                TimeArrow(mapDraw, viewModel, isPrevious = true)
+                TimeArrow(mapDraw, time, isPrevious = true)
                 AnimatedContent(
                     modifier = Modifier.weight(1f, fill = false),
                     targetState = formattedTime,
@@ -369,7 +387,7 @@ fun SharedTransitionScope.MapScreen(
                             .combinedClickable(
                                 onClick = { showDatePickerDialog = true },
                                 onClickLabel = stringResource(R.string.select_date),
-                                onLongClick = { viewModel.changeToTime(Date()) },
+                                onLongClick = { time.longValue = System.currentTimeMillis() },
                                 onLongClickLabel = stringResource(R.string.today),
                             )
                             .sharedElement(
@@ -380,14 +398,14 @@ fun SharedTransitionScope.MapScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
-                TimeArrow(mapDraw, viewModel, isPrevious = false)
+                TimeArrow(mapDraw, time, isPrevious = false)
             }
         }
     }
 }
 
 @Composable
-private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boolean) {
+private fun TimeArrow(mapDraw: MapDraw, time: MutableState<Long>, isPrevious: Boolean) {
     val hapticFeedback = LocalHapticFeedback.current
     Icon(
         if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
@@ -401,13 +419,13 @@ private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boo
             interactionSource = null,
             onClick = {
                 hapticFeedback.performLongPress()
-                if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(if (isPrevious) -1 else 1)
-                else {
-                    if (isPrevious) viewModel.subtractOneHour() else viewModel.addOneHour()
-                }
+                time.value += run {
+                    val amount = if (isPrevious) -1 else 1
+                    if (mapDraw.currentMapType.isCrescentVisibility) amount.days else amount.hours
+                }.inWholeMilliseconds
             },
             onClickLabel = stringResource(R.string.select_day),
-            onLongClick = { viewModel.addDays(if (isPrevious) -10 else 10) },
+            onLongClick = { time.value += (if (isPrevious) -10 else 10).days.inWholeMilliseconds },
         ),
         tint = MaterialTheme.colorScheme.primary,
     )

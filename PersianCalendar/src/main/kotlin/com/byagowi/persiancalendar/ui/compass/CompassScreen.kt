@@ -79,6 +79,7 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -180,10 +181,6 @@ fun SharedTransitionScope.CompassScreen(
         }
     }
 
-    var showQibla by rememberSaveable {
-        mutableStateOf(context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
-    }
-
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -244,7 +241,6 @@ fun SharedTransitionScope.CompassScreen(
                             text = { Text(stringResource(R.string.qibla)) },
                             isChecked = showQibla,
                         ) {
-                            showQibla = it
                             closeMenu()
                             compassView?.isShowQibla = it
                             context.preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }

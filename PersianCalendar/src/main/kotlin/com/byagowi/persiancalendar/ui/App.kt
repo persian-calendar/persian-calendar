@@ -114,7 +114,6 @@ import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
-import com.byagowi.persiancalendar.ui.map.MapViewModel
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsTab
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -257,14 +256,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
                 entry<Screen.Map> {
-                    val viewModel = viewModel<MapViewModel>()
-                    LaunchedEffect(Unit) {
-                        if (it.time != null) viewModel.changeToTime(Date(it.time))
-                    }
                     MapScreen(
                         navigateUp = it::navigateUp,
                         fromSettings = it.fromSettings,
-                        viewModel = viewModel,
+                        initialTime = it.time,
                     )
                 }
                 entry<Screen.Settings> {
@@ -316,7 +311,10 @@ private sealed interface Screen : NavKey {
     data class Astronomy(val day: Jdn? = null) : Screen
 
     @Serializable
-    data class Map(val fromSettings: Boolean = false, val time: Long? = null) : Screen
+    data class Map(
+        val fromSettings: Boolean = false,
+        val time: Long = System.currentTimeMillis(),
+    ) : Screen
 
     @Serializable
     data class Settings(
