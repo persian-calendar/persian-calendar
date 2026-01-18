@@ -27,25 +27,17 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Grid3x3
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material.icons.filled.SocialDistance
 import androidx.compose.material.icons.filled._3dRotation
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -79,7 +71,9 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TimeArrow
 import com.byagowi.persiancalendar.ui.common.ZoomableView
@@ -99,7 +93,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.MapScreen(
     navigateUp: () -> Unit,
@@ -164,76 +157,7 @@ fun SharedTransitionScope.MapScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    class MenuItem(
-        val icon: ImageVector,
-        @get:StringRes val titleId: Int,
-        val isEnabled: () -> Boolean = { false },
-        val onClick: () -> Unit,
-    ) {
-        val title
-            @Composable get() = language.mapButtons(titleId) ?: stringResource(titleId)
-    }
-
     val context = LocalContext.current
-    val menu = listOf(
-        MenuItem(
-            icon = Icons.Default._3dRotation,
-            titleId = R.string.show_globe_view_label,
-        ) onClick@{
-            val textureSize = 2048
-            val bitmap =
-                runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
-                    .getOrNull() ?: return@onClick
-            val matrix = Matrix()
-            matrix.setScale(
-                textureSize.toFloat() / mapDraw.mapWidth,
-                textureSize.toFloat() / mapDraw.mapHeight,
-            )
-            mapDraw.draw(
-                canvas = Canvas(bitmap),
-                matrix = matrix,
-                displayLocation = displayLocation,
-                coordinates = markedCoordinates,
-                directPathDestination = directPathDestination,
-                displayGrid = displayGrid,
-            )
-            showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
-            // DO NOT use bitmap after this
-        },
-        MenuItem(
-            icon = Icons.Default.SocialDistance,
-            titleId = R.string.show_direct_path_label,
-            isEnabled = { isDirectPathMode },
-        ) {
-            if (markedCoordinates == null) showGpsDialog = true else {
-                directPathDestination = directPathDestination.takeIf { !isDirectPathMode }
-                isDirectPathMode = !isDirectPathMode
-            }
-        },
-        MenuItem(
-            icon = Icons.Default.Grid3x3,
-            titleId = R.string.show_grid_label,
-            isEnabled = { displayGrid },
-        ) { displayGrid = !displayGrid },
-        MenuItem(
-            icon = Icons.Default.MyLocation,
-            titleId = R.string.show_my_location_label,
-        ) { showGpsDialog = true },
-        MenuItem(
-            icon = Icons.Default.LocationOn,
-            titleId = R.string.show_location_label,
-            isEnabled = { markedCoordinates != null && displayLocation },
-        ) {
-            if (markedCoordinates == null) {
-                showGpsDialog = true
-            } else displayLocation = !displayLocation
-        },
-        MenuItem(
-            icon = Icons.Default.NightlightRound,
-            titleId = R.string.show_night_mask_label,
-            isEnabled = { mapType != MapType.NONE },
-        ) { if (mapType == MapType.NONE) showMapTypesDialog = true else mapType = MapType.NONE },
-    )
     var formattedTime by remember { mutableStateOf("") }
     Box {
         // Best effort solution for landscape view till figuring out something better
@@ -300,49 +224,108 @@ fun SharedTransitionScope.MapScreen(
 
     Column {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
-        Row(
-            Modifier
-                .alpha(.85f)
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-                .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
-                .height(menuHeight.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically,
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onSurface,
         ) {
-            NavigationRailItem(
-                modifier = Modifier.weight(1f),
-                selected = false,
-                onClick = navigateUp,
-                icon = {
-                    Icon(
-                        Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.navigate_up),
-                    )
-                },
-            )
-            menu.forEach {
-                NavigationRailItem(
-                    modifier = Modifier.weight(1f),
-                    onClick = it.onClick,
-                    selected = false,
-                    icon = {
-                        TooltipBox(
-                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                TooltipAnchorPosition.Above,
-                            ),
-                            tooltip = { PlainTooltip { Text(it.title) } },
-                            state = rememberTooltipState(),
-                        ) {
-                            val tint by animateColor(
-                                if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
-                                else LocalContentColor.current,
-                            )
-                            Icon(it.icon, it.title, tint = tint)
+            Row(
+                Modifier
+                    .alpha(.85f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
+                    .height(menuHeight.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.weight(1f)) { NavigationNavigateUpIcon(navigateUp) }
+
+                @Composable
+                fun MenuItem(
+                    icon: ImageVector,
+                    @StringRes titleId: Int,
+                    isEnabled: Boolean = false,
+                    onClick: () -> Unit,
+                ) {
+                    val title = language.mapButtons(stringId = titleId) ?: stringResource(titleId)
+                    Box(Modifier.weight(weight = 1f)) {
+                        val tint by animateColor(
+                            color = if (isEnabled) {
+                                MaterialTheme.colorScheme.inversePrimary
+                            } else LocalContentColor.current,
+                        )
+                        CompositionLocalProvider(LocalContentColor provides tint) {
+                            AppIconButton(icon, title, onClick = onClick)
                         }
-                    },
-                )
+                    }
+                }
+
+                MenuItem(
+                    icon = Icons.Default._3dRotation,
+                    titleId = R.string.show_globe_view_label,
+                ) {
+                    val textureSize = 2048
+                    val bitmap = runCatching {
+                        createBitmap(textureSize, textureSize)
+                    }.onFailure(logException).getOrNull() ?: return@MenuItem
+                    val matrix = Matrix()
+                    matrix.setScale(
+                        textureSize.toFloat() / mapDraw.mapWidth,
+                        textureSize.toFloat() / mapDraw.mapHeight,
+                    )
+                    mapDraw.draw(
+                        canvas = Canvas(bitmap),
+                        matrix = matrix,
+                        displayLocation = displayLocation,
+                        coordinates = markedCoordinates,
+                        directPathDestination = directPathDestination,
+                        displayGrid = displayGrid,
+                    )
+                    showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
+                    // DO NOT use bitmap after this
+                }
+
+                MenuItem(
+                    icon = Icons.Default.SocialDistance,
+                    titleId = R.string.show_direct_path_label,
+                    isEnabled = isDirectPathMode,
+                ) {
+                    if (markedCoordinates == null) showGpsDialog = true else {
+                        directPathDestination = directPathDestination.takeIf { !isDirectPathMode }
+                        isDirectPathMode = !isDirectPathMode
+                    }
+                }
+
+                MenuItem(
+                    icon = Icons.Default.Grid3x3,
+                    titleId = R.string.show_grid_label,
+                    isEnabled = displayGrid,
+                ) { displayGrid = !displayGrid }
+
+                MenuItem(
+                    icon = Icons.Default.MyLocation,
+                    titleId = R.string.show_my_location_label,
+                ) { showGpsDialog = true }
+
+                MenuItem(
+                    icon = Icons.Default.LocationOn,
+                    titleId = R.string.show_location_label,
+                    isEnabled = markedCoordinates != null && displayLocation,
+                ) {
+                    if (markedCoordinates == null) {
+                        showGpsDialog = true
+                    } else displayLocation = !displayLocation
+                }
+
+                MenuItem(
+                    icon = Icons.Default.NightlightRound,
+                    titleId = R.string.show_night_mask_label,
+                    isEnabled = mapType != MapType.NONE,
+                ) {
+                    if (mapType == MapType.NONE) {
+                        showMapTypesDialog = true
+                    } else mapType = MapType.NONE
+                }
             }
         }
     }
@@ -378,7 +361,7 @@ fun SharedTransitionScope.MapScreen(
                     transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Text(
-                        state,
+                        text = state,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
