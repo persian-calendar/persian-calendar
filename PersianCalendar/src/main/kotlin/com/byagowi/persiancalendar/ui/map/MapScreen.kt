@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Grid3x3
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
@@ -47,7 +45,6 @@ import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -63,8 +60,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -79,17 +76,18 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.TimeArrow
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
-import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -405,29 +403,30 @@ fun SharedTransitionScope.MapScreen(
 }
 
 @Composable
-private fun TimeArrow(mapDraw: MapDraw, time: MutableState<Long>, isPrevious: Boolean) {
-    val hapticFeedback = LocalHapticFeedback.current
-    Icon(
-        if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
-        else Icons.AutoMirrored.Default.KeyboardArrowRight,
-        contentDescription = stringResource(
+private fun SharedTransitionScope.TimeArrow(
+    mapDraw: MapDraw,
+    time: MutableState<Long>,
+    isPrevious: Boolean,
+) {
+    TimeArrow(
+        onClick = {
+            time.value += run {
+                val amount = if (isPrevious) -1 else 1
+                if (mapDraw.currentMapType.isCrescentVisibility) amount.days else amount.hours
+            }.inWholeMilliseconds
+        },
+        onClickLabel = stringResource(
             if (isPrevious) R.string.previous_x else R.string.next_x,
-            stringResource(R.string.day),
+            pluralStringResource(R.plurals.hours, 1, numeral.format(1)),
         ),
-        Modifier.combinedClickable(
-            indication = ripple(bounded = false),
-            interactionSource = null,
-            onClick = {
-                hapticFeedback.performLongPress()
-                time.value += run {
-                    val amount = if (isPrevious) -1 else 1
-                    if (mapDraw.currentMapType.isCrescentVisibility) amount.days else amount.hours
-                }.inWholeMilliseconds
-            },
-            onClickLabel = stringResource(R.string.select_day),
-            onLongClick = { time.value += (if (isPrevious) -10 else 10).days.inWholeMilliseconds },
+        onLongClick = {
+            time.value += (if (isPrevious) -10 else 10).days.inWholeMilliseconds
+        },
+        onLongClickLabel = stringResource(
+            if (isPrevious) R.string.previous_x else R.string.next_x,
+            pluralStringResource(R.plurals.days, 10, numeral.format(10)),
         ),
-        tint = MaterialTheme.colorScheme.primary,
+        isPrevious = isPrevious,
     )
 }
 

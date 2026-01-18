@@ -31,9 +31,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -43,7 +40,6 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -67,7 +63,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -102,6 +97,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
+import com.byagowi.persiancalendar.ui.common.TimeArrow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -110,7 +106,6 @@ import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
@@ -452,30 +447,22 @@ private fun SharedTransitionScope.SliderBar(
 }
 
 @Composable
-private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
-    val hapticFeedback = LocalHapticFeedback.current
-    Icon(
-        if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
-        else Icons.AutoMirrored.Default.KeyboardArrowRight,
-        contentDescription = stringResource(
+private fun SharedTransitionScope.TimeArrow(
+    buttonScrollSlider: (Int) -> Unit,
+    isPrevious: Boolean,
+) {
+    TimeArrow(
+        onClick = { buttonScrollSlider(if (isPrevious) -1 else 1) },
+        onClickLabel = stringResource(
             if (isPrevious) R.string.previous_x else R.string.next_x,
             stringResource(R.string.day),
         ),
-        Modifier.combinedClickable(
-            indication = ripple(bounded = false),
-            interactionSource = null,
-            onClick = {
-                hapticFeedback.performLongPress()
-                buttonScrollSlider(if (isPrevious) -1 else 1)
-            },
-            onClickLabel = stringResource(R.string.select_day),
-            onLongClick = { buttonScrollSlider(if (isPrevious) -365 else 365) },
-            onLongClickLabel = stringResource(
-                if (isPrevious) R.string.previous_x else R.string.next_x,
-                stringResource(R.string.year),
-            ),
+        onLongClick = { buttonScrollSlider(if (isPrevious) -365 else 365) },
+        onLongClickLabel = stringResource(
+            if (isPrevious) R.string.previous_x else R.string.next_x,
+            stringResource(R.string.year),
         ),
-        tint = MaterialTheme.colorScheme.primary,
+        isPrevious = isPrevious,
     )
 }
 
