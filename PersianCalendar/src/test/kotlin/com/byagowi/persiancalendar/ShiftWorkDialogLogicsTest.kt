@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.trimEmptyRows
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

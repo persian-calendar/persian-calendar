@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Numeral
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class NumeralTests {
