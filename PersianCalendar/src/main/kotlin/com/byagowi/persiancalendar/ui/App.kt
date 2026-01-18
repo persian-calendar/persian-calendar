@@ -101,7 +101,6 @@ import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.DaysScreen
@@ -242,14 +241,13 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
                 entry<Screen.Astronomy> {
-                    val viewModel = viewModel<AstronomyViewModel>()
-                    LaunchedEffect(Unit) {
-                        it.day?.let { viewModel.changeToTime(it.toGregorianCalendar().timeInMillis) }
-                    }
                     AstronomyScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToMap = { time -> backStack += Screen.Map(time = time) },
-                        viewModel = viewModel,
+                        initialTime = remember {
+                            it.day?.toGregorianCalendar()?.timeInMillis
+                                ?: System.currentTimeMillis()
+                        },
                         noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
                     )
                 }

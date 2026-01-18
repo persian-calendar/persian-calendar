@@ -134,8 +134,8 @@ private fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<D
 }
 
 @Composable
-fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
-    val time = Time.fromMillisecondsSince1970(date.time)
+fun HoroscopeDialog(timeInMillis: Long = System.currentTimeMillis(), onDismissRequest: () -> Unit) {
+    val time = Time.fromMillisecondsSince1970(timeInMillis)
     AppDialog(onDismissRequest = onDismissRequest) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -201,7 +201,8 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             Text(
                 text = buildString {
-                    append(date.toGregorianCalendar().formatDateAndTime())
+                    val date = Date(timeInMillis).toGregorianCalendar(forceLocalTime = true)
+                    append(date.formatDateAndTime())
                     cityName?.let { name -> append(spacedComma); append(name) }
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
