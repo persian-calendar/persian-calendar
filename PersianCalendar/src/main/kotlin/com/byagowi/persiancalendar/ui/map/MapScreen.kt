@@ -39,7 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -388,12 +388,12 @@ fun SharedTransitionScope.MapScreen(
 @Composable
 private fun SharedTransitionScope.TimeArrow(
     mapDraw: MapDraw,
-    time: MutableState<Long>,
+    timeInMillis: MutableLongState,
     isPrevious: Boolean,
 ) {
     TimeArrow(
         onClick = {
-            time.value += run {
+            timeInMillis.longValue += run {
                 val amount = if (isPrevious) -1 else 1
                 if (mapDraw.currentMapType.isCrescentVisibility) amount.days else amount.hours
             }.inWholeMilliseconds
@@ -403,7 +403,7 @@ private fun SharedTransitionScope.TimeArrow(
             pluralStringResource(R.plurals.hours, 1, numeral.format(1)),
         ),
         onLongClick = {
-            time.value += (if (isPrevious) -10 else 10).days.inWholeMilliseconds
+            timeInMillis.longValue += (if (isPrevious) -10 else 10).days.inWholeMilliseconds
         },
         onLongClickLabel = stringResource(
             if (isPrevious) R.string.previous_x else R.string.next_x,
