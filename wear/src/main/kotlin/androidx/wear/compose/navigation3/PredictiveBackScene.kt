@@ -113,7 +113,7 @@ internal class PredictiveBackScene<T : Any>(
                         .clip(if (isRoundDevice) CircleShape else RectangleShape)
                         .background(scrimColor)
                         .fillMaxSize()
-                        .hierarchicalFocusGroup(shouldFocus),
+                        .hierarchicalFocusGroup(shouldFocus)
             ) {
                 currentEntry.Content()
             }
