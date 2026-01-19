@@ -40,7 +40,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
@@ -282,9 +281,7 @@ fun SettingsMultiSelect(
         summary = summary ?: persistedSet.map(entryValues::indexOf).sorted()
             .joinToString(spacedComma) { entries[it] },
     ) { onDismissRequest ->
-        val result = rememberSaveable(
-            saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
-        ) {
+        val result = rememberSaveable {
             (context.preferences.getStringSet(key, null) ?: persistedSet).toList()
                 .toMutableStateList()
         }

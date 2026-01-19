@@ -25,7 +25,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -55,12 +57,14 @@ import kotlin.random.Random
 fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
     val view = LocalView.current
     val context = LocalContext.current
-    // TODO: Make it remember during rotation by using rememberSavable
-    var list by remember {
+    val moveUp = stringResource(R.string.move_up)
+    val moveDown = stringResource(R.string.move_down)
+    val enabledCalendars = rememberSaveable { enabledCalendars.toMutableStateList() }
+    var list by rememberSaveable {
         val orderedCalendars = enabledCalendars + (Calendar.entries - enabledCalendars.toSet()) -
                 // Don't show Nepali on default locales, at least for now.
                 if (language.showNepaliCalendar) emptySet() else setOf(Calendar.NEPALI)
-        mutableStateOf(orderedCalendars.map { it to (it in enabledCalendars) })
+        mutableStateOf(orderedCalendars)
     }
 
     AppDialog(
@@ -72,7 +76,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             TextButton(
                 onClick = {
                     onDismissRequest()
-                    val result = list.mapNotNull { if (it.second) it.first.name else null }
+                    val result = list.mapNotNull { if (it in enabledCalendars) it.name else null }
                     if (result.isEmpty()) {
                         val animator = ValueAnimator.ofFloat(0f, 1f)
                         animator.duration = 3000L
@@ -101,12 +105,11 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     view.performHapticFeedback(HapticFeedbackConstants.SEGMENT_FREQUENT_TICK)
                 }
             },
-        ) { i, (calendar, checked), isDragging ->
+        ) { i, calendar, isDragging ->
             key(calendar) {
                 val blur by animateDpAsState(targetValue = if (dragStarted) 2.dp else 0.dp)
                 val interactionSource = remember(key1 = calendar) { MutableInteractionSource() }
-                val moveUp = stringResource(R.string.move_up)
-                val moveDown = stringResource(R.string.move_down)
+                val checked = calendar in enabledCalendars
                 Row(
                     modifier = Modifier
                         .blur(if (dragStarted && !isDragging) blur else 0.dp)
@@ -115,11 +118,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                             interactionSource = interactionSource,
                             indication = ripple(),
                             role = Role.Checkbox,
-                        ) { newValue ->
-                            list = list.map {
-                                it.first to (if (it.first == calendar) newValue else it.second)
-                            }
-                        }
+                        ) { if (it) enabledCalendars += calendar else enabledCalendars -= calendar }
                         .semantics {
                             customActions = listOfNotNull(
                                 CustomAccessibilityAction(moveUp) {

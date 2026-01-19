@@ -13,7 +13,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -36,9 +35,7 @@ import com.byagowi.persiancalendar.utils.startAthan
 @Composable
 fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val alarms = rememberSaveable(
-        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() }),
-    ) {
+    val alarms = rememberSaveable {
         context.preferences.getString(PREF_ATHAN_ALARM, null).orEmpty()
             .splitFilterNotEmpty(",").mapNotNull(PrayTime::fromName).toMutableStateList()
     }
