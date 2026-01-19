@@ -7,7 +7,7 @@ data class ShiftWorkRecord(val type: String, val length: Int) {
     companion object {
         private const val TYPE_KEY = "type"
         private const val LENGTH_KEY = "length"
-        val saver = listSaver<MutableList<ShiftWorkRecord>, Map<String, *>>(
+        val Saver = listSaver<MutableList<ShiftWorkRecord>, Map<String, *>>(
             save = { list ->
                 list.map { mapOf(TYPE_KEY to it.type, LENGTH_KEY to it.length) }
             },

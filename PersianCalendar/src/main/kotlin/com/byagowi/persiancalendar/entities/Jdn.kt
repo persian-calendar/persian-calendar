@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.entities
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -87,5 +90,10 @@ value class Jdn(val value: Long) {
 
     companion object {
         fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
+
+        val Saver = Saver<MutableState<Jdn>, Long>(
+            save = { it.value.value },
+            restore = { mutableStateOf(Jdn(it)) },
+        )
     }
 }

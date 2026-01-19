@@ -18,9 +18,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -30,7 +28,6 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
-import com.byagowi.persiancalendar.entities.Jdn
 
 /**
  * Determines if a color should be considered light or dark.
@@ -90,11 +87,6 @@ val appContentSizeAnimationSpec = spring(
     stiffness = Spring.StiffnessMediumLow,
     dampingRatio = Spring.DampingRatioLowBouncy,
     visibilityThreshold = IntSize.VisibilityThreshold,
-)
-
-val JdnSaver = Saver<MutableState<Jdn>, Long>(
-    save = { it.value.value },
-    restore = { mutableStateOf(Jdn(it)) },
 )
 
 val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(
