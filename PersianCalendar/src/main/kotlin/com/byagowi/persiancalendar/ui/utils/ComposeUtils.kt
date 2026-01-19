@@ -7,6 +7,7 @@ import androidx.annotation.ColorRes
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
@@ -18,16 +19,21 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
+import com.byagowi.persiancalendar.entities.Jdn
+import java.util.TimeZone
 
 /**
  * Determines if a color should be considered light or dark.
@@ -89,9 +95,24 @@ val appContentSizeAnimationSpec = spring(
     visibilityThreshold = IntSize.VisibilityThreshold,
 )
 
+val TimeZoneSaver = Saver<MutableState<TimeZone>, String>(
+    save = { it.value.id },
+    restore = { mutableStateOf(TimeZone.getTimeZone(it)) },
+)
+
 val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(
     save = { it.value },
     restore = { Animatable(it) },
+)
+
+val AnimatableColorSaver = Saver<Animatable<Color, AnimationVector4D>, Int>(
+    save = { it.value.toArgb() },
+    restore = { androidx.compose.animation.Animatable(Color(it)) },
+)
+
+val JdnSaver = Saver<MutableState<Jdn>, Long>(
+    save = { it.value.value },
+    restore = { mutableStateOf(Jdn(it)) },
 )
 
 // When something needs to match with Material default theme corner sizes

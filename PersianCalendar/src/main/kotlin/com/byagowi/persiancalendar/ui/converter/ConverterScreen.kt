@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.converter
 import android.content.res.Configuration
 import android.icu.util.ChineseCalendar
 import android.os.Build
-import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -45,10 +44,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -98,6 +99,8 @@ import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.updatedToday
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
+import com.byagowi.persiancalendar.ui.utils.TimeZoneSaver
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -111,6 +114,7 @@ import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -122,15 +126,19 @@ fun SharedTransitionScope.ConverterScreen(
 ) {
     val today = updatedToday()
     val calendar = rememberSaveable { mutableStateOf(mainCalendar) }
-    val selectedDate = rememberSaveable(saver = Jdn.Saver) { mutableStateOf(today) }
-    val secondSelectedDate = rememberSaveable(saver = Jdn.Saver) { mutableStateOf(today) }
+    val selectedDate = rememberSaveable(saver = JdnSaver) { mutableStateOf(today) }
+    val secondSelectedDate = rememberSaveable(saver = JdnSaver) { mutableStateOf(today) }
     val screenMode = rememberSaveable { mutableStateOf(initialScreenMode) }
     val calculatorInputText = rememberSaveable { mutableStateOf("") }
     val qrCodeInputText = rememberSaveable { mutableStateOf("https://example.com") }
-    val firstTimeZone = remember { mutableStateOf(TimeZone.getDefault()) }
+    val firstTimeZone = rememberSaveable(saver = TimeZoneSaver) {
+        mutableStateOf(TimeZone.getDefault())
+    }
     val utc = TimeZone.getTimeZone("UTC")
-    val secondTimeZone = remember { mutableStateOf(utc) }
-    val clock = remember { mutableStateOf(GregorianCalendar()) }
+    val secondTimeZone = rememberSaveable(saver = TimeZoneSaver) {
+        mutableStateOf(utc)
+    }
+    val clock = remember { mutableLongStateOf(System.currentTimeMillis()) }
 
     val todayButtonVisibility by remember {
         derivedStateOf {
@@ -141,7 +149,7 @@ fun SharedTransitionScope.ConverterScreen(
                 today,
                 selectedDate.value,
                 secondSelectedDate.value,
-                clock.value,
+                clock.longValue,
                 firstTimeZone.value,
                 secondTimeZone.value,
                 utc,
@@ -187,7 +195,7 @@ fun SharedTransitionScope.ConverterScreen(
                             ConverterScreenMode.TIME_ZONES -> {
                                 firstTimeZone.value = TimeZone.getDefault()
                                 secondTimeZone.value = utc
-                                clock.value = GregorianCalendar()
+                                clock.longValue = System.currentTimeMillis()
                             }
 
                             ConverterScreenMode.QR_CODE -> {
@@ -211,7 +219,7 @@ fun SharedTransitionScope.ConverterScreen(
                             calculatorInputText.value,
                             firstTimeZone.value,
                             secondTimeZone.value,
-                            clock.value,
+                            clock.longValue,
                             qrShareAction,
                         )
                     }
@@ -280,36 +288,28 @@ fun SharedTransitionScope.ConverterScreen(
     }
 }
 
-@VisibleForTesting
-fun todayButtonVisibility(
+private val oneMinutes = 1.minutes.inWholeMilliseconds
+
+private fun todayButtonVisibility(
     screenMode: ConverterScreenMode,
     calculatorInputText: String,
     qrCodeInputText: String,
     today: Jdn,
     selectedDate: Jdn,
     secondSelectedDate: Jdn,
-    clock: GregorianCalendar,
+    clock: Long,
     firstTimeZone: TimeZone,
     secondTimeZone: TimeZone,
     utc: TimeZone,
 ): Boolean {
-    fun haveSameClock(
-        first: GregorianCalendar,
-        second: GregorianCalendar,
-    ): Boolean {
-        return first[GregorianCalendar.MINUTE] == second[GregorianCalendar.MINUTE] &&
-                first[GregorianCalendar.HOUR_OF_DAY] == second[GregorianCalendar.HOUR_OF_DAY]
-    }
     return when (screenMode) {
         ConverterScreenMode.CALCULATOR -> calculatorInputText.isNotEmpty()
         ConverterScreenMode.QR_CODE -> qrCodeInputText.isNotEmpty()
         ConverterScreenMode.CONVERTER -> selectedDate != today
         ConverterScreenMode.DISTANCE -> selectedDate != today || secondSelectedDate != today
         ConverterScreenMode.TIME_ZONES -> {
-            !haveSameClock(
-                first = clock,
-                second = GregorianCalendar(clock.timeZone),
-            ) || firstTimeZone != TimeZone.getDefault() || secondTimeZone != utc
+            val sameClock = abs(clock - System.currentTimeMillis()) > oneMinutes
+            sameClock || firstTimeZone != TimeZone.getDefault() || secondTimeZone != utc
         }
     }
 }
@@ -318,7 +318,7 @@ fun todayButtonVisibility(
 private fun TimeZones(
     firstTimeZone: MutableState<TimeZone>,
     secondTimeZone: MutableState<TimeZone>,
-    clock: MutableState<GregorianCalendar>,
+    clock: MutableLongState,
     pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     val zones = remember {
@@ -372,7 +372,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
     calculatorInputText: String,
     firstTimeZone: TimeZone,
     secondTimeZone: TimeZone,
-    clock: GregorianCalendar,
+    clock: Long,
     qrShareAction: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -433,7 +433,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                     ).joinToString("\n") { timeZone ->
                         timeZone.displayName + ": " + Clock(
                             GregorianCalendar(timeZone).also {
-                                it.time = clock.time
+                                it.timeInMillis = clock
                             },
                         ).toBasicFormatString()
                     },
@@ -763,24 +763,23 @@ private val minutesRange = 0..59
 private fun TimezoneClock(
     firstTimeZone: MutableState<TimeZone>,
     secondTimeZone: MutableState<TimeZone>,
-    clock: MutableState<GregorianCalendar>,
+    clock: MutableLongState,
     zones: List<TimeZone>,
     pendingConfirms: MutableCollection<() -> Unit>,
     modifier: Modifier = Modifier,
     isFirst: Boolean,
 ) {
-    val timeZone = (if (isFirst) firstTimeZone else secondTimeZone).value
+    val timeZone = if (isFirst) firstTimeZone else secondTimeZone
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
             val view = LocalView.current
             NumberPicker(
                 modifier = Modifier.weight(3f),
                 range = zones.indices,
-                value = zones.indexOf(timeZone).coerceAtLeast(0),
+                value = zones.indexOf(timeZone.value).coerceAtLeast(0),
                 onValueChange = {
                     view.performHapticFeedbackVirtualKey()
-                    if (isFirst) firstTimeZone.value = zones[it]
-                    else secondTimeZone.value = zones[it]
+                    timeZone.value = zones[it]
                 },
                 label = {
                     val hoursFraction = (zones[it].rawOffset).milliseconds / 1.hours
@@ -794,17 +793,17 @@ private fun TimezoneClock(
                 pendingConfirms = pendingConfirms,
             )
             Spacer(Modifier.width(4.dp))
-            val time = GregorianCalendar(timeZone).also { it.time = clock.value.time }
+            val time = GregorianCalendar(timeZone.value).also { it.timeInMillis = clock.longValue }
             NumberPicker(
                 modifier = Modifier.weight(1f),
                 range = hoursRange,
                 value = time[GregorianCalendar.HOUR_OF_DAY],
                 onValueChange = { hours ->
                     view.performHapticFeedbackVirtualKey()
-                    clock.value = GregorianCalendar(timeZone).also {
-                        it.time = clock.value.time
+                    clock.longValue = GregorianCalendar(timeZone.value).also {
+                        it.timeInMillis = clock.longValue
                         it[GregorianCalendar.HOUR_OF_DAY] = hours
-                    }
+                    }.timeInMillis
                 },
                 pendingConfirms = pendingConfirms,
             )
@@ -815,10 +814,10 @@ private fun TimezoneClock(
                 value = time[GregorianCalendar.MINUTE],
                 onValueChange = { minutes ->
                     view.performHapticFeedbackVirtualKey()
-                    clock.value = GregorianCalendar(timeZone).also {
-                        it.time = clock.value.time
+                    clock.longValue = GregorianCalendar(timeZone.value).also {
+                        it.timeInMillis = clock.longValue
                         it[GregorianCalendar.MINUTE] = minutes
-                    }
+                    }.timeInMillis
                 },
                 pendingConfirms = pendingConfirms,
             )

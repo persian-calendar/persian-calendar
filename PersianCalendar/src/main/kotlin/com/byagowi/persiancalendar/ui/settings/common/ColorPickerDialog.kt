@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,6 +58,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.utils.AnimatableColorSaver
 import com.byagowi.persiancalendar.ui.utils.isLight
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -72,9 +72,7 @@ fun ColorPickerDialog(
     persistColor: (Color) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val color = rememberSaveable(
-        saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) }),
-    ) { Animatable(initialColor) }
+    val color = rememberSaveable(saver = AnimatableColorSaver) { Animatable(initialColor) }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     AppDialog(
         title = { if (!isLandscape) Text(title) },

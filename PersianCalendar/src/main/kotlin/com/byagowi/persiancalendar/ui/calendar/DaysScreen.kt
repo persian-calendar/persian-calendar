@@ -138,6 +138,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -162,7 +163,7 @@ fun SharedTransitionScope.DaysScreen(
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
 ) {
-    var selectedDay by rememberSaveable(saver = Jdn.Saver) { mutableStateOf(initiallySelectedDay) }
+    var selectedDay by rememberSaveable(saver = JdnSaver) { mutableStateOf(initiallySelectedDay) }
     val today = calendarViewModel.today
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
     val date = selectedDay on mainCalendar

@@ -42,6 +42,7 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import kotlinx.coroutines.delay
 import kotlin.math.abs
@@ -53,7 +54,7 @@ fun DatePickerDialog(
     onDismissRequest: () -> Unit,
     onSuccess: (jdn: Jdn) -> Unit,
 ) {
-    var jdn by rememberSaveable(saver = Jdn.Saver) { mutableStateOf(initialJdn) }
+    var jdn by rememberSaveable(saver = JdnSaver) { mutableStateOf(initialJdn) }
     var today by remember { mutableStateOf(Jdn.today()) }
     LaunchedEffect(Unit) {
         while (true) {

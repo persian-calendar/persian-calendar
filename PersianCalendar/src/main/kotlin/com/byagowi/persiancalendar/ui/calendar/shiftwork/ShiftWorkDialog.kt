@@ -71,6 +71,7 @@ import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
@@ -107,7 +108,7 @@ private fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissReques
         mutableStateListOf<ShiftWorkRecord>().apply { addAll(items) }
     }
     var isFirstSetup by rememberSaveable { mutableStateOf(shiftWorkSettings.startingJdn == null) }
-    var startingDate by rememberSaveable(saver = Jdn.Saver) {
+    var startingDate by rememberSaveable(saver = JdnSaver) {
         mutableStateOf(shiftWorkSettings.startingJdn ?: selectedJdn)
     }
     var recurs by rememberSaveable { mutableStateOf(shiftWorkSettings.recurs) }
