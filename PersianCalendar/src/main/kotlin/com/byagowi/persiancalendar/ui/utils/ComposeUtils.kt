@@ -23,6 +23,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
@@ -33,6 +34,8 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import java.util.TimeZone
 
 /**
@@ -113,6 +116,22 @@ val AnimatableColorSaver = Saver<Animatable<Color, AnimationVector4D>, Int>(
 val JdnSaver = Saver<MutableState<Jdn>, Long>(
     save = { it.value.value },
     restore = { mutableStateOf(Jdn(it)) },
+)
+
+private const val TYPE_KEY = "type"
+private const val LENGTH_KEY = "length"
+val ShiftWorkRecordListSaver = listSaver<MutableList<ShiftWorkRecord>, Map<String, *>>(
+    save = { list ->
+        list.map { mapOf(TYPE_KEY to it.type, LENGTH_KEY to it.length) }
+    },
+    restore = { list ->
+        list.map {
+            ShiftWorkRecord(
+                type = (it[TYPE_KEY] as? String).debugAssertNotNull ?: "",
+                length = (it[LENGTH_KEY] as? Int).debugAssertNotNull ?: 0,
+            )
+        }.toMutableList()
+    },
 )
 
 // When something needs to match with Material default theme corner sizes
