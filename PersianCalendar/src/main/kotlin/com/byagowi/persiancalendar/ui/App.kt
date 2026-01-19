@@ -76,6 +76,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
@@ -109,7 +112,6 @@ import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
-import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
@@ -121,6 +123,7 @@ import com.byagowi.persiancalendar.ui.utils.findWindow
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.util.Date
@@ -219,7 +222,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     ConverterScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
-                        viewModel = viewModel<ConverterViewModel>(),
                         noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
                     )
                 }
@@ -436,6 +438,21 @@ private fun AppNavigationRail(
             ScrollShadow(scrollState)
         }
     }
+}
+
+@Composable
+fun updatedToday(): Jdn {
+    var today by remember { mutableStateOf(Jdn.today()) }
+
+    val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
+        while (isActive) {
+            today = Jdn.today()
+            delay(30.seconds)
+        }
+    }
+
+    return today
 }
 
 @Composable

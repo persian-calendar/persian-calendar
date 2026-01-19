@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.converter
 import android.content.res.Configuration
 import android.icu.util.ChineseCalendar
 import android.os.Build
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -45,6 +46,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -97,6 +100,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.updatedToday
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -116,9 +120,39 @@ import kotlin.time.Duration.Companion.milliseconds
 fun SharedTransitionScope.ConverterScreen(
     openNavigationRail: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
-    viewModel: ConverterViewModel,
     noBackStackAction: (() -> Unit)?,
+    initialScreenMode: ConverterScreenMode = ConverterScreenMode.entries[0],
 ) {
+    val today = updatedToday()
+    val calendar = rememberSaveable { mutableStateOf(mainCalendar) }
+    val selectedDate = rememberSaveable(saver = Jdn.Saver) { mutableStateOf(today) }
+    val secondSelectedDate = rememberSaveable(saver = Jdn.Saver) { mutableStateOf(today) }
+    val screenMode = rememberSaveable { mutableStateOf(initialScreenMode) }
+    val calculatorInputText = rememberSaveable { mutableStateOf("") }
+    val qrCodeInputText = rememberSaveable { mutableStateOf("https://example.com") }
+    val firstTimeZone = remember { mutableStateOf(TimeZone.getDefault()) }
+    val utc = TimeZone.getTimeZone("UTC")
+    val secondTimeZone = remember { mutableStateOf(utc) }
+    val clock = remember { mutableStateOf(GregorianCalendar()) }
+
+
+    val todayButtonVisibility by remember {
+        derivedStateOf {
+            todayButtonVisibility(
+                screenMode.value,
+                calculatorInputText.value,
+                qrCodeInputText.value,
+                today,
+                selectedDate.value,
+                secondSelectedDate.value,
+                clock.value,
+                firstTimeZone.value,
+                secondTimeZone.value,
+                utc,
+            )
+        }
+    }
+
     var qrShareAction by remember { mutableStateOf({}) }
     val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     Scaffold(
@@ -127,8 +161,8 @@ fun SharedTransitionScope.ConverterScreen(
             TopAppBar(
                 title = {
                     AppScreenModesDropDown(
-                        value = viewModel.screenMode,
-                        onValueChange = { viewModel.screenMode = it },
+                        value = screenMode.value,
+                        onValueChange = { screenMode.value = it },
                         values = ConverterScreenMode.entries,
                     ) { stringResource(it.title) }
                 },
@@ -139,28 +173,30 @@ fun SharedTransitionScope.ConverterScreen(
                 },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
-                    TodayActionButton(visible = viewModel.todayButtonVisibility && !anyPendingConfirm) {
-                        when (viewModel.screenMode) {
+                    TodayActionButton(visible = todayButtonVisibility && !anyPendingConfirm) {
+                        when (screenMode.value) {
                             ConverterScreenMode.CALCULATOR -> {
-                                viewModel.calculatorInputText = ""
+                                calculatorInputText.value = ""
                             }
 
                             ConverterScreenMode.CONVERTER -> {
-                                val todayJdn = Jdn.today()
-                                viewModel.selectedDate = todayJdn
+                                selectedDate.value = today
                             }
 
                             ConverterScreenMode.DISTANCE -> {
-                                val todayJdn = Jdn.today()
-                                viewModel.selectedDate = todayJdn
-                                viewModel.secondSelectedDate = todayJdn
+                                selectedDate.value = today
+                                secondSelectedDate.value = today
                             }
 
                             ConverterScreenMode.TIME_ZONES -> {
-                                viewModel.resetTimeZoneClock()
+                                firstTimeZone.value = TimeZone.getDefault()
+                                secondTimeZone.value = utc
+                                clock.value = GregorianCalendar()
                             }
 
-                            ConverterScreenMode.QR_CODE -> {}
+                            ConverterScreenMode.QR_CODE -> {
+                                qrCodeInputText.value = ""
+                            }
                         }
                     }
                     AnimatedVisibility(anyPendingConfirm) {
@@ -171,7 +207,17 @@ fun SharedTransitionScope.ConverterScreen(
                         )
                     }
                     AnimatedVisibility(visible = !anyPendingConfirm) {
-                        ConverterScreenShareActionButton(viewModel, qrShareAction)
+                        ConverterScreenShareActionButton(
+                            screenMode.value,
+                            calendar.value,
+                            selectedDate.value,
+                            secondSelectedDate.value,
+                            calculatorInputText.value,
+                            firstTimeZone.value,
+                            secondTimeZone.value,
+                            clock.value,
+                            qrShareAction,
+                        )
                     }
                 },
             )
@@ -188,34 +234,40 @@ fun SharedTransitionScope.ConverterScreen(
                     Column(Modifier.verticalScroll(scrollState)) {
                         Spacer(Modifier.height(24.dp))
 
-                        val screenMode = viewModel.screenMode
                         // Timezones
-                        AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
-                            TimeZones(viewModel, pendingConfirms)
+                        AnimatedVisibility(screenMode.value == ConverterScreenMode.TIME_ZONES) {
+                            TimeZones(firstTimeZone, secondTimeZone, clock, pendingConfirms)
                         }
 
                         AnimatedVisibility(
-                            screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE,
+                            when (screenMode.value) {
+                                ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
+                                else -> false
+                            },
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
                                 ConverterAndDistance(
                                     navigateToAstronomy = navigateToAstronomy,
-                                    viewModel = viewModel,
                                     sharedTransitionScope = this@ConverterScreen,
                                     pendingConfirms = pendingConfirms,
+                                    today = today,
+                                    calendar = calendar,
+                                    selectedDate = selectedDate,
+                                    secondSelectedDate = secondSelectedDate,
+                                    screenMode = screenMode,
                                 )
                             }
                         }
 
-                        AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
+                        AnimatedVisibility(screenMode.value == ConverterScreenMode.CALCULATOR) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                                Calculator(viewModel)
+                                Calculator(calculatorInputText)
                             }
                         }
 
-                        AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
+                        AnimatedVisibility(screenMode.value == ConverterScreenMode.QR_CODE) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                                QrCode(viewModel) { qrShareAction = it }
+                                QrCode(qrCodeInputText) { qrShareAction = it }
                             }
                         }
 
@@ -232,9 +284,45 @@ fun SharedTransitionScope.ConverterScreen(
     }
 }
 
+@VisibleForTesting
+fun todayButtonVisibility(
+    screenMode: ConverterScreenMode,
+    calculatorInputText: String,
+    qrCodeInputText: String,
+    today: Jdn,
+    selectedDate: Jdn,
+    secondSelectedDate: Jdn,
+    clock: GregorianCalendar,
+    firstTimeZone: TimeZone,
+    secondTimeZone: TimeZone,
+    utc: TimeZone,
+): Boolean {
+    fun haveSameClock(
+        first: GregorianCalendar,
+        second: GregorianCalendar,
+    ): Boolean {
+        return first[GregorianCalendar.MINUTE] == second[GregorianCalendar.MINUTE] &&
+                first[GregorianCalendar.HOUR_OF_DAY] == second[GregorianCalendar.HOUR_OF_DAY]
+    }
+    return when (screenMode) {
+        ConverterScreenMode.CALCULATOR -> calculatorInputText.isNotEmpty()
+        ConverterScreenMode.QR_CODE -> qrCodeInputText.isNotEmpty()
+        ConverterScreenMode.CONVERTER -> selectedDate != today
+        ConverterScreenMode.DISTANCE -> selectedDate != today || secondSelectedDate != today
+        ConverterScreenMode.TIME_ZONES -> {
+            !haveSameClock(
+                first = clock,
+                second = GregorianCalendar(clock.timeZone),
+            ) || firstTimeZone != TimeZone.getDefault() || secondTimeZone != utc
+        }
+    }
+}
+
 @Composable
 private fun TimeZones(
-    viewModel: ConverterViewModel,
+    firstTimeZone: MutableState<TimeZone>,
+    secondTimeZone: MutableState<TimeZone>,
+    clock: MutableState<GregorianCalendar>,
     pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     val zones = remember {
@@ -243,49 +331,72 @@ private fun TimeZones(
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val difference = run {
         val distance =
-            viewModel.secondTimeZone.rawOffset.milliseconds - viewModel.firstTimeZone.rawOffset.milliseconds
+            secondTimeZone.value.rawOffset.milliseconds - firstTimeZone.value.rawOffset.milliseconds
         Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
     }
     if (isLandscape) Column {
         Row(Modifier.padding(horizontal = 24.dp)) {
-            TimezoneClock(viewModel, zones, pendingConfirms, Modifier.weight(1f), isFirst = true)
+            TimezoneClock(
+                firstTimeZone,
+                secondTimeZone,
+                clock,
+                zones,
+                pendingConfirms,
+                Modifier.weight(1f),
+                isFirst = true,
+            )
             Spacer(Modifier.width(8.dp))
-            TimezoneClock(viewModel, zones, pendingConfirms, Modifier.weight(1f), isFirst = false)
+            TimezoneClock(
+                firstTimeZone,
+                secondTimeZone,
+                clock,
+                zones,
+                pendingConfirms,
+                Modifier.weight(1f),
+                isFirst = false,
+            )
         }
         Spacer(Modifier.height(4.dp))
         TextWithSlideAnimation(difference)
     } else Column(Modifier.padding(horizontal = 24.dp)) {
-        TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
+        TimezoneClock(firstTimeZone, secondTimeZone, clock, zones, pendingConfirms, isFirst = true)
         Spacer(Modifier.height(4.dp))
         TextWithSlideAnimation(difference)
         Spacer(Modifier.height(4.dp))
-        TimezoneClock(viewModel, zones, pendingConfirms, isFirst = false)
+        TimezoneClock(firstTimeZone, secondTimeZone, clock, zones, pendingConfirms, isFirst = false)
     }
 }
 
 @Composable
 private fun SharedTransitionScope.ConverterScreenShareActionButton(
-    viewModel: ConverterViewModel,
+    screenMode: ConverterScreenMode,
+    calendar: Calendar,
+    selectedDate: Jdn,
+    secondSelectedDate: Jdn,
+    calculatorInputText: String,
+    firstTimeZone: TimeZone,
+    secondTimeZone: TimeZone,
+    clock: GregorianCalendar,
     qrShareAction: () -> Unit,
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
     ShareActionButton {
-        val chooserTitle = resources.getString(viewModel.screenMode.title)
-        when (viewModel.screenMode) {
+        val chooserTitle = resources.getString(screenMode.title)
+        when (screenMode) {
             ConverterScreenMode.CONVERTER -> {
                 val calendarsList =
                     enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
-                val otherCalendars = calendarsList - viewModel.calendar
+                val otherCalendars = calendarsList - calendar
                 context.shareText(
                     text = listOf(
                         dayTitleSummary(
-                            jdn = viewModel.selectedDate,
-                            date = viewModel.selectedDate on viewModel.calendar,
+                            jdn = selectedDate,
+                            date = selectedDate on calendar,
                         ),
                         resources.getString(R.string.equivalent_to),
                         otherCalendars.joinToString(spacedComma) {
-                            formatDate(date = viewModel.selectedDate on it)
+                            formatDate(date = selectedDate on it)
                         },
                     ).joinToString(separator = " "),
                     chooserTitle = chooserTitle,
@@ -297,12 +408,12 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                     text = listOf(
                         calculateDaysDifference(
                             resources,
-                            jdn = viewModel.selectedDate,
-                            baseJdn = viewModel.secondSelectedDate,
-                            calendar = viewModel.calendar,
+                            jdn = selectedDate,
+                            baseJdn = secondSelectedDate,
+                            calendar = calendar,
                         ),
-                        formatDate(viewModel.selectedDate on viewModel.calendar),
-                        formatDate(viewModel.secondSelectedDate on viewModel.calendar),
+                        formatDate(selectedDate on calendar),
+                        formatDate(secondSelectedDate on calendar),
                     ).joinToString("\n"),
                     chooserTitle = chooserTitle,
                 )
@@ -312,7 +423,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                 context.shareText(
                     runCatching {
                         // running this inside a runCatching block is absolutely important
-                        eval(viewModel.calculatorInputText)
+                        eval(calculatorInputText)
                     }.getOrElse { it.message }.orEmpty(),
                     chooserTitle,
                 )
@@ -321,12 +432,12 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
             ConverterScreenMode.TIME_ZONES -> {
                 context.shareText(
                     listOf(
-                        viewModel.firstTimeZone,
-                        viewModel.secondTimeZone,
+                        firstTimeZone,
+                        secondTimeZone,
                     ).joinToString("\n") { timeZone ->
                         timeZone.displayName + ": " + Clock(
                             GregorianCalendar(timeZone).also {
-                                it.time = viewModel.clock.time
+                                it.time = clock.time
                             },
                         ).toBasicFormatString()
                     },
@@ -340,24 +451,26 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
 }
 
 @Composable
-private fun Calculator(viewModel: ConverterViewModel) {
+private fun Calculator(
+    calculatorInputText: MutableState<String>,
+) {
     val context = LocalContext.current
     DisposableEffect(Unit) {
         val preferences = context.preferences
-        val currentInput = viewModel.calculatorInputText
+        val currentInput = calculatorInputText.value
         if (currentInput.isEmpty()) {
             val storedInput = preferences.getString(PREF_CALCULATOR_INPUT, "").orEmpty()
-            viewModel.calculatorInputText = storedInput.ifEmpty {
+            calculatorInputText.value = storedInput.ifEmpty {
                 "1d 2h 3m 4s + 4h 5s - 2030s + 28h"
             }
         }
         onDispose {
-            preferences.edit { putString(PREF_CALCULATOR_INPUT, viewModel.calculatorInputText) }
+            preferences.edit { putString(PREF_CALCULATOR_INPUT, calculatorInputText.value) }
         }
     }
     val result = runCatching {
         // running this inside a runCatching block is absolutely important
-        eval(viewModel.calculatorInputText)
+        eval(calculatorInputText.value)
     }.getOrElse { it.message }.orEmpty()
     val defaultTextFieldColors = TextFieldDefaults.colors()
     val textFieldColors = defaultTextFieldColors.copy(
@@ -367,8 +480,8 @@ private fun Calculator(viewModel: ConverterViewModel) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         TextField(
-            value = viewModel.calculatorInputText,
-            onValueChange = { viewModel.calculatorInputText = it },
+            value = calculatorInputText.value,
+            onValueChange = { calculatorInputText.value = it },
             minLines = 6,
             modifier = Modifier.weight(1f),
             colors = textFieldColors,
@@ -386,8 +499,8 @@ private fun Calculator(viewModel: ConverterViewModel) {
         }
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TextField(
-            value = viewModel.calculatorInputText,
-            onValueChange = { viewModel.calculatorInputText = it },
+            value = calculatorInputText.value,
+            onValueChange = { calculatorInputText.value = it },
             minLines = 10,
             modifier = Modifier.fillMaxWidth(),
             colors = textFieldColors,
@@ -408,7 +521,10 @@ private fun Calculator(viewModel: ConverterViewModel) {
 }
 
 @Composable
-private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -> Unit) {
+private fun QrCode(
+    qrCodeInputText: MutableState<String>,
+    setShareAction: (() -> Unit) -> Unit,
+) {
     @Composable
     fun Qr() {
         val surfaceColor = MaterialTheme.colorScheme.surface
@@ -420,16 +536,18 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
                 setShareAction { root.share(backgroundColor = surfaceColor.toArgb()) }
                 root
             },
-            update = { it.update(viewModel.qrCodeInputText) },
+            update = { it.update(qrCodeInputText.value) },
         )
     }
 
     @Composable
-    fun ColumnScope.SampleInputButton() {
+    fun ColumnScope.SampleInputButton(
+        qrCodeInputText: MutableState<String>,
+    ) {
         var qrLongClickCount by remember { mutableIntStateOf(1) }
         OutlinedButton(
             onClick = {
-                viewModel.qrCodeInputText = when (qrLongClickCount++ % 4) {
+                qrCodeInputText.value = when (qrLongClickCount++ % 4) {
                     0 -> "https://example.com"
                     1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
                     2 -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
@@ -452,60 +570,64 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         Column(modifier = Modifier.weight(1f)) {
             TextField(
-                value = viewModel.qrCodeInputText,
-                onValueChange = { viewModel.qrCodeInputText = it },
+                value = qrCodeInputText.value,
+                onValueChange = { qrCodeInputText.value = it },
                 minLines = 6,
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
-            SampleInputButton()
+            SampleInputButton(qrCodeInputText)
         }
         Spacer(Modifier.width(24.dp))
         Qr()
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TextField(
-            value = viewModel.qrCodeInputText,
-            onValueChange = { viewModel.qrCodeInputText = it },
+            value = qrCodeInputText.value,
+            onValueChange = { qrCodeInputText.value = it },
             minLines = 10,
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(24.dp))
         Qr()
         Spacer(Modifier.height(8.dp))
-        SampleInputButton()
+        SampleInputButton(qrCodeInputText)
     }
 }
 
 @Composable
 private fun ColumnScope.ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,
-    viewModel: ConverterViewModel,
     sharedTransitionScope: SharedTransitionScope,
     pendingConfirms: MutableCollection<() -> Unit>,
+    screenMode: MutableState<ConverterScreenMode>,
+    selectedDate: MutableState<Jdn>,
+    secondSelectedDate: MutableState<Jdn>,
+    today: Jdn,
+    calendar: MutableState<Calendar>,
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
-    if (viewModel.calendar !in calendarsList) viewModel.calendar = mainCalendar
+    if (calendar.value !in calendarsList) calendar.value = mainCalendar
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarPicker(
-                value = viewModel.calendar,
+                value = calendar.value,
                 items = calendarsList,
                 backgroundColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-            ) { viewModel.calendar = it }
+            ) { calendar.value = it }
             DatePicker(
-                calendar = viewModel.calendar,
-                jdn = viewModel.selectedDate,
+                calendar = calendar.value,
+                jdn = selectedDate.value,
                 pendingConfirms = pendingConfirms,
-                setJdn = { viewModel.selectedDate = it },
+                setJdn = { selectedDate.value = it },
             )
         }
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
             AnimatedVisibility(
-                visible = viewModel.screenMode == ConverterScreenMode.CONVERTER,
+                visible = screenMode.value == ConverterScreenMode.CONVERTER,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraLarge)
                     .clickable { isExpanded = !isExpanded }
@@ -513,38 +635,38 @@ private fun ColumnScope.ConverterAndDistance(
             ) {
                 sharedTransitionScope.apply {
                     CalendarsOverview(
-                        jdn = viewModel.selectedDate,
-                        today = viewModel.today,
-                        selectedCalendar = viewModel.calendar,
-                        shownCalendars = calendarsList - viewModel.calendar,
+                        jdn = selectedDate.value,
+                        today = today,
+                        selectedCalendar = calendar.value,
+                        shownCalendars = calendarsList - calendar.value,
                         isExpanded = isExpanded,
                         navigateToAstronomy = navigateToAstronomy,
                     )
                 }
             }
-            AnimatedVisibility(visible = viewModel.screenMode == ConverterScreenMode.DISTANCE) {
+            AnimatedVisibility(visible = screenMode.value == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart(
-                    viewModel = viewModel,
-                    jdn = viewModel.selectedDate,
-                    calendar = viewModel.calendar,
+                    secondSelectedDate = secondSelectedDate,
+                    jdn = selectedDate.value,
+                    calendar = calendar.value,
                     pendingConfirms = pendingConfirms,
                 )
             }
         }
     } else {
         CalendarPicker(
-            value = viewModel.calendar,
+            value = calendar.value,
             items = calendarsList,
             backgroundColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-        ) { viewModel.calendar = it }
+        ) { calendar.value = it }
         DatePicker(
-            calendar = viewModel.calendar,
-            jdn = viewModel.selectedDate,
+            calendar = calendar.value,
+            jdn = selectedDate.value,
             pendingConfirms = pendingConfirms,
-            setJdn = { viewModel.selectedDate = it },
+            setJdn = { selectedDate.value = it },
         )
-        AnimatedVisibility(visible = viewModel.screenMode == ConverterScreenMode.CONVERTER) {
+        AnimatedVisibility(visible = screenMode.value == ConverterScreenMode.CONVERTER) {
             val cardColors = CardDefaults.cardColors()
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
@@ -562,10 +684,10 @@ private fun ColumnScope.ConverterAndDistance(
                 Box(Modifier.fillMaxWidth()) {
                     sharedTransitionScope.apply {
                         CalendarsOverview(
-                            jdn = viewModel.selectedDate,
-                            today = viewModel.today,
-                            selectedCalendar = viewModel.calendar,
-                            shownCalendars = calendarsList - viewModel.calendar,
+                            jdn = selectedDate.value,
+                            today = today,
+                            selectedCalendar = calendar.value,
+                            shownCalendars = calendarsList - calendar.value,
                             isExpanded = isExpanded,
                             navigateToAstronomy = navigateToAstronomy,
                         )
@@ -574,21 +696,21 @@ private fun ColumnScope.ConverterAndDistance(
                 Spacer(Modifier.height(12.dp))
             }
         }
-        AnimatedVisibility(visible = viewModel.screenMode == ConverterScreenMode.DISTANCE) {
+        AnimatedVisibility(visible = screenMode.value == ConverterScreenMode.DISTANCE) {
             DaysDistanceSecondPart(
-                viewModel = viewModel,
-                jdn = viewModel.selectedDate,
-                calendar = viewModel.calendar,
+                secondSelectedDate = secondSelectedDate,
+                jdn = selectedDate.value,
+                calendar = calendar.value,
                 pendingConfirms = pendingConfirms,
             )
         }
     }
 
     AnimatedVisibility(
-        isAstronomicalExtraFeaturesEnabled && viewModel.screenMode == ConverterScreenMode.DISTANCE && !(viewModel.secondSelectedDate == viewModel.selectedDate && viewModel.selectedDate == viewModel.today),
+        isAstronomicalExtraFeaturesEnabled && screenMode.value == ConverterScreenMode.DISTANCE && !(secondSelectedDate == selectedDate && selectedDate.value == today),
     ) {
-        val isPersian = viewModel.calendar == Calendar.SHAMSI
-        val zodiacs = listOf(viewModel.selectedDate, viewModel.secondSelectedDate).map {
+        val isPersian = calendar.value == Calendar.SHAMSI
+        val zodiacs = listOf(selectedDate.value, secondSelectedDate.value).map {
             if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 ChineseZodiac.fromPersianCalendar(it.toPersianDate())
             } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
@@ -604,7 +726,7 @@ private fun ColumnScope.ConverterAndDistance(
 
 @Composable
 private fun DaysDistanceSecondPart(
-    viewModel: ConverterViewModel,
+    secondSelectedDate: MutableState<Jdn>,
     jdn: Jdn,
     calendar: Calendar,
     pendingConfirms: MutableCollection<() -> Unit>,
@@ -614,15 +736,15 @@ private fun DaysDistanceSecondPart(
             text = calculateDaysDifference(
                 resources = LocalResources.current,
                 jdn = jdn,
-                baseJdn = viewModel.secondSelectedDate,
+                baseJdn = secondSelectedDate.value,
                 calendar = calendar,
             ),
         )
         DatePicker(
             calendar = calendar,
-            jdn = viewModel.secondSelectedDate,
+            jdn = secondSelectedDate.value,
             pendingConfirms = pendingConfirms,
-            setJdn = { viewModel.secondSelectedDate = it },
+            setJdn = { secondSelectedDate.value = it },
         )
     }
 }
@@ -654,13 +776,15 @@ private val minutesRange = 0..59
 
 @Composable
 private fun TimezoneClock(
-    viewModel: ConverterViewModel,
+    firstTimeZone: MutableState<TimeZone>,
+    secondTimeZone: MutableState<TimeZone>,
+    clock: MutableState<GregorianCalendar>,
     zones: List<TimeZone>,
     pendingConfirms: MutableCollection<() -> Unit>,
     modifier: Modifier = Modifier,
     isFirst: Boolean,
 ) {
-    val timeZone = if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone
+    val timeZone = (if (isFirst) firstTimeZone else secondTimeZone).value
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
             val view = LocalView.current
@@ -670,8 +794,8 @@ private fun TimezoneClock(
                 value = zones.indexOf(timeZone).coerceAtLeast(0),
                 onValueChange = {
                     view.performHapticFeedbackVirtualKey()
-                    if (isFirst) viewModel.firstTimeZone = zones[it]
-                    else viewModel.secondTimeZone = zones[it]
+                    if (isFirst) firstTimeZone.value = zones[it]
+                    else secondTimeZone.value = zones[it]
                 },
                 label = {
                     val hoursFraction = (zones[it].rawOffset).milliseconds / 1.hours
@@ -685,15 +809,15 @@ private fun TimezoneClock(
                 pendingConfirms = pendingConfirms,
             )
             Spacer(Modifier.width(4.dp))
-            val time = GregorianCalendar(timeZone).also { it.time = viewModel.clock.time }
+            val time = GregorianCalendar(timeZone).also { it.time = clock.value.time }
             NumberPicker(
                 modifier = Modifier.weight(1f),
                 range = hoursRange,
                 value = time[GregorianCalendar.HOUR_OF_DAY],
                 onValueChange = { hours ->
                     view.performHapticFeedbackVirtualKey()
-                    viewModel.clock = GregorianCalendar(timeZone).also {
-                        it.time = viewModel.clock.time
+                    clock.value = GregorianCalendar(timeZone).also {
+                        it.time = clock.value.time
                         it[GregorianCalendar.HOUR_OF_DAY] = hours
                     }
                 },
@@ -706,8 +830,8 @@ private fun TimezoneClock(
                 value = time[GregorianCalendar.MINUTE],
                 onValueChange = { minutes ->
                     view.performHapticFeedbackVirtualKey()
-                    viewModel.clock = GregorianCalendar(timeZone).also {
-                        it.time = viewModel.clock.time
+                    clock.value = GregorianCalendar(timeZone).also {
+                        it.time = clock.value.time
                         it[GregorianCalendar.MINUTE] = minutes
                     }
                 },
