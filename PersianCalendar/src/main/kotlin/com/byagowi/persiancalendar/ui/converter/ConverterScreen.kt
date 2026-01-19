@@ -35,7 +35,6 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -59,7 +58,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -70,7 +68,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_CALCULATOR_INPUT
 import com.byagowi.persiancalendar.R
@@ -134,7 +131,6 @@ fun SharedTransitionScope.ConverterScreen(
     val utc = TimeZone.getTimeZone("UTC")
     val secondTimeZone = remember { mutableStateOf(utc) }
     val clock = remember { mutableStateOf(GregorianCalendar()) }
-
 
     val todayButtonVisibility by remember {
         derivedStateOf {
@@ -526,21 +522,6 @@ private fun QrCode(
     setShareAction: (() -> Unit) -> Unit,
 ) {
     @Composable
-    fun Qr() {
-        val surfaceColor = MaterialTheme.colorScheme.surface
-        val contentColor = LocalContentColor.current
-        AndroidView(
-            factory = {
-                val root = QrView(it)
-                root.setContentColor(contentColor.toArgb())
-                setShareAction { root.share(backgroundColor = surfaceColor.toArgb()) }
-                root
-            },
-            update = { it.update(qrCodeInputText.value) },
-        )
-    }
-
-    @Composable
     fun ColumnScope.SampleInputButton(
         qrCodeInputText: MutableState<String>,
     ) {
@@ -566,6 +547,10 @@ private fun QrCode(
         ) { Text(stringResource(R.string.sample_inputs)) }
     }
 
+    @Composable
+    fun Qr() {
+        Crossfade(targetState = qrCodeInputText.value) { text -> QrView(text, setShareAction) }
+    }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         Column(modifier = Modifier.weight(1f)) {
@@ -579,7 +564,7 @@ private fun QrCode(
             SampleInputButton(qrCodeInputText)
         }
         Spacer(Modifier.width(24.dp))
-        Qr()
+        Box(Modifier.weight(1f)) { Qr() }
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TextField(
             value = qrCodeInputText.value,
