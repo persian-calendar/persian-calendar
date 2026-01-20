@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.collection.IntIntPair
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -29,8 +30,10 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -268,6 +271,7 @@ fun daysTable(
             }
 
             val holidaysPositions = remember { DayTablePositions() }
+            var todayPosition by remember(today) { mutableStateOf<IntIntPair?>(null) }
             Box(
                 Modifier
                     .fillMaxSize()
@@ -291,6 +295,19 @@ fun daysTable(
                                     alpha = normalizedDistance,
                                 )
                                 holidayFraction = min(holidayFraction, normalizedDistance)
+                            }
+                            todayPosition?.let { (row, column) ->
+                                val center = positionToOffset(row, column)
+                                val normalizedDistance = run {
+                                    (center - animatedCenter.value).getDistance() / cellRadius / 2
+                                }.coerceIn(1 - animatedRadius.value.coerceIn(0f, 1f), 1f)
+                                val fraction = 1 - normalizedDistance
+                                drawCircle(
+                                    center = center,
+                                    color = todayOutlineColor,
+                                    radius = cellRadius - todayIndicatorStroke.width * fraction,
+                                    style = todayIndicatorStroke,
+                                )
                             }
                             drawContent()
                             val radiusFraction = animatedRadius.value
@@ -415,11 +432,7 @@ fun daysTable(
                             }
                             Canvas(cellsSizeModifier) {
                                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
-                                if (isToday) drawCircle(
-                                    color = todayOutlineColor,
-                                    radius = cellRadius,
-                                    style = todayIndicatorStroke,
-                                )
+                                if (isToday) todayPosition = IntIntPair(row, column)
                             }
                             Text(
                                 text = mainCalendarNumeral.format(
