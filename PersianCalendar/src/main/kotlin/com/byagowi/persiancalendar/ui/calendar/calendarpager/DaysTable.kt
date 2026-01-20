@@ -127,6 +127,7 @@ fun daysTable(
     val context = LocalContext.current
     val baseDayPainter = remember(
         cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile, isBoldFont,
+        secondaryCalendar,
     ) {
         DayPainter(
             context = context,
