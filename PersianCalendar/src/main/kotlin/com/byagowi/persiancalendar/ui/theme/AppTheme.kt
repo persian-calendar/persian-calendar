@@ -75,6 +75,7 @@ import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
+import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
@@ -444,7 +445,9 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> .075f
         else -> null.debugAssertNotNull ?: 0f
     }
-    val holidaysFillColor = colorHolidays.copy(alpha = holidayCircleAlpha)
+    val holidaysFillColor = colorHolidays.copy(
+        alpha = if (isHighTextContrastEnabled) .2f else holidayCircleAlpha
+    )
     val todayOutlineColor = if (theme.isDynamicColors) getResourcesColor(
         when (theme) {
             Theme.LIGHT -> android.R.color.system_accent1_400
