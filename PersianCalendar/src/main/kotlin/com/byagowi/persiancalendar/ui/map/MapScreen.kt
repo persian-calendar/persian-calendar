@@ -235,7 +235,7 @@ fun SharedTransitionScope.MapScreen(
                     .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
                     .height(menuHeight.dp)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(Modifier.weight(1f)) { NavigationNavigateUpIcon(navigateUp) }
