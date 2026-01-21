@@ -101,8 +101,8 @@ fun daysTable(
     refreshToken: Int,
     setSelectedDay: (Jdn) -> Unit,
     pagerState: PagerState,
+    secondaryCalendar: Calendar?,
     modifier: Modifier = Modifier,
-    secondaryCalendar: Calendar? = null,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     isWeekMode: Boolean = false,
 ): @Composable (

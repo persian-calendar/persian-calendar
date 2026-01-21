@@ -346,6 +346,7 @@ fun SharedTransitionScope.DaysScreen(
                         today = today,
                         refreshToken = refreshToken,
                         setSelectedDay = setSelectedDayInWeekPager,
+                        secondaryCalendar = secondaryCalendar,
                         pagerState = weekPagerState,
                         isWeekMode = true,
                     )
