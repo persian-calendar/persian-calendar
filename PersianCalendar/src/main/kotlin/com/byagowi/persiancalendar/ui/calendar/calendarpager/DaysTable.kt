@@ -209,6 +209,11 @@ fun daysTable(
                 !animatedCenter.isRunning && !animatedRadius.isRunning
             }
 
+            fun normalizedDistanceWithIndicator(center: Offset): Float {
+                val value = (center - animatedCenter.value).getDistance() / cellRadius / 2
+                return value.coerceIn(1 - animatedRadius.value.coerceIn(0f, 1f), 1f)
+            }
+
             // Handles circle radius change animation, initial selection reveal and hide
             LaunchedEffect(key1 = indicatorCenter != null) {
                 if (indicatorCenter != null) animatedCenter.snapTo(indicatorCenter)
@@ -285,23 +290,18 @@ fun daysTable(
                             var holidayFraction = 1f
                             holidaysPositions.forEach { row, column ->
                                 val center = positionToOffset(row, column)
-                                val normalizedDistance = run {
-                                    (center - animatedCenter.value).getDistance() / cellRadius / 2
-                                }.coerceIn(1 - animatedRadius.value.coerceIn(0f, 1f), 1f)
+                                val normalizedDistance = normalizedDistanceWithIndicator(center)
                                 drawCircle(
-                                    color = holidaysFillColor,
-                                    center = center,
-                                    radius = cellRadius,
                                     alpha = normalizedDistance,
+                                    center = center,
+                                    color = holidaysFillColor,
+                                    radius = cellRadius,
                                 )
                                 holidayFraction = min(holidayFraction, normalizedDistance)
                             }
                             todayPosition?.let { (row, column) ->
                                 val center = positionToOffset(row, column)
-                                val normalizedDistance = run {
-                                    (center - animatedCenter.value).getDistance() / cellRadius / 2
-                                }.coerceIn(1 - animatedRadius.value.coerceIn(0f, 1f), 1f)
-                                val fraction = 1 - normalizedDistance
+                                val fraction = 1.5f * (1 - normalizedDistanceWithIndicator(center))
                                 drawCircle(
                                     center = center,
                                     color = todayOutlineColor,
@@ -312,14 +312,14 @@ fun daysTable(
                             drawContent()
                             val radiusFraction = animatedRadius.value
                             if (radiusFraction > 0f) drawCircle(
+                                blendMode = BlendMode.SrcOut,
+                                center = animatedCenter.value,
                                 color = lerp(
+                                    fraction = holidayFraction,
                                     start = holidaysColor,
                                     stop = indicatorFillColor,
-                                    fraction = holidayFraction,
                                 ),
-                                center = animatedCenter.value,
                                 radius = cellRadius * radiusFraction,
-                                blendMode = BlendMode.SrcOut,
                             )
                         }
                     },
