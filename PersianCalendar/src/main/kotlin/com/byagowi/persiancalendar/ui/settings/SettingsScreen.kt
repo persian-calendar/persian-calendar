@@ -132,7 +132,6 @@ import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun SharedTransitionScope.SettingsScreen(
     openNavigationRail: () -> Unit,
     navigateToMap: () -> Unit,
@@ -146,7 +145,7 @@ fun SharedTransitionScope.SettingsScreen(
         topBar = {
             Column(Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)) {
 //                AnimatedVisibility(isAtTop) {
-                TopAppBar(
+                @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                     windowInsets = WindowInsets(),
                     title = {
                         AnimatedContent(

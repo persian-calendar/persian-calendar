@@ -80,10 +80,9 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import org.jetbrains.annotations.VisibleForTesting
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShiftWorkDialog(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
-    BasicAlertDialog(onDismissRequest = onDismissRequest) {
+    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(onDismissRequest = onDismissRequest) {
         DialogSurface {
             Column {
                 Spacer(Modifier.height(16.dp))

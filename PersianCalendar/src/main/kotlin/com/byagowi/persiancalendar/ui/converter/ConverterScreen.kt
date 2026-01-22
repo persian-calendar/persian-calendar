@@ -116,7 +116,6 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.ConverterScreen(
     openNavigationRail: () -> Unit,
@@ -162,7 +161,7 @@ fun SharedTransitionScope.ConverterScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            TopAppBar(
+            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     AppScreenModesDropDown(
                         value = screenMode.value,

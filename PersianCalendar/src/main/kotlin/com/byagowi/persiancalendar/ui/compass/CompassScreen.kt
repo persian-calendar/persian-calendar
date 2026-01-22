@@ -109,7 +109,6 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.CompassScreen(
     openNavigationRail: () -> Unit,
@@ -184,7 +183,7 @@ fun SharedTransitionScope.CompassScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            TopAppBar(
+            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     Column {
                         Text(

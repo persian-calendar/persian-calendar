@@ -588,7 +588,6 @@ private val countDownTimeParts = listOf(
     R.plurals.minutes to 1.minutes,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EquinoxCountDown(
     contentColor: Color,
@@ -604,7 +603,7 @@ private fun EquinoxCountDown(
         if (showHoroscopeDialog) YearHoroscopeDialog(year) {
             showHoroscopeDialog = false
         }
-        if (isAstronomicalExtraFeaturesEnabled) TooltipBox(
+        if (isAstronomicalExtraFeaturesEnabled) @OptIn(ExperimentalMaterial3Api::class) TooltipBox(
             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                 TooltipAnchorPosition.Above,
             ),

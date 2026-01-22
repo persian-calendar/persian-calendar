@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BaseAppDialog(
     title: (@Composable () -> Unit)?,
@@ -37,7 +36,7 @@ private fun BaseAppDialog(
     dismissButton: (@Composable () -> Unit)?,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    BasicAlertDialog(onDismissRequest = onDismissRequest) {
+    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(onDismissRequest = onDismissRequest) {
         DialogSurface {
             Column {
                 title?.also { title ->

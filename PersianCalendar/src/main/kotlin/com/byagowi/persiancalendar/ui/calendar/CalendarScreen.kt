@@ -757,7 +757,6 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
     val repository = eventsRepository
     val enabledEvents = remember { repository.getEnabledEvents(Jdn.today()) }
@@ -774,7 +773,7 @@ private fun Search(viewModel: CalendarViewModel) {
     val padding by animateDpAsState(targetValue = if (expanded) 0.dp else 32.dp)
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
-    SearchBar(
+    @OptIn(ExperimentalMaterial3Api::class) SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
                 query = searchTerm,
