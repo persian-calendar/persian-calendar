@@ -51,6 +51,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -246,7 +247,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AstronomyScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToMap = { time -> backStack += Screen.Map(time = time) },
-                        initialTime = remember {
+                        initialTime = rememberSaveable {
                             it.day?.toGregorianCalendar()?.timeInMillis
                                 ?: System.currentTimeMillis()
                         },
