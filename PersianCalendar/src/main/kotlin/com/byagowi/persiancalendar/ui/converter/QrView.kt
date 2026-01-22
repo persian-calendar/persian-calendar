@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -89,15 +90,17 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
 
     val context = LocalContext.current
     val surfaceColor = MaterialTheme.colorScheme.surface
-    setShareAction {
-        val size = 1280f
-        val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
-            val canvas = Canvas(this)
-            drawColor(surfaceColor.toArgb())
-            withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
-                drawQr(canvas, size)
+    LaunchedEffect(Unit) {
+        setShareAction {
+            val size = 1280f
+            val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
+                val canvas = Canvas(this)
+                drawColor(surfaceColor.toArgb())
+                withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
+                    drawQr(canvas, size)
+                }
             }
+            context.shareBinaryFile(bitmap.toPngByteArray(), "result.png", "image/png")
         }
-        context.shareBinaryFile(bitmap.toPngByteArray(), "result.png", "image/png")
     }
 }
