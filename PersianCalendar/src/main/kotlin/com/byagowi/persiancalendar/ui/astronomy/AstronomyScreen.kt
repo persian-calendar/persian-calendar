@@ -163,7 +163,7 @@ fun SharedTransitionScope.AstronomyScreen(
             Jdn(date.toGregorianCalendar(forceLocalTime = true).toCivilDate())
         }
     }
-    val astronomyState by remember { derivedStateOf { AstronomyState(timeInMillis.longValue) } }
+    val astronomyState = AstronomyState(timeInMillis.longValue)
     val sliderState = rememberLazyListState(initialFirstVisibleItemIndex = SLIDER_ITEMS / 2)
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
