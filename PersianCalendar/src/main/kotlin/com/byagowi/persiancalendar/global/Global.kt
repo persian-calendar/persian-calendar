@@ -9,7 +9,6 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -299,17 +298,15 @@ private val enabledCalendars_ =
     mutableStateOf(listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
 val enabledCalendars by enabledCalendars_
 
-val mainCalendar by derivedStateOf { enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI }
-val mainCalendarNumeral by derivedStateOf {
-    when {
+val mainCalendar get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
+val mainCalendarNumeral
+    get() = when {
         secondaryCalendar == null -> numeral
         numeral.isArabic || !language.canHaveLocalNumeral -> Numeral.ARABIC
         else -> mainCalendar.preferredNumeral
     }
-}
-val secondaryCalendar by derivedStateOf {
-    if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
-}
+val secondaryCalendar
+    get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
 
 private val isCenterAlignWidgets_ = mutableStateOf(DEFAULT_CENTER_ALIGN_WIDGETS)
 val isCenterAlignWidgets by isCenterAlignWidgets_
