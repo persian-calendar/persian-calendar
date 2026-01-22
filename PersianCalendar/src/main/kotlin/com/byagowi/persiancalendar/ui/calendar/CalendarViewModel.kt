@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.content.Context
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -52,10 +51,6 @@ class CalendarViewModel() : ViewModel() {
 
     private val _now = mutableLongStateOf(System.currentTimeMillis())
     val now by _now
-
-    val todayButtonVisibility by derivedStateOf {
-        isYearView || selectedMonthOffset != 0 || isHighlighted
-    }
 
     private val _today = mutableStateOf(Jdn.today())
     val today by _today

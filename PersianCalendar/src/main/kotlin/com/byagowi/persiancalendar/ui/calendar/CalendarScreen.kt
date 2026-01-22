@@ -896,8 +896,7 @@ private fun SharedTransitionScope.Toolbar(
                     val selectedDate = selectedDay on mainCalendar
                     val isCurrentMonth =
                         selectedDate.year == selectedMonth.year && selectedDate.month == selectedMonth.month
-                    val isHighlighted = viewModel.isHighlighted
-                    if (isHighlighted && isCurrentMonth) {
+                    if (viewModel.isHighlighted && isCurrentMonth) {
                         val selectedSecondaryDate = selectedDay on secondaryCalendar
                         subtitle = language.my.format(
                             selectedSecondaryDate.monthName,
@@ -1005,8 +1004,7 @@ private fun SharedTransitionScope.Toolbar(
             }
 
             AnimatedVisibility(!viewModel.isYearView) {
-                val todayButtonVisibility = viewModel.todayButtonVisibility
-                TodayActionButton(todayButtonVisibility) {
+                TodayActionButton(viewModel.selectedMonthOffset != 0 || viewModel.isHighlighted) {
                     viewModel.changeYearViewCalendar(null)
                     viewModel.bringDay(Jdn.today(), highlight = false)
                 }
