@@ -5,105 +5,143 @@ permissions:
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # 让 Gradle 在 CI 更稳定、日志更好读
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx3g -Dfile.encoding=UTF-8"
+  # 可选：如果你项目用到 AndroidX / Jetifier，可在这里统一开关
+  # ANDROIDX: "true"
+  # ENABLE_JETIFIER: "true"
 
 jobs:
   build-and-test-jvm:
+    name: Build + JVM tests
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - uses: gradle/actions/wrapper-validation@v4
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 21
           distribution: temurin
+          java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      - name: Run spotless check
-        run: |
-          ./gradlew spotlessCheck --stacktrace
+      # ✅ Spotless：用 --info 让它打印出具体违规文件
+      - name: Spotless check
+        run: ./gradlew spotlessCheck --info --stacktrace
 
-      - name: Build debug APK and run JVM tests
-        run: |
-          ./scripts/action-build.sh
-          ./gradlew lintDebug testDebugUnitTest :wear:testDebugUnitTest --stacktrace
+      # ✅ 你原来有 action-build.sh，保留；同时把 Gradle 任务拆开更易定位
+      - name: Build debug APK (script)
+        run: ./scripts/action-build.sh
 
-      - name: Run lint checks
-        run: |
-          ./gradlew lintReportDebug --stacktrace
+      - name: Lint + Unit tests (JVM)
+        run: ./gradlew lintDebug testDebugUnitTest :wear:testDebugUnitTest --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: PersianCalendar
+          name: PersianCalendar-apk
           path: PersianCalendar/build/outputs/apk/**/*.apk
+          if-no-files-found: warn
 
       - name: Upload JVM test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: jvm-test-results
-          path: "*/build/test-results/**/*.xml"
+          path: |
+            **/build/test-results/**/*.xml
+            **/build/reports/tests/**
 
       - name: Upload lint reports
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: lint-reports
-          path: "*/build/reports/lint-*.html"
+          path: |
+            **/build/reports/lint-*.html
+            **/build/reports/lint-results-*.xml
+          if-no-files-found: warn
 
-      - name: Archive reports for failed build
+      - name: Upload all reports on failure
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: "*/build/reports"
+          name: reports-on-failure
+          path: "**/build/reports/**"
 
   test-android:
+    name: Instrumentation tests (emulator)
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
         api-level: [29]
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 21
           distribution: temurin
+          java-version: 21
+          cache: gradle
 
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      # https://github.blog/changelog/2024-04-02-github-actions-hardware-accelerated-android-virtualization-now-available/
+      # ✅ KVM 权限（保留你原来的）
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
+          ls -al /dev/kvm
 
+      # ✅ Emulator runner：加上常用稳定参数（禁快照/禁动画/加启动超时）
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew :PersianCalendar:connectedDebugAndroidTest --info --full-stacktrace
+          target: default
+          arch: x86_64
+          disable-animations: true
+          emulator-options: "-no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim"
+          script: ./gradlew :PersianCalendar:connectedDebugAndroidTest --info --stacktrace
 
-      - name: Upload results
+      - name: Upload instrumentation test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: instrumentation-test-results ${{ matrix.api-level }}
-          path: ./**/build/reports/androidTests/connected/**
+          name: instrumentation-test-results-api${{ matrix.api-level }}
+          path: |
+            **/build/reports/androidTests/connected/**
+            **/build/outputs/androidTest-results/connected/**
+          if-no-files-found: warn
