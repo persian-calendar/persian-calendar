@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">zh-rCN</string>
-    <string name="app_name">波斯历</string>
-    <string name="widget_name">波斯历</string>
-    <string name="widget_mini_name">波斯历（迷你版）</string>
+    <string name="app_name">天文老黄历</string>
+    <string name="widget_name">天文老黄历</string>
+    <string name="widget_mini_name">天文老黄历（迷你）</string>
     <string name="close">关闭</string>
     <string name="open">打开</string>
     <string name="accept">确定</string>
@@ -79,6 +79,12 @@
     <string name="animal_year_name_ox">丑牛</string>
     <string name="asr">晡礼</string>
     <string name="zodiac">星座</string>
+    <string name="chinese_lunar_date">农历：%1$s</string>
+    <string name="chinese_zodiac">生肖：%1$s</string>
+    <string name="eight_characters">八字：%1$s</string>
+    <string name="time_branch">时辰：%1$s</string>
+    <string name="solar_term">节气：%1$s</string>
+    <string name="traditional_festivals">传统节日：%1$s</string>
     <string name="capricorn">摩羯座</string>
     <string name="sunrise">日出</string>
     <string name="sunset">日落</string>

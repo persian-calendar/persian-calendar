@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.content.ClipData
-import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
@@ -75,12 +74,10 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
@@ -95,13 +92,9 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.isOldEra
-import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
+import com.byagowi.persiancalendar.utils.buildChineseLunarLines
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
@@ -109,13 +102,11 @@ import com.byagowi.persiancalendar.utils.searchMoonAgeTime
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
-import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
-import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
-import java.util.Date
+import java.util.GregorianCalendar
 
 @Composable
 fun SharedTransitionScope.CalendarsOverview(
@@ -174,17 +165,6 @@ fun SharedTransitionScope.CalendarsOverview(
         Spacer(Modifier.height(4.dp))
 
         val date = jdn on selectedCalendar
-        val equinox = remember(selectedCalendar, jdn, resources) {
-            if (date !is PersianDate) return@remember null
-            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) equinoxTitle(
-                date,
-                jdn,
-                resources,
-            ).first else null
-        }
-
-        AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
-
         AnimatedVisibility(!isToday) {
             AutoSizedBodyText(
                 listOf(
@@ -239,41 +219,25 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
-        val persianDate = jdn.toPersianDate()
         AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            val yearName = generateYearName(
-                resources,
-                jdn,
-                withOldEraName = persianDate.isOldEra && language.isUserAbleToReadPersian,
-                withEmoji = true,
-            )
-            AutoSizedBodyText(yearName)
-        }
-
-        AnimatedVisibility(
-            isExpanded && isAstronomicalExtraFeaturesEnabled && !persianDate.isOldEra,
-        ) {
-            val zodiacString =
-                if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
-            val borji = PersianDate.borjiFromJdn(jdn.value)
-            val zodiac = Zodiac.entries.getOrNull(borji.month - 1) ?: Zodiac.ARIES
-            val zodiacTitle = language.dm.format(
-                numeral.format(borji.dayOfMonth),
-                stringResource(zodiac.titleId),
-            )
-            AutoSizedBodyText(
-                text = zodiacString + spacedColon + zodiac.symbol + " " + zodiacTitle,
-                contentDescriptionOverride = zodiacString + spacedColon + zodiacTitle,
-            )
-        }
-
-        if (language.isPersian) {
-            val enableExtra = eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled
-            AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
-                AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
+            val lines = remember(jdn) {
+                val referenceTime = if (isToday) {
+                    System.currentTimeMillis()
+                } else {
+                    jdn.toGregorianCalendar().also {
+                        it[GregorianCalendar.HOUR_OF_DAY] = 12
+                        it[GregorianCalendar.MINUTE] = 0
+                        it[GregorianCalendar.SECOND] = 0
+                        it[GregorianCalendar.MILLISECOND] = 0
+                    }.timeInMillis
+                }
+                buildChineseLunarLines(resources, jdn, referenceTime)
             }
-            AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
-                AutoSizedBodyText(formatAsSeleucidAndYazdegerdDate(jdn))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                lines.forEach { AutoSizedBodyText(it) }
             }
         }
 
@@ -440,21 +404,6 @@ private fun AutoSizedBodyText(
             )
         }
     }
-}
-
-fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String, Long> {
-    val gregorianYear = jdn.toCivilDate().year
-    val timestamp = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
-    val equinoxYear = when (mainCalendar) {
-        Calendar.SHAMSI -> date.year + if (date.month == 12) 1 else 0
-        else -> gregorianYear
-    }
-    val calendar = Date(timestamp).toGregorianCalendar()
-    return resources.getString(
-        R.string.spring_equinox,
-        numeral.format(equinoxYear),
-        calendar.formatDateAndTime(withWeekDay = true),
-    ) to timestamp
 }
 
 @Composable
