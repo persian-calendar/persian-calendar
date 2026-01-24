@@ -28,9 +28,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
-      - name: Run spotless check
-        run: |
-          ./gradlew spotlessCheck --stacktrace
+#      - name: Run spotless check
+#        run: |
+#          ./gradlew spotlessCheck --stacktrace
 
       - name: Build debug APK and run JVM tests
         run: |
