@@ -32,6 +32,8 @@ spotless {
         "ktlint_standard_function-expression-body" to "disabled",
         "ktlint_standard_multiline-if-else" to "disabled",
         "ktlint_standard_class-signature" to "disabled",
+        "ktlint_standard_blank-line-between-when-conditions" to "disabled",
+        "ktlint_standard_kdoc" to "disabled",
     )
 
     kotlin {

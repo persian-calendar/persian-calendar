@@ -184,7 +184,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
 
             MotionEvent.ACTION_MOVE -> // if the mode is ZOOM or
                 // if the mode is DRAG and already zoomed
-                if (mode == ZOOM || mode == DRAG && currentScale > minScale) {
+                if ((mode == ZOOM) || (mode == DRAG && currentScale > minScale)) {
                     applyVelocity(event.x - last.x, event.y - last.y)
                     last.set(event.x, event.y)
                     invalidate()

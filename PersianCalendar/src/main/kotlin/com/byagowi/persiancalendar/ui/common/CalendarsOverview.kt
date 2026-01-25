@@ -176,7 +176,7 @@ fun SharedTransitionScope.CalendarsOverview(
         val date = jdn on selectedCalendar
         val equinox = remember(selectedCalendar, jdn, resources) {
             if (date !is PersianDate) return@remember null
-            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) equinoxTitle(
+            if ((date.month == 12 && date.dayOfMonth >= 20) || (date.month == 1 && date.dayOfMonth == 1)) equinoxTitle(
                 date,
                 jdn,
                 resources,
