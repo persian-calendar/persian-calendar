@@ -51,11 +51,6 @@ android {
         baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
     }
 
-    kotlin {
-        compilerOptions {
-            allWarningsAsErrors.set(true)
-        }
-    }
 
     buildFeatures { compose = true }
 
@@ -63,6 +58,12 @@ android {
         unitTests.all {
             it.useJUnitPlatform()
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
     }
 }
 

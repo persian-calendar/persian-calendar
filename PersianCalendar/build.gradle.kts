@@ -5,6 +5,8 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin")
 }
 
+val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
+
 android {
     sourceSets {
         operator fun File.div(child: String): File = File(this, child)
@@ -19,8 +21,6 @@ android {
         buildConfig = true
         compose = true
     }
-
-    val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
 
     namespace = "com.byagowi.persiancalendar"
 
@@ -135,10 +135,11 @@ android {
         )
     }
 
-    kotlin {
-        compilerOptions {
-            allWarningsAsErrors.set(true)
-        }
+}
+
+kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
     }
 }
 
