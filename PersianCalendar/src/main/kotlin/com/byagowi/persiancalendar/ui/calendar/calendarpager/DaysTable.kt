@@ -290,12 +290,13 @@ fun daysTable(
                             var holidayFraction = 1f
                             holidaysPositions.forEach { row, column ->
                                 val center = positionToOffset(row, column)
+                                val normalizedDistance = normalizedDistanceWithIndicator(center)
                                 drawCircle(
+                                    alpha = normalizedDistance,
                                     center = center,
                                     color = holidaysFillColor,
                                     radius = cellRadius,
                                 )
-                                val normalizedDistance = normalizedDistanceWithIndicator(center)
                                 holidayFraction = min(holidayFraction, normalizedDistance)
                             }
                             todayPosition?.let { (row, column) ->
