@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
@@ -130,7 +131,7 @@ val ShiftWorkRecordListSaver = listSaver<MutableList<ShiftWorkRecord>, Map<Strin
                 type = (it[TYPE_KEY] as? String).debugAssertNotNull ?: "",
                 length = (it[LENGTH_KEY] as? Int).debugAssertNotNull ?: 0,
             )
-        }.toMutableList()
+        }.toMutableStateList()
     },
 )
 
