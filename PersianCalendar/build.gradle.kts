@@ -134,7 +134,6 @@ android {
             "DuplicateStrings",
         )
     }
-
 }
 
 kotlin {

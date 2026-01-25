@@ -51,7 +51,6 @@ android {
         baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
     }
 
-
     buildFeatures { compose = true }
 
     testOptions {
