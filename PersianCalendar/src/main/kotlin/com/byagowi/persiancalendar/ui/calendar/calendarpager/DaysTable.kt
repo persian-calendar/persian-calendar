@@ -299,15 +299,17 @@ fun daysTable(
                                 )
                                 holidayFraction = min(holidayFraction, normalizedDistance)
                             }
+                            var todayAddition = 0f
                             todayPosition?.let { (row, column) ->
                                 val center = positionToOffset(row, column)
-                                val fraction = 1.5f * (1 - normalizedDistanceWithIndicator(center))
                                 drawCircle(
                                     center = center,
                                     color = todayOutlineColor,
-                                    radius = cellRadius - todayIndicatorStroke.width * fraction,
+                                    radius = cellRadius,
                                     style = todayIndicatorStroke,
                                 )
+                                todayAddition =
+                                    (1 - normalizedDistanceWithIndicator(center)) * 1.5f * todayIndicatorStroke.width
                             }
                             drawContent()
                             val radiusFraction = animatedRadius.value
@@ -319,7 +321,7 @@ fun daysTable(
                                     start = holidaysColor,
                                     stop = indicatorFillColor,
                                 ),
-                                radius = cellRadius * radiusFraction,
+                                radius = cellRadius * radiusFraction + todayAddition,
                             )
                         }
                     },
