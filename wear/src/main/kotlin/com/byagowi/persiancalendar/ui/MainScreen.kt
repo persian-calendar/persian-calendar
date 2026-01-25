@@ -130,7 +130,7 @@ fun EventView(it: Entry) {
                 )
             }
             when (val type = it.type) {
-                is EntryType.Holiday -> "تعطیل"
+                is EntryType.Holiday if type.source == EventSource.Iran -> "تعطیل"
                 is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
                 is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
                 else -> null
