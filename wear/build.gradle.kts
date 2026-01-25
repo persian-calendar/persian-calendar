@@ -10,7 +10,7 @@ android {
         operator fun File.div(child: String): File = File(this, child)
         val generatedAppSrcDir =
             layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
-        getByName("main").kotlin.srcDir(generatedAppSrcDir)
+        getByName("main").kotlin.directories += generatedAppSrcDir.path
     }
 
     namespace = "com.byagowi.persiancalendar"
