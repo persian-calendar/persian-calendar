@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -76,16 +76,16 @@ fun MainScreen(
             ),
         ) { OtherCalendars(localeUtils, today, onTop = true, withWeekDayName = false) }
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-        var showWarnDialog by remember {
+        var showWarningDialog by rememberSaveable {
             val currentYear = today.toPersianDate().year
             val isOutDated = currentYear > IranianIslamicDateConverter.latestSupportedYearOfIran
             mutableStateOf(isOutDated)
         }
         AlertDialog(
-            showWarnDialog,
-            { showWarnDialog = false },
+            showWarningDialog,
+            { showWarningDialog = false },
             title = { Text("برنامه قدیمی است\n\nمناسبت‌ها دقیق نیست") },
-            edgeButton = { EdgeButton({ showWarnDialog = false }) { Text("متوجه شدم") } },
+            edgeButton = { EdgeButton({ showWarningDialog = false }) { Text("متوجه شدم") } },
         )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
             val entries = generateEntries(
@@ -109,7 +109,7 @@ fun MainScreen(
 
 @Composable
 fun EventView(it: Entry) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
     val isHoliday = it.type is EntryType.Holiday
     EventButton(
         onClick = { isExpanded = !isExpanded },
