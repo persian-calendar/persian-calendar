@@ -446,7 +446,7 @@ fun appMonthColors(): MonthColors {
         else -> null.debugAssertNotNull ?: 0f
     }
     val holidaysFillColor = colorHolidays.copy(
-        alpha = if (isHighTextContrastEnabled) .2f else holidayCircleAlpha
+        alpha = if (isHighTextContrastEnabled) .2f else holidayCircleAlpha,
     )
     val todayOutlineColor = if (theme.isDynamicColors) getResourcesColor(
         when (theme) {

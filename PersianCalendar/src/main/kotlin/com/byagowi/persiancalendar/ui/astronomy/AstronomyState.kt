@@ -2,12 +2,10 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Resources
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toObserver
