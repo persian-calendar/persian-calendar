@@ -410,11 +410,9 @@ private fun SharedTransitionScope.SliderBar(
     timeInMillis: Animatable<Long, AnimationVector1D>,
     isDatePickerDialogShown: MutableState<Boolean>,
 ) {
-    var lastButtonClickTimestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val coroutineScope = rememberCoroutineScope()
     fun buttonScrollSlider(days: Int) {
-        lastButtonClickTimestamp = System.currentTimeMillis()
         coroutineScope.launch { sliderState.animateScrollBy(250f * if (isRtl) 1 else -1) }
         coroutineScope.launch {
             val newValue = timeInMillis.value + days.days.inWholeMilliseconds
@@ -481,7 +479,9 @@ private fun SharedTransitionScope.SliderBar(
                         },
                     state = sliderState,
                 ) { items(SLIDER_ITEMS) { Box(Modifier.width(space)) } }
-                // Above handles the painting below handles touch, they should be merged
+                // Above handles the painting below handles touch, they should be merged but be
+                // worried about connecting back non-user visual changes to screen's time so
+                // the separation is actually better in some sense
                 AndroidView(
                     factory = { context ->
                         val root = BaseSlider(context)
@@ -490,15 +490,13 @@ private fun SharedTransitionScope.SliderBar(
                             if (dx != 0f) {
                                 coroutineScope.launch { sliderState.scrollBy(dx) }
                                 val current = System.currentTimeMillis()
-                                if (current - lastButtonClickTimestamp > 2000) {
-                                    if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                                        root.performHapticFeedbackVirtualKey()
-                                        latestVibration = current
-                                    }
-                                    coroutineScope.launch {
-                                        val delta = (oneMinute * dx * if (isRtl) 1 else -1).toInt()
-                                        timeInMillis.snapTo(timeInMillis.value + delta)
-                                    }
+                                if (current >= latestVibration + 25_000_000 / abs(dx)) {
+                                    root.performHapticFeedbackVirtualKey()
+                                    latestVibration = current
+                                }
+                                coroutineScope.launch {
+                                    val delta = (oneMinute * dx * if (isRtl) 1 else -1).toInt()
+                                    timeInMillis.snapTo(timeInMillis.value + delta)
                                 }
                             }
                         }
