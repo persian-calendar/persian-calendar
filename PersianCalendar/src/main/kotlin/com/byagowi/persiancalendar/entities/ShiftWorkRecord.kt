@@ -1,3 +1,5 @@
 package com.byagowi.persiancalendar.entities
 
-data class ShiftWorkRecord(val type: String, val length: Int)
+import java.io.Serializable
+
+data class ShiftWorkRecord(val type: String, val length: Int) : Serializable

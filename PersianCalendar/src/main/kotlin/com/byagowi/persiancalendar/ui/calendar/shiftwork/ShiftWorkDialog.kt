@@ -74,7 +74,6 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.ui.utils.ShiftWorkRecordListSaver
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
@@ -102,7 +101,7 @@ fun ShiftWorkDialog(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
 @Composable
 @VisibleForTesting
 fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
-    val shiftWorks = rememberSaveable(saver = ShiftWorkRecordListSaver) {
+    val shiftWorks = rememberSaveable {
         val items = shiftWorkSettings.records.takeIf { it.isNotEmpty() } ?: listOf(
             ShiftWorkRecord(shiftWorkKeyToString("d"), 1),
         )

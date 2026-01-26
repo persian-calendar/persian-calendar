@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialogContent
-import com.byagowi.persiancalendar.ui.utils.ShiftWorkRecordListSaver
 import org.junit.Rule
 import org.junit.Test
 
@@ -36,7 +35,7 @@ class ShiftWorkDialogTest {
 
         restorationTester.setContent {
             Column { ShiftWorkDialogContent(Jdn.today()) {} }
-            val value1 = rememberSaveable(saver = ShiftWorkRecordListSaver) {
+            val value1 = rememberSaveable {
                 mutableStateListOf(ShiftWorkRecord("d", 12))
             }
             val value2 = rememberSaveable { mutableStateListOf("a") }
