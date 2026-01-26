@@ -25,13 +25,15 @@ class AboutScreenTest {
     fun aboutScreenNavigateToDeviceInformation() {
         var navigateToDeviceInformationIsCalled = false
         var deviceInformationString = ""
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             deviceInformationString = stringResource(R.string.device_information)
-            AboutScreen(
-                openNavigationRail = {},
-                navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
-                navigateToLicenses = { assert(false) },
-            )
+            NavigationMock {
+                AboutScreen(
+                    openNavigationRail = {},
+                    navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
+                    navigateToLicenses = { assert(false) },
+                )
+            }
         }
         composeTestRule.onNodeWithContentDescription(deviceInformationString)
             .assertHasClickAction()
@@ -43,13 +45,15 @@ class AboutScreenTest {
     fun aboutScreenNavigateToLicenses() {
         var navigateToLicensesIsCalled = false
         var licensesString = ""
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             licensesString = stringResource(R.string.about_license_title)
-            AboutScreen(
-                openNavigationRail = {},
-                navigateToDeviceInformation = { assert(false) },
-                navigateToLicenses = { navigateToLicensesIsCalled = true },
-            )
+            NavigationMock {
+                AboutScreen(
+                    openNavigationRail = {},
+                    navigateToDeviceInformation = { assert(false) },
+                    navigateToLicenses = { navigateToLicensesIsCalled = true },
+                )
+            }
         }
         composeTestRule.onNodeWithText(licensesString)
             .assertHasClickAction()
@@ -59,13 +63,13 @@ class AboutScreenTest {
 
     @Test
     fun deviceInformationSmokeTest() {
-        composeTestRule.setContentWithParent {
-            DeviceInformationScreen({})
+        composeTestRule.setContent {
+            NavigationMock { DeviceInformationScreen({}) }
         }
     }
 
     @Test
     fun licensesSmokeTest() {
-        composeTestRule.setContentWithParent { LicensesScreen {} }
+        composeTestRule.setContent { NavigationMock { LicensesScreen {} } }
     }
 }

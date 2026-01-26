@@ -22,48 +22,60 @@ class ConverterScreenTest {
 
     @Test
     fun converterScreenSmokeTest() {
-        composeTestRule.setContentWithParent {
-            ConverterScreen({}, {}, null)
+        composeTestRule.setContent {
+            NavigationMock {
+                ConverterScreen({}, {}, null)
+            }
         }
     }
 
     @Test
     fun converterScreenConverterSmokeTest() {
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             val screenMode = ConverterScreenMode.CONVERTER
-            ConverterScreen({}, {}, null, screenMode)
+            NavigationMock {
+                ConverterScreen({}, {}, null, screenMode)
+            }
         }
     }
 
     @Test
     fun converterScreenDistanceSmokeTest() {
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             val screenMode = ConverterScreenMode.DISTANCE
-            ConverterScreen({}, {}, null, screenMode)
+            NavigationMock {
+                ConverterScreen({}, {}, null, screenMode)
+            }
         }
     }
 
     @Test
     fun converterScreenCalculatorSmokeTest() {
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             val screenMode = ConverterScreenMode.CALCULATOR
-            ConverterScreen({}, {}, null, screenMode)
+            NavigationMock {
+                ConverterScreen({}, {}, null, screenMode)
+            }
         }
     }
 
     @Test
     fun converterScreenQrCodeSmokeTest() {
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             val screenMode = ConverterScreenMode.QR_CODE
-            ConverterScreen({}, {}, null, screenMode)
+            NavigationMock {
+                ConverterScreen({}, {}, null, screenMode)
+            }
         }
     }
 
     @Test
     fun converterScreenTimeZonesSmokeTest() {
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             val screenMode = ConverterScreenMode.TIME_ZONES
-            ConverterScreen({}, {}, null, screenMode)
+            NavigationMock {
+                ConverterScreen({}, {}, null, screenMode)
+            }
         }
     }
 

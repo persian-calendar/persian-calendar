@@ -16,8 +16,10 @@ class CompassScreenTest {
 
     @Test
     fun basicSmokeTest() {
-        composeTestRule.setContentWithParent {
-            CompassScreen({}, {}, {}, {}, null)
+        composeTestRule.setContent {
+            NavigationMock {
+                CompassScreen({}, {}, {}, {}, null)
+            }
         }
     }
 
@@ -25,15 +27,17 @@ class CompassScreenTest {
     fun navigateToLevelIsCalled() {
         var levelString = ""
         var navigateToLevelIsCalled = false
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             levelString = stringResource(R.string.level)
-            CompassScreen(
-                openNavigationRail = {},
-                navigateToLevel = { navigateToLevelIsCalled = true },
-                navigateToMap = { assert(false) },
-                navigateToSettingsLocationTab = {},
-                noBackStackAction = null,
-            )
+            NavigationMock {
+                CompassScreen(
+                    openNavigationRail = {},
+                    navigateToLevel = { navigateToLevelIsCalled = true },
+                    navigateToMap = { assert(false) },
+                    navigateToSettingsLocationTab = {},
+                    noBackStackAction = null,
+                )
+            }
         }
         assert(!navigateToLevelIsCalled)
         composeTestRule.onNodeWithContentDescription(levelString)
@@ -46,15 +50,17 @@ class CompassScreenTest {
     fun navigateToMapIsCalled() {
         var mapString = ""
         var navigateToMapIsCalled = false
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             mapString = stringResource(R.string.map)
-            CompassScreen(
-                openNavigationRail = {},
-                navigateToLevel = { assert(false) },
-                navigateToMap = { navigateToMapIsCalled = true },
-                navigateToSettingsLocationTab = {},
-                noBackStackAction = null,
-            )
+            NavigationMock {
+                CompassScreen(
+                    openNavigationRail = {},
+                    navigateToLevel = { assert(false) },
+                    navigateToMap = { navigateToMapIsCalled = true },
+                    navigateToSettingsLocationTab = {},
+                    noBackStackAction = null,
+                )
+            }
         }
         assert(!navigateToMapIsCalled)
         composeTestRule.onNodeWithContentDescription(mapString)

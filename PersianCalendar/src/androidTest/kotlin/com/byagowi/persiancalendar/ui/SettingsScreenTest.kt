@@ -12,40 +12,46 @@ class SettingsScreenTest {
 
     @Test
     fun bringInterfaceCalendarTab() {
-        composeTestRule.setContentWithParent {
-            SettingsScreen(
-                {},
-                {},
-                SettingsTab.InterfaceCalendar,
-                "",
-                "",
-            )
+        composeTestRule.setContent {
+            NavigationMock {
+                SettingsScreen(
+                    {},
+                    {},
+                    SettingsTab.InterfaceCalendar,
+                    "",
+                    "",
+                )
+            }
         }
     }
 
     @Test
     fun bringWidgetNotificationTab() {
-        composeTestRule.setContentWithParent {
-            SettingsScreen(
-                {},
-                {},
-                SettingsTab.WidgetNotification,
-                "",
-                "",
-            )
+        composeTestRule.setContent {
+            NavigationMock {
+                SettingsScreen(
+                    {},
+                    {},
+                    SettingsTab.WidgetNotification,
+                    "",
+                    "",
+                )
+            }
         }
     }
 
     @Test
     fun bringLocationAthanTab() {
-        composeTestRule.setContentWithParent {
-            SettingsScreen(
-                {},
-                {},
-                SettingsTab.LocationAthan,
-                "",
-                "",
-            )
+        composeTestRule.setContent {
+            NavigationMock {
+                SettingsScreen(
+                    {},
+                    {},
+                    SettingsTab.LocationAthan,
+                    "",
+                    "",
+                )
+            }
         }
     }
 }

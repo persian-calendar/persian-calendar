@@ -16,19 +16,21 @@ class LevelScreenTest {
 
     @Test
     fun basicSmokeTest() {
-        composeTestRule.setContentWithParent { LevelScreen({}, {}) }
+        composeTestRule.setContent { NavigationMock { LevelScreen({}, {}) } }
     }
 
     @Test
     fun navigateUpIsCalled() {
         var navigateUpString = ""
         var navigateUpIsCalled = false
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             navigateUpString = stringResource(R.string.navigate_up)
-            LevelScreen(
-                navigateUp = { navigateUpIsCalled = true },
-                navigateToCompass = { assert(false) },
-            )
+            NavigationMock {
+                LevelScreen(
+                    navigateUp = { navigateUpIsCalled = true },
+                    navigateToCompass = { assert(false) },
+                )
+            }
         }
         assert(!navigateUpIsCalled)
         composeTestRule.onNodeWithContentDescription(navigateUpString)
@@ -41,12 +43,14 @@ class LevelScreenTest {
     fun navigateToCompassIsCalled() {
         var compassString = ""
         var navigateToCompassIsCalled = false
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             compassString = stringResource(R.string.compass)
-            LevelScreen(
-                navigateUp = { assert(false) },
-                navigateToCompass = { navigateToCompassIsCalled = true },
-            )
+            NavigationMock {
+                LevelScreen(
+                    navigateUp = { assert(false) },
+                    navigateToCompass = { navigateToCompassIsCalled = true },
+                )
+            }
         }
         assert(!navigateToCompassIsCalled)
         composeTestRule.onNodeWithContentDescription(compassString)

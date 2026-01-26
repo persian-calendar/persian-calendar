@@ -16,8 +16,10 @@ class AstronomyScreenTest {
 
     @Test
     fun basicSmokeTest() {
-        composeTestRule.setContentWithParent {
-            AstronomyScreen({}, {}, System.currentTimeMillis(), null)
+        composeTestRule.setContent {
+            NavigationMock {
+                AstronomyScreen({}, {}, System.currentTimeMillis(), null)
+            }
         }
     }
 
@@ -25,10 +27,12 @@ class AstronomyScreenTest {
     fun astronomyScreenNavigateToMap() {
         var navigateToMapIsCalled = false
         var mapString = ""
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             mapString = stringResource(R.string.map)
             val time = System.currentTimeMillis()
-            AstronomyScreen({}, { navigateToMapIsCalled = true }, time, null)
+            NavigationMock {
+                AstronomyScreen({}, { navigateToMapIsCalled = true }, time, null)
+            }
         }
         composeTestRule.onNodeWithContentDescription(mapString)
             .assertHasClickAction()

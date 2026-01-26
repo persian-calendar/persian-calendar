@@ -18,10 +18,12 @@ class MapScreenTest {
     fun mapScreenNavigateUp() {
         var navigateUpIsCalled = false
         var navigateUpString = ""
-        composeTestRule.setContentWithParent {
+        composeTestRule.setContent {
             navigateUpString = stringResource(R.string.navigate_up)
             val time = System.currentTimeMillis()
-            MapScreen({ navigateUpIsCalled = true }, false, time)
+            NavigationMock {
+                MapScreen({ navigateUpIsCalled = true }, false, time)
+            }
         }
         composeTestRule.onNodeWithContentDescription(navigateUpString)
             .assertHasClickAction()
