@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui
 
 import android.icu.util.ChineseCalendar
 import android.os.Build
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.entities.Jdn
@@ -64,6 +65,20 @@ class ConverterScreenTest {
             val screenMode = ConverterScreenMode.TIME_ZONES
             ConverterScreen({}, {}, null, screenMode)
         }
+    }
+
+    @Test
+    fun converterScreenTimeZonesStateRestoreTest() {
+        val restorationTester = StateRestorationTester(composeTestRule)
+
+        restorationTester.setContent {
+            NavigationMock {
+                val screenMode = ConverterScreenMode.TIME_ZONES
+                ConverterScreen({}, {}, null, screenMode)
+            }
+        }
+
+        restorationTester.emulateSavedInstanceStateRestore()
     }
 
 //    @Test

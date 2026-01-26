@@ -100,7 +100,6 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.updatedToday
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
-import com.byagowi.persiancalendar.ui.utils.TimeZoneSaver
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -244,11 +243,9 @@ private fun TimeZones(
     setResetAction: (() -> Unit) -> Unit,
     setResetButtonVisibility: (Boolean) -> Unit,
 ) {
-    val firstTimeZone = rememberSaveable(saver = TimeZoneSaver) {
-        mutableStateOf(TimeZone.getDefault())
-    }
+    val firstTimeZone = rememberSaveable { mutableStateOf(TimeZone.getDefault()) }
     val utc = TimeZone.getTimeZone("UTC")
-    val secondTimeZone = rememberSaveable(saver = TimeZoneSaver) { mutableStateOf(utc) }
+    val secondTimeZone = rememberSaveable { mutableStateOf(utc) }
     val clock = remember { mutableLongStateOf(System.currentTimeMillis()) }
     val context = LocalContext.current
     val chooserTitle = stringResource(ConverterScreenMode.TIME_ZONES.title)

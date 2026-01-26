@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
 import com.byagowi.persiancalendar.entities.Jdn
-import java.util.TimeZone
 
 /**
  * Determines if a color should be considered light or dark.
@@ -93,11 +92,6 @@ val appContentSizeAnimationSpec = spring(
     stiffness = Spring.StiffnessMediumLow,
     dampingRatio = Spring.DampingRatioLowBouncy,
     visibilityThreshold = IntSize.VisibilityThreshold,
-)
-
-val TimeZoneSaver = Saver<MutableState<TimeZone>, String>(
-    save = { it.value.id },
-    restore = { mutableStateOf(TimeZone.getTimeZone(it)) },
 )
 
 val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(

@@ -11,17 +11,18 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 
 fun ComposeContentTestRule.setContentWithParent(
-    content: @Composable SharedTransitionScope.() -> Unit
-) {
-    setContent {
-        SharedTransitionLayout {
-            AnimatedContent(targetState = Unit) { state ->
-                state.let {}
-                CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyMedium,
-                    LocalNavAnimatedContentScope provides this@AnimatedContent,
-                ) { this@SharedTransitionLayout.content() }
-            }
+    content: @Composable SharedTransitionScope.() -> Unit,
+) = setContent { NavigationMock { content() } }
+
+@Composable
+fun NavigationMock(content: @Composable SharedTransitionScope.() -> Unit) {
+    SharedTransitionLayout {
+        AnimatedContent(targetState = Unit) { state ->
+            state.let {}
+            CompositionLocalProvider(
+                LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+                LocalNavAnimatedContentScope provides this@AnimatedContent,
+            ) { this@SharedTransitionLayout.content() }
         }
     }
 }
