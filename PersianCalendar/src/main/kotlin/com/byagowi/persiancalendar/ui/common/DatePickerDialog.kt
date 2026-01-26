@@ -27,7 +27,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +53,7 @@ fun DatePickerDialog(
     onDismissRequest: () -> Unit,
     onSuccess: (jdn: Jdn) -> Unit,
 ) {
-    var jdn by rememberSerializable { mutableStateOf(initialJdn) }
+    var jdn by rememberSaveable { mutableStateOf(initialJdn) }
     var today by remember { mutableStateOf(Jdn.today()) }
     LaunchedEffect(Unit) {
         while (true) {

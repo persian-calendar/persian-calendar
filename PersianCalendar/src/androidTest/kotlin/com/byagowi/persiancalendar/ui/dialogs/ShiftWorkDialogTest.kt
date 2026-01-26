@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.StateRestorationTester
@@ -39,6 +40,8 @@ class ShiftWorkDialogTest {
                 mutableStateListOf(ShiftWorkRecord("d", 12))
             }
             val value2 = rememberSaveable { mutableStateListOf("a") }
+            val value3 = rememberSaveable { mutableStateListOf(Jdn.today()) }
+            val value4 = rememberSaveable { mutableStateOf("a") }
         }
 
         restorationTester.emulateSavedInstanceStateRestore()

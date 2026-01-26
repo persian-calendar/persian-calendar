@@ -71,7 +71,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -163,7 +162,7 @@ fun SharedTransitionScope.DaysScreen(
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
 ) {
-    var selectedDay by rememberSerializable { mutableStateOf(initiallySelectedDay) }
+    var selectedDay by rememberSaveable { mutableStateOf(initiallySelectedDay) }
     val today = calendarViewModel.today
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
     val date = selectedDay on mainCalendar

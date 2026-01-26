@@ -9,6 +9,7 @@ plugins {
     // gradlePlugins plugins
     `kotlin-dsl` apply false
     alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.plugin.parcelize) apply false
     alias(libs.plugins.kotlin.plugin.serialization) apply false
     alias(libs.plugins.spotless)
 }

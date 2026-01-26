@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
+import android.os.Parcelable
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -9,6 +10,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.util.Date
 import java.util.GregorianCalendar
@@ -17,9 +19,10 @@ import kotlin.math.ceil
 
 // Julian day number, basically a day counter starting from some day in concept
 // https://en.wikipedia.org/wiki/Julian_day
+@Parcelize
 @Serializable
 @JvmInline
-value class Jdn(val value: Long) {
+value class Jdn(val value: Long) : Parcelable {
     constructor(value: AbstractDate) : this(value.toJdn())
     constructor(
         calendar: Calendar,

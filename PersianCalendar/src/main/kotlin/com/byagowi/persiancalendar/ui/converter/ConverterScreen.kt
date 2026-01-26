@@ -54,7 +54,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -475,8 +474,8 @@ private fun ColumnScope.ConverterAndDistance(
 ) {
     val today = updatedToday()
     var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
-    var selectedDate by rememberSerializable { mutableStateOf(today) }
-    var secondSelectedDate by rememberSerializable { mutableStateOf(today) }
+    var selectedDate by rememberSaveable { mutableStateOf(today) }
+    var secondSelectedDate by rememberSaveable { mutableStateOf(today) }
 
     setResetButtonVisibility(
         when (screenMode) {

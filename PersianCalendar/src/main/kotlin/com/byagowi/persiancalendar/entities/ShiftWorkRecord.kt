@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class ShiftWorkRecord(val type: String, val length: Int) : Serializable
+@Parcelize
+data class ShiftWorkRecord(val type: String, val length: Int) : Parcelable

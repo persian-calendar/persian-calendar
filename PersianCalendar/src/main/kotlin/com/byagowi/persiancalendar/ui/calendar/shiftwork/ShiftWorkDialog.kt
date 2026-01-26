@@ -36,7 +36,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,7 +107,7 @@ fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () ->
         mutableStateListOf<ShiftWorkRecord>().apply { addAll(items) }
     }
     var isFirstSetup by rememberSaveable { mutableStateOf(shiftWorkSettings.startingJdn == null) }
-    var startingDate by rememberSerializable {
+    var startingDate by rememberSaveable {
         mutableStateOf(shiftWorkSettings.startingJdn ?: selectedJdn)
     }
     var recurs by rememberSaveable { mutableStateOf(shiftWorkSettings.recurs) }
