@@ -54,6 +54,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,7 +100,6 @@ import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.updatedToday
-import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -475,8 +475,8 @@ private fun ColumnScope.ConverterAndDistance(
 ) {
     val today = updatedToday()
     var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
-    var selectedDate by rememberSaveable(saver = JdnSaver) { mutableStateOf(today) }
-    var secondSelectedDate by rememberSaveable(saver = JdnSaver) { mutableStateOf(today) }
+    var selectedDate by rememberSerializable { mutableStateOf(today) }
+    var secondSelectedDate by rememberSerializable { mutableStateOf(today) }
 
     setResetButtonVisibility(
         when (screenMode) {

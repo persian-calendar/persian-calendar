@@ -19,9 +19,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -32,7 +30,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
-import com.byagowi.persiancalendar.entities.Jdn
 
 /**
  * Determines if a color should be considered light or dark.
@@ -102,11 +99,6 @@ val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(
 val AnimatableColorSaver = Saver<Animatable<Color, AnimationVector4D>, Int>(
     save = { it.value.toArgb() },
     restore = { androidx.compose.animation.Animatable(Color(it)) },
-)
-
-val JdnSaver = Saver<MutableState<Jdn>, Long>(
-    save = { it.value.value },
-    restore = { mutableStateOf(Jdn(it)) },
 )
 
 // When something needs to match with Material default theme corner sizes

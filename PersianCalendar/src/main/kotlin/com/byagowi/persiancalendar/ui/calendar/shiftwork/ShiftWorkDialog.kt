@@ -36,6 +36,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,7 +72,6 @@ import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
@@ -108,7 +108,7 @@ fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () ->
         mutableStateListOf<ShiftWorkRecord>().apply { addAll(items) }
     }
     var isFirstSetup by rememberSaveable { mutableStateOf(shiftWorkSettings.startingJdn == null) }
-    var startingDate by rememberSaveable(saver = JdnSaver) {
+    var startingDate by rememberSerializable {
         mutableStateOf(shiftWorkSettings.startingJdn ?: selectedJdn)
     }
     var recurs by rememberSaveable { mutableStateOf(shiftWorkSettings.recurs) }
