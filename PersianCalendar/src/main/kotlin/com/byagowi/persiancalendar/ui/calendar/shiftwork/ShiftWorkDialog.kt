@@ -100,7 +100,8 @@ fun ShiftWorkDialog(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-private fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
+@VisibleForTesting
+fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
     val shiftWorks = rememberSaveable(saver = ShiftWorkRecordListSaver) {
         val items = shiftWorkSettings.records.takeIf { it.isNotEmpty() } ?: listOf(
             ShiftWorkRecord(shiftWorkKeyToString("d"), 1),
