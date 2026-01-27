@@ -887,4 +887,6 @@
 |         |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 2.3.0
 |         |              \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 (*)
 |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 2.3.0 (*)
-\--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.10.0 (*)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.10.0 (*)
+\--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.3.0
+     \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 (*)

@@ -1067,4 +1067,6 @@
 |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.0 (*)
 |         \--- androidx.navigation3:navigation3-runtime:1.0.0 (c)
 +--- androidx.navigation3:navigation3-runtime:1.0.0 (*)
-\--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.10.0 (*)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.10.0 (*)
+\--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.3.0
+     \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 (*)
