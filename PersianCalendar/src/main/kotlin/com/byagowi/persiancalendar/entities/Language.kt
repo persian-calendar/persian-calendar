@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
@@ -389,12 +390,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
     fun allNumericsDateFormat(year: Int, month: Int, dayOfMonth: Int, numeral: Numeral): String {
-        val sep = when (this) {
+        val iso8601DateFormat = iso8601DateFormat
+        val sep = if (iso8601DateFormat) "-" else when (this) {
             PS, NE -> '-'
             KMR, RU, TR, DE -> '.'
             else -> '/'
         }
-        val needsZeroPad = when (this) {
+        val needsZeroPad = iso8601DateFormat || when (this) {
             FR, IT, NE, PT, RU, TR, KMR -> true
             // According to the dated on the first page of https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1404.pdf
             // It seems it's a zero padded locale
@@ -403,7 +405,7 @@ enum class Language(val code: String, val nativeName: String) {
             FA -> false
             else -> false
         }
-        val format = when (this) {
+        val format = if (iso8601DateFormat) $$"%1$s$$sep%2$s$$sep%3$s" else when (this) {
             // Year major
             FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN, OTA -> $$"%1$s$$sep%2$s$$sep%3$s"
             // Month major

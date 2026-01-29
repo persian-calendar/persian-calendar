@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
+import com.byagowi.persiancalendar.PREF_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
@@ -22,6 +23,7 @@ import com.byagowi.persiancalendar.global.alternativePersianMonthsInAzeri
 import com.byagowi.persiancalendar.global.easternGregorianArabicMonths
 import com.byagowi.persiancalendar.global.englishGregorianPersianMonths
 import com.byagowi.persiancalendar.global.englishWeekDaysInIranEnglish
+import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.localNumeralPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
@@ -85,6 +87,14 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
             value = englishWeekDaysInIranEnglish,
             title = "English weekday names",
             summary = "Sunday, Monday, Tuesday, …",
+        )
+    }
+    AnimatedVisibility(language == Language.EN_US) {
+        SettingsSwitch(
+            key = PREF_ISO8601_DATE_FORMAT,
+            value = iso8601DateFormat,
+            title = "ISO 8601 date format",
+            summary = "Use a date format like 2026-01-01",
         )
     }
     AnimatedVisibility(language.canHaveLocalNumeral) {

@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.DEFAULT_LARGE_ICON_ON_NOTIFICATION
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
@@ -74,6 +75,7 @@ import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
@@ -281,6 +283,9 @@ val alternativePersianMonthsInAzeri by alternativePersianMonthsInAzeri_
 private val englishWeekDaysInIranEnglish_ =
     mutableStateOf(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
 val englishWeekDaysInIranEnglish by englishWeekDaysInIranEnglish_
+
+private val iso8601DateFormat_ = mutableStateOf(DEFAULT_ISO8601_DATE_FORMAT)
+val iso8601DateFormat by iso8601DateFormat_
 
 private val coordinates_ = mutableStateOf<Coordinates?>(null)
 val coordinates by coordinates_
@@ -529,6 +534,9 @@ fun updateStoredPreference(context: Context) {
     )
     englishWeekDaysInIranEnglish_.value = language == Language.EN_IR && preferences.getBoolean(
         PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH, DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
+    )
+    iso8601DateFormat_.value = language == Language.EN_US && preferences.getBoolean(
+        PREF_ISO8601_DATE_FORMAT, DEFAULT_ISO8601_DATE_FORMAT,
     )
 
     prefersWidgetsDynamicColors_.value = userSetTheme.isDynamicColors && preferences.getBoolean(
