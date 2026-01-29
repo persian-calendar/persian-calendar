@@ -9,6 +9,7 @@ import androidx.compose.ui.util.fastAny
 
 fun Modifier.detectZoom(
     onRelease: () -> Unit = {},
+    onlyMultitouch: Boolean = false,
     onZoom: (Float) -> Unit,
 ) = this then Modifier.pointerInput(Unit) {
     /** This is reduced from [androidx.compose.foundation.gestures.detectTransformGestures] */
@@ -16,7 +17,9 @@ fun Modifier.detectZoom(
         awaitFirstDown(requireUnconsumed = false)
         do {
             val event = awaitPointerEvent()
-            onZoom(event.calculateZoom())
+            if (!onlyMultitouch || event.changes.count { it.pressed } >= 2) {
+                onZoom(event.calculateZoom())
+            }
         } while (event.changes.fastAny { it.pressed })
         onRelease()
     }

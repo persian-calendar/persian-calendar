@@ -47,10 +47,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
@@ -66,11 +62,9 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
-import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
@@ -79,16 +73,11 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.intellij.lang.annotations.Language
-import java.util.Locale
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
@@ -96,7 +85,6 @@ import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
-import kotlin.math.sign
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
@@ -850,117 +838,117 @@ fun getStandardFrequency(note: Double): Double {
 //     return note.roundToInt() + MIDDLE_A_SEMITONE
 // }
 
-val ABC_NOTATION = listOf(
-    "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B",
-)
-var SOLFEGE_NOTATION = listOf(
-    "Do", "Do♯", "Re", "Re♯", "Mi", "Fa", "Fa♯", "Sol", "Sol♯", "La", "La♯", "Si",
-)
-
-fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
-fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
-
-fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
-    var currentSemitone by mutableDoubleStateOf(MIDDLE_A_SEMITONE)
-
-    val view = object : BaseSlider(activity) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GREEN
-            it.style = Paint.Style.FILL
-        }
-
-        var r = 1f
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            r = min(w, h) / 2f
-        }
-
-        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-            val width = MeasureSpec.getSize(widthMeasureSpec)
-            super.onMeasure(
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-            )
-        }
-
-        private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.BLACK
-            it.textAlign = Paint.Align.CENTER
-            it.textSize = 20 * resources.dp
-        }
-
-        override fun onDraw(canvas: Canvas) {
-            canvas.drawCircle(r, r, r / 1.1f, paint)
-            val text = "%d Hz %s %s".format(
-                Locale.ENGLISH,
-                getStandardFrequency(currentSemitone).toInt(),
-                getAbcNoteLabel(currentSemitone.roundToInt()),
-                getSolfegeNoteLabel(currentSemitone.roundToInt()),
-            )
-            canvas.drawText(text, r, r, textPaint)
-        }
-    }
-
-    view.onScrollListener = { dx, _ ->
-        currentSemitone = (currentSemitone - dx / 1000.0)
-            .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
-    }
-
-    val sampleRate = 44100
-    val buffer = ShortArray(sampleRate * 10)
-    var previousAudioTrack: AudioTrack? = null
-
-    snapshotFlow { currentSemitone }
-        .map { semitone ->
-            val frequency = getStandardFrequency(semitone)
-            buffer.indices.forEach {
-                val phase = 2 * PI * it / (sampleRate / frequency)
-                buffer[it] = (when (0) {
-                    0 -> sin(phase) // Sine
-                    1 -> sign(sin(phase)) // Square
-                    2 -> abs(asin(sin(phase / 2))) // Sawtooth
-                    else -> .0
-                } * Short.MAX_VALUE).toInt().toShort()
-            }
-            val audioTrack = AudioTrack.Builder()
-                .setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build(),
-                )
-                .setAudioFormat(
-                    AudioFormat.Builder()
-                        .setSampleRate(sampleRate)
-                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                        .build(),
-                )
-                .setBufferSizeInBytes(buffer.size)
-                .setTransferMode(AudioTrack.MODE_STATIC)
-                .build()
-            audioTrack.write(buffer, 0, buffer.size)
-            audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
-            audioTrack.play()
-            if (previousAudioTrack?.state == AudioTrack.STATE_INITIALIZED) {
-                previousAudioTrack?.stop()
-                previousAudioTrack?.release()
-            }
-            previousAudioTrack = audioTrack
-        }
-        .flowOn(Dispatchers.Unconfined)
-        .launchIn(viewLifecycle.coroutineScope)
-
-    val dialog = AlertDialog.Builder(activity)
-        .setView(view)
-        .setOnCancelListener { previousAudioTrack?.stop() }
-        .show()
-
-    activity.lifecycle.addObserver(
-        LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
-        },
-    )
-}
+//val ABC_NOTATION = listOf(
+//    "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B",
+//)
+//var SOLFEGE_NOTATION = listOf(
+//    "Do", "Do♯", "Re", "Re♯", "Mi", "Fa", "Fa♯", "Sol", "Sol♯", "La", "La♯", "Si",
+//)
+//
+//fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
+//fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
+//
+//fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
+//    var currentSemitone by mutableDoubleStateOf(MIDDLE_A_SEMITONE)
+//
+//    val view = object : BaseSlider(activity) {
+//        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.GREEN
+//            it.style = Paint.Style.FILL
+//        }
+//
+//        var r = 1f
+//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//            r = min(w, h) / 2f
+//        }
+//
+//        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//            val width = MeasureSpec.getSize(widthMeasureSpec)
+//            super.onMeasure(
+//                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+//                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+//            )
+//        }
+//
+//        private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.BLACK
+//            it.textAlign = Paint.Align.CENTER
+//            it.textSize = 20 * resources.dp
+//        }
+//
+//        override fun onDraw(canvas: Canvas) {
+//            canvas.drawCircle(r, r, r / 1.1f, paint)
+//            val text = "%d Hz %s %s".format(
+//                Locale.ENGLISH,
+//                getStandardFrequency(currentSemitone).toInt(),
+//                getAbcNoteLabel(currentSemitone.roundToInt()),
+//                getSolfegeNoteLabel(currentSemitone.roundToInt()),
+//            )
+//            canvas.drawText(text, r, r, textPaint)
+//        }
+//    }
+//
+//    view.onScrollListener = { dx, _ ->
+//        currentSemitone = (currentSemitone - dx / 1000.0)
+//            .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
+//    }
+//
+//    val sampleRate = 44100
+//    val buffer = ShortArray(sampleRate * 10)
+//    var previousAudioTrack: AudioTrack? = null
+//
+//    snapshotFlow { currentSemitone }
+//        .map { semitone ->
+//            val frequency = getStandardFrequency(semitone)
+//            buffer.indices.forEach {
+//                val phase = 2 * PI * it / (sampleRate / frequency)
+//                buffer[it] = (when (0) {
+//                    0 -> sin(phase) // Sine
+//                    1 -> sign(sin(phase)) // Square
+//                    2 -> abs(asin(sin(phase / 2))) // Sawtooth
+//                    else -> .0
+//                } * Short.MAX_VALUE).toInt().toShort()
+//            }
+//            val audioTrack = AudioTrack.Builder()
+//                .setAudioAttributes(
+//                    AudioAttributes.Builder()
+//                        .setUsage(AudioAttributes.USAGE_MEDIA)
+//                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                        .build(),
+//                )
+//                .setAudioFormat(
+//                    AudioFormat.Builder()
+//                        .setSampleRate(sampleRate)
+//                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+//                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+//                        .build(),
+//                )
+//                .setBufferSizeInBytes(buffer.size)
+//                .setTransferMode(AudioTrack.MODE_STATIC)
+//                .build()
+//            audioTrack.write(buffer, 0, buffer.size)
+//            audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
+//            audioTrack.play()
+//            if (previousAudioTrack?.state == AudioTrack.STATE_INITIALIZED) {
+//                previousAudioTrack?.stop()
+//                previousAudioTrack?.release()
+//            }
+//            previousAudioTrack = audioTrack
+//        }
+//        .flowOn(Dispatchers.Unconfined)
+//        .launchIn(viewLifecycle.coroutineScope)
+//
+//    val dialog = AlertDialog.Builder(activity)
+//        .setView(view)
+//        .setOnCancelListener { previousAudioTrack?.stop() }
+//        .show()
+//
+//    activity.lifecycle.addObserver(
+//        LifecycleEventObserver { _, event ->
+//            if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+//        },
+//    )
+//}
 
 fun showSpringDemoDialog(activity: Activity) {
     val x = FloatValueHolder()

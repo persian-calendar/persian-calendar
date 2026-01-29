@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.widget.Toast
@@ -260,6 +261,7 @@ fun SharedTransitionScope.MapScreen(
                     }
                 }
 
+                var globeBitmap by remember { mutableStateOf<Bitmap?>(null) }
                 MenuItem(
                     icon = Icons.Default._3dRotation,
                     titleId = R.string.show_globe_view_label,
@@ -281,9 +283,9 @@ fun SharedTransitionScope.MapScreen(
                         directPathDestination = directPathDestination,
                         displayGrid = displayGrid,
                     )
-                    showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
-                    // DO NOT use bitmap after this
+                    globeBitmap = bitmap
                 }
+                globeBitmap?.let { GlobeDialog(it) { globeBitmap = null } }
 
                 MenuItem(
                     icon = Icons.Default.SocialDistance,

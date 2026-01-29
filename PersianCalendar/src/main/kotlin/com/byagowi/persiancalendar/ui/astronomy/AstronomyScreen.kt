@@ -457,9 +457,9 @@ private fun SharedTransitionScope.SliderBar(
                         onDragStopped = { velocity ->
                             animateDecay(
                                 initialValue = 0f,
-                                initialVelocity = velocity / density.density,
+                                initialVelocity = velocity,
                                 animationSpec = SplineBasedFloatDecayAnimationSpec(density),
-                            ) { _, velocity -> onDelta(velocity) }
+                            ) { _, velocity -> if (velocity.isFinite()) onDelta(velocity / 20) }
                         },
                     )
                     .drawWithContent {

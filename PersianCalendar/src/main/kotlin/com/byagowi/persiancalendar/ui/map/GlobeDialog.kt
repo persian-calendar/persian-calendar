@@ -1,80 +1,93 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
-import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
-import android.widget.FrameLayout
+import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
+import androidx.compose.animation.core.animateDecay
+import androidx.compose.foundation.gestures.draggable2D
+import androidx.compose.foundation.gestures.rememberDraggable2DState
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.generated.globeFragmentShader
-import com.byagowi.persiancalendar.ui.common.BaseSlider
+import com.byagowi.persiancalendar.ui.calendar.detectZoom
+import kotlinx.coroutines.launch
 import kotlin.math.PI
 
-fun showGlobeDialog(context: Context, image: Bitmap, lifecycle: Lifecycle) {
-    val frame = FrameLayout(context)
-    frame.post {
-        val glView = GLSurfaceView(context)
-        glView.setOnClickListener { glView.requestRender() }
-        glView.setEGLContextClientVersion(2)
-        val renderer = GLRenderer(onSurfaceCreated = { it.loadTexture(image) })
-        glView.setRenderer(renderer)
-        glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
-        renderer.fragmentShader = globeFragmentShader
-        frame.addView(glView)
-        frame.addView(
-            object : BaseSlider(context) {
-                init {
-                    val startTime = System.nanoTime()
-                    enableVerticalSlider = true
-                    onScrollListener = { dx: Float, dy: Float ->
-                        if (dx != 0f && renderer.overriddenTime == 0f)
-                            renderer.overriddenTime = (System.nanoTime() - startTime) / 1e9f
-                        renderer.overriddenTime += dx / renderer.overriddenZoom / 200
-                        renderer.overriddenY =
-                            (renderer.overriddenY + dy / renderer.overriddenZoom / 200)
-                                .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
-                    }
-                }
+@Composable
+fun GlobeDialog(bitmap: Bitmap, onDismissRequest: () -> Unit) {
+    @OptIn(ExperimentalMaterial3Api::class) Dialog(onDismissRequest = onDismissRequest) {
+        var renderer by remember { mutableStateOf<GLRenderer?>(null) }
+        val startTime = remember { System.nanoTime() }
+        fun onDelta(dx: Float, dy: Float) {
+            renderer?.also { renderer ->
+                if (dx != 0f && renderer.overriddenTime == 0f)
+                    renderer.overriddenTime = (System.nanoTime() - startTime) / 1e9f
+                renderer.overriddenTime += dx / renderer.overriddenZoom / 200
+                renderer.overriddenY =
+                    (renderer.overriddenY + dy / renderer.overriddenZoom / 200)
+                        .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
+            }
+        }
 
-                override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-                    scaleDetector.onTouchEvent(event)
-                    return isInScale || super.dispatchTouchEvent(event)
-                }
-
-                private var isInScale = false
-                private val scaleListener = object : SimpleOnScaleGestureListener() {
-                    override fun onScale(detector: ScaleGestureDetector): Boolean {
-                        renderer.overriddenZoom =
-                            (renderer.overriddenZoom * detector.scaleFactor).coerceIn(.25f, 6f)
-                        return true
-                    }
-
-                    override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
-                        isInScale = true
-                        return super.onScaleBegin(detector)
-                    }
-
-                    override fun onScaleEnd(detector: ScaleGestureDetector) {
-                        isInScale = false
-                    }
-                }
-                private val scaleDetector = ScaleGestureDetector(context, scaleListener)
+        val density = LocalDensity.current
+        val coroutineScope = rememberCoroutineScope()
+        var isInZoom by remember { mutableStateOf(false) }
+        AndroidView(
+            factory = { context ->
+                val glView = GLSurfaceView(context)
+                glView.setOnClickListener { glView.requestRender() }
+                glView.setEGLContextClientVersion(2)
+                val renderer = GLRenderer(onSurfaceCreated = { it.loadTexture(bitmap) })
+                    .also { renderer = it }
+                glView.setRenderer(renderer)
+                glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                renderer.fragmentShader = globeFragmentShader
+                glView
             },
+            modifier = Modifier
+                .draggable2D(
+                    enabled = !isInZoom,
+                    state = rememberDraggable2DState { (dx, dy) -> onDelta(dx, dy) },
+                    onDragStopped = { (dx, _) ->
+                        coroutineScope.launch {
+                            animateDecay(
+                                initialValue = 0f,
+                                initialVelocity = dx,
+                                animationSpec = SplineBasedFloatDecayAnimationSpec(density),
+                            ) { _, dx -> if (dx.isFinite()) onDelta(dx / 20, 0f) }
+                        }
+                    },
+                )
+                .detectZoom(onRelease = { isInZoom = false }, onlyMultitouch = true) { factor ->
+                    renderer?.also { renderer ->
+                        renderer.overriddenZoom =
+                            (renderer.overriddenZoom * factor).coerceIn(.25f, 6f)
+                    }
+                    isInZoom = true
+                }
+                .fillMaxSize(),
         )
     }
-
-    val dialog = android.app.AlertDialog.Builder(context)
-        .setView(frame)
-        .setOnCancelListener { image.recycle() }
-        .show()
-
-    // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
-    lifecycle.addObserver(
-        LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
-        },
-    )
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) onDismissRequest()
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
 }
