@@ -45,7 +45,6 @@ fun GlobeDialog(bitmap: Bitmap, onDismissRequest: () -> Unit) {
 
         val density = LocalDensity.current
         val coroutineScope = rememberCoroutineScope()
-        var isInZoom by remember { mutableStateOf(false) }
         AndroidView(
             factory = { context ->
                 val glView = GLSurfaceView(context)
@@ -60,7 +59,6 @@ fun GlobeDialog(bitmap: Bitmap, onDismissRequest: () -> Unit) {
             },
             modifier = Modifier
                 .draggable2D(
-                    enabled = !isInZoom,
                     state = rememberDraggable2DState { (dx, dy) -> onDelta(dx, dy) },
                     onDragStopped = { (dx, _) ->
                         coroutineScope.launch {
@@ -72,12 +70,11 @@ fun GlobeDialog(bitmap: Bitmap, onDismissRequest: () -> Unit) {
                         }
                     },
                 )
-                .detectZoom(onRelease = { isInZoom = false }, onlyMultitouch = true) { factor ->
+                .detectZoom(onlyMultitouch = true) { factor ->
                     renderer?.also { renderer ->
                         renderer.overriddenZoom =
                             (renderer.overriddenZoom * factor).coerceIn(.25f, 6f)
                     }
-                    isInZoom = true
                 }
                 .fillMaxSize(),
         )
