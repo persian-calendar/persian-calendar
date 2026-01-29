@@ -4,15 +4,18 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.TwoWayConverter
+import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -32,9 +35,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -74,15 +74,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -101,7 +100,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
-import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
@@ -130,7 +128,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -175,7 +172,6 @@ fun SharedTransitionScope.AstronomyScreen(
         }
     }
     val astronomyState = AstronomyState(timeInMillis.value)
-    val sliderState = rememberLazyListState(initialFirstVisibleItemIndex = SLIDER_ITEMS / 2)
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -311,7 +307,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                 timeInMillis = timeInMillis,
                             )
                             Spacer(Modifier.weight(1f))
-                            SliderBar(sliderState, timeInMillis, isDatePickerDialogShown)
+                            SliderBar(timeInMillis, isDatePickerDialogShown)
                         }
                         SolarDisplay(
                             modifier = Modifier
@@ -322,7 +318,6 @@ fun SharedTransitionScope.AstronomyScreen(
                             astronomyState = astronomyState,
                             mode = mode,
                             isTropical = isTropical,
-                            sliderState = sliderState,
                             navigateToMap = navigateToMap,
                         )
                     }
@@ -355,7 +350,6 @@ fun SharedTransitionScope.AstronomyScreen(
                                     astronomyState = astronomyState,
                                     mode = mode,
                                     isTropical = isTropical,
-                                    sliderState = sliderState,
                                     navigateToMap = navigateToMap,
                                 )
                             },
@@ -381,7 +375,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             }
                         }
                     }
-                    SliderBar(sliderState, timeInMillis, isDatePickerDialogShown)
+                    SliderBar(timeInMillis, isDatePickerDialogShown)
                     Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
@@ -401,18 +395,15 @@ fun SharedTransitionScope.AstronomyScreen(
 }
 
 private val oneMinute = 1.minutes.inWholeMilliseconds
-private const val SLIDER_ITEMS = 1_000_000
+private val sevenDays = 7.days.inWholeMilliseconds
 
 @Composable
 private fun SharedTransitionScope.SliderBar(
-    sliderState: LazyListState,
     timeInMillis: Animatable<Long, AnimationVector1D>,
     isDatePickerDialogShown: MutableState<Boolean>,
 ) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val coroutineScope = rememberCoroutineScope()
     fun buttonScrollSlider(days: Int) {
-        coroutineScope.launch { sliderState.animateScrollBy(250f * if (isRtl) 1 else -1) }
         coroutineScope.launch {
             val newValue = timeInMillis.value + days.days.inWholeMilliseconds
             timeInMillis.animateTo(newValue)
@@ -449,60 +440,47 @@ private fun SharedTransitionScope.SliderBar(
         ) {
             TimeArrow(::buttonScrollSlider, isPrevious = true)
             val primary = MaterialTheme.colorScheme.primary
-            val space = 10.dp
-            val spacePx = with(LocalDensity.current) { space.toPx() }
-            LaunchedEffect(Unit) { sliderState.animateScrollBy(spacePx * 10) }
+            val density = LocalDensity.current
+            fun onDelta(velocity: Float) {
+                coroutineScope.launch {
+                    timeInMillis.snapTo(timeInMillis.value + (oneMinute * velocity).toInt())
+                }
+            }
             Box(
-                Modifier
+                modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .height(46.dp)
-                    .weight(weight = 1f, fill = false),
-            ) {
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .drawWithContent {
-                            val linesCount = this.size.width.toInt() / spacePx.roundToInt()
-                            repeat(linesCount) {
-                                val x =
-                                    it * spacePx + sliderState.firstVisibleItemScrollOffset % spacePx
-                                val deviation = 2 * (it - linesCount / 2f) / linesCount
-                                drawLine(
-                                    color = primary,
-                                    start = Offset(x = x, y = 0f),
-                                    end = Offset(x = x, y = this.size.height),
-                                    strokeWidth = 2.dp.toPx(),
-                                    alpha = cos(deviation * PI.toFloat() / 2),
-                                )
-                            }
+                    .weight(weight = 1f)
+                    .draggable(
+                        orientation = Orientation.Horizontal,
+                        state = rememberDraggableState(::onDelta),
+                        onDragStopped = { velocity ->
+                            animateDecay(
+                                initialValue = 0f,
+                                initialVelocity = velocity / density.density,
+                                animationSpec = SplineBasedFloatDecayAnimationSpec(density),
+                            ) { _, velocity -> onDelta(velocity) }
                         },
-                    state = sliderState,
-                ) { items(SLIDER_ITEMS) { Box(Modifier.width(space)) } }
-                // Above handles the painting below handles touch, they should be merged but be
-                // worried about connecting back non-user visual changes to screen's time so
-                // the separation is actually better in some sense
-                AndroidView(
-                    factory = { context ->
-                        val root = BaseSlider(context)
-                        var latestVibration = 0L
-                        root.onScrollListener = { dx, _ ->
-                            if (dx != 0f) {
-                                coroutineScope.launch { sliderState.scrollBy(dx) }
-                                val current = System.currentTimeMillis()
-                                if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                                    root.performHapticFeedbackVirtualKey()
-                                    latestVibration = current
-                                }
-                                coroutineScope.launch {
-                                    val delta = (oneMinute * dx * if (isRtl) 1 else -1).toInt()
-                                    timeInMillis.snapTo(timeInMillis.value + delta)
-                                }
-                            }
+                    )
+                    .drawWithContent {
+                        val space = 10.dp.toPx()
+                        val linesCount = this.size.width.toInt() / space.roundToInt()
+                        repeat(linesCount) {
+                            val x = it * space + timeInMillis.value / oneMinute % space
+                            val deviation = 2 * (it - linesCount / 2f) / linesCount
+                            drawLine(
+                                color = primary,
+                                start = Offset(x = x, y = 0f),
+                                end = Offset(x = x, y = this.size.height),
+                                strokeWidth = 2.dp.toPx(),
+                                alpha = cos(deviation * PI.toFloat() / 2),
+                            )
                         }
-                        root
                     },
-                    modifier = Modifier.fillMaxSize(),
-                )
+            )
+            val view = LocalView.current
+            LaunchedEffect(timeInMillis.value / sevenDays) {
+                view.performHapticFeedbackVirtualKey()
             }
             TimeArrow(::buttonScrollSlider, isPrevious = false)
         }
@@ -536,7 +514,6 @@ private fun SharedTransitionScope.SolarDisplay(
     astronomyState: AstronomyState,
     mode: MutableState<AstronomyMode>,
     isTropical: Boolean,
-    sliderState: LazyListState,
     navigateToMap: (time: Long) -> Unit,
 ) {
     Box(modifier) {
@@ -582,7 +559,6 @@ private fun SharedTransitionScope.SolarDisplay(
                     coroutineScope.launch {
                         timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
                     }
-                    coroutineScope.launch { sliderState.scrollBy(offset / 200f) }
                 }
                 solarView
             },
