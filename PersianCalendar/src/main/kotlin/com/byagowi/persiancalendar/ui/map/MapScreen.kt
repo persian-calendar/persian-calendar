@@ -60,7 +60,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -155,8 +154,6 @@ fun SharedTransitionScope.MapScreen(
                 )
             }
     }
-
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     val context = LocalContext.current
     var formattedTime by remember { mutableStateOf("") }
