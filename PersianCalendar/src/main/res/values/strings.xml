@@ -354,8 +354,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_prefer_device_colors">Follow Device Coloring in Widgets</string>
     <string name="nepali_calendar">Nepali Calendar</string>
     <string name="nepali_calendar_short">Nepali</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+
     <string name="show_secondary_calendar">Show secondary calendar</string>
     <string name="season">Season</string>
     <string name="nepal">Nepal</string>
