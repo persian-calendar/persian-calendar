@@ -15,6 +15,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.runtime.annotation.RememberInComposition
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.core.app.ShareCompat
@@ -124,6 +125,7 @@ fun createFlingDetector(
  * Similar to [androidx.compose.foundation.isSystemInDarkTheme] implementation but
  * for non composable contexts, in composable context, use the compose one.
  */
+@RememberInComposition
 fun isSystemInDarkTheme(configuration: Configuration): Boolean =
     configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
