@@ -25,6 +25,9 @@ enum class Calendar(
     ),
     NEPALI(
         R.string.nepali_calendar, R.string.nepali_calendar_short, Numeral.DEVANAGARI,
+    ),
+    SHAHANSHAHI(
+        R.string.shahanshahi_calendar, R.string.shahanshahi_calendar_short, Numeral.PERSIAN,
     );
 
     fun createDate(year: Int, month: Int, day: Int): AbstractDate = when (this) {
@@ -32,6 +35,7 @@ enum class Calendar(
         GREGORIAN -> CivilDate(year, month, day)
         SHAMSI -> PersianDate(year, month, day)
         NEPALI -> NepaliDate(year, month, day)
+        SHAHANSHAHI -> ShahanshahiDate(year, month, day)
     }
 
     fun getNthWeekDayOfMonth(year: Int, month: Int, weekDay: Int, nth: Int): Int {
@@ -59,6 +63,7 @@ enum class Calendar(
         GREGORIAN -> CivilDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
         SHAMSI -> PersianDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
         NEPALI -> NepaliDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
+        SHAHANSHAHI -> ShahanshahiDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
     }
 
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int = when (this) {
@@ -66,6 +71,7 @@ enum class Calendar(
         GREGORIAN -> baseJdn.toCivilDate().monthsDistanceTo(toJdn.toCivilDate())
         SHAMSI -> baseJdn.toPersianDate().monthsDistanceTo(toJdn.toPersianDate())
         NEPALI -> baseJdn.toNepaliDate().monthsDistanceTo(toJdn.toNepaliDate())
+        SHAHANSHAHI -> baseJdn.toShahanshahiDate().monthsDistanceTo(toJdn.toShahanshahiDate())
     }
 
     fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {

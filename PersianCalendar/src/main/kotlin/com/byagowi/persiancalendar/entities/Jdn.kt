@@ -38,12 +38,14 @@ value class Jdn(val value: Long) : Parcelable {
         Calendar.GREGORIAN -> toCivilDate()
         Calendar.SHAMSI -> toPersianDate()
         Calendar.NEPALI -> toNepaliDate()
+        Calendar.SHAHANSHAHI -> toShahanshahiDate()
     }
 
     fun toIslamicDate() = IslamicDate(value)
     fun toCivilDate() = CivilDate(value)
     fun toPersianDate() = PersianDate(value)
     fun toNepaliDate() = NepaliDate(value)
+    fun toShahanshahiDate() = ShahanshahiDate(value)
 
     operator fun compareTo(other: Jdn) = value compareTo other.value
     operator fun plus(other: Int): Jdn = Jdn(value + other)

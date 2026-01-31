@@ -140,6 +140,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import com.byagowi.persiancalendar.entities.ShahanshahiDate
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
@@ -167,6 +168,9 @@ private val gregorianMonths_ = mutableStateOf(monthNameEmptyList)
 private val gregorianMonths by gregorianMonths_
 private val nepaliMonths_ = mutableStateOf(monthNameEmptyList)
 private val nepaliMonths by nepaliMonths_
+private val shahanshahiMonthsEmptyList = List(13) { "" }
+private val shahanshahiMonths_ = mutableStateOf(shahanshahiMonthsEmptyList)
+private val shahanshahiMonths by shahanshahiMonths_
 
 private val weekDaysEmptyList = List(7) { "" }
 private val weekDaysTitles_ = mutableStateOf(weekDaysEmptyList)
@@ -434,6 +438,7 @@ fun yearMonthNameOfDate(date: AbstractDate): List<String> {
         is CivilDate -> gregorianMonths
         is IslamicDate -> islamicMonths
         is NepaliDate -> nepaliMonths
+        is ShahanshahiDate -> shahanshahiMonths
         else -> monthNameEmptyList
     }
 }
@@ -457,6 +462,7 @@ fun loadLanguageResources(resources: Resources) {
         englishGregorianPersianMonths || easternGregorianArabicMonths,
     )
     nepaliMonths_.value = language.getNepaliMonths()
+    shahanshahiMonths_.value = resources.getStringArray(R.array.shahanshahi_months).toList()
     weekDaysTitles_.value = if (englishWeekDaysInIranEnglish) Language.EN_US.getWeekDays(resources)
     else language.getWeekDays(resources)
     weekDaysTitlesInitials_.value =

@@ -16,6 +16,7 @@ android {
 
     namespace = "com.byagowi.persiancalendar"
     compileSdk = 36
+    buildToolsVersion = "36.1.0"
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"

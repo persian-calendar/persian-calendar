@@ -92,4 +92,19 @@ adenoxi: Adel Noruzi"</string>
     <string name="crescent_evening_visibility_odeh" translatable="false">Crescent evening visibility (Odeh)</string>
     <string name="crescent_morning_visibility_yallop" translatable="false">Crescent morning visibility (Yallop)</string>
     <string name="crescent_morning_visibility_odeh" translatable="false">Crescent morning visibility (Odeh)</string>
+    <string-array name="shahanshahi_months" translatable="false">
+        <item>Fravardin</item>
+        <item>Ardibehesht</item>
+        <item>Khordad</item>
+        <item>Tir</item>
+        <item>Amardad</item>
+        <item>Shehrevar</item>
+        <item>Mehr</item>
+        <item>Aban</item>
+        <item>Adar</item>
+        <item>Dae</item>
+        <item>Bahman</item>
+        <item>Aspandarmad</item>
+        <item>Gatha</item>
+    </string-array>
 </resources>

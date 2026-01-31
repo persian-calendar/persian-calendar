@@ -366,6 +366,8 @@
     <string name="widget_prefer_device_colors">پیروی از رنگ‌بندی دستگاه در ویجت‌ها</string>
     <string name="nepali_calendar">نپالی</string>
     <string name="nepali_calendar_short">نپالی</string>
+    <string name="shahanshahi_calendar">تقویم شاهنشاهی</string>
+    <string name="shahanshahi_calendar_short">شاهنشاهی</string>
     <string name="show_secondary_calendar">نمایش تقویم ثانویه</string>
     <string name="season">فصل</string>
     <string name="nepal">نپال</string>

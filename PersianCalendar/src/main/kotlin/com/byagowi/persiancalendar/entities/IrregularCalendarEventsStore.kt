@@ -29,6 +29,7 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             Calendar.ISLAMIC -> islamicEvents[year]
             Calendar.GREGORIAN -> gregorianEvents[year]
             Calendar.NEPALI -> nepaliEvents[year]
+            Calendar.SHAHANSHAHI -> emptyList()
         } as? List<T> ?: emptyList()
     }
 

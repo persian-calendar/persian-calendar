@@ -25,3 +25,7 @@
     public static *** d(...);
     public static *** i(...);
 }
+
+-keep class io.github.persiancalendar.calendar.DateTriplet { <init>(...); }
+
+-keep class io.github.persiancalendar.calendar.DateTriplet { *; }

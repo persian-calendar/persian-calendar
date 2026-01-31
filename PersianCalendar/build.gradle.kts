@@ -17,6 +17,7 @@ android {
     }
 
     compileSdk = 36
+    buildToolsVersion = "36.1.0"
 
     buildFeatures {
         buildConfig = true

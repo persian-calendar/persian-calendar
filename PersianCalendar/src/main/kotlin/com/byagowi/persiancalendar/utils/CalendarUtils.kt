@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.entities.ShahanshahiDate
 import com.byagowi.persiancalendar.entities.everyYear
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -316,6 +317,7 @@ val AbstractDate.calendar: Calendar
         is IslamicDate -> Calendar.ISLAMIC
         is CivilDate -> Calendar.GREGORIAN
         is NepaliDate -> Calendar.NEPALI
+        is ShahanshahiDate -> Calendar.SHAHANSHAHI
         else -> Calendar.SHAMSI
     }
 
