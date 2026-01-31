@@ -4,7 +4,6 @@
     android:id="@+id/widget_layout_week_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/WidgetTheme"
     tools:context=".WidgetWeekView">
 
     <ImageView

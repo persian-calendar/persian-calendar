@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- its v31 version is more interesting -->
-    <style name="WidgetTheme" />
-
-    <!-- its v31 version is more interesting -->
-    <color name="widget_background">@android:color/transparent</color>
-
     <!-- There is an override of this in values-night/styles.xml -->
     <style name="BaseDayNightTheme" parent="android:Theme.Material.Light.NoActionBar" />
 
@@ -40,6 +34,10 @@
     <color name="shortcut_background">#F5F5F5</color>
     <color name="dynamic_icon_foreground">#00796b</color>
     <color name="dynamic_icon_background">#F5F5F5</color>
+
+    <color name="widget_accent">@android:color/transparent</color>
+    <color name="widget_foreground">@android:color/transparent</color>
+    <color name="widget_background">@android:color/transparent</color>
 
     <color name="widget_add_event_icon">#D3E3FD</color>
     <color name="widget_add_event">#0B57D0</color>

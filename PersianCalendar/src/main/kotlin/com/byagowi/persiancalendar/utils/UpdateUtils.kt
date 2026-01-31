@@ -23,7 +23,6 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
-import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
@@ -452,8 +451,11 @@ fun createAgeRemoteViews(
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title)
     remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
     listOf(R.id.textview_age_widget_title, R.id.textview_age_widget).forEach {
-        if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(it)
-        else remoteViews.setTextColor(it, textColor)
+        if (prefersWidgetsDynamicColors) remoteViews.setColor(
+            it,
+            "setTextColor",
+            R.color.widget_foreground,
+        ) else remoteViews.setTextColor(it, textColor)
     }
     val secondary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET_START + widgetId)
     if (secondary != null && primary > secondary && primary > today && today >= secondary) {
@@ -678,13 +680,13 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
 
                 it.isHoliday -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        eventView.setColorAttr(
+                        eventView.setColor(
                             R.id.title_background,
                             "setColorFilter",
-                            android.R.attr.colorAccent,
+                            R.color.widget_accent,
                         )
                         eventView.setColorInt(
-                            R.id.title, "setTextColor", Color.WHITE, Color.WHITE,
+                            R.id.title, "setTextColor", Color.WHITE, Color.BLACK,
                         )
                     } else {
                         eventView.setInt(
@@ -906,16 +908,14 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
                 it * if (mainCalendarNumeral.isArabicIndicVariants) 1f else .8f
             }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it * .8f) }
             remoteViews.setAlpha(id, .5f)
-            remoteViews.setDynamicTextColor(id, android.R.attr.colorForeground)
+            remoteViews.setColor(id, "setTextColor", R.color.widget_foreground)
         } else null,
         setText = if (size != null && prefersWidgetsDynamicColors) { i, text, isHoliday ->
             val id = monthWidgetCells[i]
             remoteViews.setTextViewText(id, text)
             remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, cellFontSize)
-            when {
-                isHoliday -> android.R.attr.colorAccent
-                else -> android.R.attr.colorForeground
-            }.also { remoteViews.setDynamicTextColor(id, it) }
+            if (isHoliday) remoteViews.setColor(id, "setTextColor", R.color.widget_accent)
+            else remoteViews.setColor(id, "setTextColor", R.color.widget_foreground)
             when {
                 i < 7 -> .5f
                 else -> 1f
@@ -927,7 +927,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         remoteViews.setTextViewText(R.id.month_year, contentDescription)
         remoteViews.setTextViewTextSize(R.id.month_year, TypedValue.COMPLEX_UNIT_PX, footerSize)
         remoteViews.setAlpha(R.id.month_year, 0.5f)
-        remoteViews.setDynamicTextColor(R.id.month_year, android.R.attr.colorForeground)
+        remoteViews.setColor(R.id.month_year, "setTextColor", R.color.widget_foreground)
         remoteViews.setViewPadding(R.id.month_year, 0, 0, 0, (height * .02f).roundToInt())
     } else {
         remoteViews.setTextViewText(R.id.month_year, "")
@@ -1146,8 +1146,10 @@ fun create1x1RemoteViews(
     remoteViews.setRoundBackground(context.resources, R.id.widget_layout1x1_background, size)
     remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
     remoteViews.setupForegroundTextColors(R.id.textPlaceholder1_1x1, R.id.textPlaceholder2_1x1)
-    if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder1_1x1, android.R.attr.colorAccent,
+    if (prefersWidgetsDynamicColors) remoteViews.setColor(
+        R.id.textPlaceholder1_1x1,
+        "setTextColor",
+        R.color.widget_accent,
     )
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
@@ -1193,8 +1195,10 @@ fun create4x1RemoteViews(
     remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder2_4x1, 14 * scale)
     remoteViews.setTextViewTextSizeDp(R.id.textPlaceholder3_4x1, 12 * scale)
     if (isWidgetClock) remoteViews.setTextViewTextSizeDp(R.id.time_header_4x1, 22 * scale)
-    if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder1_4x1, android.R.attr.colorAccent,
+    if (prefersWidgetsDynamicColors) remoteViews.setColor(
+        R.id.textPlaceholder1_4x1,
+        "setTextColor",
+        R.color.widget_accent,
     )
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
@@ -1255,8 +1259,10 @@ fun create2x2RemoteViews(
         R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2,
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_2x2)
-    if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.time_2x2, android.R.attr.colorAccent,
+    if (prefersWidgetsDynamicColors) remoteViews.setColor(
+        R.id.time_2x2,
+        "setTextColor",
+        R.color.widget_accent,
     )
 
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
@@ -1294,10 +1300,7 @@ private val widget4x2TimesViewsIds = listOf(
 private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
     if (isWidgetClock) {
         setupForegroundTextColors(id)
-        if (prefersWidgetsDynamicColors) setDynamicTextColor(
-            id,
-            android.R.attr.colorAccent,
-        )
+        if (prefersWidgetsDynamicColors) setColor(id, "setTextColor", R.color.widget_accent)
         setTextViewTextOrHideIfEmpty(
             id,
             if (language.isTamil) clock.timeSlot.tamilName else "",
@@ -1354,8 +1357,10 @@ fun create4x2RemoteViews(
         R.id.event_4x2,
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x2)
-    if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder0_4x2, android.R.attr.colorAccent,
+    if (prefersWidgetsDynamicColors) remoteViews.setColor(
+        R.id.textPlaceholder0_4x2,
+        "setTextColor",
+        R.color.widget_accent,
     )
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
@@ -1390,7 +1395,7 @@ fun create4x2RemoteViews(
             if (viewId != nextViewId) {
                 if (prefersWidgetsDynamicColors) {
                     remoteViews.setAlpha(viewId, .6f)
-                    remoteViews.setDynamicTextColor(viewId)
+                    remoteViews.setColor(viewId, "setTextColor", R.color.widget_foreground)
                 } else remoteViews.setTextColor(
                     viewId, ColorUtils.setAlphaComponent(selectedWidgetTextColor, 180),
                 )
@@ -1872,11 +1877,6 @@ private fun RemoteViews.configureClock(@IdRes viewId: Int) {
     setCharSequence(viewId, "setFormat24Hour", clockFormat)
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
-private fun RemoteViews.setDynamicTextColor(
-    @IdRes id: Int, @AttrRes attr: Int = android.R.attr.colorForeground,
-): Unit = setColorAttr(id, "setTextColor", attr)
-
 @JvmSynthetic
 @RequiresApi(Build.VERSION_CODES.S)
 private fun RemoteViews.setAlpha(@IdRes viewId: Int, value: Float): Unit =
@@ -1884,7 +1884,7 @@ private fun RemoteViews.setAlpha(@IdRes viewId: Int, value: Float): Unit =
 
 private fun RemoteViews.setupForegroundTextColors(@IdRes vararg ids: Int) {
     ids.forEach {
-        if (prefersWidgetsDynamicColors) setDynamicTextColor(it)
+        if (prefersWidgetsDynamicColors) setColor(it, "setTextColor", R.color.widget_foreground)
         else setTextColor(it, selectedWidgetTextColor)
     }
 }
