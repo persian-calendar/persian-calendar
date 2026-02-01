@@ -63,7 +63,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.zIndex
 import androidx.core.graphics.createBitmap
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
@@ -227,6 +226,30 @@ fun SharedTransitionScope.MapScreen(
         )
     }
 
+    val globeTextureSize = 2048
+    if (showGlobeView) runCatching {
+        createBitmap(globeTextureSize, globeTextureSize)
+    }.onFailure(logException).onFailure {
+        showGlobeView = false
+    }.getOrNull()?.let { bitmap ->
+        val matrix = Matrix()
+        matrix.setScale(
+            globeTextureSize.toFloat() / mapDraw.mapWidth,
+            globeTextureSize.toFloat() / mapDraw.mapHeight,
+        )
+        mapDraw.updateMap(timeInMillis = time.longValue, mapType = mapType)
+        mapDraw.draw(
+            canvas = Canvas(bitmap),
+            matrix = matrix,
+            displayLocation = displayLocation,
+            coordinates = markedCoordinates,
+            directPathDestination = directPathDestination,
+            displayGrid = displayGrid,
+        )
+        BackHandler { showGlobeView = false }
+        GlobeView(bitmap)
+    }
+
     Column {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
         CompositionLocalProvider(
@@ -239,7 +262,6 @@ fun SharedTransitionScope.MapScreen(
                     .padding(horizontal = 24.dp, vertical = 16.dp)
                     .background(MaterialTheme.colorScheme.surface, CircleShape)
                     .height(menuHeight.dp)
-                    .then(if (showGlobeView) Modifier.zIndex(1f) else Modifier)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -329,30 +351,6 @@ fun SharedTransitionScope.MapScreen(
                     } else mapType = MapType.NONE
                 }
             }
-        }
-
-        val globeTextureSize = 2048
-        if (showGlobeView) runCatching {
-            createBitmap(globeTextureSize, globeTextureSize)
-        }.onFailure(logException).onFailure {
-            showGlobeView = false
-        }.getOrNull()?.let { bitmap ->
-            val matrix = Matrix()
-            matrix.setScale(
-                globeTextureSize.toFloat() / mapDraw.mapWidth,
-                globeTextureSize.toFloat() / mapDraw.mapHeight,
-            )
-            mapDraw.updateMap(timeInMillis = time.longValue, mapType = mapType)
-            mapDraw.draw(
-                canvas = Canvas(bitmap),
-                matrix = matrix,
-                displayLocation = displayLocation,
-                coordinates = markedCoordinates,
-                directPathDestination = directPathDestination,
-                displayGrid = displayGrid,
-            )
-            BackHandler { showGlobeView = false }
-            GlobeView(bitmap)
         }
     }
 
