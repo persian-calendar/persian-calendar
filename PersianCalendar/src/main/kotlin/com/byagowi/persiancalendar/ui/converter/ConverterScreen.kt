@@ -30,6 +30,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -144,7 +145,17 @@ fun SharedTransitionScope.ConverterScreen(
                 },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
-                    TodayActionButton(visible = resetButtonVisibility && !anyPendingConfirm) {
+                    if (screenMode == ConverterScreenMode.CALCULATOR) CompositionLocalProvider(
+                        LocalLayoutDirection provides LayoutDirection.Ltr,
+                    ) {
+                        AnimatedVisibility(resetButtonVisibility) {
+                            AppIconButton(
+                                icon = Icons.AutoMirrored.Default.Backspace,
+                                title = stringResource(R.string.return_to_today),
+                                onClick = resetAction,
+                            )
+                        }
+                    } else TodayActionButton(visible = resetButtonVisibility && !anyPendingConfirm) {
                         resetAction()
                     }
                     AnimatedVisibility(anyPendingConfirm) {
