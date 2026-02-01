@@ -243,11 +243,9 @@ fun SharedTransitionScope.MapScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(Modifier.weight(1f)) {
-                    NavigationNavigateUpIcon(
-                        if (showGlobeView) ({
-                            showGlobeView = false
-                        }) else navigateUp,
-                    )
+                    NavigationNavigateUpIcon {
+                        if (showGlobeView) showGlobeView = false else navigateUp()
+                    }
                 }
 
                 @Composable
