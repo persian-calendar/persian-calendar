@@ -43,6 +43,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.getValue
@@ -250,6 +251,7 @@ fun SharedTransitionScope.MapScreen(
         )
         BackHandler { showGlobeView = false }
         GlobeView(bitmap)
+        DisposableEffect(key1 = bitmap) { onDispose { bitmap.recycle() } }
     }
 
     Column {
@@ -278,11 +280,12 @@ fun SharedTransitionScope.MapScreen(
                 fun MenuItem(
                     icon: ImageVector,
                     @StringRes titleId: Int,
+                    modifier: Modifier = Modifier,
                     isEnabled: Boolean = false,
                     onClick: () -> Unit,
                 ) {
                     val title = language.mapButtons(stringId = titleId) ?: stringResource(titleId)
-                    Box(Modifier.weight(weight = 1f)) {
+                    Box(modifier.weight(weight = 1f)) {
                         val tint by animateColor(
                             color = if (isEnabled) {
                                 MaterialTheme.colorScheme.inversePrimary
@@ -300,25 +303,22 @@ fun SharedTransitionScope.MapScreen(
                     isEnabled = showGlobeView,
                 ) { showGlobeView = !showGlobeView }
 
-                Box(
-                    Modifier.alpha(
+                MenuItem(
+                    icon = Icons.Default.SocialDistance,
+                    titleId = R.string.show_direct_path_label,
+                    isEnabled = isDirectPathMode,
+                    modifier = Modifier.alpha(
                         alpha = animateFloatAsState(
                             targetValue = if (showGlobeView) .25f else 1f,
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         ).value,
                     ),
                 ) {
-                    MenuItem(
-                        icon = Icons.Default.SocialDistance,
-                        titleId = R.string.show_direct_path_label,
-                        isEnabled = isDirectPathMode,
-                    ) {
-                        if (showGlobeView) return@MenuItem
-                        if (markedCoordinates == null) showGpsDialog = true else {
-                            directPathDestination =
-                                directPathDestination.takeIf { !isDirectPathMode }
-                            isDirectPathMode = !isDirectPathMode
-                        }
+                    if (showGlobeView) return@MenuItem
+                    if (markedCoordinates == null) showGpsDialog = true else {
+                        directPathDestination =
+                            directPathDestination.takeIf { !isDirectPathMode }
+                        isDirectPathMode = !isDirectPathMode
                     }
                 }
 
@@ -359,9 +359,10 @@ fun SharedTransitionScope.MapScreen(
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val currentJdn = Jdn(Date(time.longValue).toGregorianCalendar().toCivilDate())
-        DatePickerDialog(currentJdn, { showDatePickerDialog = false }) { jdn ->
-            time.longValue += (jdn - currentJdn).days.inWholeMilliseconds
-        }
+        DatePickerDialog(
+            initialJdn = currentJdn,
+            onDismissRequest = { showDatePickerDialog = false },
+        ) { jdn -> time.longValue += (jdn - currentJdn).days.inWholeMilliseconds }
     }
 
     Box(Modifier.fillMaxSize()) {
