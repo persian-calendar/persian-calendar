@@ -237,7 +237,9 @@ fun SharedTransitionScope.MapScreen(
             globeTextureSize.toFloat() / mapDraw.mapWidth,
             globeTextureSize.toFloat() / mapDraw.mapHeight,
         )
-        mapDraw.updateMap(timeInMillis = time.longValue, mapType = mapType)
+        mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+        mapDraw.updateMap(time.longValue, mapType)
+        formattedTime = mapDraw.maskFormattedTime
         mapDraw.draw(
             canvas = Canvas(bitmap),
             matrix = matrix,
