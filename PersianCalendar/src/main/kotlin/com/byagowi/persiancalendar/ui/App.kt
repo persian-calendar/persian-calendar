@@ -141,14 +141,17 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
         val navigateUp: () -> Unit = {
-            // Empty back stack causes crash, what is meant is to finish the activity
+            // Empty back stack causes crash, just finish the activity on that situation
+            // It's needed when a part of app is opened from a shortcut but even though it's
+            // handled correctly there are rare crash reports so let's use it in NavDisplay,onBack
+            // also.
             if (backStack.size < 2) finish() else backStack.removeLastOrNull()
         }
         // Not the best approach to access calendar screen view model…
         var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
         NavDisplay(
             backStack = backStack,
-            onBack = { backStack.removeLastOrNull() },
+            onBack = navigateUp,
             predictivePopTransitionSpec = {
                 ContentTransform(fadeIn(), fadeOut())
             },
