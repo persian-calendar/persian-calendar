@@ -4,10 +4,14 @@ import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -26,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Grid3x3
 import androidx.compose.material.icons.filled.LocationOn
@@ -122,6 +127,8 @@ fun SharedTransitionScope.MapScreen(
     var showGpsDialog by rememberSaveable { mutableStateOf(false) }
     if (showGpsDialog) GPSLocationDialog { showGpsDialog = false }
 
+    var showGlobeView by rememberSaveable { mutableStateOf(false) }
+
     var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
     var saveCoordinates by rememberSaveable { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
@@ -163,7 +170,7 @@ fun SharedTransitionScope.MapScreen(
             Spacer(Modifier.height((16 + menuHeight + 16).dp))
             ScreenSurface { Box(Modifier.fillMaxSize()) }
         }
-        AndroidView(
+        if (!showGlobeView) AndroidView(
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(
@@ -235,7 +242,13 @@ fun SharedTransitionScope.MapScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(Modifier.weight(1f)) { NavigationNavigateUpIcon(navigateUp) }
+                Box(Modifier.weight(1f)) {
+                    NavigationNavigateUpIcon(
+                        if (showGlobeView) ({
+                            showGlobeView = false
+                        }) else navigateUp,
+                    )
+                }
 
                 @Composable
                 fun MenuItem(
@@ -257,41 +270,31 @@ fun SharedTransitionScope.MapScreen(
                     }
                 }
 
-                var showGlobDialog by rememberSaveable { mutableStateOf(false) }
                 MenuItem(
                     icon = Icons.Default._3dRotation,
                     titleId = R.string.show_globe_view_label,
-                ) { showGlobDialog = true }
-                val globeTextureSize = 2048
-                if (showGlobDialog) runCatching {
-                    createBitmap(globeTextureSize, globeTextureSize)
-                }.onFailure(logException).onFailure {
-                    showGlobDialog = false
-                }.getOrNull()?.let { bitmap ->
-                    val matrix = Matrix()
-                    matrix.setScale(
-                        globeTextureSize.toFloat() / mapDraw.mapWidth,
-                        globeTextureSize.toFloat() / mapDraw.mapHeight,
-                    )
-                    mapDraw.draw(
-                        canvas = Canvas(bitmap),
-                        matrix = matrix,
-                        displayLocation = displayLocation,
-                        coordinates = markedCoordinates,
-                        directPathDestination = directPathDestination,
-                        displayGrid = displayGrid,
-                    )
-                    GlobeDialog(bitmap) { showGlobDialog = false }
-                }
+                    isEnabled = showGlobeView,
+                ) { showGlobeView = !showGlobeView }
 
-                MenuItem(
-                    icon = Icons.Default.SocialDistance,
-                    titleId = R.string.show_direct_path_label,
-                    isEnabled = isDirectPathMode,
+                Box(
+                    Modifier.alpha(
+                        alpha = animateFloatAsState(
+                            targetValue = if (showGlobeView) .25f else 1f,
+                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                        ).value,
+                    ),
                 ) {
-                    if (markedCoordinates == null) showGpsDialog = true else {
-                        directPathDestination = directPathDestination.takeIf { !isDirectPathMode }
-                        isDirectPathMode = !isDirectPathMode
+                    MenuItem(
+                        icon = Icons.Default.SocialDistance,
+                        titleId = R.string.show_direct_path_label,
+                        isEnabled = isDirectPathMode,
+                    ) {
+                        if (showGlobeView) return@MenuItem
+                        if (markedCoordinates == null) showGpsDialog = true else {
+                            directPathDestination =
+                                directPathDestination.takeIf { !isDirectPathMode }
+                            isDirectPathMode = !isDirectPathMode
+                        }
                     }
                 }
 
@@ -327,6 +330,30 @@ fun SharedTransitionScope.MapScreen(
                 }
             }
         }
+
+        val globeTextureSize = 2048
+        if (showGlobeView) runCatching {
+            createBitmap(globeTextureSize, globeTextureSize)
+        }.onFailure(logException).onFailure {
+            showGlobeView = false
+        }.getOrNull()?.let { bitmap ->
+            val matrix = Matrix()
+            matrix.setScale(
+                globeTextureSize.toFloat() / mapDraw.mapWidth,
+                globeTextureSize.toFloat() / mapDraw.mapHeight,
+            )
+            mapDraw.updateMap(timeInMillis = time.longValue, mapType = mapType)
+            mapDraw.draw(
+                canvas = Canvas(bitmap),
+                matrix = matrix,
+                displayLocation = displayLocation,
+                coordinates = markedCoordinates,
+                directPathDestination = directPathDestination,
+                displayGrid = displayGrid,
+            )
+            BackHandler { showGlobeView = false }
+            GlobeView(bitmap)
+        }
     }
 
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
@@ -349,8 +376,10 @@ fun SharedTransitionScope.MapScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(all = 16.dp)
+                    .padding(vertical = 16.dp, horizontal = 8.dp)
                     .height(46.dp)
+                    .background(MaterialTheme.colorScheme.surface.copy(.75f), CircleShape)
+                    .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
             ) {
                 TimeArrow(mapDraw, time, isPrevious = true)
