@@ -62,7 +62,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -176,6 +175,7 @@ import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -976,10 +976,8 @@ private fun SharedTransitionScope.Toolbar(
         colors = appTopAppBarColors(),
         navigationIcon = {
             Crossfade(targetState = viewModel.isYearView) { state ->
-                if (state) AppIconButton(
-                    icon = Icons.AutoMirrored.Default.ArrowBack,
-                    title = stringResource(R.string.close),
-                    onClick = viewModel::onYearViewBackPressed,
+                if (state) NavigationNavigateUpIcon(
+                    navigateUp = viewModel::onYearViewBackPressed,
                 ) else NavigationOpenNavigationRailIcon(openNavigationRail)
             }
         },
