@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.widget.Toast
@@ -258,19 +257,21 @@ fun SharedTransitionScope.MapScreen(
                     }
                 }
 
-                var globeBitmap by remember { mutableStateOf<Bitmap?>(null) }
+                var showGlobDialog by rememberSaveable { mutableStateOf(false) }
                 MenuItem(
                     icon = Icons.Default._3dRotation,
                     titleId = R.string.show_globe_view_label,
-                ) {
-                    val textureSize = 2048
-                    val bitmap = runCatching {
-                        createBitmap(textureSize, textureSize)
-                    }.onFailure(logException).getOrNull() ?: return@MenuItem
+                ) { showGlobDialog = true }
+                val globeTextureSize = 2048
+                if (showGlobDialog) runCatching {
+                    createBitmap(globeTextureSize, globeTextureSize)
+                }.onFailure(logException).onFailure {
+                    showGlobDialog = false
+                }.getOrNull()?.let { bitmap ->
                     val matrix = Matrix()
                     matrix.setScale(
-                        textureSize.toFloat() / mapDraw.mapWidth,
-                        textureSize.toFloat() / mapDraw.mapHeight,
+                        globeTextureSize.toFloat() / mapDraw.mapWidth,
+                        globeTextureSize.toFloat() / mapDraw.mapHeight,
                     )
                     mapDraw.draw(
                         canvas = Canvas(bitmap),
@@ -280,9 +281,8 @@ fun SharedTransitionScope.MapScreen(
                         directPathDestination = directPathDestination,
                         displayGrid = displayGrid,
                     )
-                    globeBitmap = bitmap
+                    GlobeDialog(bitmap) { showGlobDialog = false }
                 }
-                globeBitmap?.let { GlobeDialog(it) { globeBitmap = null } }
 
                 MenuItem(
                     icon = Icons.Default.SocialDistance,
