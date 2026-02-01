@@ -236,7 +236,7 @@ fun SharedTransitionScope.MapScreen(
                     .alpha(.85f)
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
-                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
+                    .background(MaterialTheme.colorScheme.surface, CircleShape)
                     .height(menuHeight.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
