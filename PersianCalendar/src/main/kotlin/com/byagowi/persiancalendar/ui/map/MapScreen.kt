@@ -63,6 +63,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.core.graphics.createBitmap
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
@@ -238,6 +239,7 @@ fun SharedTransitionScope.MapScreen(
                     .padding(horizontal = 24.dp, vertical = 16.dp)
                     .background(MaterialTheme.colorScheme.surface, CircleShape)
                     .height(menuHeight.dp)
+                    .then(if (showGlobeView) Modifier.zIndex(1f) else Modifier)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
