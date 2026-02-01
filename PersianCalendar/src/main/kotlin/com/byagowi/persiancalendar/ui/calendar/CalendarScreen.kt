@@ -127,6 +127,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -219,7 +222,6 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
     viewModel: CalendarViewModel,
-    isCurrentDestination: Boolean,
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -331,8 +333,12 @@ fun SharedTransitionScope.CalendarScreen(
                 LocalActivity.current?.windowManager?.currentWindowMetrics?.bounds?.height()
             } else null
 
+            val isCurrentDestination = run {
+                val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+                lifecycle.isAtLeast(Lifecycle.State.RESUMED)
+            }
             AnimatedVisibility(
-                visible = (viewModel.selectedTab == CalendarScreenTab.EVENT || isOnlyEventsTab) && !viewModel.isYearView && isCurrentDestination,
+                visible = (viewModel.selectedTab == CalendarScreenTab.EVENT || isOnlyEventsTab) && !viewModel.isYearView,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {

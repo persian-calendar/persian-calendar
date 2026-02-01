@@ -193,7 +193,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         },
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
                         viewModel = viewModel,
-                        isCurrentDestination = it.isCurrentDestination(),
                     )
                 }
                 entry<Screen.Month> {
