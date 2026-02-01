@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.AndroidView
@@ -39,10 +40,10 @@ fun GlobeView(bitmap: Bitmap) {
 
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
+    var isInZooming by remember { mutableStateOf(false) }
     AndroidView(
         factory = { context ->
             val glView = GLSurfaceView(context)
-            glView.setOnClickListener { glView.requestRender() }
             glView.setEGLContextClientVersion(2)
             glView.setRenderer(renderer)
             glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
@@ -54,6 +55,7 @@ fun GlobeView(bitmap: Bitmap) {
         },
         modifier = Modifier
             .draggable2D(
+                enabled = !isInZooming,
                 state = rememberDraggable2DState { (dx, dy) -> onDelta(dx, dy) },
                 onDragStopped = { (dx, _) ->
                     coroutineScope.launch {
@@ -65,7 +67,12 @@ fun GlobeView(bitmap: Bitmap) {
                     }
                 },
             )
-            .detectZoom(onlyMultitouch = true) { factor ->
+            .detectZoom(
+                onRelease = { isInZooming = false },
+                // Otherwise it intercepts pointer inputs of draggable2d
+                onlyMultitouch = true,
+            ) { factor ->
+                isInZooming = true
                 renderer.overriddenZoom = (renderer.overriddenZoom * factor).coerceIn(.25f, 6f)
             }
             .fillMaxSize(),
