@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import java.io.ByteArrayOutputStream
@@ -144,9 +145,16 @@ val Resources.isDynamicGrayscale: Boolean
         ).all { Color.colorToHSV(getColor(it, null), hsv); hsv[1] < .25 }
     }
 
+fun View.safePerformHapticFeedback(feedbackConstant: Int) {
+    debugLog("safePerformHapticFeedback called")
+    runCatching {
+        performHapticFeedback(feedbackConstant)
+    }.onFailure(logException).getOrNull().debugAssertNotNull
+}
+
 fun View.performHapticFeedbackVirtualKey() {
     debugLog("Preformed a haptic feedback virtual key")
-    performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+    safePerformHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 }
 
 fun HapticFeedback.performLongPress() {

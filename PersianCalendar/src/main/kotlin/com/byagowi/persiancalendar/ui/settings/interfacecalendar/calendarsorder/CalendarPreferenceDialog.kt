@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.ui.utils.safePerformHapticFeedback
 import com.byagowi.persiancalendar.utils.preferences
 import kotlin.random.Random
 
@@ -102,7 +103,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             onSettle = ::onSettle,
             onMove = {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                    view.performHapticFeedback(HapticFeedbackConstants.SEGMENT_FREQUENT_TICK)
+                    view.safePerformHapticFeedback(HapticFeedbackConstants.SEGMENT_FREQUENT_TICK)
                 }
             },
         ) { i, calendar, isDragging ->
@@ -136,7 +137,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                             onDragStarted = {
                                 dragStarted = true
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                                    view.performHapticFeedback(HapticFeedbackConstants.DRAG_START)
+                                    view.safePerformHapticFeedback(HapticFeedbackConstants.DRAG_START)
                                 } else {
                                     view.performHapticFeedbackVirtualKey()
                                 }
@@ -144,7 +145,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                             onDragStopped = {
                                 dragStarted = false
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                    view.performHapticFeedback(HapticFeedbackConstants.GESTURE_END)
+                                    view.safePerformHapticFeedback(HapticFeedbackConstants.GESTURE_END)
                                 }
                             },
                         )
