@@ -16,4 +16,21 @@
     <string name="exit">بند کرو</string>
     <string name="today">اج</string>
     <string name="days_distance">دوری</string>
+    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string-array name="shahanshahi_months">
+        <item>Fravardin</item>
+        <item>Ardibehesht</item>
+        <item>Khordad</item>
+        <item>Tir</item>
+        <item>Amardad</item>
+        <item>Shehrevar</item>
+        <item>Mehr</item>
+        <item>Aban</item>
+        <item>Adar</item>
+        <item>Dae</item>
+        <item>Bahman</item>
+        <item>Aspandarmad</item>
+        <item>Gatha</item>
+    </string-array>
 </resources>

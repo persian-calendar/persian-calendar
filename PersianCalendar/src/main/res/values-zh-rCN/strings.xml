@@ -411,4 +411,21 @@
     <string name="black_moon">莉莉丝</string>
     <string name="method_egypt">埃及测绘总局</string>
     <string name="method_jafari">库姆莱瓦研究所什叶派十二伊玛目派</string>
+    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string-array name="shahanshahi_months">
+        <item>Fravardin</item>
+        <item>Ardibehesht</item>
+        <item>Khordad</item>
+        <item>Tir</item>
+        <item>Amardad</item>
+        <item>Shehrevar</item>
+        <item>Mehr</item>
+        <item>Aban</item>
+        <item>Adar</item>
+        <item>Dae</item>
+        <item>Bahman</item>
+        <item>Aspandarmad</item>
+        <item>Gatha</item>
+    </string-array>
 </resources>

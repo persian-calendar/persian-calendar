@@ -346,4 +346,21 @@
     <string name="high_latitudes_one_seventh">یئدی‌ده بیر</string>
     <string name="ask_calendar_permission">موبایلین تقویمیندن شخصی موناسیبتلری فعال المک ایستیسیز؟</string>
     <string name="high_latitudes_night_middle">گئجه یاریسی</string>
+    <string name="shahanshahi_calendar">تقویم شاهنشاهی</string>
+    <string name="shahanshahi_calendar_short">شاهنشاهی</string>
+    <string-array name="shahanshahi_months">
+        <item>فروردین</item>
+        <item>اردیبهشت</item>
+        <item>خرداد</item>
+        <item>تیر</item>
+        <item>امرداد</item>
+        <item>شهریور</item>
+        <item>مهر</item>
+        <item>آبان</item>
+        <item>آذر</item>
+        <item>دی</item>
+        <item>بهمن</item>
+        <item>اسپندارمد</item>
+        <item>گات‌ها</item>
+    </string-array>
 </resources>

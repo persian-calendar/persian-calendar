@@ -420,4 +420,21 @@
     <string name="week">வாரம்</string>
     <string name="bold_text">தடி உரை</string>
     <string name="widget_text_size">உரை அளவு</string>
+    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string-array name="shahanshahi_months">
+        <item>Fravardin</item>
+        <item>Ardibehesht</item>
+        <item>Khordad</item>
+        <item>Tir</item>
+        <item>Amardad</item>
+        <item>Shehrevar</item>
+        <item>Mehr</item>
+        <item>Aban</item>
+        <item>Adar</item>
+        <item>Dae</item>
+        <item>Bahman</item>
+        <item>Aspandarmad</item>
+        <item>Gatha</item>
+    </string-array>
 </resources>

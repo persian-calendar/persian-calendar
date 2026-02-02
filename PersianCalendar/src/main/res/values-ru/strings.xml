@@ -419,4 +419,21 @@
     <string name="save">Сохранить</string>
     <string name="holidays_in_red">Отмечать праздники красным</string>
     <string name="add_widget">Добавить виджет</string>
+    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string-array name="shahanshahi_months">
+        <item>Fravardin</item>
+        <item>Ardibehesht</item>
+        <item>Khordad</item>
+        <item>Tir</item>
+        <item>Amardad</item>
+        <item>Shehrevar</item>
+        <item>Mehr</item>
+        <item>Aban</item>
+        <item>Adar</item>
+        <item>Dae</item>
+        <item>Bahman</item>
+        <item>Aspandarmad</item>
+        <item>Gatha</item>
+    </string-array>
 </resources>

@@ -335,4 +335,21 @@
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
     <string name="nepal">نپال</string>
+    <string name="shahanshahi_calendar">تقویم شاهنشاهی</string>
+    <string name="shahanshahi_calendar_short">شاهنشاهی</string>
+    <string-array name="shahanshahi_months">
+        <item>فروردین</item>
+        <item>اردیبهشت</item>
+        <item>خرداد</item>
+        <item>تیر</item>
+        <item>امرداد</item>
+        <item>شهریور</item>
+        <item>مهر</item>
+        <item>آبان</item>
+        <item>آذر</item>
+        <item>دی</item>
+        <item>بهمن</item>
+        <item>اسپندارمد</item>
+        <item>گات‌ها</item>
+    </string-array>
 </resources>
