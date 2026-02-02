@@ -159,5 +159,7 @@ fun View.performHapticFeedbackVirtualKey() {
 
 fun HapticFeedback.performLongPress() {
     debugLog("Preformed a haptic feedback long press")
-    performHapticFeedback(HapticFeedbackType.LongPress)
+    runCatching {
+        performHapticFeedback(HapticFeedbackType.LongPress)
+    }.onFailure(logException).getOrNull().debugAssertNotNull
 }
