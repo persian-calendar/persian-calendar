@@ -13,8 +13,10 @@
     <string name="add">添加</string>
     <string name="widget_age_name">波斯曆（年齡）</string>
     <string name="widget_mini_name">波斯曆（迷你）</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">沙漢沙希日曆</string>
+    <string name="shahanshahi_calendar_short">沙漢沙希</string>
+    <string name="shahanshahi_modern_era_title">現代沙漢沙希 (帝國)</string>
+    <string name="shahanshahi_modern_era_summary">使用巴列維帝國紀元（居魯士）代替亞茲德格迪（瑣羅亞斯德教）。</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

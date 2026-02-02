@@ -469,21 +469,23 @@
     <string name="starting_date">تاريخ البدء</string>
     <string name="pref_ui">واجهة المستخدم</string>
     <string name="week">أسبوع</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">التقويم الشاهنشاهي</string>
+    <string name="shahanshahi_calendar_short">شاهنشاهي</string>
+    <string name="shahanshahi_modern_era_title">الشاهنشاهي الحديث (الإمبراطوري)</string>
+    <string name="shahanshahi_modern_era_summary">استخدم الحقبة البهلوي (كورش) بدلاً من يزدجرد (الزرادشتية).</string>
     <string-array name="shahanshahi_months">
-        <item>Fravardin</item>
-        <item>Ardibehesht</item>
-        <item>Khordad</item>
-        <item>Tir</item>
-        <item>Amardad</item>
-        <item>Shehrevar</item>
-        <item>Mehr</item>
-        <item>Aban</item>
-        <item>Adar</item>
-        <item>Dae</item>
-        <item>Bahman</item>
-        <item>Aspandarmad</item>
-        <item>Gatha</item>
+        <item>فرفردين</item>
+        <item>أرديبهشت</item>
+        <item>خرداد</item>
+        <item>تیر</item>
+        <item>أمرداد</item>
+        <item>شهريور</item>
+        <item>مهر</item>
+        <item>آبان</item>
+        <item>آذر</item>
+        <item>دي</item>
+        <item>بهمن</item>
+        <item>إسفندارمد</item>
+        <item>غاثا</item>
     </string-array>
 </resources>

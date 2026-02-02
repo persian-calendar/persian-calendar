@@ -347,8 +347,10 @@
     <string name="widget_prefer_device_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="nepal">नेपाल</string>
     <string name="calculator">क्यालकुलेटर</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">शाहन्शाही पात्रो</string>
+    <string name="shahanshahi_calendar_short">शाहन्शाही</string>
+    <string name="shahanshahi_modern_era_title">आधुनिक शाहन्शाही (साम्राज्य)</string>
+    <string name="shahanshahi_modern_era_summary">Yazdegerdi को सट्टा पहलवी Imperial era (Cyrus) प्रयोग गर्नुहोस्।</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

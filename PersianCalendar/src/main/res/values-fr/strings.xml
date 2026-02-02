@@ -431,8 +431,10 @@
     <string name="week">Semaine</string>
     <string name="bold_text">Texte en gras</string>
     <string name="widget_text_size">Taille du texte</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar">Calendrier Shahanshahi</string>
     <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_modern_era_title">Shahanshahi Moderne (Impérial)</string>
+    <string name="shahanshahi_modern_era_summary">Utiliser l\'ère impériale Pahlavi (Cyrus) au lieu de Yazdegerdi (Zoroastrien).</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

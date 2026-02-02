@@ -326,21 +326,23 @@
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
     <string name="nepal">نپال</string>
     <string name="calculator">کیلکولیٹر</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">شہنشاهی کیلنڈر</string>
+    <string name="shahanshahi_calendar_short">شہنشاهی</string>
+    <string name="shahanshahi_modern_era_title">جدید شہنشاهی (شاہی)</string>
+    <string name="shahanshahi_modern_era_summary">یزدگرد (زرتشتی) کی بجائے پہلوی شاہی دور (کوروش) کا استعمال کریں۔</string>
     <string-array name="shahanshahi_months">
-        <item>Fravardin</item>
-        <item>Ardibehesht</item>
-        <item>Khordad</item>
-        <item>Tir</item>
-        <item>Amardad</item>
-        <item>Shehrevar</item>
-        <item>Mehr</item>
-        <item>Aban</item>
-        <item>Adar</item>
-        <item>Dae</item>
-        <item>Bahman</item>
-        <item>Aspandarmad</item>
-        <item>Gatha</item>
+        <item>فروردین</item>
+        <item>اردیبهشت</item>
+        <item>خرداد</item>
+        <item>تیر</item>
+        <item>امرداد</item>
+        <item>شهریور</item>
+        <item>مهر</item>
+        <item>آبان</item>
+        <item>آذر</item>
+        <item>دی</item>
+        <item>بهمن</item>
+        <item>اسپندارمد</item>
+        <item>گاتھا</item>
     </string-array>
 </resources>

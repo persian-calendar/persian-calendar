@@ -419,21 +419,23 @@
     <string name="save">Сохранить</string>
     <string name="holidays_in_red">Отмечать праздники красным</string>
     <string name="add_widget">Добавить виджет</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">Календарь Шаханшахи</string>
+    <string name="shahanshahi_calendar_short">Шаханшахи</string>
+    <string name="shahanshahi_modern_era_title">Современный Шаханшахи (Имперский)</string>
+    <string name="shahanshahi_modern_era_summary">Использовать имперскую эпоху Пехлеви (Кир) вместо Яздегерди (Зороастрийская).</string>
     <string-array name="shahanshahi_months">
-        <item>Fravardin</item>
-        <item>Ardibehesht</item>
-        <item>Khordad</item>
-        <item>Tir</item>
-        <item>Amardad</item>
-        <item>Shehrevar</item>
-        <item>Mehr</item>
-        <item>Aban</item>
-        <item>Adar</item>
-        <item>Dae</item>
-        <item>Bahman</item>
-        <item>Aspandarmad</item>
-        <item>Gatha</item>
+        <item>Фравардин</item>
+        <item>Ардибехешт</item>
+        <item>Хордад</item>
+        <item>Тир</item>
+        <item>Амардад</item>
+        <item>Шахривар</item>
+        <item>Мехр</item>
+        <item>Абан</item>
+        <item>Азар</item>
+        <item>Дей</item>
+        <item>Бахман</item>
+        <item>Эсфандармад</item>
+        <item>Гаты</item>
     </string-array>
 </resources>

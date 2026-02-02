@@ -360,21 +360,23 @@
     <string name="chinese">Чинӣ</string>
     <string name="yes">Бала</string>
     <string name="high_latitudes_night_middle">Нимаи Шаб</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">Тақвими Шоҳаншоҳӣ</string>
+    <string name="shahanshahi_calendar_short">Шоҳаншоҳӣ</string>
+    <string name="shahanshahi_modern_era_title">Шоҳаншоҳии муосир (Империалӣ)</string>
+    <string name="shahanshahi_modern_era_summary">Истифодаи давраи империалии Паҳлавӣ (Куруш) ба ҷои Яздегердӣ (Зардуштӣ).</string>
     <string-array name="shahanshahi_months">
-        <item>Fravardin</item>
-        <item>Ardibehesht</item>
-        <item>Khordad</item>
-        <item>Tir</item>
-        <item>Amardad</item>
-        <item>Shehrevar</item>
-        <item>Mehr</item>
-        <item>Aban</item>
-        <item>Adar</item>
-        <item>Dae</item>
-        <item>Bahman</item>
-        <item>Aspandarmad</item>
-        <item>Gatha</item>
+        <item>Фравардин</item>
+        <item>Ардибиҳишт</item>
+        <item>Хурдод</item>
+        <item>Тир</item>
+        <item>Амардод</item>
+        <item>Шаҳривар</item>
+        <item>Меҳр</item>
+        <item>Обон</item>
+        <item>Озар</item>
+        <item>Дей</item>
+        <item>Баҳман</item>
+        <item>Исфандармад</item>
+        <item>Гатҳо</item>
     </string-array>
 </resources>

@@ -205,8 +205,10 @@
     <string name="islamic_calendar">Calendário Islâmico</string>
     <string name="season">Estação/Época</string>
     <string name="show_secondary_calendar">Mostrar calendário secundário</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar">Calendário Shahanshahi</string>
     <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_modern_era_title">Shahanshahi Moderno (Imperial)</string>
+    <string name="shahanshahi_modern_era_summary">Use a época imperial Pahlavi (Ciro) em vez de Yazdegerdi (Zoroastriano).</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

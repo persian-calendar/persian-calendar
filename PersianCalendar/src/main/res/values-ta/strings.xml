@@ -420,8 +420,10 @@
     <string name="week">வாரம்</string>
     <string name="bold_text">தடி உரை</string>
     <string name="widget_text_size">உரை அளவு</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">ஷாஹன்ஷா காலண்டர்</string>
+    <string name="shahanshahi_calendar_short">ஷாஹன்ஷா</string>
+    <string name="shahanshahi_modern_era_title">நவீன ஷாஹன்ஷா (பேரரசு)</string>
+    <string name="shahanshahi_modern_era_summary">Yazdegerdi (Zoroastrian) க்கு பதிலாக Pahlavi Imperial epoch (Cyrus) ஐப் பயன்படுத்தவும்.</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

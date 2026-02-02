@@ -243,21 +243,23 @@
     <string name="end_of_year_diff">今年はあと %1$s 日 (%2$s 週 / %3$s か月)</string>
     <string name="moon_in_scorpio">月星座はさそり座です</string>
     <string name="not_supported_action">お使いの端末はこのアクションに対応していません</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">シャーハンシャーヒ暦</string>
+    <string name="shahanshahi_calendar_short">シャーハンシャーヒ</string>
+    <string name="shahanshahi_modern_era_title">現代シャーハンシャーヒ (帝国)</string>
+    <string name="shahanshahi_modern_era_summary">ヤズデギルド（ゾロアスター教）の代わりにパフラヴィー帝国紀元（キュロス）を使用します。</string>
     <string-array name="shahanshahi_months">
-        <item>Fravardin</item>
-        <item>Ardibehesht</item>
-        <item>Khordad</item>
-        <item>Tir</item>
-        <item>Amardad</item>
-        <item>Shehrevar</item>
-        <item>Mehr</item>
-        <item>Aban</item>
-        <item>Adar</item>
-        <item>Dae</item>
-        <item>Bahman</item>
-        <item>Aspandarmad</item>
-        <item>Gatha</item>
+        <item>フラヴァルディン</item>
+        <item>アルディベヘシュト</item>
+        <item>コルダード</item>
+        <item>ティル</item>
+        <item>アモルダード</item>
+        <item>シェヘレヴァル</item>
+        <item>メフル</item>
+        <item>アーバーン</item>
+        <item>アーザル</item>
+        <item>デイ</item>
+        <item>バフマン</item>
+        <item>エスファンダルマド</item>
+        <item>ガータ</item>
     </string-array>
 </resources>

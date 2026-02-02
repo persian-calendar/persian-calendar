@@ -346,8 +346,10 @@
     <string name="high_latitudes_one_seventh">یئدی‌ده بیر</string>
     <string name="ask_calendar_permission">موبایلین تقویمیندن شخصی موناسیبتلری فعال المک ایستیسیز؟</string>
     <string name="high_latitudes_night_middle">گئجه یاریسی</string>
-    <string name="shahanshahi_calendar">تقویم شاهنشاهی</string>
+    <string name="shahanshahi_calendar">شاهنشاهی تقویمی</string>
     <string name="shahanshahi_calendar_short">شاهنشاهی</string>
+    <string name="shahanshahi_modern_era_title">شاهنشاهی مدرن (ایمپراتورلوق)</string>
+    <string name="shahanshahi_modern_era_summary">یزدگرد (زرتشتی) یئرینه پهلوی ایمپراتورلوق دؤورونو (کوروش) ایشلدین.</string>
     <string-array name="shahanshahi_months">
         <item>فروردین</item>
         <item>اردیبهشت</item>

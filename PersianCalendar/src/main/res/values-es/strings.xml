@@ -426,8 +426,10 @@
     <string name="print">Imprimir</string>
     <string name="week_view">Vista semanal</string>
     <string name="daily_schedule">Horario diario</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar">Calendario Shahanshahi</string>
     <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_modern_era_title">Shahanshahi Moderno (Imperial)</string>
+    <string name="shahanshahi_modern_era_summary">Usar la época Imperial Pahlavi (Ciro) en lugar de la Yazdegerdi.</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

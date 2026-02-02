@@ -420,8 +420,10 @@
     <string name="week">Woche</string>
     <string name="bold_text">Fett Text</string>
     <string name="widget_text_size">Textgröße</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar">Shahanshahi-Kalender</string>
     <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_modern_era_title">Moderner Shahanshahi (Kaiserlich)</string>
+    <string name="shahanshahi_modern_era_summary">Verwenden Sie die Pahlavi-Kaiser-Epoche (Kyros) anstelle von Yazdegerdi (Zoroastrisch).</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

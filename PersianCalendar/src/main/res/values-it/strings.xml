@@ -399,8 +399,10 @@
     <string name="about_no_client">Nessun client di posta elettronica è installato</string>
     <string name="about_developers">Sviluppatori (spesso ordinati)</string>
     <string name="previous_x">Precedente %1$s</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
+    <string name="shahanshahi_calendar">Calendario Shahanshahi</string>
     <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_modern_era_title">Shahanshahi Moderno (Imperiale)</string>
+    <string name="shahanshahi_modern_era_summary">Usa l\'epoca imperiale Pahlavi (Ciro) invece di Yazdegerdi (Zoroastriano).</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

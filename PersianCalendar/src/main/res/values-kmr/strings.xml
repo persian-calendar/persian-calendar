@@ -143,8 +143,10 @@
     <string name="accept">Temam</string>
     <string name="chinese_calendar">Salnameya Çînî</string>
     <string name="chinese">Çînî</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">Salnameya Şahînşahî</string>
+    <string name="shahanshahi_calendar_short">Şahînşahî</string>
+    <string name="shahanshahi_modern_era_title">Şahînşahiya Nûjen (Împeryal)</string>
+    <string name="shahanshahi_modern_era_summary">Li şûna Yezdigurdî (Zerdeştî) serdema Împeryal a Pehlewî (Kûruş) bikar bînin.</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

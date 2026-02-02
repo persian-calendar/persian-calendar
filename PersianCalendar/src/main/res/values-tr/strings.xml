@@ -421,8 +421,10 @@
     <string name="pref_ui">Kullanıcı arayüzü</string>
     <string name="week">Hafta</string>
     <string name="bold_text">Kalın metin</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">Şahınşah Takvimi</string>
+    <string name="shahanshahi_calendar_short">Şahınşah</string>
+    <string name="shahanshahi_modern_era_title">Modern Şahınşah (İmparatorluk)</string>
+    <string name="shahanshahi_modern_era_summary">Yezdigerd (Zerdüşt) yerine Pehlevi İmparatorluk dönemini (Kiros) kullanın.</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>

@@ -337,6 +337,8 @@
     <string name="nepal">نپال</string>
     <string name="shahanshahi_calendar">تقویم شاهنشاهی</string>
     <string name="shahanshahi_calendar_short">شاهنشاهی</string>
+    <string name="shahanshahi_modern_era_title">شاهنشاهی مدرن (امپراتوری)</string>
+    <string name="shahanshahi_modern_era_summary">استفاده از مبدأ تاج‌گذاری کوروش (۲۵xx) به جای یزدگردی (۱۳xx).</string>
     <string-array name="shahanshahi_months">
         <item>فروردین</item>
         <item>اردیبهشت</item>

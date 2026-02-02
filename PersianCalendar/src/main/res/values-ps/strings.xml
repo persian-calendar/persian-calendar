@@ -324,21 +324,23 @@
     <string name="close">وتړئ</string>
     <string name="open">پرانیزئ</string>
     <string name="nothing_scheduled">هیڅ مهالویش نه دی شوی</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">شاهنشاهي کلیز</string>
+    <string name="shahanshahi_calendar_short">شاهنشاهي</string>
+    <string name="shahanshahi_modern_era_title">عصري شاهنشاهي (امپراتوري)</string>
+    <string name="shahanshahi_modern_era_summary">د یزدگردي پرځای د پهلوي امپراتوري دورې (کوروش) کارول.</string>
     <string-array name="shahanshahi_months">
-        <item>Fravardin</item>
-        <item>Ardibehesht</item>
-        <item>Khordad</item>
-        <item>Tir</item>
-        <item>Amardad</item>
-        <item>Shehrevar</item>
-        <item>Mehr</item>
-        <item>Aban</item>
-        <item>Adar</item>
-        <item>Dae</item>
-        <item>Bahman</item>
-        <item>Aspandarmad</item>
-        <item>Gatha</item>
+        <item>فروردین</item>
+        <item>اردیبهشت</item>
+        <item>خرداد</item>
+        <item>تیر</item>
+        <item>امرداد</item>
+        <item>شهریور</item>
+        <item>مهر</item>
+        <item>آبان</item>
+        <item>آذر</item>
+        <item>دی</item>
+        <item>بهمن</item>
+        <item>اسپندارمد</item>
+        <item>گات‌ها</item>
     </string-array>
 </resources>

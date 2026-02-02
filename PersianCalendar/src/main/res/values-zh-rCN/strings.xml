@@ -411,8 +411,10 @@
     <string name="black_moon">莉莉丝</string>
     <string name="method_egypt">埃及测绘总局</string>
     <string name="method_jafari">库姆莱瓦研究所什叶派十二伊玛目派</string>
-    <string name="shahanshahi_calendar">Shahanshahi Calendar</string>
-    <string name="shahanshahi_calendar_short">Shahanshahi</string>
+    <string name="shahanshahi_calendar">沙汉沙希日历</string>
+    <string name="shahanshahi_calendar_short">沙汉沙希</string>
+    <string name="shahanshahi_modern_era_title">现代沙汉沙希 (帝国)</string>
+    <string name="shahanshahi_modern_era_summary">使用巴列维帝国纪元（居鲁士）代替亚兹德格迪（琐罗亚斯德教）。</string>
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>
         <item>Ardibehesht</item>
