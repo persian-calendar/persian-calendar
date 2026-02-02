@@ -110,6 +110,14 @@ class ShahanshahiDate : AbstractDate {
         }
     }
 
+    /**
+     * Calculates the number of whole months between two dates.
+     * This is typically used for UI pagination indices.
+     * 
+     * Note: This intentionally ignores the day-of-month. 
+     * E.g., Y2-M1-D15 vs Y1-M2-D1 returns 12 (12 paging steps), 
+     * not ~11.5, ensuring consistent page mapping.
+     */
     fun monthsDistanceTo(other: AbstractDate): Int {
         require(other is ShahanshahiDate) { "Expected ShahanshahiDate" }
         if (isModernShahanshahi) {
