@@ -464,4 +464,20 @@ The app needs this only once, however, if you move to a new location, accessing 
         <item quantity="one">%1$s year</item>
         <item quantity="other">%1$s years</item>
     </plurals>
+    <!-- Shahanshahi Months (Pahlavi/Zoroastrian) -->
+    <string-array name="shahanshahi_months">
+        <item>Fravardin</item>
+        <item>Ardibehesht</item>
+        <item>Khordad</item>
+        <item>Tir</item>
+        <item>Amardad</item>
+        <item>Shehrevar</item>
+        <item>Mehr</item>
+        <item>Aban</item>
+        <item>Adar</item>
+        <item>Dae</item>
+        <item>Bahman</item>
+        <item>Aspandarmad</item>
+        <item>Gatha</item>
+    </string-array>
 </resources>
