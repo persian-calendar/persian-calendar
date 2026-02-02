@@ -464,6 +464,8 @@ The app needs this only once, however, if you move to a new location, accessing 
         <item quantity="one">%1$s year</item>
         <item quantity="other">%1$s years</item>
     </plurals>
+    <string name="shahanshahi_modern_era_title">Modern Shahanshahi (Imperial)</string>
+    <string name="shahanshahi_modern_era_summary">Use Pahlavi Imperial epoch (Cyrus) instead of Yazdegerdi (Zoroastrian).</string>
     <!-- Shahanshahi Months (Pahlavi/Zoroastrian) -->
     <string-array name="shahanshahi_months">
         <item>Fravardin</item>

@@ -112,6 +112,7 @@ import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
+import com.byagowi.persiancalendar.PREF_SHAHANSHAHI_MODERN_ERA
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
@@ -196,6 +197,9 @@ val isDynamicIconEnabled by isDynamicIconEnabled_
 
 private val isForcedIranTimeEnabled_ = mutableStateOf(DEFAULT_IRAN_TIME)
 val isForcedIranTimeEnabled by isForcedIranTimeEnabled_
+
+private val isModernShahanshahi_ = mutableStateOf(false)
+val isModernShahanshahi by isModernShahanshahi_
 
 private val isNotifyDateOnLockScreen_ = mutableStateOf(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
 val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen_
@@ -566,6 +570,9 @@ fun updateStoredPreference(context: Context) {
     isDynamicIconEnabled_.value = preferences.getBoolean(
         PREF_DYNAMIC_ICON_ENABLED, DEFAULT_DYNAMIC_ICON_ENABLED,
     ) && supportsDynamicIcon(mainCalendar, language)
+
+    isModernShahanshahi_.value = preferences.getBoolean(PREF_SHAHANSHAHI_MODERN_ERA, false)
+
     isNotifyDateOnLockScreen_.value = preferences.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN,
     )

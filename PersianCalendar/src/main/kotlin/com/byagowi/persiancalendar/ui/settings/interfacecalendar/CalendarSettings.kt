@@ -62,6 +62,7 @@ import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
+import com.byagowi.persiancalendar.PREF_SHAHANSHAHI_MODERN_ERA
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
@@ -95,6 +96,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.global.isModernShahanshahi
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.coroutines.launch
@@ -148,6 +150,14 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         stringResource(R.string.calendars_priority),
         stringResource(R.string.calendars_priority_summary),
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
+    
+    SettingsSwitch(
+        key = PREF_SHAHANSHAHI_MODERN_ERA,
+        value = isModernShahanshahi,
+        title = stringResource(R.string.shahanshahi_modern_era_title),
+        summary = stringResource(R.string.shahanshahi_modern_era_summary),
+    )
+
     WeekOfYearSetting()
     run {
         val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled

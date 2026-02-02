@@ -430,6 +430,8 @@
     <string name="large_day_number_on_notification">عدد بزرگ در نوار اعلان</string>
     <string name="pref_ui">رابط کاربری</string>
     <string name="week">هفته</string>
+    <string name="shahanshahi_modern_era_title">شاهنشاهی مدرن (آریامهری)</string>
+    <string name="shahanshahi_modern_era_summary">استفاده از مبدأ تاج‌گذاری کوروش (۲۵xx) به جای یزدگردی (۱۳xx).</string>
     <string name="bold_text">نوشتار پررنگ</string>
     <string name="widget_text_size">اندازهٔ متن</string>
     <string-array name="shahanshahi_months">

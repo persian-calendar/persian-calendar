@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.entities
 
+import com.byagowi.persiancalendar.global.isModernShahanshahi
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.DateTriplet
+import io.github.persiancalendar.calendar.PersianDate
 
 /**
  * Shahanshahi (Yazdegerdi) Calendar Date
@@ -13,6 +15,11 @@ import io.github.persiancalendar.calendar.DateTriplet
  * JDN Epoch: 1952063
  *
  * Month 13 represents the Gatha days (days 1-5 of month 13 = days 361-365 of year)
+ *
+ * MODERN ERA (Imperial/Pahlavi):
+ * If 'isModernShahanshahi' is true, this acts as the Pahlavi Imperial calendar (1976-1978),
+ * which is identical to the Solar Hijri (Persian) calendar but with a year offset of +1180.
+ * Epoch: Coronation of Cyrus the Great (559 BCE).
  */
 class ShahanshahiDate : AbstractDate {
 
@@ -21,6 +28,14 @@ class ShahanshahiDate : AbstractDate {
     constructor(jdn: Long) : super(jdn)
 
     override fun toJdn(): Long {
+        if (isModernShahanshahi) {
+            // Modern Shahanshahi (Imperial) is just Persian + 1180 (e.g. 1355 + 1180 = 2535)
+            // We delegate to PersianDate for the calculation
+            val pParams = PersianDate(year - 1180, month, dayOfMonth)
+            return pParams.toJdn()
+        }
+
+        // Standard Yazdegerdi (Old) implementation
         // Days before this year + days in current year
         val daysBeforeYear = (year - 1) * 365L
         val daysInYear = when {
@@ -31,6 +46,11 @@ class ShahanshahiDate : AbstractDate {
     }
 
     override fun fromJdn(jdn: Long): DateTriplet {
+        if (isModernShahanshahi) {
+            val pParams = PersianDate(jdn)
+            return createDateTriplet(pParams.year + 1180, pParams.month, pParams.dayOfMonth)
+        }
+
         val daysSinceEpoch = jdn - EPOCH
         val year = (daysSinceEpoch / 365).toInt() + 1
         val dayOfYear = (daysSinceEpoch % 365).toInt() + 1
@@ -49,6 +69,10 @@ class ShahanshahiDate : AbstractDate {
             }
         }
 
+        return createDateTriplet(year, month, day)
+    }
+
+    private fun createDateTriplet(year: Int, month: Int, day: Int): DateTriplet {
         try {
             // DateTriplet is a value class (JvmInline).
             // 1. Find the static factory method that packs the 3 ints into the underlying value.
@@ -82,10 +106,21 @@ class ShahanshahiDate : AbstractDate {
 
     fun monthsDistanceTo(other: AbstractDate): Int {
         require(other is ShahanshahiDate) { "Expected ShahanshahiDate" }
+        if (isModernShahanshahi) {
+             // Convert 'other' to Persian logic
+             val thisP = PersianDate(year - 1180, month, dayOfMonth)
+             val otherP = PersianDate(other.year - 1180, other.month, other.dayOfMonth)
+             return thisP.monthsDistanceTo(otherP)
+        }
         return (year - other.year) * 13 + (month - other.month)
     }
 
     fun monthStartOfMonthsDistance(monthsDistance: Int): AbstractDate {
+        if (isModernShahanshahi) {
+             val p = PersianDate(year - 1180, month, dayOfMonth).monthStartOfMonthsDistance(monthsDistance)
+             return ShahanshahiDate(p.year + 1180, p.month, p.dayOfMonth)
+        }
+
         var newMonth = month + monthsDistance
         var newYear = year
         while (newMonth > 13) {
