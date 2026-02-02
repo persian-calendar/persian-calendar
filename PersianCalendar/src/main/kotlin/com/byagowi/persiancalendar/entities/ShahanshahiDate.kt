@@ -126,6 +126,9 @@ class ShahanshahiDate : AbstractDate {
              val otherP = PersianDate(other.year - 1180, other.month, other.dayOfMonth)
              return thisP.monthsDistanceTo(otherP)
         }
+        // Multiplier is 13 because Gatha (Month 13) is treated as a separate page in UI.
+        // Although Gatha is short (5 days), it occupies a full 'month' slot in the ViewPager logic.
+        // Using 12 would cause index collisions between Gatha and other months.
         return (year - other.year) * 13 + (month - other.month)
     }
 
