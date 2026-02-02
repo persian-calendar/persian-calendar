@@ -15,6 +15,12 @@ import io.github.persiancalendar.calendar.PersianDate
  * JDN Epoch: 1952063
  *
  * Month 13 represents the Gatha days (days 1-5 of month 13 = days 361-365 of year)
+ * 
+ * Note regarding month count:
+ * Unlike most solar calendars with 12 months, the traditional Shahanshahi calendar includes
+ * a 13th "month" to house the 5 Gatha days (epagomenal days).
+ * This is why constants like 'shahanshahiMonthsEmptyList' in Global.kt might imply an
+ * adjusted list size compared to standard 12-month calendars.
  *
  * MODERN ERA (Imperial/Pahlavi):
  * If 'isModernShahanshahi' is true, this acts as the Pahlavi Imperial calendar (1976-1978),
