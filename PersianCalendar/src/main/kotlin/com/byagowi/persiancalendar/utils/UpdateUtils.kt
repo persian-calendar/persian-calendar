@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.utils
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -1818,25 +1817,7 @@ private data class NotificationData(
 
         if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
 
-        val notification = builder.build()
-
-        // https://stackoverflow.com/a/40708431
-        // But this hasn't fixed the issue for the user who has reported it or perhaps anyone :/
-        val deviceBrand = Build.BRAND.lowercase()
-        @SuppressLint("PrivateApi") if (deviceBrand == "redmi" || deviceBrand == "xiaomi") runCatching {
-            val miuiNotification =
-                Class.forName("android.app.MiuiNotification").getDeclaredConstructor().newInstance()
-            val customizedIconField =
-                miuiNotification::class.java.getDeclaredField("customizedIcon")
-            customizedIconField.isAccessible = true
-            customizedIconField.set(miuiNotification, true)
-
-            val extraNotificationField = notification::class.java.getField("extraNotification")
-            extraNotificationField.isAccessible = true
-            extraNotificationField.set(notification, miuiNotification)
-        }.onFailure(logException)
-
-        notificationManager.notify(notificationId, notification)
+        notificationManager.notify(notificationId, builder.build())
         return true
     }
 }
