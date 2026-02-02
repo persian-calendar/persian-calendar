@@ -139,20 +139,18 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
-        fun NavKey.isCurrentDestination() = this == backStack.lastOrNull()
-        fun NavKey.navigateUp() {
-            // Ignore back button double tap
-            if (isCurrentDestination()) {
-                // Empty back stack causes crash, what is meant is to finish the activity
-                if (backStack.size < 2) finish()
-                else backStack.removeLastOrNull()
-            }
+        val navigateUp: () -> Unit = {
+            // Empty back stack causes crash, just finish the activity on that situation
+            // It's needed when a part of app is opened from a shortcut but even though it's
+            // handled correctly there are rare crash reports so let's use it in NavDisplay,onBack
+            // also.
+            if (backStack.size < 2) finish() else backStack.removeLastOrNull()
         }
         // Not the best approach to access calendar screen view model…
         var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
         NavDisplay(
             backStack = backStack,
-            onBack = { backStack.removeLastOrNull() },
+            onBack = navigateUp,
             predictivePopTransitionSpec = {
                 ContentTransform(fadeIn(), fadeOut())
             },
@@ -194,20 +192,19 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         },
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
                         viewModel = viewModel,
-                        isCurrentDestination = it.isCurrentDestination(),
                     )
                 }
                 entry<Screen.Month> {
                     MonthScreen(
                         calendarViewModel = calendarViewModel ?: viewModel(),
-                        navigateUp = it::navigateUp,
+                        navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
                     )
                 }
                 entry<Screen.Schedule> {
                     ScheduleScreen(
                         calendarViewModel = calendarViewModel ?: viewModel(),
-                        navigateUp = it::navigateUp,
+                        navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
                     )
                 }
@@ -216,14 +213,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         calendarViewModel = calendarViewModel ?: viewModel(),
                         initiallySelectedDay = it.selectedDay,
                         isInitiallyWeek = it.isWeek,
-                        navigateUp = it::navigateUp,
+                        navigateUp = navigateUp,
                     )
                 }
                 entry<Screen.Converter> {
                     ConverterScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
-                        noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
+                        noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
                     )
                 }
                 entry<Screen.Compass> {
@@ -234,12 +231,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToSettingsLocationTab = {
                             backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
                         },
-                        noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
+                        noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
                     )
                 }
                 entry<Screen.Level> {
                     LevelScreen(
-                        navigateUp = it::navigateUp,
+                        navigateUp = navigateUp,
                         navigateToCompass = { backStack += Screen.Compass },
                     )
                 }
@@ -251,12 +248,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             it.day?.toGregorianCalendar()?.timeInMillis
                                 ?: System.currentTimeMillis()
                         },
-                        noBackStackAction = if (backStack.size > 1) null else it::navigateUp,
+                        noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
                     )
                 }
                 entry<Screen.Map> {
                     MapScreen(
-                        navigateUp = it::navigateUp,
+                        navigateUp = navigateUp,
                         fromSettings = it.fromSettings,
                         initialTime = it.time,
                     )
@@ -277,8 +274,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToDeviceInformation = { backStack += Screen.Device },
                     )
                 }
-                entry<Screen.Licenses> { LicensesScreen(navigateUp = it::navigateUp) }
-                entry<Screen.Device> { DeviceInformationScreen(navigateUp = it::navigateUp) }
+                entry<Screen.Licenses> { LicensesScreen(navigateUp = navigateUp) }
+                entry<Screen.Device> { DeviceInformationScreen(navigateUp = navigateUp) }
             },
         )
     }

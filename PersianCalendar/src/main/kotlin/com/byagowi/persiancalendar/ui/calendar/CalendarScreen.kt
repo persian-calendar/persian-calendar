@@ -62,7 +62,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -128,6 +127,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -176,6 +178,7 @@ import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -219,7 +222,6 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
     viewModel: CalendarViewModel,
-    isCurrentDestination: Boolean,
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -331,8 +333,12 @@ fun SharedTransitionScope.CalendarScreen(
                 LocalActivity.current?.windowManager?.currentWindowMetrics?.bounds?.height()
             } else null
 
+            val isCurrentDestination = run {
+                val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+                lifecycle.isAtLeast(Lifecycle.State.RESUMED)
+            }
             AnimatedVisibility(
-                visible = (viewModel.selectedTab == CalendarScreenTab.EVENT || isOnlyEventsTab) && !viewModel.isYearView && isCurrentDestination,
+                visible = (viewModel.selectedTab == CalendarScreenTab.EVENT || isOnlyEventsTab) && !viewModel.isYearView,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -976,10 +982,8 @@ private fun SharedTransitionScope.Toolbar(
         colors = appTopAppBarColors(),
         navigationIcon = {
             Crossfade(targetState = viewModel.isYearView) { state ->
-                if (state) AppIconButton(
-                    icon = Icons.AutoMirrored.Default.ArrowBack,
-                    title = stringResource(R.string.close),
-                    onClick = viewModel::onYearViewBackPressed,
+                if (state) NavigationNavigateUpIcon(
+                    navigateUp = viewModel::onYearViewBackPressed,
                 ) else NavigationOpenNavigationRailIcon(openNavigationRail)
             }
         },

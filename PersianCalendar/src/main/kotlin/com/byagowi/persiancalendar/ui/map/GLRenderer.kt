@@ -29,7 +29,8 @@ class GLRenderer(
     private var arrayBufferHandle = 0
     private var textureHandle = 0
     private var textureUniformHandle = 0
-    private var isSurfaceCreated = false
+    var isSurfaceCreated = false
+        private set
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
@@ -132,20 +133,42 @@ class GLRenderer(
         }
     }
 
+    private fun checkGLError(label: String) {
+        val error = GLES20.glGetError()
+        if (error != GLES20.GL_NO_ERROR) onError("$label - OpenGL error: $error")
+    }
+
     fun loadTexture(bitmap: Bitmap) {
+        if (this.textureHandle != 0) {
+            val handleToDelete = intArrayOf(this.textureHandle)
+            GLES20.glDeleteTextures(1, handleToDelete, 0)
+            checkGLError("glDeleteTextures")
+            this.textureHandle = 0
+        }
+
         val textureHandle = IntArray(1)
         GLES20.glGenTextures(1, textureHandle, 0)
+        checkGLError("glGenTextures")
+
         if (textureHandle[0] != 0) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0])
+            checkGLError("glBindTexture")
+
             GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR,
+                GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MIN_FILTER,
+                GLES20.GL_LINEAR,
             )
             GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR,
+                GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MAG_FILTER,
+                GLES20.GL_LINEAR,
             )
+            checkGLError("glTexParameteri")
+
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
-        }
-        if (textureHandle[0] == 0) onError("Failed to load texture")
-        this.textureHandle = textureHandle[0]
+            checkGLError("texImage2D")
+            this.textureHandle = textureHandle[0]
+        } else onError("Failed to load texture - glGenTextures returned 0")
     }
 }

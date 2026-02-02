@@ -1,14 +1,17 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -27,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Grid3x3
 import androidx.compose.material.icons.filled.LocationOn
@@ -39,6 +43,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.getValue
@@ -123,6 +128,8 @@ fun SharedTransitionScope.MapScreen(
     var showGpsDialog by rememberSaveable { mutableStateOf(false) }
     if (showGpsDialog) GPSLocationDialog { showGpsDialog = false }
 
+    var showGlobeView by rememberSaveable { mutableStateOf(false) }
+
     var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
     var saveCoordinates by rememberSaveable { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
@@ -164,7 +171,7 @@ fun SharedTransitionScope.MapScreen(
             Spacer(Modifier.height((16 + menuHeight + 16).dp))
             ScreenSurface { Box(Modifier.fillMaxSize()) }
         }
-        AndroidView(
+        if (!showGlobeView) AndroidView(
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(
@@ -220,6 +227,33 @@ fun SharedTransitionScope.MapScreen(
         )
     }
 
+    val globeTextureSize = 2048
+    if (showGlobeView) runCatching {
+        createBitmap(globeTextureSize, globeTextureSize)
+    }.onFailure(logException).onFailure {
+        showGlobeView = false
+    }.getOrNull()?.let { bitmap ->
+        val matrix = Matrix()
+        matrix.setScale(
+            globeTextureSize.toFloat() / mapDraw.mapWidth,
+            globeTextureSize.toFloat() / mapDraw.mapHeight,
+        )
+        mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+        mapDraw.updateMap(time.longValue, mapType)
+        formattedTime = mapDraw.maskFormattedTime
+        mapDraw.draw(
+            canvas = Canvas(bitmap),
+            matrix = matrix,
+            displayLocation = displayLocation,
+            coordinates = markedCoordinates,
+            directPathDestination = directPathDestination,
+            displayGrid = displayGrid,
+        )
+        BackHandler { showGlobeView = false }
+        GlobeView(bitmap)
+        DisposableEffect(key1 = bitmap) { onDispose { bitmap.recycle() } }
+    }
+
     Column {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
         CompositionLocalProvider(
@@ -230,23 +264,28 @@ fun SharedTransitionScope.MapScreen(
                     .alpha(.85f)
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
-                    .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
+                    .background(MaterialTheme.colorScheme.surface, CircleShape)
                     .height(menuHeight.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(Modifier.weight(1f)) { NavigationNavigateUpIcon(navigateUp) }
+                Box(Modifier.weight(1f)) {
+                    NavigationNavigateUpIcon {
+                        if (showGlobeView) showGlobeView = false else navigateUp()
+                    }
+                }
 
                 @Composable
                 fun MenuItem(
                     icon: ImageVector,
                     @StringRes titleId: Int,
+                    modifier: Modifier = Modifier,
                     isEnabled: Boolean = false,
                     onClick: () -> Unit,
                 ) {
                     val title = language.mapButtons(stringId = titleId) ?: stringResource(titleId)
-                    Box(Modifier.weight(weight = 1f)) {
+                    Box(modifier.weight(weight = 1f)) {
                         val tint by animateColor(
                             color = if (isEnabled) {
                                 MaterialTheme.colorScheme.inversePrimary
@@ -258,39 +297,27 @@ fun SharedTransitionScope.MapScreen(
                     }
                 }
 
-                var globeBitmap by remember { mutableStateOf<Bitmap?>(null) }
                 MenuItem(
                     icon = Icons.Default._3dRotation,
                     titleId = R.string.show_globe_view_label,
-                ) {
-                    val textureSize = 2048
-                    val bitmap = runCatching {
-                        createBitmap(textureSize, textureSize)
-                    }.onFailure(logException).getOrNull() ?: return@MenuItem
-                    val matrix = Matrix()
-                    matrix.setScale(
-                        textureSize.toFloat() / mapDraw.mapWidth,
-                        textureSize.toFloat() / mapDraw.mapHeight,
-                    )
-                    mapDraw.draw(
-                        canvas = Canvas(bitmap),
-                        matrix = matrix,
-                        displayLocation = displayLocation,
-                        coordinates = markedCoordinates,
-                        directPathDestination = directPathDestination,
-                        displayGrid = displayGrid,
-                    )
-                    globeBitmap = bitmap
-                }
-                globeBitmap?.let { GlobeDialog(it) { globeBitmap = null } }
+                    isEnabled = showGlobeView,
+                ) { showGlobeView = !showGlobeView }
 
                 MenuItem(
                     icon = Icons.Default.SocialDistance,
                     titleId = R.string.show_direct_path_label,
                     isEnabled = isDirectPathMode,
+                    modifier = Modifier.alpha(
+                        alpha = animateFloatAsState(
+                            targetValue = if (showGlobeView) .25f else 1f,
+                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                        ).value,
+                    ),
                 ) {
+                    if (showGlobeView) return@MenuItem
                     if (markedCoordinates == null) showGpsDialog = true else {
-                        directPathDestination = directPathDestination.takeIf { !isDirectPathMode }
+                        directPathDestination =
+                            directPathDestination.takeIf { !isDirectPathMode }
                         isDirectPathMode = !isDirectPathMode
                     }
                 }
@@ -332,9 +359,10 @@ fun SharedTransitionScope.MapScreen(
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val currentJdn = Jdn(Date(time.longValue).toGregorianCalendar().toCivilDate())
-        DatePickerDialog(currentJdn, { showDatePickerDialog = false }) { jdn ->
-            time.longValue += (jdn - currentJdn).days.inWholeMilliseconds
-        }
+        DatePickerDialog(
+            initialJdn = currentJdn,
+            onDismissRequest = { showDatePickerDialog = false },
+        ) { jdn -> time.longValue += (jdn - currentJdn).days.inWholeMilliseconds }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -349,8 +377,10 @@ fun SharedTransitionScope.MapScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(all = 16.dp)
+                    .padding(vertical = 16.dp, horizontal = 8.dp)
                     .height(46.dp)
+                    .background(MaterialTheme.colorScheme.surface.copy(.75f), CircleShape)
+                    .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
             ) {
                 TimeArrow(mapDraw, time, isPrevious = true)
