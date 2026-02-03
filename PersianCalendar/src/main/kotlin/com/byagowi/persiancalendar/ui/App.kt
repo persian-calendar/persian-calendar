@@ -120,7 +120,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsTab
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.findWindow
+import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
@@ -458,7 +458,7 @@ private fun Modifier.navigationRailTopGradient(): Modifier {
     val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
     val view = LocalView.current
     LaunchedEffect(isBackgroundColorLight) {
-        view.findWindow()?.let { window ->
+        view.findDialogWindow()?.let { window ->
             WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars =
                 isBackgroundColorLight
         }

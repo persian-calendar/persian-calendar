@@ -8,7 +8,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
-import com.byagowi.persiancalendar.ui.utils.findWindow
+import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 
 @Composable
 fun DialogSurface(content: @Composable () -> Unit) {
@@ -28,7 +28,7 @@ fun DialogSurface(content: @Composable () -> Unit) {
 // It also follows parts of https://source.android.com/docs/core/display/window-blurs
 @Composable
 private fun SetupDialogBlur() {
-    val window = LocalView.current.findWindow()
+    val window = LocalView.current.findDialogWindow()
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
         window?.windowManager?.isCrossWindowBlurEnabled != true
     ) return

@@ -71,7 +71,7 @@ fun Modifier.highlightItem(enabled: Boolean): Modifier {
     return background(LocalContentColor.current.copy(alpha = alpha.value))
 }
 
-fun View.findWindow(): Window? =
+fun View.findDialogWindow(): Window? =
     (this as? DialogWindowProvider ?: parent?.findDialogWindowProvider())?.window
 
 private tailrec fun ViewParent.findDialogWindowProvider(): DialogWindowProvider? =
