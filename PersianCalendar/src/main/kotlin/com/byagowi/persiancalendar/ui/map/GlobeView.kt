@@ -2,12 +2,14 @@ package com.byagowi.persiancalendar.ui.map
 
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.gestures.draggable2D
 import androidx.compose.foundation.gestures.rememberDraggable2DState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,7 +17,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import kotlinx.coroutines.launch
@@ -77,4 +81,18 @@ fun GlobeView(bitmap: Bitmap) {
             }
             .fillMaxSize(),
     )
+
+    run {
+        val view = LocalView.current
+        val window = LocalActivity.current?.window
+        val controller = window?.let { WindowInsetsControllerCompat(window, view) }
+        if (controller?.isAppearanceLightStatusBars == true) DisposableEffect(controller) {
+            controller.isAppearanceLightStatusBars = false
+            onDispose { controller.isAppearanceLightStatusBars = true }
+        }
+        if (controller?.isAppearanceLightNavigationBars == true) DisposableEffect(controller) {
+            controller.isAppearanceLightNavigationBars = false
+            onDispose { controller.isAppearanceLightNavigationBars = true }
+        }
+    }
 }
