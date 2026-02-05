@@ -52,10 +52,12 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -80,6 +82,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.showQibla
+import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -303,12 +306,18 @@ fun SharedTransitionScope.CompassScreen(
                     Box(Modifier.weight(1f, fill = false)) {
                         val surfaceColor = MaterialTheme.colorScheme.surface
                         val typeface = resolveAndroidCustomTypeface()
+                        var zoom by rememberSaveable { mutableFloatStateOf(1f) }
+                        val density = LocalDensity.current
+                        val textSizePx = with(density) { (12 * zoom).sp.toPx() }
+                        val strokeWidthPx = with(density) { (1 * zoom).dp.toPx() }
                         AndroidView(
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
+                            modifier = Modifier
+                                .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }
+                                .sharedBounds(
+                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                                    boundsTransform = appBoundsTransform,
+                                ),
                             factory = {
                                 CompassView(it).also { view ->
                                     view.isShowQibla = showQibla
@@ -316,6 +325,7 @@ fun SharedTransitionScope.CompassScreen(
                                 }
                             },
                             update = {
+                                it.setScale(textSizePx, strokeWidthPx, zoom)
                                 it.setFont(typeface)
                                 it.setSurfaceColor(surfaceColor.toArgb())
                                 it.setTime(time)

@@ -6,13 +6,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
-import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.TypedValue
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
@@ -26,7 +25,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
-import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
@@ -35,7 +33,7 @@ import kotlin.math.min
 import kotlin.math.round
 import kotlin.math.roundToInt
 
-class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
+class CompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     var angle = 0f
         set(value) {
             if (value != field) {
@@ -172,36 +170,30 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         }
     }
 
-    init {
-        val matrixProperties = FloatArray(9)
-        maxScale = 2f
-        val textSize =
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, resources.displayMetrics)
-        val dashSize = 1 * dp
-        onDraw = fun(canvas: Canvas, matrix: Matrix) {
-            matrix.getValues(matrixProperties)
-            val scale = matrixProperties[Matrix.MSCALE_X]
-            planetsPaint.textSize = textSize * scale
-            textPaint.textSize = textSize * scale
-            textSecondPaint.textSize = textSize * scale
-            textStrokePaint.textSize = textSize * scale
-            northArrowPaint.alpha = (100 * cbrt(scale)).roundToInt()
-            qiblaPaint.strokeWidth = dashSize * scale
-            moonPaint.strokeWidth = dashSize * scale
-            sunPaint.strokeWidth = dashSize * scale
+    fun setScale(textSize: Float, strokeWidth: Float, scale: Float) {
+        planetsPaint.textSize = textSize
+        textPaint.textSize = textSize
+        textSecondPaint.textSize = textSize
+        textStrokePaint.textSize = textSize
+        northArrowPaint.alpha = (100 * cbrt(scale)).roundToInt()
+        qiblaPaint.strokeWidth = strokeWidth
+        moonPaint.strokeWidth = strokeWidth
+        sunPaint.strokeWidth = strokeWidth
+        invalidate()
+    }
 
-            angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
-            canvas.withRotation(-trueNorth, cx, cy) {
-                drawDial()
-                drawPath(northwardShapePath, northArrowPaint)
-                if (coordinates != null) {
-                    drawMoon()
-                    drawSun()
-                    drawQibla()
-                    drawPlanets()
-                }
+    override fun onDraw(canvas: Canvas) {
+        canvas.withRotation(-trueNorth, cx, cy) {
+            drawDial()
+            drawPath(northwardShapePath, northArrowPaint)
+            if (coordinates != null) {
+                drawMoon()
+                drawSun()
+                drawQibla()
+                drawPlanets()
             }
         }
+        angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
     }
 
     private fun cardinalDirection(value: Int): String {
