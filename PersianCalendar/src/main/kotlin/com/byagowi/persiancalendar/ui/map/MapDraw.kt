@@ -150,8 +150,7 @@ class MapDraw(
     }
 
     private val maskDateSink = GregorianCalendar().also { --it.timeInMillis }
-    var currentMapType = MapType.NONE
-        private set
+    private var currentMapType = MapType.NONE
 
     fun updateMap(timeInMillis: Long, mapType: MapType) {
         if (mapType == MapType.NONE) {

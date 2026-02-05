@@ -107,7 +107,7 @@ fun SharedTransitionScope.MapScreen(
     val resources = LocalResources.current
     val mapDraw = remember(resources) { MapDraw(resources) }
 
-    val time = rememberSaveable { mutableLongStateOf(initialTime) }
+    val timeInMillis = rememberSaveable { mutableLongStateOf(initialTime) }
     var mapType by rememberSaveable { mutableStateOf(MapType.DAY_NIGHT) }
     var displayLocation by rememberSaveable { mutableStateOf(true) }
     var displayGrid by rememberSaveable { mutableStateOf(false) }
@@ -121,7 +121,7 @@ fun SharedTransitionScope.MapScreen(
     LaunchedEffect(Unit) {
         while (true) {
             delay(1.minutes)
-            time.longValue += 1.minutes.inWholeMilliseconds
+            timeInMillis.longValue += 1.minutes.inWholeMilliseconds
         }
     }
 
@@ -220,7 +220,7 @@ fun SharedTransitionScope.MapScreen(
                     )
                 }
                 mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-                mapDraw.updateMap(time.longValue, mapType)
+                mapDraw.updateMap(timeInMillis.longValue, mapType)
                 formattedTime = mapDraw.maskFormattedTime
                 it.invalidate()
             },
@@ -239,7 +239,7 @@ fun SharedTransitionScope.MapScreen(
             globeTextureSize.toFloat() / mapDraw.mapHeight,
         )
         mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-        mapDraw.updateMap(time.longValue, mapType)
+        mapDraw.updateMap(timeInMillis.longValue, mapType)
         formattedTime = mapDraw.maskFormattedTime
         mapDraw.draw(
             canvas = Canvas(bitmap),
@@ -358,11 +358,11 @@ fun SharedTransitionScope.MapScreen(
 
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
-        val currentJdn = Jdn(Date(time.longValue).toGregorianCalendar().toCivilDate())
+        val currentJdn = Jdn(Date(timeInMillis.longValue).toGregorianCalendar().toCivilDate())
         DatePickerDialog(
             initialJdn = currentJdn,
             onDismissRequest = { showDatePickerDialog = false },
-        ) { jdn -> time.longValue += (jdn - currentJdn).days.inWholeMilliseconds }
+        ) { jdn -> timeInMillis.longValue += (jdn - currentJdn).days.inWholeMilliseconds }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -383,7 +383,7 @@ fun SharedTransitionScope.MapScreen(
                     .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
             ) {
-                TimeArrow(mapDraw, time, isPrevious = true)
+                TimeArrow(mapType, timeInMillis, isPrevious = true)
                 AnimatedContent(
                     modifier = Modifier.weight(1f, fill = false),
                     targetState = formattedTime,
@@ -397,7 +397,9 @@ fun SharedTransitionScope.MapScreen(
                             .combinedClickable(
                                 onClick = { showDatePickerDialog = true },
                                 onClickLabel = stringResource(R.string.select_date),
-                                onLongClick = { time.longValue = System.currentTimeMillis() },
+                                onLongClick = {
+                                    timeInMillis.longValue = System.currentTimeMillis()
+                                },
                                 onLongClickLabel = stringResource(R.string.today),
                             )
                             .sharedElement(
@@ -408,7 +410,7 @@ fun SharedTransitionScope.MapScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
-                TimeArrow(mapDraw, time, isPrevious = false)
+                TimeArrow(mapType, timeInMillis, isPrevious = false)
             }
         }
     }
@@ -416,7 +418,7 @@ fun SharedTransitionScope.MapScreen(
 
 @Composable
 private fun SharedTransitionScope.TimeArrow(
-    mapDraw: MapDraw,
+    mapType: MapType,
     timeInMillis: MutableLongState,
     isPrevious: Boolean,
 ) {
@@ -424,7 +426,7 @@ private fun SharedTransitionScope.TimeArrow(
         onClick = {
             timeInMillis.longValue += run {
                 val amount = if (isPrevious) -1 else 1
-                if (mapDraw.currentMapType.isCrescentVisibility) amount.days else amount.hours
+                if (mapType.isCrescentVisibility) amount.days else amount.hours
             }.inWholeMilliseconds
         },
         onClickLabel = stringResource(
