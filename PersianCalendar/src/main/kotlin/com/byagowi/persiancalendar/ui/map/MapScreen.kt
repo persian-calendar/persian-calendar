@@ -55,15 +55,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
@@ -81,7 +84,7 @@ import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TimeArrow
-import com.byagowi.persiancalendar.ui.common.ZoomableView
+import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -171,60 +174,65 @@ fun SharedTransitionScope.MapScreen(
             Spacer(Modifier.height((16 + menuHeight + 16).dp))
             ScreenSurface { Box(Modifier.fillMaxSize()) }
         }
-        if (!showGlobeView) AndroidView(
+        val mapString = stringResource(R.string.map)
+        if (!showGlobeView) ZoomableCanvas(
             modifier = Modifier
+                .semantics { this.contentDescription = mapString }
                 .fillMaxSize()
                 .sharedBounds(
                     sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
-            factory = {
-                val root = ZoomableView(it)
-                root.contentWidth = mapDraw.mapWidth.toFloat()
-                root.contentHeight = mapDraw.mapHeight.toFloat()
-                root.maxScale = 512f
-                root.contentDescription = it.getString(R.string.map)
-                root.onClick = { x: Float, y: Float ->
-                    val latitude = 90 - y / mapDraw.mapScaleFactor
-                    val longitude = x / mapDraw.mapScaleFactor - 180
-                    if (abs(latitude) < 90 && abs(longitude) < 180) {
-                        // Easter egg like feature, bring sky renderer fragment
-                        if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
-                            Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
-                        } else {
-                            val coords = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                            if (isDirectPathMode) directPathDestination = coords else {
-                                dialogInputCoordinates = coords
-                                showCoordinatesDialog = true
-                            }
+            contentSize = { canvasSize ->
+                val scaledHeight = mapDraw.mapHeight * canvasSize.width / mapDraw.mapWidth
+                Size(width = canvasSize.width, height = scaledHeight)
+            },
+            scaleRange = 1f..512f,
+            onClick = { (x, y), canvasSize ->
+                val scale = canvasSize.width / mapDraw.mapWidth
+                val scaledHeight = mapDraw.mapHeight * scale
+                val translateY = (canvasSize.height - scaledHeight) / 2f
+
+                val mapX = x / scale
+                val mapY = (y - translateY) / scale
+
+                val latitude = 90 - mapY / mapDraw.mapScaleFactor
+                val longitude = mapX / mapDraw.mapScaleFactor - 180
+                if (abs(latitude) < 90 && abs(longitude) < 180) {
+                    if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
+                        Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val coords = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                        if (isDirectPathMode) directPathDestination = coords else {
+                            dialogInputCoordinates = coords
+                            showCoordinatesDialog = true
                         }
                     }
                 }
-                root
             },
-            update = {
-                displayLocation.let {}
-                markedCoordinates.let {}
-                directPathDestination.let {}
-                displayGrid.let {}
+        ) {
+            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+            mapDraw.updateMap(timeInMillis.longValue, mapType)
 
-                it.onDraw = { canvas, matrix ->
-                    mapDraw.draw(
-                        canvas = canvas,
-                        matrix = matrix,
-                        displayLocation = displayLocation,
-                        coordinates = markedCoordinates,
-                        directPathDestination = directPathDestination,
-                        displayGrid = displayGrid,
-                    )
-                }
-                mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-                mapDraw.updateMap(timeInMillis.longValue, mapType)
-                formattedTime = mapDraw.maskFormattedTime
-                it.invalidate()
-            },
-        )
+            val scale = size.width / mapDraw.mapWidth
+            val scaledHeight = mapDraw.mapHeight * scale
+            val translateY = (size.height - scaledHeight) / 2f
+
+            val matrix = Matrix()
+            matrix.setScale(scale, scale)
+            matrix.postTranslate(0f, translateY)
+
+            mapDraw.draw(
+                canvas = this.drawContext.canvas.nativeCanvas,
+                matrix = matrix,
+                displayLocation = displayLocation,
+                coordinates = markedCoordinates,
+                directPathDestination = directPathDestination,
+                displayGrid = displayGrid,
+            )
+            formattedTime = mapDraw.maskFormattedTime
+        }
     }
 
     val globeTextureSize = 2048
