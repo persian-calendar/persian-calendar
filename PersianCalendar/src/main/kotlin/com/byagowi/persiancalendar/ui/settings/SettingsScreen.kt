@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.StatusBarManager
 import android.app.WallpaperManager
 import android.appwidget.AppWidgetManager
@@ -11,11 +9,6 @@ import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
-import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.TextView
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
@@ -60,11 +53,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -75,11 +71,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -105,6 +103,7 @@ import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ScheduleAlarm
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
@@ -485,41 +484,24 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
 
     HorizontalDivider()
 
-    fun viewCommandResult(command: String) {
-        val dialogBuilder = AlertDialog.Builder(context)
-        val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
-        val button = Button(context).also { button ->
-            @SuppressLint("SetTextI18n") run { button.text = "Share" }
-            button.setOnClickListener {
-                context.shareTextFile(result, "log.txt", "text/plain")
-            }
+    var command by remember { mutableStateOf("") }
+    if (command.isNotBlank()) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        val result = remember(command) {
+            Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
         }
-        dialogBuilder.setCustomTitle(
-            LinearLayout(context).also {
-                it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-                it.addView(button)
+        AppDialog(
+            onDismissRequest = { command = "" },
+            neutralButton = {
+                TextButton(
+                    onClick = { context.shareTextFile(result, "log.txt", "text/plain") },
+                ) { Text("Share") }
             },
-        )
-        dialogBuilder.setView(
-            ScrollView(context).also { scrollView ->
-                scrollView.addView(
-                    TextView(context).also {
-                        it.text = result
-                        it.textDirection = View.TEXT_DIRECTION_LTR
-                    },
-                )
-                // Scroll to bottom, https://stackoverflow.com/a/3080483
-                scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-            },
-        )
-        dialogBuilder.show()
+        ) { Text(result) }
     }
     listOf(
         "Filtered Log Viewer" to "logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E",
         "Unfiltered Log Viewer" to "logcat -v raw -t 500",
-    ).forEach { (title, command) ->
-        AppDropdownMenuItem({ Text(title) }) { viewCommandResult(command) }
-    }
+    ).forEach { (title, cmd) -> AppDropdownMenuItem({ Text(title) }) { command = cmd } }
 
     HorizontalDivider()
 
