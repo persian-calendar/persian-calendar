@@ -11,8 +11,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.RadialGradient
-import android.graphics.RectF
-import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.graphics.Shader
 import android.graphics.SweepGradient
@@ -23,12 +21,8 @@ import android.hardware.SensorManager
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
-import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
 import android.os.Build
-import android.text.Html
-import android.text.Spanned
-import android.text.SpannedString
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -36,7 +30,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -46,12 +39,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
-import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
@@ -65,7 +56,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
-import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -80,7 +70,6 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.floor
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.pow
@@ -430,271 +419,6 @@ float4 main(float2 fragCoord) {
     return d < 1 ? color : vec4(0);
 }
 """
-
-fun showPeriodicTableDialog(activity: Activity) {
-    val zoomableView = ZoomableView(activity)
-    val cellSize = 100
-    zoomableView.contentWidth = 100f * 18
-    zoomableView.contentHeight = 100f * 9
-    zoomableView.maxScale = 64f
-
-    val rect = RectF(0f, 0f, cellSize.toFloat(), cellSize.toFloat()).also {
-        it.inset(cellSize * .02f, cellSize * .02f)
-    }
-    val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
-        it.textAlign = Paint.Align.CENTER
-    }
-    val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
-        it.textAlign = Paint.Align.CENTER
-        it.color = Color.BLACK
-    }
-    zoomableView.onDraw = { canvas, matrix ->
-        canvas.withMatrix(matrix) {
-            (0..<18).forEach { i ->
-                (0..<9).forEach { j ->
-                    withTranslation(i * cellSize.toFloat(), j * cellSize.toFloat()) {
-                        val index = elementsIndices.getOrNull(i + j * 18) ?: return@withTranslation
-                        val details = elements[index - 1].split(",")
-                        rectPaint.color = elementsColor.getValue(index).toInt()
-                        drawRect(rect, rectPaint)
-                        textPaint.textSize = cellSize * .35f
-                        drawText(details[0], cellSize / 2f, cellSize * .37f, textPaint)
-                        drawText(index.toString(), cellSize / 2f, cellSize * .70f, textPaint)
-                        textPaint.textSize = cellSize * .15f
-                        drawText(details[1], cellSize / 2f, cellSize * .87f, textPaint)
-                    }
-                }
-            }
-        }
-    }
-
-    fun formatTitle(input: String): Spanned {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return SpannedString(input)
-        return Html.fromHtml(
-            "<small><small>$input</small></small>"
-                .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>"),
-            Html.FROM_HTML_MODE_LEGACY,
-        )
-    }
-
-    val dialog = AlertDialog.Builder(activity)
-        .setTitle(
-            formatTitle(
-                "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6",
-            ),
-        )
-        .setView(zoomableView)
-        .show()
-
-    zoomableView.onClick = { x, y ->
-        val index = floor(x / cellSize).toInt() + floor(y / cellSize).toInt() * 18
-        elementsIndices.getOrNull(index)?.let { atomicNumber ->
-            val info = elements.getOrNull(atomicNumber - 1)?.split(",") ?: return@let
-            dialog.setTitle(formatTitle("$atomicNumber ${info[0]} ${info[1]}<br>${info[2]}"))
-        }
-        if (index == 161) {
-            AlertDialog.Builder(activity)
-                .setView(
-                    EditText(activity).also {
-                        it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-                        it.textDirection = View.TEXT_DIRECTION_LTR
-                        it.setText(
-                            elements
-                                .asReversed()
-                                .mapIndexed { index, s -> "${elements.size - index},$s" }
-                                .joinToString("\n"),
-                        )
-                    },
-                )
-                .show()
-        } else if (index == 144) {
-            // https://commons.wikimedia.org/wiki/File:Ave_Maria_(Bach-Gounod).mid
-            val mediaPlayer = MediaPlayer.create(activity, R.raw.avemaria)
-            runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(logException)
-            AlertDialog.Builder(activity).create().apply {
-                setView(
-                    Button(context).also {
-                        @SuppressLint("SetTextI18n")
-                        it.text = "Stop"
-                        it.setOnClickListener { dismiss() }
-                    },
-                )
-                setOnDismissListener { runCatching { mediaPlayer.stop() }.onFailure(logException) }
-                show()
-            }
-        }
-    }
-}
-
-private val elementsColor = buildMap {
-    listOf(3, 11, 19, 37, 55, 87).forEach { put(it, 0xffff9d9d) } // Alkali metals
-    listOf(4, 12, 20, 38, 56, 88).forEach { put(it, 0xffffdead) } // Alkaline earth metals
-    (57..71).forEach { put(it, 0xffffbfff) } // Lanthanides
-    (89..103).forEach { put(it, 0xffff99cc) } // Actinides
-    listOf(1, 6, 7, 8, 15, 16, 34).forEach { put(it, 0xffa0ffa0) } // Other nonmetals
-    listOf(5, 14, 32, 33, 51, 52).forEach { put(it, 0xffcccc99) } // Metalloids
-    // Other nonmetals
-    listOf(13, 31, 49, 50, 81, 82, 83, 84, 113, 114, 115, 116).forEach { put(it, 0xffcccccc) }
-    listOf(9, 17, 35, 53, 85, 117).forEach { put(it, 0xffffff99) } // Halogens
-    listOf(2, 10, 18, 36, 54, 86, 118).forEach { put(it, 0xffc0ffff) } // Noble gases
-}.withDefault { 0xffffc0c0 } // Transition metals
-
-private val elementsIndices = buildList<Int?> {
-    var i = 1
-    add(i++)
-    addAll(arrayOfNulls(16))
-    add(i++)
-    repeat(2) {
-        addAll(List(2) { i++ })
-        addAll(arrayOfNulls(10))
-        addAll(List(6) { i++ })
-    }
-    repeat(2) { addAll(List(18) { i++ }) }
-    repeat(2) {
-        addAll(List(2) { i++ })
-        i += 14
-        addAll(List(16) { i++ })
-    }
-    repeat(2) {
-        i = if (it == 0) 57 else 89
-        addAll(arrayOfNulls(2))
-        addAll(List(14) { i++ })
-        addAll(arrayOfNulls(2))
-    }
-}
-
-// Based on https://en.wikipedia.org/wiki/Template:Infobox_element/symbol-to-electron-configuration
-// Algorithmic atomic configuration won't be perfect, see also https://github.com/xanecs/aufbau-principle
-private val elements = """
-H,Hydrogen,1s1
-He,Helium,1s2
-Li,Lithium,[He] 2s1
-Be,Beryllium,[He] 2s2
-B,Boron,[He] 2s2 2p1
-C,Carbon,[He] 2s2 2p2
-N,Nitrogen,[He] 2s2 2p3
-O,Oxygen,[He] 2s2 2p4
-F,Fluorine,[He] 2s2 2p5
-Ne,Neon,[He] 2s2 2p6
-Na,Sodium,[Ne] 3s1
-Mg,Magnesium,[Ne] 3s2
-Al,Aluminium,[Ne] 3s2 3p1
-Si,Silicon,[Ne] 3s2 3p2
-P,Phosphorus,[Ne] 3s2 3p3
-S,Sulfur,[Ne] 3s2 3p4
-Cl,Chlorine,[Ne] 3s2 3p5
-Ar,Argon,[Ne] 3s2 3p6
-K,Potassium,[Ar] 4s1
-Ca,Calcium,[Ar] 4s2
-Sc,Scandium,[Ar] 3d1 4s2
-Ti,Titanium,[Ar] 3d2 4s2
-V,Vanadium,[Ar] 3d3 4s2
-Cr,Chromium,[Ar] 3d5 4s1
-Mn,Manganese,[Ar] 3d5 4s2
-Fe,Iron,[Ar] 3d6 4s2
-Co,Cobalt,[Ar] 3d7 4s2
-Ni,Nickel,[Ar] 3d8 4s2 or [Ar] 3d9 4s1
-Cu,Copper,[Ar] 3d10 4s1
-Zn,Zinc,[Ar] 3d10 4s2
-Ga,Gallium,[Ar] 3d10 4s2 4p1
-Ge,Germanium,[Ar] 3d10 4s2 4p2
-As,Arsenic,[Ar] 3d10 4s2 4p3
-Se,Selenium,[Ar] 3d10 4s2 4p4
-Br,Bromine,[Ar] 3d10 4s2 4p5
-Kr,Krypton,[Ar] 3d10 4s2 4p6
-Rb,Rubidium,[Kr] 5s1
-Sr,Strontium,[Kr] 5s2
-Y,Yttrium,[Kr] 4d1 5s2
-Zr,Zirconium,[Kr] 4d2 5s2
-Nb,Niobium,[Kr] 4d4 5s1
-Mo,Molybdenum,[Kr] 4d5 5s1
-Tc,Technetium,[Kr] 4d5 5s2
-Ru,Ruthenium,[Kr] 4d7 5s1
-Rh,Rhodium,[Kr] 4d8 5s1
-Pd,Palladium,[Kr] 4d10
-Ag,Silver,[Kr] 4d10 5s1
-Cd,Cadmium,[Kr] 4d10 5s2
-In,Indium,[Kr] 4d10 5s2 5p1
-Sn,Tin,[Kr] 4d10 5s2 5p2
-Sb,Antimony,[Kr] 4d10 5s2 5p3
-Te,Tellurium,[Kr] 4d10 5s2 5p4
-I,Iodine,[Kr] 4d10 5s2 5p5
-Xe,Xenon,[Kr] 4d10 5s2 5p6
-Cs,Caesium,[Xe] 6s1
-Ba,Barium,[Xe] 6s2
-La,Lanthanum,[Xe] 5d1 6s2
-Ce,Cerium,[Xe] 4f1 5d1 6s2
-Pr,Praseodymium,[Xe] 4f3 6s2
-Nd,Neodymium,[Xe] 4f4 6s2
-Pm,Promethium,[Xe] 4f5 6s2
-Sm,Samarium,[Xe] 4f6 6s2
-Eu,Europium,[Xe] 4f7 6s2
-Gd,Gadolinium,[Xe] 4f7 5d1 6s2
-Tb,Terbium,[Xe] 4f9 6s2
-Dy,Dysprosium,[Xe] 4f10 6s2
-Ho,Holmium,[Xe] 4f11 6s2
-Er,Erbium,[Xe] 4f12 6s2
-Tm,Thulium,[Xe] 4f13 6s2
-Yb,Ytterbium,[Xe] 4f14 6s2
-Lu,Lutetium,[Xe] 4f14 5d1 6s2
-Hf,Hafnium,[Xe] 4f14 5d2 6s2
-Ta,Tantalum,[Xe] 4f14 5d3 6s2
-W,Tungsten,[Xe] 4f14 5d4 6s2
-Re,Rhenium,[Xe] 4f14 5d5 6s2
-Os,Osmium,[Xe] 4f14 5d6 6s2
-Ir,Iridium,[Xe] 4f14 5d7 6s2
-Pt,Platinum,[Xe] 4f14 5d9 6s1
-Au,Gold,[Xe] 4f14 5d10 6s1
-Hg,Mercury,[Xe] 4f14 5d10 6s2
-Tl,Thallium,[Xe] 4f14 5d10 6s2 6p1 (to check)
-Pb,Lead,[Xe] 4f14 5d10 6s2 6p2
-Bi,Bismuth,[Xe] 4f14 5d10 6s2 6p3
-Po,Polonium,[Xe] 4f14 5d10 6s2 6p4
-At,Astatine,[Xe] 4f14 5d10 6s2 6p5
-Rn,Radon,[Xe] 4f14 5d10 6s2 6p6
-Fr,Francium,[Rn] 7s1
-Ra,Radium,[Rn] 7s2
-Ac,Actinium,[Rn] 6d1 7s2
-Th,Thorium,[Rn] 6d2 7s2
-Pa,Protactinium,[Rn] 5f2 6d1 7s2
-U,Uranium,[Rn] 5f3 6d1 7s2
-Np,Neptunium,[Rn] 5f4 6d1 7s2
-Pu,Plutonium,[Rn] 5f6 7s2
-Am,Americium,[Rn] 5f7 7s2
-Cm,Curium,[Rn] 5f7 6d1 7s2
-Bk,Berkelium,[Rn] 5f9 7s2
-Cf,Californium,[Rn] 5f10 7s2
-Es,Einsteinium,[Rn] 5f11 7s2
-Fm,Fermium,[Rn] 5f12 7s2
-Md,Mendelevium,[Rn] 5f13 7s2
-No,Nobelium,[Rn] 5f14 7s2
-Lr,Lawrencium,[Rn] 5f14 7s2 7p1 (modern calculations all favour the 7p1)
-Rf,Rutherfordium,[Rn] 5f14 6d2 7s2
-Db,Dubnium,[Rn] 5f14 6d3 7s2
-Sg,Seaborgium,[Rn] 5f14 6d4 7s2
-Bh,Bohrium,[Rn] 5f14 6d5 7s2
-Hs,Hassium,[Rn] 5f14 6d6 7s2
-Mt,Meitnerium,[Rn] 5f14 6d7 7s2
-Ds,Darmstadtium,[Rn] 5f14 6d8 7s2
-Rg,Roentgenium,[Rn] 5f14 6d9 7s2
-Cn,Copernicium,[Rn] 5f14 6d10 7s2
-Nh,Nihonium,[Rn] 5f14 6d10 7s2 7p1
-Fl,Flerovium,[Rn] 5f14 6d10 7s2 7p2
-Mc,Moscovium,[Rn] 5f14 6d10 7s2 7p3
-Lv,Livermorium,[Rn] 5f14 6d10 7s2 7p4
-Ts,Tennessine,[Rn] 5f14 6d10 7s2 7p5
-Og,Oganesson,[Rn] 5f14 6d10 7s2 7p6
-Uue,Ununennium,[Og] 8s1 (predicted)
-Ubn,Unbinilium,[Og] 8s2 (predicted)
-Ubu,Unbiunium,[Og] 8s2 8p1 (predicted)
-Ubb,Unbibium,[Og] 7d1 8s2 8p1
-Ubt,Unbitrium,
-Ubq,Unbiquadium,[Og] 6f3 8s2 8p1
-Ubc,Unbipentium,
-Ubh,Unbihexium,[Og] 5g2 6f3 8s2 8p1
-""".trim().split("\n")
 
 fun showRotationalSpringDemoDialog(activity: ComponentActivity) {
     val radius = FloatValueHolder()

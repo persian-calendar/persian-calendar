@@ -164,7 +164,9 @@ private val headerSize = 250.dp
 
 @Composable
 private fun Header() {
-    val clickHandler = createEasterEggClickHandler(::showPeriodicTableDialog)
+    var showPeriodicTableDialog by rememberSaveable { mutableStateOf(false) }
+    if (showPeriodicTableDialog) PeriodicTableDialog { showPeriodicTableDialog = false }
+    val clickHandler = createEasterEggClickHandler { showPeriodicTableDialog = true }
 
     var logoAnimationAtEnd by remember { mutableStateOf(false) }
     var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }

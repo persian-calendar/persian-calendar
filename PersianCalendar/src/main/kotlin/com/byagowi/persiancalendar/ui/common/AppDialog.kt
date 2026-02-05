@@ -25,18 +25,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
 @Composable
-private fun BaseAppDialog(
+fun BaseAppDialog(
     title: (@Composable () -> Unit)?,
     onDismissRequest: () -> Unit,
     neutralButton: (@Composable () -> Unit)?,
     confirmButton: (@Composable () -> Unit)?,
     dismissButton: (@Composable () -> Unit)?,
+    properties: DialogProperties = DialogProperties(),
     content: @Composable BoxScope.() -> Unit,
 ) {
-    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(onDismissRequest = onDismissRequest) {
+    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties,
+    ) {
         DialogSurface {
             Column {
                 title?.also { title ->
