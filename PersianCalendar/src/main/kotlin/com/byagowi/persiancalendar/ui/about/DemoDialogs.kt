@@ -105,52 +105,6 @@ fun createEasterEggClickHandler(callback: (Activity) -> Unit): (Activity?) -> Un
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun createIconRandomEffects(): () -> RenderEffect? {
-    var clickCount = 0
-    val colorShader by lazy(LazyThreadSafetyMode.NONE) { RuntimeShader(COLOR_SHIFT_EFFECT) }
-    return {
-        if (clickCount++ % 2 == 0) {
-            colorShader.setFloatUniform("colorShift", Random.nextFloat())
-            RenderEffect.createRuntimeShaderEffect(colorShader, "content")
-        } else {
-            val r = Random.nextFloat() * 30
-            RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
-        }
-    }
-}
-
-@Language("AGSL")
-private const val COLOR_SHIFT_EFFECT = """
-uniform shader content;
-
-uniform float colorShift;
-
-// https://gist.github.com/983/e170a24ae8eba2cd174f
-half3 rgb2hsv(half3 c) {
-    half4 K = half4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-    half4 p = mix(half4(c.bg, K.wz), half4(c.gb, K.xy), step(c.b, c.g));
-    half4 q = mix(half4(p.xyw, c.r), half4(c.r, p.yzx), step(p.x, c.r));
-
-    float d = q.x - min(q.w, q.y);
-    float e = 1.0e-10;
-    return half3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
-}
-
-half3 hsv2rgb(half3 c) {
-    half4 K = half4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    half3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-half4 main(float2 fragCoord) {
-    half4 color = content.eval(fragCoord);
-    half3 hsv = rgb2hsv(color.rgb);
-    hsv.x = mod(hsv.x + colorShift, 1);
-    return half4(hsv2rgb(hsv), color.a);
-}
-"""
-
 fun showShaderSandboxDialog(activity: Activity) {
     val frame = object : FrameLayout(activity) {
         // Just to let AlertDialog know there is an editor here so it needs to show the soft keyboard

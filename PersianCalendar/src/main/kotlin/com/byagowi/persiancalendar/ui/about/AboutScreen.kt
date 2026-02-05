@@ -77,7 +77,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RenderEffect
-import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -228,7 +227,7 @@ private fun Header() {
                 .clickable(indication = null, interactionSource = interactionSource) {
                     logoAnimationAtEnd = !logoAnimationAtEnd
                     clickHandlerDialog(activity)
-                    logoEffect = effectsGenerator?.invoke()?.asComposeRenderEffect()
+                    logoEffect = effectsGenerator?.invoke()
                 },
             contentAlignment = Alignment.Center,
         ) {
