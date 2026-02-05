@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.app.Activity
 import android.graphics.RuntimeShader
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -77,6 +80,7 @@ import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import org.intellij.lang.annotations.Language
 import java.util.concurrent.TimeUnit
@@ -549,3 +553,17 @@ half4 main(float2 fragCoord) {
     return half4(hsv2rgb(hsv), color.a);
 }
 """
+
+@Composable
+fun createEasterEggClickHandler(callback: (Activity) -> Unit): () -> Unit {
+    var clickCount by rememberSaveable { mutableIntStateOf(0) }
+    val activity = LocalActivity.current
+    return {
+        if (activity != null) runCatching {
+            when (++clickCount % 10) {
+                0 -> callback(activity)
+                9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
+            }
+        }.onFailure(logException)
+    }
+}

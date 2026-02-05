@@ -93,18 +93,6 @@ import kotlin.random.Random
 // These are somehow a sandbox to test things not used in the app yet and can be removed anytime.
 //
 
-fun createEasterEggClickHandler(callback: (Activity) -> Unit): (Activity?) -> Unit {
-    var clickCount = 0
-    return { activity: Activity? ->
-        if (activity != null) runCatching {
-            when (++clickCount % 10) {
-                0 -> callback(activity)
-                9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
-            }
-        }.onFailure(logException)
-    }
-}
-
 fun showShaderSandboxDialog(activity: Activity) {
     val frame = object : FrameLayout(activity) {
         // Just to let AlertDialog know there is an editor here so it needs to show the soft keyboard

@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.about
 
 import android.app.Activity
 import android.os.Build
-import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
@@ -146,13 +145,12 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                 ::showFlingDemoDialog,
             ),
         ).forEachIndexed { i, (title, icon, action) ->
-            val clickHandler = remember { createEasterEggClickHandler(action) }
-            val activity = LocalActivity.current
+            val clickHandler = createEasterEggClickHandler(action)
             NavigationRailItem(
                 selected = selectedItem == i,
                 onClick = {
                     selectedItem = i
-                    clickHandler(activity)
+                    clickHandler()
                 },
                 icon = icon,
                 label = { Text(title) },

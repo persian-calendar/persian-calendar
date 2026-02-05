@@ -211,13 +211,12 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
         }
         var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
         keyItems.forEachIndexed { i, (icon, title, action) ->
-            val activity = LocalActivity.current
-            val clickHandler = remember { createEasterEggClickHandler(action) }
+            val clickHandler = createEasterEggClickHandler(action)
             NavigationRailItem(
                 selected = i == selectedIndex,
                 onClick = {
                     selectedIndex = i
-                    clickHandler(activity)
+                    clickHandler()
                 },
                 label = { Text(title) },
                 icon = {

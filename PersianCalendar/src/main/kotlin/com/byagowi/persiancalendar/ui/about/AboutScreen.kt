@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
@@ -165,7 +164,7 @@ private val headerSize = 250.dp
 
 @Composable
 private fun Header() {
-    val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
+    val clickHandler = createEasterEggClickHandler(::showPeriodicTableDialog)
 
     var logoAnimationAtEnd by remember { mutableStateOf(false) }
     var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
@@ -219,14 +218,13 @@ private fun Header() {
                 )
             }
         }
-        val activity = LocalActivity.current
         Box(
             Modifier
                 .weight(1f)
                 .semantics { this.hideFromAccessibility() }
                 .clickable(indication = null, interactionSource = interactionSource) {
                     logoAnimationAtEnd = !logoAnimationAtEnd
-                    clickHandlerDialog(activity)
+                    clickHandler()
                     logoEffect = effectsGenerator?.invoke()
                 },
             contentAlignment = Alignment.Center,
