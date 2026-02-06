@@ -56,6 +56,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
@@ -211,27 +213,31 @@ fun SharedTransitionScope.MapScreen(
                     }
                 }
             },
-        ) {
-            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-            mapDraw.updateMap(timeInMillis.longValue, mapType)
+        ) { offsetX, offsetY, scale ->
+            translate(offsetX, offsetY) {
+                scale(scale) {
+                    mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+                    mapDraw.updateMap(timeInMillis.longValue, mapType)
 
-            val scale = size.width / mapDraw.mapWidth
-            val scaledHeight = mapDraw.mapHeight * scale
-            val translateY = (size.height - scaledHeight) / 2f
+                    val scale = size.width / mapDraw.mapWidth
+                    val scaledHeight = mapDraw.mapHeight * scale
+                    val translateY = (size.height - scaledHeight) / 2f
 
-            val matrix = Matrix()
-            matrix.setScale(scale, scale)
-            matrix.postTranslate(0f, translateY)
+                    val matrix = Matrix()
+                    matrix.setScale(scale, scale)
+                    matrix.postTranslate(0f, translateY)
 
-            mapDraw.draw(
-                canvas = this.drawContext.canvas.nativeCanvas,
-                matrix = matrix,
-                displayLocation = displayLocation,
-                coordinates = markedCoordinates,
-                directPathDestination = directPathDestination,
-                displayGrid = displayGrid,
-            )
-            formattedTime = mapDraw.maskFormattedTime
+                    mapDraw.draw(
+                        canvas = this.drawContext.canvas.nativeCanvas,
+                        matrix = matrix,
+                        displayLocation = displayLocation,
+                        coordinates = markedCoordinates,
+                        directPathDestination = directPathDestination,
+                        displayGrid = displayGrid,
+                    )
+                    formattedTime = mapDraw.maskFormattedTime
+                }
+            }
         }
     }
 

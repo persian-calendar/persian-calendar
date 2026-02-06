@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.annotation.FloatRange
 import androidx.collection.FloatFloatPair
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.exponentialDecay
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
@@ -34,7 +32,7 @@ fun ZoomableCanvas(
     onClick: (position: Offset, canvasSize: Size) -> Unit,
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
     contentSize: ((size: Size) -> Size)? = null,
-    onDraw: DrawScope.() -> Unit,
+    onDraw: DrawScope.(offsetX: Float, offsetY: Float, scale: Float) -> Unit,
 ) {
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
@@ -138,13 +136,6 @@ fun ZoomableCanvas(
                         }
                     }
                 }
-            }
-            .graphicsLayer(
-                scaleX = scale,
-                scaleY = scale,
-                translationX = offsetX.value,
-                translationY = offsetY.value,
-            ),
-        onDraw = onDraw,
-    )
+            },
+    ) { onDraw(offsetX.value, offsetY.value, scale) }
 }
