@@ -49,12 +49,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -173,7 +171,7 @@ fun SharedTransitionScope.AstronomyScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val scale = rememberSaveable { mutableFloatStateOf(1f) }
+    val scale = remember { Animatable(1f) }
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
 
@@ -198,7 +196,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
                 actions = {
                     TodayActionButton(visible = jdn != today || scale.value != 1f || offsetX.value != 0f || offsetY.value != 0f) {
-                        scale.value = 1f
+                        coroutineScope.launch { scale.animateTo(1f) }
                         coroutineScope.launch { offsetX.animateTo(0f) }
                         coroutineScope.launch { offsetY.animateTo(0f) }
                         coroutineScope.launch {
@@ -520,7 +518,7 @@ private fun SharedTransitionScope.TimeArrow(
 @Composable
 private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
-    scale: MutableFloatState,
+    scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
     timeInMillis: Animatable<Long, AnimationVector1D>,

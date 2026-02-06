@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -56,7 +55,7 @@ import kotlin.math.sign
 fun SolarView(
     modifier: Modifier,
     isTropical: Boolean,
-    scale: MutableFloatState,
+    scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
     state: AstronomyState,

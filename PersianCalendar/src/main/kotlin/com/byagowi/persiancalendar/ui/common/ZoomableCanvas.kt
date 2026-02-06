@@ -11,12 +11,8 @@ import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -35,7 +31,7 @@ fun ZoomableCanvas(
     onClick: (position: Offset, canvasSize: Size) -> Unit = { _, _ -> },
     disableLimits: Boolean = false,
     disablePan: Boolean = false,
-    scale: MutableFloatState = remember { mutableFloatStateOf(1f) },
+    scale: Animatable<Float, AnimationVector1D> = remember { Animatable(1f) },
     offsetX: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) },
     offsetY: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) },
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
@@ -43,7 +39,6 @@ fun ZoomableCanvas(
     onDraw: DrawScope.() -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    var scale by scale
     Canvas(
         modifier
             .pointerInput(disablePan) {
@@ -64,6 +59,7 @@ fun ZoomableCanvas(
                     val downTime = down.uptimeMillis
                     var hasMoved = false
                     var lastEvent: PointerEvent
+                    var newScale = scale.value
                     do {
                         val event = awaitPointerEvent()
                         lastEvent = event
@@ -76,14 +72,15 @@ fun ZoomableCanvas(
                             var targetY = 0f
                             if (zoomChange != 1f) {
                                 hasMoved = true
-                                val oldScale = scale
-                                scale = (scale * zoomChange).coerceIn(scaleRange)
+                                val oldScale = scale.value
+                                newScale = (scale.value * zoomChange).coerceIn(scaleRange)
+                                coroutineScope.launch { scale.snapTo(newScale) }
                                 val focusX = centroid.x - size.width / 2f
                                 val focusY = centroid.y - size.height / 2f
                                 targetX =
-                                    (offsetX.value + focusX) * (scale / oldScale) - focusX + panChange.x
+                                    (offsetX.value + focusX) * (newScale / oldScale) - focusX + panChange.x
                                 targetY =
-                                    (offsetY.value + focusY) * (scale / oldScale) - focusY + panChange.y
+                                    (offsetY.value + focusY) * (newScale / oldScale) - focusY + panChange.y
                             } else if (panChange != Offset.Zero) {
                                 hasMoved = true
                                 targetX = offsetX.value + panChange.x
@@ -91,7 +88,7 @@ fun ZoomableCanvas(
                             }
 
                             if (targetX != 0f || targetY != 0f) coroutineScope.launch {
-                                val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(scale)
+                                val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(newScale)
                                 offsetX.snapTo(targetX.coerceIn(-maxOffsetX, maxOffsetX))
                                 offsetY.snapTo(targetY.coerceIn(-maxOffsetY, maxOffsetY))
                             }
@@ -117,15 +114,15 @@ fun ZoomableCanvas(
                         val centerY = size.height / 2f
                         val translatedX = upPosition.x - centerX - offsetX.value
                         val translatedY = upPosition.y - centerY - offsetY.value
-                        val canvasX = translatedX / scale + centerX
-                        val canvasY = translatedY / scale + centerY
+                        val canvasX = translatedX / newScale + centerX
+                        val canvasY = translatedY / newScale + centerY
                         onClick(Offset(canvasX, canvasY), size)
                     }
 
                     if (hasMoved && !disablePan) {
                         val velocity = tracker.calculateVelocity()
                         coroutineScope.launch {
-                            val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(scale)
+                            val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(newScale)
                             launch {
                                 offsetX.updateBounds(-maxOffsetX, maxOffsetX)
                                 offsetX.animateDecay(
@@ -145,8 +142,8 @@ fun ZoomableCanvas(
                 }
             }
             .graphicsLayer(
-                scaleX = scale,
-                scaleY = scale,
+                scaleX = scale.value,
+                scaleY = scale.value,
                 translationX = offsetX.value,
                 translationY = offsetY.value,
             ),
