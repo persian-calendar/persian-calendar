@@ -109,6 +109,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -171,9 +172,9 @@ fun SharedTransitionScope.AstronomyScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val scale = remember { Animatable(1f) }
-    val offsetX = remember { Animatable(0f) }
-    val offsetY = remember { Animatable(0f) }
+    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+    val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+    val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
 
     Scaffold(
         containerColor = Color.Transparent,

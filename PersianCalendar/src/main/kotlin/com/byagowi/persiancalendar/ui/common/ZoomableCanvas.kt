@@ -11,8 +11,8 @@ import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -23,6 +23,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.unit.toSize
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import kotlinx.coroutines.launch
 
 @Composable
@@ -31,9 +32,15 @@ fun ZoomableCanvas(
     onClick: (position: Offset, canvasSize: Size) -> Unit = { _, _ -> },
     disableLimits: Boolean = false,
     disablePan: Boolean = false,
-    scale: Animatable<Float, AnimationVector1D> = remember { Animatable(1f) },
-    offsetX: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) },
-    offsetY: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) },
+    scale: Animatable<Float, AnimationVector1D> = rememberSaveable(saver = AnimatableFloatSaver) {
+        Animatable(1f)
+    },
+    offsetX: Animatable<Float, AnimationVector1D> = rememberSaveable(saver = AnimatableFloatSaver) {
+        Animatable(0f)
+    },
+    offsetY: Animatable<Float, AnimationVector1D> = rememberSaveable(saver = AnimatableFloatSaver) {
+        Animatable(0f)
+    },
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
     contentSize: ((size: Size) -> Size)? = null,
     onDraw: DrawScope.() -> Unit,
