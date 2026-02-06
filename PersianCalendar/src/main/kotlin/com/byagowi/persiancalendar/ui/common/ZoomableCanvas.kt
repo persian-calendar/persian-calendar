@@ -32,6 +32,7 @@ fun ZoomableCanvas(
     onClick: (position: Offset, canvasSize: Size) -> Unit = { _, _ -> },
     disableLimits: Boolean = false,
     disablePan: Boolean = false,
+    userHandledTransform: Boolean = false,
     scale: Animatable<Float, AnimationVector1D> = rememberSaveable(saver = AnimatableFloatSaver) {
         Animatable(1f)
     },
@@ -148,11 +149,13 @@ fun ZoomableCanvas(
                     }
                 }
             }
-            .graphicsLayer(
-                scaleX = scale.value,
-                scaleY = scale.value,
-                translationX = offsetX.value,
-                translationY = offsetY.value,
+            .then(
+                if (userHandledTransform) Modifier else Modifier.graphicsLayer(
+                    scaleX = scale.value,
+                    scaleY = scale.value,
+                    translationX = offsetX.value,
+                    translationY = offsetY.value,
+                ),
             ),
         onDraw = onDraw,
     )

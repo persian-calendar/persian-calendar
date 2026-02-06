@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -56,6 +57,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
@@ -89,6 +92,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.Coordinate
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -175,7 +179,14 @@ fun SharedTransitionScope.MapScreen(
             ScreenSurface { Box(Modifier.fillMaxSize()) }
         }
         val mapString = stringResource(R.string.map)
+        val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+        val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+        val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
         if (!showGlobeView) ZoomableCanvas(
+            userHandledTransform = true,
+            scale = scale,
+            offsetX = offsetX,
+            offsetY = offsetY,
             modifier = Modifier
                 .semantics { this.contentDescription = mapString }
                 .fillMaxSize()
@@ -212,26 +223,30 @@ fun SharedTransitionScope.MapScreen(
                 }
             },
         ) {
-            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-            mapDraw.updateMap(timeInMillis.longValue, mapType)
+            translate(offsetX.value, offsetY.value) {
+                scale(scale.value) {
+                    mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+                    mapDraw.updateMap(timeInMillis.longValue, mapType)
 
-            val scale = size.width / mapDraw.mapWidth
-            val scaledHeight = mapDraw.mapHeight * scale
-            val translateY = (size.height - scaledHeight) / 2f
+                    val scale = size.width / mapDraw.mapWidth
+                    val scaledHeight = mapDraw.mapHeight * scale
+                    val translateY = (size.height - scaledHeight) / 2f
 
-            val matrix = Matrix()
-            matrix.setScale(scale, scale)
-            matrix.postTranslate(0f, translateY)
+                    val matrix = Matrix()
+                    matrix.setScale(scale, scale)
+                    matrix.postTranslate(0f, translateY)
 
-            mapDraw.draw(
-                canvas = this.drawContext.canvas.nativeCanvas,
-                matrix = matrix,
-                displayLocation = displayLocation,
-                coordinates = markedCoordinates,
-                directPathDestination = directPathDestination,
-                displayGrid = displayGrid,
-            )
-            formattedTime = mapDraw.maskFormattedTime
+                    mapDraw.draw(
+                        canvas = this.drawContext.canvas.nativeCanvas,
+                        matrix = matrix,
+                        displayLocation = displayLocation,
+                        coordinates = markedCoordinates,
+                        directPathDestination = directPathDestination,
+                        displayGrid = displayGrid,
+                    )
+                    formattedTime = mapDraw.maskFormattedTime
+                }
+            }
         }
     }
 
