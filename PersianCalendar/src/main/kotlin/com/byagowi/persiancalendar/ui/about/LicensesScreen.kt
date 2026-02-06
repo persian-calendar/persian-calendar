@@ -47,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -115,35 +116,33 @@ fun SharedTransitionScope.LicensesScreen(navigateUp: () -> Unit) {
 
 @Composable
 private fun Sidebar(modifier: Modifier = Modifier) {
+    var showPeriodicTableDialog by rememberSaveable { mutableStateOf(false) }
+    if (showPeriodicTableDialog) PeriodicTableDialog { showPeriodicTableDialog = false }
+
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     NavigationRail(
         modifier,
         windowInsets = WindowInsets(),
         containerColor = Color.Transparent,
     ) {
-        listOf<Triple<String, @Composable () -> Unit, (Activity) -> Unit>>(
+        listOf<Triple<String, @Composable () -> Unit, () -> Unit>>(
             Triple(
-                "GPLv3",
-                { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
-                ::showShaderSandboxDialog,
-            ),
+                first = "GPLv3",
+                second = { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
+            ) { showPeriodicTableDialog = true },
             Triple(
-                KotlinVersion.CURRENT.toString(),
-                {
-                    Text("Kotlin", style = MaterialTheme.typography.bodySmall)
-                },
-                ::showSpringDemoDialog,
-            ),
+                first = KotlinVersion.CURRENT.toString(),
+                second = { Text("Kotlin", style = MaterialTheme.typography.bodySmall) },
+            ) { showPeriodicTableDialog = true },
             Triple(
-                "API ${Build.VERSION.SDK_INT}",
-                {
+                first = "API ${Build.VERSION.SDK_INT}",
+                second = {
                     Icon(
                         imageVector = Icons.Default.Motorcycle,
                         contentDescription = "API",
                     )
                 },
-                ::showFlingDemoDialog,
-            ),
+            ) { showPeriodicTableDialog = true },
         ).forEachIndexed { i, (title, icon, action) ->
             val clickHandler = createEasterEggClickHandler(action)
             NavigationRailItem(

@@ -1,11 +1,9 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.app.Activity
 import android.graphics.RuntimeShader
 import android.media.MediaPlayer
 import android.os.Build
 import android.widget.Toast
-import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -570,14 +568,14 @@ half4 main(float2 fragCoord) {
 """
 
 @Composable
-fun createEasterEggClickHandler(callback: (Activity) -> Unit): () -> Unit {
+fun createEasterEggClickHandler(callback: () -> Unit): () -> Unit {
     var clickCount by rememberSaveable { mutableIntStateOf(0) }
-    val activity = LocalActivity.current
+    val context = LocalContext.current
     return {
-        if (activity != null) runCatching {
+        runCatching {
             when (++clickCount % 10) {
-                0 -> callback(activity)
-                9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
+                0 -> callback()
+                9 -> Toast.makeText(context, "One more to go!", Toast.LENGTH_SHORT).show()
             }
         }.onFailure(logException)
     }

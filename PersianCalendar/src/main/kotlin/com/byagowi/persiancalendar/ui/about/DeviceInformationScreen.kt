@@ -196,7 +196,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
     if (showScheduleDialog) ScheduleAlarm { showScheduleDialog = false }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
-            listOf<Triple<ImageVector, String, (Activity) -> Unit>>(
+            listOf<Triple<ImageVector, String, () -> Unit>>(
                 Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(Icons.Default.Settings, "API " + Build.VERSION.SDK_INT) { showScheduleDialog = true },
                 Triple(Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0]) { showScheduleDialog = true },

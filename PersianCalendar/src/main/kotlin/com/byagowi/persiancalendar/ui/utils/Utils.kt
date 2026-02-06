@@ -10,9 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
-import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
-import android.view.MotionEvent
 import android.view.View
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.annotation.RememberInComposition
@@ -108,18 +106,6 @@ fun getFileName(context: Context, uri: Uri): String? {
         val cut = it.lastIndexOf('/')
         if (cut != -1) it.substring(cut + 1) else it
     }
-}
-
-fun createFlingDetector(
-    context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean,
-): GestureDetector {
-    class FlingListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onFling(
-            e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float,
-        ): Boolean = callback(velocityX, velocityY)
-    }
-
-    return GestureDetector(context, FlingListener())
 }
 
 /**
