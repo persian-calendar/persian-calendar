@@ -198,15 +198,9 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
         val keyItems = remember {
             listOf<Triple<ImageVector, String, (Activity) -> Unit>>(
                 Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
-                Triple(
-                    Icons.Default.Settings, "API " + Build.VERSION.SDK_INT, ::showSensorTestDialog,
-                ),
-                Triple(
-                    Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0], ::showInputDeviceTestDialog,
-                ),
-                Triple(
-                    Icons.Default.PermDeviceInformation, Build.MODEL, ::showColorPickerDialog,
-                ),
+                Triple(Icons.Default.Settings, "API " + Build.VERSION.SDK_INT) { showScheduleDialog = true },
+                Triple(Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0]) { showScheduleDialog = true },
+                Triple(Icons.Default.PermDeviceInformation, Build.MODEL) { showScheduleDialog = true },
             )
         }
         var selectedIndex by rememberSaveable { mutableIntStateOf(0) }

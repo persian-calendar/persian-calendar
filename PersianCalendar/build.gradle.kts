@@ -153,8 +153,7 @@ dependencies {
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation(libs.astronomy)
 
-    // Google/JetBrains owned libraries (roughly platform libraries)
-    implementation(libs.dynamicanimation)
+    // Google/JetBrains
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.lifecycle)
     implementation(libs.browser)

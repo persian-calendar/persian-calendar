@@ -41,7 +41,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
@@ -50,10 +49,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -69,7 +70,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
@@ -86,7 +86,6 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
@@ -112,7 +111,6 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -175,6 +173,9 @@ fun SharedTransitionScope.AstronomyScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val scale = rememberSaveable { mutableFloatStateOf(1f) }
+    val offsetX = remember { Animatable(0f) }
+    val offsetY = remember { Animatable(0f) }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -196,7 +197,10 @@ fun SharedTransitionScope.AstronomyScreen(
                     else NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
-                    TodayActionButton(visible = jdn != today) {
+                    TodayActionButton(visible = jdn != today || scale.value != 1f || offsetX.value != 0f || offsetY.value != 0f) {
+                        scale.value = 1f
+                        coroutineScope.launch { offsetX.animateTo(0f) }
+                        coroutineScope.launch { offsetY.animateTo(0f) }
                         coroutineScope.launch {
                             timeInMillis.animateTo(System.currentTimeMillis())
                         }
@@ -319,6 +323,9 @@ fun SharedTransitionScope.AstronomyScreen(
                             mode = mode,
                             isTropical = isTropical,
                             navigateToMap = navigateToMap,
+                            scale = scale,
+                            offsetX = offsetX,
+                            offsetY = offsetY,
                         )
                     }
                 } else Column {
@@ -351,6 +358,9 @@ fun SharedTransitionScope.AstronomyScreen(
                                     mode = mode,
                                     isTropical = isTropical,
                                     navigateToMap = navigateToMap,
+                                    scale = scale,
+                                    offsetX = offsetX,
+                                    offsetY = offsetY,
                                 )
                             },
                         ) { (header, content), constraints ->
@@ -510,6 +520,9 @@ private fun SharedTransitionScope.TimeArrow(
 @Composable
 private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
+    scale: MutableFloatState,
+    offsetX: Animatable<Float, AnimationVector1D>,
+    offsetY: Animatable<Float, AnimationVector1D>,
     timeInMillis: Animatable<Long, AnimationVector1D>,
     astronomyState: AstronomyState,
     mode: MutableState<AstronomyMode>,
@@ -548,33 +561,23 @@ private fun SharedTransitionScope.SolarDisplay(
             onClick = { navigateToMap(timeInMillis.value) },
             icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
-        val surfaceColor = MaterialTheme.colorScheme.surface
-        val contentColor = LocalContentColor.current
-        val typeface = resolveAndroidCustomTypeface()
         val coroutineScope = rememberCoroutineScope()
-        AndroidView(
-            factory = {
-                val solarView = SolarView(it)
-                solarView.rotationalMinutesChange = { offset ->
-                    coroutineScope.launch {
-                        timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
-                    }
-                }
-                solarView
-            },
+        SolarView(
             modifier = Modifier
                 .padding(horizontal = 56.dp)
                 .aspectRatio(1f)
                 .align(Alignment.Center),
-            update = {
-                it.setSurfaceColor(surfaceColor.toArgb())
-                it.setContentColor(contentColor.toArgb())
-                it.isTropicalDegree = isTropical
-                it.setTime(astronomyState)
-                it.setFont(typeface)
-                it.mode = mode.value
-            },
-        )
+            isTropical = isTropical,
+            state = astronomyState,
+            scale = scale,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            mode = mode.value,
+        ) { offset ->
+            coroutineScope.launch {
+                timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
+            }
+        }
     }
 }
 

@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.annotation.FloatRange
 import androidx.collection.FloatFloatPair
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -31,20 +32,24 @@ import kotlinx.coroutines.launch
 @Composable
 fun ZoomableCanvas(
     modifier: Modifier,
-    onClick: (position: Offset, canvasSize: Size) -> Unit,
+    onClick: (position: Offset, canvasSize: Size) -> Unit = { _, _ -> },
+    disableLimits: Boolean = false,
+    disablePan: Boolean = false,
+    scale: MutableFloatState = remember { mutableFloatStateOf(1f) },
+    offsetX: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) },
+    offsetY: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) },
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
     contentSize: ((size: Size) -> Size)? = null,
     onDraw: DrawScope.() -> Unit,
 ) {
-    val offsetX = remember { Animatable(0f) }
-    val offsetY = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
-    var scale by remember { mutableFloatStateOf(1f) }
+    var scale by scale
     Canvas(
         modifier
-            .pointerInput(Unit) {
+            .pointerInput(disablePan) {
                 val size = this@pointerInput.size.toSize()
                 fun calculateMaxOffsets(scale: Float): FloatFloatPair {
+                    if (disableLimits) return FloatFloatPair(Float.MAX_VALUE, Float.MAX_VALUE)
                     val contentSize = contentSize?.invoke(size) ?: size
                     return FloatFloatPair(
                         ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f),
@@ -65,7 +70,7 @@ fun ZoomableCanvas(
                         val canceled = event.changes.any { it.isConsumed }
                         if (!canceled) {
                             val zoomChange = event.calculateZoom()
-                            val panChange = event.calculatePan()
+                            val panChange = if (disablePan) Offset.Zero else event.calculatePan()
                             val centroid = event.calculateCentroid(useCurrent = false)
                             var targetX = 0f
                             var targetY = 0f
@@ -117,7 +122,7 @@ fun ZoomableCanvas(
                         onClick(Offset(canvasX, canvasY), size)
                     }
 
-                    if (hasMoved) {
+                    if (hasMoved && !disablePan) {
                         val velocity = tracker.calculateVelocity()
                         coroutineScope.launch {
                             val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(scale)

@@ -19,20 +19,20 @@
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 (c)
 +--- com.github.cosinekitty:astronomy:61dc07020aaa6885d2c7f688a4d82beaf6edb9ef
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 2.2.21 (*)
-+--- androidx.dynamicanimation:dynamicanimation:1.1.0
-|    +--- androidx.collection:collection:1.4.2 -> 1.5.0
-|    |    \--- androidx.collection:collection-jvm:1.5.0
-|    |         +--- androidx.annotation:annotation:1.9.1
-|    |         |    \--- androidx.annotation:annotation-jvm:1.9.1
-|    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.24 -> 2.3.10 (*)
-|    |         +--- org.jetbrains.kotlin:kotlin-stdlib -> 2.3.10 (*)
-|    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.24 -> 2.3.10 (c)
-|    |         \--- androidx.collection:collection-ktx:1.5.0 (c)
-|    +--- androidx.core:core:1.1.0 -> 1.17.0
++--- androidx.core:core-ktx:1.17.0
+|    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1
+|    |    \--- androidx.annotation:annotation-jvm:1.9.1
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.24 -> 2.3.10 (*)
+|    +--- androidx.core:core:1.17.0
 |    |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |    |    +--- androidx.annotation:annotation-experimental:1.4.1
 |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 -> 2.3.10 (*)
-|    |    +--- androidx.collection:collection:1.4.2 -> 1.5.0 (*)
+|    |    +--- androidx.collection:collection:1.4.2 -> 1.5.0
+|    |    |    \--- androidx.collection:collection-jvm:1.5.0
+|    |    |         +--- androidx.annotation:annotation:1.9.1 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib -> 2.3.10 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.24 -> 2.3.10 (c)
+|    |    |         \--- androidx.collection:collection-ktx:1.5.0 (c)
 |    |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0
 |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.9.1 (*)
 |    |    |    \--- com.google.guava:listenablefuture:1.0
@@ -117,10 +117,6 @@
 |    |    +--- org.jspecify:jspecify:1.0.0
 |    |    +--- androidx.core:core-ktx:1.17.0 (c)
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.10 (c)
-|    \--- org.jspecify:jspecify:1.0.0
-+--- androidx.core:core-ktx:1.17.0
-|    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
-|    +--- androidx.core:core:1.17.0 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib -> 2.3.10 (*)
 |    +--- androidx.core:core:1.17.0 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.3.10 (c)
@@ -635,7 +631,23 @@
 |    |         |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |    |         |    +--- androidx.collection:collection:1.4.2 -> 1.5.0 (*)
 |    |         |    +--- androidx.core:core:1.16.0 -> 1.17.0 (*)
-|    |         |    +--- androidx.dynamicanimation:dynamicanimation:1.0.0 -> 1.1.0 (*)
+|    |         |    +--- androidx.dynamicanimation:dynamicanimation:1.0.0
+|    |         |    |    +--- androidx.core:core:1.0.0 -> 1.17.0 (*)
+|    |         |    |    +--- androidx.collection:collection:1.0.0 -> 1.5.0 (*)
+|    |         |    |    \--- androidx.legacy:legacy-support-core-utils:1.0.0
+|    |         |    |         +--- androidx.annotation:annotation:1.0.0 -> 1.9.1 (*)
+|    |         |    |         +--- androidx.core:core:1.0.0 -> 1.17.0 (*)
+|    |         |    |         +--- androidx.documentfile:documentfile:1.0.0
+|    |         |    |         |    \--- androidx.annotation:annotation:1.0.0 -> 1.9.1 (*)
+|    |         |    |         +--- androidx.loader:loader:1.0.0
+|    |         |    |         |    +--- androidx.annotation:annotation:1.0.0 -> 1.9.1 (*)
+|    |         |    |         |    +--- androidx.core:core:1.0.0 -> 1.17.0 (*)
+|    |         |    |         |    +--- androidx.lifecycle:lifecycle-livedata:2.0.0 -> 2.10.0 (*)
+|    |         |    |         |    \--- androidx.lifecycle:lifecycle-viewmodel:2.0.0 -> 2.10.0 (*)
+|    |         |    |         +--- androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
+|    |         |    |         |    \--- androidx.annotation:annotation:1.0.0 -> 1.9.1 (*)
+|    |         |    |         \--- androidx.print:print:1.0.0
+|    |         |    |              \--- androidx.annotation:annotation:1.0.0 -> 1.9.1 (*)
 |    |         |    \--- org.jspecify:jspecify:1.0.0
 |    |         +--- androidx.window:window:1.5.0
 |    |         |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
