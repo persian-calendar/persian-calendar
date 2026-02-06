@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.map
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,11 +27,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
+import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 
 @Composable
-fun GlobeView(bitmap: Bitmap) {
+fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
     val renderer by remember {
         val renderer = GLRenderer(onSurfaceCreated = { it.loadTexture(bitmap) })
         renderer.fragmentShader = globeFragmentShader
@@ -94,6 +95,12 @@ fun GlobeView(bitmap: Bitmap) {
             }
             .fillMaxSize(),
     )
+
+    PredictiveBackHandler { progress ->
+        runCatching {
+            progress.collect { renderer.overriddenZoom = (1 - it.progress).coerceAtLeast(.25f) }
+        }.onFailure(logException).onSuccess { onDismissRequest() }
+    }
 
     run {
         val view = LocalView.current

@@ -272,8 +272,7 @@ fun SharedTransitionScope.MapScreen(
             directPathDestination = directPathDestination,
             displayGrid = displayGrid,
         )
-        BackHandler { showGlobeView = false }
-        GlobeView(bitmap)
+        GlobeView(bitmap) { showGlobeView = false }
         DisposableEffect(key1 = bitmap) { onDispose { bitmap.recycle() } }
     }
 
