@@ -4,12 +4,17 @@ import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.draggable2D
 import androidx.compose.foundation.gestures.rememberDraggable2DState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +50,14 @@ fun GlobeView(bitmap: Bitmap) {
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
     var isInZooming by remember { mutableStateOf(false) }
+    val zoom = remember { Animatable(.25f) }
+    LaunchedEffect(Unit) {
+        zoom.animateTo(
+            targetValue = 1f,
+            animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow),
+        )
+    }
+    renderer.overriddenZoom = zoom.value
     AndroidView(
         factory = { context ->
             val glView = GLSurfaceView(context)
@@ -77,22 +90,28 @@ fun GlobeView(bitmap: Bitmap) {
                 onlyMultitouch = true,
             ) { factor ->
                 isInZooming = true
-                renderer.overriddenZoom = (renderer.overriddenZoom * factor).coerceIn(.25f, 6f)
+                coroutineScope.launch { zoom.snapTo((zoom.value * factor).coerceIn(.25f, 6f)) }
             }
             .fillMaxSize(),
     )
 
     run {
         val view = LocalView.current
-        val window = LocalActivity.current?.window
-        val controller = window?.let { WindowInsetsControllerCompat(window, view) }
-        if (controller?.isAppearanceLightStatusBars == true) DisposableEffect(controller) {
-            controller.isAppearanceLightStatusBars = false
-            onDispose { controller.isAppearanceLightStatusBars = true }
+        val window = LocalActivity.current?.window ?: return@run
+        val controller = remember(view, window) {
+            WindowInsetsControllerCompat(window, view)
         }
-        if (controller?.isAppearanceLightNavigationBars == true) DisposableEffect(controller) {
-            controller.isAppearanceLightNavigationBars = false
-            onDispose { controller.isAppearanceLightNavigationBars = true }
+        DisposableEffect(controller) {
+            if (controller.isAppearanceLightStatusBars) {
+                controller.isAppearanceLightStatusBars = false
+                onDispose { controller.isAppearanceLightStatusBars = true }
+            } else onDispose {}
+        }
+        DisposableEffect(controller) {
+            if (controller.isAppearanceLightNavigationBars) {
+                controller.isAppearanceLightNavigationBars = false
+                onDispose { controller.isAppearanceLightNavigationBars = true }
+            } else onDispose {}
         }
     }
 }

@@ -139,6 +139,7 @@ class GLRenderer(
     }
 
     fun loadTexture(bitmap: Bitmap) {
+        debugLog("loadTexture()")
         if (this.textureHandle != 0) {
             val handleToDelete = intArrayOf(this.textureHandle)
             GLES20.glDeleteTextures(1, handleToDelete, 0)
