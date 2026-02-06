@@ -599,7 +599,6 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
         return
     }
 
-
     var title by rememberSaveable {
         mutableStateOf(
             "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6",
