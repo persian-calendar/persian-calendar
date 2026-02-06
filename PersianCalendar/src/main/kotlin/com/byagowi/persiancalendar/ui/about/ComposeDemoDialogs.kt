@@ -57,7 +57,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RenderEffect
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -604,7 +603,6 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
             "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6",
         )
     }
-
     BaseAppDialog(
         title = {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -658,58 +656,43 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
                 }
                 if (index == 161) showRawData = true else if (index == 144) playMusic = true
             },
-        ) { offsetX, offsetY, scale ->
-            translate(offsetX, offsetY) {
-                scale(scale) {
-                    val cellSize = cellSize(this.size)
-                    val rectTopLeft = Offset(.02f * cellSize, .02f * cellSize)
-                    val top = canvasTop(this.size, cellSize)
-                    val rectSize = Size(.98f * cellSize, .98f * cellSize)
-                    val textStyle = textStyle.copy(fontSize = (cellSize * .35f).toSp())
-                    val textFullNameStyle = textStyle.copy(fontSize = (cellSize * .15f).toSp())
-                    (0..<18).forEach { i ->
-                        (0..<9).forEach { j ->
-                            translate(i * cellSize, j * cellSize + top) {
-                                val index =
-                                    elementsIndices.getOrNull(i + j * 18) ?: return@translate
-                                val details = elements[index - 1].split(",")
-                                val color = elementsColor.getValue(index)
-                                drawRect(color, rectTopLeft, rectSize)
-                                textMeasurer.measure(text = details[0], textStyle).also {
-                                    val topLeft = Offset(
-                                        x = cellSize / 2f - it.size.width / 2f,
-                                        y = cellSize * .27f - it.size.height / 2f,
-                                    )
-                                    drawText(
-                                        textLayoutResult = it,
-                                        Color.Black,
-                                        topLeft,
-                                    )
-                                }
-                                textMeasurer.measure(text = index.toString(), textStyle).also {
-                                    val topLeft = Offset(
-                                        x = cellSize / 2f - it.size.width / 2f,
-                                        y = cellSize * .6f - it.size.height / 2f,
-                                    )
-                                    drawText(
-                                        textLayoutResult = it,
-                                        Color.Black,
-                                        topLeft,
-                                    )
-                                }
-                                textMeasurer.measure(text = details[1], textFullNameStyle).also {
-                                    val topLeft = Offset(
-                                        x = cellSize / 2f - it.size.width / 2f,
-                                        y = cellSize * .87f - it.size.height / 2f,
-                                    )
-                                    drawText(
-                                        textLayoutResult = it,
-                                        Color.Black,
-                                        topLeft,
-                                    )
-                                }
-                            }
+        ) {
+            val cellSize = cellSize(this.size)
+            val rectTopLeft = Offset(.02f * cellSize, .02f * cellSize)
+            val top = canvasTop(this.size, cellSize)
+            val rectSize = Size(.98f * cellSize, .98f * cellSize)
+            val textStyle = textStyle.copy(fontSize = (cellSize * .35f).toSp())
+            val textFullNameStyle = textStyle.copy(fontSize = (cellSize * .15f).toSp())
+            (0..<18).forEach { i ->
+                (0..<9).forEach { j ->
+                    translate(i * cellSize, j * cellSize + top) {
+                        val index =
+                            elementsIndices.getOrNull(i + j * 18) ?: return@translate
+                        val details = elements[index - 1].split(",")
+                        val color = elementsColor.getValue(index)
+                        drawRect(color, rectTopLeft, rectSize)
+                        textMeasurer.measure(text = details[0], textStyle).also {
+                            val topLeft = Offset(
+                                x = cellSize / 2f - it.size.width / 2f,
+                                y = cellSize * .27f - it.size.height / 2f,
+                            )
+                            drawText(textLayoutResult = it, Color.Black, topLeft)
                         }
+                        textMeasurer.measure(text = index.toString(), textStyle).also {
+                            val topLeft = Offset(
+                                x = cellSize / 2f - it.size.width / 2f,
+                                y = cellSize * .6f - it.size.height / 2f,
+                            )
+                            drawText(textLayoutResult = it, Color.Black, topLeft)
+                        }
+                        textMeasurer.measure(text = details[1], textFullNameStyle)
+                            .also {
+                                val topLeft = Offset(
+                                    x = cellSize / 2f - it.size.width / 2f,
+                                    y = cellSize * .87f - it.size.height / 2f,
+                                )
+                                drawText(textLayoutResult = it, Color.Black, topLeft)
+                            }
                     }
                 }
             }
