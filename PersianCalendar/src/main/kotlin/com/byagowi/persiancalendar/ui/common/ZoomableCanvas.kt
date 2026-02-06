@@ -30,7 +30,8 @@ import kotlinx.coroutines.launch
 fun ZoomableCanvas(
     modifier: Modifier,
     onClick: (position: Offset, canvasSize: Size) -> Unit = { _, _ -> },
-    disableLimits: Boolean = false,
+    disableHorizontalLimit: Boolean = false,
+    disableVerticalLimit: Boolean = false,
     disablePan: Boolean = false,
     userHandledTransform: Boolean = false,
     scale: Animatable<Float, AnimationVector1D> = rememberSaveable(saver = AnimatableFloatSaver) {
@@ -52,11 +53,12 @@ fun ZoomableCanvas(
             .pointerInput(disablePan) {
                 val size = this@pointerInput.size.toSize()
                 fun calculateMaxOffsets(scale: Float): FloatFloatPair {
-                    if (disableLimits) return FloatFloatPair(Float.MAX_VALUE, Float.MAX_VALUE)
                     val contentSize = contentSize?.invoke(size) ?: size
                     return FloatFloatPair(
-                        ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f),
-                        ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f),
+                        if (disableHorizontalLimit) Float.MAX_VALUE
+                        else ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f),
+                        if (disableVerticalLimit) Float.MAX_VALUE
+                        else ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f),
                     )
                 }
 

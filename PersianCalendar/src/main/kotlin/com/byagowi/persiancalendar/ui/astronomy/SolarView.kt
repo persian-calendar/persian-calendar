@@ -189,7 +189,8 @@ fun SolarView(
         scale = scale,
         offsetX = offsetX,
         offsetY = offsetY,
-        disableLimits = true,
+        disableHorizontalLimit = true,
+        disableVerticalLimit = true,
         disablePan = !isScaled,
         modifier = modifier.pointerInput(mode, isScaled) {
             if (mode != AstronomyMode.EARTH || isScaled) return@pointerInput
