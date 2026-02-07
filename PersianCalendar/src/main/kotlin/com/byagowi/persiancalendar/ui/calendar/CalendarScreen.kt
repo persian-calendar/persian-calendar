@@ -21,6 +21,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -54,6 +56,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
@@ -173,6 +176,7 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
+import com.byagowi.persiancalendar.ui.calendar.yearview.yearViewLazyListState
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -192,6 +196,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isLight
@@ -274,7 +279,14 @@ fun SharedTransitionScope.CalendarScreen(
     val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
     val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
     val isYearView = rememberSaveable { mutableStateOf(false) }
-    val yearViewCommand = rememberSaveable { mutableStateOf<YearViewCommand?>(null) }
+    val yearViewLazyListState = if (isYearView.value) yearViewLazyListState(
+        viewModel.today,
+        viewModel.selectedMonthOffset,
+        yearViewCalendar.value,
+    ) else null
+    val yearViewScale = if (isYearView.value) rememberSaveable(saver = AnimatableFloatSaver) {
+        Animatable(1f)
+    } else null
 
     val swipeDownActions = mapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
@@ -341,7 +353,8 @@ fun SharedTransitionScope.CalendarScreen(
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
                         openSearch = { searchTerm.value = "" },
-                        commandYearView = { yearViewCommand.value = it },
+                        yearViewLazyListState = yearViewLazyListState,
+                        yearViewScale = yearViewScale,
                         isYearView = isYearView,
                         yearViewCalendar = yearViewCalendar,
                         viewModel = viewModel,
@@ -406,10 +419,13 @@ fun SharedTransitionScope.CalendarScreen(
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(visible = isYearView.value) {
-                    YearView(
+                    val yearViewLazyListState = yearViewLazyListState
+                    val yearViewScale = yearViewScale
+                    if (yearViewLazyListState != null && yearViewScale != null) YearView(
                         viewModel = viewModel,
                         closeYearView = { isYearView.value = false },
-                        yearViewCommand = yearViewCommand,
+                        lazyListState = yearViewLazyListState,
+                        scale = yearViewScale,
                         maxWidth = maxWidth,
                         yearViewCalendar = yearViewCalendar,
                         maxHeight = maxHeight,
@@ -879,12 +895,14 @@ private fun SharedTransitionScope.Toolbar(
     openSearch: () -> Unit,
     yearViewCalendar: MutableState<Calendar?>,
     isYearView: MutableState<Boolean>,
-    commandYearView: (YearViewCommand) -> Unit,
+    yearViewLazyListState: LazyListState?,
+    yearViewScale: Animatable<Float, AnimationVector1D>?,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
     hasToolbarHeight: Boolean,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
         baseJdn = today,
         monthsDistance = viewModel.selectedMonthOffset,
@@ -963,8 +981,12 @@ private fun SharedTransitionScope.Toolbar(
                             else R.string.year_view,
                         ),
                     ) {
-                        if (isYearView) commandYearView(YearViewCommand.ToggleYearSelection)
-                        else yearViewCalendar = mainCalendar
+                        if (isYearView) coroutineScope.launch {
+                            YearViewCommand.ToggleYearSelection(
+                                yearViewLazyListState,
+                                yearViewScale,
+                            )
+                        } else yearViewCalendar = mainCalendar
                     }
                     .then(
                         // Toolbar height might not exist if screen rotated while being in year view
@@ -1032,20 +1054,39 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(visible = isYearView) {
                 TodayActionButton(visible = yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     yearViewCalendar = mainCalendar
-                    commandYearView(YearViewCommand.TodayMonth)
+                    coroutineScope.launch {
+                        YearViewCommand.TodayMonth(
+                            yearViewLazyListState,
+                            yearViewScale,
+                        )
+                    }
                 }
             }
             AnimatedVisibility(visible = isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
-                ) { commandYearView(YearViewCommand.NextMonth) }
+                ) {
+                    coroutineScope.launch {
+                        YearViewCommand.NextMonth(
+                            yearViewLazyListState,
+                            yearViewScale,
+                        )
+                    }
+                }
             }
             AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
-                ) { commandYearView(YearViewCommand.PreviousMonth) }
+                ) {
+                    coroutineScope.launch {
+                        YearViewCommand.PreviousMonth(
+                            yearViewLazyListState,
+                            yearViewScale,
+                        )
+                    }
+                }
             }
 
             AnimatedVisibility(!isYearView) {

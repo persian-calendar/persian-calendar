@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.yearview
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +37,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,7 +76,6 @@ import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
@@ -89,7 +89,8 @@ fun YearView(
     viewModel: CalendarViewModel,
     closeYearView: () -> Unit,
     yearViewCalendar: MutableState<Calendar?>,
-    yearViewCommand: MutableState<YearViewCommand?>,
+    lazyListState: LazyListState,
+    scale: Animatable<Float, AnimationVector1D>,
     maxWidth: Dp,
     maxHeight: Dp,
     bottomPadding: Dp,
@@ -97,14 +98,9 @@ fun YearView(
     if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
     val calendar = yearViewCalendar.value ?: mainCalendar
     val todayDate = viewModel.today on calendar
-    val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
-        baseJdn = viewModel.today,
-        monthsDistance = viewModel.selectedMonthOffset,
-    ).year - todayDate.year
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
     val horizontalDivisions = if (isLandscape) 4 else 3
     viewModel.yearViewIsInYearSelection(scale.value < yearSelectionModeMaxScale)
 
@@ -146,31 +142,6 @@ fun YearView(
                 )
             },
         )
-    }
-
-    val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
-    LaunchedEffect(key1 = yearViewCommand.value) {
-        when (yearViewCommand.value ?: return@LaunchedEffect) {
-            YearViewCommand.ToggleYearSelection -> scale.snapTo(if (scale.value > .5f) 0.01f else 1f)
-
-            YearViewCommand.PreviousMonth -> {
-                lazyListState.animateScrollToItem(
-                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0),
-                )
-            }
-
-            YearViewCommand.NextMonth -> {
-                lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex + 1)
-            }
-
-            YearViewCommand.TodayMonth -> {
-                scale.animateTo(1f)
-                if (abs(lazyListState.firstVisibleItemIndex - halfPages) > 2) {
-                    lazyListState.scrollToItem(halfPages)
-                } else lazyListState.animateScrollToItem(halfPages)
-            }
-        }
-        yearViewCommand.value = null
     }
 
     val current by remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }
@@ -335,6 +306,55 @@ fun YearView(
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun yearViewLazyListState(
+    today: Jdn,
+    selectedMonthOffset: Int,
+    yearViewCalendar: Calendar?,
+): LazyListState {
+    val calendar = yearViewCalendar ?: mainCalendar
+    val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
+        baseJdn = today,
+        monthsDistance = selectedMonthOffset,
+    ).year - (today on calendar).year
+    return rememberLazyListState(halfPages + yearOffsetInMonths)
+}
+
+sealed interface YearViewCommand {
+    object NextMonth : YearViewCommand
+    object PreviousMonth : YearViewCommand
+    object TodayMonth : YearViewCommand
+    object ToggleYearSelection : YearViewCommand
+
+    suspend operator fun invoke(
+        yearViewLazyListState: LazyListState?,
+        yearViewScale: Animatable<Float, AnimationVector1D>?,
+    ) {
+        val lazyListState = yearViewLazyListState ?: return
+        val scale = yearViewScale ?: return
+        when (this) {
+            ToggleYearSelection -> scale.snapTo(if (scale.value > .5f) 0.01f else 1f)
+
+            PreviousMonth -> {
+                lazyListState.animateScrollToItem(
+                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0),
+                )
+            }
+
+            NextMonth -> {
+                lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex + 1)
+            }
+
+            TodayMonth -> {
+                scale.animateTo(1f)
+                if (abs(lazyListState.firstVisibleItemIndex - halfPages) > 2) {
+                    lazyListState.scrollToItem(halfPages)
+                } else lazyListState.animateScrollToItem(halfPages)
             }
         }
     }
