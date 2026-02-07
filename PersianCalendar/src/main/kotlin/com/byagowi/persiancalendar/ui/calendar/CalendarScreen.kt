@@ -250,6 +250,16 @@ fun SharedTransitionScope.CalendarScreen(
         today = viewModel.today,
         fabPlaceholderHeight = fabPlaceholderHeight,
     )
+    val detailsPagerState = rememberPagerState(
+        initialPage = remember {
+            CalendarScreenTab.entries.getOrNull(context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
+                ?: CalendarScreenTab.entries[0]
+        }.ordinal.coerceAtMost(detailsTabs.size - 1),
+        pageCount = detailsTabs::size,
+    )
+    LaunchedEffect(detailsPagerState.currentPage) {
+        context.preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, detailsPagerState.currentPage) }
+    }
     val isOnlyEventsTab = detailsTabs.size == 1
 
     val swipeUpActions = mapOf(
@@ -266,7 +276,7 @@ fun SharedTransitionScope.CalendarScreen(
     val swipeDownActions = mapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
         SwipeDownAction.YearView to {
-            searchTerm.value = ""
+            searchTerm.value = null
             viewModel.openYearView()
         },
         SwipeDownAction.None to {
@@ -309,7 +319,7 @@ fun SharedTransitionScope.CalendarScreen(
             val isSearchExpanded = !searchTerm.value.isNullOrEmpty()
             Crossfade(targetState = searchTerm.value != null) { isInSearch ->
                 Box(
-                    (if (isInSearch) {
+                    modifier = (if (isInSearch) {
                         if (isSearchExpanded || toolbarHeight <= 0.dp) Modifier
                         else Modifier.requiredHeight(toolbarHeight)
                     } else if (viewModel.isYearView) {
@@ -348,7 +358,7 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = (viewModel.selectedTab == CalendarScreenTab.EVENT || isOnlyEventsTab) && !viewModel.isYearView,
+                visible = (detailsPagerState.currentPage == CalendarScreenTab.EVENT.ordinal || isOnlyEventsTab) && !viewModel.isYearView,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -395,7 +405,6 @@ fun SharedTransitionScope.CalendarScreen(
 
                 // To preserve pager's state even in year view where calendar isn't in the tree
                 val pagerState = calendarPagerState()
-                val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
                 AnimatedVisibility(
                     visible = !viewModel.isYearView,
@@ -585,26 +594,6 @@ private fun SharedTransitionScope.detailsTabs(
 }
 
 @Composable
-private fun detailsPagerState(
-    viewModel: CalendarViewModel,
-    tabs: List<DetailsTab>,
-): PagerState {
-    val context = LocalContext.current
-    val selectedTab = remember { viewModel.initializeAndGetInitialSelectedTab(context) }
-    val pagerState = rememberPagerState(
-        initialPage = selectedTab.ordinal.coerceAtMost(tabs.size - 1),
-        pageCount = tabs::size,
-    )
-    LaunchedEffect(key1 = pagerState.currentPage) {
-        viewModel.changeSelectedTab(
-            CalendarScreenTab.entries.getOrNull(pagerState.currentPage)
-                ?: CalendarScreenTab.entries[0],
-        )
-    }
-    return pagerState
-}
-
-@Composable
 private fun Details(
     viewModel: CalendarViewModel,
     tabs: List<DetailsTab>,
@@ -616,19 +605,14 @@ private fun Details(
     scrollableTabs: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val preferences = LocalContext.current.preferences
-    LaunchedEffect(viewModel.selectedTab) {
-        preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, viewModel.selectedTab.ordinal) }
-    }
     Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
         val coroutineScope = rememberCoroutineScope()
-
         if (!isOnlyEventsTab) PrimaryTabRow(
-            selectedTabIndex = viewModel.selectedTab.ordinal,
+            selectedTabIndex = pagerState.currentPage,
             divider = {},
             containerColor = Color.Transparent,
             indicator = {
-                val offset = viewModel.selectedTab.ordinal.coerceAtMost(tabs.size - 1)
+                val offset = pagerState.currentPage.coerceAtMost(tabs.size - 1)
                 val tabIndicatorColor by animateColor(MaterialTheme.colorScheme.primary)
                 TabRowDefaults.PrimaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(selectedTabIndex = offset),

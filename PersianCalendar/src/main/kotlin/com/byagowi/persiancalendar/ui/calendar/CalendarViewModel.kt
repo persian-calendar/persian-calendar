@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -8,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
@@ -16,7 +14,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
-import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -30,9 +27,6 @@ class CalendarViewModel() : ViewModel() {
 
     private val _selectedMonthOffsetCommand = mutableStateOf<Int?>(null)
     val selectedMonthOffsetCommand by _selectedMonthOffsetCommand
-
-    private val _selectedTab = mutableStateOf(CalendarScreenTab.CALENDAR)
-    val selectedTab by _selectedTab
 
     private val _refreshToken = mutableIntStateOf(0)
     val refreshToken by _refreshToken
@@ -98,10 +92,6 @@ class CalendarViewModel() : ViewModel() {
         _selectedDay.value = jdn
     }
 
-    fun changeSelectedTab(tab: CalendarScreenTab) {
-        _selectedTab.value = tab
-    }
-
     fun refreshCalendar() {
         ++_refreshToken.intValue
     }
@@ -161,14 +151,6 @@ class CalendarViewModel() : ViewModel() {
         changeSelectedDay(jdn)
         if (!highlight) _isHighlighted.value = false
         changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
-    }
-
-    fun initializeAndGetInitialSelectedTab(context: Context): CalendarScreenTab {
-        val initialTab =
-            CalendarScreenTab.entries.getOrNull(context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
-                ?: CalendarScreenTab.entries[0]
-        changeSelectedTab(initialTab)
-        return initialTab
     }
 
     init {
