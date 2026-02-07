@@ -38,9 +38,6 @@ class CalendarViewModel() : ViewModel() {
     private val _today = mutableStateOf(Jdn.today())
     val today by _today
 
-    private val _yearViewIsInYearSelection = mutableStateOf(false)
-    val yearViewIsInYearSelection by _yearViewIsInYearSelection
-
     private val _daysScreenSelectedDay = mutableStateOf<Jdn?>(null)
     val daysScreenSelectedDay by _daysScreenSelectedDay
 
@@ -68,10 +65,6 @@ class CalendarViewModel() : ViewModel() {
 
     fun refreshCalendar() {
         ++_refreshToken.intValue
-    }
-
-    fun yearViewIsInYearSelection(value: Boolean) {
-        _yearViewIsInYearSelection.value = value
     }
 
     fun bringEvent(event: CalendarEvent<*>) {

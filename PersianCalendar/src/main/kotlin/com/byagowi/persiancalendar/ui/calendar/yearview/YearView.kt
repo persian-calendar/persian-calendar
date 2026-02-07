@@ -100,7 +100,6 @@ fun YearView(
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val horizontalDivisions = if (isLandscape) 4 else 3
-    viewModel.yearViewIsInYearSelection(scale.value < yearSelectionModeMaxScale)
 
     val width = floor(maxWidth.value / horizontalDivisions * scale.value).coerceAtLeast(1f).dp
     val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale.value
@@ -148,7 +147,7 @@ fun YearView(
         coroutineScope.launch {
             val value = scale.value * it
             scale.snapTo(
-                value.coerceIn(yearSelectionModeMaxScale, horizontalDivisions.toFloat()),
+                value.coerceIn(yearSelectionModeScale, horizontalDivisions.toFloat()),
             )
         }
     }
@@ -172,7 +171,7 @@ fun YearView(
             val yearOffset = it - halfPages
 
             Column(Modifier.fillMaxWidth()) {
-                if (scale.value > yearSelectionModeMaxScale) {
+                if (scale.value != yearSelectionModeScale) {
                     val yearDeviceEvents: DeviceCalendarEventsStore = remember(
                         yearOffset,
                         viewModel.today,
@@ -292,7 +291,7 @@ fun YearView(
                                 .then(detectZoom)
                                 .clickable(onClickLabel = stringResource(R.string.select_year)) {
                                     coroutineScope.launch {
-                                        if (scale.value <= yearSelectionModeMaxScale) scale.snapTo(
+                                        if (scale.value == yearSelectionModeScale) scale.snapTo(
                                             1f,
                                         )
                                         lazyListState.animateScrollToItem(halfPages + yearOffset + 1)
@@ -363,5 +362,9 @@ fun yearViewOffset(lazyListState: LazyListState?): Int {
     }.value
 }
 
-private const val yearSelectionModeMaxScale = .2f
+fun yearViewIsInYearSelection(
+    yearViewScale: Animatable<Float, AnimationVector1D>?,
+): Boolean = yearViewScale?.value == yearSelectionModeScale
+
+private const val yearSelectionModeScale = .2f
 private const val halfPages = 200
