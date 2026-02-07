@@ -31,6 +31,7 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
@@ -69,18 +70,16 @@ fun SolarView(
 ) {
     val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
     val contentColor = LocalContentColor.current
-    val resources = LocalResources.current
     val typeface = resolveAndroidCustomTypeface()
 
-    val solarDraw = remember(resources) { SolarDraw(resources) }
     val textPath = remember { Path() }
     val textPathRect = remember { RectF() }
 
-    val heliocentricPlanetsTitles = remember(resources) {
-        AstronomyState.heliocentricPlanetsList.map { resources.getString(it.titleStringId) + " " + it.symbol }
+    val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
+        stringResource(it.titleStringId) + " " + it.symbol
     }
-    val geocentricPlanetsTitles = remember(resources) {
-        geocentricPlanetsList.map { resources.getString(it.titleStringId) + " " + it.symbol }
+    val geocentricPlanetsTitles = geocentricPlanetsList.map {
+        stringResource(it.titleStringId) + " " + it.symbol
     }
 
     val density = LocalDensity.current
@@ -159,10 +158,10 @@ fun SolarView(
 
     val zodiacRanges = run {
         val tropicalRanges = remember {
-            Zodiac.entries.flatMap { it.tropicalRange.map(Double::toFloat) }
+            FloatArray(24) { Zodiac.entries[it / 2].tropicalRange[it % 2].toFloat() }
         }
         val iauRanges = remember {
-            Zodiac.entries.flatMap { it.iauRange.map(Double::toFloat) }
+            FloatArray(24) { Zodiac.entries[it / 2].iauRange[it % 2].toFloat() }
         }
         val fraction by animateFloatAsState(
             targetValue = if (isTropical) 1f else 0f,
@@ -175,6 +174,8 @@ fun SolarView(
             ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt().coerceIn(0, 255))
         FloatArray(24) { lerp(iauRanges[it], tropicalRanges[it], fraction) }
     }
+    val resources = LocalResources.current
+    val solarDraw = remember(resources) { SolarDraw(resources) }
     val labels = Zodiac.entries.map { it.shortTitle(resources) }
     val symbols = Zodiac.entries.map { it.symbol }
 
