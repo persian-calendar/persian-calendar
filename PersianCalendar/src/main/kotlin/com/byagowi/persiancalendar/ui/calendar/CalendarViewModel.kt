@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.calendar
 import kotlinx.coroutines.delay
@@ -38,9 +37,6 @@ class CalendarViewModel() : ViewModel() {
 
     private val _today = mutableStateOf(Jdn.today())
     val today by _today
-
-    private val _yearViewCommand = mutableStateOf<YearViewCommand?>(null)
-    val yearViewCommand by _yearViewCommand
 
     private val _yearViewOffset = mutableIntStateOf(0)
     val yearViewOffset by _yearViewOffset
@@ -79,14 +75,6 @@ class CalendarViewModel() : ViewModel() {
 
     fun refreshCalendar() {
         ++_refreshToken.intValue
-    }
-
-    fun commandYearView(command: YearViewCommand) {
-        _yearViewCommand.value = command
-    }
-
-    fun clearYearViewCommand() {
-        _yearViewCommand.value = null
     }
 
     fun yearViewIsInYearSelection(value: Boolean) {

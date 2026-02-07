@@ -89,6 +89,7 @@ fun YearView(
     viewModel: CalendarViewModel,
     closeYearView: () -> Unit,
     yearViewCalendar: MutableState<Calendar?>,
+    yearViewCommand: MutableState<YearViewCommand?>,
     maxWidth: Dp,
     maxHeight: Dp,
     bottomPadding: Dp,
@@ -148,9 +149,8 @@ fun YearView(
     }
 
     val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
-    val yearViewCommand = viewModel.yearViewCommand
-    LaunchedEffect(key1 = yearViewCommand) {
-        when (yearViewCommand ?: return@LaunchedEffect) {
+    LaunchedEffect(key1 = yearViewCommand.value) {
+        when (yearViewCommand.value ?: return@LaunchedEffect) {
             YearViewCommand.ToggleYearSelection -> scale.snapTo(if (scale.value > .5f) 0.01f else 1f)
 
             YearViewCommand.PreviousMonth -> {
@@ -170,7 +170,7 @@ fun YearView(
                 } else lazyListState.animateScrollToItem(halfPages)
             }
         }
-        viewModel.clearYearViewCommand()
+        yearViewCommand.value = null
     }
 
     val current by remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }

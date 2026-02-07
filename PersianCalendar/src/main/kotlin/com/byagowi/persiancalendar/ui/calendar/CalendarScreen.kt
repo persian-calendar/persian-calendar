@@ -274,6 +274,7 @@ fun SharedTransitionScope.CalendarScreen(
     val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
     val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
     val isYearView = rememberSaveable { mutableStateOf(false) }
+    val yearViewCommand = rememberSaveable { mutableStateOf<YearViewCommand?>(null) }
 
     val swipeDownActions = mapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
@@ -340,6 +341,7 @@ fun SharedTransitionScope.CalendarScreen(
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
                         openSearch = { searchTerm.value = "" },
+                        commandYearView = { yearViewCommand.value = it },
                         isYearView = isYearView,
                         yearViewCalendar = yearViewCalendar,
                         viewModel = viewModel,
@@ -407,6 +409,7 @@ fun SharedTransitionScope.CalendarScreen(
                     YearView(
                         viewModel = viewModel,
                         closeYearView = { isYearView.value = false },
+                        yearViewCommand = yearViewCommand,
                         maxWidth = maxWidth,
                         yearViewCalendar = yearViewCalendar,
                         maxHeight = maxHeight,
@@ -876,6 +879,7 @@ private fun SharedTransitionScope.Toolbar(
     openSearch: () -> Unit,
     yearViewCalendar: MutableState<Calendar?>,
     isYearView: MutableState<Boolean>,
+    commandYearView: (YearViewCommand) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
@@ -959,7 +963,7 @@ private fun SharedTransitionScope.Toolbar(
                             else R.string.year_view,
                         ),
                     ) {
-                        if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
+                        if (isYearView) commandYearView(YearViewCommand.ToggleYearSelection)
                         else yearViewCalendar = mainCalendar
                     }
                     .then(
@@ -1028,20 +1032,20 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(visible = isYearView) {
                 TodayActionButton(visible = yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     yearViewCalendar = mainCalendar
-                    viewModel.commandYearView(YearViewCommand.TodayMonth)
+                    commandYearView(YearViewCommand.TodayMonth)
                 }
             }
             AnimatedVisibility(visible = isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
-                ) { viewModel.commandYearView(YearViewCommand.NextMonth) }
+                ) { commandYearView(YearViewCommand.NextMonth) }
             }
             AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
-                ) { viewModel.commandYearView(YearViewCommand.PreviousMonth) }
+                ) { commandYearView(YearViewCommand.PreviousMonth) }
             }
 
             AnimatedVisibility(!isYearView) {
