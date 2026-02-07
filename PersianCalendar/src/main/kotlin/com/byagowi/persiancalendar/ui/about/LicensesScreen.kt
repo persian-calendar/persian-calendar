@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
