@@ -137,8 +137,10 @@ fun SolarView(
         it.strokeWidth = with(density) { 1.dp.toPx() }
         it.textSize = with(density) { 20.dp.toPx() }
         it.textAlign = Paint.Align.CENTER
-        it.typeface =
-            ResourcesCompat.getFont(LocalContext.current, R.font.notosanssymbolsregularzodiacsubset)
+        val context = LocalContext.current
+        it.typeface = remember(context) {
+            ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+        }
         if (isBoldFont) it.isFakeBoldText = true
     }
     val moonOrbitPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
