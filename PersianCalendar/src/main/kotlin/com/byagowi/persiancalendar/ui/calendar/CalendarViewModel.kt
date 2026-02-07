@@ -34,12 +34,6 @@ class CalendarViewModel() : ViewModel() {
     private val _selectedTab = mutableStateOf(CalendarScreenTab.CALENDAR)
     val selectedTab by _selectedTab
 
-    private val _isSearchOpen = mutableStateOf(false)
-    val isSearchOpen by _isSearchOpen
-
-    private val _searchTerm = mutableStateOf("")
-    val searchTerm by _searchTerm
-
     private val _refreshToken = mutableIntStateOf(0)
     val refreshToken by _refreshToken
 
@@ -116,15 +110,6 @@ class CalendarViewModel() : ViewModel() {
         _removedThirdTab.value = true
     }
 
-    fun openSearch() {
-        _isSearchOpen.value = true
-    }
-
-    fun closeSearch() {
-        _isSearchOpen.value = false
-        changeSearchTerm("")
-    }
-
     fun openYearView() {
         if (_yearViewCalendar.value == null) _yearViewCalendar.value = mainCalendar
         _isYearView.value = true
@@ -132,10 +117,6 @@ class CalendarViewModel() : ViewModel() {
 
     fun closeYearView() {
         _isYearView.value = false
-    }
-
-    fun changeSearchTerm(query: String) {
-        _searchTerm.value = query
     }
 
     fun commandYearView(command: YearViewCommand) {

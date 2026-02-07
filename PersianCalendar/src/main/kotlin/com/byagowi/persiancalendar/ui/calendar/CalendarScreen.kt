@@ -90,6 +90,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -145,6 +146,7 @@ import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -255,10 +257,12 @@ fun SharedTransitionScope.CalendarScreen(
         },
     )
 
+    val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
+
     val swipeDownActions = mapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
         SwipeDownAction.YearView to {
-            viewModel.closeSearch()
+            searchTerm.value = ""
             viewModel.openYearView()
         },
         SwipeDownAction.None to {
@@ -297,14 +301,13 @@ fun SharedTransitionScope.CalendarScreen(
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            BackHandler(enabled = viewModel.isSearchOpen, onBack = viewModel::closeSearch)
             var toolbarHeight by remember { mutableStateOf(0.dp) }
-            Crossfade(targetState = viewModel.isSearchOpen) { searchBoxIsOpenState ->
+            val isSearchExpanded = !searchTerm.value.isNullOrEmpty()
+            Crossfade(targetState = searchTerm.value != null) { isInSearch ->
                 Box(
-                    (if (searchBoxIsOpenState) {
-                        if (viewModel.searchTerm.isEmpty() && toolbarHeight > 0.dp) Modifier.requiredHeight(
-                            toolbarHeight,
-                        ) else Modifier
+                    (if (isInSearch) {
+                        if (isSearchExpanded || toolbarHeight <= 0.dp) Modifier
+                        else Modifier.requiredHeight(toolbarHeight)
                     } else if (viewModel.isYearView) {
                         if (toolbarHeight > 0.dp) {
                             Modifier.requiredHeight(toolbarHeight)
@@ -314,10 +317,13 @@ fun SharedTransitionScope.CalendarScreen(
                     }).fillMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    if (searchBoxIsOpenState) Search(viewModel) else Toolbar(
+                    if (isInSearch) Search(searchTerm, isSearchExpanded, viewModel::bringEvent) {
+                        searchTerm.value = null
+                    } else Toolbar(
                         openNavigationRail = openNavigationRail,
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
+                        openSearch = { searchTerm.value = "" },
                         viewModel = viewModel,
                         isLandscape = isLandscape,
                         today = viewModel.today,
@@ -763,41 +769,47 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 }
 
 @Composable
-private fun Search(viewModel: CalendarViewModel) {
+private fun Search(
+    searchTerm: MutableState<String?>,
+    isSearchExpanded: Boolean,
+    bringEvent: (CalendarEvent<*>) -> Unit,
+    closeSearch: () -> Unit,
+) {
+    BackHandler { closeSearch() }
+    var searchTerm by searchTerm
     val repository = eventsRepository
     val enabledEvents = remember { repository.getEnabledEvents(Jdn.today()) }
-    val searchTerm = viewModel.searchTerm
-    val expanded = searchTerm.isNotEmpty()
     val context = LocalContext.current
     val items = remember(searchTerm) {
-        if (searchTerm.isBlank()) return@remember emptyList()
+        val searchTerm = searchTerm
+        if (searchTerm.isNullOrBlank()) return@remember emptyList()
         val regex = createSearchRegex(searchTerm)
         context.searchDeviceCalendarEvents(searchTerm) + enabledEvents.asSequence().filter {
             regex.containsMatchIn(it.title)
         }.take(50).toList()
     }
-    val padding by animateDpAsState(targetValue = if (expanded) 0.dp else 32.dp)
+    val padding by animateDpAsState(targetValue = if (isSearchExpanded) 0.dp else 32.dp)
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     @OptIn(ExperimentalMaterial3Api::class) SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
-                query = searchTerm,
-                onQueryChange = viewModel::changeSearchTerm,
+                query = searchTerm ?: "",
+                onQueryChange = { searchTerm = it },
                 onSearch = {},
-                expanded = expanded,
+                expanded = isSearchExpanded,
                 onExpandedChange = {},
                 placeholder = { Text(stringResource(R.string.search_in_events)) },
                 trailingIcon = {
                     AppIconButton(
                         icon = Icons.Default.Close,
                         title = stringResource(R.string.close),
-                    ) { viewModel.closeSearch() }
+                    ) { closeSearch() }
                 },
             )
         },
-        expanded = expanded,
-        onExpandedChange = { if (!it) viewModel.changeSearchTerm("") },
+        expanded = isSearchExpanded,
+        onExpandedChange = { if (!it) searchTerm = "" },
         modifier = Modifier
             .padding(horizontal = padding)
             .focusRequester(focusRequester),
@@ -816,8 +828,8 @@ private fun Search(viewModel: CalendarViewModel) {
                         Box(
                             Modifier
                                 .clickable {
-                                    viewModel.closeSearch()
-                                    viewModel.bringEvent(it)
+                                    closeSearch()
+                                    bringEvent(it)
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 20.dp, horizontal = 24.dp),
@@ -846,6 +858,7 @@ private fun SharedTransitionScope.Toolbar(
     openNavigationRail: () -> Unit,
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
+    openSearch: () -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
@@ -1017,7 +1030,8 @@ private fun SharedTransitionScope.Toolbar(
                 AppIconButton(
                     icon = Icons.Default.Search,
                     title = stringResource(R.string.search_in_events),
-                ) { viewModel.openSearch() }
+                    onClick = openSearch,
+                )
             }
             AnimatedVisibility(!viewModel.isYearView) {
                 Menu(
