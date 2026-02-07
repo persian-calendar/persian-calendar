@@ -65,6 +65,7 @@ fun SharedTransitionScope.TimesTab(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
+    removeThirdTab: () -> Unit,
     viewModel: CalendarViewModel,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
@@ -77,7 +78,7 @@ fun SharedTransitionScope.TimesTab(
             header = stringResource(R.string.ask_user_to_set_location),
             discardAction = {
                 context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
-                viewModel.removeThirdTab()
+                removeThirdTab()
             },
             acceptAction = navigateToSettingsLocationTab,
             hideOnAccept = false,

@@ -556,7 +556,8 @@ private fun SharedTransitionScope.detailsTabs(
     today: Jdn,
     fabPlaceholderHeight: Dp?,
 ): List<DetailsTab> {
-    val hasTimesTab = enableTimesTab() && !viewModel.removedThirdTab
+    var removeThirdTab by rememberSaveable { mutableStateOf(false) }
+    val hasTimesTab = enableTimesTab() && !removeThirdTab
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
     return listOfNotNull(
@@ -584,6 +585,7 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                 navigateToAstronomy = navigateToAstronomy,
+                removeThirdTab = { removeThirdTab = true },
                 viewModel = viewModel,
                 interactionSource = interactionSource,
                 minHeight = minHeight,

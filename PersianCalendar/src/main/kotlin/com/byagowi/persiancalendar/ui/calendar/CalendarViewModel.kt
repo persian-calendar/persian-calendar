@@ -34,9 +34,6 @@ class CalendarViewModel() : ViewModel() {
     private val _isHighlighted = mutableStateOf(false)
     val isHighlighted by _isHighlighted
 
-    private val _removedThirdTab = mutableStateOf(false)
-    val removedThirdTab by _removedThirdTab
-
     private val _now = mutableLongStateOf(System.currentTimeMillis())
     val now by _now
 
@@ -94,10 +91,6 @@ class CalendarViewModel() : ViewModel() {
 
     fun refreshCalendar() {
         ++_refreshToken.intValue
-    }
-
-    fun removeThirdTab() {
-        _removedThirdTab.value = true
     }
 
     fun openYearView() {
