@@ -30,6 +30,7 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -56,6 +57,7 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -83,8 +85,16 @@ import kotlin.math.abs
 import kotlin.math.floor
 
 @Composable
-fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
-    val calendar = viewModel.yearViewCalendar ?: mainCalendar
+fun YearView(
+    viewModel: CalendarViewModel,
+    closeYearView: () -> Unit,
+    yearViewCalendar: MutableState<Calendar?>,
+    maxWidth: Dp,
+    maxHeight: Dp,
+    bottomPadding: Dp,
+) {
+    if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
+    val calendar = yearViewCalendar.value ?: mainCalendar
     val todayDate = viewModel.today on calendar
     val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
         baseJdn = viewModel.today,
@@ -184,13 +194,11 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     LazyColumn(
         state = lazyListState,
-        modifier = detectZoom.detectHorizontalSwipe {
+        modifier = detectZoom.detectHorizontalSwipe(calendar) {
             { isLeft ->
                 val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
-                val currentCalendar = viewModel.yearViewCalendar
-                val index = calendars.indexOf(currentCalendar) + if (isLeft xor isRtl) 1 else -1
-                val newCalendar = calendars[index.mod(calendars.size)]
-                coroutineScope.launch { viewModel.changeYearViewCalendar(newCalendar) }
+                val index = calendars.indexOf(calendar) + if (isLeft xor isRtl) 1 else -1
+                yearViewCalendar.value = calendars[index.mod(calendars.size)]
             }
         },
     ) {
@@ -235,7 +243,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                         .clip(shape)
                                         .then(detectZoom)
                                         .clickable(onClickLabel = stringResource(R.string.select_month)) {
-                                            viewModel.closeYearView()
+                                            closeYearView()
                                             if (mainCalendar == calendar) {
                                                 viewModel.changeSelectedMonthOffsetCommand(offset)
                                             } else viewModel.bringDay(Jdn(monthDate))

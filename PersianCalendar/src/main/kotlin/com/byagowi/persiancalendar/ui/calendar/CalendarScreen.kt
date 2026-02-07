@@ -272,12 +272,14 @@ fun SharedTransitionScope.CalendarScreen(
     )
 
     val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
+    val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
+    val isYearView = rememberSaveable { mutableStateOf(false) }
 
     val swipeDownActions = mapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
         SwipeDownAction.YearView to {
             searchTerm.value = null
-            viewModel.openYearView()
+            isYearView.value = true
         },
         SwipeDownAction.None to {
             if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay + 7)
@@ -286,7 +288,7 @@ fun SharedTransitionScope.CalendarScreen(
 
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
-            if (!viewModel.isYearView && keyEvent.type == KeyEventType.KeyDown) {
+            if (!isYearView.value && keyEvent.type == KeyEventType.KeyDown) {
                 when (keyEvent.key) {
                     Key.D -> {
                         navigateToDays(viewModel.selectedDay, false)
@@ -299,7 +301,7 @@ fun SharedTransitionScope.CalendarScreen(
                     }
 
                     Key.Y -> {
-                        viewModel.openYearView()
+                        isYearView.value = true
                         true
                     }
 
@@ -322,7 +324,7 @@ fun SharedTransitionScope.CalendarScreen(
                     modifier = (if (isInSearch) {
                         if (isSearchExpanded || toolbarHeight <= 0.dp) Modifier
                         else Modifier.requiredHeight(toolbarHeight)
-                    } else if (viewModel.isYearView) {
+                    } else if (isYearView.value) {
                         if (toolbarHeight > 0.dp) {
                             Modifier.requiredHeight(toolbarHeight)
                         } else Modifier
@@ -338,6 +340,8 @@ fun SharedTransitionScope.CalendarScreen(
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
                         openSearch = { searchTerm.value = "" },
+                        isYearView = isYearView,
+                        yearViewCalendar = yearViewCalendar,
                         viewModel = viewModel,
                         isLandscape = isLandscape,
                         today = viewModel.today,
@@ -358,7 +362,7 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = (detailsPagerState.currentPage == CalendarScreenTab.EVENT.ordinal || isOnlyEventsTab) && !viewModel.isYearView,
+                visible = (detailsPagerState.currentPage == CalendarScreenTab.EVENT.ordinal || isOnlyEventsTab) && !isYearView.value,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -399,15 +403,22 @@ fun SharedTransitionScope.CalendarScreen(
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
             Column(Modifier.fillMaxSize()) {
-                AnimatedVisibility(visible = viewModel.isYearView) {
-                    YearView(viewModel, maxWidth, maxHeight, bottomPaddingWithMinimum)
+                AnimatedVisibility(visible = isYearView.value) {
+                    YearView(
+                        viewModel = viewModel,
+                        closeYearView = { isYearView.value = false },
+                        maxWidth = maxWidth,
+                        yearViewCalendar = yearViewCalendar,
+                        maxHeight = maxHeight,
+                        bottomPadding = bottomPaddingWithMinimum,
+                    )
                 }
 
                 // To preserve pager's state even in year view where calendar isn't in the tree
                 val pagerState = calendarPagerState()
 
                 AnimatedVisibility(
-                    visible = !viewModel.isYearView,
+                    visible = !isYearView.value,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
                 ) {
                     if (isLandscape) Row {
@@ -416,6 +427,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 viewModel = viewModel,
                                 today = viewModel.today,
                                 pagerState = pagerState,
+                                yearViewCalendar = yearViewCalendar.value,
                                 addEvent = addEvent,
                                 suggestedPagerSize = pagerSize,
                                 navigateToDays = navigateToDays,
@@ -482,6 +494,7 @@ fun SharedTransitionScope.CalendarScreen(
                                         viewModel = viewModel,
                                         today = viewModel.today,
                                         pagerState = pagerState,
+                                        yearViewCalendar = yearViewCalendar.value,
                                         addEvent = addEvent,
                                         suggestedPagerSize = pagerSize,
                                         navigateToDays = navigateToDays,
@@ -861,6 +874,8 @@ private fun SharedTransitionScope.Toolbar(
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
     openSearch: () -> Unit,
+    yearViewCalendar: MutableState<Calendar?>,
+    isYearView: MutableState<Boolean>,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
@@ -873,7 +888,13 @@ private fun SharedTransitionScope.Toolbar(
     val yearViewOffset = viewModel.yearViewOffset
     val yearViewIsInYearSelection = viewModel.yearViewIsInYearSelection
 
-    BackHandler(enabled = viewModel.isYearView, onBack = viewModel::onYearViewBackPressed)
+    var isYearView by isYearView
+    var yearViewCalendar by yearViewCalendar
+    val onYearViewBackPressed = {
+        isYearView = false
+        yearViewCalendar = null
+    }
+    if (isYearView) BackHandler(onBack = onYearViewBackPressed)
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
@@ -881,13 +902,13 @@ private fun SharedTransitionScope.Toolbar(
             // just a noop to update title and subtitle when secondary calendar is toggled
             refreshToken.run {}
 
-            val yearViewCalendar = viewModel.yearViewCalendar
             val title: String
             val subtitle: String
             run {
+                val yearViewCalendar = yearViewCalendar
                 val secondaryCalendar =
                     yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
-                if (viewModel.isYearView && yearViewCalendar != null) {
+                if (isYearView && yearViewCalendar != null) {
                     title = stringResource(
                         if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view,
                     )
@@ -934,22 +955,23 @@ private fun SharedTransitionScope.Toolbar(
                         indication = null,
                         interactionSource = null,
                         onClickLabel = stringResource(
-                            if (viewModel.isYearView && !yearViewIsInYearSelection) R.string.select_year
+                            if (isYearView && !yearViewIsInYearSelection) R.string.select_year
                             else R.string.year_view,
                         ),
                     ) {
-                        if (viewModel.isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
-                        else viewModel.openYearView()
+                        if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
+                        else yearViewCalendar = mainCalendar
                     }
                     .then(
                         // Toolbar height might not exist if screen rotated while being in year view
-                        if (viewModel.isYearView && hasToolbarHeight) Modifier.fillMaxSize() else Modifier,
+                        if (isYearView && hasToolbarHeight) Modifier.fillMaxSize() else Modifier,
                     ),
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (viewModel.isYearView && yearViewCalendar != null) AppScreenModesDropDown(
-                    value = yearViewCalendar,
-                    onValueChange = viewModel::changeYearViewCalendar,
+                val yearViewCalendarValue = yearViewCalendar
+                if (isYearView && yearViewCalendarValue != null) AppScreenModesDropDown(
+                    value = yearViewCalendarValue,
+                    onValueChange = { yearViewCalendar = it },
                     values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
                     small = subtitle.isNotEmpty(),
                 ) { stringResource(it.title) } else Crossfade(targetState = title) { title ->
@@ -962,9 +984,9 @@ private fun SharedTransitionScope.Toolbar(
                 }
                 AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(targetState = subtitle) { subtitle ->
-                        val fraction by animateFloatAsState(if (viewModel.isYearView) 1f else 0f)
+                        val fraction by animateFloatAsState(if (isYearView) 1f else 0f)
                         Text(
-                            if (isTalkBackEnabled && viewModel.isYearView) "$subtitle ${
+                            if (isTalkBackEnabled && isYearView) "$subtitle ${
                                 stringResource(R.string.year_view)
                             }"
                             else subtitle,
@@ -975,7 +997,7 @@ private fun SharedTransitionScope.Toolbar(
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = if (viewModel.isYearView) Modifier else when (yearViewCalendar) {
+                            modifier = if (isYearView) Modifier else when (yearViewCalendar) {
                                 null, mainCalendar, secondaryCalendar -> Modifier
                                 else -> Modifier
                                     .clip(MaterialTheme.shapes.extraLarge)
@@ -986,7 +1008,7 @@ private fun SharedTransitionScope.Toolbar(
                                             append(" ")
                                             append(stringResource(R.string.year_view))
                                         },
-                                    ) { viewModel.changeYearViewCalendar(null) }
+                                    ) { yearViewCalendar = null }
                                     .padding(horizontal = 8.dp)
                             },
                         )
@@ -996,46 +1018,46 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            Crossfade(targetState = viewModel.isYearView) { state ->
+            Crossfade(targetState = isYearView) { state ->
                 if (state) NavigationNavigateUpIcon(
-                    navigateUp = viewModel::onYearViewBackPressed,
+                    navigateUp = onYearViewBackPressed,
                 ) else NavigationOpenNavigationRailIcon(openNavigationRail)
             }
         },
         actions = {
-            AnimatedVisibility(visible = viewModel.isYearView) {
+            AnimatedVisibility(visible = isYearView) {
                 TodayActionButton(visible = yearViewOffset != 0 && !yearViewIsInYearSelection) {
-                    viewModel.changeYearViewCalendar(mainCalendar)
+                    yearViewCalendar = mainCalendar
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
-            AnimatedVisibility(visible = viewModel.isYearView && !yearViewIsInYearSelection) {
+            AnimatedVisibility(visible = isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.NextMonth) }
             }
-            AnimatedVisibility(viewModel.isYearView && !yearViewIsInYearSelection) {
+            AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.PreviousMonth) }
             }
 
-            AnimatedVisibility(!viewModel.isYearView) {
+            AnimatedVisibility(!isYearView) {
                 TodayActionButton(viewModel.selectedMonthOffset != 0 || viewModel.isHighlighted) {
-                    viewModel.changeYearViewCalendar(null)
+                    yearViewCalendar = null
                     viewModel.bringDay(Jdn.today(), highlight = false)
                 }
             }
-            AnimatedVisibility(!viewModel.isYearView) {
+            AnimatedVisibility(!isYearView) {
                 AppIconButton(
                     icon = Icons.Default.Search,
                     title = stringResource(R.string.search_in_events),
                     onClick = openSearch,
                 )
             }
-            AnimatedVisibility(!viewModel.isYearView) {
+            AnimatedVisibility(!isYearView) {
                 Menu(
                     viewModel = viewModel,
                     isLandscape = isLandscape,

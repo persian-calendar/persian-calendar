@@ -5,6 +5,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -25,6 +27,7 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 fun CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
+    yearViewCalendar: Calendar?,
     addEvent: (AddEventData) -> Unit,
     today: Jdn,
     suggestedPagerSize: DpSize,
@@ -46,7 +49,6 @@ fun CalendarPager(
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
 
     val refreshToken = viewModel.refreshToken
-    val yearViewCalendar = viewModel.yearViewCalendar
     val daysTable = daysTable(
         suggestedPagerSize = suggestedPagerSize,
         addEvent = addEvent,

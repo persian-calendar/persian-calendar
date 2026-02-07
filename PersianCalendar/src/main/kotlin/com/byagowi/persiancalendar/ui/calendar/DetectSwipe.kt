@@ -37,12 +37,13 @@ fun Modifier.detectSwipe(
 }
 
 fun Modifier.detectHorizontalSwipe(
+    key1: Any = Unit,
     threshold: Dp = 80.dp,
     // Detector has a two phase execution, right after the first down and after pass of the
     // threshold, this is needed for a screen with its own scrollable content and state.
     // In retrospect maybe this could be implemented based on Modifier.nestedScroll also.
     detector: () -> ((isLeft: Boolean) -> Unit),
-) = this then Modifier.pointerInput(Unit) {
+) = this then Modifier.pointerInput(key1 = key1) {
     val thresholdPx = threshold.toPx()
     awaitEachGesture {
         var disable = false

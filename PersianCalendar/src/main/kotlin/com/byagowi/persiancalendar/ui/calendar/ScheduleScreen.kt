@@ -304,7 +304,8 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 calendarViewModel.notifySelectedMonthOffset(
                                                     monthOffset,
                                                 )
-                                                calendarViewModel.openYearView()
+                                                // TODO: Somehow navigate directly to year view
+                                                // yearViewCalendar.value = mainCalendar
                                                 navigateUp()
                                             },
                                     )

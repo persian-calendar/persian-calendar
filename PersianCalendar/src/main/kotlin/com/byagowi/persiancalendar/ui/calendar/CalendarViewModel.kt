@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -40,9 +39,6 @@ class CalendarViewModel() : ViewModel() {
     private val _today = mutableStateOf(Jdn.today())
     val today by _today
 
-    private val _isYearView = mutableStateOf(false)
-    val isYearView by _isYearView
-
     private val _yearViewCommand = mutableStateOf<YearViewCommand?>(null)
     val yearViewCommand by _yearViewCommand
 
@@ -54,14 +50,6 @@ class CalendarViewModel() : ViewModel() {
 
     private val _daysScreenSelectedDay = mutableStateOf<Jdn?>(null)
     val daysScreenSelectedDay by _daysScreenSelectedDay
-
-    private val _yearViewCalendar = mutableStateOf<Calendar?>(null)
-    val yearViewCalendar by _yearViewCalendar
-
-    // Commands
-    fun changeYearViewCalendar(calendar: Calendar?) {
-        _yearViewCalendar.value = calendar
-    }
 
     fun changeDaysScreenSelectedDay(jdn: Jdn?) {
         jdn?.let { changeSelectedDay(it) }
@@ -93,25 +81,8 @@ class CalendarViewModel() : ViewModel() {
         ++_refreshToken.intValue
     }
 
-    fun openYearView() {
-        if (_yearViewCalendar.value == null) _yearViewCalendar.value = mainCalendar
-        _isYearView.value = true
-    }
-
-    fun closeYearView() {
-        _isYearView.value = false
-    }
-
     fun commandYearView(command: YearViewCommand) {
         _yearViewCommand.value = command
-    }
-
-    fun onYearViewBackPressed() {
-        if (yearViewIsInYearSelection) commandYearView(YearViewCommand.ToggleYearSelection)
-        else {
-            changeYearViewCalendar(null)
-            closeYearView()
-        }
     }
 
     fun clearYearViewCommand() {
