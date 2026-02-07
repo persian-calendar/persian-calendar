@@ -12,6 +12,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.draggable2D
 import androidx.compose.foundation.gestures.rememberDraggable2DState
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +28,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
+import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.launch
 import kotlin.math.PI
@@ -102,23 +104,17 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
         }.onFailure(logException).onSuccess { onDismissRequest() }
     }
 
-    run {
+    LocalActivity.current?.window?.also { window ->
         val view = LocalView.current
-        val window = LocalActivity.current?.window ?: return@run
-        val controller = remember(view, window) {
-            WindowInsetsControllerCompat(window, view)
-        }
-        DisposableEffect(controller) {
-            if (controller.isAppearanceLightStatusBars) {
-                controller.isAppearanceLightStatusBars = false
-                onDispose { controller.isAppearanceLightStatusBars = true }
-            } else onDispose {}
-        }
-        DisposableEffect(controller) {
-            if (controller.isAppearanceLightNavigationBars) {
-                controller.isAppearanceLightNavigationBars = false
-                onDispose { controller.isAppearanceLightNavigationBars = true }
-            } else onDispose {}
+        val colorScheme = MaterialTheme.colorScheme
+        DisposableEffect(key1 = Unit) {
+            val controller = WindowInsetsControllerCompat(window, view)
+            controller.isAppearanceLightStatusBars = false
+            controller.isAppearanceLightNavigationBars = false
+            onDispose {
+                controller.isAppearanceLightStatusBars = colorScheme.background.isLight
+                controller.isAppearanceLightNavigationBars = colorScheme.surface.isLight
+            }
         }
     }
 }
