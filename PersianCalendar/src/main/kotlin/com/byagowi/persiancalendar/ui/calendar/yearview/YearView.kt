@@ -31,10 +31,8 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -143,9 +141,6 @@ fun YearView(
             },
         )
     }
-
-    val current by remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }
-    LaunchedEffect(key1 = current) { viewModel.notifyYearViewOffset(current) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -358,6 +353,14 @@ sealed interface YearViewCommand {
             }
         }
     }
+}
+
+@Composable
+fun yearViewOffset(lazyListState: LazyListState?): Int {
+    lazyListState ?: return 0
+    return remember {
+        derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages }
+    }.value
 }
 
 private const val yearSelectionModeMaxScale = .2f

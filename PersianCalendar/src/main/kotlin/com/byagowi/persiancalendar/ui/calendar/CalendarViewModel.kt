@@ -38,9 +38,6 @@ class CalendarViewModel() : ViewModel() {
     private val _today = mutableStateOf(Jdn.today())
     val today by _today
 
-    private val _yearViewOffset = mutableIntStateOf(0)
-    val yearViewOffset by _yearViewOffset
-
     private val _yearViewIsInYearSelection = mutableStateOf(false)
     val yearViewIsInYearSelection by _yearViewIsInYearSelection
 
@@ -54,10 +51,6 @@ class CalendarViewModel() : ViewModel() {
 
     fun changeSelectedMonthOffsetCommand(offset: Int?) {
         _selectedMonthOffsetCommand.value = offset
-    }
-
-    fun notifyYearViewOffset(value: Int) {
-        _yearViewOffset.intValue = value
     }
 
     /**

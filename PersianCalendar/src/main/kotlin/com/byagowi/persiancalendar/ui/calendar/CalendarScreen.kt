@@ -177,6 +177,7 @@ import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.calendar.yearview.yearViewLazyListState
+import com.byagowi.persiancalendar.ui.calendar.yearview.yearViewOffset
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -907,7 +908,7 @@ private fun SharedTransitionScope.Toolbar(
         baseJdn = today,
         monthsDistance = viewModel.selectedMonthOffset,
     )
-    val yearViewOffset = viewModel.yearViewOffset
+    val yearViewOffset = yearViewOffset(yearViewLazyListState)
     val yearViewIsInYearSelection = viewModel.yearViewIsInYearSelection
 
     var isYearView by isYearView
