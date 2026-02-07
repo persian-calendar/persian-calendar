@@ -8,8 +8,10 @@ import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -172,9 +174,19 @@ fun SharedTransitionScope.AstronomyScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.25f) }
     val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
     val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+    var initialAnimation by rememberSaveable { mutableStateOf(true) }
+    LaunchedEffect(Unit) {
+        if (initialAnimation) {
+            scale.animateTo(
+                targetValue = 1f,
+                animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow),
+            )
+            initialAnimation = false
+        }
+    }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -196,7 +208,8 @@ fun SharedTransitionScope.AstronomyScreen(
                     else NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
-                    TodayActionButton(visible = jdn != today || scale.value != 1f || offsetX.value != 0f || offsetY.value != 0f) {
+                    val isScaled = scale.value != 1f && !initialAnimation
+                    TodayActionButton(visible = jdn != today || isScaled || offsetX.value != 0f || offsetY.value != 0f) {
                         coroutineScope.launch { scale.animateTo(1f) }
                         coroutineScope.launch { offsetX.animateTo(0f) }
                         coroutineScope.launch { offsetY.animateTo(0f) }
