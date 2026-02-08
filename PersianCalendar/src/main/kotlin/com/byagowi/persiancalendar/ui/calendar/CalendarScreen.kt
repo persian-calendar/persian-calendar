@@ -205,6 +205,7 @@ import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.createSearchRegex
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -241,8 +242,9 @@ fun SharedTransitionScope.CalendarScreen(
     val addEvent = addEvent(viewModel, snackbarHostState)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+    val today = viewModel.today
     LaunchedEffect(viewModel.daysScreenSelectedDay) {
-        viewModel.daysScreenSelectedDay?.let { viewModel.bringDay(it, it != viewModel.today) }
+        viewModel.daysScreenSelectedDay?.let { viewModel.bringDay(it, it != today) }
     }
 
     val density = LocalDensity.current
@@ -254,7 +256,7 @@ fun SharedTransitionScope.CalendarScreen(
         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
         navigateToAstronomy = navigateToAstronomy,
-        today = viewModel.today,
+        today = today,
         fabPlaceholderHeight = fabPlaceholderHeight,
     )
     val detailsPagerState = rememberPagerState(
@@ -282,7 +284,7 @@ fun SharedTransitionScope.CalendarScreen(
     val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
     val isYearView = rememberSaveable { mutableStateOf(false) }
     val yearViewLazyListState = if (isYearView.value) yearViewLazyListState(
-        viewModel.today,
+        today,
         viewModel.selectedMonthOffset,
         yearViewCalendar.value,
     ) else null
@@ -348,8 +350,26 @@ fun SharedTransitionScope.CalendarScreen(
                     }).fillMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    if (isInSearch) Search(searchTerm, isSearchExpanded, viewModel::bringEvent) {
-                        searchTerm.value = null
+                    if (isInSearch) Search(
+                        searchTerm = searchTerm,
+                        closeSearch = { searchTerm.value = null },
+                        isSearchExpanded = isSearchExpanded,
+                    ) { event ->
+                        val date = event.date
+                        val calendar = date.calendar
+                        val jdn = Jdn(
+                            calendar = calendar,
+                            year = date.year.takeIf { it != -1 } ?: run {
+                                val selectedMonth = calendar.getMonthStartFromMonthsDistance(
+                                    baseJdn = today,
+                                    monthsDistance = viewModel.selectedMonthOffset,
+                                )
+                                selectedMonth.year + if (date.month < selectedMonth.month) 1 else 0
+                            },
+                            month = date.month,
+                            day = date.dayOfMonth,
+                        )
+                        viewModel.bringDay(jdn)
                     } else Toolbar(
                         openNavigationRail = openNavigationRail,
                         swipeUpActions = swipeUpActions,
@@ -361,7 +381,7 @@ fun SharedTransitionScope.CalendarScreen(
                         yearViewCalendar = yearViewCalendar,
                         viewModel = viewModel,
                         isLandscape = isLandscape,
-                        today = viewModel.today,
+                        today = today,
                         hasToolbarHeight = toolbarHeight > 0.dp,
                     )
                 }
@@ -446,7 +466,7 @@ fun SharedTransitionScope.CalendarScreen(
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(
                                 viewModel = viewModel,
-                                today = viewModel.today,
+                                today = today,
                                 pagerState = pagerState,
                                 yearViewCalendar = yearViewCalendar.value,
                                 addEvent = addEvent,
@@ -513,7 +533,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 ) {
                                     CalendarPager(
                                         viewModel = viewModel,
-                                        today = viewModel.today,
+                                        today = today,
                                         pagerState = pagerState,
                                         yearViewCalendar = yearViewCalendar.value,
                                         addEvent = addEvent,
@@ -548,8 +568,8 @@ fun SharedTransitionScope.CalendarScreen(
 
     val eventsRepository = eventsRepository
     val resources = LocalResources.current
-    LaunchedEffect(viewModel.today, eventsRepository) {
-        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && viewModel.today.toPersianDate().year > supportedYearOfIranCalendar) {
+    LaunchedEffect(today, eventsRepository) {
+        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar) {
             if (snackbarHostState.showSnackbar(
                     resources.getString(R.string.outdated_app),
                     duration = SnackbarDuration.Long,
@@ -562,9 +582,7 @@ fun SharedTransitionScope.CalendarScreen(
 }
 
 enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
-    CALENDAR(R.string.calendar),
-    EVENT(R.string.events),
-    TIMES(R.string.times),
+    CALENDAR(R.string.calendar), EVENT(R.string.events), TIMES(R.string.times),
 }
 
 @Composable
@@ -796,8 +814,8 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 private fun Search(
     searchTerm: MutableState<String?>,
     isSearchExpanded: Boolean,
-    bringEvent: (CalendarEvent<*>) -> Unit,
     closeSearch: () -> Unit,
+    bringEvent: (CalendarEvent<*>) -> Unit,
 ) {
     BackHandler { closeSearch() }
     var searchTerm by searchTerm
@@ -1111,6 +1129,7 @@ private fun SharedTransitionScope.Toolbar(
                     swipeUpActions = swipeUpActions,
                     swipeDownActions = swipeDownActions,
                     isTalkBackEnabled = isTalkBackEnabled,
+                    today = today,
                 )
             }
         },
@@ -1124,6 +1143,7 @@ private fun SharedTransitionScope.Menu(
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     isTalkBackEnabled: Boolean,
+    today: Jdn,
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
@@ -1146,8 +1166,8 @@ private fun SharedTransitionScope.Menu(
     if (showPlanetaryHoursDialog) coordinates?.also {
         PlanetaryHoursDialog(
             coordinates = it,
-            now = viewModel.now + (viewModel.selectedDay - viewModel.today).days.inWholeMilliseconds,
-            isToday = viewModel.today == viewModel.selectedDay,
+            now = viewModel.now + (viewModel.selectedDay - today).days.inWholeMilliseconds,
+            isToday = today == viewModel.selectedDay,
         ) { showPlanetaryHoursDialog = false }
     }
 
@@ -1165,7 +1185,7 @@ private fun SharedTransitionScope.Menu(
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
             closeMenu()
             val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
-                baseJdn = Jdn.today(),
+                baseJdn = today,
                 monthsDistance = viewModel.selectedMonthOffset,
             )
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))

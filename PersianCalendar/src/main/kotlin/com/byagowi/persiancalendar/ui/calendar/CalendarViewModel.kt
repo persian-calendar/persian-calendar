@@ -67,24 +67,6 @@ class CalendarViewModel() : ViewModel() {
         ++_refreshToken.intValue
     }
 
-    fun bringEvent(event: CalendarEvent<*>) {
-        val date = event.date
-        val calendar = date.calendar
-        val jdn = Jdn(
-            calendar = calendar,
-            year = date.year.takeIf { it != -1 } ?: run {
-                val selectedMonth = calendar.getMonthStartFromMonthsDistance(
-                    baseJdn = today,
-                    monthsDistance = selectedMonthOffset,
-                )
-                selectedMonth.year + if (date.month < selectedMonth.month) 1 else 0
-            },
-            month = date.month,
-            day = date.dayOfMonth,
-        )
-        bringDay(jdn)
-    }
-
     fun bringDay(jdn: Jdn, highlight: Boolean = true) {
         changeSelectedDay(jdn)
         if (!highlight) _isHighlighted.value = false
