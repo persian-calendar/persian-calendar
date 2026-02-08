@@ -97,7 +97,7 @@ private class EventsViewFactory(
             val date = dates[i]
             val secondaryDate = secondaryDates?.let { it[i] }
             when {
-                i != 0 && items.isEmpty() -> listOf()
+                i != 0 && items.isEmpty() -> emptyList()
                 dates[0].month != date.month && !monthChange -> {
                     monthChange = true
                     if (secondaryDates?.get(0)?.month != secondaryDate?.month) {
