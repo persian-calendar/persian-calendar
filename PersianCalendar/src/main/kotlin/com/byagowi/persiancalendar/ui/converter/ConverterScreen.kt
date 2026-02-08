@@ -145,7 +145,7 @@ fun SharedTransitionScope.ConverterScreen(
                 },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
-                    if (screenMode == ConverterScreenMode.CALCULATOR) CompositionLocalProvider(
+                    if (screenMode.backspaceReset) CompositionLocalProvider(
                         LocalLayoutDirection provides LayoutDirection.Ltr,
                     ) {
                         AnimatedVisibility(resetButtonVisibility) {
