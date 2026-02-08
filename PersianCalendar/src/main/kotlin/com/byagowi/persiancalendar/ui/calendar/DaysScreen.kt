@@ -159,7 +159,7 @@ import kotlin.math.roundToInt
 fun SharedTransitionScope.DaysScreen(
     refreshToken: Int,
     refreshCalendar: () -> Unit,
-    requestBringJdn: (Jdn) -> Unit,
+    commandBringJdn: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
@@ -169,7 +169,7 @@ fun SharedTransitionScope.DaysScreen(
     var selectedDay by rememberSaveable { mutableStateOf(initiallySelectedDay) }
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
     val date = selectedDay on mainCalendar
-    requestBringJdn(selectedDay)
+    commandBringJdn(selectedDay)
     val coroutineScope = rememberCoroutineScope()
     val weekInitialPage = remember(today) { weekPageFromJdn(initiallySelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }

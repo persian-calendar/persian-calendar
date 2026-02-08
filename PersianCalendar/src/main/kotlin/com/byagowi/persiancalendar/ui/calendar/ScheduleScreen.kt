@@ -76,7 +76,7 @@ import kotlin.math.abs
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
     refreshToken: Int,
-    requestBringJdn: (Jdn) -> Unit,
+    commandBringJdn: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
     today: Jdn,
@@ -233,7 +233,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
                                             ) {
-                                                requestBringJdn(jdn)
+                                                commandBringJdn(jdn)
                                                 navigateUp()
                                             }
                                             .size(36.dp)
@@ -297,7 +297,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                             ) {
                                                 // This used to bring year view directly but now
                                                 // only brings the day on the calendar
-                                                requestBringJdn(Jdn(nextMonth))
+                                                commandBringJdn(Jdn(nextMonth))
                                                 navigateUp()
                                             },
                                     )

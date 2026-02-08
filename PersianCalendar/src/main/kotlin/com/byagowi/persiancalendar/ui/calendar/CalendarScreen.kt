@@ -230,7 +230,7 @@ import kotlin.time.Duration.Companion.hours
 fun SharedTransitionScope.CalendarScreen(
     refreshToken: Int,
     refreshCalendar: () -> Unit,
-    bringJdnRequest: MutableState<Jdn?>,
+    bringJdnCommand: MutableState<Jdn?>,
     openNavigationRail: () -> Unit,
     navigateToSchedule: (Jdn) -> Unit,
     navigateToMonthView: (Jdn) -> Unit,
@@ -254,7 +254,7 @@ fun SharedTransitionScope.CalendarScreen(
         val page = applyOffset(-mainCalendar.getMonthsDistance(today, jdn))
         coroutineScope.launch { pagerState.animateScrollToPage(page) }
     }
-    bringJdnRequest.value?.let { bringDay(it, true); bringJdnRequest.value = null }
+    bringJdnCommand.value?.let { bringDay(it, true); bringJdnCommand.value = null }
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
