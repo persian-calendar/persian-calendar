@@ -24,6 +24,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
@@ -40,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
@@ -106,12 +106,6 @@ fun SolarView(
         it.color = 0x18808080
         it.style = Paint.Style.FILL
     }
-    val circlesPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }
-    val zodiacSeparatorPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.strokeWidth = with(density) { .5.dp.toPx() }
-        it.style = Paint.Style.STROKE
-        it.color = surfaceColor.toArgb()
-    }
 
     val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.textAlign = Paint.Align.CENTER
@@ -138,11 +132,7 @@ fun SolarView(
         }
         if (isBoldFont) it.isFakeBoldText = true
     }
-    val moonOrbitPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.style = Paint.Style.STROKE
-        it.strokeWidth = with(density) { 1.dp.toPx() }
-        it.color = 0x40808080
-    }
+    val moonOrbitStroke = Stroke(with(density) { 1.dp.toPx() })
 
     val tropicalFraction by animateFloatAsState(
         targetValue = if (isTropical) 1f else 0f,
@@ -249,7 +239,7 @@ fun SolarView(
         },
     ) {
         val radius = size.minDimension / 2f
-        val canvas = this.drawContext.canvas.nativeCanvas
+        val canvas = drawContext.canvas.nativeCanvas
         when (mode) {
             AstronomyMode.MOON -> {
                 solarDraw.moon(
@@ -294,7 +284,9 @@ fun SolarView(
                         if (index % 2 == 0) canvas.drawArc(
                             arcRect, -90f, end - start, true, zodiacForegroundPaint,
                         )
-                        canvas.drawLine(radius, circleInset, radius, radius, zodiacSeparatorPaint)
+                        val start = Offset(radius, circleInset)
+                        val end = Offset(radius, radius)
+                        drawLine(surfaceColor, start, end)
                     }
                     rotate(degrees = -(start + end) / 2 + 90) {
 //                val rectSize = radius * .88f
@@ -316,7 +308,7 @@ fun SolarView(
                     translate(left = radius) { drawPath(trianglePath, Color(0xFFEEBB22)) }
                 }
                 val moonDegree = state.moon.lon.toFloat()
-                canvas.drawCircle(radius, radius, radius * .25f, moonOrbitPaint)
+                drawCircle(Color(0x40808080), radius * .25f, style = moonOrbitStroke)
                 rotate(degrees = -moonDegree + 90) {
                     val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
                     solarDraw.moon(
@@ -357,14 +349,10 @@ fun SolarView(
             AstronomyMode.SUN -> {
                 colorTextPaint.textSize = radius / 11
                 colorTextPaint.alpha = 255
-                circlesPaint.strokeWidth = radius / 9
-                circlesPaint.style = Paint.Style.FILL_AND_STROKE
-                (1..8).forEach {
-                    circlesPaint.color = ColorUtils.setAlphaComponent(0x808080, (9 - it) * 0x10)
-                    canvas.drawCircle(radius, radius, radius / 9 * it, circlesPaint)
-                    circlesPaint.style = Paint.Style.STROKE
+                (2..9).forEach {
+                    drawCircle(Color(0xFF808080).copy(alpha = (10 - it) / 40f), radius / 10 * it)
                 }
-                drawCircle(Color(0xFFEEBB22), radius / 35, center = Offset(radius, radius))
+                drawCircle(Color(0xFFEEBB22), radius / 35)
                 state.heliocentricPlanets.forEachIndexed { i, ecliptic ->
                     rotate(degrees = -ecliptic.elon.toFloat() + 90) {
                         textPath.rewind()
