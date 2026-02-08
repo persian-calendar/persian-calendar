@@ -214,7 +214,13 @@ fun SharedTransitionScope.AstronomyScreen(
                         coroutineScope.launch { offsetX.animateTo(0f) }
                         coroutineScope.launch { offsetY.animateTo(0f) }
                         coroutineScope.launch {
-                            timeInMillis.animateTo(System.currentTimeMillis())
+                            timeInMillis.animateTo(
+                                targetValue = System.currentTimeMillis(),
+                                animationSpec = spring(
+                                    Spring.DampingRatioLowBouncy,
+                                    Spring.StiffnessLow,
+                                ),
+                            )
                         }
                     }
                     AnimatedVisibility(visible = mode.value == AstronomyMode.EARTH) {
