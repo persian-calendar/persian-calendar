@@ -209,7 +209,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.Month> {
                     MonthScreen(
-                        calendarViewModel = calendarViewModel ?: viewModel(),
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
                     )

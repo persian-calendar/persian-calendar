@@ -451,7 +451,8 @@ fun SharedTransitionScope.CalendarScreen(
                     val yearViewLazyListState = yearViewLazyListState
                     val yearViewScale = yearViewScale
                     if (yearViewLazyListState != null && yearViewScale != null) YearView(
-                        viewModel = viewModel,
+                        selectedDay = viewModel.selectedDay,
+                        selectedMonthOffset = viewModel.selectedMonthOffset,
                         closeYearView = { isYearView.value = false },
                         lazyListState = yearViewLazyListState,
                         scale = yearViewScale,
@@ -460,7 +461,17 @@ fun SharedTransitionScope.CalendarScreen(
                         maxHeight = maxHeight,
                         bottomPadding = bottomPaddingWithMinimum,
                         today = today,
-                    )
+                    ) { calendar, offset ->
+                        if (mainCalendar != calendar) {
+                            viewModel.changeSelectedMonthOffsetCommand(offset)
+                        } else {
+                            val date = calendar.getMonthStartFromMonthsDistance(
+                                baseJdn = today,
+                                monthsDistance = offset,
+                            )
+                            viewModel.bringDay(Jdn(date))
+                        }
+                    }
                 }
 
                 // To preserve pager's state even in year view where calendar isn't in the tree

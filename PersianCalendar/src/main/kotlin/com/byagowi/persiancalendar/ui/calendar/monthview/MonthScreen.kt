@@ -55,7 +55,6 @@ import com.byagowi.persiancalendar.utils.monthName
 
 @Composable
 fun SharedTransitionScope.MonthScreen(
-    calendarViewModel: CalendarViewModel,
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
 ) {

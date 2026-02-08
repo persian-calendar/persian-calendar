@@ -84,7 +84,8 @@ import kotlin.math.floor
 
 @Composable
 fun YearView(
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
+    selectedMonthOffset: Int,
     closeYearView: () -> Unit,
     yearViewCalendar: MutableState<Calendar?>,
     lazyListState: LazyListState,
@@ -93,6 +94,7 @@ fun YearView(
     maxHeight: Dp,
     bottomPadding: Dp,
     today: Jdn,
+    selectedMonth: (calendar: Calendar, offset: Int) -> Unit,
 ) {
     if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
     val calendar = yearViewCalendar.value ?: mainCalendar
@@ -154,7 +156,7 @@ fun YearView(
     }
     val language = language
     val selectedDayMonth = calendar.getMonthStartFromMonthsDistance(
-        baseJdn = viewModel.selectedDay,
+        baseJdn = selectedDay,
         monthsDistance = 0,
     )
 
@@ -207,13 +209,11 @@ fun YearView(
                                         .then(detectZoom)
                                         .clickable(onClickLabel = stringResource(R.string.select_month)) {
                                             closeYearView()
-                                            if (mainCalendar == calendar) {
-                                                viewModel.changeSelectedMonthOffsetCommand(offset)
-                                            } else viewModel.bringDay(Jdn(monthDate))
+                                            selectedMonth(calendar, offset)
                                         }
                                         .background(LocalContentColor.current.copy(alpha = .1f))
                                         .then(
-                                            if (offset != viewModel.selectedMonthOffset) Modifier else Modifier.border(
+                                            if (offset != selectedMonthOffset) Modifier else Modifier.border(
                                                 width = 2.dp,
                                                 color = LocalContentColor.current.copy(alpha = .15f),
                                                 shape = shape,
@@ -246,7 +246,7 @@ fun YearView(
                                                 deviceEvents = yearDeviceEvents,
                                                 isRtl = isRtl,
                                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-                                                selectedDay = viewModel.selectedDay,
+                                                selectedDay = selectedDay,
                                                 calendar = calendar,
                                             )
                                         }
