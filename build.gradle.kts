@@ -35,6 +35,7 @@ spotless {
         "ktlint_standard_class-signature" to "disabled",
         "ktlint_standard_blank-line-between-when-conditions" to "disabled",
         "ktlint_standard_kdoc" to "disabled",
+        "ktlint_standard_enum-wrapping" to "disabled",
     )
 
     kotlin {
