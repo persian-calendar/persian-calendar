@@ -109,6 +109,7 @@ fun SharedTransitionScope.MapScreen(
     navigateUp: () -> Unit,
     fromSettings: Boolean,
     initialTime: Long,
+    today: Jdn,
 ) {
     val resources = LocalResources.current
     val mapDraw = remember(resources) { MapDraw(resources) }
@@ -383,6 +384,7 @@ fun SharedTransitionScope.MapScreen(
         DatePickerDialog(
             initialJdn = currentJdn,
             onDismissRequest = { showDatePickerDialog = false },
+            today = today,
         ) { jdn -> timeInMillis.longValue += (jdn - currentJdn).days.inWholeMilliseconds }
     }
 

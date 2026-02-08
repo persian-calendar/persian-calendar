@@ -235,14 +235,14 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
+    today: Jdn,
+    now: Long,
     viewModel: CalendarViewModel,
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val addEvent = addEvent(viewModel, snackbarHostState)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-    val today = viewModel.today
     LaunchedEffect(viewModel.daysScreenSelectedDay) {
         viewModel.daysScreenSelectedDay?.let { viewModel.bringDay(it, it != today) }
     }
@@ -257,6 +257,7 @@ fun SharedTransitionScope.CalendarScreen(
         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
         navigateToAstronomy = navigateToAstronomy,
         today = today,
+        now = now,
         fabPlaceholderHeight = fabPlaceholderHeight,
     )
     val detailsPagerState = rememberPagerState(
@@ -354,6 +355,7 @@ fun SharedTransitionScope.CalendarScreen(
                         searchTerm = searchTerm,
                         closeSearch = { searchTerm.value = null },
                         isSearchExpanded = isSearchExpanded,
+                        today = today,
                     ) { event ->
                         val date = event.date
                         val calendar = date.calendar
@@ -382,6 +384,7 @@ fun SharedTransitionScope.CalendarScreen(
                         viewModel = viewModel,
                         isLandscape = isLandscape,
                         today = today,
+                        now = now,
                         hasToolbarHeight = toolbarHeight > 0.dp,
                     )
                 }
@@ -607,6 +610,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     today: Jdn,
+    now: Long,
     fabPlaceholderHeight: Dp?,
 ): List<DetailsTab> {
     var removeThirdTab by rememberSaveable { mutableStateOf(false) }
@@ -630,6 +634,7 @@ private fun SharedTransitionScope.detailsTabs(
                 viewModel = viewModel,
                 // See the comment in floatingActionButton
                 fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
+                now = now,
             )
         },
         // The optional third tab
@@ -643,6 +648,8 @@ private fun SharedTransitionScope.detailsTabs(
                 interactionSource = interactionSource,
                 minHeight = minHeight,
                 bottomPadding = bottomPadding,
+                now = now,
+                today = today,
             )
         } else null,
     )
@@ -816,12 +823,13 @@ private fun Search(
     searchTerm: MutableState<String?>,
     isSearchExpanded: Boolean,
     closeSearch: () -> Unit,
+    today: Jdn,
     bringEvent: (CalendarEvent<*>) -> Unit,
 ) {
     BackHandler { closeSearch() }
     var searchTerm by searchTerm
     val repository = eventsRepository
-    val enabledEvents = remember { repository.getEnabledEvents(Jdn.today()) }
+    val enabledEvents = remember(key1 = today) { repository.getEnabledEvents(today) }
     val context = LocalContext.current
     val items = remember(searchTerm) {
         val searchTerm = searchTerm
@@ -921,6 +929,7 @@ private fun SharedTransitionScope.Toolbar(
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
+    now: Long,
     hasToolbarHeight: Boolean,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -1113,7 +1122,7 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(!isYearView) {
                 TodayActionButton(viewModel.selectedMonthOffset != 0 || viewModel.isHighlighted) {
                     yearViewCalendar = null
-                    viewModel.bringDay(Jdn.today(), highlight = false)
+                    viewModel.bringDay(today, highlight = false)
                 }
             }
             AnimatedVisibility(!isYearView) {
@@ -1131,6 +1140,7 @@ private fun SharedTransitionScope.Toolbar(
                     swipeDownActions = swipeDownActions,
                     isTalkBackEnabled = isTalkBackEnabled,
                     today = today,
+                    now = now,
                 )
             }
         },
@@ -1145,6 +1155,7 @@ private fun SharedTransitionScope.Menu(
     isLandscape: Boolean,
     isTalkBackEnabled: Boolean,
     today: Jdn,
+    now: Long,
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
@@ -1152,9 +1163,12 @@ private fun SharedTransitionScope.Menu(
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val selectedDay = viewModel.selectedDay
-        DatePickerDialog(selectedDay, { showDatePickerDialog = false }) { jdn ->
-            viewModel.bringDay(jdn)
-        }
+        DatePickerDialog(
+            initialJdn = selectedDay,
+            onDismissRequest = { showDatePickerDialog = false },
+            today = today,
+            onSuccess = viewModel::bringDay,
+        )
     }
 
     var showShiftWorkDialog by rememberSaveable { mutableStateOf(false) }
@@ -1167,7 +1181,7 @@ private fun SharedTransitionScope.Menu(
     if (showPlanetaryHoursDialog) coordinates?.also {
         PlanetaryHoursDialog(
             coordinates = it,
-            now = viewModel.now + (viewModel.selectedDay - today).days.inWholeMilliseconds,
+            now = now + (viewModel.selectedDay - today).days.inWholeMilliseconds,
             isToday = today == viewModel.selectedDay,
         ) { showPlanetaryHoursDialog = false }
     }

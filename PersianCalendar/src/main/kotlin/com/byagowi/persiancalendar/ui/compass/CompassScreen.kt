@@ -36,7 +36,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -102,10 +101,8 @@ import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.VisibleForTesting
-import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -119,6 +116,8 @@ fun SharedTransitionScope.CompassScreen(
     navigateToMap: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     noBackStackAction: (() -> Unit)?,
+    today: Jdn,
+    now: Long,
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
@@ -145,15 +144,8 @@ fun SharedTransitionScope.CompassScreen(
     val coordinates = coordinates
     val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
     val isSliderShown = sliderValue != 0f
-    var baseTime by remember { mutableStateOf(Date()) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(30.seconds)
-            baseTime = Date()
-        }
-    }
     val time = GregorianCalendar().also {
-        it.time = baseTime
+        it.timeInMillis = now
         it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
     }
     var isStopped by rememberSaveable { mutableStateOf(false) }
@@ -257,7 +249,7 @@ fun SharedTransitionScope.CompassScreen(
                                     ) { Text(it) }
                                 },
                             ) {
-                                val dayOfMonth = Jdn.today().toIslamicDate().dayOfMonth
+                                val dayOfMonth = today.toIslamicDate().dayOfMonth
                                 value = if (value == null) "مزبوره: " + when (dayOfMonth) {
                                     1, 9, 17, 25 -> "شرق"
                                     2, 10, 18, 26 -> "شمال شرق"

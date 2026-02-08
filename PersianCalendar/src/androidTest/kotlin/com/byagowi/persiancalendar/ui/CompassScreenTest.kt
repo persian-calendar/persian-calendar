@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +19,8 @@ class CompassScreenTest {
     fun basicSmokeTest() {
         composeTestRule.setContent {
             NavigationMock {
-                CompassScreen({}, {}, {}, {}, null)
+                val now = System.currentTimeMillis()
+                CompassScreen({}, {}, {}, {}, null, Jdn.today(), now)
             }
         }
     }
@@ -36,6 +38,8 @@ class CompassScreenTest {
                     navigateToMap = { assert(false) },
                     navigateToSettingsLocationTab = {},
                     noBackStackAction = null,
+                    today = Jdn.today(),
+                    now = System.currentTimeMillis(),
                 )
             }
         }
@@ -59,6 +63,8 @@ class CompassScreenTest {
                     navigateToMap = { navigateToMapIsCalled = true },
                     navigateToSettingsLocationTab = {},
                     noBackStackAction = null,
+                    today = Jdn.today(),
+                    now = System.currentTimeMillis(),
                 )
             }
         }

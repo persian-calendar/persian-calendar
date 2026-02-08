@@ -70,6 +70,8 @@ fun SharedTransitionScope.TimesTab(
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
+    now: Long,
+    today: Jdn,
 ) {
     val context = LocalContext.current
     val coordinates = coordinates ?: return Column(Modifier.fillMaxWidth()) {
@@ -93,8 +95,6 @@ fun SharedTransitionScope.TimesTab(
     }
 
     val prayTimes = coordinates.calculatePrayTimes(viewModel.selectedDay.toGregorianCalendar())
-    val now = viewModel.now
-    val today = viewModel.today
 
     Column(
         Modifier

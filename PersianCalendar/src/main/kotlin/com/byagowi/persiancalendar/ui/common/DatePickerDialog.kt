@@ -21,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,24 +42,16 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import kotlinx.coroutines.delay
 import kotlin.math.abs
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun DatePickerDialog(
     initialJdn: Jdn,
     onDismissRequest: () -> Unit,
+    today: Jdn,
     onSuccess: (jdn: Jdn) -> Unit,
 ) {
     var jdn by rememberSaveable { mutableStateOf(initialJdn) }
-    var today by remember { mutableStateOf(Jdn.today()) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(30.seconds)
-            today = Jdn.today()
-        }
-    }
     val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -113,7 +104,7 @@ fun DatePickerDialog(
             betterToUseShortCalendarName = true,
         ) { calendar = it }
 
-        DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
+        DatePicker(today, calendar, pendingConfirms, jdn) { jdn = it }
         var showNumberEdit by remember { mutableStateOf(false) }
         Crossfade(targetState = showNumberEdit) { isInNumberEdit ->
             if (isInNumberEdit) NumberEdit(

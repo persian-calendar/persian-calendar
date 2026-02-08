@@ -131,6 +131,7 @@ fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: (String?) -> Unit,
     viewModel: CalendarViewModel,
     fabPlaceholderHeight: Dp,
+    now: Long,
 ) {
     Column(
         Modifier
@@ -178,7 +179,7 @@ fun SharedTransitionScope.EventsTab(
             val deviceEvents = remember(viewModel.selectedDay, viewModel.refreshToken) {
                 context.readDayDeviceEvents(viewModel.selectedDay)
             }
-            val events = readEvents(viewModel.selectedDay, viewModel, deviceEvents)
+            val events = readEvents(viewModel.selectedDay, now, deviceEvents)
             Spacer(Modifier.height(16.dp))
             AnimatedVisibility(events.isEmpty()) {
                 Text(
@@ -680,7 +681,7 @@ private fun EquinoxCountDownContent(
 @Composable
 fun readEvents(
     jdn: Jdn,
-    viewModel: CalendarViewModel,
+    now: Long,
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
     val resources = LocalResources.current
@@ -693,7 +694,6 @@ fun readEvents(
         val date = jdn.toPersianDate()
         val nextPersianYearDate = PersianDate(date.year + 1, 1, 1)
         if (jdn + 1 == Jdn(nextPersianYearDate)) {
-            val now = viewModel.now
             val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
             val title = rawTitle.split(spacedColon).mapIndexed { i, x ->
                 if (i == 0 && isAstronomicalExtraFeaturesEnabled) {

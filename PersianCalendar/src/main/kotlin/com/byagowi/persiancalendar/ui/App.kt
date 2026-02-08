@@ -48,6 +48,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -136,6 +137,16 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val railState = rememberWideNavigationRailState()
     AppNavigationRail(railState, backStack, finish)
     SharedTransitionLayout {
+        var today by remember { mutableStateOf(Jdn.today()) }
+        var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+        val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+        if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
+            while (isActive) {
+                today = Jdn.today()
+                now = System.currentTimeMillis()
+                delay(30.seconds)
+            }
+        }
         var appInitialJdn by remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
@@ -192,6 +203,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         },
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
                         viewModel = viewModel,
+                        today = today,
+                        now = now,
                     )
                 }
                 entry<Screen.Month> {
@@ -206,6 +219,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         calendarViewModel = calendarViewModel ?: viewModel(),
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
+                        today = today,
+                        now = now,
                     )
                 }
                 entry<Screen.Days> {
@@ -214,6 +229,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         initiallySelectedDay = it.selectedDay,
                         isInitiallyWeek = it.isWeek,
                         navigateUp = navigateUp,
+                        today = today,
+                        now = now,
                     )
                 }
                 entry<Screen.Converter> {
@@ -221,6 +238,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         openNavigationRail = openNavigationRail,
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
                         noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
+                        today = today,
                     )
                 }
                 entry<Screen.Compass> {
@@ -232,6 +250,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
                         },
                         noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
+                        today = today,
+                        now = now,
                     )
                 }
                 entry<Screen.Level> {
@@ -248,6 +268,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             it.day?.toGregorianCalendar()?.timeInMillis
                                 ?: System.currentTimeMillis()
                         },
+                        today = today,
                         noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
                     )
                 }
@@ -256,6 +277,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateUp = navigateUp,
                         fromSettings = it.fromSettings,
                         initialTime = it.time,
+                        today = today,
                     )
                 }
                 entry<Screen.Settings> {
@@ -436,21 +458,6 @@ private fun AppNavigationRail(
             ScrollShadow(scrollState)
         }
     }
-}
-
-@Composable
-fun updatedToday(): Jdn {
-    var today by remember { mutableStateOf(Jdn.today()) }
-
-    val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
-    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
-        while (isActive) {
-            today = Jdn.today()
-            delay(30.seconds)
-        }
-    }
-
-    return today
 }
 
 @Composable

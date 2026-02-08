@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
@@ -30,11 +29,7 @@ class CalendarViewModel() : ViewModel() {
     private val _isHighlighted = mutableStateOf(false)
     val isHighlighted by _isHighlighted
 
-    private val _now = mutableLongStateOf(System.currentTimeMillis())
-    val now by _now
-
     private val _today = mutableStateOf(Jdn.today())
-    val today by _today
 
     private val _daysScreenSelectedDay = mutableStateOf<Jdn?>(null)
     val daysScreenSelectedDay by _daysScreenSelectedDay
@@ -68,14 +63,13 @@ class CalendarViewModel() : ViewModel() {
     fun bringDay(jdn: Jdn, highlight: Boolean = true) {
         changeSelectedDay(jdn)
         if (!highlight) _isHighlighted.value = false
-        changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
+        changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(Jdn.today(), jdn))
     }
 
     init {
         viewModelScope.launch {
             while (true) {
                 delay(30.seconds)
-                _now.longValue = System.currentTimeMillis()
                 val today = Jdn.today()
                 if (_today.value != today) {
                     refreshCalendar()

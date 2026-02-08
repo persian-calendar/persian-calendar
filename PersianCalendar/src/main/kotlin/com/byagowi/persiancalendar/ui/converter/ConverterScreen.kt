@@ -99,7 +99,6 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.updatedToday
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -120,6 +119,7 @@ fun SharedTransitionScope.ConverterScreen(
     openNavigationRail: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     noBackStackAction: (() -> Unit)?,
+    today: Jdn,
     initialScreenMode: ConverterScreenMode = ConverterScreenMode.entries[0],
 ) {
     var screenMode by rememberSaveable { mutableStateOf(initialScreenMode) }
@@ -207,6 +207,7 @@ fun SharedTransitionScope.ConverterScreen(
                                     setShareAction = { shareAction = it },
                                     setResetAction = { resetAction = it },
                                     setResetButtonVisibility = { resetButtonVisibility = it },
+                                    today = today,
                                 )
                             }
                         }
@@ -482,8 +483,8 @@ private fun ColumnScope.ConverterAndDistance(
     setShareAction: (() -> Unit) -> Unit,
     setResetAction: (() -> Unit) -> Unit,
     setResetButtonVisibility: (Boolean) -> Unit,
+    today: Jdn,
 ) {
-    val today = updatedToday()
     var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
     var selectedDate by rememberSaveable { mutableStateOf(today) }
     var secondSelectedDate by rememberSaveable { mutableStateOf(today) }
@@ -559,6 +560,7 @@ private fun ColumnScope.ConverterAndDistance(
                 ),
             )
             DatePicker(
+                today = today,
                 calendar = calendar,
                 jdn = secondSelectedDate,
                 pendingConfirms = pendingConfirms,
@@ -580,6 +582,7 @@ private fun ColumnScope.ConverterAndDistance(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             ) { calendar = it }
             DatePicker(
+                today = today,
                 calendar = calendar,
                 jdn = selectedDate,
                 pendingConfirms = pendingConfirms,
@@ -618,6 +621,7 @@ private fun ColumnScope.ConverterAndDistance(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) { calendar = it }
         DatePicker(
+            today = today,
             calendar = calendar,
             jdn = selectedDate,
             pendingConfirms = pendingConfirms,

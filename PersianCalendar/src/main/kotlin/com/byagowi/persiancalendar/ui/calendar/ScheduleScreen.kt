@@ -78,10 +78,11 @@ fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
+    today: Jdn,
+    now: Long,
 ) {
     var baseJdn by remember { mutableStateOf(initiallySelectedDay) }
     val listState = rememberLazyListState(ITEMS_COUNT / 2, 0)
-    val today = calendarViewModel.today
     var isFirstTime by remember { mutableStateOf(true) }
     val firstVisibleItemJdn by remember {
         derivedStateOf { indexToJdn(baseJdn, listState.firstVisibleItemIndex) }
@@ -141,10 +142,9 @@ fun SharedTransitionScope.ScheduleScreen(
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
                     if (showDatePickerDialog) {
                         DatePickerDialog(
-                            firstVisibleItemJdn,
-                            {
-                                showDatePickerDialog = false
-                            },
+                            initialJdn = firstVisibleItemJdn,
+                            onDismissRequest = { showDatePickerDialog = false },
+                            today = today,
                         ) { jdn ->
                             if (abs(firstVisibleItemJdn - jdn) > 30 || abs(baseJdn - jdn) > 30) {
                                 baseJdn = jdn
@@ -203,7 +203,7 @@ fun SharedTransitionScope.ScheduleScreen(
                     if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge
                 Box {
-                    val eventsCache = eventsCache(calendarViewModel)
+                    val eventsCache = eventsCache(calendarViewModel, now)
                     LazyColumn(state = listState) {
                         items(ITEMS_COUNT) { index ->
                             val jdn = indexToJdn(baseJdn, index)
@@ -295,7 +295,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 indication = ripple(bounded = false),
                                             ) {
                                                 val monthOffset = mainCalendar.getMonthsDistance(
-                                                    Jdn.today(),
+                                                    today,
                                                     Jdn(nextMonth),
                                                 )
                                                 calendarViewModel.changeSelectedMonthOffsetCommand(
@@ -324,14 +324,17 @@ private const val ITEMS_COUNT = 365 * 2
 private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT / 2
 
 @Composable
-private fun eventsCache(calendarViewModel: CalendarViewModel): @Composable (Jdn) -> List<CalendarEvent<*>> {
+private fun eventsCache(
+    calendarViewModel: CalendarViewModel,
+    now: Long,
+): @Composable (Jdn) -> List<CalendarEvent<*>> {
     val refreshToken = calendarViewModel.refreshToken
     val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
     val context = LocalContext.current
     return { jdn ->
         if (jdn.value in emptyDays) emptyList() else {
             val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
-            val events = readEvents(jdn, calendarViewModel, deviceEvents)
+            val events = readEvents(jdn, now, deviceEvents)
             if (events.isEmpty()) emptyDays += jdn.value
             events
         }

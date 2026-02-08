@@ -91,7 +91,11 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
             mutableStateOf(context.preferences.getJdnOrNull(primaryKey) ?: today)
         }
         SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
-            DatePickerDialog(initialJdn = primaryJdn, onDismissRequest = onDismissRequest) {
+            DatePickerDialog(
+                initialJdn = primaryJdn,
+                onDismissRequest = onDismissRequest,
+                today = Jdn.today(),
+            ) {
                 primaryJdn = it
                 context.preferences.edit { putJdn(primaryKey, it) }
             }
@@ -103,7 +107,11 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
                 mutableStateOf(context.preferences.getJdnOrNull(secondaryKey) ?: today)
             }
             SettingsClickable(stringResource(R.string.starting_date)) { onDismissRequest ->
-                DatePickerDialog(initialJdn = jdn, onDismissRequest = onDismissRequest) {
+                DatePickerDialog(
+                    initialJdn = jdn,
+                    onDismissRequest = onDismissRequest,
+                    today = today,
+                ) {
                     jdn = it
                     context.preferences.edit { putJdn(secondaryKey, it) }
                 }

@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
 @Composable
 fun DatePicker(
+    today: Jdn,
     calendar: Calendar,
     pendingConfirms: MutableCollection<() -> Unit>,
     jdn: Jdn,
@@ -29,10 +30,11 @@ fun DatePicker(
     Crossfade(targetState = calendar) { calendarState ->
         Row(modifier = Modifier.fillMaxWidth()) {
             DatePickerContent(
-                calendarState,
-                pendingConfirms,
-                jdn,
-                setJdn,
+                today = today,
+                calendar = calendarState,
+                pendingConfirms = pendingConfirms,
+                jdn = jdn,
+                setJdn = setJdn,
             )
         }
     }
@@ -40,6 +42,7 @@ fun DatePicker(
 
 @Composable
 private fun RowScope.DatePickerContent(
+    today: Jdn,
     calendar: Calendar,
     pendingConfirms: MutableCollection<() -> Unit>,
     jdn: Jdn,
@@ -61,7 +64,7 @@ private fun RowScope.DatePickerContent(
     val monthsFormat = remember(numeral, months) {
         { item: Int -> numeral.format(item) + " / " + months[item - 1] }
     }
-    val todayYear = remember(calendar) { (Jdn.today() on calendar).year }
+    val todayYear = remember(calendar, today) { (today on calendar).year }
     val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
     val view = LocalView.current
     NumberPicker(

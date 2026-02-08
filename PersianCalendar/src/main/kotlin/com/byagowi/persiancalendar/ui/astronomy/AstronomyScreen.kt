@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -140,9 +139,9 @@ fun SharedTransitionScope.AstronomyScreen(
     openNavigationRail: () -> Unit,
     navigateToMap: (time: Long) -> Unit,
     initialTime: Long,
+    today: Jdn,
     noBackStackAction: (() -> Unit)?,
 ) {
-    var today by remember { mutableStateOf(Jdn.today()) }
     val converter = TwoWayConverter<Long, AnimationVector1D>(
         convertToVector = { AnimationVector1D(initVal = (it - initialTime).toFloat()) },
         convertFromVector = { it.value.toLong() + initialTime },
@@ -158,7 +157,6 @@ fun SharedTransitionScope.AstronomyScreen(
         while (true) {
             delay(interval)
             timeInMillis.snapTo(targetValue = timeInMillis.value + interval)
-            today = Jdn.today()
         }
     }
 
@@ -427,12 +425,13 @@ fun SharedTransitionScope.AstronomyScreen(
     }
 
     if (isDatePickerDialogShown.value) DatePickerDialog(
+        today = today,
         initialJdn = jdn,
         onDismissRequest = { isDatePickerDialogShown.value = false },
     ) { jdn ->
         coroutineScope.launch {
             timeInMillis.animateTo(
-                System.currentTimeMillis() + (jdn - Jdn.today()).days.inWholeMilliseconds,
+                System.currentTimeMillis() + (jdn - today).days.inWholeMilliseconds,
             )
         }
     }

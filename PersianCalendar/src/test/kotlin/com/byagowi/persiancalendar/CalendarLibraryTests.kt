@@ -20,7 +20,8 @@ class CalendarLibraryTests {
     @Test
     fun `Islamic calendar calculations correctness`() {
         listOf(
-            listOf(2453767, 1427, 1, 1), listOf(2455658, 1432, 5, 2)
+            listOf(2453767, 1427, 1, 1),
+            listOf(2455658, 1432, 5, 2),
 //            listOf(2458579, 1440, 7, 29), listOf(2458580, 1440, 8, 1)
         ).forEach {
             val reference = IslamicDate(it[1], it[2], it[3])
@@ -69,7 +70,7 @@ class CalendarLibraryTests {
             listOf(2018, 11, 9, 1440, 3, 1),
             listOf(2018, 12, 9, 1440, 4, 1),
             listOf(2019, 1, 8, 1440, 5, 1),
-            listOf(2019, 2, 7, 1440, 6, 1)
+            listOf(2019, 2, 7, 1440, 6, 1),
 //            listOf(2040, 5, 12, 1462, 5, 1),
 //            listOf(2040, 6, 11, 1462, 6, 1),
 //            listOf(2040, 7, 10, 1462, 7, 1),
@@ -103,7 +104,7 @@ class CalendarLibraryTests {
         listOf(
             listOf(listOf(2015, 3, 14), listOf(1436, 5, 23)),
             listOf(listOf(1999, 4, 1), listOf(1419, 12, 15)),
-            listOf(listOf(1989, 2, 25), listOf(1409, 7, 19))
+            listOf(listOf(1989, 2, 25), listOf(1409, 7, 19)),
         ).forEach {
             val jdn = CivilDate(it[0][0], it[0][1], it[0][2]).toJdn()
             val islamicDate = IslamicDate(it[1][0], it[1][1], it[1][2])
@@ -266,7 +267,7 @@ class CalendarLibraryTests {
             assertEquals(
                 moonInScorpioDaysOf1404[jdn],
                 moonInScorpioState(jdn, setIranTime = true),
-                "${jdn.toPersianDate()}"
+                "${jdn.toPersianDate()}",
             )
         }
     }
@@ -290,7 +291,7 @@ class CalendarLibraryTests {
     fun `it differentiate date object equal`() {
         assertNotEquals(
             CivilDate(2000, 1, 1) as? AbstractDate,
-            PersianDate(2000, 1, 1) as? AbstractDate
+            PersianDate(2000, 1, 1) as? AbstractDate,
         )
         assertEquals(CivilDate(2000, 1, 1), CivilDate(2000, 1, 1))
         assertNotEquals(CivilDate(2000, 1, 1), CivilDate(2000, 2, 1))
@@ -332,7 +333,7 @@ class CalendarLibraryTests {
             listOf(727274, 1370, 12, 27),
             listOf(728714, 1374, 12, 6),
             listOf(744313, 1417, 8, 19),
-            listOf(764652, 1473, 4, 28)
+            listOf(764652, 1473, 4, 28),
         ).forEach {
             assertEquals(it[0] + J0000, PersianDate(it[1], it[2], it[3]).toJdn(), it.toString())
             val from = PersianDate(it[0] + J0000)
@@ -374,7 +375,7 @@ class CalendarLibraryTests {
             listOf(2448698, 1992, 3, 17),
             listOf(2450138, 1996, 2, 25),
             listOf(2465737, 2038, 11, 10),
-            listOf(2486076, 2094, 7, 18)
+            listOf(2486076, 2094, 7, 18),
         ).forEach {
             assertEquals(it[0] + 1L, CivilDate(it[1], it[2], it[3]).toJdn())
             val from = CivilDate(it[0] + 1L)
@@ -416,7 +417,7 @@ class CalendarLibraryTests {
 //        listOf(727274, 1412, 9, 12),
 //        listOf(728714, 1416, 10, 5),
 //        listOf(744313, 1460, 10, 12),
-            listOf(764652, 1518, 3, 5)
+            listOf(764652, 1518, 3, 5),
         ).forEach {
             assertEquals(it[0] + J0000, IslamicDate(it[1], it[2], it[3]).toJdn(), "${it[0]}")
             val from = IslamicDate(it[0] + J0000)
