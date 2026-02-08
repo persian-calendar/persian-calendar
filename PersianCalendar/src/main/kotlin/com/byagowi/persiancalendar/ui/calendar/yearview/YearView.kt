@@ -92,10 +92,11 @@ fun YearView(
     maxWidth: Dp,
     maxHeight: Dp,
     bottomPadding: Dp,
+    today: Jdn,
 ) {
     if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
     val calendar = yearViewCalendar.value ?: mainCalendar
-    val todayDate = viewModel.today on calendar
+    val todayDate = today on calendar
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -172,13 +173,10 @@ fun YearView(
 
             Column(Modifier.fillMaxWidth()) {
                 if (scale.value != yearSelectionModeScale) {
-                    val yearDeviceEvents: DeviceCalendarEventsStore = remember(
-                        yearOffset,
-                        viewModel.today,
-                    ) {
+                    val yearDeviceEvents: DeviceCalendarEventsStore = remember(yearOffset, today) {
                         val yearStartJdn = Jdn(
                             calendar.createDate(
-                                (viewModel.today on calendar).year + yearOffset, 1, 1,
+                                (today on calendar).year + yearOffset, 1, 1,
                             ),
                         )
                         if (isShowDeviceCalendarEvents) {
@@ -194,7 +192,7 @@ fun YearView(
                                 val month = 1 + column + row * if (isLandscape) 4 else 3
                                 val offset = yearOffset * 12 + month - todayDate.month
                                 val monthDate = calendar.getMonthStartFromMonthsDistance(
-                                    baseJdn = viewModel.today,
+                                    baseJdn = today,
                                     monthsDistance = offset,
                                 )
                                 val title = language.my.format(
@@ -243,7 +241,7 @@ fun YearView(
                                                 dayPainter = dayPainter[this.size.height],
                                                 width = size.width,
                                                 canvas = canvas.nativeCanvas,
-                                                today = viewModel.today,
+                                                today = today,
                                                 baseDate = monthDate,
                                                 deviceEvents = yearDeviceEvents,
                                                 isRtl = isRtl,

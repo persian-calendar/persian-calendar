@@ -452,6 +452,7 @@ fun SharedTransitionScope.CalendarScreen(
                         yearViewCalendar = yearViewCalendar,
                         maxHeight = maxHeight,
                         bottomPadding = bottomPaddingWithMinimum,
+                        today = today,
                     )
                 }
 
