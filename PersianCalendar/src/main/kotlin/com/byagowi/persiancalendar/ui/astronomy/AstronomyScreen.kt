@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.animateContentSize
@@ -580,20 +581,24 @@ private fun SharedTransitionScope.SolarDisplay(
             icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
         val coroutineScope = rememberCoroutineScope()
-        SolarView(
+        Crossfade(
+            targetState = mode.value,
             modifier = Modifier
                 .padding(horizontal = 56.dp)
-                .aspectRatio(1f)
                 .align(Alignment.Center),
-            isTropical = isTropical,
-            state = astronomyState,
-            scale = scale,
-            offsetX = offsetX,
-            offsetY = offsetY,
-            mode = mode.value,
-        ) { offset ->
-            coroutineScope.launch {
-                timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
+        ) { mode ->
+            SolarView(
+                modifier = Modifier.aspectRatio(1f),
+                isTropical = isTropical,
+                state = astronomyState,
+                scale = scale,
+                offsetX = offsetX,
+                offsetY = offsetY,
+                mode = mode,
+            ) { offset ->
+                coroutineScope.launch {
+                    timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
+                }
             }
         }
     }
