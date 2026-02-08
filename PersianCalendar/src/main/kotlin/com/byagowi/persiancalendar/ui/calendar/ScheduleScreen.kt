@@ -75,7 +75,8 @@ import kotlin.math.abs
 
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
-    calendarViewModel: CalendarViewModel,
+    refreshToken: Int,
+    requestBringJdn: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
     today: Jdn,
@@ -203,7 +204,7 @@ fun SharedTransitionScope.ScheduleScreen(
                     if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge
                 Box {
-                    val eventsCache = eventsCache(calendarViewModel, now)
+                    val eventsCache = eventsCache(refreshToken, now)
                     LazyColumn(state = listState) {
                         items(ITEMS_COUNT) { index ->
                             val jdn = indexToJdn(baseJdn, index)
@@ -232,7 +233,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
                                             ) {
-                                                calendarViewModel.bringDay(jdn)
+                                                requestBringJdn(jdn)
                                                 navigateUp()
                                             }
                                             .size(36.dp)
@@ -294,18 +295,9 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
                                             ) {
-                                                val monthOffset = mainCalendar.getMonthsDistance(
-                                                    today,
-                                                    Jdn(nextMonth),
-                                                )
-                                                calendarViewModel.changeSelectedMonthOffsetCommand(
-                                                    monthOffset,
-                                                )
-                                                calendarViewModel.notifySelectedMonthOffset(
-                                                    monthOffset,
-                                                )
-                                                // TODO: Somehow navigate directly to year view
-                                                // yearViewCalendar.value = mainCalendar
+                                                // This used to bring year view directly but now
+                                                // only brings the day on the calendar
+                                                requestBringJdn(Jdn(nextMonth))
                                                 navigateUp()
                                             },
                                     )
@@ -325,10 +317,9 @@ private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT
 
 @Composable
 private fun eventsCache(
-    calendarViewModel: CalendarViewModel,
+    refreshToken: Int,
     now: Long,
 ): @Composable (Jdn) -> List<CalendarEvent<*>> {
-    val refreshToken = calendarViewModel.refreshToken
     val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
     val context = LocalContext.current
     return { jdn ->

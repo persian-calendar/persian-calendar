@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
@@ -16,11 +16,12 @@ class CalendarScreenTest {
 
     @Test
     fun calendarScreenSmokeTest() {
+        val jdn = mutableStateOf<Jdn?>(null)
         composeTestRule.setContent {
             NavigationMock {
                 val today = Jdn.today()
                 val now = System.currentTimeMillis()
-                CalendarScreen({}, {}, {}, {}, {}, {}, {}, { _, _ -> }, today, now, viewModel())
+                CalendarScreen(0, {}, jdn, {}, {}, {}, {}, {}, {}, {}, { _, _ -> }, today, now)
             }
         }
     }

@@ -169,6 +169,7 @@ import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.applyOffset
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.reports.prayTimeHtmlReport
@@ -227,9 +228,12 @@ import kotlin.time.Duration.Companion.hours
 
 @Composable
 fun SharedTransitionScope.CalendarScreen(
+    refreshToken: Int,
+    refreshCalendar: () -> Unit,
+    bringJdnRequest: MutableState<Jdn?>,
     openNavigationRail: () -> Unit,
-    navigateToSchedule: () -> Unit,
-    navigateToMonthView: () -> Unit,
+    navigateToSchedule: (Jdn) -> Unit,
+    navigateToMonthView: (Jdn) -> Unit,
     navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -237,21 +241,36 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
     today: Jdn,
     now: Long,
-    viewModel: CalendarViewModel,
 ) {
+    var selectedDay by rememberSaveable { mutableStateOf(today) }
+    var isHighlighted by rememberSaveable { mutableStateOf(false) }
+    var daysScreenSelectedDay by rememberSaveable { mutableStateOf<Jdn?>(null) }
+    val pagerState = calendarPagerState()
+    val selectedMonthOffset = -applyOffset(pagerState.currentPage)
+    val coroutineScope = rememberCoroutineScope()
+    val bringDay: BringDay = { jdn: Jdn, highlight: Boolean ->
+        isHighlighted = highlight
+        selectedDay = jdn
+        val page = applyOffset(-mainCalendar.getMonthsDistance(today, jdn))
+        coroutineScope.launch { pagerState.animateScrollToPage(page) }
+    }
+    bringJdnRequest.value?.let { bringDay(it, true); bringJdnRequest.value = null }
+
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val addEvent = addEvent(viewModel, snackbarHostState)
+    val addEvent = addEvent(refreshCalendar, snackbarHostState)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    LaunchedEffect(viewModel.daysScreenSelectedDay) {
-        viewModel.daysScreenSelectedDay?.let { viewModel.bringDay(it, it != today) }
+    LaunchedEffect(daysScreenSelectedDay) {
+        daysScreenSelectedDay?.let { bringDay(it, it != today) }
     }
 
     val density = LocalDensity.current
     var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
 
     val detailsTabs = detailsTabs(
-        viewModel = viewModel,
+        refreshToken = refreshToken,
+        refreshCalendar = refreshCalendar,
+        selectedDay = selectedDay,
         navigateToHolidaysSettings = navigateToHolidaysSettings,
         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -273,24 +292,20 @@ fun SharedTransitionScope.CalendarScreen(
     val isOnlyEventsTab = detailsTabs.size == 1
 
     val swipeUpActions = mapOf(
-        SwipeUpAction.Schedule to { navigateToSchedule() },
-        SwipeUpAction.DayView to { navigateToDays(viewModel.selectedDay, false) },
-        SwipeUpAction.WeekView to { navigateToDays(viewModel.selectedDay, true) },
-        SwipeUpAction.None to {
-            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay - 7)
-        },
+        SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
+        SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
+        SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
+        SwipeUpAction.None to { if (isOnlyEventsTab) bringDay(selectedDay - 7, true) },
     )
 
-    if (!viewModel.isHighlighted && viewModel.selectedDay != today) LaunchedEffect(Unit) {
-        viewModel.bringDay(jdn = today, highlight = false)
-    }
+    if (!isHighlighted && selectedDay != today) LaunchedEffect(Unit) { bringDay(today, false) }
 
     val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
     val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
     val isYearView = rememberSaveable { mutableStateOf(false) }
     val yearViewLazyListState = if (isYearView.value) yearViewLazyListState(
         today,
-        viewModel.selectedMonthOffset,
+        selectedMonthOffset,
         yearViewCalendar.value,
     ) else null
     val yearViewScale = if (isYearView.value) rememberSaveable(saver = AnimatableFloatSaver) {
@@ -303,9 +318,7 @@ fun SharedTransitionScope.CalendarScreen(
             searchTerm.value = null
             isYearView.value = true
         },
-        SwipeDownAction.None to {
-            if (isOnlyEventsTab) viewModel.bringDay(viewModel.selectedDay + 7)
-        },
+        SwipeDownAction.None to { if (isOnlyEventsTab) bringDay(selectedDay + 7, true) },
     )
 
     Scaffold(
@@ -313,12 +326,12 @@ fun SharedTransitionScope.CalendarScreen(
             if (!isYearView.value && keyEvent.type == KeyEventType.KeyDown) {
                 when (keyEvent.key) {
                     Key.D -> {
-                        navigateToDays(viewModel.selectedDay, false)
+                        navigateToDays(selectedDay, false)
                         true
                     }
 
                     Key.W -> {
-                        navigateToDays(viewModel.selectedDay, true)
+                        navigateToDays(selectedDay, true)
                         true
                     }
 
@@ -328,7 +341,7 @@ fun SharedTransitionScope.CalendarScreen(
                     }
 
                     Key.A -> {
-                        navigateToSchedule()
+                        navigateToSchedule(selectedDay)
                         true
                     }
 
@@ -368,14 +381,14 @@ fun SharedTransitionScope.CalendarScreen(
                             year = date.year.takeIf { it != -1 } ?: run {
                                 val selectedMonth = calendar.getMonthStartFromMonthsDistance(
                                     baseJdn = today,
-                                    monthsDistance = viewModel.selectedMonthOffset,
+                                    monthsDistance = selectedMonthOffset,
                                 )
                                 selectedMonth.year + if (date.month < selectedMonth.month) 1 else 0
                             },
                             month = date.month,
                             day = date.dayOfMonth,
                         )
-                        viewModel.bringDay(jdn)
+                        bringDay(jdn, true)
                     } else Toolbar(
                         openNavigationRail = openNavigationRail,
                         swipeUpActions = swipeUpActions,
@@ -385,11 +398,15 @@ fun SharedTransitionScope.CalendarScreen(
                         yearViewScale = yearViewScale,
                         isYearView = isYearView,
                         yearViewCalendar = yearViewCalendar,
-                        viewModel = viewModel,
                         isLandscape = isLandscape,
                         today = today,
                         now = now,
                         hasToolbarHeight = toolbarHeight > 0.dp,
+                        selectedMonthOffset = selectedMonthOffset,
+                        refreshToken = refreshToken,
+                        isHighlighted = isHighlighted,
+                        selectedDay = selectedDay,
+                        bringDay = bringDay,
                     )
                 }
             }
@@ -421,14 +438,14 @@ fun SharedTransitionScope.CalendarScreen(
                 exit = scaleOut(),
             ) {
                 AppFloatingActionButton(
-                    onClick = { addEvent(AddEventData.fromJdn(viewModel.selectedDay)) },
+                    onClick = { addEvent(AddEventData.fromJdn(selectedDay)) },
                 ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
             }
         },
     ) { paddingValues ->
         // Refresh the calendar on resume
         LaunchedEffect(Unit) {
-            viewModel.refreshCalendar()
+            refreshCalendar()
             context.preferences.edit {
                 putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
             }
@@ -451,8 +468,8 @@ fun SharedTransitionScope.CalendarScreen(
                     val yearViewLazyListState = yearViewLazyListState
                     val yearViewScale = yearViewScale
                     if (yearViewLazyListState != null && yearViewScale != null) YearView(
-                        selectedDay = viewModel.selectedDay,
-                        selectedMonthOffset = viewModel.selectedMonthOffset,
+                        selectedDay = selectedDay,
+                        selectedMonthOffset = selectedMonthOffset,
                         closeYearView = { isYearView.value = false },
                         lazyListState = yearViewLazyListState,
                         scale = yearViewScale,
@@ -462,20 +479,17 @@ fun SharedTransitionScope.CalendarScreen(
                         bottomPadding = bottomPaddingWithMinimum,
                         today = today,
                     ) { calendar, offset ->
-                        if (mainCalendar != calendar) {
-                            viewModel.changeSelectedMonthOffsetCommand(offset)
+                        if (mainCalendar == calendar) coroutineScope.launch {
+                            pagerState.scrollToPage(applyOffset(offset))
                         } else {
                             val date = calendar.getMonthStartFromMonthsDistance(
                                 baseJdn = today,
                                 monthsDistance = offset,
                             )
-                            viewModel.bringDay(Jdn(date))
+                            bringDay(Jdn(date), true)
                         }
                     }
                 }
-
-                // To preserve pager's state even in year view where calendar isn't in the tree
-                val pagerState = calendarPagerState()
 
                 AnimatedVisibility(
                     visible = !isYearView.value,
@@ -484,7 +498,13 @@ fun SharedTransitionScope.CalendarScreen(
                     if (isLandscape) Row {
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(
-                                viewModel = viewModel,
+                                selectedDay = selectedDay,
+                                isHighlighted = isHighlighted,
+                                refreshToken = refreshToken,
+                                changeSelectedDay = { jdn: Jdn ->
+                                    isHighlighted = true
+                                    selectedDay = jdn
+                                },
                                 today = today,
                                 pagerState = pagerState,
                                 yearViewCalendar = yearViewCalendar.value,
@@ -498,7 +518,8 @@ fun SharedTransitionScope.CalendarScreen(
                             drawBehindSurface = false,
                         ) {
                             Details(
-                                viewModel = viewModel,
+                                selectedDay = selectedDay,
+                                bringDay = bringDay,
                                 tabs = detailsTabs,
                                 pagerState = detailsPagerState,
                                 contentMinHeight = maxHeight,
@@ -551,7 +572,13 @@ fun SharedTransitionScope.CalendarScreen(
                                         .animateContentSize(appContentSizeAnimationSpec),
                                 ) {
                                     CalendarPager(
-                                        viewModel = viewModel,
+                                        selectedDay = selectedDay,
+                                        isHighlighted = isHighlighted,
+                                        refreshToken = refreshToken,
+                                        changeSelectedDay = { jdn: Jdn ->
+                                            isHighlighted = true
+                                            selectedDay = jdn
+                                        },
                                         today = today,
                                         pagerState = pagerState,
                                         yearViewCalendar = yearViewCalendar.value,
@@ -567,7 +594,8 @@ fun SharedTransitionScope.CalendarScreen(
                                     mayNeedDragHandleToDivide = true,
                                 ) {
                                     Details(
-                                        viewModel = viewModel,
+                                        bringDay = bringDay,
+                                        selectedDay = selectedDay,
                                         tabs = detailsTabs,
                                         pagerState = detailsPagerState,
                                         contentMinHeight = detailsMinHeight,
@@ -600,6 +628,8 @@ fun SharedTransitionScope.CalendarScreen(
     }
 }
 
+private typealias BringDay = (jdn: Jdn, highlight: Boolean) -> Unit
+
 enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
     CALENDAR(R.string.calendar), EVENT(R.string.events), TIMES(R.string.times),
 }
@@ -619,7 +649,9 @@ private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInter
 
 @Composable
 private fun SharedTransitionScope.detailsTabs(
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
+    refreshToken: Int,
+    refreshCalendar: () -> Unit,
     navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -635,7 +667,7 @@ private fun SharedTransitionScope.detailsTabs(
     return listOfNotNull(
         if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
             CalendarsTab(
-                viewModel = viewModel,
+                selectedDay = selectedDay,
                 interactionSource = interactionSource,
                 minHeight = minHeight,
                 bottomPadding = bottomPadding,
@@ -646,10 +678,12 @@ private fun SharedTransitionScope.detailsTabs(
         CalendarScreenTab.EVENT to { _, _, bottomPadding ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
-                viewModel = viewModel,
                 // See the comment in floatingActionButton
                 fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
                 now = now,
+                refreshToken = refreshToken,
+                refreshCalendar = refreshCalendar,
+                selectedDay = selectedDay,
             )
         },
         // The optional third tab
@@ -659,7 +693,7 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                 navigateToAstronomy = navigateToAstronomy,
                 removeThirdTab = { removeThirdTab = true },
-                viewModel = viewModel,
+                selectedDay = selectedDay,
                 interactionSource = interactionSource,
                 minHeight = minHeight,
                 bottomPadding = bottomPadding,
@@ -672,7 +706,8 @@ private fun SharedTransitionScope.detailsTabs(
 
 @Composable
 private fun Details(
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
+    bringDay: BringDay,
     tabs: List<DetailsTab>,
     pagerState: PagerState,
     contentMinHeight: Dp,
@@ -715,10 +750,10 @@ private fun Details(
                 if (isOnlyEventsTab) run {
                     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                     Modifier
-                        .detectHorizontalSwipe {
+                        .detectHorizontalSwipe(selectedDay) {
                             { isLeft ->
-                                val newJdn = viewModel.selectedDay + if (isLeft xor isRtl) -1 else 1
-                                viewModel.bringDay(newJdn)
+                                val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
+                                bringDay(newJdn, true)
                             }
                         }
                         .then(modifier)
@@ -737,7 +772,7 @@ private fun Details(
 
 @Composable
 private fun SharedTransitionScope.CalendarsTab(
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
@@ -757,7 +792,7 @@ private fun SharedTransitionScope.CalendarsTab(
     ) {
         Spacer(Modifier.height(24.dp))
         CalendarsOverview(
-            jdn = viewModel.selectedDay,
+            jdn = selectedDay,
             today = today,
             selectedCalendar = mainCalendar,
             shownCalendars = enabledCalendars,
@@ -941,7 +976,11 @@ private fun SharedTransitionScope.Toolbar(
     isYearView: MutableState<Boolean>,
     yearViewLazyListState: LazyListState?,
     yearViewScale: Animatable<Float, AnimationVector1D>?,
-    viewModel: CalendarViewModel,
+    selectedMonthOffset: Int,
+    refreshToken: Int,
+    selectedDay: Jdn,
+    isHighlighted: Boolean,
+    bringDay: BringDay,
     isLandscape: Boolean,
     today: Jdn,
     now: Long,
@@ -950,7 +989,7 @@ private fun SharedTransitionScope.Toolbar(
     val coroutineScope = rememberCoroutineScope()
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
         baseJdn = today,
-        monthsDistance = viewModel.selectedMonthOffset,
+        monthsDistance = selectedMonthOffset,
     )
     val yearViewOffset = yearViewOffset(yearViewLazyListState)
     val yearViewIsInYearSelection = yearViewIsInYearSelection(yearViewScale)
@@ -965,7 +1004,7 @@ private fun SharedTransitionScope.Toolbar(
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
-            val refreshToken = viewModel.refreshToken
+            val refreshToken = refreshToken
             // just a noop to update title and subtitle when secondary calendar is toggled
             refreshToken.run {}
 
@@ -1001,11 +1040,10 @@ private fun SharedTransitionScope.Toolbar(
                     title = language.my.format(
                         selectedMonth.monthName, numeral.format(selectedMonth.year),
                     )
-                    val selectedDay = viewModel.selectedDay
                     val selectedDate = selectedDay on mainCalendar
                     val isCurrentMonth =
                         selectedDate.year == selectedMonth.year && selectedDate.month == selectedMonth.month
-                    if (viewModel.isHighlighted && isCurrentMonth) {
+                    if (isHighlighted && isCurrentMonth) {
                         val selectedSecondaryDate = selectedDay on secondaryCalendar
                         subtitle = language.my.format(
                             selectedSecondaryDate.monthName,
@@ -1135,9 +1173,9 @@ private fun SharedTransitionScope.Toolbar(
             }
 
             AnimatedVisibility(!isYearView) {
-                TodayActionButton(viewModel.selectedMonthOffset != 0 || viewModel.isHighlighted) {
+                TodayActionButton(selectedMonthOffset != 0 || isHighlighted) {
                     yearViewCalendar = null
-                    viewModel.bringDay(today, highlight = false)
+                    bringDay(today, false)
                 }
             }
             AnimatedVisibility(!isYearView) {
@@ -1149,7 +1187,9 @@ private fun SharedTransitionScope.Toolbar(
             }
             AnimatedVisibility(!isYearView) {
                 Menu(
-                    viewModel = viewModel,
+                    selectedDay = selectedDay,
+                    selectedMonthOffset = selectedMonthOffset,
+                    bringDay = bringDay,
                     isLandscape = isLandscape,
                     swipeUpActions = swipeUpActions,
                     swipeDownActions = swipeDownActions,
@@ -1166,8 +1206,10 @@ private fun SharedTransitionScope.Toolbar(
 private fun SharedTransitionScope.Menu(
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
-    viewModel: CalendarViewModel,
     isLandscape: Boolean,
+    bringDay: BringDay,
+    selectedDay: Jdn,
+    selectedMonthOffset: Int,
     isTalkBackEnabled: Boolean,
     today: Jdn,
     now: Long,
@@ -1176,19 +1218,16 @@ private fun SharedTransitionScope.Menu(
     val resources = LocalResources.current
 
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDatePickerDialog) {
-        val selectedDay = viewModel.selectedDay
-        DatePickerDialog(
-            initialJdn = selectedDay,
-            onDismissRequest = { showDatePickerDialog = false },
-            today = today,
-            onSuccess = viewModel::bringDay,
-        )
-    }
+    if (showDatePickerDialog) DatePickerDialog(
+        initialJdn = selectedDay,
+        onDismissRequest = { showDatePickerDialog = false },
+        today = today,
+        onSuccess = { bringDay(it, true) },
+    )
 
     var showShiftWorkDialog by rememberSaveable { mutableStateOf(false) }
     if (showShiftWorkDialog) ShiftWorkDialog(
-        selectedJdn = viewModel.selectedDay,
+        selectedJdn = selectedDay,
         onDismissRequest = { showShiftWorkDialog = false },
     )
 
@@ -1196,8 +1235,8 @@ private fun SharedTransitionScope.Menu(
     if (showPlanetaryHoursDialog) coordinates?.also {
         PlanetaryHoursDialog(
             coordinates = it,
-            now = now + (viewModel.selectedDay - today).days.inWholeMilliseconds,
-            isToday = today == viewModel.selectedDay,
+            now = now + (selectedDay - today).days.inWholeMilliseconds,
+            isToday = today == selectedDay,
         ) { showPlanetaryHoursDialog = false }
     }
 
@@ -1216,7 +1255,7 @@ private fun SharedTransitionScope.Menu(
             closeMenu()
             val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
                 baseJdn = today,
-                monthsDistance = viewModel.selectedMonthOffset,
+                monthsDistance = selectedMonthOffset,
             )
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
@@ -1380,10 +1419,11 @@ private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
 
 @Composable
 fun addEvent(
-    viewModel: CalendarViewModel, snackbarHostState: SnackbarHostState,
+    refreshCalendar: () -> Unit,
+    snackbarHostState: SnackbarHostState,
 ): (AddEventData) -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
-        viewModel.refreshCalendar()
+        refreshCalendar()
     }
 
     val context = LocalContext.current
@@ -1392,7 +1432,7 @@ fun addEvent(
 
     addEventData?.let { data ->
         AskForCalendarPermissionDialog { isGranted ->
-            viewModel.refreshCalendar()
+            refreshCalendar()
             if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
                 if (language.isPersianOrDari) coroutineScope.launch {
                     if (snackbarHostState.showSnackbar(

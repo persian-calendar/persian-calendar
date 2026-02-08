@@ -157,7 +157,9 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SharedTransitionScope.DaysScreen(
-    calendarViewModel: CalendarViewModel,
+    refreshToken: Int,
+    refreshCalendar: () -> Unit,
+    requestBringJdn: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
@@ -167,7 +169,7 @@ fun SharedTransitionScope.DaysScreen(
     var selectedDay by rememberSaveable { mutableStateOf(initiallySelectedDay) }
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
     val date = selectedDay on mainCalendar
-    calendarViewModel.changeDaysScreenSelectedDay(selectedDay)
+    requestBringJdn(selectedDay)
     val coroutineScope = rememberCoroutineScope()
     val weekInitialPage = remember(today) { weekPageFromJdn(initiallySelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
@@ -186,7 +188,7 @@ fun SharedTransitionScope.DaysScreen(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val addEvent = addEvent(calendarViewModel, snackbarHostState)
+    val addEvent = addEvent(refreshCalendar, snackbarHostState)
     val density = LocalDensity.current
     val hasWeeksPager =
         LocalWindowInfo.current.containerSize.height > with(density) { 600.dp.toPx() }
@@ -337,7 +339,6 @@ fun SharedTransitionScope.DaysScreen(
                     calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
                 // Don't show weeks pager if there isn't enough space
                 Column {
-                    val refreshToken = calendarViewModel.refreshToken
                     val daysTable = daysTable(
                         modifier = Modifier.detectSwipe { ::onSwipeDown },
                         suggestedPagerSize = pagerSize,
@@ -434,14 +435,13 @@ fun SharedTransitionScope.DaysScreen(
                                     selectedDay = selectedDay,
                                     setSelectedDay = setSelectedDayInWeekPager,
                                     addEvent = addEvent,
-                                    refreshCalendar = calendarViewModel::refreshCalendar,
+                                    refreshCalendar = refreshCalendar,
                                     days = 7,
                                     deviceEvents = weekDeviceEvents,
                                     now = now,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
-                                    calendarViewModel = calendarViewModel,
                                     screenWidth = screenWidth,
                                     scrollState = scrollState,
                                     initialScroll = initialScroll,
@@ -495,13 +495,12 @@ fun SharedTransitionScope.DaysScreen(
                                 selectedDay = selectedDay,
                                 setSelectedDay = { selectedDay = it; isHighlighted = true },
                                 addEvent = addEvent,
-                                refreshCalendar = calendarViewModel::refreshCalendar,
+                                refreshCalendar = refreshCalendar,
                                 days = 1,
                                 now = now,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                 snackbarHostState = snackbarHostState,
-                                calendarViewModel = calendarViewModel,
                                 hasWeekPager = hasWeeksPager,
                                 deviceEvents = dayDeviceEvents,
                                 screenWidth = screenWidth,
@@ -570,7 +569,6 @@ private fun DaysView(
     isAddEventBoxEnabled: Boolean,
     setAddEventBoxEnabled: () -> Unit,
     snackbarHostState: SnackbarHostState,
-    calendarViewModel: CalendarViewModel,
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
     screenWidth: Dp,

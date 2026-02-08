@@ -4,8 +4,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
@@ -20,12 +18,14 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
-import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 
 @Composable
 fun CalendarPager(
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
+    isHighlighted: Boolean,
+    refreshToken: Int,
+    changeSelectedDay: (Jdn) -> Unit,
     pagerState: PagerState,
     yearViewCalendar: Calendar?,
     addEvent: (AddEventData) -> Unit,
@@ -33,35 +33,17 @@ fun CalendarPager(
     suggestedPagerSize: DpSize,
     navigateToDays: (Jdn, Boolean) -> Unit,
 ) {
-    LaunchedEffect(key1 = viewModel.selectedMonthOffsetCommand) {
-        val offset = viewModel.selectedMonthOffsetCommand ?: return@LaunchedEffect
-        val page = applyOffset(-offset)
-        if (viewModel.daysScreenSelectedDay == null) {
-            pagerState.animateScrollToPage(page)
-        } else {
-            viewModel.changeDaysScreenSelectedDay(null)
-            // Apply immediately if we're just coming back from days screen
-            pagerState.scrollToPage(page)
-        }
-        viewModel.changeSelectedMonthOffsetCommand(null)
-    }
-
-    viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
-
-    val refreshToken = viewModel.refreshToken
     val daysTable = daysTable(
         suggestedPagerSize = suggestedPagerSize,
         addEvent = addEvent,
         today = today,
         refreshToken = refreshToken,
-        setSelectedDay = viewModel::changeSelectedDay,
+        setSelectedDay = changeSelectedDay,
         onWeekClick = navigateToDays,
         pagerState = pagerState,
         secondaryCalendar = yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar,
     )
 
-    val selectedDay = viewModel.selectedDay
-    val isHighlighted = viewModel.isHighlighted
     val context = LocalContext.current
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
@@ -105,4 +87,4 @@ fun calendarPagerState(): PagerState =
 
 private const val monthsLimit = 5000 // this should be an even number
 
-private fun applyOffset(position: Int) = monthsLimit / 2 - position
+fun applyOffset(position: Int) = monthsLimit / 2 - position

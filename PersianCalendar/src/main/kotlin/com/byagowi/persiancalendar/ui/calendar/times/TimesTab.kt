@@ -49,7 +49,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
@@ -62,11 +61,11 @@ import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
 fun SharedTransitionScope.TimesTab(
+    selectedDay: Jdn,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     removeThirdTab: () -> Unit,
-    viewModel: CalendarViewModel,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
@@ -94,7 +93,7 @@ fun SharedTransitionScope.TimesTab(
         onDispose { context.preferences.edit { putBoolean(EXPANDED_TIME_STATE_KEY, isExpanded) } }
     }
 
-    val prayTimes = coordinates.calculatePrayTimes(viewModel.selectedDay.toGregorianCalendar())
+    val prayTimes = coordinates.calculatePrayTimes(selectedDay.toGregorianCalendar())
 
     Column(
         Modifier
@@ -108,8 +107,8 @@ fun SharedTransitionScope.TimesTab(
             ),
     ) {
         Spacer(Modifier.height(16.dp))
-        val isToday = viewModel.selectedDay == today
-        AstronomicalOverview(viewModel, prayTimes, now, isToday, navigateToAstronomy)
+        val isToday = selectedDay == today
+        AstronomicalOverview(selectedDay, prayTimes, now, isToday, navigateToAstronomy)
         Spacer(Modifier.height(16.dp))
         Times(isExpanded, prayTimes, now, isToday)
         Spacer(Modifier.height(8.dp))
@@ -156,7 +155,7 @@ private fun showEnableAthanForPersianUsers(): Boolean {
 
 @Composable
 private fun SharedTransitionScope.AstronomicalOverview(
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
     prayTimes: PrayTimes,
     now: Long,
     isToday: Boolean,
@@ -187,7 +186,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
             modifier = Modifier.fillMaxHeight(),
         ) else Box(Modifier.fillMaxSize()) {
             MoonView(
-                jdn = viewModel.selectedDay,
+                jdn = selectedDay,
                 modifier = Modifier
                     .size(70.dp)
                     .align(Alignment.Center)
@@ -200,7 +199,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,
-                    ) { navigateToAstronomy(viewModel.selectedDay) },
+                    ) { navigateToAstronomy(selectedDay) },
             )
         }
     }

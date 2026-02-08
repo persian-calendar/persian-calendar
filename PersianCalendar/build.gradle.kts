@@ -172,7 +172,6 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.compose.animation)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.runtime)

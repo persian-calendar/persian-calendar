@@ -129,7 +129,9 @@ import kotlin.time.Duration.Companion.minutes
 @Composable
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: (String?) -> Unit,
-    viewModel: CalendarViewModel,
+    selectedDay: Jdn,
+    refreshToken: Int,
+    refreshCalendar: () -> Unit,
     fabPlaceholderHeight: Dp,
     now: Long,
 ) {
@@ -138,7 +140,7 @@ fun SharedTransitionScope.EventsTab(
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
     ) {
-        val shiftWorkTitle = shiftWorkSettings.workTitle(viewModel.selectedDay)
+        val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
         AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle.orEmpty(),
@@ -156,8 +158,7 @@ fun SharedTransitionScope.EventsTab(
                 }
             }
         }
-        val shiftWorkInDaysDistance =
-            shiftWorkSettings.getShiftWorksInDaysDistance(viewModel.selectedDay)
+        val shiftWorkInDaysDistance = shiftWorkSettings.getShiftWorksInDaysDistance(selectedDay)
         AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance.orEmpty(),
@@ -176,10 +177,10 @@ fun SharedTransitionScope.EventsTab(
 
         Column(Modifier.padding(horizontal = 24.dp)) {
             val context = LocalContext.current
-            val deviceEvents = remember(viewModel.selectedDay, viewModel.refreshToken) {
-                context.readDayDeviceEvents(viewModel.selectedDay)
+            val deviceEvents = remember(selectedDay, refreshToken) {
+                context.readDayDeviceEvents(selectedDay)
             }
-            val events = readEvents(viewModel.selectedDay, now, deviceEvents)
+            val events = readEvents(selectedDay, now, deviceEvents)
             Spacer(Modifier.height(16.dp))
             AnimatedVisibility(events.isEmpty()) {
                 Text(
@@ -196,7 +197,7 @@ fun SharedTransitionScope.EventsTab(
                 ),
             ) {
                 DayEvents(events, navigateToHolidaysSettings) {
-                    viewModel.refreshCalendar()
+                    refreshCalendar()
                 }
             }
         }

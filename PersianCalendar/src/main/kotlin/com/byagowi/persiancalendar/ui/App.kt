@@ -54,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,13 +82,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -107,7 +105,6 @@ import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
-import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.DaysScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
@@ -137,6 +134,18 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val railState = rememberWideNavigationRailState()
     AppNavigationRail(railState, backStack, finish)
     SharedTransitionLayout {
+        var refreshToken by rememberSaveable { mutableIntStateOf(0) }
+        val refreshCalendar: () -> Unit = { ++refreshToken }
+        LaunchedEffect(Unit) {
+            snapshotFlow { resumeToken }.collect {
+                if (it > 1) {
+                    delay(.5.seconds)
+                    refreshCalendar()
+                    delay(.5.seconds)
+                    refreshCalendar()
+                }
+            }
+        }
         var today by remember { mutableStateOf(Jdn.today()) }
         var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
         val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
@@ -145,9 +154,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 today = Jdn.today()
                 now = System.currentTimeMillis()
                 delay(30.seconds)
+                refreshCalendar()
             }
         }
-        var appInitialJdn by remember { mutableStateOf(initialJdn) }
+        val bringJdnRequest = remember { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         val navigateUp: () -> Unit = {
@@ -157,26 +167,18 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             // also.
             if (backStack.size < 2) finish() else backStack.removeLastOrNull()
         }
-        // Not the best approach to access calendar screen view model…
-        var calendarViewModel by remember { mutableStateOf<CalendarViewModel?>(null) }
         NavDisplay(
             backStack = backStack,
             onBack = navigateUp,
             predictivePopTransitionSpec = {
                 ContentTransform(fadeIn(), fadeOut())
             },
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator(
-                    removeViewModelStoreOnPop = { true },
-                ),
-            ),
             entryProvider = entryProvider {
                 entry<Screen.Calendar> {
-                    val viewModel = viewModel<CalendarViewModel>()
-                    calendarViewModel = viewModel
-                    appInitialJdn?.let { viewModel.bringDay(it); appInitialJdn = null }
                     CalendarScreen(
+                        refreshToken = refreshToken,
+                        refreshCalendar = refreshCalendar,
+                        bringJdnRequest = bringJdnRequest,
                         openNavigationRail = openNavigationRail,
                         navigateToHolidaysSettings = { item ->
                             backStack += Screen.Settings(
@@ -191,18 +193,19 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 settings = PREF_ATHAN_ALARM,
                             )
                         },
-                        navigateToSchedule = {
-                            backStack += Screen.Schedule(viewModel.selectedDay)
+                        navigateToSchedule = { selectedDay ->
+                            backStack += Screen.Schedule(selectedDay)
                         },
                         navigateToDays = { jdn, isWeek ->
                             backStack += Screen.Days(selectedDay = jdn, isWeek = isWeek)
                         },
-                        navigateToMonthView = { backStack += Screen.Month(viewModel.selectedDay) },
+                        navigateToMonthView = { selectedDay ->
+                            backStack += Screen.Month(selectedDay)
+                        },
                         navigateToSettingsLocationTab = {
                             backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
                         },
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
-                        viewModel = viewModel,
                         today = today,
                         now = now,
                     )
@@ -215,7 +218,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.Schedule> {
                     ScheduleScreen(
-                        calendarViewModel = calendarViewModel ?: viewModel(),
+                        refreshToken = refreshToken,
+                        requestBringJdn = { jdn -> bringJdnRequest.value = jdn },
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
                         today = today,
@@ -224,7 +228,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
                 entry<Screen.Days> {
                     DaysScreen(
-                        calendarViewModel = calendarViewModel ?: viewModel(),
+                        refreshToken = refreshToken,
+                        refreshCalendar = refreshCalendar,
+                        requestBringJdn = { jdn -> bringJdnRequest.value = jdn },
                         initiallySelectedDay = it.selectedDay,
                         isInitiallyWeek = it.isWeek,
                         navigateUp = navigateUp,
