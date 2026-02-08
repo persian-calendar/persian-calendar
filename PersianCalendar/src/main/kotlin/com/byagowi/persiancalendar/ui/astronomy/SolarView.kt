@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -353,8 +352,6 @@ fun SunView(
     offsetY: Animatable<Float, AnimationVector1D>,
     state: AstronomyState,
 ) {
-    val contentColor = LocalContentColor.current
-    val typeface = resolveAndroidCustomTypeface()
     val textPath = remember { Path() }
     val textPathRect = remember { RectF() }
     val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
@@ -362,8 +359,8 @@ fun SunView(
     }
     val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.textAlign = Paint.Align.CENTER
-        it.typeface = typeface
-        it.color = contentColor.toArgb()
+        it.typeface = resolveAndroidCustomTypeface()
+        it.color = LocalContentColor.current.toArgb()
     }
     ZoomableCanvas(
         scale = scale,
@@ -378,9 +375,7 @@ fun SunView(
         val canvas = this.drawContext.canvas.nativeCanvas
         colorTextPaint.textSize = radius / 11
         colorTextPaint.alpha = 255
-        (2..9).forEach {
-            drawCircle(Color(0xFF808080).copy(alpha = (10 - it) / 40f), radius / 10 * it)
-        }
+        repeat(8) { drawCircle(Color.Gray.copy(alpha = (9 - it) / 50f), radius / 10 * (it + 2)) }
         drawCircle(Color(0xFFEEBB22), radius / 35)
         state.heliocentricPlanets.forEachIndexed { i, ecliptic ->
             rotate(degrees = -ecliptic.elon.toFloat() + 90) {
