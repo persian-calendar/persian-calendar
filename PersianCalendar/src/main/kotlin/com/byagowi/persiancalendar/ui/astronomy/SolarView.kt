@@ -10,15 +10,20 @@ import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -35,10 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
@@ -48,6 +50,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
 import kotlinx.coroutines.launch
@@ -57,35 +60,22 @@ import kotlin.math.hypot
 import kotlin.math.sign
 
 @Composable
-fun SolarView(
-    modifier: Modifier,
+fun EarthView(
     isTropical: Boolean,
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
     state: AstronomyState,
-    mode: AstronomyMode,
     rotationalMinutesChange: (Int) -> Unit,
 ) {
-    if (scale.value == 1f && (offsetX.value != 0f || offsetY.value != 0f)) LaunchedEffect(Unit) {
-        launch { offsetX.animateTo(0f) }
-        launch { offsetY.animateTo(0f) }
-    }
-
     val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
     val contentColor = LocalContentColor.current
     val typeface = resolveAndroidCustomTypeface()
-
     val textPath = remember { Path() }
     val textPathRect = remember { RectF() }
-
-    val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
-        stringResource(it.titleStringId) + " " + it.symbol
-    }
     val geocentricPlanetsTitles = geocentricPlanetsList.map {
         stringResource(it.titleStringId) + " " + it.symbol
     }
-
     val density = LocalDensity.current
     val trianglePath = remember(density) {
         Path().also {
@@ -97,7 +87,6 @@ fun SolarView(
         }
     }
     val arcRect = remember { RectF() }
-
     val zodiacBackgroundPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.color = 0x08808080
         it.style = Paint.Style.FILL
@@ -106,13 +95,11 @@ fun SolarView(
         it.color = 0x18808080
         it.style = Paint.Style.FILL
     }
-
     val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
         it.color = contentColor.toArgb()
     }
-
     val zodiacPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.color = 0xFF808080.toInt()
         it.strokeWidth = with(density) { 1.dp.toPx() }
@@ -120,7 +107,6 @@ fun SolarView(
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
     }
-
     val zodiacSymbolPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.color = 0x38808080
         it.strokeWidth = with(density) { 1.dp.toPx() }
@@ -133,7 +119,6 @@ fun SolarView(
         if (isBoldFont) it.isFakeBoldText = true
     }
     val moonOrbitStroke = Stroke(with(density) { 1.dp.toPx() })
-
     val tropicalFraction by animateFloatAsState(
         targetValue = if (isTropical) 1f else 0f,
         animationSpec = spring(
@@ -154,13 +139,10 @@ fun SolarView(
     val solarDraw = remember(resources) { SolarDraw(resources) }
     val labels = Zodiac.entries.map { it.shortTitle(resources) }
     val symbols = Zodiac.entries.map { it.symbol }
-
     val coroutineScope = rememberCoroutineScope()
     val rotationVelocity = remember { Animatable(0f) }
-
     val isScaled by remember { derivedStateOf { scale.value != 1f } }
-    val textMeasurer = rememberTextMeasurer()
-    val textStyle = LocalTextStyle.current
+    val modifier = Modifier.aspectRatio(1f)
     ZoomableCanvas(
         scale = scale,
         offsetX = offsetX,
@@ -168,9 +150,8 @@ fun SolarView(
         disableHorizontalLimit = true,
         disableVerticalLimit = true,
         disablePan = !isScaled,
-        modifier = modifier.pointerInput(mode, isScaled) {
-            if (mode != AstronomyMode.EARTH || isScaled) return@pointerInput
-            awaitEachGesture {
+        modifier = modifier.pointerInput(isScaled) {
+            if (!isScaled) awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = false)
                 val centerX = size.width / 2f
                 val centerY = size.height / 2f
@@ -216,7 +197,6 @@ fun SolarView(
                     }
                 } while (event.changes.any { it.pressed })
 
-                // Handle fling animation
                 val velocity = velocityTracker.calculateVelocity()
                 val velocityMagnitude = hypot(velocity.x, velocity.y) * rotationSpeed / 2000
 
@@ -238,39 +218,37 @@ fun SolarView(
             }
         },
     ) {
-        val radius = size.minDimension / 2f
-        val canvas = drawContext.canvas.nativeCanvas
-        when (mode) {
-            AstronomyMode.EARTH -> {
-                val dp = 1.dp.toPx()
-                (0..12).forEach {
-                    rotate(degrees = it * 30f) {
-                        drawLine(
-                            color = Color.Gray,
-                            start = Offset(size.width - dp / 2, radius),
-                            end = Offset(size.width - 6 * dp, radius),
-                            strokeWidth = (if (it == 0) 2 else 1) * dp,
-                            alpha = if (it == 0) .5f else (tropicalFraction / 2),
-                        )
-                    }
-                }
-                arcRect.set(0f, 0f, 2 * radius, 2 * radius)
-                val circleInset = radius * .05f
-                arcRect.inset(circleInset, circleInset)
-                canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
-                tropicalFraction.let {}
-                repeat(12) { index ->
-                    val start = zodiacRanges[index * 2]
-                    val end = zodiacRanges[index * 2 + 1]
-                    rotate(degrees = -end + 90) {
-                        if (index % 2 == 0) canvas.drawArc(
-                            arcRect, -90f, end - start, true, zodiacForegroundPaint,
-                        )
-                        val start = Offset(radius, circleInset)
-                        val end = Offset(radius, radius)
-                        drawLine(surfaceColor, start, end)
-                    }
-                    rotate(degrees = -(start + end) / 2 + 90) {
+        val radius = this.center.x
+        val canvas = this.drawContext.canvas.nativeCanvas
+        val dp = 1.dp.toPx()
+        (0..12).forEach {
+            rotate(degrees = it * 30f) {
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(size.width - dp / 2, radius),
+                    end = Offset(size.width - 6 * dp, radius),
+                    strokeWidth = (if (it == 0) 2 else 1) * dp,
+                    alpha = if (it == 0) .5f else (tropicalFraction / 2),
+                )
+            }
+        }
+        arcRect.set(0f, 0f, 2 * radius, 2 * radius)
+        val circleInset = radius * .05f
+        arcRect.inset(circleInset, circleInset)
+        canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
+        tropicalFraction.let {}
+        repeat(12) { index ->
+            val start = zodiacRanges[index * 2]
+            val end = zodiacRanges[index * 2 + 1]
+            rotate(degrees = -end + 90) {
+                if (index % 2 == 0) canvas.drawArc(
+                    arcRect, -90f, end - start, true, zodiacForegroundPaint,
+                )
+                val start = Offset(radius, circleInset)
+                val end = Offset(radius, radius)
+                drawLine(surfaceColor, start, end)
+            }
+            rotate(degrees = -(start + end) / 2 + 90) {
 //                val rectSize = radius * .88f
 //                textPath.rewind()
 //                textPathRect.set(
@@ -278,98 +256,147 @@ fun SolarView(
 //                )
 //                textPath.addArc(textPathRect, 0f, 180f)
 //                drawTextOnPath(labels[(index + 6) % 12], textPath, 0f, 0f, zodiacPaint)
-                        canvas.drawText(labels[index], radius, radius * .12f, zodiacPaint)
-                        canvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
-                    }
-                }
-                val cr = radius / 8f
-                solarDraw.earth(canvas, radius, radius, cr / 1.5f, state.sun)
-                val sunDegree = state.sun.elon.toFloat()
-                rotate(degrees = -sunDegree + 90) {
-                    solarDraw.sun(canvas, radius, radius / 2.5f, cr)
-                    translate(left = radius) { drawPath(trianglePath, Color(0xFFEEBB22)) }
-                }
-                val moonDegree = state.moon.lon.toFloat()
-                drawCircle(Color(0x40808080), radius * .25f, style = moonOrbitStroke)
-                rotate(degrees = -moonDegree + 90) {
-                    val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
-                    solarDraw.moon(
-                        canvas, state.sun, state.moon, radius,
-                        radius * moonDistance.toFloat() * .75f, cr / 1.9f,
-                    )
-                    translate(left = radius) { drawPath(trianglePath, Color(0x78808080)) }
-                }
-                colorTextPaint.textSize = radius / 15
-                colorTextPaint.alpha = 120
-                state.geocentricPlanets.forEachIndexed { i, ecliptic ->
-                    rotate(degrees = -ecliptic.elon.toFloat() + 270) {
-                        val r = when (i) {
-                            0 -> 2.5f
-                            1 -> 3.25f
-                            2 -> 5.25f
-                            3 -> 6f
-                            4 -> 6.75f
-                            else -> 0f
-                        }
-                        val rectSize = radius / 9 * (1 + r) * .95f
-                        textPath.rewind()
-                        textPathRect.set(
-                            radius - rectSize,
-                            radius - rectSize,
-                            radius + rectSize,
-                            radius + rectSize,
-                        )
-                        textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
-                        canvas.drawTextOnPath(
-                            geocentricPlanetsTitles[i],
-                            textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
-                        )
-                    }
-                }
+                canvas.drawText(labels[index], radius, radius * .12f, zodiacPaint)
+                canvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
             }
-
-            AstronomyMode.MOON -> {
-                solarDraw.moon(
-                    canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt,
-                    moonAltitude = state.moonAltitude,
+        }
+        val cr = radius / 8f
+        solarDraw.earth(canvas, radius, radius, cr / 1.5f, state.sun)
+        val sunDegree = state.sun.elon.toFloat()
+        rotate(degrees = -sunDegree + 90) {
+            solarDraw.sun(canvas, radius, radius / 2.5f, cr)
+            translate(left = radius) { drawPath(trianglePath, Color(0xFFEEBB22)) }
+        }
+        val moonDegree = state.moon.lon.toFloat()
+        drawCircle(Color(0x40808080), radius * .25f, style = moonOrbitStroke)
+        rotate(degrees = -moonDegree + 90) {
+            val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
+            solarDraw.moon(
+                canvas, state.sun, state.moon, radius,
+                radius * moonDistance.toFloat() * .75f, cr / 1.9f,
+            )
+            translate(left = radius) { drawPath(trianglePath, Color(0x78808080)) }
+        }
+        colorTextPaint.textSize = radius / 15
+        colorTextPaint.alpha = 120
+        state.geocentricPlanets.forEachIndexed { i, ecliptic ->
+            rotate(degrees = -ecliptic.elon.toFloat() + 270) {
+                val r = when (i) {
+                    0 -> 2.5f
+                    1 -> 3.25f
+                    2 -> 5.25f
+                    3 -> 6f
+                    4 -> 6.75f
+                    else -> 0f
+                }
+                val rectSize = radius / 9 * (1 + r) * .95f
+                textPath.rewind()
+                textPathRect.set(
+                    radius - rectSize,
+                    radius - rectSize,
+                    radius + rectSize,
+                    radius + rectSize,
                 )
-                state.sunAltitude?.also { sunAltitude ->
-                    val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
-                    solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
-                }
-                val text = language.formatAuAsKm(state.moon.dist)
-                val style = textStyle.copy(fontSize = 14.sp)
-                textMeasurer.measure(text, style).let {
-                    val topLeft =
-                        Offset(radius - it.size.width / 2, radius * 1.7f - it.size.height / 2)
-                    drawText(it, Color.Gray, topLeft)
-                }
+                textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
+                canvas.drawTextOnPath(
+                    geocentricPlanetsTitles[i],
+                    textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
+                )
             }
+        }
+    }
+}
 
-            AstronomyMode.SUN -> {
-                colorTextPaint.textSize = radius / 11
-                colorTextPaint.alpha = 255
-                (2..9).forEach {
-                    drawCircle(Color(0xFF808080).copy(alpha = (10 - it) / 40f), radius / 10 * it)
-                }
-                drawCircle(Color(0xFFEEBB22), radius / 35)
-                state.heliocentricPlanets.forEachIndexed { i, ecliptic ->
-                    rotate(degrees = -ecliptic.elon.toFloat() + 90) {
-                        textPath.rewind()
-                        val rectSize = radius / 9 * (1 + i) * .95f
-                        textPathRect.set(
-                            radius - rectSize,
-                            radius - rectSize,
-                            radius + rectSize,
-                            radius + rectSize,
-                        )
-                        textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
-                        canvas.drawTextOnPath(
-                            heliocentricPlanetsTitles[i],
-                            textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
-                        )
-                    }
-                }
+@Composable
+fun MoonView(
+    scale: Animatable<Float, AnimationVector1D>,
+    offsetX: Animatable<Float, AnimationVector1D>,
+    offsetY: Animatable<Float, AnimationVector1D>,
+    state: AstronomyState,
+) {
+    Box(Modifier.aspectRatio(1f)) {
+        val solarDraw = LocalResources.current.let { remember(it) { SolarDraw(it) } }
+        ZoomableCanvas(
+            scale = scale,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            disableHorizontalLimit = true,
+            disableVerticalLimit = true,
+            disablePan = scale.value == 1f,
+            modifier = Modifier.aspectRatio(1f),
+        ) {
+            val radius = this.center.x
+            val canvas = this.drawContext.canvas.nativeCanvas
+            solarDraw.moon(
+                canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt,
+                moonAltitude = state.moonAltitude,
+            )
+            state.sunAltitude?.also { sunAltitude ->
+                val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
+                solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
+            }
+        }
+        SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
+            Text(
+                text = language.formatAuAsKm(state.moon.dist),
+                color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
+                modifier = Modifier.padding(bottom = 24.dp),
+            )
+        }
+    }
+}
+
+@Composable
+fun SunView(
+    scale: Animatable<Float, AnimationVector1D>,
+    offsetX: Animatable<Float, AnimationVector1D>,
+    offsetY: Animatable<Float, AnimationVector1D>,
+    state: AstronomyState,
+) {
+    val contentColor = LocalContentColor.current
+    val typeface = resolveAndroidCustomTypeface()
+    val textPath = remember { Path() }
+    val textPathRect = remember { RectF() }
+    val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
+        stringResource(it.titleStringId) + " " + it.symbol
+    }
+    val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
+        it.textAlign = Paint.Align.CENTER
+        it.typeface = typeface
+        it.color = contentColor.toArgb()
+    }
+    ZoomableCanvas(
+        scale = scale,
+        offsetX = offsetX,
+        offsetY = offsetY,
+        disableHorizontalLimit = true,
+        disableVerticalLimit = true,
+        disablePan = scale.value == 1f,
+        modifier = Modifier.aspectRatio(1f),
+    ) {
+        val radius = this.center.x
+        val canvas = this.drawContext.canvas.nativeCanvas
+        colorTextPaint.textSize = radius / 11
+        colorTextPaint.alpha = 255
+        (2..9).forEach {
+            drawCircle(Color(0xFF808080).copy(alpha = (10 - it) / 40f), radius / 10 * it)
+        }
+        drawCircle(Color(0xFFEEBB22), radius / 35)
+        state.heliocentricPlanets.forEachIndexed { i, ecliptic ->
+            rotate(degrees = -ecliptic.elon.toFloat() + 90) {
+                textPath.rewind()
+                val rectSize = radius / 9 * (1 + i) * .95f
+                textPathRect.set(
+                    radius - rectSize,
+                    radius - rectSize,
+                    radius + rectSize,
+                    radius + rectSize,
+                )
+                textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
+                canvas.drawTextOnPath(
+                    heliocentricPlanetsTitles[i],
+                    textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
+                )
             }
         }
     }

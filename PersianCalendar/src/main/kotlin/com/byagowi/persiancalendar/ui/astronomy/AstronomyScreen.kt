@@ -178,6 +178,13 @@ fun SharedTransitionScope.AstronomyScreen(
     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.25f) }
     val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
     val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+    // Since panning will be disabled when scale is reset, if the content isn't in
+    // its default place, reset the position also.
+    if (scale.value == 1f && (offsetX.value != 0f || offsetY.value != 0f)) LaunchedEffect(Unit) {
+        launch { offsetX.animateTo(0f) }
+        launch { offsetY.animateTo(0f) }
+    }
+
     var initialAnimation by rememberSaveable { mutableStateOf(true) }
     LaunchedEffect(Unit) {
         if (initialAnimation) {
@@ -211,7 +218,15 @@ fun SharedTransitionScope.AstronomyScreen(
                 actions = {
                     val isScaled = scale.value != 1f && !initialAnimation
                     TodayActionButton(visible = jdn != today || isScaled || offsetX.value != 0f || offsetY.value != 0f) {
-                        coroutineScope.launch { scale.animateTo(1f) }
+                        coroutineScope.launch {
+                            scale.animateTo(
+                                targetValue = 1f,
+                                animationSpec = spring(
+                                    Spring.DampingRatioLowBouncy,
+                                    Spring.StiffnessLow,
+                                ),
+                            )
+                        }
                         coroutineScope.launch { offsetX.animateTo(0f) }
                         coroutineScope.launch { offsetY.animateTo(0f) }
                         coroutineScope.launch {
@@ -587,18 +602,32 @@ private fun SharedTransitionScope.SolarDisplay(
                 .padding(horizontal = 56.dp)
                 .align(Alignment.Center),
         ) { mode ->
-            SolarView(
-                modifier = Modifier.aspectRatio(1f),
-                isTropical = isTropical,
-                state = astronomyState,
-                scale = scale,
-                offsetX = offsetX,
-                offsetY = offsetY,
-                mode = mode,
-            ) { offset ->
-                coroutineScope.launch {
-                    timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
+            when (mode) {
+                AstronomyMode.EARTH -> EarthView(
+                    isTropical = isTropical,
+                    scale = scale,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    state = astronomyState,
+                ) { offset ->
+                    coroutineScope.launch {
+                        timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
+                    }
                 }
+
+                AstronomyMode.SUN -> SunView(
+                    scale = scale,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    state = astronomyState,
+                )
+
+                AstronomyMode.MOON -> MoonView(
+                    scale = scale,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    state = astronomyState,
+                )
             }
         }
     }
