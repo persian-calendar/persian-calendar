@@ -241,24 +241,6 @@ fun SolarView(
         val radius = size.minDimension / 2f
         val canvas = drawContext.canvas.nativeCanvas
         when (mode) {
-            AstronomyMode.MOON -> {
-                solarDraw.moon(
-                    canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt,
-                    moonAltitude = state.moonAltitude,
-                )
-                state.sunAltitude?.also { sunAltitude ->
-                    val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
-                    solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
-                }
-                val text = language.formatAuAsKm(state.moon.dist)
-                val style = textStyle.copy(fontSize = 14.sp)
-                textMeasurer.measure(text, style).let {
-                    val topLeft =
-                        Offset(radius - it.size.width / 2, radius * 1.7f - it.size.height / 2)
-                    drawText(it, Color.Gray, topLeft)
-                }
-            }
-
             AstronomyMode.EARTH -> {
                 val dp = 1.dp.toPx()
                 (0..12).forEach {
@@ -343,6 +325,24 @@ fun SolarView(
                             textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
                         )
                     }
+                }
+            }
+
+            AstronomyMode.MOON -> {
+                solarDraw.moon(
+                    canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt,
+                    moonAltitude = state.moonAltitude,
+                )
+                state.sunAltitude?.also { sunAltitude ->
+                    val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
+                    solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
+                }
+                val text = language.formatAuAsKm(state.moon.dist)
+                val style = textStyle.copy(fontSize = 14.sp)
+                textMeasurer.measure(text, style).let {
+                    val topLeft =
+                        Offset(radius - it.size.width / 2, radius * 1.7f - it.size.height / 2)
+                    drawText(it, Color.Gray, topLeft)
                 }
             }
 
