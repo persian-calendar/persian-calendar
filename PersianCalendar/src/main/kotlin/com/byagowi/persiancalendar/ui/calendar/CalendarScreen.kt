@@ -281,6 +281,10 @@ fun SharedTransitionScope.CalendarScreen(
         },
     )
 
+    if (!viewModel.isHighlighted && viewModel.selectedDay != today) LaunchedEffect(Unit) {
+        viewModel.bringDay(jdn = today, highlight = false)
+    }
+
     val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
     val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
     val isYearView = rememberSaveable { mutableStateOf(false) }

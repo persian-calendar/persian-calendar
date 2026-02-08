@@ -29,8 +29,6 @@ class CalendarViewModel() : ViewModel() {
     private val _isHighlighted = mutableStateOf(false)
     val isHighlighted by _isHighlighted
 
-    private val today = mutableStateOf(Jdn.today())
-
     private val _daysScreenSelectedDay = mutableStateOf<Jdn?>(null)
     val daysScreenSelectedDay by _daysScreenSelectedDay
 
@@ -68,13 +66,13 @@ class CalendarViewModel() : ViewModel() {
 
     init {
         viewModelScope.launch {
+            var today = Jdn.today()
             while (true) {
                 delay(30.seconds)
                 val newToday = Jdn.today()
-                if (today.value != newToday) {
+                if (today != newToday) {
                     refreshCalendar()
-                    today.value = newToday
-                    if (!isHighlighted) _selectedDay.value = newToday
+                    today = newToday
                 }
             }
         }
