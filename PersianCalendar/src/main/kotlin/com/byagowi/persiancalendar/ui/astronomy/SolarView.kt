@@ -59,7 +59,7 @@ import kotlin.math.hypot
 import kotlin.math.sign
 
 @Composable
-fun EarthView(
+fun AstronomyEarthView(
     isTropical: Boolean,
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
@@ -307,7 +307,7 @@ fun EarthView(
 }
 
 @Composable
-fun MoonView(
+fun AstronomyMoonView(
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
@@ -346,7 +346,7 @@ fun MoonView(
 }
 
 @Composable
-fun SunView(
+fun AstronomySunView(
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,

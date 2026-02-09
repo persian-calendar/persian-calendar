@@ -602,7 +602,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 .align(Alignment.Center),
         ) { mode ->
             when (mode) {
-                AstronomyMode.EARTH -> EarthView(
+                AstronomyMode.EARTH -> AstronomyEarthView(
                     isTropical = isTropical,
                     scale = scale,
                     offsetX = offsetX,
@@ -614,14 +614,14 @@ private fun SharedTransitionScope.SolarDisplay(
                     }
                 }
 
-                AstronomyMode.SUN -> SunView(
+                AstronomyMode.SUN -> AstronomySunView(
                     scale = scale,
                     offsetX = offsetX,
                     offsetY = offsetY,
                     state = astronomyState,
                 )
 
-                AstronomyMode.MOON -> MoonView(
+                AstronomyMode.MOON -> AstronomyMoonView(
                     scale = scale,
                     offsetX = offsetX,
                     offsetY = offsetY,
