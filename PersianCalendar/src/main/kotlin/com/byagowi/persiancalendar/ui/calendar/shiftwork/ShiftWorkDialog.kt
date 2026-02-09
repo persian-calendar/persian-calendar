@@ -277,13 +277,7 @@ fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () ->
     Spacer(Modifier.height(8.dp))
     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
         TextButton(
-            onClick = {
-                shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1)
-                // TODO: Make it scroll to end?
-                // scope.launch {
-                //     lazyListState.animateScrollBy(viewModel.shiftWorks.value.size + 1f)
-                // }
-            },
+            onClick = { shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1) },
         ) { Text(stringResource(R.string.add)) }
         Spacer(Modifier.weight(1f))
         TextButton(onClick = onDismissRequest) {

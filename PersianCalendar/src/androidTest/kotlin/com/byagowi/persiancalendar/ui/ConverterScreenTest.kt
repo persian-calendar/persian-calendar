@@ -93,46 +93,6 @@ class ConverterScreenTest {
         restorationTester.emulateSavedInstanceStateRestore()
     }
 
-//    @Test
-//    fun testTodayButtonVisibilityConverter() {
-//        val values = mutableListOf<Boolean>()
-//        val viewModel = ConverterViewModel()
-//        composeTestRule.setContent {
-//            LaunchedEffect(viewModel.todayButtonVisibility) {
-//                values += viewModel.todayButtonVisibility
-//            }
-//        }
-//        listOf(
-//            { viewModel.selectedDate = Jdn.today() + 1 },
-//            { viewModel.selectedDate = Jdn.today() },
-//        ).forEach { it(); composeTestRule.waitForIdle() }
-//        assertEquals(listOf(false, true, false), values)
-//    }
-
-//    @Test
-//    fun testTodayButtonVisibility() {
-//        val values = mutableListOf<Boolean>()
-//        val viewModel = ConverterViewModel()
-//        composeTestRule.setContent {
-//            LaunchedEffect(viewModel.todayButtonVisibility) {
-//                values += viewModel.todayButtonVisibility
-//            }
-//        }
-//        listOf(
-//            { viewModel.screenMode = ConverterScreenMode.DISTANCE },
-//            { viewModel.secondSelectedDate = Jdn.today() + 1 },
-//            { viewModel.secondSelectedDate = Jdn.today() },
-//            { viewModel.secondSelectedDate = Jdn.today() + 1 },
-//            { viewModel.screenMode = ConverterScreenMode.CONVERTER },
-//            { viewModel.secondSelectedDate = Jdn.today() },
-//            { viewModel.screenMode = ConverterScreenMode.CALCULATOR },
-//            { viewModel.secondSelectedDate = Jdn.today() },
-//            { viewModel.screenMode = ConverterScreenMode.QR_CODE },
-//            { viewModel.secondSelectedDate = Jdn.today() },
-//        ).forEach { it(); composeTestRule.waitForIdle() }
-//        assertEquals(listOf(false, true, false, true, false), values)
-//    }
-
     @Test
     fun testChineseAnimalYearName() {
         // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
