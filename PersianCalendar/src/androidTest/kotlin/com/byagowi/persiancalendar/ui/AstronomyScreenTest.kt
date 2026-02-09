@@ -14,10 +14,10 @@ import org.junit.Test
 class AstronomyScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+    private val today = Jdn.today()
 
     @Test
     fun basicSmokeTest() {
-        val today = Jdn.today()
         val initialTime = System.currentTimeMillis()
         composeTestRule.setContent {
             NavigationMock {
@@ -30,7 +30,6 @@ class AstronomyScreenTest {
     fun astronomyScreenNavigateToMap() {
         var navigateToMapIsCalled = false
         var mapString = ""
-        val today = Jdn.today()
         val initialTime = System.currentTimeMillis()
         composeTestRule.setContent {
             mapString = stringResource(R.string.map)

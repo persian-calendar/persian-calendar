@@ -14,13 +14,14 @@ import org.junit.Test
 class CompassScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+    private val today = Jdn.today()
 
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContent {
             NavigationMock {
                 val now = System.currentTimeMillis()
-                CompassScreen({}, {}, {}, {}, null, Jdn.today(), now)
+                CompassScreen({}, {}, {}, {}, null, today, now)
             }
         }
     }
@@ -38,7 +39,7 @@ class CompassScreenTest {
                     navigateToMap = { assert(false) },
                     navigateToSettingsLocationTab = {},
                     noBackStackAction = null,
-                    today = Jdn.today(),
+                    today = today,
                     now = System.currentTimeMillis(),
                 )
             }
@@ -63,7 +64,7 @@ class CompassScreenTest {
                     navigateToMap = { navigateToMapIsCalled = true },
                     navigateToSettingsLocationTab = {},
                     noBackStackAction = null,
-                    today = Jdn.today(),
+                    today = today,
                     now = System.currentTimeMillis(),
                 )
             }

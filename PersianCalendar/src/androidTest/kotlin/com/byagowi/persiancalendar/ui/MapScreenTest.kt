@@ -14,16 +14,17 @@ import org.junit.Test
 class MapScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+    private val today = Jdn.today()
 
     @Test
     fun mapScreenNavigateUp() {
         var navigateUpIsCalled = false
         var navigateUpString = ""
+        val time = System.currentTimeMillis()
         composeTestRule.setContent {
             navigateUpString = stringResource(R.string.navigate_up)
-            val time = System.currentTimeMillis()
             NavigationMock {
-                MapScreen({ navigateUpIsCalled = true }, false, time, Jdn.today())
+                MapScreen({ navigateUpIsCalled = true }, false, time, today)
             }
         }
         composeTestRule.onNodeWithContentDescription(navigateUpString)

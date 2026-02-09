@@ -13,13 +13,13 @@ import org.junit.runner.RunWith
 class CalendarScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+    private val today = Jdn.today()
 
     @Test
     fun calendarScreenSmokeTest() {
         val jdn = mutableStateOf<Jdn?>(null)
         composeTestRule.setContent {
             NavigationMock {
-                val today = Jdn.today()
                 val now = System.currentTimeMillis()
                 CalendarScreen(0, {}, jdn, {}, {}, {}, {}, {}, {}, {}, { _, _ -> }, today, now)
             }

@@ -19,13 +19,14 @@ import org.junit.Test
 class ShiftWorkDialogTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+    private val today = Jdn.today()
 
     @Test
     fun basicSmokeTest() {
         var acceptString = ""
         composeTestRule.setContent {
             acceptString = stringResource(R.string.accept)
-            ShiftWorkDialog(Jdn.today()) {}
+            ShiftWorkDialog(today) {}
         }
         composeTestRule.onNodeWithText(acceptString).assertExists()
     }
@@ -35,12 +36,12 @@ class ShiftWorkDialogTest {
         val restorationTester = StateRestorationTester(composeTestRule)
 
         restorationTester.setContent {
-            Column { ShiftWorkDialogContent(Jdn.today()) {} }
+            Column { ShiftWorkDialogContent(today) {} }
             val value1 = rememberSaveable {
                 mutableStateListOf(ShiftWorkRecord("d", 12))
             }
             val value2 = rememberSaveable { mutableStateListOf("a") }
-            val value3 = rememberSaveable { mutableStateListOf(Jdn.today()) }
+            val value3 = rememberSaveable { mutableStateListOf(today) }
             val value4 = rememberSaveable { mutableStateOf("a") }
         }
 
