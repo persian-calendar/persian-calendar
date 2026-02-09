@@ -270,7 +270,9 @@ fun daysTable(
                 }
             }
 
-            val holidaysPositions = remember(eventsRepository, deviceEvents) { DayTablePositions() }
+            val holidaysPositions = remember(eventsRepository, deviceEvents, monthStartJdn) {
+                DayTablePositions()
+            }
             var todayPosition by remember(today) { mutableStateOf<IntIntPair?>(null) }
             Box(
                 Modifier
