@@ -17,9 +17,11 @@ class AstronomyScreenTest {
 
     @Test
     fun basicSmokeTest() {
+        val today = Jdn.today()
+        val initialTime = System.currentTimeMillis()
         composeTestRule.setContent {
             NavigationMock {
-                AstronomyScreen({}, {}, System.currentTimeMillis(), Jdn.today(), null)
+                AstronomyScreen({}, {}, initialTime, today, null)
             }
         }
     }
@@ -28,11 +30,12 @@ class AstronomyScreenTest {
     fun astronomyScreenNavigateToMap() {
         var navigateToMapIsCalled = false
         var mapString = ""
+        val today = Jdn.today()
+        val initialTime = System.currentTimeMillis()
         composeTestRule.setContent {
             mapString = stringResource(R.string.map)
-            val time = System.currentTimeMillis()
             NavigationMock {
-                AstronomyScreen({}, { navigateToMapIsCalled = true }, time, Jdn.today(), null)
+                AstronomyScreen({}, { navigateToMapIsCalled = true }, initialTime, today, null)
             }
         }
         composeTestRule.onNodeWithContentDescription(mapString)
