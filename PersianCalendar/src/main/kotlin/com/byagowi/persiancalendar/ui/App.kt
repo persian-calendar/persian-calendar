@@ -125,38 +125,37 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
     val backStack = rememberNavBackStack(Screen.fromName(intentStartDestination))
     val railState = rememberWideNavigationRailState()
-    AppNavigationRail(railState, backStack, finish)
-    SharedTransitionLayout {
-        var refreshToken by rememberSaveable { mutableIntStateOf(0) }
-        val refreshCalendar: () -> Unit = { ++refreshToken }
-        LaunchedEffect(Unit) {
-            snapshotFlow { resumeToken }.collect {
-                if (it > 1) {
-                    delay(.5.seconds)
-                    refreshCalendar()
-                    delay(.5.seconds)
-                    refreshCalendar()
-                }
-            }
-        }
-        var today by remember { mutableStateOf(Jdn.today()) }
-        var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
-        val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
-        if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
-            while (isActive) {
-                today = Jdn.today()
-                now = System.currentTimeMillis()
-                delay(30.seconds)
+    var refreshToken by rememberSaveable { mutableIntStateOf(0) }
+    val refreshCalendar: () -> Unit = { ++refreshToken }
+    LaunchedEffect(Unit) {
+        snapshotFlow { resumeToken }.collect {
+            if (it > 1) {
+                delay(.5.seconds)
+                refreshCalendar()
+                delay(.5.seconds)
                 refreshCalendar()
             }
         }
+    }
+    var today by remember { mutableStateOf(Jdn.today()) }
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
+        while (isActive) {
+            today = Jdn.today()
+            now = System.currentTimeMillis()
+            delay(30.seconds)
+            refreshCalendar()
+        }
+    }
+    AppNavigationRail(now, railState, backStack, finish)
+    SharedTransitionLayout {
         val bringJdnCommand = rememberSaveable { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
@@ -385,6 +384,7 @@ private val railWidth = 220.dp
 
 @Composable
 private fun AppNavigationRail(
+    now: Long,
     railState: WideNavigationRailState,
     backStack: NavBackStack<NavKey>,
     finish: () -> Unit,
@@ -420,7 +420,7 @@ private fun AppNavigationRail(
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 ) {
-                    NavigationRailSeasonsPager()
+                    NavigationRailSeasonsPager(now)
                     NavigationRailDarkModeToggle()
                 }
                 val defaultColors = WideNavigationRailItemDefaults.colors()
@@ -493,22 +493,11 @@ private fun Modifier.navigationRailTopGradient(): Modifier {
 }
 
 @Composable
-private fun NavigationRailSeasonsPager() {
-    var actualSeason by remember {
-        mutableIntStateOf(Season.fromDate(Date(), coordinates).ordinal)
-    }
+private fun NavigationRailSeasonsPager(now: Long) {
+    val actualSeason = Season.fromTimeInMillis(now, coordinates).ordinal
     val pageSize = 200
     val pagerState = rememberPagerState(pageSize / 2 + actualSeason, pageCount = { pageSize })
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(30.seconds)
-            val seasonIndex = Season.fromDate(Date(), coordinates).ordinal
-            if (actualSeason != seasonIndex) {
-                actualSeason = seasonIndex
-                pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
-            }
-        }
-    }
+    LaunchedEffect(actualSeason) { pagerState.animateScrollToPage(pageSize / 2 + actualSeason) }
 
     val isDynamicGrayscale = isDynamicGrayscale()
     val imageFilter = remember(isDynamicGrayscale) {

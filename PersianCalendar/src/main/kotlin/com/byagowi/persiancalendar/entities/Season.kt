@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.Coordinates
-import java.util.Date
 import kotlin.math.floor
 
 enum class Season(
@@ -21,8 +20,8 @@ enum class Season(
     WINTER(R.string.winter, R.drawable.winter, Color(0xcc5580aa));
 
     companion object {
-        fun fromDate(date: Date, coordinates: Coordinates?): Season {
-            val sunLongitude = sunPosition(Time.fromMillisecondsSince1970(date.time)).elon
+        fun fromTimeInMillis(timeInMillis: Long, coordinates: Coordinates?): Season {
+            val sunLongitude = sunPosition(Time.fromMillisecondsSince1970(timeInMillis)).elon
             val seasonIndex = floor(sunLongitude / 90).toInt()
                 // Southern hemisphere consideration
                 .let { if (coordinates?.isSouthernHemisphere == true) (it + 2) % 4 else it }
