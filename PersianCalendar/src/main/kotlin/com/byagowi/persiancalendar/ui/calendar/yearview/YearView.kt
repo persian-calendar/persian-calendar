@@ -93,7 +93,7 @@ fun YearView(
     maxHeight: Dp,
     bottomPadding: Dp,
     today: Jdn,
-    selectedMonth: (calendar: Calendar, offset: Int) -> Unit,
+    selectedMonth: (calendar: Calendar, monthsDistance: Int) -> Unit,
 ) {
     if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
     val calendar = yearViewCalendar.value ?: mainCalendar

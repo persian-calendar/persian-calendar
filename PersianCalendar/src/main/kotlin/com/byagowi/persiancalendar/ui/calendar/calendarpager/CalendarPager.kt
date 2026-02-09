@@ -26,7 +26,7 @@ fun CalendarPager(
     isHighlighted: Boolean,
     refreshToken: Int,
     changeSelectedDay: (Jdn) -> Unit,
-    pagerState: PagerState,
+    calendarPagerState: CalendarPagerState,
     yearViewCalendar: Calendar?,
     addEvent: (AddEventData) -> Unit,
     today: Jdn,
@@ -40,12 +40,12 @@ fun CalendarPager(
         refreshToken = refreshToken,
         setSelectedDay = changeSelectedDay,
         onWeekClick = navigateToDays,
-        pagerState = pagerState,
+        pagerState = calendarPagerState,
         secondaryCalendar = yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar,
     )
 
     val context = LocalContext.current
-    HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
+    HorizontalPager(state = calendarPagerState, verticalAlignment = Alignment.Top) { page ->
         val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
         val monthStartJdn = Jdn(monthStartDate)
         val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
@@ -81,10 +81,14 @@ fun calendarPagerSize(
     )
 }
 
+typealias CalendarPagerState = PagerState
+
 @Composable
-fun calendarPagerState(): PagerState =
-    rememberPagerState(initialPage = applyOffset(0), pageCount = ::monthsLimit)
+fun calendarPagerState(monthsDistance: Int): CalendarPagerState =
+    rememberPagerState(initialPage = applyOffset(monthsDistance), pageCount = ::monthsLimit)
 
 private const val monthsLimit = 5000 // this should be an even number
 
-fun applyOffset(position: Int) = monthsLimit / 2 - position
+fun clampPageNumber(pageNumber: Int) = pageNumber.coerceIn(0..<monthsLimit)
+
+fun applyOffset(monthsDistance: Int) = monthsLimit / 2 - monthsDistance

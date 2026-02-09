@@ -156,7 +156,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     }
     AppNavigationRail(now, railState, backStack, finish)
     SharedTransitionLayout {
-        val bringJdnCommand = rememberSaveable { mutableStateOf(initialJdn) }
+        val bringDayCommand = rememberSaveable { mutableStateOf(initialJdn) }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         val navigateUp: () -> Unit = {
@@ -177,7 +177,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     CalendarScreen(
                         refreshToken = refreshToken,
                         refreshCalendar = refreshCalendar,
-                        bringJdnCommand = bringJdnCommand,
+                        bringDayCommand = bringDayCommand,
                         openNavigationRail = openNavigationRail,
                         navigateToHolidaysSettings = { item ->
                             backStack += Screen.Settings(
@@ -218,7 +218,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Schedule> {
                     ScheduleScreen(
                         refreshToken = refreshToken,
-                        commandBringJdn = { jdn -> bringJdnCommand.value = jdn },
+                        commandBringDay = { day -> bringDayCommand.value = day },
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
                         today = today,
@@ -229,7 +229,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     DaysScreen(
                         refreshToken = refreshToken,
                         refreshCalendar = refreshCalendar,
-                        commandBringJdn = { jdn -> bringJdnCommand.value = jdn },
+                        commandBringDay = { day -> bringDayCommand.value = day },
                         initiallySelectedDay = it.selectedDay,
                         isInitiallyWeek = it.isWeek,
                         navigateUp = navigateUp,
