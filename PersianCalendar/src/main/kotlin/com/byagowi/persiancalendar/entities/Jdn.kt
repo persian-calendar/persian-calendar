@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
 import android.os.Parcelable
+import androidx.compose.runtime.annotation.RememberInComposition
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -89,6 +90,8 @@ value class Jdn(val value: Long) : Parcelable {
         (this.value..<that.value).asSequence().map(::Jdn)
 
     companion object {
+        // Better to use App provided today() where possible
+        @RememberInComposition
         fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
     }
 }
