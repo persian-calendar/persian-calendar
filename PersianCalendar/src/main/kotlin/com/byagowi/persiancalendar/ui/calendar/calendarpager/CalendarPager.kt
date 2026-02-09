@@ -5,6 +5,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -19,6 +20,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
+import kotlinx.coroutines.launch
 
 @Composable
 fun CalendarPager(
@@ -33,6 +35,7 @@ fun CalendarPager(
     suggestedPagerSize: DpSize,
     navigateToDays: (Jdn, Boolean) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val daysTable = daysTable(
         suggestedPagerSize = suggestedPagerSize,
         addEvent = addEvent,
@@ -40,7 +43,15 @@ fun CalendarPager(
         refreshToken = refreshToken,
         setSelectedDay = changeSelectedDay,
         onWeekClick = navigateToDays,
-        pagerState = calendarPagerState,
+        arrowAction = { isPrevious, isLongClick ->
+            coroutineScope.launch {
+                val page = clampPageNumber(
+                    calendarPagerState.currentPage + (if (isLongClick) 12 else 1) * if (isPrevious) -1 else 1,
+                )
+                if (isLongClick) calendarPagerState.scrollToPage(page)
+                else calendarPagerState.animateScrollToPage(page)
+            }
+        },
         secondaryCalendar = yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar,
     )
 
@@ -53,7 +64,6 @@ fun CalendarPager(
             else EventsStore.empty()
         }
         daysTable(
-            page,
             monthStartDate,
             monthStartJdn,
             monthDeviceEvents,

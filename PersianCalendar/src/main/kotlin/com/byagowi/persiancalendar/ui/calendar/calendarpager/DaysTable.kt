@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -32,7 +31,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,8 +84,6 @@ import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import io.github.persiancalendar.calendar.AbstractDate
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.min
 
@@ -100,13 +96,13 @@ fun daysTable(
     today: Jdn,
     refreshToken: Int,
     setSelectedDay: (Jdn) -> Unit,
-    pagerState: PagerState,
+    arrowAction: PageArrowAction,
     secondaryCalendar: Calendar?,
     modifier: Modifier = Modifier,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     isWeekMode: Boolean = false,
 ): @Composable (
-    page: Int, monthStartDate: AbstractDate, monthStartJdn: Jdn,
+    monthStartDate: AbstractDate, monthStartJdn: Jdn,
     deviceEvents: DeviceCalendarEventsStore, onlyWeek: Int?,
     isHighlighted: Boolean, selectedDay: Jdn,
 ) -> Unit {
@@ -123,7 +119,6 @@ fun daysTable(
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val fontFile = resolveFontFile()
     val monthColors = appMonthColors()
-    val coroutineScope = rememberCoroutineScope()
 
     val resources = LocalResources.current
     val diameter = min(cellWidth, cellHeight)
@@ -174,7 +169,7 @@ fun daysTable(
         )
     }
 
-    return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
+    return { monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =
             if (onlyWeek == null) null else ((monthStartJdn - 1) on mainCalendar).dayOfMonth
 
@@ -251,7 +246,7 @@ fun daysTable(
 
             val arrowOffsetY =
                 (cellHeight + (if (language.isArabicScript) 4 else 0).dp - MaterialIconDimension.dp) / 2
-            PagerArrow(arrowOffsetY, coroutineScope, pagerState, page, width, true, onlyWeek)
+            PagerArrow(arrowOffsetY, arrowAction, width, true, onlyWeek)
 
             repeat(7) { column ->
                 Box(
@@ -468,7 +463,7 @@ fun daysTable(
                 }
             }
 
-            PagerArrow(arrowOffsetY, coroutineScope, pagerState, page, width, false, onlyWeek)
+            PagerArrow(arrowOffsetY, arrowAction, width, false, onlyWeek)
         }
     }
 }
@@ -493,15 +488,15 @@ internal class DayTablePositions {
     }
 }
 
+typealias PageArrowAction = (isPrevious: Boolean, isLongClick: Boolean) -> Unit
+
 private const val pagerArrowSize = MaterialIconDimension + 8 * 2
 const val pagerArrowSizeAndPadding = pagerArrowSize + 4
 
 @Composable
 private fun PagerArrow(
     arrowOffsetY: Dp,
-    coroutineScope: CoroutineScope,
-    pagerState: PagerState,
-    page: Int,
+    arrowAction: PageArrowAction,
     screenWidth: Dp,
     isPrevious: Boolean,
     week: Int?,
@@ -522,26 +517,14 @@ private fun PagerArrow(
                 if (week == null) Modifier.combinedClickable(
                     indication = ripple(bounded = false),
                     interactionSource = null,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
-                        }
-                    },
+                    onClick = { arrowAction(isPrevious, false) },
                     onClickLabel = stringResource(R.string.select_month),
-                    onLongClick = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(page + 12 * if (isPrevious) -1 else 1)
-                        }
-                    },
+                    onLongClick = { arrowAction(isPrevious, true) },
                     onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
                 ) else Modifier.clickable(
                     indication = ripple(bounded = false),
                     interactionSource = null,
-                ) {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
-                    }
-                },
+                ) { arrowAction(isPrevious, false) },
             )
             .alpha(.9f),
     )

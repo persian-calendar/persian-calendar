@@ -347,7 +347,13 @@ fun SharedTransitionScope.DaysScreen(
                         refreshToken = refreshToken,
                         setSelectedDay = setSelectedDayInWeekPager,
                         secondaryCalendar = secondaryCalendar,
-                        pagerState = weekPagerState,
+                        arrowAction = { isPrevious, _ ->
+                            coroutineScope.launch {
+                                weekPagerState.animateScrollToPage(
+                                    weekPagerState.currentPage + if (isPrevious) -1 else 1,
+                                )
+                            }
+                        },
                         isWeekMode = true,
                     )
 
@@ -406,7 +412,6 @@ fun SharedTransitionScope.DaysScreen(
                             }
 
                             if (hasWeeksPager) daysTable(
-                                page,
                                 monthStartDate,
                                 monthStartJdn,
                                 weekDeviceEvents,

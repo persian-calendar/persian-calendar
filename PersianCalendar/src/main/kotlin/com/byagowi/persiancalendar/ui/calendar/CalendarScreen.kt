@@ -481,7 +481,7 @@ fun SharedTransitionScope.CalendarScreen(
                     ) { calendar, monthsDistance ->
                         if (mainCalendar == calendar) coroutineScope.launch {
                             calendarPagerState.scrollToPage(
-                                clampPageNumber(applyOffset(-monthsDistance))
+                                clampPageNumber(applyOffset(-monthsDistance)),
                             )
                         } else {
                             val date = calendar.getMonthStartFromMonthsDistance(
