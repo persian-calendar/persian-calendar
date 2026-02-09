@@ -89,7 +89,7 @@ fun SharedTransitionScope.TimesTab(
     var isExpanded by rememberSaveable {
         mutableStateOf(context.preferences.getBoolean(EXPANDED_TIME_STATE_KEY, false))
     }
-    DisposableEffect(Unit) {
+    DisposableEffect(isExpanded) {
         onDispose { context.preferences.edit { putBoolean(EXPANDED_TIME_STATE_KEY, isExpanded) } }
     }
 
