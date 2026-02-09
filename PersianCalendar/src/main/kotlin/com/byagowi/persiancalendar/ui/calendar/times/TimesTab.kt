@@ -2,15 +2,19 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,15 +31,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
@@ -160,8 +167,6 @@ private fun SharedTransitionScope.AstronomicalOverview(
     isToday: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
-    var needsAnimation by remember(isToday) { mutableStateOf(isToday) }
-
     Crossfade(
         targetState = isToday,
         modifier = Modifier
@@ -170,20 +175,35 @@ private fun SharedTransitionScope.AstronomicalOverview(
     ) { state ->
         val sunViewColors = appSunViewColors()
         val typeface = resolveAndroidCustomTypeface()
-        if (state) AndroidView(
-            factory = ::SunView,
-            update = {
-                it.setFont(typeface)
-                it.colors = sunViewColors
-                it.prayTimes = prayTimes
-                it.setTime(now)
-                if (needsAnimation) {
-                    it.startAnimate()
-                    needsAnimation = false
-                } else it.initiate()
-            },
-            modifier = Modifier.fillMaxHeight(),
-        ) else Box(Modifier.fillMaxSize()) {
+        val resources = LocalResources.current
+        val density = LocalDensity.current
+        if (state) BoxWithConstraints {
+            val width = this.maxWidth
+            val height = this.maxHeight
+            val sunView = SunView(
+                resources = resources,
+                prayTimes = prayTimes,
+                colors = sunViewColors,
+                width = with(density) { width.roundToPx() },
+                height = with(density) { height.roundToPx() },
+                timeInMillis = now,
+                typeface = typeface,
+                isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            )
+            val fraction = remember { Animatable(0f) }
+            LaunchedEffect(Unit) {
+                fraction.animateTo(
+                    targetValue = 1f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessVeryLow,
+                    ),
+                )
+            }
+            Canvas(Modifier.fillMaxSize()) {
+                sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value)
+            }
+        } else Box(Modifier.fillMaxSize()) {
             MoonView(
                 jdn = selectedDay,
                 modifier = Modifier

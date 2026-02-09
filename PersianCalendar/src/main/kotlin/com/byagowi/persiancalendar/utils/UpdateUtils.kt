@@ -45,7 +45,6 @@ import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri
 import androidx.core.text.layoutDirection
-import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
@@ -270,7 +269,7 @@ fun update(context: Context, updateDate: Boolean) {
             )
         }
         updateFromRemoteViews<WidgetSunView>(context, now) { size, _ ->
-            createSunViewRemoteViews(context, size, prayTimes)
+            createSunViewRemoteViews(context, size, prayTimes, now)
         }
         updateFromRemoteViews<WidgetMonthView>(context, now) { size, _ ->
             createMonthViewRemoteViews(context, size, jdn)
@@ -469,15 +468,19 @@ fun createAgeRemoteViews(
     return remoteViews
 }
 
-fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTimes?): RemoteViews {
+fun createSunViewRemoteViews(
+    context: Context,
+    size: DpSize?,
+    prayTimes: PrayTimes?,
+    now: Long,
+): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = when {
         prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
 
         else -> selectedWidgetTextColor
     }
-    val sunView = SunView(context)
-    sunView.colors = SunViewColors(
+    val colors = SunViewColors(
         nightColor = ContextCompat.getColor(
             context,
             if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_night_color
@@ -499,37 +502,38 @@ fun createSunViewRemoteViews(context: Context, size: DpSize?, prayTimes: PrayTim
         textColorSecondary = color,
         linesColor = ColorUtils.setAlphaComponent(color, 0x60),
     )
-    remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
-    sunView.layoutDirection = context.resources.configuration.layoutDirection
-    // https://stackoverflow.com/a/69080742
     val width = size?.width?.roundToPx(context.resources) ?: 250
     val height = size?.height?.roundToPx(context.resources) ?: 250
-    sunView.measure(
-        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
-        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST),
+    val sunView = SunView(
+        resources = context.resources,
+        prayTimes = prayTimes,
+        colors = colors,
+        width = width,
+        height = height - (4 * context.resources.dp).roundToInt(),
+        timeInMillis = now,
+        typeface = null,
+        isRtl = context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL,
     )
-    sunView.layout(0, 0, width, height)
-    sunView.prayTimes = prayTimes
-    sunView.setTime(System.currentTimeMillis())
-    sunView.initiate()
-    if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
+    remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
+    val clippingPath =
+        if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-    ) sunView.clippingPath = createRoundPath(width, height, roundPixelSize)
+        ) createRoundPath(width, height, roundPixelSize) else null
     remoteViews.setTextColor(R.id.message, color)
-    remoteViews.setTextViewTextOrHideIfEmpty(
-        R.id.message,
-        if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else "",
+    val message =
+        if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else ""
+    remoteViews.setTextViewTextOrHideIfEmpty(R.id.message, message)
+    remoteViews.setImageViewBitmap(
+        R.id.image,
+        createBitmap(width, height).applyCanvas {
+            if (clippingPath == null) sunView.draw(this, 1f)
+            else withClip(clippingPath) { sunView.draw(this, 1f) }
+        },
     )
-
-    // These are used to generate preview,
-    // view.setBackgroundColor(Color.parseColor("#80A0A0A0"))
-    // val outStream = ByteArrayOutputStream()
-    // view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, outStream)
-    // copyToClipboard(Base64.encodeToString(outStream.toByteArray(), Base64.DEFAULT)) {}
-    // $ convert -scale 50% a.png b.png
-    // $ cwebp b.png -o c.webp
-    remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
-    remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
+    remoteViews.setContentDescription(
+        R.id.image,
+        if (prayTimes == null) message else sunView.contentDescription,
+    )
     remoteViews.setOnClickPendingIntent(
         R.id.widget_layout_sun_view, context.launchAppPendingIntent(),
     )

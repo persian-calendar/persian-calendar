@@ -134,8 +134,11 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 }
 
 class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
-    override fun preview(size: DpSize) =
-        createSunViewRemoteViews(this, size, coordinates?.calculatePrayTimes())
+    override fun preview(size: DpSize): RemoteViews {
+        val prayTimes = coordinates?.calculatePrayTimes()
+        val now = System.currentTimeMillis()
+        return createSunViewRemoteViews(this, size, prayTimes, now)
+    }
 
     @Composable
     override fun ColumnScope.Settings() {

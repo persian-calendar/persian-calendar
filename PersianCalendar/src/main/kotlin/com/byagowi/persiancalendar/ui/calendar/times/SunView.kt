@@ -1,15 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import android.animation.ValueAnimator
-import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
 import android.graphics.Typeface
-import android.view.View
-import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
@@ -20,8 +17,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
-import io.github.cosinekitty.astronomy.Ecliptic
-import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
@@ -46,96 +41,97 @@ data class SunViewColors(
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class SunView(context: Context) : View(context) {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val dayPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
+class SunView(
+    resources: Resources,
+    prayTimes: PrayTimes?,
+    private val colors: SunViewColors,
+    private val width: Int,
+    private val height: Int,
+    timeInMillis: Long,
+    typeface: Typeface?,
+    private val isRtl: Boolean,
+) {
+    private val sunset = prayTimes?.sunset
+    private val sunrise = prayTimes?.sunrise
+    private val now = Clock(GregorianCalendar().also { it.timeInMillis = timeInMillis }).value
 
-    internal var width: Int = 0
-    internal var height: Int = 0
-    private val curvePath = Path()
-    private val nightPath = Path()
-    private var current = 0f
-    private var dayLengthString = ""
-    private var remainingString = ""
-    private val sunriseString = context.getString(R.string.sunrise_sun_view)
-    private val middayString = context.getString(R.string.midday_sun_view)
-    private val sunsetString = context.getString(R.string.sunset_sun_view)
-    private var segmentByPixel = .0
-    var prayTimes: PrayTimes? = null
-        set(value) {
-            field = value
-            invalidate()
+    fun Double.safeDiv(other: Double): Float = if (other == .0) 0f else (this / other).toFloat()
+
+    private val current = when {
+        sunset == null || sunrise == null -> 0f
+        now <= sunrise -> now.safeDiv(sunrise) * .17f
+        now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
+        else -> (now - sunset).safeDiv(24 - sunset) * .17f + .17f + .66f
+    }
+
+    private val dayLength = Clock(if (sunset == null || sunrise == null) .0 else sunset - sunrise)
+    private val dayLengthString = if (sunset == null || sunrise == null) "" else {
+        resources.getString(R.string.length_of_day) + spacedColon + run {
+            dayLength.asRemainingTime(resources, short = true)
         }
-    private var sun: Ecliptic? = null
-    private var moon: Spherical? = null
+    }
+
+    private val remaining = if (sunset == null || sunrise == null) null
+    else if (now !in sunrise..sunset) null else Clock(sunset - now)
+    private val remainingString = if (remaining == null) "" else {
+        resources.getString(R.string.remaining_daylight) + spacedColon + run {
+            remaining?.asRemainingTime(resources, short = true)
+        }
+    }
+
+    val contentDescription = if (sunset == null || sunrise == null) "" else {
+        resources.getString(R.string.length_of_day) + spacedColon + run {
+            dayLength.asRemainingTime(resources)
+        } + if (remaining == null) "" else {
+            "\n\n" + resources.getString(R.string.remaining_daylight) + spacedColon + run {
+                remaining?.asRemainingTime(resources)
+            }
+        }
+    }
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.typeface = typeface
+    }
+    private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL_AND_STROKE
+        it.typeface = typeface
+        it.shader = LinearGradient(
+            width * .17f, 0f, width / 2f, 0f, colors.dayColor, colors.middayColor,
+            Shader.TileMode.MIRROR,
+        )
+    }
+
+    private val segmentByPixel = 2 * PI / width
+    private val curvePath = Path().also {
+        it.moveTo(0f, height.toFloat())
+        (0..width).forEach { x ->
+            it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
+        }
+    }
+    private val nightPath = Path().also {
+        it.addPath(curvePath)
+        it.setLastPoint(width.toFloat(), height.toFloat())
+        it.lineTo(width.toFloat(), 0f)
+        it.lineTo(0f, 0f)
+        it.close()
+    }
+    private val sunriseString = resources.getString(R.string.sunrise_sun_view)
+    private val middayString = resources.getString(R.string.midday_sun_view)
+    private val sunsetString = resources.getString(R.string.sunset_sun_view)
+
+    private val time = Time.fromMillisecondsSince1970(timeInMillis)
+    private var sun = sunPosition(time)
+    private var moon = eclipticGeoMoon(time)
     private val fontSize = when {
         language.isArabicScript -> 14f
         language.isTamil -> 11f
         else -> 11.5f
     } * resources.dp
 
-    fun setFont(typeface: Typeface?) {
-        paint.typeface = typeface
-        dayPaint.typeface = typeface
-    }
+    private val solarDraw = SolarDraw(resources)
 
-    fun setTime(date: Long) {
-        val time = Time.fromMillisecondsSince1970(date)
-        sun = sunPosition(time)
-        moon = eclipticGeoMoon(time)
-        invalidate()
-    }
-
-    var colors: SunViewColors? = null
-
-    override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
-        super.onSizeChanged(w, h, oldW, oldH)
-        val colors = colors ?: return
-
-        width = w
-        height = h - 18
-
-        dayPaint.shader = LinearGradient(
-            width * .17f, 0f, width / 2f, 0f, colors.dayColor, colors.middayColor,
-            Shader.TileMode.MIRROR,
-        )
-
-        if (width != 0) segmentByPixel = 2 * PI / width
-
-        curvePath.also {
-            it.rewind()
-            it.moveTo(0f, height.toFloat())
-            (0..width).forEach { x ->
-                it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
-            }
-        }
-
-        nightPath.also {
-            it.rewind()
-            it.addPath(curvePath)
-            it.setLastPoint(width.toFloat(), height.toFloat())
-            it.lineTo(width.toFloat(), 0f)
-            it.lineTo(0f, 0f)
-            it.close()
-        }
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        if (clippingPath.isEmpty) mainDraw(canvas) // no change if there is path is empty
-        else canvas.withClip(clippingPath) { mainDraw(canvas) }
-    }
-
-    // A home-screen widget with background has some roundness that is taken care by a passed path
-    var clippingPath = Path()
-
-    private fun mainDraw(canvas: Canvas) {
-        val colors = colors ?: return
-        val animatedFraction = if (animator.isRunning) animator.animatedFraction else 1f
-        val value = animatedFraction * current
-        val width = width
-        val height = height
-        val isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
+    fun draw(canvas: Canvas, fraction: Float) {
+        val value = fraction * current
         canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = width / 2f) {
             // draw fill of night
             withClip(0f, height * .75f, width * value, height.toFloat()) {
@@ -170,13 +166,11 @@ class SunView(context: Context) : View(context) {
             val radius = sqrt(width * height * .002f)
             val cx = width * value
             val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
-            if (value in .17f..0.83f) withRotation(animatedFraction * 900f, cx, cy) {
+            if (value in .17f..0.83f) withRotation(fraction * 900f, cx, cy) {
                 solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
-            } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) scale@{
+            } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) {
                 // cancel parent flip
-                solarDraw.moon(
-                    canvas, sun ?: return@scale, moon ?: return@scale, cx, cy, radius,
-                )
+                solarDraw.moon(canvas, sun, moon, cx, cy, radius)
             }
         }
 
@@ -220,52 +214,6 @@ class SunView(context: Context) : View(context) {
         drawText(a, w * if (isRtl) .70f else .30f, y, paint)
         drawText(b, w * if (isRtl) .30f else .70f, y, paint)
     }
-
-    private val solarDraw = SolarDraw(resources)
-
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
-
-    fun initiate() {
-        if (animator.isRunning) return
-        val prayTimes = prayTimes ?: return
-
-        val sunset = prayTimes.sunset
-        val sunrise = prayTimes.sunrise
-        val now = Clock(GregorianCalendar()).value
-
-        fun Double.safeDiv(other: Double): Float = if (other == .0) 0f else (this / other).toFloat()
-        current = when {
-            now <= sunrise -> now.safeDiv(sunrise) * .17f
-            now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
-            else -> (now - sunset).safeDiv(24 - sunset) * .17f + .17f + .66f
-        }
-
-        val dayLength = Clock(sunset - sunrise)
-        dayLengthString = context.getString(R.string.length_of_day) + spacedColon +
-                dayLength.asRemainingTime(resources, short = true)
-
-        val remaining = if (now !in sunrise..sunset) null else Clock(sunset - now)
-        remainingString = if (remaining == null) "" else
-            context.getString(R.string.remaining_daylight) + spacedColon +
-                    remaining.asRemainingTime(resources, short = true)
-        // a11y
-        contentDescription = context.getString(R.string.length_of_day) + spacedColon +
-                dayLength.asRemainingTime(resources) + if (remaining == null) "" else
-            ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
-                    remaining.asRemainingTime(resources))
-
-        invalidate()
-    }
-
-    private val animator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = resources.getInteger(android.R.integer.config_longAnimTime) * 3L
-        it.interpolator = DecelerateInterpolator()
-        it.addUpdateListener { invalidate() }
-    }
-
-    fun startAnimate() {
-        initiate()
-        animator.start()
-    }
 }
