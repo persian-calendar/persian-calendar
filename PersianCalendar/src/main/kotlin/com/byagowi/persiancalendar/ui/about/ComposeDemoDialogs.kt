@@ -344,7 +344,7 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
 
 @Composable
 fun ConverterDialog(onDismissRequest: () -> Unit) {
-    val now = Jdn.today()
+    val today = remember { Jdn.today() } // take this from App.kt's today
     val lazyListState = rememberLazyListState(pagesCount / 2)
     val textStyle = LocalTextStyle.current
     val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
@@ -434,7 +434,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 val date = sourceCalendar.getMonthStartFromMonthsDistance(
-                    baseJdn = now,
+                    baseJdn = today,
                     monthsDistance = it - pagesCount / 2,
                 )
                 Text(
@@ -467,7 +467,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
                 )
                 val endOfMonth = (Jdn(
                     sourceCalendar.getMonthStartFromMonthsDistance(
-                        baseJdn = now,
+                        baseJdn = today,
                         monthsDistance = it - pagesCount / 2 + 1,
                     ),
                 ) - 1) on destinationCalendar
