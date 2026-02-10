@@ -212,11 +212,9 @@ fun SharedTransitionScope.LevelScreen(
                         val density = LocalDensity.current
                         val width = with(density) { this@BoxWithConstraints.maxWidth.roundToPx() }
                         val height = with(density) { this@BoxWithConstraints.maxHeight.roundToPx() }
-                        var timeToken by remember { mutableLongStateOf(0) }
+                        var updateToken by remember { mutableLongStateOf(0) }
                         val levelView = remember(resources, angleDisplay, width, height) {
-                            LevelView(resources, angleDisplay, width, height) {
-                                timeToken = System.nanoTime()
-                            }
+                            LevelView(resources, angleDisplay, width, height) { ++updateToken }
                         }
                         LaunchedEffect(activity) {
                             activity?.let { activity ->
@@ -236,7 +234,7 @@ fun SharedTransitionScope.LevelScreen(
                             }
                         }
                         Canvas(Modifier.fillMaxSize()) {
-                            timeToken.let {}
+                            updateToken.let {}
                             levelView.draw(this.drawContext.canvas.nativeCanvas)
                         }
                     }

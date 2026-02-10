@@ -47,17 +47,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -69,19 +65,22 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_COMPASS_SET_LOCATION_IGNORED
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
+import com.byagowi.persiancalendar.QIBLA_LATITUDE
+import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.showQibla
-import com.byagowi.persiancalendar.ui.calendar.detectZoom
+import com.byagowi.persiancalendar.global.showTrueNorth
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -94,7 +93,6 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appSliderColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -149,7 +147,6 @@ fun SharedTransitionScope.CompassScreen(
         it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
     }
     var isStopped by rememberSaveable { mutableStateOf(false) }
-    var compassView by remember { mutableStateOf<CompassView?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -173,6 +170,12 @@ fun SharedTransitionScope.CompassScreen(
                 }
             }
         }
+    }
+
+    val angle = rememberSaveable { mutableFloatStateOf(0f) }
+    val qiblaHeading = coordinates?.run {
+        val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
+        EarthPosition(latitude, longitude).toEarthHeading(qibla)
     }
 
     Scaffold(
@@ -217,26 +220,19 @@ fun SharedTransitionScope.CompassScreen(
                             timeShift = 0f
                         } else isTimeShiftAnimate = true
                     }
-                    var showTrueNorth by rememberSaveable {
-                        mutableStateOf(
-                            context.preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false),
-                        )
-                    }
                     if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
                             text = { Text(stringResource(R.string.true_north)) },
                             isChecked = showTrueNorth,
                         ) {
-                            showTrueNorth = it
+                            context.preferences.edit { putBoolean(PREF_TRUE_NORTH_IN_COMPASS, it) }
                             closeMenu()
-                            compassView?.isTrueNorth = it
                         }
                         AppDropdownMenuCheckableItem(
                             text = { Text(stringResource(R.string.qibla)) },
                             isChecked = showQibla,
                         ) {
                             closeMenu()
-                            compassView?.isShowQibla = it
                             context.preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersianOrDari) {
@@ -282,7 +278,7 @@ fun SharedTransitionScope.CompassScreen(
                                 val animator = ValueAnimator.ofFloat(0f, 1f)
                                 animator.duration = 10.seconds.inWholeMilliseconds
                                 animator.addUpdateListener {
-                                    compassView?.angle = it.animatedFraction * 360
+                                    angle.floatValue = it.animatedFraction * 360
                                 }
                                 if (Random.nextBoolean()) animator.start() else animator.reverse()
                             }
@@ -296,33 +292,13 @@ fun SharedTransitionScope.CompassScreen(
             ScreenSurface {
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
-                        val surfaceColor = MaterialTheme.colorScheme.surface
-                        val typeface = resolveAndroidCustomTypeface()
-                        var zoom by rememberSaveable { mutableFloatStateOf(1f) }
-                        val density = LocalDensity.current
-                        val textSizePx = with(density) { (12 * zoom).sp.toPx() }
-                        val strokeWidthPx = with(density) { (1 * zoom).dp.toPx() }
-                        AndroidView(
-                            modifier = Modifier
-                                .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }
-                                .sharedBounds(
-                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                    boundsTransform = appBoundsTransform,
-                                ),
-                            factory = {
-                                CompassView(it).also { view ->
-                                    view.isShowQibla = showQibla
-                                    compassView = view
-                                }
-                            },
-                            update = {
-                                it.setScale(textSizePx, strokeWidthPx, zoom)
-                                it.setFont(typeface)
-                                it.setSurfaceColor(surfaceColor.toArgb())
-                                it.setTime(time)
-                            },
-                        )
+                        Box(
+                            Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                                boundsTransform = appBoundsTransform,
+                            ),
+                        ) { CompassView(qiblaHeading, time, angle) }
                         Column {
                             AnimatedVisibility(
                                 visible = isSliderShown,
@@ -414,21 +390,25 @@ fun SharedTransitionScope.CompassScreen(
                 eastAnnouncer.check(context, isNearToDegree(90f, angle))
                 southAnnouncer.check(context, isNearToDegree(180f, angle))
                 westAnnouncer.check(context, isNearToDegree(270f, angle))
-                compassView?.qiblaHeading?.heading?.also {
-                    qiblaAnnouncer.check(context, isNearToDegree(it, angle))
+                qiblaHeading?.also {
+                    qiblaAnnouncer.check(context, isNearToDegree(it.heading, angle))
                 }
                 Unit
             }
         }
         val orientationSensorListener = object : OrientationSensorListener() {
-            override val compassView: CompassView? get() = compassView
+            override fun setAngle(value: Float) {
+                angle.floatValue = value
+            }
             override val isStopped: Boolean get() = isStopped
             override val orientation: Float get() = orientation
             override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
                 checkIfA11yAnnounceIsNeeded(angle)
         }
         val accelerometerMagneticSensorListener = object : AccelerometerMagneticSensorListener() {
-            override val compassView: CompassView? get() = compassView
+            override fun setAngle(value: Float) {
+                angle.floatValue = value
+            }
             override val isStopped: Boolean get() = isStopped
             override val orientation: Float get() = orientation
             override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
@@ -498,7 +478,7 @@ private abstract class BaseSensorListener : SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-    abstract val compassView: CompassView?
+    abstract fun setAngle(value: Float)
     abstract val isStopped: Boolean
     abstract val orientation: Float
     abstract fun checkIfA11yAnnounceIsNeeded(angle: Float)
@@ -509,7 +489,7 @@ private abstract class BaseSensorListener : SensorEventListener {
         val angle = if (isStopped) 0f else value + orientation
         if (!isStopped) checkIfA11yAnnounceIsNeeded(angle)
         azimuth = lowPass(angle, azimuth)
-        compassView?.angle = azimuth
+        setAngle(azimuth)
     }
 
     /**

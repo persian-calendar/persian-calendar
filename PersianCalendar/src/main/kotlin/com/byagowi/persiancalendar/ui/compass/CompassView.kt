@@ -2,7 +2,7 @@
 // licensed under GPLv3
 package com.byagowi.persiancalendar.ui.compass
 
-import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
@@ -10,20 +10,42 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.view.View
 import androidx.annotation.ColorInt
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.FloatState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
-import com.byagowi.persiancalendar.QIBLA_LATITUDE
-import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.showQibla
+import com.byagowi.persiancalendar.global.showTrueNorth
+import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.theme.animateColor
+import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
@@ -32,15 +54,58 @@ import kotlin.math.min
 import kotlin.math.round
 import kotlin.math.roundToInt
 
-class CompassView(context: Context) : View(context) {
-    var angle = 0f
-        set(value) {
-            if (value != field) {
-                field = value
-                invalidate()
-            }
+@Composable
+fun CompassView(
+    qiblaHeading: EarthPosition.EarthHeading?,
+    time: GregorianCalendar,
+    angle: FloatState,
+) {
+    var zoom by rememberSaveable { mutableFloatStateOf(1f) }
+    BoxWithConstraints(modifier = Modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
+        val resources = LocalResources.current
+        val context = LocalContext.current
+        var updateToken by remember { mutableIntStateOf(0) }
+        val angleDisplay = remember(context) {
+            AngleDisplay(context, "0", "888")
         }
-    private val trueNorth get() = angle + if (isTrueNorth) astronomyState?.declination ?: 0f else 0f
+        val compassView = remember(resources, angleDisplay) {
+            CompassView(resources, angleDisplay) { ++updateToken }
+        }
+        compassView.isShowQibla = showQibla
+        compassView.isTrueNorth = showTrueNorth
+        with(LocalDensity.current) {
+            val textSizePx = (12 * zoom).sp.toPx()
+            val strokeWidthPx = (1 * zoom).dp.toPx()
+            compassView.setScale(textSizePx, strokeWidthPx, zoom)
+        }
+        compassView.qiblaHeading = qiblaHeading
+        compassView.setFont(resolveAndroidCustomTypeface())
+        compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
+        compassView.setTime(time)
+        with(LocalDensity.current) {
+            compassView.updateSize(
+                this@BoxWithConstraints.maxWidth.roundToPx(),
+                this@BoxWithConstraints.maxHeight.roundToPx(),
+            )
+        }
+        Canvas(Modifier.fillMaxSize()) {
+            updateToken.let {}
+            compassView.draw(this.drawContext.canvas.nativeCanvas, angle.floatValue)
+        }
+    }
+}
+
+private class CompassView(
+    private val resources: Resources,
+    private val angleDisplay: AngleDisplay,
+    private val invalidate: () -> Unit,
+) {
+    var isTrueNorth: Boolean = true
+    private fun trueNorth(angle: Float) =
+        angle + if (isTrueNorth) astronomyState?.declination ?: 0f else 0f
+
+    var qiblaHeading: EarthPosition.EarthHeading? = null
+    var isShowQibla: Boolean = false
 
     // This applies true north correction if it isn't enabled by user but does nothing if is already on
     private fun fixForTrueNorth(angle: Float) =
@@ -104,20 +169,6 @@ class CompassView(context: Context) : View(context) {
         invalidate()
     }
 
-    val qiblaHeading = coordinates?.run {
-        val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
-        EarthPosition(latitude, longitude).toEarthHeading(qibla)
-    }
-    var isShowQibla = true
-        set(value) {
-            field = value
-            invalidate()
-        }
-    var isTrueNorth = false
-        set(value) {
-            field = value
-            invalidate()
-        }
     private val planetsPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = Color.GRAY
         it.textAlign = Paint.Align.CENTER
@@ -147,10 +198,7 @@ class CompassView(context: Context) : View(context) {
         textStrokePaint.color = color
     }
 
-    private val angleDisplay = AngleDisplay(context, "0", "888")
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
+    fun updateSize(w: Int, h: Int) {
         angleDisplay.updatePlacement(w / 2, h)
 
         cx = w / 2f
@@ -181,15 +229,16 @@ class CompassView(context: Context) : View(context) {
         invalidate()
     }
 
-    override fun onDraw(canvas: Canvas) {
+    fun draw(canvas: Canvas, angle: Float) {
+        val trueNorth = trueNorth(angle)
         canvas.withRotation(-trueNorth, cx, cy) {
             drawDial()
             drawPath(northwardShapePath, northArrowPaint)
             if (coordinates != null) {
-                drawMoon()
+                drawMoon(trueNorth)
                 drawSun()
                 drawQibla()
-                drawPlanets()
+                drawPlanets(trueNorth)
             }
         }
         angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
@@ -264,7 +313,7 @@ class CompassView(context: Context) : View(context) {
         }
     }
 
-    private fun Canvas.drawMoon() {
+    private fun Canvas.drawMoon(trueNorth: Float) {
         val astronomyState = astronomyState ?: return
         if (astronomyState.isMoonGone) return
         val azimuth = fixForTrueNorth(astronomyState.moonHorizon.azimuth.toFloat())
@@ -281,7 +330,7 @@ class CompassView(context: Context) : View(context) {
         }
     }
 
-    private fun Canvas.drawPlanets() {
+    private fun Canvas.drawPlanets(trueNorth: Float) {
         val astronomyState = astronomyState ?: return
         planetsPaint.alpha = (127 - astronomyState.sunHorizon.altitude.toInt() * 3).coerceIn(0, 255)
         astronomyState.planets.forEach { (title, planetHorizon) ->

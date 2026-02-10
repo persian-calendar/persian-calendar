@@ -44,6 +44,7 @@ import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
+import com.byagowi.persiancalendar.DEFAULT_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_ALTERNATIVE
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
@@ -102,6 +103,7 @@ import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
+import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_WALLPAPER_ALTERNATIVE
 import com.byagowi.persiancalendar.PREF_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
@@ -295,6 +297,9 @@ val cityName by cityName_
 
 private val showQibla_ = mutableStateOf(true)
 val showQibla by showQibla_
+
+private val showTrueNorth_ = mutableStateOf(DEFAULT_TRUE_NORTH_IN_COMPASS)
+val showTrueNorth by showTrueNorth_
 
 private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
@@ -684,6 +689,10 @@ fun updateStoredPreference(context: Context) {
     numericalDatePreferred_.value =
         preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, DEFAULT_NUMERICAL_DATE_PREFERRED)
     showQibla_.value = preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
+    showTrueNorth_.value = preferences.getBoolean(
+        PREF_TRUE_NORTH_IN_COMPASS,
+        DEFAULT_TRUE_NORTH_IN_COMPASS,
+    )
 
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)
