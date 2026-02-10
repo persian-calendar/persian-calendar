@@ -180,16 +180,21 @@ private fun SharedTransitionScope.AstronomicalOverview(
         if (state) BoxWithConstraints {
             val width = this.maxWidth
             val height = this.maxHeight
-            val sunView = SunView(
-                resources = resources,
-                prayTimes = prayTimes,
-                colors = sunViewColors,
-                width = with(density) { width.roundToPx() },
-                height = with(density) { height.roundToPx() },
-                timeInMillis = now,
-                typeface = typeface,
-                isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-            )
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            val sunView = remember(
+                resources, prayTimes, sunViewColors, density, now, typeface, isRtl,
+            ) {
+                SunView(
+                    resources = resources,
+                    prayTimes = prayTimes,
+                    colors = sunViewColors,
+                    width = with(density) { width.roundToPx() },
+                    height = with(density) { height.roundToPx() },
+                    timeInMillis = now,
+                    typeface = typeface,
+                    isRtl = isRtl,
+                )
+            }
             val fraction = remember { Animatable(0f) }
             LaunchedEffect(Unit) {
                 fraction.animateTo(

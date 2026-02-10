@@ -8,6 +8,7 @@ import android.graphics.Path
 import android.graphics.Shader
 import android.graphics.Typeface
 import androidx.annotation.ColorInt
+import androidx.compose.runtime.Immutable
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
@@ -26,6 +27,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt
 
+@Immutable
 data class SunViewColors(
     @get:ColorInt val nightColor: Int,
     @get:ColorInt val dayColor: Int,
