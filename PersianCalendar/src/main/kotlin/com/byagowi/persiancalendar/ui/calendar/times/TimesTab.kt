@@ -198,7 +198,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
             val fraction = remember { Animatable(0f) }
             LaunchedEffect(Unit) {
                 fraction.animateTo(
-                    targetValue = 1f,
+                    targetValue = 100_000f,
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioNoBouncy,
                         stiffness = Spring.StiffnessVeryLow,
@@ -206,7 +206,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                 )
             }
             Canvas(Modifier.fillMaxSize()) {
-                sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value)
+                sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value / 100_000)
             }
         } else Box(Modifier.fillMaxSize()) {
             MoonView(
