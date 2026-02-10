@@ -19,11 +19,10 @@
  */
 package com.byagowi.persiancalendar.ui.level
 
-import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.view.View
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
@@ -37,9 +36,13 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
-class LevelView(context: Context) : View(context) {
-
-    private val angleDisplay = AngleDisplay(context)
+class LevelView(
+    resources: Resources,
+    private val angleDisplay: AngleDisplay,
+    private val canvasWidth: Int,
+    private val canvasHeight: Int,
+    val invalidate: () -> Unit,
+) {
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.BLACK
     }
@@ -47,8 +50,6 @@ class LevelView(context: Context) : View(context) {
     /**
      * Dimensions
      */
-    private var canvasWidth = 0
-    private var canvasHeight = 0
     private var minLevelX = 0
     private var maxLevelX = 0
     private var levelWidth = 0
@@ -219,19 +220,18 @@ class LevelView(context: Context) : View(context) {
 
     var onIsLevel = fun(_: Boolean) {}
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        canvasWidth = w
-        canvasHeight = h
+    init {
         levelMaxDimension = min(
-            min(h, w) - 2 * angleDisplay.displayGap,
-            max(h, w) - 2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight),
+            min(canvasHeight, canvasWidth) - 2 * angleDisplay.displayGap,
+            max(canvasHeight, canvasWidth) - run {
+                2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight)
+            },
         )
         angleDisplay.updatePlacement(canvasWidth / 2, canvasHeight)
         onOrientationChange(orientation ?: Orientation.LANDING)
     }
 
-    public override fun onDraw(canvas: Canvas) {
+    fun draw(canvas: Canvas) {
         if (firstTime) {
             setOrientation(Orientation.LANDING, 0f, 0f, 0f)
             firstTime = false

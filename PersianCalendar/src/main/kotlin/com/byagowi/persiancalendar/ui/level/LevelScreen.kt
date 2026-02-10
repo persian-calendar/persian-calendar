@@ -15,7 +15,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,6 +43,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -48,12 +52,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -67,6 +72,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
@@ -191,7 +197,7 @@ fun SharedTransitionScope.LevelScreen(
                     )
                 }
                 Column {
-                    AndroidView(
+                    BoxWithConstraints(
                         modifier = Modifier
                             .weight(1f, fill = false)
                             .padding(horizontal = 24.dp)
@@ -201,15 +207,25 @@ fun SharedTransitionScope.LevelScreen(
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
-                        factory = {
-                            val levelView = LevelView(it)
+                    ) {
+                        val angleDisplay = remember(context) { AngleDisplay(context) }
+                        val resources = LocalResources.current
+                        val density = LocalDensity.current
+                        val width = with(density) { this@BoxWithConstraints.maxWidth.roundToPx() }
+                        val height = with(density) { this@BoxWithConstraints.maxHeight.roundToPx() }
+                        var timeToken by remember { mutableLongStateOf(0) }
+                        val levelView = remember(resources, angleDisplay, width, height) {
+                            LevelView(resources, angleDisplay, width, height) {
+                                timeToken = System.nanoTime()
+                            }
+                        }
+                        LaunchedEffect(activity) {
                             activity?.let { activity ->
                                 orientationProvider = OrientationProvider(activity, levelView)
                             }
-                            levelView
-                        },
-                        update = update@{ levelView ->
-                            val provider = orientationProvider ?: return@update
+                        }
+                        LaunchedEffect(orientationProvider) {
+                            val provider = orientationProvider ?: return@LaunchedEffect
                             if (isStopped && provider.isListening) {
                                 levelView.onIsLevel = {}
                                 provider.stopListening()
@@ -218,8 +234,12 @@ fun SharedTransitionScope.LevelScreen(
                                     { isLevel -> announcer.check(context, isLevel) }
                                 provider.startListening()
                             }
-                        },
-                    )
+                        }
+                        Canvas(Modifier.fillMaxSize()) {
+                            timeToken.let {}
+                            levelView.draw(this.drawContext.canvas.nativeCanvas)
+                        }
+                    }
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
                             AppIconButton(
