@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.level
 import android.content.pm.ActivityInfo
 import android.view.Surface
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,13 +24,16 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.debugLog
 
 @Composable
-fun Level(isStopped: Boolean, modifier: Modifier) {
+fun SharedTransitionScope.Level(isStopped: Boolean) {
     val context = LocalContext.current
     val activity = LocalActivity.current
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
@@ -63,7 +67,15 @@ fun Level(isStopped: Boolean, modifier: Modifier) {
         val width = this.maxWidth
         val height = this.maxHeight
         with(density) { levelView.updateSize(width.roundToPx(), height.roundToPx()) }
-        Canvas(modifier.fillMaxSize()) {
+        Canvas(
+            Modifier
+                .sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                    boundsTransform = appBoundsTransform,
+                )
+                .fillMaxSize(),
+        ) {
             updateToken.let {}
             levelView.draw(this.drawContext.canvas.nativeCanvas)
         }

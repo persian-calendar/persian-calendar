@@ -56,7 +56,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
@@ -155,16 +154,7 @@ fun SharedTransitionScope.LevelScreen(
                             .weight(1f, fill = false)
                             .padding(horizontal = 24.dp)
                             .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
-                    ) {
-                        Level(
-                            isStopped.value,
-                            Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
-                        )
-                    }
+                    ) { Level(isStopped.value) }
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
                             AppIconButton(

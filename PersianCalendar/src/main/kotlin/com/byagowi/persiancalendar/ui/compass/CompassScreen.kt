@@ -293,16 +293,7 @@ fun SharedTransitionScope.CompassScreen(
             ScreenSurface {
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
-                        Compass(
-                            qiblaHeading = qiblaHeading,
-                            time = time,
-                            angle = angle,
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
-                        )
+                        Compass(qiblaHeading = qiblaHeading, time = time, angle = angle)
                         Column {
                             AnimatedVisibility(
                                 visible = isSliderShown,
