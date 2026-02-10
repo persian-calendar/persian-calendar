@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import android.os.Parcelable
+import androidx.compose.runtime.annotation.RememberInComposition
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -35,6 +36,7 @@ value class Jdn(val value: Long) : Parcelable {
         (this.value..<that.value).asSequence().map(::Jdn)
 
     companion object {
+        @RememberInComposition
         fun today(): Jdn {
             val calendar = GregorianCalendar.getInstance()
             val jdn = CivilDate(

@@ -138,8 +138,8 @@ private fun updatedToday(): Jdn {
     val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
         while (isActive) {
-            today = Jdn.today()
             delay(30.seconds)
+            today = Jdn.today()
         }
     }
 
