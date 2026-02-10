@@ -39,8 +39,6 @@ import kotlin.math.sin
 class LevelView(
     resources: Resources,
     private val angleDisplay: AngleDisplay,
-    private val width: Int,
-    private val height: Int,
     val invalidate: () -> Unit,
 ) {
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -220,7 +218,11 @@ class LevelView(
 
     var onIsLevel = fun(_: Boolean) {}
 
-    init {
+    var width = 0
+    var height = 0
+    fun updateSize(width: Int, height: Int) {
+        this.width = width
+        this.height = height
         levelMaxDimension = min(
             min(height, width) - 2 * angleDisplay.displayGap,
             max(height, width) - run {

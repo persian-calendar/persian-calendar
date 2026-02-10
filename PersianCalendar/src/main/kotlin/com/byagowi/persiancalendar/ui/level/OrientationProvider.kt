@@ -34,7 +34,11 @@ import kotlin.math.asin
 import kotlin.math.hypot
 import kotlin.math.min
 
-class OrientationProvider(activity: Activity, private val view: LevelView) :
+class OrientationProvider(
+    activity: Activity,
+    private val invalidate: () -> Unit,
+    private val setOrientation: (newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float) -> Unit,
+) :
     SensorEventListener {
 
     /**
@@ -87,7 +91,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) :
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SensorManager.SENSOR_DELAY_GAME
             else SensorManager.SENSOR_DELAY_FASTEST,
         )
-        view.invalidate()
+        invalidate()
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -157,7 +161,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) :
             else -> Orientation.LANDING
         }
         // propagation of the orientation
-        view.setOrientation(orientation, pitch, roll, balance)
+        setOrientation(orientation, pitch, roll, balance)
     }
 
     companion object {
