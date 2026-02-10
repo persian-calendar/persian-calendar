@@ -17,6 +17,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -292,13 +293,16 @@ fun SharedTransitionScope.CompassScreen(
             ScreenSurface {
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
-                        Box(
-                            Modifier.sharedBounds(
+                        Compass(
+                            qiblaHeading = qiblaHeading,
+                            time = time,
+                            angle = angle,
+                            modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
-                        ) { CompassView(qiblaHeading, time, angle) }
+                        )
                         Column {
                             AnimatedVisibility(
                                 visible = isSliderShown,

@@ -78,11 +78,13 @@ class LevelView(
     /**
      * Orientation
      */
-    private var orientation: Orientation? = null
+    var orientation: Orientation? = null
     private var lastTime: Long = 0
     private var lastTimeShowAngle: Long = 0
-    private var angleToShow1 = 0f
-    private var angleToShow2 = 0f
+    var angleToShow1 = 0f
+        private set
+    var angleToShow2 = 0f
+        private set
     private var angleX = 0.0
     private var angleY = 0.0
     private var speedX = 0.0
@@ -231,6 +233,7 @@ class LevelView(
         )
         angleDisplay.updatePlacement(width / 2, height)
         onOrientationChange(orientation ?: Orientation.LANDING)
+        invalidate()
     }
 
     fun draw(canvas: Canvas) {
@@ -304,13 +307,9 @@ class LevelView(
                 middleX.toFloat(), (middleY + halfMarkerGap).toFloat(),
                 middleX.toFloat(), maxLevelY.toFloat(), infoPaint,
             )
-
-            angleDisplay.draw(canvas, angleToShow1, offsetXFactor = -1)
-            angleDisplay.draw(canvas, angleToShow2, offsetXFactor = 1)
         } else canvas.withRotation(
             orientation.rotation.toFloat(), middleX.toFloat(), middleY.toFloat(),
         ) {
-            angleDisplay.draw(canvas, angleToShow1)
             // level
             level1D.draw(canvas)
             // bubble

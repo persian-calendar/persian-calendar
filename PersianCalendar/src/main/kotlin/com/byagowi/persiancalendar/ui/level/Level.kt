@@ -4,11 +4,11 @@ import android.content.pm.ActivityInfo
 import android.view.Surface
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.unit.Dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -30,20 +29,15 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.debugLog
 
 @Composable
-fun Level(isStopped: Boolean, width: Dp, height: Dp) {
+fun Level(isStopped: Boolean, modifier: Modifier) {
     val context = LocalContext.current
     val activity = LocalActivity.current
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
-    val angleDisplay = remember(context) { AngleDisplay(context) }
+    val angleDisplay = remember { AngleDisplay(context) }
     val resources = LocalResources.current
     var updateToken by remember { mutableLongStateOf(0) }
-    val levelView = remember(resources, angleDisplay) {
-        LevelView(resources, angleDisplay) { ++updateToken }
-    }
+    val levelView = remember { LevelView(resources, angleDisplay) { ++updateToken } }
     val density = LocalDensity.current
-    LaunchedEffect(width, height, density) {
-        with(density) { levelView.updateSize(width.roundToPx(), height.roundToPx()) }
-    }
     LaunchedEffect(activity) {
         activity?.let { activity ->
             orientationProvider = OrientationProvider(
@@ -65,9 +59,22 @@ fun Level(isStopped: Boolean, width: Dp, height: Dp) {
             provider.startListening()
         }
     }
-    Canvas(Modifier.fillMaxSize()) {
-        updateToken.let {}
-        levelView.draw(this.drawContext.canvas.nativeCanvas)
+    BoxWithConstraints {
+        val width = this.maxWidth
+        val height = this.maxHeight
+        with(density) { levelView.updateSize(width.roundToPx(), height.roundToPx()) }
+        Canvas(modifier.fillMaxSize()) {
+            updateToken.let {}
+            levelView.draw(this.drawContext.canvas.nativeCanvas)
+        }
+        Canvas(Modifier.fillMaxSize()) {
+            updateToken.let {}
+            val canvas = this.drawContext.canvas.nativeCanvas
+            if (levelView.orientation == Orientation.LANDING) {
+                angleDisplay.draw(canvas, levelView.angleToShow1, offsetXFactor = -1)
+                angleDisplay.draw(canvas, levelView.angleToShow2, offsetXFactor = 1)
+            } else angleDisplay.draw(canvas, levelView.angleToShow1)
+        }
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current

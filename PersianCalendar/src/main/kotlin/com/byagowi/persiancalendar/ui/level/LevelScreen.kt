@@ -14,7 +14,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -151,17 +150,21 @@ fun SharedTransitionScope.LevelScreen(
                     )
                 }
                 Column {
-                    BoxWithConstraints(
+                    Box(
                         modifier = Modifier
                             .weight(1f, fill = false)
                             .padding(horizontal = 24.dp)
-                            .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier)
-                            .sharedBounds(
+                            .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
+                    ) {
+                        Level(
+                            isStopped.value,
+                            Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
-                    ) { Level(isStopped.value, this.maxWidth, this.maxHeight) }
+                        )
+                    }
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
                             AppIconButton(

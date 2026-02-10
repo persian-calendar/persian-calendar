@@ -55,53 +55,62 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 
 @Composable
-fun CompassView(
+fun Compass(
     qiblaHeading: EarthPosition.EarthHeading?,
     time: GregorianCalendar,
     angle: FloatState,
+    modifier: Modifier,
 ) {
     var zoom by rememberSaveable { mutableFloatStateOf(1f) }
-    BoxWithConstraints(modifier = Modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
-        val resources = LocalResources.current
-        val context = LocalContext.current
-        var updateToken by remember { mutableIntStateOf(0) }
-        val angleDisplay = remember(context) {
-            AngleDisplay(context, "0", "888")
+    val resources = LocalResources.current
+    val context = LocalContext.current
+    var updateToken by remember { mutableIntStateOf(0) }
+    val angleDisplay = remember { AngleDisplay(context, "0", "888") }
+    val compassView = remember { CompassView(resources) { ++updateToken } }
+    compassView.isShowQibla = showQibla
+    compassView.isTrueNorth = showTrueNorth
+    val density = LocalDensity.current
+    with(LocalDensity.current) {
+        val textSizePx = (12 * zoom).sp.toPx()
+        val strokeWidthPx = (1 * zoom).dp.toPx()
+        compassView.setScale(textSizePx, strokeWidthPx, zoom)
+    }
+    compassView.qiblaHeading = qiblaHeading
+    compassView.setFont(resolveAndroidCustomTypeface())
+    compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
+    compassView.setTime(time)
+    BoxWithConstraints {
+        val width = this.maxWidth
+        val height = this.maxHeight
+        with(density) {
+            val width = width.roundToPx()
+            val height = height.roundToPx()
+            angleDisplay.updatePlacement(width / 2, height)
+            val cx = width / 2f
+            val cy = height / 2f - angleDisplay.lcdHeight
+            compassView.updateSize(cx, cy)
         }
-        val compassView = remember(resources, angleDisplay) {
-            CompassView(resources, angleDisplay) { ++updateToken }
-        }
-        compassView.isShowQibla = showQibla
-        compassView.isTrueNorth = showTrueNorth
-        with(LocalDensity.current) {
-            val textSizePx = (12 * zoom).sp.toPx()
-            val strokeWidthPx = (1 * zoom).dp.toPx()
-            compassView.setScale(textSizePx, strokeWidthPx, zoom)
-        }
-        compassView.qiblaHeading = qiblaHeading
-        compassView.setFont(resolveAndroidCustomTypeface())
-        compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
-        compassView.setTime(time)
-        with(LocalDensity.current) {
-            compassView.updateSize(
-                this@BoxWithConstraints.maxWidth.roundToPx(),
-                this@BoxWithConstraints.maxHeight.roundToPx(),
-            )
-        }
-        Canvas(Modifier.fillMaxSize()) {
+        Canvas(
+            modifier
+                .fillMaxSize()
+                .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) },
+        ) {
             updateToken.let {}
             compassView.draw(this.drawContext.canvas.nativeCanvas, angle.floatValue)
+        }
+        Canvas(Modifier.fillMaxSize()) {
+            val value = (round(compassView.trueNorth(angle.floatValue)) + 360f) % 360f
+            angleDisplay.draw(this.drawContext.canvas.nativeCanvas, value)
         }
     }
 }
 
 private class CompassView(
     private val resources: Resources,
-    private val angleDisplay: AngleDisplay,
     private val invalidate: () -> Unit,
 ) {
     var isTrueNorth: Boolean = true
-    private fun trueNorth(angle: Float) =
+    fun trueNorth(angle: Float) =
         angle + if (isTrueNorth) astronomyState?.declination ?: 0f else 0f
 
     var qiblaHeading: EarthPosition.EarthHeading? = null
@@ -198,11 +207,9 @@ private class CompassView(
         textStrokePaint.color = color
     }
 
-    fun updateSize(w: Int, h: Int) {
-        angleDisplay.updatePlacement(w / 2, h)
-
-        cx = w / 2f
-        cy = h / 2f - angleDisplay.lcdHeight
+    fun updateSize(cx: Float, cy: Float) {
+        this.cx = cx
+        this.cy = cy
         radius = min(cx - cx / 12, cy - cy / 12)
         r = radius / 10 // Sun Moon radius
 
@@ -215,6 +222,7 @@ private class CompassView(
             it.arcTo(RectF(cx - r, cy - r, cx + r, cy + r), 180f, -180f)
             it.close()
         }
+        invalidate()
     }
 
     fun setScale(textSize: Float, strokeWidth: Float, scale: Float) {
@@ -241,7 +249,6 @@ private class CompassView(
                 drawPlanets(trueNorth)
             }
         }
-        angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
     }
 
     private fun cardinalDirection(value: Int): String {
