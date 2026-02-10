@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,34 +34,6 @@ fun Level(isStopped: Boolean, width: Dp, height: Dp) {
     val context = LocalContext.current
     val activity = LocalActivity.current
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        activity ?: return@DisposableEffect onDispose {}
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                debugLog("level: ON_RESUME")
-                // Rotation lock, https://stackoverflow.com/a/75984863
-                val destination = ActivityCompat.getDisplayOrDefault(activity).rotation
-                activity.requestedOrientation = when (destination) {
-                    Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-                    Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                    Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                }
-                if (orientationProvider?.isListening == false && !isStopped) {
-                    orientationProvider?.startListening()
-                }
-            } else if (event == Lifecycle.Event.ON_PAUSE) {
-                debugLog("level: ON_PAUSE")
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-    }
-
     val angleDisplay = remember(context) { AngleDisplay(context) }
     val resources = LocalResources.current
     var updateToken by remember { mutableLongStateOf(0) }
@@ -82,7 +55,7 @@ fun Level(isStopped: Boolean, width: Dp, height: Dp) {
         }
     }
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
-    LaunchedEffect(orientationProvider) {
+    LaunchedEffect(orientationProvider, isStopped) {
         val provider = orientationProvider ?: return@LaunchedEffect
         if (isStopped && provider.isListening) {
             levelView.onIsLevel = {}
@@ -95,5 +68,33 @@ fun Level(isStopped: Boolean, width: Dp, height: Dp) {
     Canvas(Modifier.fillMaxSize()) {
         updateToken.let {}
         levelView.draw(this.drawContext.canvas.nativeCanvas)
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        activity ?: return@DisposableEffect onDispose {}
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                debugLog("level: ON_RESUME")
+                // Rotation lock, https://stackoverflow.com/a/75984863
+                val destination = ActivityCompat.getDisplayOrDefault(activity).rotation
+                activity.requestedOrientation = when (destination) {
+                    Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                    Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                }
+                if (orientationProvider?.isListening == false) {
+                    orientationProvider?.startListening()
+                }
+            } else if (event == Lifecycle.Event.ON_PAUSE) {
+                debugLog("level: ON_PAUSE")
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 }

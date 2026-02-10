@@ -146,7 +146,7 @@ fun SharedTransitionScope.CompassScreen(
         it.timeInMillis = now
         it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
     }
-    var isStopped by rememberSaveable { mutableStateOf(false) }
+    val isStopped = rememberSaveable { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -361,7 +361,7 @@ fun SharedTransitionScope.CompassScreen(
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
-                        ) { StopButton(isStopped) { isStopped = it } }
+                        ) { StopButton(isStopped) }
                     }
                 }
             }
@@ -400,7 +400,7 @@ fun SharedTransitionScope.CompassScreen(
             override fun setAngle(value: Float) {
                 angle.floatValue = value
             }
-            override val isStopped: Boolean get() = isStopped
+            override val isStopped: Boolean get() = isStopped.value
             override val orientation: Float get() = orientation
             override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
                 checkIfA11yAnnounceIsNeeded(angle)
@@ -409,7 +409,7 @@ fun SharedTransitionScope.CompassScreen(
             override fun setAngle(value: Float) {
                 angle.floatValue = value
             }
-            override val isStopped: Boolean get() = isStopped
+            override val isStopped: Boolean get() = isStopped.value
             override val orientation: Float get() = orientation
             override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
                 checkIfA11yAnnounceIsNeeded(angle)

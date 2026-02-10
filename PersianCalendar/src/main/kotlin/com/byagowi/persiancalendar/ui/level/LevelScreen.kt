@@ -77,7 +77,7 @@ fun SharedTransitionScope.LevelScreen(
     navigateUp: () -> Unit,
     navigateToCompass: () -> Unit,
 ) {
-    var isStopped by rememberSaveable { mutableStateOf(false) }
+    val isStopped = rememberSaveable { mutableStateOf(false) }
     var cmInchFlip by rememberSaveable { mutableStateOf(false) }
     var isFullscreen by remember { mutableStateOf(false) }
     val activity = LocalActivity.current
@@ -161,7 +161,7 @@ fun SharedTransitionScope.LevelScreen(
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
-                    ) { Level(isStopped, this.maxWidth, this.maxHeight) }
+                    ) { Level(isStopped.value, this.maxWidth, this.maxHeight) }
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
                             AppIconButton(
@@ -181,7 +181,7 @@ fun SharedTransitionScope.LevelScreen(
                                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                     boundsTransform = appBoundsTransform,
                                 ),
-                            ) { StopButton(isStopped) { isStopped = it } }
+                            ) { StopButton(isStopped) }
                         }
                     }
                 }
@@ -195,7 +195,7 @@ fun SharedTransitionScope.LevelScreen(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(end = 24.dp, bottom = bottomWindowInset + 16.dp),
-                ) { StopButton(isStopped) { isStopped = it } }
+                ) { StopButton(isStopped) }
 
                 ShrinkingFloatingActionButton(
                     Modifier
