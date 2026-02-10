@@ -39,8 +39,8 @@ import kotlin.math.sin
 class LevelView(
     resources: Resources,
     private val angleDisplay: AngleDisplay,
-    private val canvasWidth: Int,
-    private val canvasHeight: Int,
+    private val width: Int,
+    private val height: Int,
     val invalidate: () -> Unit,
 ) {
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -110,8 +110,8 @@ class LevelView(
 
     private fun onOrientationChange(newOrientation: Orientation) {
         orientation = newOrientation
-        middleX = canvasWidth / 2
-        middleY = canvasHeight / 2 - angleDisplay.displayGap
+        middleX = width / 2
+        middleY = height / 2 - angleDisplay.displayGap
         when (newOrientation) {
             Orientation.LANDING -> {
                 levelWidth = levelMaxDimension
@@ -119,7 +119,7 @@ class LevelView(
             }
 
             Orientation.TOP, Orientation.BOTTOM, Orientation.LEFT, Orientation.RIGHT -> {
-                levelWidth = canvasWidth - 2 * angleDisplay.displayGap
+                levelWidth = width - 2 * angleDisplay.displayGap
                 levelHeight = (levelWidth * LEVEL_ASPECT_RATIO).toInt()
             }
         }
@@ -140,9 +140,9 @@ class LevelView(
         // display
         val displayY = when (newOrientation) {
             Orientation.LEFT, Orientation.RIGHT ->
-                (canvasHeight - canvasWidth) / 2 + canvasWidth - angleDisplay.displayGap
+                (height - width) / 2 + width - angleDisplay.displayGap
 
-            else -> canvasHeight
+            else -> height
         }
         angleDisplay.updatePlacement(middleX, displayY)
 
@@ -222,12 +222,12 @@ class LevelView(
 
     init {
         levelMaxDimension = min(
-            min(canvasHeight, canvasWidth) - 2 * angleDisplay.displayGap,
-            max(canvasHeight, canvasWidth) - run {
+            min(height, width) - 2 * angleDisplay.displayGap,
+            max(height, width) - run {
                 2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight)
             },
         )
-        angleDisplay.updatePlacement(canvasWidth / 2, canvasHeight)
+        angleDisplay.updatePlacement(width / 2, height)
         onOrientationChange(orientation ?: Orientation.LANDING)
     }
 
