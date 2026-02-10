@@ -682,6 +682,7 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 // See the comment in floatingActionButton
                 fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
+                today = today,
                 now = now,
                 refreshToken = refreshToken,
                 refreshCalendar = refreshCalendar,

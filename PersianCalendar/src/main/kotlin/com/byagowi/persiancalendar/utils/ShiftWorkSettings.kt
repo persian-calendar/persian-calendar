@@ -56,9 +56,8 @@ data class ShiftWorkSettings(
     }
 
     @Composable
-    fun getShiftWorksInDaysDistance(jdn: Jdn): String? {
+    fun getShiftWorksInDaysDistance(today: Jdn, jdn: Jdn): String? {
         if (records.isEmpty()) return null
-        val today = Jdn.today()
         if ((jdn - today) !in 1..365) return null
         val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::workTitle)
         if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null

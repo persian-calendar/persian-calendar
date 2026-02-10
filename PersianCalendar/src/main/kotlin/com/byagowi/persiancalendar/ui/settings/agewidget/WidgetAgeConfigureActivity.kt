@@ -86,7 +86,8 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         )
 
         val primaryKey = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-        val today = Jdn.today()
+        // Ideally this should be updated with time but doesn't worth to for now
+        val today = remember { Jdn.today() }
         var primaryJdn by remember {
             mutableStateOf(context.preferences.getJdnOrNull(primaryKey) ?: today)
         }
@@ -94,7 +95,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
             DatePickerDialog(
                 initialJdn = primaryJdn,
                 onDismissRequest = onDismissRequest,
-                today = Jdn.today(),
+                today = today,
             ) {
                 primaryJdn = it
                 context.preferences.edit { putJdn(primaryKey, it) }

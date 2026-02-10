@@ -133,6 +133,7 @@ fun SharedTransitionScope.EventsTab(
     refreshToken: Int,
     refreshCalendar: () -> Unit,
     fabPlaceholderHeight: Dp,
+    today: Jdn,
     now: Long,
 ) {
     Column(
@@ -158,7 +159,8 @@ fun SharedTransitionScope.EventsTab(
                 }
             }
         }
-        val shiftWorkInDaysDistance = shiftWorkSettings.getShiftWorksInDaysDistance(selectedDay)
+        val shiftWorkInDaysDistance =
+            shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
         AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance.orEmpty(),
