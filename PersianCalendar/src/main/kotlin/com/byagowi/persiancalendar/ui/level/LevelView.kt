@@ -23,7 +23,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
@@ -38,7 +37,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
-class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class LevelView(context: Context) : View(context) {
 
     private val angleDisplay = AngleDisplay(context)
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

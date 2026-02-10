@@ -278,7 +278,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
 // }
 // """
 
-// class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+// class CheckerBoard(context: Context) : View(context) {
 //     private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
 //     // private val startTime = System.nanoTime()
 //     // private val shader by lazy(LazyThreadSafetyMode.NONE) {

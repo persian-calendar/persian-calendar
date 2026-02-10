@@ -26,7 +26,6 @@ import android.media.AudioFormat
 import android.media.AudioTrack
 import android.opengl.GLSurfaceView
 import android.os.Build
-import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -158,7 +157,7 @@ fun showColorPickerDialog(activity: Activity) {
         .show()
 }
 
-class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class CircleColorPickerView(context: Context) : View(context) {
     private var bitmap = createBitmap(1, 1)
     private var lastX = -1f
     private var lastY = -1f
@@ -1072,7 +1071,7 @@ fun showInputDeviceTestDialog(activity: Activity) {
 // }
 
 // Lindenmayer system: https://en.wikipedia.org/wiki/L-system
-class LSystem(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class LSystem(context: Context) : View(context) {
     private fun lSystem(startAxiom: String, rules: Map<Char, String>): Sequence<String> = sequence {
         var result = startAxiom
         yield(result)

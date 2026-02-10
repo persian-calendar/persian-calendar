@@ -10,7 +10,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.toBitmap
@@ -33,7 +32,7 @@ import kotlin.math.min
 import kotlin.math.round
 import kotlin.math.roundToInt
 
-class CompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class CompassView(context: Context) : View(context) {
     var angle = 0f
         set(value) {
             if (value != field) {
