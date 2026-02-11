@@ -12,16 +12,20 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.annotation.ColorInt
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.FloatState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,9 +53,11 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
+import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
@@ -64,7 +70,6 @@ fun SharedTransitionScope.Compass(
     time: GregorianCalendar,
     angle: FloatState,
 ) {
-    var zoom by rememberSaveable { mutableFloatStateOf(1f) }
     val resources = LocalResources.current
     val context = LocalContext.current
     var updateToken by remember { mutableIntStateOf(0) }
@@ -73,10 +78,17 @@ fun SharedTransitionScope.Compass(
     compassView.isShowQibla = showQibla
     compassView.isTrueNorth = showTrueNorth
     val density = LocalDensity.current
+    val zoom = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.25f) }
+    LaunchedEffect(Unit) {
+        zoom.animateTo(
+            targetValue = 1f,
+            animationSpec = spring(dampingRatio = .35f, stiffness = Spring.StiffnessLow),
+        )
+    }
     with(LocalDensity.current) {
-        val textSizePx = (12 * zoom).sp.toPx()
-        val strokeWidthPx = (1 * zoom).dp.toPx()
-        compassView.setScale(textSizePx, strokeWidthPx, zoom)
+        val textSizePx = (12 * zoom.value).sp.toPx()
+        val strokeWidthPx = (1 * zoom.value).dp.toPx()
+        compassView.setScale(textSizePx, strokeWidthPx, zoom.value)
     }
     compassView.qiblaHeading = qiblaHeading
     compassView.setFont(resolveAndroidCustomTypeface())
@@ -93,6 +105,7 @@ fun SharedTransitionScope.Compass(
             val cy = height / 2f - angleDisplay.lcdHeight
             compassView.updateSize(cx, cy)
         }
+        val coroutineScope = rememberCoroutineScope()
         Canvas(
             modifier = Modifier
                 .sharedBounds(
@@ -101,7 +114,11 @@ fun SharedTransitionScope.Compass(
                     boundsTransform = appBoundsTransform,
                 )
                 .fillMaxSize()
-                .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) },
+                .detectZoom {
+                    coroutineScope.launch {
+                        zoom.snapTo((zoom.value * it).coerceIn(1f, 2f))
+                    }
+                },
         ) {
             updateToken.let {}
             compassView.draw(this.drawContext.canvas.nativeCanvas, angle.floatValue)
@@ -238,7 +255,7 @@ private class CompassView(
         textPaint.textSize = textSize
         textSecondPaint.textSize = textSize
         textStrokePaint.textSize = textSize
-        northArrowPaint.alpha = (100 * cbrt(scale)).roundToInt()
+        northArrowPaint.alpha = ((100 * cbrt(scale)).roundToInt()).coerceIn(0, 255)
         qiblaPaint.strokeWidth = strokeWidth
         moonPaint.strokeWidth = strokeWidth
         sunPaint.strokeWidth = strokeWidth
