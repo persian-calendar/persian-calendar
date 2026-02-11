@@ -67,7 +67,7 @@ class SolarDraw(resources: Resources) {
         angle: Float? = null, moonAltitude: Double? = null, flipHorizontally: Boolean = false,
     ) = moon(canvas, moon.lon - sun.elon, cx, cy, r, angle, moonAltitude, flipHorizontally)
 
-    fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
+    fun plainMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
         moonDrawable.alpha = 255
         moonDrawable.setBounds(
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt(),
