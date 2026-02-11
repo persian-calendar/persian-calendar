@@ -189,6 +189,7 @@ fun SharedTransitionScope.MapScreen(
             scale = scale,
             offsetX = offsetX,
             offsetY = offsetY,
+            disableHorizontalLimit = true,
             modifier = Modifier
                 .semantics { this.contentDescription = mapString }
                 .fillMaxSize()
@@ -206,10 +207,8 @@ fun SharedTransitionScope.MapScreen(
                 val scale = canvasSize.width / mapDraw.mapWidth
                 val scaledHeight = mapDraw.mapHeight * scale
                 val translateY = (canvasSize.height - scaledHeight) / 2f
-
-                val mapX = x / scale
+                val mapX = x.mod(canvasSize.width) / scale
                 val mapY = (y - translateY) / scale
-
                 val latitude = 90 - mapY / mapDraw.mapScaleFactor
                 val longitude = mapX / mapDraw.mapScaleFactor - 180
                 if (abs(latitude) < 90 && abs(longitude) < 180) {
@@ -225,23 +224,26 @@ fun SharedTransitionScope.MapScreen(
                 }
             },
         ) {
-            translate(offsetX.value, offsetY.value) {
-                scale(scale.value) {
-                    val mapSize = min(size.width / 2, size.height)
-                    val contentScale = mapSize / mapDraw.mapHeight
-                    translate(top = (size.height - mapSize) / 2) {
-                        scale(contentScale, pivot = Offset.Zero) {
-                            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-                            mapDraw.updateMap(timeInMillis.longValue, mapType)
-                            mapDraw.draw(
-                                canvas = this.drawContext.canvas.nativeCanvas,
-                                scale = scale.value * contentScale,
-                                displayLocation = displayLocation,
-                                coordinates = markedCoordinates,
-                                directPathDestination = directPathDestination,
-                                displayGrid = displayGrid,
-                            )
-                            formattedTime = mapDraw.maskFormattedTime
+            val (width, height) = this.size
+            val mapSize = min(width / 2, height)
+            val contentScale = mapSize / mapDraw.mapHeight
+            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+            mapDraw.updateMap(timeInMillis.longValue, mapType)
+            formattedTime = mapDraw.maskFormattedTime
+            translate(offsetX.value.mod(width * scale.value), offsetY.value) {
+                scale(scale.value, pivot = this.center) {
+                    repeat(2) { tileIndex ->
+                        translate(left = (tileIndex - 1) * width, top = (height - mapSize) / 2) {
+                            scale(contentScale, pivot = Offset.Zero) {
+                                mapDraw.draw(
+                                    canvas = this.drawContext.canvas.nativeCanvas,
+                                    scale = scale.value * contentScale,
+                                    displayLocation = displayLocation,
+                                    coordinates = markedCoordinates,
+                                    directPathDestination = directPathDestination,
+                                    displayGrid = displayGrid,
+                                )
+                            }
                         }
                     }
                 }
