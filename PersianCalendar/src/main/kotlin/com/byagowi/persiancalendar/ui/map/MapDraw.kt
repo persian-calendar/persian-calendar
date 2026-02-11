@@ -117,23 +117,23 @@ class MapDraw(
 
     var markersScale = 1f
 
-    private fun drawMask(canvas: Canvas, matrixScale: Float) {
+    private fun drawMask(canvas: Canvas, scale: Float) {
         when (currentMapType) {
             MapType.NONE -> Unit
             MapType.DAY_NIGHT, MapType.MOON_VISIBILITY -> {
                 canvas.drawBitmap(maskMap, null, mapRect, null)
-                val scale = mapWidth / maskMap.width
+                val contentScale = mapWidth / maskMap.width
                 solarDraw.plainMoon(
                     canvas,
-                    maskMoonX * scale,
-                    maskMoonY * scale,
-                    mapWidth * .02f / matrixScale / 5 * markersScale,
+                    maskMoonX * contentScale,
+                    maskMoonY * contentScale,
+                    mapWidth * .02f / scale / 5 * markersScale,
                 )
                 solarDraw.sun(
                     canvas,
-                    maskSunX * scale,
-                    maskSunY * scale,
-                    mapWidth * .025f / matrixScale / 5 * markersScale,
+                    maskSunX * contentScale,
+                    maskSunY * contentScale,
+                    mapWidth * .025f / scale / 5 * markersScale,
                 )
             }
 
@@ -389,7 +389,6 @@ class MapDraw(
 
     private val drawEasterEggs by lazy(LazyThreadSafetyMode.NONE) {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-
         class Entry(
             private val char: String, private val x: Float, private val y: Float,
             private val xOffset: Float = 0f, private val color: Int = Color.BLACK,
@@ -423,77 +422,74 @@ class MapDraw(
         directPathDestination: Coordinates?,
         displayGrid: Boolean,
     ) {
-        canvas.run {
-            drawRect(mapRect, backgroundPaint)
-            drawPath(mapPath, foregroundPaint)
-
-            drawMask(this, scale)
-            if (drawKaaba) {
-                val userX = (QIBLA_LONGITUDE.toFloat() + 180) * mapScaleFactor
-                val userY = (90 - QIBLA_LATITUDE.toFloat()) * mapScaleFactor
-                kaabaIcon.setBounds(
-                    (userX - 8).roundToInt(), (userY - 8).roundToInt(),
-                    (userX + 8).roundToInt(), (userY + 8).roundToInt(),
-                )
-                kaabaIcon.draw(this)
+        canvas.drawRect(mapRect, backgroundPaint)
+        canvas.drawPath(mapPath, foregroundPaint)
+        drawMask(canvas, scale)
+        if (drawKaaba) {
+            val userX = (QIBLA_LONGITUDE.toFloat() + 180) * mapScaleFactor
+            val userY = (90 - QIBLA_LATITUDE.toFloat()) * mapScaleFactor
+            kaabaIcon.setBounds(
+                (userX - 8).roundToInt(), (userY - 8).roundToInt(),
+                (userX + 8).roundToInt(), (userY + 8).roundToInt(),
+            )
+            kaabaIcon.draw(canvas)
+        }
+        if (scale > 2) drawEasterEggs(canvas)
+        if (coordinates != null && displayLocation) {
+            val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
+            val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
+            pinDrawable.setBounds(
+                (userX - 24 * markersScale / scale).roundToInt(),
+                (userY - 44 * markersScale / scale).roundToInt(),
+                (userX + 24 * markersScale / scale).roundToInt(),
+                userY.toInt(),
+            )
+            pinDrawable.draw(canvas)
+        }
+        if (coordinates != null && directPathDestination != null) {
+            val from = EarthPosition(coordinates.latitude, coordinates.longitude)
+            val to = EarthPosition(
+                directPathDestination.latitude,
+                directPathDestination.longitude,
+            )
+            val points = from.intermediatePoints(to, 24).map { (latitude, longitude) ->
+                val userX = (longitude.toFloat() + 180) * mapScaleFactor
+                val userY = (90 - latitude.toFloat()) * mapScaleFactor
+                userX to userY
+            }.toList()
+            points.forEachIndexed { i, (x1, y1) ->
+                if (i >= points.size - 1) return@forEachIndexed
+                val (x2, y2) = points[i + 1]
+                if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
+                pathPaint.color = (argbEvaluator.evaluate(
+                    i.toFloat() / points.size, Color.BLACK, Color.RED,
+                ) as? Int) ?: 0
+                canvas.drawLine(x1, y1, x2, y2, pathPaint)
             }
-            if (scale > 2) drawEasterEggs(canvas)
-            if (coordinates != null && displayLocation) {
-                val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
-                val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
-                pinDrawable.setBounds(
-                    (userX - 24 * markersScale / scale).roundToInt(),
-                    (userY - 44 * markersScale / scale).roundToInt(),
-                    (userX + 24 * markersScale / scale).roundToInt(),
-                    userY.toInt(),
-                )
-                pinDrawable.draw(this)
+            val center = points[points.size / 2]
+            val centerPlus1 = points[points.size / 2 + 1]
+            val textDegree = Math.toDegrees(
+                atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
+                    .toDouble(),
+            ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
+            val heading = from.toEarthHeading(to)
+            canvas.withRotation(textDegree, center.first, center.second) {
+                drawText(heading.km, center.first, center.second - 2 * dp, textPaint)
             }
-            if (coordinates != null && directPathDestination != null) {
-                val from = EarthPosition(coordinates.latitude, coordinates.longitude)
-                val to = EarthPosition(
-                    directPathDestination.latitude,
-                    directPathDestination.longitude,
-                )
-                val points = from.intermediatePoints(to, 24).map { (latitude, longitude) ->
-                    val userX = (longitude.toFloat() + 180) * mapScaleFactor
-                    val userY = (90 - latitude.toFloat()) * mapScaleFactor
-                    userX to userY
-                }.toList()
-                points.forEachIndexed { i, (x1, y1) ->
-                    if (i >= points.size - 1) return@forEachIndexed
-                    val (x2, y2) = points[i + 1]
-                    if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
-                    pathPaint.color = (argbEvaluator.evaluate(
-                        i.toFloat() / points.size, Color.BLACK, Color.RED,
-                    ) as? Int) ?: 0
-                    drawLine(x1, y1, x2, y2, pathPaint)
-                }
-                val center = points[points.size / 2]
-                val centerPlus1 = points[points.size / 2 + 1]
-                val textDegree = Math.toDegrees(
-                    atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
-                        .toDouble(),
-                ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
-                val heading = from.toEarthHeading(to)
-                withRotation(textDegree, center.first, center.second) {
-                    drawText(heading.km, center.first, center.second - 2 * dp, textPaint)
-                }
+        }
+        if (displayGrid) {
+            (0..<mapWidth step mapWidth / 24).forEachIndexed { i, x ->
+                if (i == 0 || i == 12) return@forEachIndexed
+                canvas.drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), gridPaint)
             }
-            if (displayGrid) {
-                (0..<mapWidth step mapWidth / 24).forEachIndexed { i, x ->
-                    if (i == 0 || i == 12) return@forEachIndexed
-                    drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), gridPaint)
-                }
-                (0..<mapHeight step mapHeight / 12).forEachIndexed { i, y ->
-                    if (i == 0 || i == 6) return@forEachIndexed
-                    drawLine(0f, y.toFloat(), mapWidth.toFloat(), y.toFloat(), gridPaint)
-                }
-                drawLine(mapWidth / 2f, 0f, mapWidth / 2f, mapHeight / 1f, gridHalfPaint)
-                drawLine(0f, mapHeight / 2f, mapWidth / 1f, mapHeight / 2f, gridHalfPaint)
-                parallelsLatitudes.forEach { y ->
-                    drawLine(0f, y, mapWidth.toFloat(), y, parallelsPaint)
-                }
+            (0..<mapHeight step mapHeight / 12).forEachIndexed { i, y ->
+                if (i == 0 || i == 6) return@forEachIndexed
+                canvas.drawLine(0f, y.toFloat(), mapWidth.toFloat(), y.toFloat(), gridPaint)
+            }
+            canvas.drawLine(mapWidth / 2f, 0f, mapWidth / 2f, mapHeight / 1f, gridHalfPaint)
+            canvas.drawLine(0f, mapHeight / 2f, mapWidth / 1f, mapHeight / 2f, gridHalfPaint)
+            parallelsLatitudes.forEach { y ->
+                canvas.drawLine(0f, y, mapWidth.toFloat(), y, parallelsPaint)
             }
         }
     }
