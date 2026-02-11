@@ -122,17 +122,16 @@ class MapDraw(
             MapType.NONE -> Unit
             MapType.DAY_NIGHT, MapType.MOON_VISIBILITY -> {
                 canvas.drawBitmap(maskMap, null, mapRect, null)
-                val contentScale = mapWidth / maskMap.width
                 solarDraw.plainMoon(
                     canvas,
-                    maskMoonX * contentScale,
-                    maskMoonY * contentScale,
+                    maskMoonX * mapScaleFactor,
+                    maskMoonY * mapScaleFactor,
                     24 * markersScale / scale,
                 )
                 solarDraw.sun(
                     canvas,
-                    maskSunX * contentScale,
-                    maskSunY * contentScale,
+                    maskSunX * mapScaleFactor,
+                    maskSunY * mapScaleFactor,
                     36 * markersScale / scale,
                 )
             }
