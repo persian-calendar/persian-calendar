@@ -127,13 +127,13 @@ class MapDraw(
                     canvas,
                     maskMoonX * contentScale,
                     maskMoonY * contentScale,
-                    mapWidth * .02f / scale / 5 * markersScale,
+                    24 * markersScale / scale,
                 )
                 solarDraw.sun(
                     canvas,
                     maskSunX * contentScale,
                     maskSunY * contentScale,
-                    mapWidth * .025f / scale / 5 * markersScale,
+                    36 * markersScale / scale,
                 )
             }
 
