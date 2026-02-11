@@ -628,42 +628,40 @@ private fun SharedTransitionScope.SolarDisplay(
                     }
                 }
 
-                AstronomyMode.MOON -> {
-                    Box(Modifier.aspectRatio(1f)) {
-                        ZoomableCanvas(
-                            scale = scale,
-                            offsetX = offsetX,
-                            offsetY = offsetY,
-                            disableHorizontalLimit = true,
-                            disableVerticalLimit = true,
-                            disablePan = scale.value == 1f,
-                            modifier = Modifier.aspectRatio(1f),
-                        ) {
-                            val radius = this.center.x
-                            val canvas = this.drawContext.canvas.nativeCanvas
-                            solarDraw.moon(
-                                canvas = canvas,
-                                sun = astronomyState.sun,
-                                moon = astronomyState.moon,
-                                cx = radius,
-                                cy = radius,
-                                r = radius / 3,
-                                angle = astronomyState.moonTilt,
-                                moonAltitude = astronomyState.moonAltitude,
-                            )
-                            astronomyState.sunAltitude?.also { sunAltitude ->
-                                val alpha =
-                                    ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
-                                solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
-                            }
+                AstronomyMode.MOON -> Box(Modifier.aspectRatio(1f)) {
+                    ZoomableCanvas(
+                        scale = scale,
+                        offsetX = offsetX,
+                        offsetY = offsetY,
+                        disableHorizontalLimit = true,
+                        disableVerticalLimit = true,
+                        disablePan = scale.value == 1f,
+                        modifier = Modifier.aspectRatio(1f),
+                    ) {
+                        val radius = this.center.x
+                        val canvas = this.drawContext.canvas.nativeCanvas
+                        solarDraw.moon(
+                            canvas = canvas,
+                            sun = astronomyState.sun,
+                            moon = astronomyState.moon,
+                            cx = radius,
+                            cy = radius,
+                            r = radius / 3,
+                            angle = astronomyState.moonTilt,
+                            moonAltitude = astronomyState.moonAltitude,
+                        )
+                        astronomyState.sunAltitude?.also { sunAltitude ->
+                            val alpha =
+                                ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
+                            solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
                         }
-                        SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
-                            Text(
-                                text = language.formatAuAsKm(astronomyState.moon.dist),
-                                color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
-                                modifier = Modifier.padding(bottom = 24.dp),
-                            )
-                        }
+                    }
+                    SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
+                        Text(
+                            text = language.formatAuAsKm(astronomyState.moon.dist),
+                            color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
+                            modifier = Modifier.padding(bottom = 24.dp),
+                        )
                     }
                 }
 
