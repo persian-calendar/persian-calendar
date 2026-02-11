@@ -140,7 +140,7 @@ private class CompassView(
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
         it.strokeWidth = .5f * dp
-        it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
+        it.style = Paint.Style.STROKE // Only drawing a circle.
     }
     private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE

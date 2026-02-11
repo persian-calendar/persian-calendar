@@ -103,7 +103,7 @@ class LevelView(
     private val marker2D = resources.getDrawable(R.drawable.marker_2d, null)
 
     /**
-     * Ajustement de la vitesse
+     * Speed adjustment
      */
     private var viscosityValue = 1.0
     private var firstTime = true
@@ -129,7 +129,7 @@ class LevelView(
         minLevelY = middleY - levelHeight / 2
         maxLevelY = middleY + levelHeight / 2
 
-        // bubble
+        // Bubble
         halfBubbleWidth = (levelWidth * BUBBLE_WIDTH / 2).toInt()
         halfBubbleHeight = (halfBubbleWidth * BUBBLE_ASPECT_RATIO).toInt()
         val bubbleWidth = 2 * halfBubbleWidth
@@ -137,7 +137,7 @@ class LevelView(
         maxBubble = (maxLevelY - bubbleHeight * BUBBLE_CROPPING).toInt()
         minBubble = maxBubble - bubbleHeight
 
-        // display
+        // Display
         val displayY = when (newOrientation) {
             Orientation.LEFT, Orientation.RIGHT ->
                 (height - width) / 2 + width - angleDisplay.displayGap
@@ -146,14 +146,14 @@ class LevelView(
         }
         angleDisplay.updatePlacement(middleX, displayY)
 
-        // marker
+        // Marker
         halfMarkerGap = (levelWidth * MARKER_GAP / 2).toInt()
 
-        // autres
+        // Others
         levelMinusBubbleWidth = levelWidth - bubbleWidth - 2 * levelBorderWidth
         levelMinusBubbleHeight = levelHeight - bubbleHeight - 2 * levelBorderWidth
 
-        // positionnement
+        // Positioning
         level1D.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
         level2D.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
         marker2D.setBounds(
@@ -198,15 +198,15 @@ class LevelView(
 
             else -> Unit
         }
-        // correction des angles affiches
+        // Correction of displayed angles
         angle1 = angle1.coerceAtMost(99.9f)
         angle2 = angle2.coerceAtMost(99.9f)
-        // correction des angles aberrants
-        // pour ne pas que la bulle sorte de l'ecran
+        // Correction of aberrant angles
+        // to prevent the bubble from going off the screen
         angleX = angleX.coerceIn(-1.0, 1.0)
         angleY = angleY.coerceIn(-1.0, 1.0)
-        // correction des angles a plat
-        // la bulle ne doit pas sortir du niveau
+        // Correction of flat angles
+        // the bubble must not go outside the level
         if (orientation == Orientation.LANDING && angleX != 0.0 && angleY != 0.0) {
             val n = hypot(angleX, angleY)
             val teta = acos(abs(angleX) / n)
@@ -243,7 +243,7 @@ class LevelView(
         }
         val orientation = orientation ?: return
 
-        // update physics
+        // Update physics
         val currentTime = System.currentTimeMillis()
         val timeDiff = (currentTime - lastTime) / 1000.0
         lastTime = currentTime
@@ -268,9 +268,9 @@ class LevelView(
             }
         }
         x += speedX * timeDiff
-        // en cas de latence elevee
-        // si la bubble a trop deviee
-        // elle est replacee correctement
+        // In case of high latency
+        // if the bubble has deviated too much
+        // it is repositioned correctly
         if (orientation == Orientation.LANDING) {
             if (hypot(middleX - x, middleY - y) > levelMaxDimension / 2 - halfBubbleWidth) {
                 x = (angleX * levelMinusBubbleWidth + minLevelX + maxLevelX) / 2
@@ -310,9 +310,9 @@ class LevelView(
         } else canvas.withRotation(
             orientation.rotation.toFloat(), middleX.toFloat(), middleY.toFloat(),
         ) {
-            // level
+            // Level
             level1D.draw(canvas)
-            // bubble
+            // Bubble
             canvas.clipRect(
                 minLevelX + levelBorderWidth, minLevelY + levelBorderHeight,
                 maxLevelX - levelBorderWidth, maxLevelY - levelBorderHeight,
@@ -322,7 +322,7 @@ class LevelView(
                 (x + halfBubbleWidth).toInt(), maxBubble,
             )
             bubble1D.draw(canvas)
-            // marker
+            // Marker
             marker1D.setBounds(
                 middleX - halfMarkerGap - markerThickness, minLevelY,
                 middleX - halfMarkerGap, maxLevelY,
