@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Configuration
+import android.graphics.Paint
+import android.graphics.RectF
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +46,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
@@ -68,8 +72,12 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
@@ -108,16 +116,21 @@ import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TimeArrow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
+import com.byagowi.persiancalendar.utils.symbol
+import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
@@ -563,6 +576,7 @@ private fun SharedTransitionScope.SolarDisplay(
     navigateToMap: (time: Long) -> Unit,
 ) {
     Box(modifier) {
+        val solarDraw = LocalResources.current.let { remember(it) { SolarDraw(it) } }
         Column(Modifier.align(Alignment.CenterStart)) {
             AstronomyMode.entries.forEach {
                 NavigationRailItem(
@@ -570,7 +584,7 @@ private fun SharedTransitionScope.SolarDisplay(
                     selected = mode.value == it,
                     onClick = { mode.value = it },
                     icon = {
-                        if (it == AstronomyMode.MOON) MoonIcon(astronomyState) else Icon(
+                        if (it == AstronomyMode.MOON) MoonIcon(astronomyState, solarDraw) else Icon(
                             ImageVector.vectorResource(it.icon),
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
@@ -602,7 +616,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 .align(Alignment.Center),
         ) { mode ->
             when (mode) {
-                AstronomyMode.EARTH -> AstronomyEarthView(
+                AstronomyMode.EARTH -> EarthView(
                     isTropical = isTropical,
                     scale = scale,
                     offsetX = offsetX,
@@ -614,19 +628,93 @@ private fun SharedTransitionScope.SolarDisplay(
                     }
                 }
 
-                AstronomyMode.SUN -> AstronomySunView(
-                    scale = scale,
-                    offsetX = offsetX,
-                    offsetY = offsetY,
-                    state = astronomyState,
-                )
+                AstronomyMode.MOON -> {
+                    Box(Modifier.aspectRatio(1f)) {
+                        ZoomableCanvas(
+                            scale = scale,
+                            offsetX = offsetX,
+                            offsetY = offsetY,
+                            disableHorizontalLimit = true,
+                            disableVerticalLimit = true,
+                            disablePan = scale.value == 1f,
+                            modifier = Modifier.aspectRatio(1f),
+                        ) {
+                            val radius = this.center.x
+                            val canvas = this.drawContext.canvas.nativeCanvas
+                            solarDraw.moon(
+                                canvas = canvas,
+                                sun = astronomyState.sun,
+                                moon = astronomyState.moon,
+                                cx = radius,
+                                cy = radius,
+                                r = radius / 3,
+                                angle = astronomyState.moonTilt,
+                                moonAltitude = astronomyState.moonAltitude,
+                            )
+                            astronomyState.sunAltitude?.also { sunAltitude ->
+                                val alpha =
+                                    ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
+                                solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
+                            }
+                        }
+                        SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
+                            Text(
+                                text = language.formatAuAsKm(astronomyState.moon.dist),
+                                color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
+                                modifier = Modifier.padding(bottom = 24.dp),
+                            )
+                        }
+                    }
+                }
 
-                AstronomyMode.MOON -> AstronomyMoonView(
-                    scale = scale,
-                    offsetX = offsetX,
-                    offsetY = offsetY,
-                    state = astronomyState,
-                )
+                AstronomyMode.SUN -> {
+                    val textPath = remember { Path() }
+                    val textPathRect = remember { RectF() }
+                    val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
+                        stringResource(it.titleStringId) + " " + it.symbol
+                    }
+                    val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
+                        it.textAlign = Paint.Align.CENTER
+                        it.typeface = resolveAndroidCustomTypeface()
+                        it.color = LocalContentColor.current.toArgb()
+                    }
+                    ZoomableCanvas(
+                        scale = scale,
+                        offsetX = offsetX,
+                        offsetY = offsetY,
+                        disableHorizontalLimit = true,
+                        disableVerticalLimit = true,
+                        disablePan = scale.value == 1f,
+                        modifier = Modifier.aspectRatio(1f),
+                    ) {
+                        val radius = this.center.x
+                        val canvas = this.drawContext.canvas.nativeCanvas
+                        colorTextPaint.textSize = radius / 11
+                        colorTextPaint.alpha = 255
+                        repeat(8) {
+                            val color = Color.Gray.copy(alpha = (9 - it) / 50f)
+                            drawCircle(color, radius / 10 * (it + 2))
+                        }
+                        drawCircle(Color(0xFFEEBB22), radius / 35)
+                        astronomyState.heliocentricPlanets.forEachIndexed { i, ecliptic ->
+                            rotate(degrees = -ecliptic.elon.toFloat() + 90) {
+                                textPath.rewind()
+                                val rectSize = radius / 9 * (1 + i) * .95f
+                                textPathRect.set(
+                                    radius - rectSize,
+                                    radius - rectSize,
+                                    radius + rectSize,
+                                    radius + rectSize,
+                                )
+                                textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
+                                canvas.drawTextOnPath(
+                                    heliocentricPlanetsTitles[i],
+                                    textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -762,9 +850,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: Animatable<Long, AnimationVector1D>)
 
 @Stable
 @Composable
-private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState) {
-    val resources = LocalResources.current
-    val solarDraw = remember(resources) { SolarDraw(resources) }
+private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState, solarDraw: SolarDraw) {
     Box(
         modifier = Modifier
             .size(24.dp)

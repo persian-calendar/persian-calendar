@@ -10,19 +10,14 @@ import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -44,12 +39,10 @@ import androidx.compose.ui.util.lerp
 import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
-import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
 import kotlinx.coroutines.launch
@@ -59,7 +52,7 @@ import kotlin.math.hypot
 import kotlin.math.sign
 
 @Composable
-fun AstronomyEarthView(
+fun EarthView(
     isTropical: Boolean,
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
@@ -299,97 +292,6 @@ fun AstronomyEarthView(
                 textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
                 canvas.drawTextOnPath(
                     geocentricPlanetsTitles[i],
-                    textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun AstronomyMoonView(
-    scale: Animatable<Float, AnimationVector1D>,
-    offsetX: Animatable<Float, AnimationVector1D>,
-    offsetY: Animatable<Float, AnimationVector1D>,
-    state: AstronomyState,
-) {
-    Box(Modifier.aspectRatio(1f)) {
-        val solarDraw = LocalResources.current.let { remember(it) { SolarDraw(it) } }
-        ZoomableCanvas(
-            scale = scale,
-            offsetX = offsetX,
-            offsetY = offsetY,
-            disableHorizontalLimit = true,
-            disableVerticalLimit = true,
-            disablePan = scale.value == 1f,
-            modifier = Modifier.aspectRatio(1f),
-        ) {
-            val radius = this.center.x
-            val canvas = this.drawContext.canvas.nativeCanvas
-            solarDraw.moon(
-                canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt,
-                moonAltitude = state.moonAltitude,
-            )
-            state.sunAltitude?.also { sunAltitude ->
-                val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
-                solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
-            }
-        }
-        SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
-            Text(
-                text = language.formatAuAsKm(state.moon.dist),
-                color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
-                modifier = Modifier.padding(bottom = 24.dp),
-            )
-        }
-    }
-}
-
-@Composable
-fun AstronomySunView(
-    scale: Animatable<Float, AnimationVector1D>,
-    offsetX: Animatable<Float, AnimationVector1D>,
-    offsetY: Animatable<Float, AnimationVector1D>,
-    state: AstronomyState,
-) {
-    val textPath = remember { Path() }
-    val textPathRect = remember { RectF() }
-    val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
-        stringResource(it.titleStringId) + " " + it.symbol
-    }
-    val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.textAlign = Paint.Align.CENTER
-        it.typeface = resolveAndroidCustomTypeface()
-        it.color = LocalContentColor.current.toArgb()
-    }
-    ZoomableCanvas(
-        scale = scale,
-        offsetX = offsetX,
-        offsetY = offsetY,
-        disableHorizontalLimit = true,
-        disableVerticalLimit = true,
-        disablePan = scale.value == 1f,
-        modifier = Modifier.aspectRatio(1f),
-    ) {
-        val radius = this.center.x
-        val canvas = this.drawContext.canvas.nativeCanvas
-        colorTextPaint.textSize = radius / 11
-        colorTextPaint.alpha = 255
-        repeat(8) { drawCircle(Color.Gray.copy(alpha = (9 - it) / 50f), radius / 10 * (it + 2)) }
-        drawCircle(Color(0xFFEEBB22), radius / 35)
-        state.heliocentricPlanets.forEachIndexed { i, ecliptic ->
-            rotate(degrees = -ecliptic.elon.toFloat() + 90) {
-                textPath.rewind()
-                val rectSize = radius / 9 * (1 + i) * .95f
-                textPathRect.set(
-                    radius - rectSize,
-                    radius - rectSize,
-                    radius + rectSize,
-                    radius + rectSize,
-                )
-                textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
-                canvas.drawTextOnPath(
-                    heliocentricPlanetsTitles[i],
                     textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
                 )
             }
