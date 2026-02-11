@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.content.res.Configuration
-import android.graphics.Canvas
-import android.graphics.Matrix
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
@@ -55,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
@@ -69,7 +68,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withScale
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -100,6 +101,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -225,26 +227,23 @@ fun SharedTransitionScope.MapScreen(
         ) {
             translate(offsetX.value, offsetY.value) {
                 scale(scale.value) {
-                    mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-                    mapDraw.updateMap(timeInMillis.longValue, mapType)
-
-                    val scale = size.width / mapDraw.mapWidth
-                    val scaledHeight = mapDraw.mapHeight * scale
-                    val translateY = (size.height - scaledHeight) / 2f
-
-                    val matrix = Matrix()
-                    matrix.setScale(scale, scale)
-                    matrix.postTranslate(0f, translateY)
-
-                    mapDraw.draw(
-                        canvas = this.drawContext.canvas.nativeCanvas,
-                        matrix = matrix,
-                        displayLocation = displayLocation,
-                        coordinates = markedCoordinates,
-                        directPathDestination = directPathDestination,
-                        displayGrid = displayGrid,
-                    )
-                    formattedTime = mapDraw.maskFormattedTime
+                    val mapSize = min(size.width / 2, size.height)
+                    val contentScale = mapSize / mapDraw.mapHeight
+                    translate(top = (size.height - mapSize) / 2) {
+                        scale(contentScale, pivot = Offset.Zero) {
+                            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+                            mapDraw.updateMap(timeInMillis.longValue, mapType)
+                            mapDraw.draw(
+                                canvas = this.drawContext.canvas.nativeCanvas,
+                                scale = scale.value * contentScale,
+                                displayLocation = displayLocation,
+                                coordinates = markedCoordinates,
+                                directPathDestination = directPathDestination,
+                                displayGrid = displayGrid,
+                            )
+                            formattedTime = mapDraw.maskFormattedTime
+                        }
+                    }
                 }
             }
         }
@@ -256,22 +255,22 @@ fun SharedTransitionScope.MapScreen(
     }.onFailure(logException).onFailure {
         showGlobeView = false
     }.getOrNull()?.let { bitmap ->
-        val matrix = Matrix()
-        matrix.setScale(
-            globeTextureSize.toFloat() / mapDraw.mapWidth,
-            globeTextureSize.toFloat() / mapDraw.mapHeight,
-        )
         mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
         mapDraw.updateMap(timeInMillis.longValue, mapType)
         formattedTime = mapDraw.maskFormattedTime
-        mapDraw.draw(
-            canvas = Canvas(bitmap),
-            matrix = matrix,
-            displayLocation = displayLocation,
-            coordinates = markedCoordinates,
-            directPathDestination = directPathDestination,
-            displayGrid = displayGrid,
-        )
+        bitmap.applyCanvas {
+            val scale = globeTextureSize / 2f / mapDraw.mapHeight
+            withScale(x = scale, y = scale * 2) {
+                mapDraw.draw(
+                    canvas = this,
+                    scale = scale,
+                    displayLocation = displayLocation,
+                    coordinates = markedCoordinates,
+                    directPathDestination = directPathDestination,
+                    displayGrid = displayGrid,
+                )
+            }
+        }
         GlobeView(bitmap) { showGlobeView = false }
         DisposableEffect(key1 = bitmap) { onDispose { bitmap.recycle() } }
     }

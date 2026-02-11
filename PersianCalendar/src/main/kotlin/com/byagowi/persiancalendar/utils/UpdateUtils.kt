@@ -13,7 +13,6 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
@@ -43,6 +42,7 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withClip
+import androidx.core.graphics.withScale
 import androidx.core.net.toUri
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.ADD_EVENT
@@ -1076,19 +1076,20 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
     }
     val bitmap = mapWidgetCache?.get() ?: createBitmap(mapSize * 2, mapSize).applyCanvas {
         val mapDraw = MapDraw(context.resources, 4, Color.TRANSPARENT, foregroundColor)
-        mapDraw.markersScale = .75f
         mapDraw.updateMap(now, MapType.DAY_NIGHT)
-        val matrix = Matrix()
-        matrix.setScale(mapSize * 2f / mapDraw.mapWidth, mapSize.toFloat() / mapDraw.mapHeight)
         withClip(createRoundPath(mapSize * 2, mapSize, roundPixelSize)) {
-            mapDraw.draw(
-                canvas = this,
-                matrix = matrix,
-                coordinates = coordinates,
-                displayLocation = true,
-                directPathDestination = null,
-                displayGrid = false,
-            )
+            mapDraw.markersScale = .75f
+            val scale = mapSize.toFloat() / mapDraw.mapHeight
+            withScale(x = scale, y = scale) {
+                mapDraw.draw(
+                    canvas = this,
+                    scale = scale,
+                    coordinates = coordinates,
+                    displayLocation = true,
+                    directPathDestination = null,
+                    displayGrid = false,
+                )
+            }
         }
     }.also {
         mapWidgetCache = WeakReference(it)

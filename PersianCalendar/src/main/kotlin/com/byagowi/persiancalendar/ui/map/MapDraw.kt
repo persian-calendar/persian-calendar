@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
-import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.graphics.vector.toPath
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
-import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.QIBLA_LATITUDE
 import com.byagowi.persiancalendar.QIBLA_LONGITUDE
@@ -129,13 +127,13 @@ class MapDraw(
                     canvas,
                     maskMoonX * scale,
                     maskMoonY * scale,
-                    mapWidth * .02f * matrixScale * markersScale,
+                    mapWidth * .02f / matrixScale / 5 * markersScale,
                 )
                 solarDraw.sun(
                     canvas,
                     maskSunX * scale,
                     maskSunY * scale,
-                    mapWidth * .025f * matrixScale * markersScale,
+                    mapWidth * .025f / matrixScale / 5 * markersScale,
                 )
             }
 
@@ -387,7 +385,6 @@ class MapDraw(
         strokeWidth = 5 * dp
         color = mapForegroundColor ?: defaultMisc
     }
-    private val matrixProperties = FloatArray(9)
     private val argbEvaluator = ArgbEvaluator()
 
     private val drawEasterEggs by lazy(LazyThreadSafetyMode.NONE) {
@@ -420,20 +417,17 @@ class MapDraw(
 
     fun draw(
         canvas: Canvas,
-        matrix: Matrix,
+        scale: Float,
         displayLocation: Boolean,
         coordinates: Coordinates?,
         directPathDestination: Coordinates?,
         displayGrid: Boolean,
     ) {
-        matrix.getValues(matrixProperties)
-        // prevents sun/moon/pin unnecessary scale
-        val scaleBack = 1 / matrixProperties[Matrix.MSCALE_X] / 5
-        canvas.withMatrix(matrix) {
+        canvas.run {
             drawRect(mapRect, backgroundPaint)
             drawPath(mapPath, foregroundPaint)
 
-            drawMask(this, scaleBack)
+            drawMask(this, scale)
             if (drawKaaba) {
                 val userX = (QIBLA_LONGITUDE.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - QIBLA_LATITUDE.toFloat()) * mapScaleFactor
@@ -443,14 +437,14 @@ class MapDraw(
                 )
                 kaabaIcon.draw(this)
             }
-            if (scaleBack < .1) drawEasterEggs(canvas)
+            if (scale > 2) drawEasterEggs(canvas)
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                 pinDrawable.setBounds(
-                    (userX - 240 * markersScale * scaleBack / 2).roundToInt(),
-                    (userY - 220 * markersScale * scaleBack).roundToInt(),
-                    (userX + 240 * markersScale * scaleBack / 2).roundToInt(),
+                    (userX - 24 * markersScale / scale).roundToInt(),
+                    (userY - 44 * markersScale / scale).roundToInt(),
+                    (userX + 24 * markersScale / scale).roundToInt(),
                     userY.toInt(),
                 )
                 pinDrawable.draw(this)
