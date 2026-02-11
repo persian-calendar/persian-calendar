@@ -219,7 +219,7 @@ fun SharedTransitionScope.CompassScreen(
                             timeShift = 0f
                         } else isTimeShiftAnimate = true
                     }
-                    if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
+                    if (coordinates != null) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
                             text = { Text(stringResource(R.string.true_north)) },
                             isChecked = showTrueNorth,
