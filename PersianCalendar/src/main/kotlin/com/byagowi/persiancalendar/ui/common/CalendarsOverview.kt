@@ -329,7 +329,7 @@ fun SharedTransitionScope.CalendarsOverview(
         LaunchedEffect(Unit) { firstShow = false }
         val indicatorStrokeWidth by animateDpAsState(
             targetValue = if (isExpanded && !firstShow) ProgressIndicatorDefaults.CircularStrokeWidth else 0.dp,
-            animationSpec = tween(delayMillis = 800),
+            animationSpec = tween(durationMillis = 800),
         )
 
         AnimatedVisibility(isExpanded) {
