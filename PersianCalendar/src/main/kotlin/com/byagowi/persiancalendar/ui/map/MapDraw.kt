@@ -354,21 +354,6 @@ class MapDraw(
         it.textSize = gridLinesWidth * 10
         it.textAlign = Paint.Align.CENTER
     }
-    private val emojiPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.BLACK
-        it.textSize = 1.5f
-        it.textAlign = Paint.Align.CENTER
-    }
-    private val emojiRedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.RED
-        it.textSize = 1.5f
-        it.textAlign = Paint.Align.CENTER
-    }
-    private val biggerEmojiPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.BLACK
-        it.textSize = 10f
-        it.textAlign = Paint.Align.CENTER
-    }
 
     private val parallelsLatitudes = listOf(
         // Circles of latitude are often called parallels
@@ -405,6 +390,34 @@ class MapDraw(
     private val matrixProperties = FloatArray(9)
     private val argbEvaluator = ArgbEvaluator()
 
+    private val drawEasterEggs by lazy(LazyThreadSafetyMode.NONE) {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        class Entry(
+            private val char: String, private val x: Float, private val y: Float,
+            private val xOffset: Float = 0f, private val color: Int = Color.BLACK,
+            private val textSize: Float = 10f,
+        ) {
+            fun draw(canvas: Canvas) {
+                paint.color = color
+                paint.textSize = textSize
+                val userX = (x + 180) * mapScaleFactor
+                val userY = (90 - y) * mapScaleFactor
+                canvas.drawText(char, userX - xOffset, userY + 2.5f, paint)
+            }
+        }
+
+        val list = listOf(
+            Entry("🗿", -109.366f, -27.116f, xOffset = 1f, textSize = 1.5f), // Moai
+            Entry("⛩", 129.3970f, 34.5897f, color = Color.RED, textSize = 1.5f), // Tsushima
+            Entry("🗻", 86.92527f, 27.98833f), // Everest
+            Entry("🐻‍❄️", -72.62f, 80.37f), // North geomagnetic pole
+            Entry("🐧", 108.22f, -79.74f), // South geomagnetic pole
+            Entry("🦘", 132.16666f, -23.03333f), // Australia pole of inaccessibility
+        )
+        ({ canvas: Canvas -> list.forEach { it.draw(canvas) } })
+    }
+
     fun draw(
         canvas: Canvas,
         matrix: Matrix,
@@ -430,41 +443,7 @@ class MapDraw(
                 )
                 kaabaIcon.draw(this)
             }
-            if (scaleBack < .1) {
-                val userX = (-109.366f + 180) * mapScaleFactor
-                val userY = (90 - -27.116f) * mapScaleFactor
-                drawText("🗿", userX - 1f, userY + 2.5f, emojiPaint) // Moai
-            }
-            if (scaleBack < .1) {
-                val userX = (129.3970f + 180) * mapScaleFactor
-                val userY = (90 - 34.5897f) * mapScaleFactor
-                drawText("⛩", userX, userY + 2.5f, emojiRedPaint) // Tsushima
-            }
-            if (scaleBack < .1) {
-                val userX = (86.92527f + 180) * mapScaleFactor
-                val userY = (90 - 27.98833f) * mapScaleFactor
-                drawText("🗻", userX, userY + 2.5f, biggerEmojiPaint) // Everest
-            }
-            if (scaleBack < .1) {
-                val userX = (-72.62f + 180) * mapScaleFactor
-                val userY = (90 - 80.37f) * mapScaleFactor
-                drawText("🐻‍❄️", userX, userY + 2.5f, biggerEmojiPaint) // North geomagnetic pole
-            }
-            if (scaleBack < .1) {
-                val userX = (108.22f + 180) * mapScaleFactor
-                val userY = (90 - -79.74f) * mapScaleFactor
-                drawText("🐧", userX, userY + 2.5f, biggerEmojiPaint) // South geomagnetic pole
-            }
-            if (scaleBack < .1) {
-                val userX = (132.16666f + 180) * mapScaleFactor
-                val userY = (90 - -23.03333f) * mapScaleFactor
-                drawText(
-                    "🦘",
-                    userX,
-                    userY + 2.5f,
-                    biggerEmojiPaint,
-                ) // Australia pole of inaccessibility
-            }
+            if (scaleBack < .1) drawEasterEggs(canvas)
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
