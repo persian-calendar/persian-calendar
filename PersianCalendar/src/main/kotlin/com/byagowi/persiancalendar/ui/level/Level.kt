@@ -34,7 +34,7 @@ fun Level(
     isStopped: Boolean,
     angleToShow1: MutableFloatState,
     angleToShow2: MutableFloatState,
-    showTwoAngles: MutableState<Boolean>,
+    setShowTwoAngles: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -42,7 +42,7 @@ fun Level(
     val resources = LocalResources.current
     var updateToken by remember { mutableLongStateOf(0) }
     val levelView = remember {
-        LevelView(resources, angleToShow1, angleToShow2, showTwoAngles) { ++updateToken }
+        LevelView(resources, angleToShow1, angleToShow2, setShowTwoAngles) { ++updateToken }
     }
     val density = LocalDensity.current
     LaunchedEffect(activity) {

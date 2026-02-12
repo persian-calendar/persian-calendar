@@ -11,6 +11,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.annotation.ColorInt
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -87,15 +88,17 @@ fun Compass(
         val width = this.maxWidth
         val height = this.maxHeight
         with(LocalDensity.current) { compassView.updateSize(width.toPx() / 2f, height.toPx() / 2f) }
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            showTrueNorth.let {}
-            showQibla.let {}
-            time.let {}
-            zoom.let {}
-            compassView.draw(
-                this.drawContext.canvas.nativeCanvas,
-                angle.floatValue + onEnterAnimation.value,
-            )
+        Crossfade(showQibla) { showQibla ->
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                showTrueNorth.let {}
+                showQibla.let {}
+                time.let {}
+                zoom.let {}
+                compassView.draw(
+                    this.drawContext.canvas.nativeCanvas,
+                    angle.floatValue + onEnterAnimation.value,
+                )
+            }
         }
     }
 }

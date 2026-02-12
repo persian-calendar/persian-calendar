@@ -41,7 +41,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -160,7 +159,7 @@ fun SharedTransitionScope.LevelScreen(
                 }
                 val angleToShow1 = remember { mutableFloatStateOf(0f) }
                 val angleToShow2 = remember { mutableFloatStateOf(0f) }
-                val showTwoAngles = remember { mutableStateOf(false) }
+                var showTwoAngles by remember { mutableStateOf(false) }
                 Column {
                     Box(
                         modifier = Modifier
@@ -172,7 +171,7 @@ fun SharedTransitionScope.LevelScreen(
                                 boundsTransform = appBoundsTransform,
                             )
                             .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
-                    ) { Level(isStopped.value, angleToShow1, angleToShow2, showTwoAngles) }
+                    ) { Level(isStopped.value, angleToShow1, angleToShow2) { showTwoAngles = it } }
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar({ Angles(showTwoAngles, angleToShow1, angleToShow2) }) {
                             AppIconButton(
@@ -233,17 +232,21 @@ fun SharedTransitionScope.LevelScreen(
 
 @Composable
 private fun Angles(
-    showTwoAngles: MutableState<Boolean>,
+    showTwoAngles: Boolean,
     angleToShow1: MutableFloatState,
     angleToShow2: MutableFloatState,
 ) {
     val context = LocalContext.current
     val angleDisplay = remember { AngleDisplay(context) }
-    Canvas(Modifier.fillMaxSize()) {
-        val canvas = this.drawContext.canvas.nativeCanvas
-        angleDisplay.updatePlacement(center.x.roundToInt(), (center.y - 4.dp.toPx()).roundToInt())
-        if (!showTwoAngles.value) angleDisplay.draw(canvas, angleToShow1.floatValue)
-        else angleDisplay.draw(canvas, angleToShow1.floatValue, angleToShow2.floatValue)
+    Crossfade(showTwoAngles) { showTwoAngles ->
+        Canvas(Modifier.fillMaxSize()) {
+            val canvas = this.drawContext.canvas.nativeCanvas
+            val x = center.x.roundToInt()
+            val y = (center.y - 4.dp.toPx()).roundToInt()
+            angleDisplay.updatePlacement(x, y)
+            if (!showTwoAngles) angleDisplay.draw(canvas, angleToShow1.floatValue)
+            else angleDisplay.draw(canvas, angleToShow1.floatValue, angleToShow2.floatValue)
+        }
     }
 }
 

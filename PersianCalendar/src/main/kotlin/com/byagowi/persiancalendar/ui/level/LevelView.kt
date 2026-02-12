@@ -41,7 +41,7 @@ class LevelView(
     resources: Resources,
     private val angleToShow1: MutableFloatState,
     private val angleToShow2: MutableFloatState,
-    private val showTwoAngles: MutableState<Boolean>,
+    private val setShowTwoAngles: (Boolean) -> Unit,
     val invalidate: () -> Unit,
 ) {
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -109,7 +109,7 @@ class LevelView(
 
     private fun onOrientationChange(newOrientation: Orientation) {
         orientation = newOrientation
-        showTwoAngles.value = newOrientation == Orientation.LANDING
+        setShowTwoAngles(newOrientation == Orientation.LANDING)
         middleX = width / 2
         middleY = height / 2
         when (newOrientation) {
