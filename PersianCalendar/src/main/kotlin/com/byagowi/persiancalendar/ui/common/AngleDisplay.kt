@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -41,38 +40,35 @@ class AngleDisplay(
     private val displayRect = Rect().also {
         lcdBackgroundPaint.getTextBounds(backgroundText, 0, backgroundText.length, it)
     }
-    private val lcdWidth = displayRect.width()
-    val lcdHeight = displayRect.height()
+    val lcdWidth = displayRect.width()
+    private val lcdHeight = displayRect.height()
     private val displayDrawable = context.resources.getDrawable(R.drawable.display, null)
     private val displayFormat = DecimalFormat(defaultFormat).also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
     private val displayPadding = (8 * dp).toInt()
-    val displayGap = (24 * dp).toInt()
 
     fun updatePlacement(x: Int, y: Int) {
         displayRect.set(
             x - lcdWidth / 2 - displayPadding,
-            y - displayGap - 2 * displayPadding - lcdHeight,
+            y - lcdHeight / 2 - displayPadding,
             x + lcdWidth / 2 + displayPadding,
-            y - displayGap,
+            y + lcdHeight / 2 + displayPadding,
         )
     }
 
-    fun draw(canvas: Canvas, angle: Float, offsetXFactor: Int = 0) {
-        canvas.withTranslation(x = offsetXFactor * (displayRect.width() + displayGap) / 2f) {
-            displayDrawable.bounds = displayRect
-            displayDrawable.draw(this)
-            drawText(
-                backgroundText,
-                displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
-                lcdBackgroundPaint,
-            )
-            drawText(
-                displayFormat.format(angle).padStart(backgroundText.length, whiteSpace),
-                displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
-                lcdForegroundPaint,
-            )
-        }
+    fun draw(canvas: Canvas, angle: Float) {
+        displayDrawable.bounds = displayRect
+        displayDrawable.draw(canvas)
+        canvas.drawText(
+            backgroundText,
+            displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
+            lcdBackgroundPaint,
+        )
+        canvas.drawText(
+            displayFormat.format(angle).padStart(backgroundText.length, whiteSpace),
+            displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
+            lcdForegroundPaint,
+        )
     }
 }

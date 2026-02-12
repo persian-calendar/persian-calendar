@@ -13,12 +13,14 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGesturesPadding
@@ -38,7 +40,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -46,10 +51,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.withTranslation
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -58,6 +66,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
@@ -68,6 +77,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -148,15 +158,18 @@ fun SharedTransitionScope.LevelScreen(
                         isFullscreen = isFullscreen,
                     )
                 }
+                val angleToShow1 = remember { mutableFloatStateOf(0f) }
+                val angleToShow2 = remember { mutableFloatStateOf(0f) }
+                val showTwoAngles = remember { mutableStateOf(false) }
                 Column {
                     Box(
                         modifier = Modifier
                             .weight(1f, fill = false)
-                            .padding(horizontal = 24.dp)
+                            .padding(horizontal = 48.dp)
                             .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
-                    ) { Level(isStopped.value) }
+                    ) { Level(isStopped.value, angleToShow1, angleToShow2, showTwoAngles) }
                     AnimatedVisibility(visible = !isFullscreen) {
-                        AppBottomAppBar {
+                        AppBottomAppBar({ Angles(showTwoAngles, angleToShow1, angleToShow2) }) {
                             AppIconButton(
                                 icon = Icons.Default.Explore,
                                 title = stringResource(R.string.compass),
@@ -184,11 +197,19 @@ fun SharedTransitionScope.LevelScreen(
                     WindowInsets.systemBars.getBottom(this).toDp()
                 }
 
-                if (isFullscreen) Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 24.dp, bottom = bottomWindowInset + 16.dp),
-                ) { StopButton(isStopped) }
+                if (isFullscreen) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 24.dp, bottom = bottomWindowInset + 16.dp),
+                    ) { StopButton(isStopped) }
+                    Box(
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .height(96.dp)
+                            .padding(bottom = bottomWindowInset + 16.dp),
+                    ) { Angles(showTwoAngles, angleToShow1, angleToShow2) }
+                }
 
                 ShrinkingFloatingActionButton(
                     Modifier
@@ -202,6 +223,31 @@ fun SharedTransitionScope.LevelScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun Angles(
+    showTwoAngles: MutableState<Boolean>,
+    angleToShow1: MutableFloatState,
+    angleToShow2: MutableFloatState,
+) {
+    val context = LocalContext.current
+    val angleDisplay = remember { AngleDisplay(context) }
+    Canvas(Modifier.fillMaxSize()) {
+        val canvas = this.drawContext.canvas.nativeCanvas
+        val x = this.center.x
+        val y = this.center.y - 4.dp.toPx()
+        angleDisplay.updatePlacement(x.roundToInt(), y.roundToInt())
+        if (showTwoAngles.value) {
+            val lcdWidth = angleDisplay.lcdWidth
+            canvas.withTranslation(x = -lcdWidth / 2 - 14.dp.toPx()) {
+                angleDisplay.draw(canvas, angleToShow1.floatValue)
+            }
+            canvas.withTranslation(x = lcdWidth / 2 + 14.dp.toPx()) {
+                angleDisplay.draw(canvas, angleToShow2.floatValue)
+            }
+        } else angleDisplay.draw(canvas, angleToShow1.floatValue)
     }
 }
 

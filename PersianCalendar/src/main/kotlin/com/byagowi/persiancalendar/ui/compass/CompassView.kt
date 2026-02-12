@@ -24,14 +24,12 @@ import androidx.compose.runtime.FloatState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.dp
@@ -49,7 +47,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
-import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
@@ -59,23 +56,20 @@ import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 @Composable
 fun SharedTransitionScope.Compass(
+    declination: Float,
     qiblaHeading: EarthPosition.EarthHeading?,
     time: GregorianCalendar,
     angle: FloatState,
 ) {
     val resources = LocalResources.current
-    val context = LocalContext.current
-    var updateToken by remember { mutableIntStateOf(0) }
-    val angleDisplay = remember { AngleDisplay(context, "0", "888") }
-    val compassView = remember { CompassView(resources) { ++updateToken } }
+    val compassView = remember { CompassView(resources) }
+    compassView.declination = declination
     compassView.isShowQibla = showQibla
     compassView.isTrueNorth = showTrueNorth
-    val density = LocalDensity.current
     var zoom by rememberSaveable { mutableFloatStateOf(1f) }
     with(LocalDensity.current) {
         val textSizePx = (12 * zoom).sp.toPx()
@@ -96,14 +90,7 @@ fun SharedTransitionScope.Compass(
     BoxWithConstraints {
         val width = this.maxWidth
         val height = this.maxHeight
-        with(density) {
-            val width = width.roundToPx()
-            val height = height.roundToPx()
-            angleDisplay.updatePlacement(width / 2, height)
-            val cx = width / 2f
-            val cy = height / 2f - angleDisplay.lcdHeight
-            compassView.updateSize(cx, cy)
-        }
+        with(LocalDensity.current) { compassView.updateSize(width.toPx() / 2f, height.toPx() / 2f) }
         Canvas(
             modifier = Modifier
                 .sharedBounds(
@@ -114,33 +101,28 @@ fun SharedTransitionScope.Compass(
                 .fillMaxSize()
                 .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) },
         ) {
-            updateToken.let {}
+            showTrueNorth.let {}
+            showQibla.let {}
+            time.let {}
+            zoom.let {}
             compassView.draw(
                 this.drawContext.canvas.nativeCanvas,
                 angle.floatValue + onEnterAnimation.value,
             )
         }
-        Canvas(Modifier.fillMaxSize()) {
-            val value = (round(compassView.trueNorth(angle.floatValue)) + 360f) % 360f
-            angleDisplay.draw(this.drawContext.canvas.nativeCanvas, value)
-        }
     }
 }
 
-private class CompassView(
-    private val resources: Resources,
-    private val invalidate: () -> Unit,
-) {
+class CompassView(private val resources: Resources) {
     var isTrueNorth: Boolean = true
-    fun trueNorth(angle: Float) =
-        angle + if (isTrueNorth) astronomyState?.declination ?: 0f else 0f
+    var declination = 0f
+    fun trueNorth(angle: Float) = angle + if (isTrueNorth) declination else 0f
 
     var qiblaHeading: EarthPosition.EarthHeading? = null
     var isShowQibla: Boolean = false
 
     // This applies true north correction if it isn't enabled by user but does nothing if is already on
-    private fun fixForTrueNorth(angle: Float) =
-        angle - (if (!isTrueNorth) astronomyState?.declination ?: 0f else 0f)
+    private fun fixForTrueNorth(angle: Float) = angle - (if (!isTrueNorth) declination else 0f)
 
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -197,7 +179,6 @@ private class CompassView(
     fun setTime(time: GregorianCalendar) {
         astronomyState = observer?.let { AstronomyState(it, time) }
         sunProgress = (Clock(time).value / 24).toFloat()
-        invalidate()
     }
 
     private val planetsPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
@@ -244,7 +225,6 @@ private class CompassView(
             it.arcTo(RectF(cx - r, cy - r, cx + r, cy + r), 180f, -180f)
             it.close()
         }
-        invalidate()
     }
 
     fun setScale(textSize: Float, strokeWidth: Float, scale: Float) {
@@ -256,7 +236,6 @@ private class CompassView(
         qiblaPaint.strokeWidth = strokeWidth
         moonPaint.strokeWidth = strokeWidth
         sunPaint.strokeWidth = strokeWidth
-        invalidate()
     }
 
     fun draw(canvas: Canvas, angle: Float) {

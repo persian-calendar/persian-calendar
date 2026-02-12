@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.animation.ValueAnimator
+import android.hardware.GeomagneticField
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -16,9 +17,11 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
@@ -36,6 +39,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -80,6 +86,7 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
+import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -102,6 +109,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.annotations.VisibleForTesting
 import java.util.GregorianCalendar
 import kotlin.math.abs
+import kotlin.math.round
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
@@ -290,8 +298,23 @@ fun SharedTransitionScope.CompassScreen(
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface {
                 Column {
+                    val declination = remember(coordinates, now) {
+                        coordinates?.let {
+                            GeomagneticField(
+                                it.latitude.toFloat(),
+                                it.longitude.toFloat(),
+                                it.elevation.toFloat(),
+                                now,
+                            ).declination
+                        } ?: 0f
+                    }
                     Box(Modifier.weight(1f, fill = false)) {
-                        Compass(qiblaHeading = qiblaHeading, time = time, angle = angle)
+                        Compass(
+                            declination = declination,
+                            qiblaHeading = qiblaHeading,
+                            time = time,
+                            angle = angle,
+                        )
                         Column {
                             AnimatedVisibility(
                                 visible = isSliderShown,
@@ -312,7 +335,7 @@ fun SharedTransitionScope.CompassScreen(
                         }
                         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
-                    AppBottomAppBar {
+                    AppBottomAppBar(overlay = { Angle(angle, declination) }) {
                         AppIconButton(
                             icon = ImageVector.vectorResource(R.drawable.ic_level),
                             title = stringResource(R.string.level),
@@ -457,6 +480,23 @@ fun SharedTransitionScope.CompassScreen(
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+}
+
+@Composable
+private fun Angle(angle: MutableFloatState, declination: Float) {
+    val angleToDisplay by remember {
+        derivedStateOf {
+            round(angle.floatValue + if (showTrueNorth) declination else 0f).mod(360f)
+        }
+    }
+    val context = LocalContext.current
+    val angleDisplay = remember { AngleDisplay(context, "0", "888") }
+    Canvas(Modifier.fillMaxSize()) {
+        val x = this.center.x
+        val y = this.center.y - 4.dp.toPx()
+        angleDisplay.updatePlacement(x.roundToInt(), y.roundToInt())
+        angleDisplay.draw(drawContext.canvas.nativeCanvas, angleToDisplay)
     }
 }
 

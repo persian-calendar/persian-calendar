@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,20 +29,25 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
-import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.debugLog
 
 @Composable
-fun SharedTransitionScope.Level(isStopped: Boolean) {
+fun SharedTransitionScope.Level(
+    isStopped: Boolean,
+    angleToShow1: MutableFloatState,
+    angleToShow2: MutableFloatState,
+    showTwoAngles: MutableState<Boolean>,
+) {
     val context = LocalContext.current
     val activity = LocalActivity.current
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
-    val angleDisplay = remember { AngleDisplay(context) }
     val resources = LocalResources.current
     var updateToken by remember { mutableLongStateOf(0) }
-    val levelView = remember { LevelView(resources, angleDisplay) { ++updateToken } }
+    val levelView = remember {
+        LevelView(resources, angleToShow1, angleToShow2, showTwoAngles) { ++updateToken }
+    }
     val density = LocalDensity.current
     LaunchedEffect(activity) {
         activity?.let { activity ->
@@ -78,14 +85,6 @@ fun SharedTransitionScope.Level(isStopped: Boolean) {
         ) {
             updateToken.let {}
             levelView.draw(this.drawContext.canvas.nativeCanvas)
-        }
-        Canvas(Modifier.fillMaxSize()) {
-            updateToken.let {}
-            val canvas = this.drawContext.canvas.nativeCanvas
-            if (levelView.orientation == Orientation.LANDING) {
-                angleDisplay.draw(canvas, levelView.angleToShow1, offsetXFactor = -1)
-                angleDisplay.draw(canvas, levelView.angleToShow2, offsetXFactor = 1)
-            } else angleDisplay.draw(canvas, levelView.angleToShow1)
         }
     }
 

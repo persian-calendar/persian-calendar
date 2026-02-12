@@ -23,9 +23,10 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.MutableState
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.utils.dp
 import kotlin.math.PI
 import kotlin.math.abs
@@ -38,7 +39,9 @@ import kotlin.math.sin
 
 class LevelView(
     resources: Resources,
-    private val angleDisplay: AngleDisplay,
+    private val angleToShow1: MutableFloatState,
+    private val angleToShow2: MutableFloatState,
+    private val showTwoAngles: MutableState<Boolean>,
     val invalidate: () -> Unit,
 ) {
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -78,13 +81,9 @@ class LevelView(
     /**
      * Orientation
      */
-    var orientation: Orientation? = null
+    private var orientation: Orientation? = null
     private var lastTime: Long = 0
     private var lastTimeShowAngle: Long = 0
-    var angleToShow1 = 0f
-        private set
-    var angleToShow2 = 0f
-        private set
     private var angleX = 0.0
     private var angleY = 0.0
     private var speedX = 0.0
@@ -110,8 +109,9 @@ class LevelView(
 
     private fun onOrientationChange(newOrientation: Orientation) {
         orientation = newOrientation
+        showTwoAngles.value = newOrientation == Orientation.LANDING
         middleX = width / 2
-        middleY = height / 2 - angleDisplay.displayGap
+        middleY = height / 2
         when (newOrientation) {
             Orientation.LANDING -> {
                 levelWidth = levelMaxDimension
@@ -119,7 +119,7 @@ class LevelView(
             }
 
             Orientation.TOP, Orientation.BOTTOM, Orientation.LEFT, Orientation.RIGHT -> {
-                levelWidth = width - 2 * angleDisplay.displayGap
+                levelWidth = width
                 levelHeight = (levelWidth * LEVEL_ASPECT_RATIO).toInt()
             }
         }
@@ -136,15 +136,6 @@ class LevelView(
         val bubbleHeight = 2 * halfBubbleHeight
         maxBubble = (maxLevelY - bubbleHeight * BUBBLE_CROPPING).toInt()
         minBubble = maxBubble - bubbleHeight
-
-        // Display
-        val displayY = when (newOrientation) {
-            Orientation.LEFT, Orientation.RIGHT ->
-                (height - width) / 2 + width - angleDisplay.displayGap
-
-            else -> height
-        }
-        angleDisplay.updatePlacement(middleX, displayY)
 
         // Marker
         halfMarkerGap = (levelWidth * MARKER_GAP / 2).toInt()
@@ -226,12 +217,9 @@ class LevelView(
         this.width = width
         this.height = height
         levelMaxDimension = min(
-            min(height, width) - 2 * angleDisplay.displayGap,
-            max(height, width) - run {
-                2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight)
-            },
+            min(height, width),
+            max(height, width) - 2 * sensorGap,
         )
-        angleDisplay.updatePlacement(width / 2, height)
         onOrientationChange(orientation ?: Orientation.LANDING)
         invalidate()
     }
@@ -248,8 +236,8 @@ class LevelView(
         val timeDiff = (currentTime - lastTime) / 1000.0
         lastTime = currentTime
         if (currentTime - lastTimeShowAngle > 500) {
-            angleToShow1 = angle1
-            angleToShow2 = angle2
+            angleToShow1.floatValue = angle1
+            angleToShow2.floatValue = angle2
             lastTimeShowAngle = currentTime
         }
         val posX = orientation.reverse * (2 * x - minLevelX - maxLevelX) / levelMinusBubbleWidth
