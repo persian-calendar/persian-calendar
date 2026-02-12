@@ -204,11 +204,11 @@ fun SharedTransitionScope.MapScreen(
             },
             scaleRange = 1f..512f,
             onClick = { (x, y), canvasSize ->
-                val scale = canvasSize.width / mapDraw.mapWidth
-                val scaledHeight = mapDraw.mapHeight * scale
-                val translateY = (canvasSize.height - scaledHeight) / 2f
-                val mapX = x.mod(canvasSize.width) / scale
-                val mapY = (y - translateY) / scale
+                val mapSize = min(canvasSize.width / 2, canvasSize.height)
+                val contentScale = mapSize / mapDraw.mapHeight
+                val translateY = (canvasSize.height - mapSize) / 2f
+                val mapX = x.mod(mapSize * 2) / contentScale
+                val mapY = (y - translateY) / contentScale
                 val latitude = 90 - mapY / mapDraw.mapScaleFactor
                 val longitude = mapX / mapDraw.mapScaleFactor - 180
                 if (abs(latitude) < 90 && abs(longitude) < 180) {
@@ -230,10 +230,10 @@ fun SharedTransitionScope.MapScreen(
             mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
             mapDraw.updateMap(timeInMillis.longValue, mapType)
             formattedTime = mapDraw.maskFormattedTime
-            translate(offsetX.value.mod(width * scale.value), offsetY.value) {
+            translate(offsetX.value.mod(mapSize * 2 * scale.value), offsetY.value) {
                 scale(scale.value, pivot = this.center) {
-                    repeat(2) { tileIndex ->
-                        translate(left = (tileIndex - 1) * width, top = (height - mapSize) / 2) {
+                    repeat(if (width > height) 3 else 2) { tileIndex ->
+                        translate(left = (tileIndex - 1) * mapSize * 2, top = (height - mapSize) / 2) {
                             scale(contentScale, pivot = Offset.Zero) {
                                 mapDraw.draw(
                                     canvas = this.drawContext.canvas.nativeCanvas,
