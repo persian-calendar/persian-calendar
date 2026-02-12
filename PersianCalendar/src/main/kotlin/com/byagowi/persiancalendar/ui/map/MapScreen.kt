@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.content.res.Configuration
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
@@ -59,7 +58,6 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
@@ -174,8 +172,7 @@ fun SharedTransitionScope.MapScreen(
     val context = LocalContext.current
     var formattedTime by remember { mutableStateOf("") }
     Box {
-        // Best effort solution for landscape view till figuring out something better
-        if (LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE) Column {
+        Column {
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
             Spacer(Modifier.height((16 + menuHeight + 16).dp))
             ScreenSurface { Box(Modifier.fillMaxSize()) }
@@ -199,8 +196,12 @@ fun SharedTransitionScope.MapScreen(
                     boundsTransform = appBoundsTransform,
                 ),
             contentSize = { canvasSize ->
-                val scaledHeight = mapDraw.mapHeight * canvasSize.width / mapDraw.mapWidth
-                Size(width = canvasSize.width, height = scaledHeight)
+                Size(
+                    width = canvasSize.width,
+                    height = (mapDraw.mapHeight * canvasSize.width / mapDraw.mapWidth).coerceAtMost(
+                        canvasSize.height,
+                    ),
+                )
             },
             scaleRange = 1f..512f,
             onClick = { (x, y), canvasSize ->
