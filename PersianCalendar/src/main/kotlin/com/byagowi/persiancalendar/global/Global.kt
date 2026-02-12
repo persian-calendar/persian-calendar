@@ -726,8 +726,3 @@ fun changeWeekDaysForTest(weekEnds: Set<WeekDay>, action: () -> Unit) {
 fun initiateMonthNamesForTest() {
     oldEraPersianMonths_.value = Language.persianCalendarMonthsInDariOrPersianOldEra
 }
-
-// A very special case to trig coordinates mechanism in saveLocation
-fun overrideCoordinatesGlobalVariable(coordinates: Coordinates) {
-    coordinates_.value = coordinates
-}
