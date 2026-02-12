@@ -30,7 +30,10 @@ fun AppBottomAppBar(
         containerColor = animateColor(MaterialTheme.colorScheme.surfaceContainer).value,
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Row(Modifier.padding(PaddingValues(start = 16.dp, end = 24.dp))) { content() }
+            Row(
+                Modifier.padding(PaddingValues(start = 16.dp, end = 24.dp)),
+                verticalAlignment = Alignment.CenterVertically,
+            ) { content() }
             overlay()
         }
     }

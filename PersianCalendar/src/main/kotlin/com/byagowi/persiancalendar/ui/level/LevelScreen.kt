@@ -210,8 +210,8 @@ fun SharedTransitionScope.LevelScreen(
                     Box(
                         Modifier
                             .align(Alignment.BottomEnd)
-                            .height(96.dp)
-                            .padding(bottom = bottomWindowInset + 16.dp),
+                            .padding(bottom = bottomWindowInset + 16.dp)
+                            .height(58.dp),
                     ) { Angles(showTwoAngles, angleToShow1, angleToShow2) }
                 }
 
@@ -241,9 +241,7 @@ private fun Angles(
     Crossfade(showTwoAngles) { showTwoAngles ->
         Canvas(Modifier.fillMaxSize()) {
             val canvas = this.drawContext.canvas.nativeCanvas
-            val x = center.x.roundToInt()
-            val y = (center.y - 4.dp.toPx()).roundToInt()
-            angleDisplay.updatePlacement(x, y)
+            angleDisplay.updatePlacement(center.x.roundToInt(), center.y.roundToInt())
             if (!showTwoAngles) angleDisplay.draw(canvas, angleToShow1.floatValue)
             else angleDisplay.draw(canvas, angleToShow1.floatValue, angleToShow2.floatValue)
         }
