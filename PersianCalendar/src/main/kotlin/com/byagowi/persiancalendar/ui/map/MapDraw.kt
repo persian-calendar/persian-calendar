@@ -477,14 +477,9 @@ class MapDraw(
             }
         }
         if (displayGrid) {
-            (0..<mapWidth step mapWidth / 24).forEachIndexed { i, x ->
-                if (i == 0 || i == 12) return@forEachIndexed
-                val x = x.toFloat()
-                canvas.drawLine(x, 0f, x, mapHeight.toFloat(), gridPaint)
-            }
-            repeat(3) {
-                val x = it * mapWidth / 2f
-                canvas.drawLine(x, 0f, x, mapHeight.toFloat(), gridHalfPaint)
+            (0..mapWidth step mapWidth / 24).forEachIndexed { i, x ->
+                val paint = if (i % 12 == 0) gridHalfPaint else gridPaint
+                canvas.drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), paint)
             }
             (0..<mapHeight step mapHeight / 12).forEachIndexed { i, y ->
                 if (i == 0 || i == 6) return@forEachIndexed
