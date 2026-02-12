@@ -1812,7 +1812,13 @@ private data class NotificationData(
                                 if (isLargeDayNumberOnNotification) View.GONE else View.VISIBLE
                             it.setViewVisibility(R.id.column4, lastColumnsVisibility)
                             it.setViewVisibility(R.id.column5, lastColumnsVisibility)
-                        }
+
+                            it.setTextViewTextOrHideIfEmpty(
+                                R.id.city,
+                                cityName.takeIf { OWGHAT_LOCATION_KEY in whatToShowOnWidgets }
+                                    .orEmpty(),
+                            )
+                        } else it.setViewVisibility(R.id.city, View.GONE)
                     },
                 )
 
