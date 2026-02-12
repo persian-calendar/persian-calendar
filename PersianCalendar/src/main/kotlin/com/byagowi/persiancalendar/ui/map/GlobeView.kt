@@ -100,7 +100,10 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
 
     PredictiveBackHandler { progress ->
         runCatching {
-            progress.collect { renderer.overriddenZoom = (1 - it.progress).coerceAtLeast(.05f) }
+            val original = renderer.overriddenZoom
+            progress.collect {
+                renderer.overriddenZoom = (original - it.progress).coerceAtLeast(.05f)
+            }
         }.onFailure(logException).onSuccess { onDismissRequest() }
     }
 
