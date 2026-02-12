@@ -57,7 +57,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.withTranslation
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -242,18 +241,9 @@ private fun Angles(
     val angleDisplay = remember { AngleDisplay(context) }
     Canvas(Modifier.fillMaxSize()) {
         val canvas = this.drawContext.canvas.nativeCanvas
-        val x = this.center.x
-        val y = this.center.y - 4.dp.toPx()
-        angleDisplay.updatePlacement(x.roundToInt(), y.roundToInt())
-        if (showTwoAngles.value) {
-            val lcdWidth = angleDisplay.lcdWidth
-            canvas.withTranslation(x = -lcdWidth / 2 - 14.dp.toPx()) {
-                angleDisplay.draw(canvas, angleToShow1.floatValue)
-            }
-            canvas.withTranslation(x = lcdWidth / 2 + 14.dp.toPx()) {
-                angleDisplay.draw(canvas, angleToShow2.floatValue)
-            }
-        } else angleDisplay.draw(canvas, angleToShow1.floatValue)
+        angleDisplay.updatePlacement(center.x.roundToInt(), (center.y - 4.dp.toPx()).roundToInt())
+        if (!showTwoAngles.value) angleDisplay.draw(canvas, angleToShow1.floatValue)
+        else angleDisplay.draw(canvas, angleToShow1.floatValue, angleToShow2.floatValue)
     }
 }
 

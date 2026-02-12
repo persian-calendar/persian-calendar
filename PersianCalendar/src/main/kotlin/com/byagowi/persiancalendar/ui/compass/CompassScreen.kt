@@ -502,9 +502,7 @@ private fun Angle(angle: MutableFloatState, declination: Float) {
     val context = LocalContext.current
     val angleDisplay = remember { AngleDisplay(context, "0", "888") }
     Canvas(Modifier.fillMaxSize()) {
-        val x = this.center.x
-        val y = this.center.y - 4.dp.toPx()
-        angleDisplay.updatePlacement(x.roundToInt(), y.roundToInt())
+        angleDisplay.updatePlacement(center.x.roundToInt(), (center.y - 4.dp.toPx()).roundToInt())
         angleDisplay.draw(drawContext.canvas.nativeCanvas, angleToDisplay)
     }
 }

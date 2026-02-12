@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -40,7 +41,7 @@ class AngleDisplay(
     private val displayRect = Rect().also {
         lcdBackgroundPaint.getTextBounds(backgroundText, 0, backgroundText.length, it)
     }
-    val lcdWidth = displayRect.width()
+    private val lcdWidth = displayRect.width()
     private val lcdHeight = displayRect.height()
     private val displayDrawable = context.resources.getDrawable(R.drawable.display, null)
     private val displayFormat = DecimalFormat(defaultFormat).also {
@@ -55,6 +56,12 @@ class AngleDisplay(
             x + lcdWidth / 2 + displayPadding,
             y + lcdHeight / 2 + displayPadding,
         )
+    }
+
+    private val gap = 14 * dp
+    fun draw(canvas: Canvas, angle1: Float, angle2: Float) {
+        canvas.withTranslation(x = -lcdWidth / 2 - gap) { draw(canvas, angle1) }
+        canvas.withTranslation(x = lcdWidth / 2 + gap) { draw(canvas, angle2) }
     }
 
     fun draw(canvas: Canvas, angle: Float) {
