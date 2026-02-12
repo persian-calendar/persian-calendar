@@ -23,9 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.FloatState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -53,11 +53,9 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
-import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
@@ -78,17 +76,18 @@ fun SharedTransitionScope.Compass(
     compassView.isShowQibla = showQibla
     compassView.isTrueNorth = showTrueNorth
     val density = LocalDensity.current
-    val zoom = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.25f) }
-    LaunchedEffect(Unit) {
-        zoom.animateTo(
-            targetValue = 1f,
-            animationSpec = spring(dampingRatio = .35f, stiffness = Spring.StiffnessLow),
-        )
-    }
+    var zoom by rememberSaveable { mutableFloatStateOf(1f) }
     with(LocalDensity.current) {
-        val textSizePx = (12 * zoom.value).sp.toPx()
-        val strokeWidthPx = (1 * zoom.value).dp.toPx()
-        compassView.setScale(textSizePx, strokeWidthPx, zoom.value)
+        val textSizePx = (12 * zoom).sp.toPx()
+        val strokeWidthPx = (1 * zoom).dp.toPx()
+        compassView.setScale(textSizePx, strokeWidthPx, zoom)
+    }
+    val onEnterAnimation = remember { Animatable(listOf(15f, -15f).random()) }
+    LaunchedEffect(Unit) {
+        onEnterAnimation.animateTo(
+            targetValue = 0f,
+            animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow),
+        )
     }
     compassView.qiblaHeading = qiblaHeading
     compassView.setFont(resolveAndroidCustomTypeface())
@@ -105,7 +104,6 @@ fun SharedTransitionScope.Compass(
             val cy = height / 2f - angleDisplay.lcdHeight
             compassView.updateSize(cx, cy)
         }
-        val coroutineScope = rememberCoroutineScope()
         Canvas(
             modifier = Modifier
                 .sharedBounds(
@@ -114,14 +112,13 @@ fun SharedTransitionScope.Compass(
                     boundsTransform = appBoundsTransform,
                 )
                 .fillMaxSize()
-                .detectZoom {
-                    coroutineScope.launch {
-                        zoom.snapTo((zoom.value * it).coerceIn(1f, 2f))
-                    }
-                },
+                .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) },
         ) {
             updateToken.let {}
-            compassView.draw(this.drawContext.canvas.nativeCanvas, angle.floatValue)
+            compassView.draw(
+                this.drawContext.canvas.nativeCanvas,
+                angle.floatValue + onEnterAnimation.value,
+            )
         }
         Canvas(Modifier.fillMaxSize()) {
             val value = (round(compassView.trueNorth(angle.floatValue)) + 360f) % 360f
