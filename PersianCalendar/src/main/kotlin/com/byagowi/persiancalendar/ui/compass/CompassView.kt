@@ -11,7 +11,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.annotation.ColorInt
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -36,9 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
@@ -50,7 +47,6 @@ import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
-import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
@@ -59,7 +55,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 @Composable
-fun SharedTransitionScope.Compass(
+fun Compass(
     declination: Float,
     qiblaHeading: EarthPosition.EarthHeading?,
     time: GregorianCalendar,
@@ -87,20 +83,11 @@ fun SharedTransitionScope.Compass(
     compassView.setFont(resolveAndroidCustomTypeface())
     compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
     compassView.setTime(time)
-    BoxWithConstraints {
+    BoxWithConstraints(Modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
         val width = this.maxWidth
         val height = this.maxHeight
         with(LocalDensity.current) { compassView.updateSize(width.toPx() / 2f, height.toPx() / 2f) }
-        Canvas(
-            modifier = Modifier
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                    boundsTransform = appBoundsTransform,
-                )
-                .fillMaxSize()
-                .detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) },
-        ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
             showTrueNorth.let {}
             showQibla.let {}
             time.let {}

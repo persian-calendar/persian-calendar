@@ -74,6 +74,7 @@ import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.QIBLA_LATITUDE
 import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
@@ -309,12 +310,20 @@ fun SharedTransitionScope.CompassScreen(
                         } ?: 0f
                     }
                     Box(Modifier.weight(1f, fill = false)) {
-                        Compass(
-                            declination = declination,
-                            qiblaHeading = qiblaHeading,
-                            time = time,
-                            angle = angle,
-                        )
+                        Box(
+                            Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                                boundsTransform = appBoundsTransform,
+                            ),
+                        ) {
+                            Compass(
+                                declination = declination,
+                                qiblaHeading = qiblaHeading,
+                                time = time,
+                                angle = angle,
+                            )
+                        }
                         Column {
                             AnimatedVisibility(
                                 visible = isSliderShown,
