@@ -169,8 +169,7 @@ fun SharedTransitionScope.LevelScreen(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
-                            )
-                            .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
+                            ),
                     ) { Level(isStopped.value, angleToShow1, angleToShow2) { showTwoAngles = it } }
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar({ Angles(showTwoAngles, angleToShow1, angleToShow2) }) {
