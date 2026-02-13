@@ -18,13 +18,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGesturesPadding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
@@ -53,7 +50,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -102,6 +98,10 @@ fun SharedTransitionScope.LevelScreen(
             windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
         }
     }
+
+    val angleToShow1 = remember { mutableFloatStateOf(0f) }
+    val angleToShow2 = remember { mutableFloatStateOf(0f) }
+    var showTwoAngles by remember { mutableStateOf(false) }
 
     Column {
         AnimatedVisibility(visible = !isFullscreen) {
@@ -157,61 +157,31 @@ fun SharedTransitionScope.LevelScreen(
                         isFullscreen = isFullscreen,
                     )
                 }
-                val angleToShow1 = remember { mutableFloatStateOf(0f) }
-                val angleToShow2 = remember { mutableFloatStateOf(0f) }
-                var showTwoAngles by remember { mutableStateOf(false) }
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f, fill = false)
-                            .padding(horizontal = 48.dp)
-                            .sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                AppBottomAppBar(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    hideContainer = isFullscreen,
+                    overlay = { Angles(showTwoAngles, angleToShow1, angleToShow2) },
+                ) {
+                    Crossfade(isFullscreen) {
+                        if (!it) AppIconButton(
+                            icon = Icons.Default.Explore,
+                            title = stringResource(R.string.compass),
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),
-                    ) { Level(isStopped.value, angleToShow1, angleToShow2) { showTwoAngles = it } }
-                    AnimatedVisibility(visible = !isFullscreen) {
-                        AppBottomAppBar({ Angles(showTwoAngles, angleToShow1, angleToShow2) }) {
-                            AppIconButton(
-                                icon = Icons.Default.Explore,
-                                title = stringResource(R.string.compass),
-                                modifier = Modifier.sharedBounds(
-                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                    boundsTransform = appBoundsTransform,
-                                ),
-                                onClick = navigateToCompass,
-                            )
-                            Spacer(Modifier.weight(1f))
-                            Box(
-                                Modifier.sharedElement(
-                                    rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
-                                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                    boundsTransform = appBoundsTransform,
-                                ),
-                            ) { StopButton(isStopped) }
-                        }
+                            onClick = navigateToCompass,
+                        )
                     }
-                }
-
-                var bottomWindowInset by remember { mutableStateOf(0.dp) }
-                if (!isFullscreen) bottomWindowInset = with(LocalDensity.current) {
-                    WindowInsets.systemBars.getBottom(this).toDp()
-                }
-
-                if (isFullscreen) {
+                    Spacer(Modifier.weight(1f))
                     Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(end = 24.dp, bottom = bottomWindowInset + 16.dp),
+                        Modifier.sharedElement(
+                            rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                            boundsTransform = appBoundsTransform,
+                        ),
                     ) { StopButton(isStopped) }
-                    Box(
-                        Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(bottom = bottomWindowInset + 16.dp)
-                            .height(58.dp),
-                    ) { Angles(showTwoAngles, angleToShow1, angleToShow2) }
                 }
 
                 ShrinkingFloatingActionButton(
@@ -227,6 +197,16 @@ fun SharedTransitionScope.LevelScreen(
             }
         }
     }
+
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 52.dp, vertical = 58.dp)
+            .sharedBounds(
+                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                boundsTransform = appBoundsTransform,
+            ),
+    ) { Level(isStopped.value, angleToShow1, angleToShow2) { showTwoAngles = it } }
 }
 
 @Composable

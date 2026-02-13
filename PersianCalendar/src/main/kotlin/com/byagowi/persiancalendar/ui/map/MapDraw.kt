@@ -388,6 +388,7 @@ class MapDraw(
 
     private val drawEasterEggs by lazy(LazyThreadSafetyMode.NONE) {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
         class Entry(
             private val char: String, private val x: Float, private val y: Float,
             private val xOffset: Float = 0f, private val color: Int = Color.BLACK,

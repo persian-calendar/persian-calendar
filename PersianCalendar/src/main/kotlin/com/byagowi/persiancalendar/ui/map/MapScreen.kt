@@ -234,7 +234,10 @@ fun SharedTransitionScope.MapScreen(
             translate(offsetX.value.mod(mapSize * 2 * scale.value), offsetY.value) {
                 scale(scale.value, pivot = this.center) {
                     repeat(if (width > height) 3 else 2) { tileIndex ->
-                        translate(left = (tileIndex - 1) * mapSize * 2, top = (height - mapSize) / 2) {
+                        translate(
+                            left = (tileIndex - 1) * mapSize * 2,
+                            top = (height - mapSize) / 2,
+                        ) {
                             scale(contentScale, pivot = Offset.Zero) {
                                 mapDraw.draw(
                                     canvas = this.drawContext.canvas.nativeCanvas,
