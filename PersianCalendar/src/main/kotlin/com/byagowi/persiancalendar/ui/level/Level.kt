@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,7 @@ fun Level(
         LevelView(resources, angleToShow1, angleToShow2, setShowTwoAngles) { ++updateToken }
     }
     val density = LocalDensity.current
-    LaunchedEffect(activity) {
+    LaunchedEffect(key1 = Unit) {
         activity?.let { activity ->
             orientationProvider = OrientationProvider(
                 activity,
