@@ -28,8 +28,8 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 @Composable
 fun AppBottomAppBar(
     overlay: @Composable () -> Unit,
-    hideContainer: Boolean = false,
     modifier: Modifier = Modifier,
+    hideContainer: Boolean = false,
     content: @Composable RowScope.() -> Unit,
 ) {
     val surfaceContainer by animateColor(MaterialTheme.colorScheme.surfaceContainer)
