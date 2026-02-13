@@ -77,7 +77,6 @@ fun Level(
     DisposableEffect(lifecycleOwner) {
         activity ?: return@DisposableEffect onDispose {}
         val observer = LifecycleEventObserver { _, event ->
-            val oldRequestedOrientation = activity.requestedOrientation
             if (event == Lifecycle.Event.ON_RESUME) {
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
                 if (orientationProvider?.isListening == false) {
@@ -85,7 +84,7 @@ fun Level(
                 }
             } else if (event == Lifecycle.Event.ON_PAUSE) {
                 debugLog("level: ON_PAUSE")
-                activity.requestedOrientation = oldRequestedOrientation
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
             }
         }
