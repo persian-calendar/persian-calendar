@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -367,6 +368,7 @@ fun SharedTransitionScope.CompassScreen(
                             ),
                             onClick = navigateToMap,
                         )
+                        Spacer(Modifier.weight(1f))
                         AppIconButton(
                             icon = Icons.Default.Info,
                             title = stringResource(R.string.help),
@@ -381,7 +383,7 @@ fun SharedTransitionScope.CompassScreen(
                                 SnackbarDuration.Long,
                             )
                         }
-                        Spacer(Modifier.weight(1f))
+                        Spacer(Modifier.width(4.dp))
                         Box(
                             Modifier.sharedElement(
                                 rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
@@ -427,6 +429,7 @@ fun SharedTransitionScope.CompassScreen(
             override fun setAngle(value: Float) {
                 angle.floatValue = value
             }
+
             override val getDeclination: Float get() = declination.value
             override val isStopped: Boolean get() = isStopped.value
             override val orientation: Float get() = orientation
@@ -437,6 +440,7 @@ fun SharedTransitionScope.CompassScreen(
             override fun setAngle(value: Float) {
                 angle.floatValue = value
             }
+
             override val getDeclination: Float get() = declination.value
             override val isStopped: Boolean get() = isStopped.value
             override val orientation: Float get() = orientation
