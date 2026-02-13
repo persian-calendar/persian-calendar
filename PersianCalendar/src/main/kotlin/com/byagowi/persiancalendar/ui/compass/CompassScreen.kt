@@ -186,6 +186,19 @@ fun SharedTransitionScope.CompassScreen(
         EarthPosition(latitude, longitude).toEarthHeading(qibla)
     }
 
+    val declination = remember(coordinates, now) {
+        derivedStateOf {
+            coordinates?.let {
+                GeomagneticField(
+                    it.latitude.toFloat(),
+                    it.longitude.toFloat(),
+                    it.elevation.toFloat(),
+                    now,
+                ).declination
+            } ?: 0f
+        }
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -299,16 +312,6 @@ fun SharedTransitionScope.CompassScreen(
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface {
                 Column {
-                    val declination = remember(coordinates, now) {
-                        coordinates?.let {
-                            GeomagneticField(
-                                it.latitude.toFloat(),
-                                it.longitude.toFloat(),
-                                it.elevation.toFloat(),
-                                now,
-                            ).declination
-                        } ?: 0f
-                    }
                     Box(Modifier.weight(1f, fill = false)) {
                         Box(
                             Modifier.sharedBounds(
@@ -318,7 +321,7 @@ fun SharedTransitionScope.CompassScreen(
                             ),
                         ) {
                             Compass(
-                                declination = declination,
+                                declination = declination.value,
                                 qiblaHeading = qiblaHeading,
                                 time = time,
                                 angle = angle,
@@ -344,7 +347,7 @@ fun SharedTransitionScope.CompassScreen(
                         }
                         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
-                    AppBottomAppBar(overlay = { Angle(angle, declination) }) {
+                    AppBottomAppBar(overlay = { Angle(angle, declination.value) }) {
                         AppIconButton(
                             icon = ImageVector.vectorResource(R.drawable.ic_level),
                             title = stringResource(R.string.level),
@@ -425,6 +428,7 @@ fun SharedTransitionScope.CompassScreen(
             override fun setAngle(value: Float) {
                 angle.floatValue = value
             }
+            override val getDeclination: Float get() = declination.value
             override val isStopped: Boolean get() = isStopped.value
             override val orientation: Float get() = orientation
             override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
@@ -434,6 +438,7 @@ fun SharedTransitionScope.CompassScreen(
             override fun setAngle(value: Float) {
                 angle.floatValue = value
             }
+            override val getDeclination: Float get() = declination.value
             override val isStopped: Boolean get() = isStopped.value
             override val orientation: Float get() = orientation
             override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
@@ -520,13 +525,14 @@ private abstract class BaseSensorListener : SensorEventListener {
 
     abstract fun setAngle(value: Float)
     abstract val isStopped: Boolean
+    abstract val getDeclination: Float
     abstract val orientation: Float
     abstract fun checkIfA11yAnnounceIsNeeded(angle: Float)
 
     protected fun update(value: Float) {
         // angle between the magnetic north direction
         // 0=North, 90=East, 180=South, 270=West
-        val angle = if (isStopped) 0f else value + orientation
+        val angle = if (isStopped) -getDeclination else value + orientation
         if (!isStopped) checkIfA11yAnnounceIsNeeded(angle)
         azimuth = lowPass(angle, azimuth)
         setAngle(azimuth)
