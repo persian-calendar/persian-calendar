@@ -501,14 +501,14 @@ fun SharedTransitionScope.CompassScreen(
 private fun Angle(angle: MutableFloatState, declination: Float) {
     val angleToDisplay by remember {
         derivedStateOf {
-            round(angle.floatValue + if (showTrueNorth) declination else 0f).mod(360f)
+            (angle.floatValue + if (showTrueNorth) declination else 0f).roundToInt().mod(360)
         }
     }
     val context = LocalContext.current
     val angleDisplay = remember { AngleDisplay(context, "0", "888") }
     Canvas(Modifier.fillMaxSize()) {
         angleDisplay.updatePlacement(center.x.roundToInt(), center.y.roundToInt())
-        angleDisplay.draw(drawContext.canvas.nativeCanvas, angleToDisplay)
+        angleDisplay.draw(drawContext.canvas.nativeCanvas, angleToDisplay.toFloat())
     }
 }
 
