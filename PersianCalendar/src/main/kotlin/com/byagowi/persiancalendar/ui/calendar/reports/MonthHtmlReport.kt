@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.reports
 
 import android.content.Context
 import androidx.annotation.CheckResult
-import androidx.core.text.buildSpannedString
-import androidx.core.text.color
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
@@ -54,22 +52,22 @@ fun monthHtmlReport(context: Context, date: AbstractDate, wholeYear: Boolean) = 
             unsafe {
                 val calendarColumnsPercent = 100 / if (isShowWeekOfYearEnabled) 8 else 7
                 +"""
-                    body { font-family: system-ui }
-                    td { vertical-align: top }
-                    table.calendar td, table.calendar th {
-                        width: $calendarColumnsPercent%;
-                        text-align: center;
-                        height: 2em;
-                    }
-                    .holiday { color: red; font-weight: bold }
-                    .hasEvents { border-bottom: 1px dotted; }
-                    table.events { padding: 1em 0; font-size: 95% }
-                    table.events td { width: 50%; padding: 0 1em }
-                    table { width: 100% }
-                    h1 { text-align: center }
-                    .page { break-after: page }
-                    sup { font-size: x-small; position: absolute }
-                """.trimIndent()
+body { font-family: system-ui }
+td { vertical-align: top }
+table.calendar td, table.calendar th {
+    width: $calendarColumnsPercent%;
+    text-align: center;
+    height: 2em;
+}
+.holiday { color: red; font-weight: bold }
+.hasEvents { border-bottom: 1px dotted; }
+table.events { padding: 1em 0; font-size: 95% }
+table.events td { width: 50%; padding: 0 1em }
+table { width: 100% }
+h1 { text-align: center }
+.page { break-after: page }
+sup { font-size: x-small; position: absolute }
+"""
             }
         }
     }
@@ -141,8 +139,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         tr {
             val titles = formatPrintEventsList(events)
             if (titles.isEmpty()) return@tr
-            val sizes =
-                titles.map { it.second.toString().length }.runningFold(0) { acc, it -> acc + it }
+            val sizes = titles.map { it.second.length }.runningFold(0) { acc, it -> acc + it }
             val halfOfTotal = sizes.last() / 2
             val center = sizes.indexOfFirst { it > halfOfTotal }
             listOf(titles.take(center), titles.drop(center)).forEach {
@@ -153,7 +150,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                                 +numeral.format((jdn on mainCalendar).dayOfMonth)
                             }
                             +spacedColon
-                            +title.toString()
+                            +title
                         }
                     }
                 }
@@ -162,8 +159,8 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     }
 }
 
-private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): List<Pair<Jdn, CharSequence>> {
-    val result = events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
+private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): List<Pair<Jdn, String>> {
+    return events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
         val holidays = getEventsTitle(
             events,
             holiday = true,
@@ -178,16 +175,12 @@ private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): Lis
             insertRLM = false,
             addIsHoliday = true,
         )
-        if (holidays.isEmpty() && nonHolidays.isEmpty()) null
-        else jdn to buildSpannedString {
-            if (holidays.isNotEmpty()) color(android.graphics.Color.RED) { append(holidays) }
+        if (holidays.isEmpty() && nonHolidays.isEmpty()) null else jdn to buildString {
+            if (holidays.isNotEmpty()) append(holidays)
             if (nonHolidays.isNotEmpty()) {
                 if (holidays.isNotEmpty()) appendLine()
                 append(nonHolidays)
             }
         }
-    }
-    return result.map { (jdn, title) ->
-        jdn to title.toString().replace("\n", " $EN_DASH ")
-    }
+    }.map { (jdn, title) -> jdn to title.replace("\n", " $EN_DASH ") }
 }
