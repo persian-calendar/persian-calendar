@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.level
 
 import android.content.pm.ActivityInfo
-import android.view.Surface
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -20,7 +19,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -79,23 +77,15 @@ fun Level(
     DisposableEffect(lifecycleOwner) {
         activity ?: return@DisposableEffect onDispose {}
         val observer = LifecycleEventObserver { _, event ->
+            val oldRequestedOrientation = activity.requestedOrientation
             if (event == Lifecycle.Event.ON_RESUME) {
-                debugLog("level: ON_RESUME")
-                // Rotation lock, https://stackoverflow.com/a/75984863
-                val destination = ActivityCompat.getDisplayOrDefault(activity).rotation
-                activity.requestedOrientation = when (destination) {
-                    Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-                    Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                    Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                }
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
                 if (orientationProvider?.isListening == false) {
                     orientationProvider?.startListening()
                 }
             } else if (event == Lifecycle.Event.ON_PAUSE) {
                 debugLog("level: ON_PAUSE")
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                activity.requestedOrientation = oldRequestedOrientation
                 if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
             }
         }
