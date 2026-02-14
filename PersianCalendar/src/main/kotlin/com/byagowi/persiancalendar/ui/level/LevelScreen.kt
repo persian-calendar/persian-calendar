@@ -5,12 +5,10 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Canvas
@@ -131,7 +129,10 @@ fun SharedTransitionScope.LevelScreen(
 
         val topCornersRoundness by animateDpAsState(
             targetValue = if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
-            animationSpec = tween(durationMillis = 500, easing = LinearEasing),
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioNoBouncy,
+                stiffness = Spring.StiffnessMediumLow,
+            ),
         )
         var everWentFullscreen by remember { mutableStateOf(false) }
         if (isFullscreen) everWentFullscreen = true
@@ -183,17 +184,6 @@ fun SharedTransitionScope.LevelScreen(
                         ),
                     ) { StopButton(isStopped) }
                 }
-
-                ShrinkingFloatingActionButton(
-                    Modifier
-                        .align(Alignment.TopCenter)
-                        .safeGesturesPadding()
-                        .padding(top = 32.dp),
-                    isVisible = isFullscreen,
-                    action = { isFullscreen = false },
-                    icon = Icons.Default.FullscreenExit,
-                    title = stringResource(R.string.exit_full_screen),
-                )
             }
         }
     }
@@ -207,6 +197,19 @@ fun SharedTransitionScope.LevelScreen(
                 boundsTransform = appBoundsTransform,
             ),
     ) { Level(isStopped.value, angleToShow1, angleToShow2) { showTwoAngles = it } }
+
+    Box(Modifier.fillMaxSize()) {
+        ShrinkingFloatingActionButton(
+            Modifier
+                .align(Alignment.TopCenter)
+                .safeGesturesPadding()
+                .padding(top = 72.dp),
+            isVisible = isFullscreen,
+            action = { isFullscreen = false },
+            icon = Icons.Default.FullscreenExit,
+            title = stringResource(R.string.exit_full_screen),
+        )
+    }
 }
 
 @Composable
