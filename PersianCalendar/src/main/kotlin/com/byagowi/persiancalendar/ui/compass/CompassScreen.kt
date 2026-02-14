@@ -93,7 +93,6 @@ import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
-import com.byagowi.persiancalendar.ui.common.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -102,6 +101,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appSliderColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -182,7 +182,7 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     val angle = rememberSaveable { mutableFloatStateOf(0f) }
-    ChangesHapticFeedback(angle)
+    ChangesHapticFeedback { angle.floatValue }
     val qiblaHeading = coordinates?.run {
         val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
         EarthPosition(latitude, longitude).toEarthHeading(qibla)

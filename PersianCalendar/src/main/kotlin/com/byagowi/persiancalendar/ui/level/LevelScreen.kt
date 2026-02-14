@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.level
 
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
+import androidx.collection.IntIntPair
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
@@ -35,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -63,11 +63,11 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
-import com.byagowi.persiancalendar.ui.common.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import kotlinx.coroutines.delay
@@ -100,9 +100,9 @@ fun SharedTransitionScope.LevelScreen(
 
     val angleToShow1 = remember { mutableFloatStateOf(0f) }
     val angleToShow2 = remember { mutableFloatStateOf(0f) }
-    ChangesHapticFeedback(
-        key = remember { derivedStateOf { angleToShow1.floatValue + angleToShow2.floatValue } },
-    )
+    ChangesHapticFeedback {
+        IntIntPair(angleToShow1.floatValue.roundToInt(), angleToShow2.floatValue.roundToInt())
+    }
     var showTwoAngles by remember { mutableStateOf(false) }
 
     Column {
