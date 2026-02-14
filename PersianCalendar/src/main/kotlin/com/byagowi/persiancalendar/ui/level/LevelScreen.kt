@@ -202,7 +202,6 @@ fun SharedTransitionScope.LevelScreen(
         ShrinkingFloatingActionButton(
             Modifier
                 .align(Alignment.TopCenter)
-                .safeGesturesPadding()
                 .padding(top = 72.dp),
             isVisible = isFullscreen,
             action = { isFullscreen = false },
