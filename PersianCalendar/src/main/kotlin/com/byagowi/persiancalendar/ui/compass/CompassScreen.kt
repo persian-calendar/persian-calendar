@@ -93,6 +93,7 @@ import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -181,6 +182,7 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     val angle = rememberSaveable { mutableFloatStateOf(0f) }
+    ChangesHapticFeedback(angle)
     val qiblaHeading = coordinates?.run {
         val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
         EarthPosition(latitude, longitude).toEarthHeading(qibla)

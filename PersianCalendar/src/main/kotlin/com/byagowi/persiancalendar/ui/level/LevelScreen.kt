@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -62,6 +63,7 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
@@ -98,6 +100,9 @@ fun SharedTransitionScope.LevelScreen(
 
     val angleToShow1 = remember { mutableFloatStateOf(0f) }
     val angleToShow2 = remember { mutableFloatStateOf(0f) }
+    ChangesHapticFeedback(
+        key = remember { derivedStateOf { angleToShow1.floatValue + angleToShow2.floatValue } },
+    )
     var showTwoAngles by remember { mutableStateOf(false) }
 
     Column {

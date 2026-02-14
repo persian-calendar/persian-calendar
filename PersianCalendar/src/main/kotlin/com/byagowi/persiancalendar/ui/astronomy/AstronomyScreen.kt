@@ -83,7 +83,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -107,6 +106,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
@@ -125,7 +125,6 @@ import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
@@ -451,7 +450,6 @@ fun SharedTransitionScope.AstronomyScreen(
 }
 
 private val oneMinute = 1.minutes.inWholeMilliseconds
-private val sevenDays = 7.days.inWholeMilliseconds
 
 @Composable
 private fun SharedTransitionScope.SliderBar(
@@ -534,10 +532,7 @@ private fun SharedTransitionScope.SliderBar(
                         }
                     },
             )
-            val view = LocalView.current
-            LaunchedEffect(timeInMillis.value / sevenDays) {
-                view.performHapticFeedbackVirtualKey()
-            }
+            ChangesHapticFeedback(timeInMillis.asState())
             TimeArrow(::buttonScrollSlider, isPrevious = false)
         }
     }
