@@ -24,7 +24,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.MutableState
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp

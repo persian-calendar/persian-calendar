@@ -517,7 +517,7 @@ fun createSunViewRemoteViews(
     remoteViews.setRoundBackground(context.resources, R.id.image_background, size)
     val clippingPath =
         if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
-        selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+            selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
         ) createRoundPath(width, height, roundPixelSize) else null
     remoteViews.setTextColor(R.id.message, color)
     val message =

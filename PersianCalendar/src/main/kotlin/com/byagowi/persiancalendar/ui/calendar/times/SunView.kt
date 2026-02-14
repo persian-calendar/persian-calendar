@@ -216,6 +216,7 @@ class SunView(
         drawText(a, w * if (isRtl) .70f else .30f, y, paint)
         drawText(b, w * if (isRtl) .30f else .70f, y, paint)
     }
+
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
 }
