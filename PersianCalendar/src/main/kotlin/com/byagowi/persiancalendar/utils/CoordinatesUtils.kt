@@ -31,17 +31,19 @@ suspend fun geocode(
     context: Context,
     latitude: Double,
     longitude: Double,
-): Address? = withContext(Dispatchers.IO) {
-    val geocoder = Geocoder(context, language.asSystemLocale())
-    withTimeoutOrNull(3.seconds) {
+): Address? {
+    return withTimeoutOrNull(3.seconds) {
         runCatching {
+            val geocoder = Geocoder(context, language.asSystemLocale())
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 suspendCancellableCoroutine { continuation ->
                     geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
                         if (continuation.isActive) continuation.resume(addresses)
                     }
                 }
-            } else @Suppress("DEPRECATION") geocoder.getFromLocation(latitude, longitude, 1)
+            } else @Suppress("DEPRECATION") withContext(Dispatchers.IO) {
+                geocoder.getFromLocation(latitude, longitude, 1)
+            }
         }.onFailure(logException).getOrNull()
     }?.firstOrNull()
 }
