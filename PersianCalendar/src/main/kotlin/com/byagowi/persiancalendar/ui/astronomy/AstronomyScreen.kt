@@ -450,6 +450,7 @@ fun SharedTransitionScope.AstronomyScreen(
 }
 
 private val oneMinute = 1.minutes.inWholeMilliseconds
+private val oneDay = 1.days.inWholeMilliseconds
 
 @Composable
 private fun SharedTransitionScope.SliderBar(
@@ -532,7 +533,7 @@ private fun SharedTransitionScope.SliderBar(
                         }
                     },
             )
-            ChangesHapticFeedback { timeInMillis.value }
+            ChangesHapticFeedback { timeInMillis.value / oneDay }
             TimeArrow(::buttonScrollSlider, isPrevious = false)
         }
     }
