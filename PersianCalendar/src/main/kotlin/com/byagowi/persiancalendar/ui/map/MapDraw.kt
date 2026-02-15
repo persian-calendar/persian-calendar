@@ -73,6 +73,8 @@ class MapDraw(
     val mapWidth = 360 * mapScaleFactor
     val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
+    // Just a little wider to avoid hairline artifact between two maps in map screen
+    private val backgroundMapRect = Rect(0, 0, mapWidth + 1, mapHeight)
 
     private fun createPathFromResourceText(resources: Resources, @RawRes id: Int): Path {
         val path = resources.openRawResource(id).readBytes().decodeToString()
@@ -422,7 +424,7 @@ class MapDraw(
         directPathDestination: Coordinates?,
         displayGrid: Boolean,
     ) {
-        canvas.drawRect(mapRect, backgroundPaint)
+        canvas.drawRect(backgroundMapRect, backgroundPaint)
         canvas.drawPath(mapPath, foregroundPaint)
         drawMask(canvas, scale)
         if (drawKaaba) {
