@@ -115,7 +115,7 @@ fun getFileName(context: Context, uri: Uri): String? {
 
 /**
  * Similar to [androidx.compose.foundation.isSystemInDarkTheme] implementation but
- * for non composable contexts, in composable context, use the compose one.
+ * for non-composable contexts, in composable context, use the compose one.
  */
 @RememberInComposition
 fun isSystemInDarkTheme(configuration: Configuration): Boolean =

@@ -45,7 +45,7 @@ private fun BoxScope.ScrollShadowImpl(scrollState: ScrollState, top: Boolean) {
     ScrollShadowBar(top, height)
 }
 
-// It doesn't consider the amount unlike the non lazy one
+// It doesn't consider the amount unlike the non-lazy one
 @Composable
 private fun BoxScope.ScrollShadowImpl(listState: LazyListState, top: Boolean) {
     val needsShadow = if (top) listState.canScrollBackward else listState.canScrollForward

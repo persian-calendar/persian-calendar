@@ -25,7 +25,7 @@ import java.util.GregorianCalendar
 import kotlin.math.abs
 
 // .split() turns an empty string into an array with an empty string which is undesirable
-// for our use so this filter any non empty string after split, its name rhymes with .filterNotNull
+// for our use so this filter any non-empty string after split, its name rhymes with .filterNotNull
 fun String.splitFilterNotEmpty(delim: String) = this.split(delim).filter { it.isNotEmpty() }
 
 fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalendar()): PrayTimes =
