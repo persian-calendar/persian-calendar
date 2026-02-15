@@ -19,7 +19,7 @@ import androidx.compose.runtime.annotation.RememberInComposition
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -28,8 +28,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.sample
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -158,10 +156,8 @@ fun HapticFeedback.performLongPress() {
 
 @Composable
 fun <T> ChangesHapticFeedback(block: () -> T) {
-    val view = LocalView.current
-    @OptIn(FlowPreview::class) LaunchedEffect(key1 = Unit) {
-        snapshotFlow(block).sample(20).collect {
-            view.performHapticFeedbackVirtualKey()
-        }
+    val hapticFeedback = LocalHapticFeedback.current
+    LaunchedEffect(key1 = Unit) {
+        snapshotFlow(block).collect { hapticFeedback.performLongPress() }
     }
 }

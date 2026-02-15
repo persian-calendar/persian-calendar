@@ -59,18 +59,21 @@ fun Level(
     LaunchedEffect(orientationProvider, isStopped) {
         val provider = orientationProvider ?: return@LaunchedEffect
         var lastFeedback = -1L
+        var previouslyIsLevel = false
         if (isStopped && provider.isListening) {
             levelView.onIsLevel = {}
             provider.stopListening()
         } else if (!provider.isListening) {
             levelView.onIsLevel = { isLevel ->
-                if (isLevel) {
+                if (isLevel && !previouslyIsLevel) {
                     val now = System.currentTimeMillis()
                     if (now - lastFeedback > 2000L) { // 2 seconds
                         view.performHapticFeedbackVirtualKey()
                     }
                     lastFeedback = now
+                    previouslyIsLevel = true
                 }
+                if (!isLevel) previouslyIsLevel = false
                 announcer.check(context, isLevel)
             }
             provider.startListening()
