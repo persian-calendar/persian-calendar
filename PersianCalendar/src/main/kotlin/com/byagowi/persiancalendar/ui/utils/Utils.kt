@@ -160,7 +160,7 @@ fun HapticFeedback.performLongPress() {
 fun <T> ChangesHapticFeedback(block: () -> T) {
     val view = LocalView.current
     @OptIn(FlowPreview::class) LaunchedEffect(key1 = Unit) {
-        snapshotFlow(block).debounce(500).collect {
+        snapshotFlow(block).debounce { if (it == 1) 0 else 500 }.collect {
             view.performHapticFeedbackVirtualKey()
         }
     }

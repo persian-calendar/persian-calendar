@@ -19,11 +19,13 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.debugLog
 
 @Composable
@@ -53,13 +55,24 @@ fun Level(
         }
     }
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
+    val view = LocalView.current
     LaunchedEffect(orientationProvider, isStopped) {
         val provider = orientationProvider ?: return@LaunchedEffect
+        var lastFeedback = -1L
         if (isStopped && provider.isListening) {
             levelView.onIsLevel = {}
             provider.stopListening()
         } else if (!provider.isListening) {
-            levelView.onIsLevel = { isLevel -> announcer.check(context, isLevel) }
+            levelView.onIsLevel = { isLevel ->
+                if (isLevel) {
+                    val now = System.currentTimeMillis()
+                    if (now - lastFeedback > 2000L) { // 2 seconds
+                        view.performHapticFeedbackVirtualKey()
+                    }
+                    lastFeedback = now
+                }
+                announcer.check(context, isLevel)
+            }
             provider.startListening()
         }
     }

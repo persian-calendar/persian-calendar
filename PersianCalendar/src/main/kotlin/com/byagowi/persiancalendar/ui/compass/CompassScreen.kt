@@ -182,7 +182,7 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     val angle = rememberSaveable { mutableFloatStateOf(0f) }
-    ChangesHapticFeedback { angle.floatValue }
+    ChangesHapticFeedback { angle.floatValue.roundToInt() }
     val qiblaHeading = coordinates?.run {
         val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
         EarthPosition(latitude, longitude).toEarthHeading(qibla)

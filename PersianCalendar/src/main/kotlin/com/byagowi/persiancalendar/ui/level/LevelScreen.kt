@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.level
 
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
-import androidx.collection.IntIntPair
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
@@ -67,7 +66,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import kotlinx.coroutines.delay
@@ -100,9 +98,6 @@ fun SharedTransitionScope.LevelScreen(
 
     val angleToShow1 = remember { mutableFloatStateOf(0f) }
     val angleToShow2 = remember { mutableFloatStateOf(0f) }
-    ChangesHapticFeedback {
-        IntIntPair(angleToShow1.floatValue.roundToInt(), angleToShow2.floatValue.roundToInt())
-    }
     var showTwoAngles by remember { mutableStateOf(false) }
 
     Column {
