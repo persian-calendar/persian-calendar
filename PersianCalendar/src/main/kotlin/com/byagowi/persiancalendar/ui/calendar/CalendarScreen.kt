@@ -1072,7 +1072,10 @@ private fun SharedTransitionScope.Toolbar(
                                 yearViewLazyListState,
                                 yearViewScale,
                             )
-                        } else yearViewCalendar = mainCalendar
+                        } else {
+                            yearViewCalendar = mainCalendar
+                            isYearView = true
+                        }
                     }
                     .then(
                         // Toolbar height might not exist if screen rotated while being in year view
