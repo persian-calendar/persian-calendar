@@ -465,8 +465,6 @@ fun SharedTransitionScope.CalendarScreen(
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(visible = isYearView.value) {
-                    val yearViewLazyListState = yearViewLazyListState
-                    val yearViewScale = yearViewScale
                     if (yearViewLazyListState != null && yearViewScale != null) YearView(
                         selectedDay = selectedDay,
                         selectedMonthOffset = selectedMonthOffset,
@@ -490,7 +488,7 @@ fun SharedTransitionScope.CalendarScreen(
                             )
                             bringDay(Jdn(date), true, true)
                         }
-                    }
+                    } else Box(Modifier.fillMaxSize())
                 }
 
                 AnimatedVisibility(
