@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.sample
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -160,7 +160,7 @@ fun HapticFeedback.performLongPress() {
 fun <T> ChangesHapticFeedback(block: () -> T) {
     val view = LocalView.current
     @OptIn(FlowPreview::class) LaunchedEffect(key1 = Unit) {
-        snapshotFlow(block).debounce { if (it == 1) 0 else 500 }.collect {
+        snapshotFlow(block).sample(500).collect {
             view.performHapticFeedbackVirtualKey()
         }
     }
