@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
+import kotlinx.coroutines.flow.drop
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -158,6 +159,6 @@ fun HapticFeedback.performLongPress() {
 fun <T> ChangesHapticFeedback(block: () -> T) {
     val hapticFeedback = LocalHapticFeedback.current
     LaunchedEffect(key1 = Unit) {
-        snapshotFlow(block).collect { hapticFeedback.performLongPress() }
+        snapshotFlow(block).drop(1).collect { hapticFeedback.performLongPress() }
     }
 }
