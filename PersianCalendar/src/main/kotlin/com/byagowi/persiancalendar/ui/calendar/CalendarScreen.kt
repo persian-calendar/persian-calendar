@@ -17,18 +17,20 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
@@ -463,9 +465,20 @@ fun SharedTransitionScope.CalendarScreen(
             val maxHeight = this.maxHeight
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
-            Column(Modifier.fillMaxSize()) {
-                AnimatedVisibility(visible = isYearView.value) {
-                    if (yearViewLazyListState != null && yearViewScale != null) YearView(
+            AnimatedContent(
+                targetState = isYearView.value,
+                transitionSpec = {
+                    val direction =
+                        if (targetState) AnimatedContentTransitionScope.SlideDirection.Down
+                        else AnimatedContentTransitionScope.SlideDirection.Up
+                    slideIntoContainer(
+                        towards = direction,
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                    ).togetherWith(slideOutOfContainer(direction))
+                },
+            ) { isYearViewState ->
+                if (isYearViewState && yearViewLazyListState != null && yearViewScale != null) {
+                    YearView(
                         selectedDay = selectedDay,
                         selectedMonthOffset = selectedMonthOffset,
                         closeYearView = { isYearView.value = false },
@@ -488,13 +501,10 @@ fun SharedTransitionScope.CalendarScreen(
                             )
                             bringDay(Jdn(date), true, true)
                         }
-                    } else Box(Modifier.fillMaxSize())
+                    }
                 }
 
-                AnimatedVisibility(
-                    visible = !isYearView.value,
-                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
-                ) {
+                if (!isYearViewState) {
                     if (isLandscape) Row {
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(
