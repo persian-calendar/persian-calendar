@@ -11,6 +11,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -205,7 +210,12 @@ fun SharedTransitionScope.ScheduleScreen(
                     else MaterialTheme.typography.titleLarge
                 Box {
                     val eventsCache = eventsCache(refreshToken, now)
-                    LazyColumn(state = listState) {
+                    LazyColumn(
+                        state = listState,
+                        contentPadding = WindowInsets.displayCutout.only(
+                            sides = WindowInsetsSides.Horizontal,
+                        ).asPaddingValues(),
+                    ) {
                         items(ITEMS_COUNT) { index ->
                             val jdn = indexToJdn(baseJdn, index)
                             if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(

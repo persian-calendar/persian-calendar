@@ -27,15 +27,20 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -639,7 +644,12 @@ private fun DaysView(
         val cellWidth = tableWidth / days
 
         // Header
-        AnimatedVisibility(hasHeader) {
+        AnimatedVisibility(
+            visible = hasHeader,
+            modifier = Modifier.windowInsetsPadding(
+                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+            ),
+        ) {
             var isExpanded by rememberSaveable { mutableStateOf(false) }
             val clickToExpandModifier = Modifier.clickable(
                 onClickLabel = stringResource(R.string.more),
@@ -749,6 +759,9 @@ private fun DaysView(
         Box {
             Box(
                 Modifier
+                    .windowInsetsPadding(
+                        WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+                    )
                     .verticalScroll(scrollState)
                     .then(scrollableModifier),
             ) {
