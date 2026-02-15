@@ -195,9 +195,10 @@ fun SharedTransitionScope.AstronomyScreen(
         launch { offsetY.animateTo(0f) }
     }
 
-    var initialAnimation by rememberSaveable { mutableStateOf(true) }
+    var initialAnimation by remember { mutableStateOf(true) }
     LaunchedEffect(Unit) {
         if (initialAnimation) {
+            scale.snapTo(.25f)
             scale.animateTo(
                 targetValue = 1f,
                 animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow),
