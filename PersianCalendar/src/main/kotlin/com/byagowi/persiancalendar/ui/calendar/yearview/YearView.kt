@@ -93,7 +93,7 @@ fun YearView(
     maxHeight: Dp,
     bottomPadding: Dp,
     today: Jdn,
-    selectedMonth: (calendar: Calendar, monthsDistance: Int) -> Unit,
+    selectMonth: (calendar: Calendar, monthsDistance: Int) -> Unit,
 ) {
     if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
     val calendar = yearViewCalendar.value ?: mainCalendar
@@ -208,7 +208,7 @@ fun YearView(
                                         .then(detectZoom)
                                         .clickable(onClickLabel = stringResource(R.string.select_month)) {
                                             closeYearView()
-                                            selectedMonth(calendar, offset)
+                                            selectMonth(calendar, offset)
                                         }
                                         .background(LocalContentColor.current.copy(alpha = .1f))
                                         .then(
