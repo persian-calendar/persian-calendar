@@ -141,14 +141,14 @@ private fun <T> SegmentedButtonItemsPicker(
                 .dropShadow(shape = capsuleShape) {
                     this.color = outlineColor
                     if (isGradient) {
-                        this.offset = Offset(0f, with(this.density) { 4.dp.toPx() })
+                        this.offset = Offset(0f, 4.dp.toPx())
                         this.alpha = .325f
-                        this.spread = with(this.density) { 8.dp.toPx() }
-                        this.radius = with(this.density) { 8.dp.toPx() }
+                        this.spread = 8.dp.toPx()
+                        this.radius = 8.dp.toPx()
                     } else {
                         this.offset = Offset.Zero
                         this.alpha = AppBlendAlpha
-                        this.spread = with(this.density) { 1.dp.toPx() }
+                        this.spread = 1.dp.toPx()
                     }
                 }
                 .fillMaxWidth()

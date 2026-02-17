@@ -199,9 +199,7 @@ fun SharedTransitionScope.MapScreen(
                     contentSize = { canvasSize ->
                         Size(
                             width = canvasSize.width,
-                            height = (mapDraw.mapHeight * canvasSize.width / mapDraw.mapWidth).coerceAtMost(
-                                canvasSize.height,
-                            ),
+                            height = min(canvasSize.width / 2, canvasSize.height),
                         )
                     },
                     scaleRange = 1f..512f,

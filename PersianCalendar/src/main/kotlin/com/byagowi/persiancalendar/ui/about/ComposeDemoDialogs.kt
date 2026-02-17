@@ -669,12 +669,12 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
                         if (index == 161) showRawData = true else if (index == 144) playMusic = true
                     },
                 )
-                .graphicsLayer(
-                    scaleX = scale.value,
-                    scaleY = scale.value,
-                    translationX = offsetX.value,
-                    translationY = offsetY.value,
-                ),
+                .graphicsLayer {
+                    this.scaleX = scale.value
+                    this.scaleY = scale.value
+                    this.translationX = offsetX.value
+                    this.translationY = offsetY.value
+                },
         ) {
             val cellSize = cellSize(this.size)
             val rectTopLeft = Offset(.02f * cellSize, .02f * cellSize)

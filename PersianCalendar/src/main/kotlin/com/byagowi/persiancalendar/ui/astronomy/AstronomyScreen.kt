@@ -612,12 +612,12 @@ private fun SharedTransitionScope.SolarDisplay(
         val coroutineScope = rememberCoroutineScope()
         val commonModifier = Modifier
             .aspectRatio(1f)
-            .graphicsLayer(
-                scaleX = scale.value,
-                scaleY = scale.value,
-                translationX = offsetX.value,
-                translationY = offsetY.value,
-            )
+            .graphicsLayer {
+                this.scaleX = scale.value
+                this.scaleY = scale.value
+                this.translationX = offsetX.value
+                this.translationY = offsetY.value
+            }
         Crossfade(
             targetState = mode.value,
             modifier = Modifier
