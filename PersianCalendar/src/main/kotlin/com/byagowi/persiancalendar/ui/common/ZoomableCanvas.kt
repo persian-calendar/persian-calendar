@@ -99,8 +99,10 @@ fun ZoomableCanvas(
 
                             if (targetX != 0f || targetY != 0f) coroutineScope.launch {
                                 val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(newScale)
-                                offsetX.snapTo(targetX.coerceIn(-maxOffsetX, maxOffsetX))
-                                offsetY.snapTo(targetY.coerceIn(-maxOffsetY, maxOffsetY))
+                                offsetX.updateBounds(-maxOffsetX, maxOffsetX)
+                                offsetY.updateBounds(-maxOffsetY, maxOffsetY)
+                                offsetX.snapTo(targetX)
+                                offsetY.snapTo(targetY)
                             }
 
                             event.changes.forEach {
