@@ -132,6 +132,11 @@ import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
+import com.byagowi.persiancalendar.utils.toObserver
+import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
+import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
+import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -730,11 +735,32 @@ private fun Header(
     else Zodiac.fromIau(astronomyState.moon.lon)
 
     val resources = LocalResources.current
-    val headerCache = remember(resources, language) {
+    val headerCache = remember(resources, language, coordinates) {
+        val observer = coordinates?.toObserver()
         lruCache(
             1024,
             create = { jdn: Jdn ->
-                astronomyState.generateHeader(resources, language) + generateYearName(
+                val time = Time.fromMillisecondsSince1970(jdn.toGregorianCalendar().timeInMillis)
+                listOf(
+                    if (observer != null) searchLocalSolarEclipse(time, observer).run {
+                        Triple(R.string.solar_eclipse, kind, peak.time)
+                    } else searchGlobalSolarEclipse(time).run {
+                        Triple(R.string.solar_eclipse, kind, peak)
+                    },
+                    searchLunarEclipse(time).run {
+                        Triple(R.string.lunar_eclipse, kind, peak)
+                    },
+                ).sortedBy { (_, _, peak) -> peak }.map { (title, kind, peak) ->
+                    val formattedDate = Date(peak.toMillisecondsSince1970()).toGregorianCalendar()
+                        .formatDateAndTime()
+                    val isSolar = title == R.string.solar_eclipse
+                    val type = language.tryTranslateEclipseType(isSolar, kind)
+                        ?: resources.getString(title)
+                    when {
+                        language.isPersianOrDari -> "$type بعدی"
+                        else -> resources.getString(R.string.next_x, type)
+                    } + spacedColon + formattedDate
+                } + generateYearName(
                     resources = resources,
                     jdn = jdn,
                     withOldEraName = language.isPersianOrDari,

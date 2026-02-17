@@ -1,13 +1,7 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.content.res.Resources
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
-import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -20,11 +14,7 @@ import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.horizon
-import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
-import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
-import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.cosinekitty.astronomy.sunPosition
-import java.util.Date
 
 class AstronomyState(timeInMillis: Long) {
     private val time = Time.fromMillisecondsSince1970(timeInMillis)
@@ -52,29 +42,6 @@ class AstronomyState(timeInMillis: Long) {
     val geocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
         geocentricPlanetsList.map {
             equatorialToEcliptic(geoVector(it, time, Aberration.Corrected))
-        }
-    }
-
-    fun generateHeader(resources: Resources, language: Language): List<String> {
-        val observer = coordinates?.toObserver()
-        return listOf(
-            if (observer != null) searchLocalSolarEclipse(time, observer).run {
-                Triple(R.string.solar_eclipse, kind, peak.time)
-            } else searchGlobalSolarEclipse(time).run {
-                Triple(R.string.solar_eclipse, kind, peak)
-            },
-            searchLunarEclipse(time).run {
-                Triple(R.string.lunar_eclipse, kind, peak)
-            },
-        ).sortedBy { (_, _, peak) -> peak }.map { (title, kind, peak) ->
-            val formattedDate =
-                Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
-            val isSolar = title == R.string.solar_eclipse
-            val type = language.tryTranslateEclipseType(isSolar, kind) ?: resources.getString(title)
-            when {
-                language.isPersianOrDari -> "$type بعدی"
-                else -> resources.getString(R.string.next_x, type)
-            } + spacedColon + formattedDate
         }
     }
 
