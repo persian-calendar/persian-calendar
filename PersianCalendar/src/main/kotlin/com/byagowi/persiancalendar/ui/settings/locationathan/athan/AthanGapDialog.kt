@@ -23,12 +23,18 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.preferences
+import kotlin.math.roundToInt
 
 @Composable
 fun AthanGapDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     var minutes by rememberSaveable {
-        mutableStateOf(context.preferences.getString(PREF_ATHAN_GAP, null) ?: "0")
+        mutableStateOf(
+            context.preferences.getString(PREF_ATHAN_GAP, null)?.let {
+                val numeral = numeral.parseDouble(it) ?: return@let "0"
+                if (numeral % 1.0 == 0.0) "${numeral.roundToInt()}" else it
+            } ?: "0",
+        )
     }
     AppDialog(
         title = { Text(stringResource(R.string.athan_gap_summary)) },
