@@ -22,6 +22,7 @@ import androidx.core.os.postDelayed
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_CHANNEL_ID
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.PREF_ATHAN_CHANNEL_ID
+import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
@@ -29,7 +30,9 @@ import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION
@@ -41,6 +44,8 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.startAthanActivity
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.minutes
 
 class AthanNotification : Service() {
@@ -94,7 +99,17 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val prayTimeName = getString(prayTime.stringRes)
+        val prayTimeName = getString(prayTime.stringRes).let {
+            if (!language.isPersianOrDari) return@let it
+            val athanGap =
+                (preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0).roundToInt()
+            if (athanGap <= 0) return@let it
+            resources.getQuantityString(
+                R.plurals.minutes,
+                abs(athanGap),
+                numeral.format(abs(athanGap)),
+            ) + " پیش از " + it
+        }
         val title =
             if (cityName == null) prayTimeName
             else "$prayTimeName$spacedComma${getString(R.string.in_city_time, cityName)}"

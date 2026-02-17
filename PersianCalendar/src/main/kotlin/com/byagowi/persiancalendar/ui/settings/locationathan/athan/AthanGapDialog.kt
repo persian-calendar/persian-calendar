@@ -39,10 +39,7 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
                     onDismissRequest()
                     val value = numeral.parseDouble(minutes)
                     if (value != null) context.preferences.edit {
-                        putString(
-                            PREF_ATHAN_GAP,
-                            "$value",
-                        )
+                        putString(PREF_ATHAN_GAP, "$value")
                     }
                 },
             ) { Text(stringResource(R.string.accept)) }
