@@ -624,9 +624,9 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
     ) {
         val textMeasurer = rememberTextMeasurer()
         val textStyle = LocalTextStyle.current
-        fun cellSize(size: Size) = min(size.width / 18, size.height / 9)
-        fun canvasTop(size: Size, cellSize: Float = cellSize(size)) =
-            (size.height - cellSize * 9).coerceAtLeast(0f) / 2
+        fun cellSize(canvasSize: Size) = min(canvasSize.width / 18, canvasSize.height / 9)
+        fun canvasTop(canvasSize: Size, cellSize: Float = cellSize(canvasSize)) =
+            (canvasSize.height - cellSize * 9).coerceAtLeast(0f) / 2
 
         var playMusic by remember { mutableStateOf(false) }
         if (playMusic) {
@@ -656,10 +656,10 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
                         val cellSize = cellSize(size)
                         Size(width = cellSize * 18, height = cellSize * 9)
                     },
-                    onClick = { position: Offset, canvasSize: Size ->
+                    onClick = { x: Float, y: Float, canvasSize: Size ->
                         val cellSize = cellSize(canvasSize)
-                        val index = floor(position.x / cellSize).toInt() + run {
-                            floor((position.y - canvasTop(canvasSize)) / cellSize).toInt() * 18
+                        val index = floor(x / cellSize).toInt() + run {
+                            floor((y - canvasTop(canvasSize)) / cellSize).toInt() * 18
                         }
                         elementsIndices.getOrNull(index)?.let { atomicNumber ->
                             val info =

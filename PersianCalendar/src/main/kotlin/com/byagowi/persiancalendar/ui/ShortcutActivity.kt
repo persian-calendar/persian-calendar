@@ -10,7 +10,6 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.byagowi.persiancalendar.R
 
-// It should be in sync with res/xml/shortcuts.xml
 abstract class BaseShortcut(val shortcut: Shortcut) : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

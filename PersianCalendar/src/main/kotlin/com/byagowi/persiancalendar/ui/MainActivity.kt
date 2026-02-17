@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.utils.update
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Just to make sure we have an initial transparent system bars
-        // System bars are tweaked later with project's theme matching values
+        // They are tweaked later with project's theme matching values
         applyEdgeToEdge(isBackgroundColorLight = false, isSurfaceColorLight = true)
 
         setTheme(R.style.BaseTheme)

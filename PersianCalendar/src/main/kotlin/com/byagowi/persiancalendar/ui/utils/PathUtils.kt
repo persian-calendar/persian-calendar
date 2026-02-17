@@ -5,7 +5,7 @@ import android.graphics.Path
 
 fun List<Pair<Float, Float>>.toPath(close: Boolean) = Path().also {
     if (isNotEmpty()) it.moveTo(this[0].first, this[0].second)
-    this.drop(1).map { (x, y) -> it.lineTo(x, y) }
+    this.drop(1).forEach { (x, y) -> it.lineTo(x, y) }
     if (close) it.close()
 }
 

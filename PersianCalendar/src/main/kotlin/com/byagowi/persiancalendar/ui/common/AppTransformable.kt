@@ -24,15 +24,15 @@ import kotlinx.coroutines.launch
 // some shortcomings on a quick look but the decision is to be reconsidered.
 @Composable
 fun Modifier.appTransformable(
-    onClick: ((position: Offset, canvasSize: Size) -> Unit)? = null,
     disableHorizontalLimit: Boolean = false,
     disableVerticalLimit: Boolean = false,
     disablePan: Boolean = false,
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
+    contentSize: ((canvasSize: Size) -> Size)? = null,
+    onClick: ((x: Float, y: Float, canvasSize: Size) -> Unit)? = null,
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
-    contentSize: ((size: Size) -> Size)? = null,
 ): Modifier {
     val coroutineScope = rememberCoroutineScope()
     return this.pointerInput(disablePan) {
@@ -114,9 +114,9 @@ fun Modifier.appTransformable(
                 val centerY = size.height / 2f
                 val translatedX = upPosition.x - centerX - offsetX.value
                 val translatedY = upPosition.y - centerY - offsetY.value
-                val canvasX = translatedX / newScale + centerX
-                val canvasY = translatedY / newScale + centerY
-                onClick(Offset(canvasX, canvasY), size)
+                val x = translatedX / newScale + centerX
+                val y = translatedY / newScale + centerY
+                onClick(x, y, size)
             }
 
             if (hasMoved && !disablePan) {

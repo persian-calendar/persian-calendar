@@ -57,6 +57,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -127,9 +128,10 @@ fun SharedTransitionScope.MapScreen(
     LaunchedEffect(key1 = coordinates) { markedCoordinates = coordinates }
 
     LaunchedEffect(Unit) {
+        val interval = 1.minutes.inWholeMilliseconds
         while (true) {
-            delay(1.minutes)
-            timeInMillis.longValue += 1.minutes.inWholeMilliseconds
+            delay(timeMillis = interval)
+            timeInMillis.longValue += interval
         }
     }
 
@@ -196,14 +198,11 @@ fun SharedTransitionScope.MapScreen(
                     offsetX = offsetX,
                     offsetY = offsetY,
                     disableHorizontalLimit = true,
-                    contentSize = { canvasSize ->
-                        Size(
-                            width = canvasSize.width,
-                            height = min(canvasSize.width / 2, canvasSize.height),
-                        )
+                    contentSize = { (width: Float, height: Float) ->
+                        Size(width = width, height = min(width / 2, height))
                     },
                     scaleRange = 1f..512f,
-                    onClick = { (x, y), canvasSize ->
+                    onClick = { x: Float, y: Float, canvasSize: Size ->
                         val mapSize = min(canvasSize.width / 2, canvasSize.height)
                         val contentScale = mapSize / mapDraw.mapHeight
                         val translateY = (canvasSize.height - mapSize) / 2f
@@ -224,7 +223,15 @@ fun SharedTransitionScope.MapScreen(
                             }
                         }
                     },
-                ),
+                )
+                .graphicsLayer {
+                    this.scaleX = scale.value
+                    this.scaleY = scale.value
+                    val (width, height) = this.size
+                    val mapSize = min(width / 2, height)
+                    this.translationX = offsetX.value.mod(mapSize * 2 * scale.value)
+                    this.translationY = offsetY.value
+                },
         ) {
             val (width, height) = this.size
             val mapSize = min(width / 2, height)
@@ -232,24 +239,17 @@ fun SharedTransitionScope.MapScreen(
             mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
             mapDraw.updateMap(timeInMillis.longValue, mapType)
             formattedTime = mapDraw.maskFormattedTime
-            translate(offsetX.value.mod(mapSize * 2 * scale.value), offsetY.value) {
-                scale(scale.value, pivot = this.center) {
-                    repeat(if (width > height) 3 else 2) { tileIndex ->
-                        translate(
-                            left = (tileIndex - 1) * mapSize * 2,
-                            top = (height - mapSize) / 2,
-                        ) {
-                            scale(contentScale, pivot = Offset.Zero) {
-                                mapDraw.draw(
-                                    canvas = this.drawContext.canvas.nativeCanvas,
-                                    scale = scale.value * contentScale,
-                                    displayLocation = displayLocation,
-                                    coordinates = markedCoordinates,
-                                    directPathDestination = directPathDestination,
-                                    displayGrid = displayGrid,
-                                )
-                            }
-                        }
+            repeat(if (width > height) 3 else 2) { tileIndex ->
+                translate(left = (tileIndex - 1) * mapSize * 2, top = (height - mapSize) / 2) {
+                    scale(contentScale, pivot = Offset.Zero) {
+                        mapDraw.draw(
+                            canvas = this.drawContext.canvas.nativeCanvas,
+                            scale = scale.value * contentScale,
+                            displayLocation = displayLocation,
+                            coordinates = markedCoordinates,
+                            directPathDestination = directPathDestination,
+                            displayGrid = displayGrid,
+                        )
                     }
                 }
             }
