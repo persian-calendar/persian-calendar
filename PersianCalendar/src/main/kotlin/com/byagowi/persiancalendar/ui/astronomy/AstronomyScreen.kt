@@ -248,10 +248,7 @@ fun SharedTransitionScope.AstronomyScreen(
                         coroutineScope.launch {
                             timeInMillis.animateTo(
                                 targetValue = System.currentTimeMillis(),
-                                animationSpec = spring(
-                                    Spring.DampingRatioLowBouncy,
-                                    Spring.StiffnessLow,
-                                ),
+                                animationSpec = spring(.9f, Spring.StiffnessLow),
                             )
                         }
                     }
