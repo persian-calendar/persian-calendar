@@ -343,7 +343,7 @@ enum class Language(val code: String, val nativeName: String) {
             else -> irCodeOrder
         }
 
-    // Some languages don't have alphabet order matching with unicode order, this fixes them
+    // Some languages don't have alphabet order matching with Unicode order, this fixes them
     fun prepareForSort(text: String) = when {
         isArabicScript && !isArabic -> prepareForArabicSort(text)
         // We will need some preparation for non-English latin script

@@ -4,7 +4,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.weekDaysTitles
 import com.byagowi.persiancalendar.global.weekDaysTitlesInitials
 
-// Order of this enum is a legacy for this codebase and it
+// Order of this enum is a legacy for this codebase, and it
 // *DIFFERS* from ISO-8601 standard and isn't 1 (Monday) to 7 (Sunday), unfortunately
 enum class WeekDay {
     SATURDAY,
