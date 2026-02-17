@@ -297,7 +297,7 @@ fun IconsDemoDialog(onDismissRequest: () -> Unit) {
         FlowRow {
             val fontFile = resolveFontFile()
             val isBoldFont = isBoldFont
-            (0..61).forEach {
+            repeat(62) {
                 val day = it / 2 + 1
                 Image(
                     bitmap = if (it % 2 == 0) ImageBitmap.imageResource(getDayIconResource(day))
@@ -682,8 +682,8 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
             val rectSize = Size(.98f * cellSize, .98f * cellSize)
             val textStyle = textStyle.copy(fontSize = (cellSize * .35f).toSp())
             val textFullNameStyle = textStyle.copy(fontSize = (cellSize * .15f).toSp())
-            (0..<18).forEach { i ->
-                (0..<9).forEach { j ->
+            repeat(18) { i ->
+                repeat(9) { j ->
                     translate(i * cellSize, j * cellSize + top) {
                         val index =
                             elementsIndices.getOrNull(i + j * 18) ?: return@translate

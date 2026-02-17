@@ -791,7 +791,7 @@ private fun DaysView(
                     Modifier.drawBehind {
                         val topLineY = 2.dp.toPx()
                         val paintCellWidthPx = if (days == 1) oneDayTableWidthPx else cellWidthPx
-                        (0..days).forEach { i ->
+                        repeat(days + 1) { i ->
                             val x = (firstColumnPx + paintCellWidthPx * i).let {
                                 if (isRtl) this.size.width - it else it
                             }
@@ -803,7 +803,7 @@ private fun DaysView(
                             if (isRtl) this.size.width - it else it
                         }
                         val extraLineWidth = 8.dp.toPx() * directionSign
-                        (0..23).forEach {
+                        repeat(24) {
                             val x = x1 - if (it != 0) extraLineWidth else 0f
                             val y = if (it != 0) cellHeightPx * it else topLineY
                             drawLine(outlineVariant, Offset(x, y), Offset(x2, y))
@@ -932,7 +932,7 @@ private fun DaysView(
                         val dashSize = 4.dp.toPx()
                         PathEffect.dashPathEffect(floatArrayOf(dashSize, dashSize / 2))
                     }
-                    (0..<days).map { offsetDay ->
+                    repeat(days) { offsetDay ->
                         val date = (startingDay + offsetDay).toGregorianCalendar()
                         val prayTimes = coordinates.calculatePrayTimes(date)
                         enabledTimes.forEach { prayTime ->

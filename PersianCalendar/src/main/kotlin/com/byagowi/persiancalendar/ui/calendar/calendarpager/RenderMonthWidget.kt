@@ -45,7 +45,7 @@ fun renderMonthWidget(
     val weekStart = weekStart
     val weekEnds = weekEnds
     canvas.also {
-        (0..<7).forEach { column ->
+        repeat(7) { column ->
             val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
             it.withTranslation(
                 if (isRtl) width - cellWidth * (column + 1) - xStart
@@ -62,8 +62,8 @@ fun renderMonthWidget(
         val eventsRepository = eventsRepository
         val secondaryCalendar =
             if (OTHER_CALENDARS_KEY in whatToShowOnWidgets) secondaryCalendar else null
-        (0..<rowsCount - 1).forEach { row ->
-            (0..<7).forEach cell@{ column ->
+        repeat(rowsCount - 1) { row ->
+            repeat(7) cell@{ column ->
                 val dayOffset = (column + row * 7) - (startingWeekDay - weekStart)
                 if (dayOffset !in monthRange) return@cell
                 val day = monthStartJdn + dayOffset

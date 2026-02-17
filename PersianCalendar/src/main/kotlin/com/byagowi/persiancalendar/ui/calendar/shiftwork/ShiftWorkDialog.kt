@@ -250,7 +250,7 @@ fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () ->
                             },
                             minWidth = 40.dp,
                         ) {
-                            (0..14).map { length ->
+                            repeat(14 + 1) { length ->
                                 AppDropdownMenuItem({ Text(numeral.format(length)) }) {
                                     focusManager.clearFocus()
                                     selectedLengthDropdownIndex = -1

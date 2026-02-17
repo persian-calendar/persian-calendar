@@ -429,11 +429,11 @@ class CalendarLibraryTests {
 
     @Test
     fun `TimeSlots works`() {
-        ((24 * -10)..(24 * 10)).map {
+        ((24 * -10)..(24 * 10)).forEach {
             val clock = Clock(it / 10.0)
             "${clock.toHoursAndMinutesPair()}: ${clock.timeSlot}"
         }
-        (0..(24 * 2)).forEach {
+        repeat(24 * 2 + 1) {
             val clock = Clock(it / 2.0)
             "${clock.toHoursAndMinutesPair()}: ${clock.timeSlot}"
         }

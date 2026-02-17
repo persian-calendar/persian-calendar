@@ -267,7 +267,7 @@ private fun EasternHoroscopePattern(
                 val c3 = Offset(sizePx / 6 + 3 * oneDp, sizePx / 2)
                 val c4 = Offset(sizePx / 2, sizePx / 6 + 3 * oneDp)
                 val c5 = Offset(sizePx / 2, sizePx / 2)
-                (0..3).forEach {
+                repeat(4) {
                     rotate(it * 90f) {
                         drawLine(outline, Offset.Zero, c5, oneDp)
                         drawLine(outline, c0, c1, oneDp)

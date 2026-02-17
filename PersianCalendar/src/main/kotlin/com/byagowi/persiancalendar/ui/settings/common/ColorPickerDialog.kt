@@ -133,7 +133,7 @@ fun ColorPickerDialog(
                 )
             }
         }
-        (0..if (isBackgroundPick) 3 else 2).forEach {
+        repeat(if (isBackgroundPick) 4 else 3) {
             Slider(
                 value = when (it) {
                     0 -> color.value.red

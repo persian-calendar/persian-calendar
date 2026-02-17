@@ -188,8 +188,8 @@ class MapDraw(
     }
 
     private fun writeMagneticMap(timeInMillis: Long, mapType: MapType) {
-        (0..<360).forEach { x ->
-            (0..<180).forEach { y ->
+        repeat(360) { x ->
+            repeat(180) { y ->
                 val latitude = 180 / 2f - y
                 val longitude = x - 360 / 2f
                 val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
@@ -271,8 +271,8 @@ class MapDraw(
         val direction = if (isEvening) Direction.Set else Direction.Rise
         val multiplier = if (isEvening) 1 else -1
         // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
-        (0..<360 / maskMapMoonScaleDown).forEach { x ->
-            (0..<180 / maskMapMoonScaleDown).forEach heightForEach@{ y ->
+        repeat(360 / maskMapMoonScaleDown) { x ->
+            repeat(180 / maskMapMoonScaleDown) heightForEach@{ y ->
                 val latitude = 180 / 2.0 - y * maskMapMoonScaleDown
                 val longitude = x * maskMapMoonScaleDown - 360 / 2.0
                 val observer = Observer(latitude, longitude, .0)

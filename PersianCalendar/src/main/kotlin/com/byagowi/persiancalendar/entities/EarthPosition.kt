@@ -45,7 +45,7 @@ data class EarthPosition(val latitude: Double, val longitude: Double) {
         val a = sin(Δφ / 2) * sin(Δφ / 2) + cosφ1 * cosφ2 * sin(Δλ / 2) * sin(Δλ / 2)
         val δ = 2 * atan2(sqrt(a), sqrt(1 - a))
         val sinδ = sin(δ)
-        (0..pointsCount).forEach {
+        repeat(pointsCount + 1) {
             val fraction = it.toDouble() / pointsCount
             val A = sin((1 - fraction) * δ) / sinδ
             val B = sin(fraction * δ) / sinδ

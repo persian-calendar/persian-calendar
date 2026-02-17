@@ -106,7 +106,7 @@ class SunView(
     private val segmentByPixel = 2 * PI / width
     private val curvePath = Path().also {
         it.moveTo(0f, height.toFloat())
-        (0..width).forEach { x ->
+        repeat(width + 1) { x ->
             it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
         }
     }

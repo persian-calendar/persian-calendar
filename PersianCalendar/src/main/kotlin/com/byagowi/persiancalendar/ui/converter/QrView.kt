@@ -42,8 +42,8 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
         val cells = qr.size // cells in a row or a column
         val cellSize = size / (qr.size.takeIf { it != 0 } ?: return)
         val r = roundness * cellSize / 2 * 1f
-        (0..<cells).forEach { i ->
-            (0..<cells).forEach { j ->
+        repeat(cells) { i ->
+            repeat(cells) { j ->
                 if ((i > 6 || j > 6) && (cells - i > 7 || j > 6) && (i > 6 || cells - j > 7)) {
                     if (qr[i][j]) canvas.drawRoundRect(
                         i * cellSize, j * cellSize, (i + 1) * cellSize, (j + 1) * cellSize,

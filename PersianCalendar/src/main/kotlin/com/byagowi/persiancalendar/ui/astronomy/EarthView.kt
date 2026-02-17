@@ -217,7 +217,7 @@ fun EarthView(
         val radius = this.center.x
         val canvas = this.drawContext.canvas.nativeCanvas
         val dp = 1.dp.toPx()
-        (0..12).forEach {
+        repeat(12) {
             rotate(degrees = it * 30f) {
                 drawLine(
                     color = Color.Gray,
