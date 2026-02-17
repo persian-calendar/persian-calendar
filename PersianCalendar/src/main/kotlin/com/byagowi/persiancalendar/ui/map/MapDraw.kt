@@ -73,6 +73,7 @@ class MapDraw(
     val mapWidth = 360 * mapScaleFactor
     val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
+
     // Just a little wider to avoid hairline artifact between two maps in map screen
     private val backgroundMapRect = Rect(0, 0, mapWidth + 1, mapHeight)
 
