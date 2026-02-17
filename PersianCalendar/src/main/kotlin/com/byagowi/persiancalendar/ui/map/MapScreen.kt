@@ -11,6 +11,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -85,7 +86,7 @@ import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TimeArrow
-import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
+import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -181,12 +182,7 @@ fun SharedTransitionScope.MapScreen(
         val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
         val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
         val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
-        if (!showGlobeView) ZoomableCanvas(
-            userHandledTransform = true,
-            scale = scale,
-            offsetX = offsetX,
-            offsetY = offsetY,
-            disableHorizontalLimit = true,
+        if (!showGlobeView) Canvas(
             modifier = Modifier
                 .semantics { this.contentDescription = mapString }
                 .fillMaxSize()
@@ -194,36 +190,43 @@ fun SharedTransitionScope.MapScreen(
                     sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
-                ),
-            contentSize = { canvasSize ->
-                Size(
-                    width = canvasSize.width,
-                    height = (mapDraw.mapHeight * canvasSize.width / mapDraw.mapWidth).coerceAtMost(
-                        canvasSize.height,
-                    ),
                 )
-            },
-            scaleRange = 1f..512f,
-            onClick = { (x, y), canvasSize ->
-                val mapSize = min(canvasSize.width / 2, canvasSize.height)
-                val contentScale = mapSize / mapDraw.mapHeight
-                val translateY = (canvasSize.height - mapSize) / 2f
-                val mapX = x.mod(mapSize * 2) / contentScale
-                val mapY = (y - translateY) / contentScale
-                val latitude = 90 - mapY / mapDraw.mapScaleFactor
-                val longitude = mapX / mapDraw.mapScaleFactor - 180
-                if (abs(latitude) < 90 && abs(longitude) < 180) {
-                    if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
-                        Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val coords = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                        if (isDirectPathMode) directPathDestination = coords else {
-                            dialogInputCoordinates = coords
-                            showCoordinatesDialog = true
+                .appTransformable(
+                    scale = scale,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    disableHorizontalLimit = true,
+                    contentSize = { canvasSize ->
+                        Size(
+                            width = canvasSize.width,
+                            height = (mapDraw.mapHeight * canvasSize.width / mapDraw.mapWidth).coerceAtMost(
+                                canvasSize.height,
+                            ),
+                        )
+                    },
+                    scaleRange = 1f..512f,
+                    onClick = { (x, y), canvasSize ->
+                        val mapSize = min(canvasSize.width / 2, canvasSize.height)
+                        val contentScale = mapSize / mapDraw.mapHeight
+                        val translateY = (canvasSize.height - mapSize) / 2f
+                        val mapX = x.mod(mapSize * 2) / contentScale
+                        val mapY = (y - translateY) / contentScale
+                        val latitude = 90 - mapY / mapDraw.mapScaleFactor
+                        val longitude = mapX / mapDraw.mapScaleFactor - 180
+                        if (abs(latitude) < 90 && abs(longitude) < 180) {
+                            if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
+                                Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                val coords =
+                                    Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                                if (isDirectPathMode) directPathDestination = coords else {
+                                    dialogInputCoordinates = coords
+                                    showCoordinatesDialog = true
+                                }
+                            }
                         }
-                    }
-                }
-            },
+                    },
+                ),
         ) {
             val (width, height) = this.size
             val mapSize = min(width / 2, height)

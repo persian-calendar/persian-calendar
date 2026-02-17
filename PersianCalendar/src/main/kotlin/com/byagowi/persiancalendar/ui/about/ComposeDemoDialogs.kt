@@ -5,6 +5,8 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -56,6 +58,7 @@ import androidx.compose.ui.graphics.RenderEffect
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -85,8 +88,9 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.common.BaseAppDialog
-import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
+import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.createStatusIcon
@@ -637,23 +641,40 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
             }
         }
 
-        ZoomableCanvas(
-            modifier = Modifier.fillMaxSize(),
-            scaleRange = 1f..64f,
-            contentSize = { size ->
-                val cellSize = cellSize(size)
-                Size(width = cellSize * 18, height = cellSize * 9)
-            },
-            onClick = { position: Offset, canvasSize: Size ->
-                val cellSize = cellSize(canvasSize)
-                val index =
-                    floor(position.x / cellSize).toInt() + floor((position.y - canvasTop(canvasSize)) / cellSize).toInt() * 18
-                elementsIndices.getOrNull(index)?.let { atomicNumber ->
-                    val info = elements.getOrNull(atomicNumber - 1)?.split(",") ?: return@let
-                    title = "$atomicNumber ${info[0]} ${info[1]}\n${info[2]}"
-                }
-                if (index == 161) showRawData = true else if (index == 144) playMusic = true
-            },
+        val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+        val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+        val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .appTransformable(
+                    scale = scale,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    scaleRange = 1f..64f,
+                    contentSize = { size ->
+                        val cellSize = cellSize(size)
+                        Size(width = cellSize * 18, height = cellSize * 9)
+                    },
+                    onClick = { position: Offset, canvasSize: Size ->
+                        val cellSize = cellSize(canvasSize)
+                        val index = floor(position.x / cellSize).toInt() + run {
+                            floor((position.y - canvasTop(canvasSize)) / cellSize).toInt() * 18
+                        }
+                        elementsIndices.getOrNull(index)?.let { atomicNumber ->
+                            val info =
+                                elements.getOrNull(atomicNumber - 1)?.split(",") ?: return@let
+                            title = "$atomicNumber ${info[0]} ${info[1]}\n${info[2]}"
+                        }
+                        if (index == 161) showRawData = true else if (index == 144) playMusic = true
+                    },
+                )
+                .graphicsLayer(
+                    scaleX = scale.value,
+                    scaleY = scale.value,
+                    translationX = offsetX.value,
+                    translationY = offsetY.value,
+                ),
         ) {
             val cellSize = cellSize(this.size)
             val rectTopLeft = Offset(.02f * cellSize, .02f * cellSize)

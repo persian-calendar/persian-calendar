@@ -8,9 +8,9 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -40,7 +40,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.ui.common.SolarDraw
-import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
+import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.utils.symbol
@@ -58,6 +58,7 @@ fun EarthView(
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
     state: AstronomyState,
+    modifier: Modifier,
     rotationalMinutesChange: (Int) -> Unit,
 ) {
     val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
@@ -134,81 +135,84 @@ fun EarthView(
     val coroutineScope = rememberCoroutineScope()
     val rotationVelocity = remember { Animatable(0f) }
     val isScaled by remember { derivedStateOf { scale.value != 1f } }
-    val modifier = Modifier.aspectRatio(1f)
-    ZoomableCanvas(
-        scale = scale,
-        offsetX = offsetX,
-        offsetY = offsetY,
-        disableHorizontalLimit = true,
-        disableVerticalLimit = true,
-        disablePan = !isScaled,
-        modifier = modifier.pointerInput(isScaled) {
-            if (!isScaled) awaitEachGesture {
-                val down = awaitFirstDown(requireUnconsumed = false)
-                val centerX = size.width / 2f
-                val centerY = size.height / 2f
-                var previousAngle = atan2(down.position.y - centerY, down.position.x - centerX)
+    val pointerModifier = Modifier.pointerInput(isScaled) {
+        if (!isScaled) awaitEachGesture {
+            val down = awaitFirstDown(requireUnconsumed = false)
+            val centerX = size.width / 2f
+            val centerY = size.height / 2f
+            var previousAngle = atan2(down.position.y - centerY, down.position.x - centerX)
 
-                // Determine rotation speed based on touch position (outer = sun orbit, inner = moon orbit)
-                val touchDistance = hypot(down.position.x - centerX, down.position.y - centerY)
-                val rotationSpeed = if (touchDistance > size.width / 4f) {
-                    525949 // minutes in solar year
-                } else {
-                    39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
-                }
+            // Determine rotation speed based on touch position (outer = sun orbit, inner = moon orbit)
+            val touchDistance = hypot(down.position.x - centerX, down.position.y - centerY)
+            val rotationSpeed = if (touchDistance > size.width / 4f) {
+                525949 // minutes in solar year
+            } else {
+                39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
+            }
 
-                val velocityTracker = VelocityTracker()
-                var rotationDirection = 0
+            val velocityTracker = VelocityTracker()
+            var rotationDirection = 0
 
-                do {
-                    val event = awaitPointerEvent()
-                    val change = event.changes.firstOrNull() ?: break
+            do {
+                val event = awaitPointerEvent()
+                val change = event.changes.firstOrNull() ?: break
 
-                    if (change.pressed) {
-                        val currentAngle =
-                            atan2(change.position.y - centerY, change.position.x - centerX)
-                        val rawAngleChange = currentAngle - previousAngle
+                if (change.pressed) {
+                    val currentAngle =
+                        atan2(change.position.y - centerY, change.position.x - centerX)
+                    val rawAngleChange = currentAngle - previousAngle
 
-                        // Handle angle wrapping
-                        val angleChange = when {
-                            rawAngleChange > PI -> (2 * PI - rawAngleChange).toFloat()
-                            rawAngleChange < -PI -> (2 * PI + rawAngleChange).toFloat()
-                            else -> rawAngleChange
-                        }
-
-                        val minutesChange =
-                            -(angleChange * rotationSpeed / PI.toFloat() / 2).toInt()
-                        rotationDirection = minutesChange.sign
-
-                        if (minutesChange != 0) {
-                            rotationalMinutesChange(minutesChange)
-                            velocityTracker.addPosition(change.uptimeMillis, change.position)
-                        }
-
-                        previousAngle = currentAngle
+                    // Handle angle wrapping
+                    val angleChange = when {
+                        rawAngleChange > PI -> (2 * PI - rawAngleChange).toFloat()
+                        rawAngleChange < -PI -> (2 * PI + rawAngleChange).toFloat()
+                        else -> rawAngleChange
                     }
-                } while (event.changes.any { it.pressed })
 
-                val velocity = velocityTracker.calculateVelocity()
-                val velocityMagnitude = hypot(velocity.x, velocity.y) * rotationSpeed / 2000
+                    val minutesChange =
+                        -(angleChange * rotationSpeed / PI.toFloat() / 2).toInt()
+                    rotationDirection = minutesChange.sign
 
-                if (velocityMagnitude > 0) coroutineScope.launch {
-                    val startVelocity = rotationDirection * velocityMagnitude * 2
-                    var lastValue = 0f
-                    rotationVelocity.snapTo(0f)
-                    rotationVelocity.animateDecay(
-                        initialVelocity = startVelocity,
-                        animationSpec = exponentialDecay(frictionMultiplier = 3f),
-                    ) {
-                        val minutesChange = (value - lastValue).toInt()
-                        if (minutesChange != 0) {
-                            rotationalMinutesChange(minutesChange)
-                            lastValue = value
-                        }
+                    if (minutesChange != 0) {
+                        rotationalMinutesChange(minutesChange)
+                        velocityTracker.addPosition(change.uptimeMillis, change.position)
+                    }
+
+                    previousAngle = currentAngle
+                }
+            } while (event.changes.any { it.pressed })
+
+            val velocity = velocityTracker.calculateVelocity()
+            val velocityMagnitude = hypot(velocity.x, velocity.y) * rotationSpeed / 2000
+
+            if (velocityMagnitude > 0) coroutineScope.launch {
+                val startVelocity = rotationDirection * velocityMagnitude * 2
+                var lastValue = 0f
+                rotationVelocity.snapTo(0f)
+                rotationVelocity.animateDecay(
+                    initialVelocity = startVelocity,
+                    animationSpec = exponentialDecay(frictionMultiplier = 3f),
+                ) {
+                    val minutesChange = (value - lastValue).toInt()
+                    if (minutesChange != 0) {
+                        rotationalMinutesChange(minutesChange)
+                        lastValue = value
                     }
                 }
             }
-        },
+        }
+    }
+    Canvas(
+        modifier = pointerModifier
+            .appTransformable(
+                scale = scale,
+                offsetX = offsetX,
+                offsetY = offsetY,
+                disableHorizontalLimit = true,
+                disableVerticalLimit = true,
+                disablePan = !isScaled,
+            )
+            .then(modifier),
     ) {
         val radius = this.center.x
         val canvas = this.drawContext.canvas.nativeCanvas

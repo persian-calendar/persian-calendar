@@ -15,6 +15,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -76,6 +77,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -115,7 +117,7 @@ import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TimeArrow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.common.ZoomableCanvas
+import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
@@ -608,6 +610,14 @@ private fun SharedTransitionScope.SolarDisplay(
             icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
         val coroutineScope = rememberCoroutineScope()
+        val commonModifier = Modifier
+            .aspectRatio(1f)
+            .graphicsLayer(
+                scaleX = scale.value,
+                scaleY = scale.value,
+                translationX = offsetX.value,
+                translationY = offsetY.value,
+            )
         Crossfade(
             targetState = mode.value,
             modifier = Modifier
@@ -621,6 +631,7 @@ private fun SharedTransitionScope.SolarDisplay(
                     offsetX = offsetX,
                     offsetY = offsetY,
                     state = astronomyState,
+                    modifier = commonModifier,
                 ) { offset ->
                     coroutineScope.launch {
                         timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
@@ -628,14 +639,17 @@ private fun SharedTransitionScope.SolarDisplay(
                 }
 
                 AstronomyMode.MOON -> Box(Modifier.aspectRatio(1f)) {
-                    ZoomableCanvas(
-                        scale = scale,
-                        offsetX = offsetX,
-                        offsetY = offsetY,
-                        disableHorizontalLimit = true,
-                        disableVerticalLimit = true,
-                        disablePan = scale.value == 1f,
-                        modifier = Modifier.aspectRatio(1f),
+                    Canvas(
+                        modifier = Modifier
+                            .appTransformable(
+                                scale = scale,
+                                offsetX = offsetX,
+                                offsetY = offsetY,
+                                disableHorizontalLimit = true,
+                                disableVerticalLimit = true,
+                                disablePan = scale.value == 1f,
+                            )
+                            .then(commonModifier),
                     ) {
                         val radius = this.center.x
                         val canvas = this.drawContext.canvas.nativeCanvas
@@ -675,14 +689,17 @@ private fun SharedTransitionScope.SolarDisplay(
                         it.typeface = resolveAndroidCustomTypeface()
                         it.color = LocalContentColor.current.toArgb()
                     }
-                    ZoomableCanvas(
-                        scale = scale,
-                        offsetX = offsetX,
-                        offsetY = offsetY,
-                        disableHorizontalLimit = true,
-                        disableVerticalLimit = true,
-                        disablePan = scale.value == 1f,
-                        modifier = Modifier.aspectRatio(1f),
+                    Canvas(
+                        modifier = Modifier
+                            .appTransformable(
+                                scale = scale,
+                                offsetX = offsetX,
+                                offsetY = offsetY,
+                                disableHorizontalLimit = true,
+                                disableVerticalLimit = true,
+                                disablePan = scale.value == 1f,
+                            )
+                            .then(commonModifier),
                     ) {
                         val radius = this.center.x
                         val canvas = this.drawContext.canvas.nativeCanvas
