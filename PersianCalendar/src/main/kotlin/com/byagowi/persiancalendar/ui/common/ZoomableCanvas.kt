@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.collection.FloatFloatPair
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.exponentialDecay
@@ -52,14 +51,19 @@ fun ZoomableCanvas(
         modifier
             .pointerInput(disablePan) {
                 val size = this@pointerInput.size.toSize()
-                fun calculateMaxOffsets(scale: Float): FloatFloatPair {
+                fun updateBounds(scale: Float) {
+                    if (disableVerticalLimit && disableHorizontalLimit) return
                     val contentSize = contentSize?.invoke(size) ?: size
-                    return FloatFloatPair(
-                        if (disableHorizontalLimit) Float.MAX_VALUE
-                        else ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f),
-                        if (disableVerticalLimit) Float.MAX_VALUE
-                        else ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f),
-                    )
+                    if (!disableHorizontalLimit) {
+                        val bound =
+                            ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f)
+                        offsetX.updateBounds(-bound, bound)
+                    }
+                    if (!disableVerticalLimit) {
+                        val bound =
+                            ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f)
+                        offsetY.updateBounds(-bound, bound)
+                    }
                 }
 
                 awaitEachGesture {
@@ -97,12 +101,12 @@ fun ZoomableCanvas(
                                 targetY = offsetY.value + panChange.y
                             }
 
-                            if (targetX != 0f || targetY != 0f) coroutineScope.launch {
-                                val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(newScale)
-                                offsetX.updateBounds(-maxOffsetX, maxOffsetX)
-                                offsetY.updateBounds(-maxOffsetY, maxOffsetY)
-                                offsetX.snapTo(targetX)
-                                offsetY.snapTo(targetY)
+                            if (targetX != 0f || targetY != 0f) {
+                                updateBounds(newScale)
+                                coroutineScope.launch {
+                                    offsetX.snapTo(targetX)
+                                    offsetY.snapTo(targetY)
+                                }
                             }
 
                             event.changes.forEach {
@@ -133,22 +137,18 @@ fun ZoomableCanvas(
 
                     if (hasMoved && !disablePan) {
                         val velocity = tracker.calculateVelocity()
+                        updateBounds(newScale)
                         coroutineScope.launch {
-                            val (maxOffsetX, maxOffsetY) = calculateMaxOffsets(newScale)
-                            launch {
-                                offsetX.updateBounds(-maxOffsetX, maxOffsetX)
-                                offsetX.animateDecay(
-                                    initialVelocity = velocity.x,
-                                    animationSpec = exponentialDecay(frictionMultiplier = 3f),
-                                )
-                            }
-                            launch {
-                                offsetY.updateBounds(-maxOffsetY, maxOffsetY)
-                                offsetY.animateDecay(
-                                    initialVelocity = velocity.y,
-                                    animationSpec = exponentialDecay(frictionMultiplier = 3f),
-                                )
-                            }
+                            offsetX.animateDecay(
+                                initialVelocity = velocity.x,
+                                animationSpec = exponentialDecay(frictionMultiplier = 3f),
+                            )
+                        }
+                        coroutineScope.launch {
+                            offsetY.animateDecay(
+                                initialVelocity = velocity.y,
+                                animationSpec = exponentialDecay(frictionMultiplier = 3f),
+                            )
                         }
                     }
                 }
