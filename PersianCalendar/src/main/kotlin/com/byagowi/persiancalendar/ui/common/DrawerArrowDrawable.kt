@@ -48,6 +48,8 @@ fun DrawerArrowDrawable(
     progress: State<Float>,
     // Whether bars should spin or not during progress
     spin: Boolean = true,
+    // Whether we should mirror animation when animation is reversed.
+    verticalMirror: Boolean = false,
     // Quirks to match with Icons.AutoMirrored.Default.ArrowBack and Icons.Default.Menu
     quirks: Boolean = true,
 ) {
@@ -59,8 +61,6 @@ fun DrawerArrowDrawable(
     // Use Path instead of canvas operations so that if color has transparency, overlapping sections
     // won't look different
     val path = remember { Path() }
-    // Whether we should mirror animation when animation is reversed.
-    val verticalMirror = false
     val contentColor = LocalContentColor.current
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Canvas(

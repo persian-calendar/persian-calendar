@@ -1146,13 +1146,13 @@ private fun SharedTransitionScope.Toolbar(
                 targetValue = if (isYearView) 1f else 0f,
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessLow,
+                    stiffness = 100f, // between low and very loow
                 ),
             )
             when (progress.value) {
                 0f -> NavigationOpenNavigationRailIcon(openNavigationRail)
                 1f -> NavigationNavigateUpIcon(navigateUp = onYearViewBackPressed)
-                else -> DrawerArrowDrawable(progress)
+                else -> DrawerArrowDrawable(progress, verticalMirror = isYearView)
             }
         },
         actions = {
