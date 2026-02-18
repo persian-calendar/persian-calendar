@@ -11,7 +11,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,34 +35,30 @@ fun Level(
     setShowTwoAngles: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current
-    var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
-    val resources = LocalResources.current
+    val activity = LocalActivity.current ?: return
     var updateToken by remember { mutableLongStateOf(0) }
+    val resources = LocalResources.current
     val levelView = remember {
-        LevelView(resources, angleToShow1, angleToShow2, setShowTwoAngles) { ++updateToken }
+        LevelView(resources, angleToShow1, angleToShow2, setShowTwoAngles, updateToken::inc)
     }
-    val density = LocalDensity.current
-    LaunchedEffect(key1 = Unit) {
-        activity?.let { activity ->
-            orientationProvider = OrientationProvider(
-                activity,
-                invalidate = { ++updateToken },
-            ) { newOrientation, newPitch, newRoll, newBalance ->
-                levelView.setOrientation(newOrientation, newPitch, newRoll, newBalance)
-            }
+    val orientationProvider = remember {
+        OrientationProvider(
+            activity,
+            invalidate = updateToken::inc,
+        ) { newOrientation, newPitch, newRoll, newBalance ->
+            levelView.setOrientation(newOrientation, newPitch, newRoll, newBalance)
         }
     }
+    val density = LocalDensity.current
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
     val view = LocalView.current
-    LaunchedEffect(orientationProvider, isStopped) {
-        val provider = orientationProvider ?: return@LaunchedEffect
+    LaunchedEffect(isStopped) {
         var lastFeedback = -1L
         var previouslyIsLevel = false
-        if (isStopped && provider.isListening) {
+        if (isStopped && orientationProvider.isListening) {
             levelView.onIsLevel = {}
-            provider.stopListening()
-        } else if (!provider.isListening) {
+            orientationProvider.stopListening()
+        } else if (!orientationProvider.isListening) {
             levelView.onIsLevel = { isLevel ->
                 if (isLevel && !previouslyIsLevel) {
                     val now = System.currentTimeMillis()
@@ -76,7 +71,7 @@ fun Level(
                 if (!isLevel) previouslyIsLevel = false
                 announcer.check(context, isLevel)
             }
-            provider.startListening()
+            orientationProvider.startListening()
         }
     }
     BoxWithConstraints {
@@ -91,20 +86,20 @@ fun Level(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
-        activity ?: return@DisposableEffect onDispose {}
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-                if (orientationProvider?.isListening == false) {
-                    orientationProvider?.startListening()
-                }
+                if (!orientationProvider.isListening) orientationProvider.startListening()
             } else if (event == Lifecycle.Event.ON_PAUSE) {
                 debugLog("level: ON_PAUSE")
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
+                if (orientationProvider.isListening) orientationProvider.stopListening()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+        onDispose {
+            if (orientationProvider.isListening) orientationProvider.stopListening()
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 }

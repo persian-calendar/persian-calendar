@@ -449,6 +449,18 @@ fun SharedTransitionScope.CompassScreen(
                 checkIfA11yAnnounceIsNeeded(angle)
         }
 
+        var isListening = true
+        fun unregisterListeners() {
+            if (isListening) {
+                if (orientationSensor != null) {
+                    sensorManager.unregisterListener(orientationSensorListener)
+                } else if (accelerometerSensor != null && magnetometerSensor != null) {
+                    sensorManager.unregisterListener(accelerometerMagneticSensorListener)
+                }
+                isListening = false
+            }
+        }
+
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("compass: ON_RESUME")
@@ -466,6 +478,7 @@ fun SharedTransitionScope.CompassScreen(
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: orientation", Toast.LENGTH_SHORT,
                     ).show()
+                    isListening = true
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
@@ -480,6 +493,7 @@ fun SharedTransitionScope.CompassScreen(
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: acc+magnet", Toast.LENGTH_SHORT,
                     ).show()
+                    isListening = true
                 } else if (coordinates != null) {
                     showSnackbarMessage(
                         resources.getString(R.string.compass_not_found),
@@ -487,17 +501,13 @@ fun SharedTransitionScope.CompassScreen(
                     )
                     sensorNotFound = true
                 }
-            } else if (event == Lifecycle.Event.ON_PAUSE) {
-                debugLog("compass: ON_PAUSE")
-                if (orientationSensor != null) {
-                    sensorManager.unregisterListener(orientationSensorListener)
-                } else if (accelerometerSensor != null && magnetometerSensor != null) {
-                    sensorManager.unregisterListener(accelerometerMagneticSensorListener)
-                }
-            }
+            } else if (event == Lifecycle.Event.ON_PAUSE) unregisterListeners()
         }
         lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+        onDispose {
+            unregisterListeners()
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 }
 
