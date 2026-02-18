@@ -193,6 +193,7 @@ import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.DrawerArrowDrawable
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -965,7 +966,7 @@ private fun Search(
     }
 
     // Tweak status bar color when search is expanded, can break if system night mode is changed
-    // mid search but who cares.
+    // mid-search but who cares.
     if (isSearchExpanded) LocalActivity.current?.window?.also { window ->
         val view = LocalView.current
         val colorScheme = MaterialTheme.colorScheme
@@ -1141,10 +1142,17 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            Crossfade(targetState = isYearView) { state ->
-                if (state) NavigationNavigateUpIcon(
-                    navigateUp = onYearViewBackPressed,
-                ) else NavigationOpenNavigationRailIcon(openNavigationRail)
+            val progress = animateFloatAsState(
+                targetValue = if (isYearView) 1f else 0f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow,
+                ),
+            )
+            when (progress.value) {
+                0f -> NavigationOpenNavigationRailIcon(openNavigationRail)
+                1f -> NavigationNavigateUpIcon(navigateUp = onYearViewBackPressed)
+                else -> DrawerArrowDrawable(progress)
             }
         },
         actions = {
