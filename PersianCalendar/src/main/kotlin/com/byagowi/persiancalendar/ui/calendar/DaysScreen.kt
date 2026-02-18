@@ -67,7 +67,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -108,8 +107,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.util.lruCache
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_ICON
@@ -994,7 +992,6 @@ private fun DaysView(
                     targetValue = dy * (cellHeightPx / 4),
                     animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
                 )
-                val lifecycleOwner = LocalLifecycleOwner.current
                 val widthReduction = remember { Animatable(defaultWidthReductionPx) }
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
@@ -1035,16 +1032,12 @@ private fun DaysView(
                     }
                 }
                 setAddAction(addAction)
-                DisposableEffect(lifecycleOwner) {
-                    val observer = LifecycleEventObserver { _, event ->
-                        if (event == Lifecycle.Event.ON_RESUME && resetOnNextRefresh) {
-                            duration = cellHeightPx / 4 * 4f
-                            offset = null
-                            resetOnNextRefresh = false
-                        }
+                LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                    if (resetOnNextRefresh) {
+                        duration = cellHeightPx / 4 * 4f
+                        offset = null
+                        resetOnNextRefresh = false
                     }
-                    lifecycleOwner.lifecycle.addObserver(observer)
-                    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
                 }
                 LaunchedEffect(isAddEventBoxEnabled) {
                     if (!isAddEventBoxEnabled && offset != null) offset = null
