@@ -19,7 +19,7 @@
  */
 package com.byagowi.persiancalendar.ui.level
 
-import android.app.Activity
+import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -35,7 +35,7 @@ import kotlin.math.hypot
 import kotlin.math.min
 
 class OrientationProvider(
-    activity: Activity,
+    context: Context,
     private val invalidate: () -> Unit,
     private val setOrientation: (newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float) -> Unit,
 ) :
@@ -49,8 +49,8 @@ class OrientationProvider(
     private val R = FloatArray(16)
     private val outR = FloatArray(16)
     private val LOC = FloatArray(3)
-    private val sensorManager = activity.getSystemService<SensorManager>()
-    private val displayOrientation = ActivityCompat.getDisplayOrDefault(activity).rotation
+    private val sensorManager = context.getSystemService<SensorManager>()
+    private val displayOrientation = ActivityCompat.getDisplayOrDefault(context).rotation
     private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.getOrNull(0)
 
     /**

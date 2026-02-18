@@ -35,7 +35,6 @@ fun Level(
     setShowTwoAngles: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current ?: return
     var updateToken by remember { mutableLongStateOf(0) }
     val resources = LocalResources.current
     val levelView = remember {
@@ -43,7 +42,7 @@ fun Level(
     }
     val orientationProvider = remember {
         OrientationProvider(
-            activity,
+            context,
             invalidate = updateToken::inc,
         ) { newOrientation, newPitch, newRoll, newBalance ->
             levelView.setOrientation(newOrientation, newPitch, newRoll, newBalance)
@@ -85,14 +84,15 @@ fun Level(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = LocalActivity.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
                 if (!orientationProvider.isListening) orientationProvider.startListening()
             } else if (event == Lifecycle.Event.ON_PAUSE) {
                 debugLog("level: ON_PAUSE")
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 if (orientationProvider.isListening) orientationProvider.stopListening()
             }
         }
