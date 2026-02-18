@@ -195,11 +195,15 @@ fun SharedTransitionScope.AstronomyScreen(
     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.25f) }
     val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
     val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
-    // Since panning will be disabled when scale is reset, if the content isn't in
-    // its default place, reset the position also.
-    if (scale.value == 1f && (offsetX.value != 0f || offsetY.value != 0f)) LaunchedEffect(Unit) {
-        launch { offsetX.animateTo(0f) }
-        launch { offsetY.animateTo(0f) }
+
+    val scaledButNotOnCenter by remember {
+        derivedStateOf { scale.value == 1f && (offsetX.value != 0f || offsetY.value != 0f) }
+    }
+    LaunchedEffect(scaledButNotOnCenter) {
+        if (scaledButNotOnCenter) {
+            launch { offsetX.animateTo(0f) }
+            launch { offsetY.animateTo(0f) }
+        }
     }
 
     var initialAnimation by remember { mutableStateOf(true) }
