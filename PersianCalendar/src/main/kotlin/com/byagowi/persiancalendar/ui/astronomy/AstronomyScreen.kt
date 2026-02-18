@@ -334,7 +334,19 @@ fun SharedTransitionScope.AstronomyScreen(
             )
         },
     ) { paddingValues ->
-        Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+        val isScaled by remember { derivedStateOf { scale.value != 1f } }
+        Box(
+            Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .appTransformable(
+                    scale = scale,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    disableHorizontalLimit = true,
+                    disableVerticalLimit = true,
+                    disablePan = !isScaled,
+                ),
+        ) {
             ScreenSurface {
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 if (isLandscape) BoxWithConstraints(
@@ -377,6 +389,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             isTropical = isTropical,
                             navigateToMap = navigateToMap,
                             scale = scale,
+                            isScaled = isScaled,
                             offsetX = offsetX,
                             offsetY = offsetY,
                         )
@@ -412,6 +425,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                     isTropical = isTropical,
                                     navigateToMap = navigateToMap,
                                     scale = scale,
+                                    isScaled = isScaled,
                                     offsetX = offsetX,
                                     offsetY = offsetY,
                                 )
@@ -572,6 +586,7 @@ private fun SharedTransitionScope.TimeArrow(
 private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
     scale: Animatable<Float, AnimationVector1D>,
+    isScaled: Boolean,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
     timeInMillis: Animatable<Long, AnimationVector1D>,
@@ -614,7 +629,7 @@ private fun SharedTransitionScope.SolarDisplay(
             icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
         val coroutineScope = rememberCoroutineScope()
-        val commonModifier = Modifier
+        val canvasModifier = Modifier
             .aspectRatio(1f)
             .graphicsLayer {
                 this.scaleX = scale.value
@@ -631,11 +646,9 @@ private fun SharedTransitionScope.SolarDisplay(
             when (mode) {
                 AstronomyMode.EARTH -> EarthView(
                     isTropical = isTropical,
-                    scale = scale,
-                    offsetX = offsetX,
-                    offsetY = offsetY,
                     state = astronomyState,
-                    modifier = commonModifier,
+                    modifier = canvasModifier,
+                    isScaled = isScaled,
                 ) { offset ->
                     coroutineScope.launch {
                         timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
@@ -643,18 +656,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 }
 
                 AstronomyMode.MOON -> Box(Modifier.aspectRatio(1f)) {
-                    Canvas(
-                        modifier = Modifier
-                            .appTransformable(
-                                scale = scale,
-                                offsetX = offsetX,
-                                offsetY = offsetY,
-                                disableHorizontalLimit = true,
-                                disableVerticalLimit = true,
-                                disablePan = scale.value == 1f,
-                            )
-                            .then(commonModifier),
-                    ) {
+                    Canvas(modifier = canvasModifier) {
                         val radius = this.center.x
                         val canvas = this.drawContext.canvas.nativeCanvas
                         solarDraw.moon(
@@ -693,18 +695,7 @@ private fun SharedTransitionScope.SolarDisplay(
                         it.typeface = resolveAndroidCustomTypeface()
                         it.color = LocalContentColor.current.toArgb()
                     }
-                    Canvas(
-                        modifier = Modifier
-                            .appTransformable(
-                                scale = scale,
-                                offsetX = offsetX,
-                                offsetY = offsetY,
-                                disableHorizontalLimit = true,
-                                disableVerticalLimit = true,
-                                disablePan = scale.value == 1f,
-                            )
-                            .then(commonModifier),
-                    ) {
+                    Canvas(modifier = canvasModifier) {
                         val radius = this.center.x
                         val canvas = this.drawContext.canvas.nativeCanvas
                         colorTextPaint.textSize = radius / 11

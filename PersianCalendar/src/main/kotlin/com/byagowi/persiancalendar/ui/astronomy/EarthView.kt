@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.graphics.Paint
 import android.graphics.RectF
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.exponentialDecay
@@ -14,7 +13,6 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,7 +38,6 @@ import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.ui.common.SolarDraw
-import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.utils.symbol
@@ -54,10 +51,8 @@ import kotlin.math.sign
 @Composable
 fun EarthView(
     isTropical: Boolean,
-    scale: Animatable<Float, AnimationVector1D>,
-    offsetX: Animatable<Float, AnimationVector1D>,
-    offsetY: Animatable<Float, AnimationVector1D>,
     state: AstronomyState,
+    isScaled: Boolean,
     modifier: Modifier,
     rotationalMinutesChange: (Int) -> Unit,
 ) {
@@ -134,7 +129,6 @@ fun EarthView(
     val symbols = Zodiac.entries.map { it.symbol }
     val coroutineScope = rememberCoroutineScope()
     val rotationVelocity = remember { Animatable(0f) }
-    val isScaled by remember { derivedStateOf { scale.value != 1f } }
     val pointerModifier = Modifier.pointerInput(isScaled) {
         if (!isScaled) awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false)
@@ -202,18 +196,7 @@ fun EarthView(
             }
         }
     }
-    Canvas(
-        modifier = pointerModifier
-            .appTransformable(
-                scale = scale,
-                offsetX = offsetX,
-                offsetY = offsetY,
-                disableHorizontalLimit = true,
-                disableVerticalLimit = true,
-                disablePan = !isScaled,
-            )
-            .then(modifier),
-    ) {
+    Canvas(modifier = pointerModifier.then(modifier)) {
         val radius = this.center.x
         val canvas = this.drawContext.canvas.nativeCanvas
         val dp = 1.dp.toPx()
