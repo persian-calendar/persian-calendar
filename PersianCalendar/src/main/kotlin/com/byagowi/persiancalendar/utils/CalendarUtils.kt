@@ -39,7 +39,7 @@ import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekStart
-import com.byagowi.persiancalendar.global.yearMonthNameOfDate
+import com.byagowi.persiancalendar.global.yearAwareMonthsNames
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -59,7 +59,7 @@ val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestS
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
     jdn.weekDay.title + spacedComma + formatDate(date, calendarNameInLinear)
 
-val AbstractDate.monthName get() = yearMonthNameOfDate(this).getOrNull(month - 1).orEmpty()
+val AbstractDate.monthName get() = yearAwareMonthsNames(this).getOrNull(month - 1).orEmpty()
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(

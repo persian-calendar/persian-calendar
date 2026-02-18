@@ -433,7 +433,8 @@ private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
         ?.toIntOrNull() ?: DEFAULT_ISLAMIC_OFFSET
 }
 
-fun yearMonthNameOfDate(date: AbstractDate): List<String> {
+// For better or worse it needs the year to function correctly
+fun yearAwareMonthsNames(date: AbstractDate): List<String> {
     return when (date) {
         is PersianDate -> if (date.isOldEra) oldEraPersianMonths else persianMonths
         is CivilDate -> gregorianMonths

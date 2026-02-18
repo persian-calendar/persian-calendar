@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.global.yearMonthNameOfDate
+import com.byagowi.persiancalendar.global.yearAwareMonthsNames
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
 @Composable
@@ -60,7 +60,7 @@ private fun RowScope.DatePickerContent(
     val yearMonths = remember(calendar, date.year) {
         calendar.getYearMonths(date.year)
     }
-    val months = yearMonthNameOfDate(date)
+    val months = yearAwareMonthsNames(date)
     val monthsFormat = remember(numeral, months) {
         { item: Int -> numeral.format(item) + " / " + months[item - 1] }
     }
