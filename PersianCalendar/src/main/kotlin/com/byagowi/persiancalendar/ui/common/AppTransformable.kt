@@ -20,8 +20,10 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.launch
 
-// Similar to androidx.compose.foundation.gestures's Modifier.transformable as that had
-// some shortcomings on a quick look but the decision is to be reconsidered.
+/**
+ * Similar to [androidx.compose.foundation.gestures.transformable]. That had¬
+ * some shortcomings on a quick look but the decision can be reconsidered.
+ */
 @Composable
 fun Modifier.appTransformable(
     disableHorizontalLimit: Boolean = false,
