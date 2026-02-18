@@ -47,8 +47,9 @@ import kotlin.math.sqrt
 fun DrawerArrowDrawable(
     progress: State<Float>,
     // Whether bars should spin or not during progress
-    spin: Boolean = true,
-    // Whether we should mirror animation when animation is reversed.
+    spin: Boolean = false,
+    // Whether we should mirror animation when animation is reversed, only meaningful
+    // when spin is enabled
     verticalMirror: Boolean = false,
     // Quirks to match with Icons.AutoMirrored.Default.ArrowBack and Icons.Default.Menu
     quirks: Boolean = true,
