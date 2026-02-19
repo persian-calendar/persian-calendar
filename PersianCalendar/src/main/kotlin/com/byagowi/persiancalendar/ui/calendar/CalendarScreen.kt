@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.CalendarContract
 import android.provider.Settings
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -99,6 +98,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -903,7 +903,13 @@ private fun Search(
     today: Jdn,
     bringEvent: (CalendarEvent<*>) -> Unit,
 ) {
-    BackHandler { closeSearch() }
+    val coroutineScope = rememberCoroutineScope()
+    var alpha by rememberSaveable { mutableFloatStateOf(1f) }
+    PredictiveBackHandler { flow ->
+        runCatching {
+            flow.collect { coroutineScope.launch { alpha = 1 - it.progress } }
+        }.onSuccess { closeSearch() }.onFailure { alpha = 1f }
+    }
     var searchTerm by searchTerm
     val repository = eventsRepository
     val enabledEvents = remember(key1 = today) { repository.getEnabledEvents(today) }
@@ -939,6 +945,7 @@ private fun Search(
         expanded = isSearchExpanded,
         onExpandedChange = { if (!it) searchTerm = "" },
         modifier = Modifier
+            .alpha(alpha)
             .padding(horizontal = padding)
             .focusRequester(focusRequester),
     ) {
