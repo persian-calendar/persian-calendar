@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -39,6 +40,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -52,6 +54,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
@@ -60,9 +63,11 @@ import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.title
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
@@ -142,6 +147,17 @@ fun SharedTransitionScope.TimesTab(
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
+        if (calculationMethod != language.preferredCalculationMethod) Text(
+            calculationMethod.title(LocalResources.current),
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .alpha(AppBlendAlpha)
+                .clickable(onClickLabel = stringResource(R.string.settings)) {
+                    navigateToSettingsLocationTab()
+                },
+        )
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
             header = "مایلید برنامه اذان پخش کند؟",
             discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },

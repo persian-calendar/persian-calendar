@@ -76,8 +76,8 @@ fun showUnsupportedActionToast(context: Context) {
 fun CalculationMethod.title(resources: Resources): String {
     if (language.isArabicScript) {
         when (this) {
-            CalculationMethod.France -> return "فرانسه"
-            CalculationMethod.Russia -> return "روسیه"
+            CalculationMethod.France -> return "مسلمانان فرانسه"
+            CalculationMethod.Russia -> return "ادارهٔ معنوی مسلمانان روسیه"
             CalculationMethod.Singapore -> return "مالزی / سنگاپور"
             else -> {}
         }
