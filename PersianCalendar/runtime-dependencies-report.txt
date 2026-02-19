@@ -1,24 +1,24 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 2.2.21 (c)
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 2.2.21 (c)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 2.3.10 (c)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 2.3.10 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.3.10 (c)
 +--- com.github.persian-calendar:calendar:6e54d1ce5044bf751ed1c0ef8faa9c4a95b55ee3
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 -> 2.3.10 (*)
-+--- com.github.persian-calendar:praytimes:57299c1efd720d61467dfaf5d86b0ef785117fa8
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.2.21
-|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.3.10 (*)
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.21
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.3.10 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 (c)
++--- com.github.persian-calendar:praytimes:619fd6fa2b61fea91f266b7c6d37dba48a6138df
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.3.10
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.3.10
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.10 (c)
 +--- com.github.persian-calendar:calculator:64d264a2c4c9eff6e7c060c3ff0bff0b15879f0e
 |    +--- org.antlr:antlr4-runtime:4.13.2
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.3.10 (*)
 +--- com.github.persian-calendar:qr:58da9a077e1acc2ba80b43635533117fea462c7b
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.2.21 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 (c)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.3.10 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 -> 2.3.10 (c)
 +--- com.github.cosinekitty:astronomy:61dc07020aaa6885d2c7f688a4d82beaf6edb9ef
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 2.2.21 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 2.3.10 (*)
 +--- androidx.core:core-ktx:1.17.0
 |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1
 |    |    \--- androidx.annotation:annotation-jvm:1.9.1
