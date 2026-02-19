@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.title
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.html.body
 import kotlinx.html.h1
@@ -89,7 +89,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                     tr {
                         td {
                             colSpan = "10"
-                            +resources.getString(calculationMethod.titleStringId)
+                            +calculationMethod.title(resources)
                         }
                     }
                 }

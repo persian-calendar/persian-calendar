@@ -74,6 +74,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.title
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -88,7 +89,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
     AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
             key = PREF_PRAY_TIME_METHOD,
-            entries = CalculationMethod.entries.map { stringResource(it.titleStringId) },
+            entries = CalculationMethod.entries.map { it.title(resources) },
             entryValues = CalculationMethod.entries.map { it.name },
             persistedValue = calculationMethod.name,
             dialogTitleResId = R.string.pray_methods_calculation,
@@ -283,7 +284,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
 }
 
 private fun midnightDefaultTitle(resources: Resources): String {
-    return resources.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
+    return calculationMethod.title(resources) + spacedComma + midnightMethodToString(
         resources, calculationMethod.defaultMidnight,
     )
 }

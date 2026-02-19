@@ -92,4 +92,8 @@ adenoxi: Adel Noruzi"</string>
     <string name="crescent_evening_visibility_odeh" translatable="false">Crescent evening visibility (Odeh)</string>
     <string name="crescent_morning_visibility_yallop" translatable="false">Crescent morning visibility (Yallop)</string>
     <string name="crescent_morning_visibility_odeh" translatable="false">Crescent morning visibility (Odeh)</string>
+    <string name="method_france" translatable="false">Muslims of France</string>
+    <string name="method_russia" translatable="false">Spiritual Administration of Muslims of Russia</string>
+    <!-- This originally was Islamic Religious Council of Singapore but let's mention Malaysia also -->
+    <string name="method_singapore" translatable="false">Malaysia / Singapore</string>
 </resources>
