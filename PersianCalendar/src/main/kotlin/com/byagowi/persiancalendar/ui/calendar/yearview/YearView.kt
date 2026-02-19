@@ -322,7 +322,7 @@ sealed interface YearViewCommand {
     object TodayMonth : YearViewCommand
     object ToggleYearSelection : YearViewCommand
 
-    suspend operator fun invoke(
+    suspend fun execute(
         yearViewLazyListState: LazyListState?,
         yearViewScale: Animatable<Float, AnimationVector1D>?,
     ) {

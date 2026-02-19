@@ -1099,7 +1099,7 @@ private fun SharedTransitionScope.Toolbar(
                         ),
                     ) {
                         if (isYearView) coroutineScope.launch {
-                            YearViewCommand.ToggleYearSelection(
+                            YearViewCommand.ToggleYearSelection.execute(
                                 yearViewLazyListState,
                                 yearViewScale,
                             )
@@ -1182,7 +1182,7 @@ private fun SharedTransitionScope.Toolbar(
                 TodayActionButton(visible = yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     yearViewCalendar = mainCalendar
                     coroutineScope.launch {
-                        YearViewCommand.TodayMonth(
+                        YearViewCommand.TodayMonth.execute(
                             yearViewLazyListState,
                             yearViewScale,
                         )
@@ -1195,7 +1195,7 @@ private fun SharedTransitionScope.Toolbar(
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
                 ) {
                     coroutineScope.launch {
-                        YearViewCommand.NextMonth(
+                        YearViewCommand.NextMonth.execute(
                             yearViewLazyListState,
                             yearViewScale,
                         )
@@ -1208,7 +1208,7 @@ private fun SharedTransitionScope.Toolbar(
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
                 ) {
                     coroutineScope.launch {
-                        YearViewCommand.PreviousMonth(
+                        YearViewCommand.PreviousMonth.execute(
                             yearViewLazyListState,
                             yearViewScale,
                         )
