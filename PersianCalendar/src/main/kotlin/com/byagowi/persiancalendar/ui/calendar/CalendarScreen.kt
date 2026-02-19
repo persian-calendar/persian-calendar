@@ -12,6 +12,7 @@ import android.provider.CalendarContract
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -105,6 +106,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -306,6 +308,16 @@ fun SharedTransitionScope.CalendarScreen(
     val searchTerm = rememberSaveable { mutableStateOf<String?>(null) }
     val yearViewCalendar = rememberSaveable { mutableStateOf<Calendar?>(null) }
     val isYearView = rememberSaveable { mutableStateOf(false) }
+    val isYearViewFraction = remember { Animatable(if (isYearView.value) 1f else 0f) }
+    LaunchedEffect(isYearView.value) {
+        isYearViewFraction.animateTo(
+            targetValue = if (isYearView.value) 1f else 0f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessLow,
+            ),
+        )
+    }
     val yearViewLazyListState = if (isYearView.value) yearViewLazyListState(
         today,
         selectedMonthOffset,
@@ -400,6 +412,7 @@ fun SharedTransitionScope.CalendarScreen(
                         yearViewLazyListState = yearViewLazyListState,
                         yearViewScale = yearViewScale,
                         isYearView = isYearView,
+                        isYearViewFraction = isYearViewFraction,
                         yearViewCalendar = yearViewCalendar,
                         isLandscape = isLandscape,
                         today = today,
@@ -479,28 +492,30 @@ fun SharedTransitionScope.CalendarScreen(
                 },
             ) { isYearViewState ->
                 if (isYearViewState && yearViewLazyListState != null && yearViewScale != null) {
-                    YearView(
-                        selectedDay = selectedDay,
-                        selectedMonthOffset = selectedMonthOffset,
-                        closeYearView = { isYearView.value = false },
-                        lazyListState = yearViewLazyListState,
-                        scale = yearViewScale,
-                        maxWidth = maxWidth,
-                        yearViewCalendar = yearViewCalendar,
-                        maxHeight = maxHeight,
-                        bottomPadding = bottomPaddingWithMinimum,
-                        today = today,
-                    ) { calendar, monthsDistance ->
-                        if (mainCalendar == calendar) coroutineScope.launch {
-                            calendarPagerState.scrollToPage(
-                                clampPageNumber(applyOffset(-monthsDistance)),
-                            )
-                        } else {
-                            val date = calendar.getMonthStartFromMonthsDistance(
-                                baseJdn = today,
-                                monthsDistance = monthsDistance,
-                            )
-                            bringDay(Jdn(date), true, true)
+                    Box(Modifier.alpha(isYearViewFraction.value.coerceIn(0f, 1f))) {
+                        YearView(
+                            selectedDay = selectedDay,
+                            selectedMonthOffset = selectedMonthOffset,
+                            closeYearView = { isYearView.value = false },
+                            lazyListState = yearViewLazyListState,
+                            scale = yearViewScale,
+                            maxWidth = maxWidth,
+                            yearViewCalendar = yearViewCalendar,
+                            maxHeight = maxHeight,
+                            bottomPadding = bottomPaddingWithMinimum,
+                            today = today,
+                        ) { calendar, monthsDistance ->
+                            if (mainCalendar == calendar) coroutineScope.launch {
+                                calendarPagerState.scrollToPage(
+                                    clampPageNumber(applyOffset(-monthsDistance)),
+                                )
+                            } else {
+                                val date = calendar.getMonthStartFromMonthsDistance(
+                                    baseJdn = today,
+                                    monthsDistance = monthsDistance,
+                                )
+                                bringDay(Jdn(date), true, true)
+                            }
                         }
                     }
                 }
@@ -986,6 +1001,7 @@ private fun SharedTransitionScope.Toolbar(
     openSearch: () -> Unit,
     yearViewCalendar: MutableState<Calendar?>,
     isYearView: MutableState<Boolean>,
+    isYearViewFraction: Animatable<Float, AnimationVector1D>,
     yearViewLazyListState: LazyListState?,
     yearViewScale: Animatable<Float, AnimationVector1D>?,
     selectedMonthOffset: Int,
@@ -1012,7 +1028,6 @@ private fun SharedTransitionScope.Toolbar(
         isYearView = false
         yearViewCalendar = null
     }
-    if (isYearView) BackHandler(onBack = onYearViewBackPressed)
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
@@ -1142,17 +1157,17 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            val progress = animateFloatAsState(
-                targetValue = if (isYearView) 1f else 0f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessLow,
-                ),
-            )
-            when (progress.value) {
+            if (isYearView) PredictiveBackHandler { flow ->
+                runCatching {
+                    flow.collect { isYearViewFraction.snapTo(1 - it.progress) }
+                }.onSuccess { onYearViewBackPressed() }.onFailure {
+                    isYearViewFraction.animateTo(1f)
+                }
+            }
+            when (isYearViewFraction.value) {
                 0f -> NavigationOpenNavigationRailIcon(openNavigationRail)
                 1f -> NavigationNavigateUpIcon(navigateUp = onYearViewBackPressed)
-                else -> DrawerArrowDrawable(progress)
+                else -> DrawerArrowDrawable(isYearViewFraction.asState())
             }
         },
         actions = {
