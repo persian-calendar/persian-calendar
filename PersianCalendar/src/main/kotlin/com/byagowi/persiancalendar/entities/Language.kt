@@ -128,10 +128,10 @@ enum class Language(val code: String, val nativeName: String) {
 
     val preferredCalculationMethod: CalculationMethod
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, TR, KMR, TG, NE, TA -> CalculationMethod.MWL
+            FA_AF, PS, UR, ES, DE, AR, CKB, TR, IT, JA, PT, ZH_CN, OTA, KMR, TG, NE, TA -> CalculationMethod.MWL
+            FA, AZB, EN_IR, EN_US, GLK -> CalculationMethod.Tehran
             FR -> CalculationMethod.France
             RU -> CalculationMethod.Russia
-            else -> CalculationMethod.Tehran
         }
 
     val isHanafiMajority: Boolean
