@@ -38,12 +38,12 @@ fun Level(
     var updateToken by remember { mutableLongStateOf(0) }
     val resources = LocalResources.current
     val levelView = remember {
-        LevelView(resources, angleToShow1, angleToShow2, setShowTwoAngles, updateToken::inc)
+        LevelView(resources, angleToShow1, angleToShow2, setShowTwoAngles) { ++updateToken }
     }
     val orientationProvider = remember {
         OrientationProvider(
             context,
-            invalidate = updateToken::inc,
+            invalidate = { ++updateToken },
         ) { newOrientation, newPitch, newRoll, newBalance ->
             levelView.setOrientation(newOrientation, newPitch, newRoll, newBalance)
         }
