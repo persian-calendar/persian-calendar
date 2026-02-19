@@ -104,7 +104,6 @@ class LevelView(
      * Speed adjustment
      */
     private var viscosityValue = 1.0
-    private var firstTime = true
 
     private fun onOrientationChange(newOrientation: Orientation) {
         orientation = newOrientation
@@ -224,10 +223,6 @@ class LevelView(
     }
 
     fun draw(canvas: Canvas) {
-        if (firstTime) {
-            setOrientation(Orientation.LANDING, 0f, 0f, 0f)
-            firstTime = false
-        }
         val orientation = orientation ?: return
 
         // Update physics
