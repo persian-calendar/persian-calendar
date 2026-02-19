@@ -152,11 +152,16 @@ fun SharedTransitionScope.TimesTab(
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .fillMaxWidth()
                 .alpha(AppBlendAlpha)
-                .clickable(onClickLabel = stringResource(R.string.settings)) {
-                    navigateToSettingsLocationTab()
-                },
+                .combinedClickable(
+                    indication = null,
+                    interactionSource = null,
+                    onClickLabel = stringResource(R.string.more),
+                    onClick = { isExpanded = !isExpanded },
+                    onLongClickLabel = stringResource(R.string.settings),
+                    onLongClick = { navigateToSettingsLocationTab() },
+                )
+                .align(Alignment.CenterHorizontally),
         )
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
             header = "مایلید برنامه اذان پخش کند؟",
