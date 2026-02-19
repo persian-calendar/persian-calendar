@@ -76,7 +76,9 @@ fun Level(
     BoxWithConstraints {
         val width = this.maxWidth
         val height = this.maxHeight
-        with(density) { levelView.updateSize(width.roundToPx(), height.roundToPx()) }
+        LaunchedEffect(width, height) {
+            with(density) { levelView.updateSize(width.roundToPx(), height.roundToPx()) }
+        }
         Canvas(Modifier.fillMaxSize()) {
             updateToken.let {}
             levelView.draw(this.drawContext.canvas.nativeCanvas)
