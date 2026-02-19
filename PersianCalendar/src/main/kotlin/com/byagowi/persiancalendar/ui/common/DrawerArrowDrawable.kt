@@ -70,14 +70,14 @@ fun DrawerArrowDrawable(
             .size(16.dp),
     ) {
         val progress = progress.value
-        // The length of middle bar
-        val barLength = if (quirks) {
-            // Otherwise it won't match Icons.Default.Menu
-            18.dp.toPx()
-        } else 16.dp.toPx()
-        // The space between bars when they are parallel
-        val barGap = 3.dp.toPx()
         run {
+            // The length of middle bar
+            val barLength = if (quirks) {
+                // Otherwise it won't match Icons.Default.Menu
+                18.dp.toPx()
+            } else 16.dp.toPx()
+            // The space between bars when they are parallel
+            val barGap = 3.dp.toPx()
             // The length of top and bottom bars when they merge into an arrow
             val arrowHeadLength = 8.dp.toPx()
             // Interpolated widths of arrow bars
@@ -121,8 +121,7 @@ fun DrawerArrowDrawable(
                 // otherwise it won't match Icons.AutoMirrored.Default.ArrowBack
                 progress * (if (isRtl) -1 else 1).dp.toPx()
             } else 0f,
-            top = (this.size.height - barThickness * 3 - barGap * 2) / 2 +
-                    barThickness * 1.5f + barGap,
+            top = this.size.height / 2,
         ) {
             rotate(
                 degrees = if (spin) {
