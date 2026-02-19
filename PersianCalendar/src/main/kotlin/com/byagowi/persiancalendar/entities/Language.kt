@@ -129,6 +129,8 @@ enum class Language(val code: String, val nativeName: String) {
     val preferredCalculationMethod: CalculationMethod
         get() = when (this) {
             FA_AF, PS, UR, AR, CKB, TR, KMR, TG, NE, TA -> CalculationMethod.MWL
+            FR -> CalculationMethod.France
+            RU -> CalculationMethod.Russia
             else -> CalculationMethod.Tehran
         }
 
