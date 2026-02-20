@@ -54,9 +54,8 @@ fun DrawerArrowDrawable(
     // Quirks to match with Icons.AutoMirrored.Default.ArrowBack and Icons.Default.Menu
     quirks: Boolean = true,
 ) {
-    val density = LocalDensity.current
-    val barThickness = with(density) { 2.dp.toPx() }
-    val strokeStyle = remember { Stroke(barThickness) }
+    val barThickness = with(LocalDensity.current) { 2.dp.toPx() }
+    val strokeStyle = remember { Stroke(width = barThickness) }
     // the amount that overlaps w/ bar size when rotation is max
     val maxCutForBarSize = barThickness / 2 * ARROW_HEAD_ANGLE_COSINE
     // Use Path instead of canvas operations so that if color has transparency, overlapping sections
@@ -83,17 +82,17 @@ fun DrawerArrowDrawable(
             // Interpolated widths of arrow bars
             val arrowHeadBarLength = run {
                 val finalValue = sqrt(arrowHeadLength * arrowHeadLength * 2)
-                lerp(barLength, finalValue, progress)
+                lerp(start = barLength, stop = finalValue, fraction = progress)
             }
             // The length of the middle bar when arrow is shaped
             val arrowShaftLength = run {
                 val finalValue = 16.dp.toPx()
-                lerp(barLength, finalValue, progress)
+                lerp(start = barLength, stop = finalValue, fraction = progress)
             }
             // Interpolated size of middle bar
-            val arrowShaftCut = lerp(0f, maxCutForBarSize, progress)
+            val arrowShaftCut = lerp(start = 0f, stop = maxCutForBarSize, fraction = progress)
             // The rotation of the top and bottom bars (that make the arrow head)
-            val rotation = lerp(0f, ARROW_HEAD_ANGLE, progress)
+            val rotation = lerp(start = 0f, stop = ARROW_HEAD_ANGLE, fraction = progress)
             val arrowWidth = arrowHeadBarLength * cos(rotation)
             val arrowHeight = arrowHeadBarLength * sin(rotation)
             val topBottomBarOffset = lerp(
@@ -104,14 +103,14 @@ fun DrawerArrowDrawable(
             val arrowEdge = -arrowShaftLength / 2
             path.rewind()
             // draw middle bar
-            path.moveTo(arrowEdge + arrowShaftCut, 0f)
-            path.relativeLineTo(arrowShaftLength - arrowShaftCut * 2, 0f)
+            path.moveTo(x = arrowEdge + arrowShaftCut, y = 0f)
+            path.relativeLineTo(dx = arrowShaftLength - arrowShaftCut * 2, dy = 0f)
             // bottom bar
-            path.moveTo(arrowEdge, topBottomBarOffset)
-            path.relativeLineTo(arrowWidth, arrowHeight)
+            path.moveTo(x = arrowEdge, y = topBottomBarOffset)
+            path.relativeLineTo(dx = arrowWidth, dy = arrowHeight)
             // top bar
-            path.moveTo(arrowEdge, -topBottomBarOffset)
-            path.relativeLineTo(arrowWidth, -arrowHeight)
+            path.moveTo(x = arrowEdge, y = -topBottomBarOffset)
+            path.relativeLineTo(dx = arrowWidth, dy = -arrowHeight)
             path.close()
         }
         // Rotate the whole canvas if spinning, if not, rotate it 180 to get
