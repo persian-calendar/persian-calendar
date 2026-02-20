@@ -575,8 +575,8 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
 @Composable
 private fun LockOrientationForCompassAndLevel(backStack: NavBackStack<NavKey>) {
     val activity = LocalActivity.current
-    var isLocked by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
+        var isLocked = false
         snapshotFlow { backStack.lastOrNull() }.collect {
             when (it) {
                 Screen.Compass, Screen.Level -> if (!isLocked) {
