@@ -23,7 +23,7 @@ enum class Season(
         fun fromTimeInMillis(timeInMillis: Long, coordinates: Coordinates?): Season {
             val sunLongitude = sunPosition(Time.fromMillisecondsSince1970(timeInMillis)).elon
             val seasonIndex = floor(sunLongitude / 90).toInt()
-                // Southern hemisphere consideration
+                // Southern Hemisphere consideration
                 .let { if (coordinates?.isSouthernHemisphere == true) (it + 2) % 4 else it }
             return entries.getOrNull(seasonIndex).debugAssertNotNull ?: SPRING
         }
