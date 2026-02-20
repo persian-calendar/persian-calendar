@@ -576,17 +576,17 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
 private fun LockOrientation(backStack: NavBackStack<NavKey>) {
     val activity = LocalActivity.current
     val visiblePage = backStack.lastOrNull()
-    var everLocked by remember { mutableStateOf(false) }
+    var isLocked by remember { mutableStateOf(false) }
     LaunchedEffect(visiblePage) {
         when (visiblePage) {
             Screen.Compass, Screen.Level -> {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-                everLocked = true
+                isLocked = true
             }
 
-            else -> if (everLocked) {
+            else -> if (isLocked) {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                everLocked = false
+                isLocked = false
             }
         }
     }
