@@ -156,7 +156,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             refreshCalendar()
         }
     }
-    LockOrientation(backStack)
+    LockOrientationForCompassAndLevel(backStack)
     AppNavigationRail(now, railState, backStack, finish)
     SharedTransitionLayout {
         val bringDayCommand = rememberSaveable { mutableStateOf(initialJdn) }
@@ -573,19 +573,21 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
 }
 
 @Composable
-private fun LockOrientation(backStack: NavBackStack<NavKey>) {
+private fun LockOrientationForCompassAndLevel(backStack: NavBackStack<NavKey>) {
     val activity = LocalActivity.current
     var isLocked by remember { mutableStateOf(false) }
-    LaunchedEffect(backStack.lastOrNull()) {
-        when (backStack.lastOrNull()) {
-            Screen.Compass, Screen.Level -> {
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-                isLocked = true
-            }
+    LaunchedEffect(key1 = Unit) {
+        snapshotFlow { backStack.lastOrNull() }.collect {
+            when (it) {
+                Screen.Compass, Screen.Level -> if (!isLocked) {
+                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                    isLocked = true
+                }
 
-            else -> if (isLocked) {
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                isLocked = false
+                else -> if (isLocked) {
+                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    isLocked = false
+                }
             }
         }
     }
