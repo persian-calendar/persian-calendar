@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.content.pm.ActivityInfo
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -86,15 +84,12 @@ fun Level(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val activity = LocalActivity.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
                 if (!orientationProvider.isListening) orientationProvider.startListening()
             } else if (event == Lifecycle.Event.ON_PAUSE) {
                 debugLog("level: ON_PAUSE")
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 if (orientationProvider.isListening) orientationProvider.stopListening()
             }
         }

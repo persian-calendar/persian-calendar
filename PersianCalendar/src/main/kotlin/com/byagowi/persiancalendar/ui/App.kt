@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
+import android.content.pm.ActivityInfo
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionLayout
@@ -154,6 +156,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             refreshCalendar()
         }
     }
+    LockOrientation(backStack)
     AppNavigationRail(now, railState, backStack, finish)
     SharedTransitionLayout {
         val bringDayCommand = rememberSaveable { mutableStateOf(initialJdn) }
@@ -566,5 +569,25 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
             stringResource(if (isDark) R.string.theme_dark else R.string.theme_light),
             tint = tint,
         )
+    }
+}
+
+@Composable
+private fun LockOrientation(backStack: NavBackStack<NavKey>) {
+    val activity = LocalActivity.current
+    val visiblePage = backStack.lastOrNull()
+    var everLocked by remember { mutableStateOf(false) }
+    LaunchedEffect(visiblePage) {
+        when (visiblePage) {
+            Screen.Compass, Screen.Level -> {
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                everLocked = true
+            }
+
+            else -> if (everLocked) {
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                everLocked = false
+            }
+        }
     }
 }
