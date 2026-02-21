@@ -715,11 +715,25 @@ private fun SharedTransitionScope.detailsTabs(
         },
         // The optional third tab
         if (hasTimesTab) CalendarScreenTab.TIMES to { interactionSource, minHeight, bottomPadding ->
-            TimesTab(
+            val coordinates = coordinates
+            if (coordinates == null) Column(Modifier.fillMaxWidth()) {
+                val context = LocalContext.current
+                EncourageActionLayout(
+                    modifier = Modifier.padding(top = 24.dp),
+                    header = stringResource(R.string.ask_user_to_set_location),
+                    discardAction = {
+                        context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
+                        removeThirdTab = true
+                    },
+                    acceptAction = navigateToSettingsLocationTab,
+                    hideOnAccept = false,
+                )
+                Spacer(Modifier.height(bottomPadding))
+            } else TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                 navigateToAstronomy = navigateToAstronomy,
-                removeThirdTab = { removeThirdTab = true },
+                coordinates = coordinates,
                 selectedDay = selectedDay,
                 interactionSource = interactionSource,
                 minHeight = minHeight,

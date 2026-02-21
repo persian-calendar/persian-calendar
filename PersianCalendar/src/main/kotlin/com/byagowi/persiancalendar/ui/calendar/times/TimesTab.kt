@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,14 +48,12 @@ import androidx.core.content.edit
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
-import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -68,6 +65,7 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.title
+import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
@@ -76,7 +74,7 @@ fun SharedTransitionScope.TimesTab(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
-    removeThirdTab: () -> Unit,
+    coordinates: Coordinates,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
@@ -84,19 +82,6 @@ fun SharedTransitionScope.TimesTab(
     today: Jdn,
 ) {
     val context = LocalContext.current
-    val coordinates = coordinates ?: return Column(Modifier.fillMaxWidth()) {
-        EncourageActionLayout(
-            modifier = Modifier.padding(top = 24.dp),
-            header = stringResource(R.string.ask_user_to_set_location),
-            discardAction = {
-                context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
-                removeThirdTab()
-            },
-            acceptAction = navigateToSettingsLocationTab,
-            hideOnAccept = false,
-        )
-        Spacer(Modifier.height(bottomPadding))
-    }
     var isExpanded by remember {
         mutableStateOf(context.preferences.getBoolean(EXPANDED_TIME_STATE_KEY, false))
     }
