@@ -419,7 +419,6 @@ fun SharedTransitionScope.CalendarScreen(
                         now = now,
                         hasToolbarHeight = toolbarHeight > 0.dp,
                         selectedMonthOffset = selectedMonthOffset,
-                        refreshToken = refreshToken,
                         isHighlighted = isHighlighted,
                         selectedDay = selectedDay,
                         bringDay = bringDay,
@@ -1026,7 +1025,6 @@ private fun SharedTransitionScope.Toolbar(
     yearViewLazyListState: LazyListState?,
     yearViewScale: Animatable<Float, AnimationVector1D>?,
     selectedMonthOffset: Int,
-    refreshToken: Int,
     selectedDay: Jdn,
     isHighlighted: Boolean,
     bringDay: BringDay,
@@ -1052,10 +1050,6 @@ private fun SharedTransitionScope.Toolbar(
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
-            val refreshToken = refreshToken
-            // just a noop to update title and subtitle when secondary calendar is toggled
-            refreshToken.run {}
-
             val title: String
             val subtitle: String
             run {
