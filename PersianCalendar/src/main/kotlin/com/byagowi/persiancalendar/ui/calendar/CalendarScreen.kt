@@ -1185,7 +1185,7 @@ private fun SharedTransitionScope.Toolbar(
             when (isYearViewFraction.value) {
                 0f -> NavigationOpenNavigationRailIcon(openNavigationRail)
                 1f -> NavigationNavigateUpIcon(navigateUp = onYearViewBackPressed)
-                else -> DrawerArrowDrawable(isYearViewFraction.asState())
+                else -> DrawerArrowDrawable { isYearViewFraction.value }
             }
         },
         actions = {

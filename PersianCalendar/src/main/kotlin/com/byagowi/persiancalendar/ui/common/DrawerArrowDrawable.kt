@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -45,7 +44,6 @@ import kotlin.math.sqrt
 
 @Composable
 fun DrawerArrowDrawable(
-    progress: State<Float>,
     // Whether bars should spin or not during progress
     spin: Boolean = false,
     // Whether we should mirror animation when animation is reversed, only meaningful
@@ -53,6 +51,8 @@ fun DrawerArrowDrawable(
     verticalMirror: Boolean = false,
     // Quirks to match with Icons.AutoMirrored.Default.ArrowBack and Icons.Default.Menu
     quirks: Boolean = true,
+    // Callback to get progress value from value in a more efficient way, [0-1]
+    progress: () -> Float,
 ) {
     val barThickness = with(LocalDensity.current) { 2.dp.toPx() }
     val strokeStyle = remember { Stroke(width = barThickness) }
@@ -68,7 +68,7 @@ fun DrawerArrowDrawable(
             .padding(16.dp)
             .size(16.dp),
     ) {
-        val progress = progress.value
+        val progress = progress()
         run {
             // The length of middle bar
             val barLength = if (quirks) {
