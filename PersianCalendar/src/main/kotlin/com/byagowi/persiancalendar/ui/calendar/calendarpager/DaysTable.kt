@@ -106,7 +106,6 @@ fun daysTable(
     deviceEvents: DeviceCalendarEventsStore, onlyWeek: Int?,
     isHighlighted: Boolean, selectedDay: Jdn,
 ) -> Unit {
-    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
     val density = LocalDensity.current
     val (width, suggestedHeight) = suggestedPagerSize
     val cellWidth = (width - (pagerArrowSizeAndPadding * 2).dp) / 7
@@ -155,11 +154,6 @@ fun daysTable(
     val todayOutlineColor by animateColor(monthColors.todayOutline)
     val holidaysColor by animateColor(monthColors.holidays)
     val holidaysFillColor by animateColor(monthColors.holidaysFill)
-    val weekStart = weekStart
-    val eventsRepository = eventsRepository
-    val shiftWorkSettings = shiftWorkSettings
-    val shiftWorkTitles = shiftWorkTitles
-    val isTalkBackEnabled = isTalkBackEnabled
 
     fun positionToOffset(row: Int, column: Int): Offset {
         return Offset(
