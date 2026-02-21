@@ -59,7 +59,6 @@ fun rememberSwipeDismissableSceneStrategyState(
  * @param isUserSwipeEnabled [Boolean] Whether swipe-to-dismiss gesture is enabled.
  */
 @Composable
-
 fun <T : Any> rememberSwipeDismissableSceneStrategy(
     modifier: Modifier = Modifier,
     swipeDismissableSceneStrategyState: SwipeDismissableSceneStrategyState =
