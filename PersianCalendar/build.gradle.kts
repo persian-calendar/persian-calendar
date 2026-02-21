@@ -133,6 +133,14 @@ android {
             "SelectableText",
             "IconLocation",
             "DuplicateStrings",
+            "ComposeModifierMissing",
+            "ComposeModifierWithoutDefault",
+            "ComposeMultipleContentEmitters",
+            "ComposeMutableParameters",
+            "ComposeParameterOrder",
+            "ComposePreviewPublic",
+            "ComposeUnstableCollections",
+            "ComposeUnstableReceiver",
         )
     }
 }
@@ -177,7 +185,9 @@ dependencies {
     implementation(libs.compose.runtime)
     implementation(libs.compose.material.icons.extended)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.collections.immutable)
 
+    lintChecks(libs.slack.compose.lint.checks)
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
