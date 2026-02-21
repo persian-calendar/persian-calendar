@@ -83,4 +83,4 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
 
 @Preview
 @Composable
-private fun LocationPreferenceDialogPreview() = LocationDialog {}
+internal fun LocationPreferenceDialogPreview() = LocationDialog {}

@@ -72,4 +72,4 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
 
 @Preview
 @Composable
-private fun LanguagePreferenceDialogPreview() = LanguageDialog {}
+internal fun LanguagePreferenceDialogPreview() = LanguageDialog {}

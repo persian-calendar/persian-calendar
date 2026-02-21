@@ -163,7 +163,7 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
 
 @Preview
 @Composable
-private fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
+internal fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
 
 @Composable
 @VisibleForTesting

@@ -137,7 +137,6 @@ android {
             "ComposeModifierWithoutDefault",
             "ComposeMultipleContentEmitters",
             "ComposeParameterOrder",
-            "ComposePreviewPublic",
             "ComposeUnstableCollections",
             "ComposeUnstableReceiver",
         )

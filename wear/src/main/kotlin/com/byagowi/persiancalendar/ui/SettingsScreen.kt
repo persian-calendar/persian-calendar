@@ -156,7 +156,7 @@ val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
-private fun SettingsPreview() {
+internal fun SettingsPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         AppScaffold { SettingsScreen(null) }
     }

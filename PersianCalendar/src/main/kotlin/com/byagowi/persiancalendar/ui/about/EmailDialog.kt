@@ -59,4 +59,4 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
 
 @Preview
 @Composable
-private fun EmailDialogPreview() = EmailDialog {}
+internal fun EmailDialogPreview() = EmailDialog {}

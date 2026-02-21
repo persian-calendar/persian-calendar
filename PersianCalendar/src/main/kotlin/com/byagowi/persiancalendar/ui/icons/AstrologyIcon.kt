@@ -18,4 +18,4 @@ val AstrologyIcon by lazy(LazyThreadSafetyMode.NONE) {
 
 @Preview
 @Composable
-fun AstrologyIconPreview() = Icon(AstrologyIcon, null, tint = Color.Gray)
+internal fun AstrologyIconPreview() = Icon(AstrologyIcon, null, tint = Color.Gray)

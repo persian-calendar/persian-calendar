@@ -18,4 +18,4 @@ val In24HoursIcon by lazy(LazyThreadSafetyMode.NONE) {
 
 @Preview
 @Composable
-fun In24HoursPreview() = Icon(In24HoursIcon, null, tint = Color.Gray)
+internal fun In24HoursPreview() = Icon(In24HoursIcon, null, tint = Color.Gray)

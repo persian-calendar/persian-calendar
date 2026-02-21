@@ -123,4 +123,4 @@ private fun DrawBackground(
 
 @Preview
 @Composable
-private fun AthanActivityContentPreview() = AthanActivityContent(PrayTime.FAJR) {}
+internal fun AthanActivityContentPreview() = AthanActivityContent(PrayTime.FAJR) {}
