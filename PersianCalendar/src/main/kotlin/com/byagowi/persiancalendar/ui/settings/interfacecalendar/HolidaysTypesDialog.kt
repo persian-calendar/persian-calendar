@@ -19,6 +19,7 @@ import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -171,7 +172,7 @@ fun CountryEvents(
     sourceLink: String,
     holidaysTitle: String,
     nonHolidaysTitle: String,
-    enabledTypes: MutableCollection<String>,
+    enabledTypes: SnapshotStateList<String>,
     holidaysKey: String,
     nonHolidaysKey: String,
     destinationItem: String?,
@@ -238,7 +239,7 @@ fun CountryEvents(
 @Composable
 private fun IndentedCheckBox(
     label: String,
-    enabledTypes: MutableCollection<String>,
+    enabledTypes: SnapshotStateList<String>,
     key: String,
     destinationItem: String?,
 ) {

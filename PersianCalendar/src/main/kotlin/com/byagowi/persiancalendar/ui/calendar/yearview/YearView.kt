@@ -31,7 +31,6 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -86,7 +85,8 @@ fun YearView(
     selectedDay: Jdn,
     selectedMonthOffset: Int,
     closeYearView: () -> Unit,
-    yearViewCalendar: MutableState<Calendar?>,
+    yearViewCalendar: Calendar?,
+    onYearViewCalendarChange: (Calendar) -> Unit,
     lazyListState: LazyListState,
     scale: Animatable<Float, AnimationVector1D>,
     maxWidth: Dp,
@@ -95,8 +95,8 @@ fun YearView(
     today: Jdn,
     selectMonth: (calendar: Calendar, monthsDistance: Int) -> Unit,
 ) {
-    if (yearViewCalendar.value == null) yearViewCalendar.value = mainCalendar
-    val calendar = yearViewCalendar.value ?: mainCalendar
+    if (yearViewCalendar == null) onYearViewCalendarChange(mainCalendar)
+    val calendar = yearViewCalendar ?: mainCalendar
     val todayDate = today on calendar
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -165,7 +165,7 @@ fun YearView(
             { isLeft ->
                 val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
                 val index = calendars.indexOf(calendar) + if (isLeft xor isRtl) 1 else -1
-                yearViewCalendar.value = calendars[index.mod(calendars.size)]
+                onYearViewCalendarChange(calendars[index.mod(calendars.size)])
             }
         },
     ) {

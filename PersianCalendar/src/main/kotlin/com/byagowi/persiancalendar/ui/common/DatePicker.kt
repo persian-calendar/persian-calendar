@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -23,7 +24,7 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 fun DatePicker(
     today: Jdn,
     calendar: Calendar,
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     jdn: Jdn,
     setJdn: (Jdn) -> Unit,
 ) {
@@ -44,7 +45,7 @@ fun DatePicker(
 private fun RowScope.DatePickerContent(
     today: Jdn,
     calendar: Calendar,
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     jdn: Jdn,
     setJdn: (Jdn) -> Unit,
 ) {

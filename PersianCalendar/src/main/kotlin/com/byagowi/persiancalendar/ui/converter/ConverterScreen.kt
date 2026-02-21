@@ -47,7 +47,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -56,6 +55,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -249,29 +249,29 @@ private val oneMinutes = 1.minutes.inWholeMilliseconds
 
 @Composable
 private fun TimeZones(
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     setShareAction: (() -> Unit) -> Unit,
     setResetAction: (() -> Unit) -> Unit,
     setResetButtonVisibility: (Boolean) -> Unit,
 ) {
-    val firstTimeZone = rememberSaveable { mutableStateOf(TimeZone.getDefault()) }
+    var firstTimeZone by rememberSaveable { mutableStateOf(TimeZone.getDefault()) }
     val utc = TimeZone.getTimeZone("UTC")
-    val secondTimeZone = rememberSaveable { mutableStateOf(utc) }
+    var secondTimeZone by rememberSaveable { mutableStateOf(utc) }
     val clock = remember { mutableLongStateOf(System.currentTimeMillis()) }
     val context = LocalContext.current
     val chooserTitle = stringResource(ConverterScreenMode.TIME_ZONES.title)
     setResetButtonVisibility(
         run {
             val sameClock = abs(clock.longValue - System.currentTimeMillis()) > oneMinutes
-            sameClock || firstTimeZone.value != TimeZone.getDefault() || secondTimeZone.value != utc
+            sameClock || firstTimeZone != TimeZone.getDefault() || secondTimeZone != utc
         },
     )
     LaunchedEffect(key1 = Unit) {
         setShareAction {
             context.shareText(
                 listOf(firstTimeZone, secondTimeZone).joinToString("\n") { timeZone ->
-                    timeZone.value.displayName + ": " + Clock(
-                        GregorianCalendar(timeZone.value).also {
+                    timeZone.displayName + ": " + Clock(
+                        GregorianCalendar(timeZone).also {
                             it.timeInMillis = clock.longValue
                         },
                     ).toBasicFormatString()
@@ -280,8 +280,8 @@ private fun TimeZones(
             )
         }
         setResetAction {
-            firstTimeZone.value = TimeZone.getDefault()
-            secondTimeZone.value = utc
+            firstTimeZone = TimeZone.getDefault()
+            secondTimeZone = utc
             clock.longValue = System.currentTimeMillis()
         }
     }
@@ -290,14 +290,14 @@ private fun TimeZones(
     }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val difference = run {
-        val distance =
-            secondTimeZone.value.rawOffset.milliseconds - firstTimeZone.value.rawOffset.milliseconds
+        val distance = secondTimeZone.rawOffset.milliseconds - firstTimeZone.rawOffset.milliseconds
         Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
     }
     if (isLandscape) Column {
         Row(Modifier.padding(horizontal = 24.dp)) {
             TimeZoneClock(
                 timeZone = firstTimeZone,
+                onTimeZoneChange = { firstTimeZone = it },
                 clock = clock,
                 zones = zones,
                 pendingConfirms = pendingConfirms,
@@ -306,6 +306,7 @@ private fun TimeZones(
             Spacer(Modifier.width(8.dp))
             TimeZoneClock(
                 timeZone = secondTimeZone,
+                onTimeZoneChange = { secondTimeZone = it },
                 clock = clock,
                 zones = zones,
                 pendingConfirms = pendingConfirms,
@@ -317,6 +318,7 @@ private fun TimeZones(
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TimeZoneClock(
             timeZone = firstTimeZone,
+            onTimeZoneChange = { firstTimeZone = it },
             clock = clock,
             zones = zones,
             pendingConfirms = pendingConfirms,
@@ -326,6 +328,7 @@ private fun TimeZones(
         Spacer(Modifier.height(4.dp))
         TimeZoneClock(
             timeZone = secondTimeZone,
+            onTimeZoneChange = { secondTimeZone = it },
             clock = clock,
             zones = zones,
             pendingConfirms = pendingConfirms,
@@ -478,7 +481,7 @@ private fun QrCode(
 private fun ColumnScope.ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     screenMode: ConverterScreenMode,
     setShareAction: (() -> Unit) -> Unit,
     setResetAction: (() -> Unit) -> Unit,
@@ -707,10 +710,11 @@ private val minutesRange = 0..59
 
 @Composable
 private fun TimeZoneClock(
-    timeZone: MutableState<TimeZone>,
+    timeZone: TimeZone,
+    onTimeZoneChange: (TimeZone) -> Unit,
     clock: MutableLongState,
     zones: List<TimeZone>,
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     modifier: Modifier = Modifier,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -719,10 +723,10 @@ private fun TimeZoneClock(
             NumberPicker(
                 modifier = Modifier.weight(3f),
                 range = zones.indices,
-                value = zones.indexOf(timeZone.value).coerceAtLeast(0),
+                value = zones.indexOf(timeZone).coerceAtLeast(0),
                 onValueChange = {
                     view.performHapticFeedbackVirtualKey()
-                    timeZone.value = zones[it]
+                    onTimeZoneChange(zones[it])
                 },
                 label = {
                     val hoursFraction = (zones[it].rawOffset).milliseconds / 1.hours
@@ -736,14 +740,14 @@ private fun TimeZoneClock(
                 pendingConfirms = pendingConfirms,
             )
             Spacer(Modifier.width(4.dp))
-            val time = GregorianCalendar(timeZone.value).also { it.timeInMillis = clock.longValue }
+            val time = GregorianCalendar(timeZone).also { it.timeInMillis = clock.longValue }
             NumberPicker(
                 modifier = Modifier.weight(1f),
                 range = hoursRange,
                 value = time[GregorianCalendar.HOUR_OF_DAY],
                 onValueChange = { hours ->
                     view.performHapticFeedbackVirtualKey()
-                    clock.longValue = GregorianCalendar(timeZone.value).also {
+                    clock.longValue = GregorianCalendar(timeZone).also {
                         it.timeInMillis = clock.longValue
                         it[GregorianCalendar.HOUR_OF_DAY] = hours
                     }.timeInMillis
@@ -757,7 +761,7 @@ private fun TimeZoneClock(
                 value = time[GregorianCalendar.MINUTE],
                 onValueChange = { minutes ->
                     view.performHapticFeedbackVirtualKey()
-                    clock.longValue = GregorianCalendar(timeZone.value).also {
+                    clock.longValue = GregorianCalendar(timeZone).also {
                         it.timeInMillis = clock.longValue
                         it[GregorianCalendar.MINUTE] = minutes
                     }.timeInMillis

@@ -136,7 +136,6 @@ android {
             "ComposeModifierMissing",
             "ComposeModifierWithoutDefault",
             "ComposeMultipleContentEmitters",
-            "ComposeMutableParameters",
             "ComposeParameterOrder",
             "ComposePreviewPublic",
             "ComposeUnstableCollections",

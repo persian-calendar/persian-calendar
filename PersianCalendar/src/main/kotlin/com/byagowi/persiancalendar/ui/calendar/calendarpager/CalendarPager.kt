@@ -94,8 +94,8 @@ fun calendarPagerSize(
 typealias CalendarPagerState = PagerState
 
 @Composable
-fun calendarPagerState(monthsDistance: Int): CalendarPagerState =
-    rememberPagerState(initialPage = applyOffset(monthsDistance), pageCount = ::monthsLimit)
+fun calendarPagerState(initialMonthsDistance: Int): CalendarPagerState =
+    rememberPagerState(initialPage = applyOffset(initialMonthsDistance), pageCount = ::monthsLimit)
 
 private const val monthsLimit = 5000 // this should be an even number
 

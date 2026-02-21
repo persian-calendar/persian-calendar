@@ -37,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -81,7 +82,7 @@ fun NumberPicker(
     disableEdit: Boolean = false,
     onPreviousLabel: String? = null,
     onNextLabel: String? = null,
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     value: Int,
     onValueChange: (Int) -> Unit,
 ) {
@@ -249,7 +250,7 @@ fun NumberPicker(
 @Composable
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
-    pendingConfirms: MutableCollection<() -> Unit>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     modifier: Modifier = Modifier,
     isValid: (Int) -> Boolean,
     initialValue: Int,

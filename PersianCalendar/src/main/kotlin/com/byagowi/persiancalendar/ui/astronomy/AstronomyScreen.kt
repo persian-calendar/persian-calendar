@@ -56,7 +56,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -179,9 +178,9 @@ fun SharedTransitionScope.AstronomyScreen(
         }
     }
 
-    val mode = rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
+    var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
     var isTropical by rememberSaveable { mutableStateOf(false) }
-    val isDatePickerDialogShown = rememberSaveable { mutableStateOf(false) }
+    var isDatePickerDialogShown by rememberSaveable { mutableStateOf(false) }
     val jdn by remember {
         derivedStateOf {
             val date = Date(timeInMillis.value)
@@ -258,7 +257,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             )
                         }
                     }
-                    AnimatedVisibility(visible = mode.value == AstronomyMode.EARTH) {
+                    AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
                             label = stringResource(R.string.tropical),
                             checked = isTropical,
@@ -293,7 +292,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
                             closeMenu()
-                            isDatePickerDialogShown.value = true
+                            isDatePickerDialogShown = true
                         }
                         AppDropdownMenuItem({ Text(stringResource(R.string.map)) }) {
                             closeMenu()
@@ -371,12 +370,12 @@ fun SharedTransitionScope.AstronomyScreen(
                                 modifier = Modifier,
                                 astronomyState = astronomyState,
                                 jdn = jdn,
-                                mode = mode.value,
+                                mode = mode,
                                 isTropical = isTropical,
                                 timeInMillis = timeInMillis,
                             )
                             Spacer(Modifier.weight(1f))
-                            SliderBar(timeInMillis, isDatePickerDialogShown)
+                            SliderBar(timeInMillis) { isDatePickerDialogShown = true }
                         }
                         SolarDisplay(
                             modifier = Modifier
@@ -386,6 +385,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             timeInMillis = timeInMillis,
                             astronomyState = astronomyState,
                             mode = mode,
+                            onModeChange = { mode = it },
                             isTropical = isTropical,
                             navigateToMap = navigateToMap,
                             scale = scale,
@@ -411,7 +411,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                     ),
                                     astronomyState = astronomyState,
                                     jdn = jdn,
-                                    mode = mode.value,
+                                    mode = mode,
                                     isTropical = isTropical,
                                     timeInMillis = timeInMillis,
                                 )
@@ -422,6 +422,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                     timeInMillis = timeInMillis,
                                     astronomyState = astronomyState,
                                     mode = mode,
+                                    onModeChange = { mode = it },
                                     isTropical = isTropical,
                                     navigateToMap = navigateToMap,
                                     scale = scale,
@@ -452,17 +453,17 @@ fun SharedTransitionScope.AstronomyScreen(
                             }
                         }
                     }
-                    SliderBar(timeInMillis, isDatePickerDialogShown)
+                    SliderBar(timeInMillis) { isDatePickerDialogShown = true }
                     Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
         }
     }
 
-    if (isDatePickerDialogShown.value) DatePickerDialog(
+    if (isDatePickerDialogShown) DatePickerDialog(
         today = today,
         initialJdn = jdn,
-        onDismissRequest = { isDatePickerDialogShown.value = false },
+        onDismissRequest = { isDatePickerDialogShown = false },
     ) { jdn ->
         coroutineScope.launch {
             timeInMillis.animateTo(
@@ -478,7 +479,7 @@ private val oneDay = 1.days.inWholeMilliseconds
 @Composable
 private fun SharedTransitionScope.SliderBar(
     timeInMillis: Animatable<Long, AnimationVector1D>,
-    isDatePickerDialogShown: MutableState<Boolean>,
+    showDatePickerDialog: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     fun buttonScrollSlider(days: Int) {
@@ -495,7 +496,7 @@ private fun SharedTransitionScope.SliderBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .combinedClickable(
-                    onClick = { isDatePickerDialogShown.value = true },
+                    onClick = showDatePickerDialog,
                     onClickLabel = stringResource(R.string.select_date),
                     onLongClick = {
                         coroutineScope.launch {
@@ -591,7 +592,8 @@ private fun SharedTransitionScope.SolarDisplay(
     offsetY: Animatable<Float, AnimationVector1D>,
     timeInMillis: Animatable<Long, AnimationVector1D>,
     astronomyState: AstronomyState,
-    mode: MutableState<AstronomyMode>,
+    mode: AstronomyMode,
+    onModeChange: (AstronomyMode) -> Unit,
     isTropical: Boolean,
     navigateToMap: (time: Long) -> Unit,
 ) {
@@ -601,8 +603,8 @@ private fun SharedTransitionScope.SolarDisplay(
             AstronomyMode.entries.forEach {
                 NavigationRailItem(
                     modifier = Modifier.size(56.dp),
-                    selected = mode.value == it,
-                    onClick = { mode.value = it },
+                    selected = mode == it,
+                    onClick = { onModeChange(it) },
                     icon = {
                         if (it == AstronomyMode.MOON) MoonIcon(astronomyState, solarDraw) else Icon(
                             ImageVector.vectorResource(it.icon),
@@ -638,7 +640,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 this.translationY = offsetY.value
             }
         Crossfade(
-            targetState = mode.value,
+            targetState = mode,
             modifier = Modifier
                 .padding(horizontal = 56.dp)
                 .align(Alignment.Center),
