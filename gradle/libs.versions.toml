@@ -16,6 +16,7 @@ junit-runner = "1.14.3"
 junit5 = "6.0.3"
 kotlin = "2.3.10"
 kotlinpoet = "2.2.0"
+kotlinx-collections-immutable = "0.4.0"
 kotlinx-html-jvm = "0.12.0"
 kotlinx-serialization = "1.10.0"
 lifecycle = "2.10.0"
@@ -25,6 +26,7 @@ persiancalendar-calculator = "64d264a2c4c9eff6e7c060c3ff0bff0b15879f0e"
 persiancalendar-calendar = "6e54d1ce5044bf751ed1c0ef8faa9c4a95b55ee3"
 persiancalendar-praytimes = "619fd6fa2b61fea91f266b7c6d37dba48a6138df"
 persiancalendar-qr = "58da9a077e1acc2ba80b43635533117fea462c7b"
+slack-compose-lint-checks = "1.4.2"
 work-manager = "2.11.1"
 watchface-complications-data-source-ktx = "1.2.1"
 wear-compose = "1.5.6"
@@ -60,6 +62,7 @@ junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engi
 junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit5" }
 junit-platform-runner = { group = "org.junit.platform", name = "junit-platform-runner", version.ref = "junit-runner" }
 kotlinpoet = { group = "com.squareup", name = "kotlinpoet", version.ref = "kotlinpoet" }
+kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm", version.ref = "kotlinx-html-jvm" }
@@ -73,6 +76,7 @@ persiancalendar-calculator = { group = "com.github.persian-calendar", name = "ca
 persiancalendar-calendar = { group = "com.github.persian-calendar", name = "calendar", version.ref = "persiancalendar-calendar" }
 persiancalendar-praytimes = { group = "com.github.persian-calendar", name = "praytimes", version.ref = "persiancalendar-praytimes" }
 persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", version.ref = "persiancalendar-qr" }
+slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }

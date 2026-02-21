@@ -22,7 +22,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
 @Composable
-fun ConverterScreen(todayJdn: Jdn) {
+fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
     val localeUtils = LocaleUtils()
     val today = listOf(todayJdn.toPersianDate(), todayJdn.toCivilDate(), todayJdn.toIslamicDate())
 
@@ -69,7 +69,7 @@ fun ConverterScreen(todayJdn: Jdn) {
         Jdn(date)
     }
 
-    ScreenScaffold {
+    ScreenScaffold(modifier) {
         val pickerStates = listOf(
             calendarPickerState,
             dayPickerState,

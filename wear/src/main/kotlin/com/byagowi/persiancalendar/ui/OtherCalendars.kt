@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,75 +19,78 @@ import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 
 @Composable
-fun BoxScope.OtherCalendars(
+fun OtherCalendars(
     localeUtils: LocaleUtils,
     day: Jdn,
+    modifier: Modifier = Modifier,
     onTop: Boolean = false,
     withWeekDayName: Boolean = true,
     calendarIndex: Int = 0,
 ) {
-    val weekDayName = localeUtils.weekDayName(day)
+    Box(modifier) {
+        val weekDayName = localeUtils.weekDayName(day)
 
-    val firstText = localeUtils.format(
-        when (calendarIndex) {
-            0 -> day.toCivilDate()
-            1 -> day.toPersianDate()
-            else -> day.toPersianDate()
-        },
-    )
-    val secondText = localeUtils.format(
-        when (calendarIndex) {
-            0 -> day.toIslamicDate()
-            1 -> day.toIslamicDate()
-            else -> day.toCivilDate()
-        },
-    )
-    val weekDayColor = MaterialTheme.colorScheme.primaryDim
-    val othersColor = MaterialTheme.colorScheme.secondaryDim
-    val isRound = LocalConfiguration.current.isScreenRound
-    val nonCurvedStyle = MaterialTheme.typography.bodySmall
-    if (isRound || onTop) {
-        val curvedStyle = MaterialTheme.typography.arcSmall.copy(
-            fontSize = with(LocalDensity.current) { 12.dp.toPx().toSp() },
+        val firstText = localeUtils.format(
+            when (calendarIndex) {
+                0 -> day.toCivilDate()
+                1 -> day.toPersianDate()
+                else -> day.toPersianDate()
+            },
         )
-        if (withWeekDayName) {
-            if (isRound) {
-                CurvedLayout(
-                    anchor = 90f,
-                    angularDirection = CurvedDirection.Angular.CounterClockwise,
-                ) { curvedText(text = weekDayName, style = curvedStyle, color = weekDayColor) }
-            } else Text(
+        val secondText = localeUtils.format(
+            when (calendarIndex) {
+                0 -> day.toIslamicDate()
+                1 -> day.toIslamicDate()
+                else -> day.toCivilDate()
+            },
+        )
+        val weekDayColor = MaterialTheme.colorScheme.primaryDim
+        val othersColor = MaterialTheme.colorScheme.secondaryDim
+        val isRound = LocalConfiguration.current.isScreenRound
+        val nonCurvedStyle = MaterialTheme.typography.bodySmall
+        if (isRound || onTop) {
+            val curvedStyle = MaterialTheme.typography.arcSmall.copy(
+                fontSize = with(LocalDensity.current) { 12.dp.toPx().toSp() },
+            )
+            if (withWeekDayName) {
+                if (isRound) {
+                    CurvedLayout(
+                        anchor = 90f,
+                        angularDirection = CurvedDirection.Angular.CounterClockwise,
+                    ) { curvedText(text = weekDayName, style = curvedStyle, color = weekDayColor) }
+                } else Text(
+                    weekDayName,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(top = 20.dp),
+                    color = weekDayColor,
+                    style = nonCurvedStyle,
+                )
+            }
+            CurvedLayout(
+                anchor = if (onTop) 315f else 45f,
+                angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else CurvedDirection.Angular.CounterClockwise,
+            ) { curvedText(text = firstText, style = curvedStyle, color = othersColor) }
+            CurvedLayout(
+                anchor = if (onTop) 225f else 135f,
+                angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else CurvedDirection.Angular.CounterClockwise,
+            ) { curvedText(text = secondText, style = curvedStyle, color = othersColor) }
+        } else {
+            if (withWeekDayName) Text(
                 weekDayName,
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
+                    .align(Alignment.TopCenter)
                     .padding(top = 20.dp),
                 color = weekDayColor,
                 style = nonCurvedStyle,
             )
-        }
-        CurvedLayout(
-            anchor = if (onTop) 315f else 45f,
-            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = firstText, style = curvedStyle, color = othersColor) }
-        CurvedLayout(
-            anchor = if (onTop) 225f else 135f,
-            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = secondText, style = curvedStyle, color = othersColor) }
-    } else {
-        if (withWeekDayName) Text(
-            weekDayName,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 20.dp),
-            color = weekDayColor,
-            style = nonCurvedStyle,
-        )
-        Column(
-            Modifier.align(Alignment.BottomCenter),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(firstText, color = othersColor, style = nonCurvedStyle)
-            Text(secondText, color = othersColor, style = nonCurvedStyle)
+            Column(
+                Modifier.align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(firstText, color = othersColor, style = nonCurvedStyle)
+                Text(secondText, color = othersColor, style = nonCurvedStyle)
+            }
         }
     }
 }

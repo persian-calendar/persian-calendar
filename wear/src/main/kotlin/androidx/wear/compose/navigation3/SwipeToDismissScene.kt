@@ -183,9 +183,9 @@ internal class SwipeToDismissScene<T : Any>(
 @Composable
 private fun <T : Any> BoxedStackEntryContent(
     entry: NavEntry<T>?,
-    modifier: Modifier = Modifier,
     layerColor: Color,
     animatable: Animatable<Float, AnimationVector1D>,
+    modifier: Modifier = Modifier,
 ) {
     if (entry != null) {
         val isRoundDevice = isRoundDevice()

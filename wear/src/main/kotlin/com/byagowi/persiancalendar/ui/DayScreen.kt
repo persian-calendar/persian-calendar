@@ -25,12 +25,17 @@ import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
 
 @Composable
-fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
+fun DayScreen(
+    day: Jdn,
+    localeUtils: LocaleUtils,
+    preferences: Preferences?,
+    modifier: Modifier = Modifier,
+) {
     val persianDate = day.toPersianDate()
     val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
     val events = getEventsOfDay(enabledEvents, day.toCivilDate())
     val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
-    ScreenScaffold(scrollState = scrollState) {
+    ScreenScaffold(scrollState = scrollState, modifier = modifier) {
         ScalingLazyColumn(
             state = scrollState,
             modifier = Modifier.fillMaxSize(),
@@ -53,8 +58,8 @@ fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
             }
             items(events) { EventView(it) }
         }
-        Box(
-            Modifier
+        OtherCalendars(
+            modifier = Modifier
                 .scrollAway(
                     scrollInfoProvider = ScrollInfoProvider(scrollState),
                     screenStage = {
@@ -62,13 +67,10 @@ fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
                     },
                 )
                 .fillMaxSize(),
-        ) {
-            OtherCalendars(
-                localeUtils = localeUtils,
-                day = day,
-                withWeekDayName = events.size < 2,
-                onTop = true,
-            )
-        }
+            localeUtils = localeUtils,
+            day = day,
+            withWeekDayName = events.size < 2,
+            onTop = true,
+        )
     }
 }

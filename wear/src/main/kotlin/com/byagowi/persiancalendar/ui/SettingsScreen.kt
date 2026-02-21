@@ -42,9 +42,12 @@ import com.byagowi.persiancalendar.requestTileUpdate
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen(preferences: Preferences?) {
+fun SettingsScreen(
+    preferences: Preferences?,
+    modifier: Modifier = Modifier,
+) {
     val scrollState = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = scrollState) {
+    ScreenScaffold(scrollState = scrollState, modifier = modifier) {
         val context = LocalContext.current
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         val coroutineScope = rememberCoroutineScope()
@@ -153,7 +156,7 @@ val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
-fun SettingsPreview() {
+private fun SettingsPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         AppScaffold { SettingsScreen(null) }
     }

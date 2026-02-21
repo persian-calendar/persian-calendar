@@ -25,9 +25,10 @@ fun UtilitiesScreen(
     navigateToSettings: () -> Unit,
     navigateToCalendar: () -> Unit,
     navigateToConverter: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScalingLazyListState()
-    ScreenScaffold(scrollState = scrollState) {
+    ScreenScaffold(scrollState = scrollState, modifier = modifier) {
         ScalingLazyColumn(state = scrollState) {
             item { ListHeader { Text("ابزارها") } }
             items(

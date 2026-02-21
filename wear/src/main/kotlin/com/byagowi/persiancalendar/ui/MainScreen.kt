@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -57,9 +56,11 @@ fun MainScreen(
     navigateToDay: (Jdn) -> Unit,
     preferences: Preferences?,
     today: Jdn,
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
+        modifier = modifier,
         scrollState = scrollState,
         edgeButton = {
             EdgeButton(
@@ -68,14 +69,18 @@ fun MainScreen(
             ) { Icon(Icons.Default.Construction, contentDescription = "ابزارها") }
         },
     ) {
-        Box(
-            Modifier.scrollAway(
+        OtherCalendars(
+            modifier = Modifier.scrollAway(
                 scrollInfoProvider = ScrollInfoProvider(scrollState),
                 screenStage = {
                     if (scrollState.canScrollBackward) ScreenStage.Scrolling else ScreenStage.Idle
                 },
             ),
-        ) { OtherCalendars(localeUtils, today, onTop = true, withWeekDayName = false) }
+            localeUtils = localeUtils,
+            day = today,
+            onTop = true,
+            withWeekDayName = false,
+        )
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarningDialog by rememberSaveable {
             val currentYear = today.toPersianDate().year
@@ -109,13 +114,13 @@ fun MainScreen(
 }
 
 @Composable
-fun EventView(it: Entry) {
+fun EventView(it: Entry, modifier: Modifier = Modifier) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val isHoliday = it.type is EntryType.Holiday
     EventButton(
         onClick = { isExpanded = !isExpanded },
         isHoliday = isHoliday,
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 8.dp)
             .fillMaxWidth(),
     ) {
@@ -144,7 +149,7 @@ fun EventView(it: Entry) {
 private fun EventButton(
     onClick: () -> Unit,
     isHoliday: Boolean,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     if (isHoliday) Button(onClick, modifier) { content() }
@@ -153,7 +158,7 @@ private fun EventButton(
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
-fun MainPreview() {
+private fun MainPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         val today = remember { Jdn.today() }
         AppScaffold { MainScreen(LocaleUtils(), {}, {}, null, today) }

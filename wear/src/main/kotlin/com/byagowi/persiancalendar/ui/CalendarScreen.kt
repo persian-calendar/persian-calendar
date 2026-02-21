@@ -42,9 +42,10 @@ fun CalendarScreen(
     today: Jdn,
     localeUtils: LocaleUtils,
     preferences: Preferences?,
+    modifier: Modifier = Modifier,
     navigateToDay: (Jdn) -> Unit,
 ) {
-    ScreenScaffold {
+    ScreenScaffold(modifier) {
         val weekStartJdn = today - ((today.value + 2) % 7).toInt()
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
