@@ -550,7 +550,7 @@ private abstract class BaseSensorListener : SensorEventListener {
         val angle = if (isStopped) -getDeclination else value + orientation
         if (!isStopped) checkIfA11yAnnounceIsNeeded(angle)
         azimuth = lowPass(angle, azimuth)
-        setAngle(azimuth)
+        setAngle(azimuth.let { if (it.isFinite()) it else 0f })
     }
 
     /**
