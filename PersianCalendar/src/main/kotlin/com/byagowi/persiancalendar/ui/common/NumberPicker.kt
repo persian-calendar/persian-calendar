@@ -249,10 +249,10 @@ fun NumberPicker(
 
 @Composable
 fun NumberEdit(
+    initialValue: Int,
+    isValid: (Int) -> Boolean,
     dismissNumberEdit: () -> Unit,
     pendingConfirms: SnapshotStateList<() -> Unit>,
-    isValid: (Int) -> Boolean,
-    initialValue: Int,
     modifier: Modifier = Modifier,
     onValueChange: (Int) -> Unit,
 ) {
