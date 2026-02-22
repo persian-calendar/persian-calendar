@@ -199,7 +199,7 @@ fun SharedTransitionScope.LevelScreen(
 
     Box(Modifier.fillMaxSize()) {
         ShrinkingFloatingActionButton(
-            Modifier
+            modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 72.dp),
             isVisible = isFullscreen,
@@ -230,11 +230,11 @@ private fun Angles(
 
 @Composable
 private fun ShrinkingFloatingActionButton(
-    modifier: Modifier,
     isVisible: Boolean,
     action: () -> Unit,
     icon: ImageVector,
     title: String,
+    modifier: Modifier = Modifier,
 ) {
     AnimatedVisibility(
         visible = isVisible,

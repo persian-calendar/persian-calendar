@@ -334,7 +334,10 @@ private fun getItemIndexForOffset(
 }
 
 @Composable
-private fun Label(text: String, modifier: Modifier) {
+private fun Label(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
         Text(
             text = text,

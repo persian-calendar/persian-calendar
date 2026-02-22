@@ -759,9 +759,9 @@ private fun Details(
     tabs: ImmutableList<DetailsTab>,
     pagerState: PagerState,
     contentMinHeight: Dp,
-    modifier: Modifier,
     bottomPadding: Dp,
     isOnlyEventsTab: Boolean,
+    modifier: Modifier = Modifier,
     scrollableTabs: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }

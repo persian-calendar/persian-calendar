@@ -585,7 +585,6 @@ private fun SharedTransitionScope.TimeArrow(
 
 @Composable
 private fun SharedTransitionScope.SolarDisplay(
-    modifier: Modifier,
     scale: Animatable<Float, AnimationVector1D>,
     isScaled: Boolean,
     offsetX: Animatable<Float, AnimationVector1D>,
@@ -596,6 +595,7 @@ private fun SharedTransitionScope.SolarDisplay(
     onModeChange: (AstronomyMode) -> Unit,
     isTropical: Boolean,
     navigateToMap: (time: Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
         val solarDraw = LocalResources.current.let { remember(it) { SolarDraw(it) } }
@@ -733,12 +733,12 @@ private fun SharedTransitionScope.SolarDisplay(
 
 @Composable
 private fun Header(
-    modifier: Modifier,
     astronomyState: AstronomyState,
     jdn: Jdn,
     mode: AstronomyMode,
     isTropical: Boolean,
     timeInMillis: Animatable<Long, AnimationVector1D>,
+    modifier: Modifier = Modifier,
 ) {
     val sunZodiac = if (isTropical) Zodiac.fromTropical(astronomyState.sun.elon)
     else Zodiac.fromIau(astronomyState.sun.elon)
@@ -812,7 +812,7 @@ private fun Header(
                         val title = stringResource(titleId)
                         val value = stringResource(zodiac.titleId)
                         Cell(
-                            Modifier
+                            modifier = Modifier
                                 .semantics(mergeDescendants = true) {
                                     this.contentDescription = title + spacedColon + value
                                 }
@@ -861,7 +861,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: Animatable<Long, AnimationVector1D>)
                     val title = stringResource(seasonsOrder[cell + row * 2].nameStringId)
                     val (time, formattedTime) = equinoxes[cell + row * 2]
                     Cell(
-                        Modifier
+                        modifier = Modifier
                             .clip(MaterialTheme.shapes.small)
                             .semantics(true) {
                                 this.contentDescription = title + spacedComma + formattedTime
@@ -905,10 +905,10 @@ private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState, solar
 @Stable
 @Composable
 private fun Cell(
-    modifier: Modifier,
     color: Color,
     title: String,
     value: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier

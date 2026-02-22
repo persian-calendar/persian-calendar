@@ -53,7 +53,7 @@ fun EarthView(
     isTropical: Boolean,
     state: AstronomyState,
     isScaled: Boolean,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     rotationalMinutesChange: (Int) -> Unit,
 ) {
     val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)

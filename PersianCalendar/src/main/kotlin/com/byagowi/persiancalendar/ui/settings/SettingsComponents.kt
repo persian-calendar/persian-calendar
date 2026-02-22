@@ -358,7 +358,6 @@ fun SettingsHelp(title: String) {
     SettingsLayout(
         title = title,
         summary = null,
-        modifier = Modifier,
         widget = {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.Help,
@@ -374,7 +373,7 @@ fun SettingsHelp(title: String) {
 fun SettingsLayout(
     title: String,
     summary: String?,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     extraWidget: (@Composable () -> Unit)? = null,
     widget: (@Composable () -> Unit)? = null,
 ) {

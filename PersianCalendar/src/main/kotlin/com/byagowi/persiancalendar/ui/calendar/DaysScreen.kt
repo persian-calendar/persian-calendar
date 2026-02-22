@@ -564,6 +564,7 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
     return events.indices.map { EventDivision(events[it], colors[it], columnsCount[it]) }
 }
 
+@SuppressLint("ComposeModifierWithoutDefault")
 @Composable
 private fun DaysView(
     setAddAction: (() -> Unit) -> Unit,

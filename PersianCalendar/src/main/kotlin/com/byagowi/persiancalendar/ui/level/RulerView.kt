@@ -18,7 +18,11 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 
 @Composable
-fun RulerView(modifier: Modifier, cmInchFlip: Boolean, isFullscreen: Boolean) {
+fun RulerView(
+    cmInchFlip: Boolean,
+    isFullscreen: Boolean,
+    modifier: Modifier = Modifier,
+) {
     // xdpi/ydpi doesn't swap on screen rotation so a logic like this is needed though it isn't
     // obvious to me yet whether this is a correct one.
     val dpi = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
