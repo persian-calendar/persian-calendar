@@ -44,6 +44,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.zIndex
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -244,7 +245,7 @@ internal class ReorderableScopeImpl(
  */
 @Composable
 fun <T> ReorderableColumn(
-    list: List<T>,
+    list: ImmutableList<T>,
     onSettle: (fromIndex: Int, toIndex: Int) -> Unit,
     modifier: Modifier = Modifier,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,

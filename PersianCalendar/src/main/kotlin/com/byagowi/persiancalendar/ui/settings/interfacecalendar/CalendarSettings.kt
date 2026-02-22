@@ -97,6 +97,8 @@ import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
 
 @Composable
@@ -217,8 +219,8 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         SettingsSingleSelect(
             key = PREF_ISLAMIC_OFFSET,
             // One is formatted with locale's numerals and the other used for keys isn't
-            entries = (-2..2).map { numeral.format(it) },
-            entryValues = (-2..2).map { it.toString() },
+            entries = (-2..2).map { numeral.format(it) }.toImmutableList(),
+            entryValues = (-2..2).map { it.toString() }.toImmutableList(),
             persistedValue = islamicCalendarOffset.toString(),
             dialogTitleResId = R.string.islamic_offset,
             title = stringResource(R.string.islamic_offset),
@@ -227,8 +229,8 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     }
     val weekStart = weekStart
     val weekDays = WeekDay.entries.map { it + weekStart.ordinal }
-    val weekDaysTitles = weekDays.map { it.title }
-    val weekDaysValues = weekDays.map { it.ordinal.toString() }
+    val weekDaysTitles = weekDays.map { it.title }.toImmutableList()
+    val weekDaysValues = weekDays.map { it.ordinal.toString() }.toImmutableList()
     SettingsSingleSelect(
         key = PREF_WEEK_START,
         entries = weekDaysTitles,
@@ -241,7 +243,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         key = PREF_WEEK_ENDS,
         entries = weekDaysTitles,
         entryValues = weekDaysValues,
-        persistedSet = weekEnds.map { it.ordinal.toString() }.toSet(),
+        persistedSet = weekEnds.map { it.ordinal.toString() }.toImmutableSet(),
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
     )

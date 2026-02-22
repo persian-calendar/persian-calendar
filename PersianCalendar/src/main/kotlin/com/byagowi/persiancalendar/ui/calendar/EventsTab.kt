@@ -118,6 +118,8 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
@@ -275,7 +277,7 @@ private val String.directionality
 
 @Composable
 fun DayEvents(
-    events: List<CalendarEvent<*>>,
+    events: ImmutableList<CalendarEvent<*>>,
     navigateToHolidaysSettings: ((String?) -> Unit)? = null,
     refreshCalendar: () -> Unit,
 ) {
@@ -686,7 +688,7 @@ fun readEvents(
     jdn: Jdn,
     now: Long,
     deviceEvents: DeviceCalendarEventsStore,
-): List<CalendarEvent<*>> {
+): ImmutableList<CalendarEvent<*>> {
     val resources = LocalResources.current
     val eventsRepository = eventsRepository
     val language = language
@@ -709,10 +711,10 @@ fun readEvents(
             }.joinToString("\n")
             val remainedTime = equinoxTime - now
             val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, null, remainedTime)
-            return listOf(event) + events
+            return (listOf(event) + events).toImmutableList()
         }
     }
-    return events
+    return events.toImmutableList()
 }
 
 fun sortEvents(events: List<CalendarEvent<*>>, language: Language): List<CalendarEvent<*>> {

@@ -80,6 +80,7 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ColumnScope.AthanSettings(destination: String?) {
@@ -89,8 +90,8 @@ fun ColumnScope.AthanSettings(destination: String?) {
     AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
             key = PREF_PRAY_TIME_METHOD,
-            entries = CalculationMethod.entries.map { it.title(resources) },
-            entryValues = CalculationMethod.entries.map { it.name },
+            entries = CalculationMethod.entries.map { it.title(resources) }.toImmutableList(),
+            entryValues = CalculationMethod.entries.map { it.name }.toImmutableList(),
             persistedValue = calculationMethod.name,
             dialogTitleResId = R.string.pray_methods_calculation,
             title = stringResource(R.string.pray_methods),
@@ -99,8 +100,9 @@ fun ColumnScope.AthanSettings(destination: String?) {
     AnimatedVisibility(coordinates?.isHighLatitude == true) {
         SettingsSingleSelect(
             key = PREF_HIGH_LATITUDES_METHOD,
-            entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
-            entryValues = HighLatitudesMethod.entries.map { it.name },
+            entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) }
+                .toImmutableList(),
+            entryValues = HighLatitudesMethod.entries.map { it.name }.toImmutableList(),
             persistedValue = highLatitudesMethod.name,
             dialogTitleResId = R.string.high_latitudes_method,
             title = stringResource(R.string.high_latitudes_method),

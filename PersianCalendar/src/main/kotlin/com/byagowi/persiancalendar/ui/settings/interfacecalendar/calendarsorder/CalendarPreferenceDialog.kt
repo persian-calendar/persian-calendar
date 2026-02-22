@@ -52,6 +52,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.safePerformHapticFeedback
 import com.byagowi.persiancalendar.utils.preferences
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.random.Random
 
 @Composable
@@ -99,7 +100,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         }
         ReorderableColumn(
             modifier = Modifier.fillMaxSize(),
-            list = list,
+            list = list.toImmutableList(),
             onSettle = ::onSettle,
             onMove = {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {

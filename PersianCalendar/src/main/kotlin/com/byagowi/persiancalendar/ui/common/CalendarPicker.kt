@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.min
@@ -57,7 +58,7 @@ import kotlin.math.min
 @Composable
 fun CalendarPicker(
     value: Calendar,
-    items: List<Calendar>,
+    items: ImmutableList<Calendar>,
     backgroundColor: Color,
     modifier: Modifier = Modifier,
     betterToUseShortCalendarName: Boolean = false,
@@ -83,7 +84,7 @@ fun CalendarPicker(
 private fun <T> SegmentedButtonItemsPicker(
     value: T,
     onValueChange: (T) -> Unit,
-    items: List<T>,
+    items: ImmutableList<T>,
     backgroundColor: Color,
     height: Dp,
     modifier: Modifier = Modifier,

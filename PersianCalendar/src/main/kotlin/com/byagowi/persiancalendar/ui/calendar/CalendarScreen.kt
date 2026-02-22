@@ -225,6 +225,10 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
@@ -298,7 +302,7 @@ fun SharedTransitionScope.CalendarScreen(
     }
     val isOnlyEventsTab = detailsTabs.size == 1
 
-    val swipeUpActions = mapOf(
+    val swipeUpActions = persistentMapOf(
         SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
         SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
         SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
@@ -327,7 +331,7 @@ fun SharedTransitionScope.CalendarScreen(
         Animatable(1f)
     } else null
 
-    val swipeDownActions = mapOf(
+    val swipeDownActions = persistentMapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
         SwipeDownAction.YearView to {
             searchTerm = null
@@ -688,12 +692,12 @@ private fun SharedTransitionScope.detailsTabs(
     today: Jdn,
     now: Long,
     fabPlaceholderHeight: Dp?,
-): List<DetailsTab> {
+): ImmutableList<DetailsTab> {
     var removeThirdTab by rememberSaveable { mutableStateOf(false) }
     val hasTimesTab = enableTimesTab() && !removeThirdTab
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
-    return listOfNotNull(
+    return listOfNotNull<DetailsTab>(
         if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
             CalendarsTab(
                 selectedDay = selectedDay,
@@ -745,14 +749,14 @@ private fun SharedTransitionScope.detailsTabs(
                 today = today,
             )
         } else null,
-    )
+    ).toImmutableList()
 }
 
 @Composable
 private fun Details(
     selectedDay: Jdn,
     bringDay: BringDay,
-    tabs: List<DetailsTab>,
+    tabs: ImmutableList<DetailsTab>,
     pagerState: PagerState,
     contentMinHeight: Dp,
     modifier: Modifier,
@@ -839,7 +843,7 @@ private fun SharedTransitionScope.CalendarsTab(
             jdn = selectedDay,
             today = today,
             selectedCalendar = mainCalendar,
-            shownCalendars = enabledCalendars,
+            shownCalendars = enabledCalendars.toImmutableList(),
             isExpanded = isExpanded,
             navigateToAstronomy = navigateToAstronomy,
         )
@@ -1020,8 +1024,8 @@ private fun Search(
 @Composable
 private fun SharedTransitionScope.Toolbar(
     openNavigationRail: () -> Unit,
-    swipeUpActions: Map<SwipeUpAction, () -> Unit>,
-    swipeDownActions: Map<SwipeDownAction, () -> Unit>,
+    swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
+    swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
     openSearch: () -> Unit,
     yearViewCalendar: Calendar?,
     onYearViewCalendarChange: (Calendar?) -> Unit,
@@ -1259,8 +1263,8 @@ private fun SharedTransitionScope.Toolbar(
 
 @Composable
 private fun SharedTransitionScope.Menu(
-    swipeUpActions: Map<SwipeUpAction, () -> Unit>,
-    swipeDownActions: Map<SwipeDownAction, () -> Unit>,
+    swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
+    swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
     isLandscape: Boolean,
     bringDay: BringDay,
     selectedDay: Jdn,

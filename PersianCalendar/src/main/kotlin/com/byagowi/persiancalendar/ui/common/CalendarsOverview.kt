@@ -114,6 +114,7 @@ import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -122,7 +123,7 @@ fun SharedTransitionScope.CalendarsOverview(
     jdn: Jdn,
     today: Jdn,
     selectedCalendar: Calendar,
-    shownCalendars: List<Calendar>,
+    shownCalendars: ImmutableList<Calendar>,
     isExpanded: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
@@ -459,7 +460,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
 
 @Composable
 private fun CalendarsFlow(
-    calendarsToShow: List<Calendar>,
+    calendarsToShow: ImmutableList<Calendar>,
     jdn: Jdn,
     isExpanded: Boolean,
     numeral: Numeral,

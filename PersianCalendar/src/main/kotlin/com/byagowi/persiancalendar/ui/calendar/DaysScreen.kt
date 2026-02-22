@@ -152,6 +152,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.toCivilDate
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import kotlin.math.abs
@@ -668,9 +669,11 @@ private fun DaysView(
                         .padding(horizontal = 24.dp),
                 )
                 Column(Modifier.animateContentSize(appContentSizeAnimationSpec)) {
-                    DayEvents(eventsWithoutTime[0].let { if (isExpanded) it else it.take(3) }) {
-                        refreshCalendar()
-                    }
+                    DayEvents(
+                        eventsWithoutTime[0]
+                            .let { if (isExpanded) it else it.take(3) }
+                            .toImmutableList(),
+                    ) { refreshCalendar() }
                 }
                 if (eventsWithoutTime[0].size > 3) {
                     Spacer(Modifier.height(4.dp))

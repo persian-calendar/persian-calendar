@@ -106,6 +106,8 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.calculator.eval
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
@@ -287,6 +289,7 @@ private fun TimeZones(
     }
     val zones = remember {
         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
+            .toImmutableList()
     }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val difference = run {
@@ -580,7 +583,7 @@ private fun ColumnScope.ConverterAndDistance(
         Column(Modifier.weight(1f)) {
             CalendarPicker(
                 value = calendar,
-                items = calendarsList,
+                items = calendarsList.toImmutableList(),
                 backgroundColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             ) { calendar = it }
@@ -606,7 +609,7 @@ private fun ColumnScope.ConverterAndDistance(
                         jdn = selectedDate,
                         today = today,
                         selectedCalendar = calendar,
-                        shownCalendars = calendarsList - calendar,
+                        shownCalendars = (calendarsList - calendar).toImmutableList(),
                         isExpanded = isExpanded,
                         navigateToAstronomy = navigateToAstronomy,
                     )
@@ -619,7 +622,7 @@ private fun ColumnScope.ConverterAndDistance(
     } else {
         CalendarPicker(
             value = calendar,
-            items = calendarsList,
+            items = calendarsList.toImmutableList(),
             backgroundColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) { calendar = it }
@@ -651,7 +654,7 @@ private fun ColumnScope.ConverterAndDistance(
                             jdn = selectedDate,
                             today = today,
                             selectedCalendar = calendar,
-                            shownCalendars = calendarsList - calendar,
+                            shownCalendars = (calendarsList - calendar).toImmutableList(),
                             isExpanded = isExpanded,
                             navigateToAstronomy = navigateToAstronomy,
                         )
@@ -713,7 +716,7 @@ private fun TimeZoneClock(
     timeZone: TimeZone,
     onTimeZoneChange: (TimeZone) -> Unit,
     clock: MutableLongState,
-    zones: List<TimeZone>,
+    zones: ImmutableList<TimeZone>,
     pendingConfirms: SnapshotStateList<() -> Unit>,
     modifier: Modifier = Modifier,
 ) {

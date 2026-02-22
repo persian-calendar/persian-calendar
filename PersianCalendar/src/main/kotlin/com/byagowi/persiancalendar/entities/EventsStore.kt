@@ -2,12 +2,15 @@ package com.byagowi.persiancalendar.entities
 
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import org.jetbrains.annotations.VisibleForTesting
 
 @JvmInline
 value class EventsStore<T : CalendarEvent<out AbstractDate>>
-private constructor(private val store: Map<Int, List<T>>) {
-    constructor(eventsList: List<T>) : this(eventsList.groupBy { hash(it.date) })
+private constructor(private val store: ImmutableMap<Int, List<T>>) {
+    constructor(eventsList: List<T>) : this(eventsList.groupBy { hash(it.date) }.toImmutableMap())
 
     private fun getEventsEntry(date: AbstractDate) = store[hash(date)]?.filter {
         // dayOfMonth and month are already checked by hashing so only check year equality here
@@ -33,7 +36,7 @@ private constructor(private val store: Map<Int, List<T>>) {
     companion object {
         @VisibleForTesting
         fun hash(date: AbstractDate) = date.month * 100 + date.dayOfMonth
-        fun <T : CalendarEvent<out AbstractDate>> empty() = EventsStore<T>(emptyMap())
+        fun <T : CalendarEvent<out AbstractDate>> empty() = EventsStore<T>(persistentMapOf())
     }
 }
 
