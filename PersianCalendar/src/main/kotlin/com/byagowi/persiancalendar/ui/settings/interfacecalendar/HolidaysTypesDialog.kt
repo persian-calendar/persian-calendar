@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -176,64 +177,66 @@ fun CountryEvents(
     holidaysKey: String,
     nonHolidaysKey: String,
     destinationItem: String?,
+    modifier: Modifier = Modifier,
     hideFromAccessibility: Boolean = true,
 ) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .then(
-                if (hideFromAccessibility) {
-                    Modifier
-                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                        .clearAndSetSemantics {}
-                } else Modifier,
-            )
-            .clickable {
-                if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-                    enabledTypes -= holidaysKey
-                    enabledTypes -= nonHolidaysKey
-                } else {
-                    if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
-                    if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
+    Column(modifier) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .then(
+                    if (hideFromAccessibility) {
+                        Modifier.semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                            .clearAndSetSemantics {}
+                    } else Modifier,
+                )
+                .clickable {
+                    if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
+                        enabledTypes -= holidaysKey
+                        enabledTypes -= nonHolidaysKey
+                    } else {
+                        if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
+                        if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
+                    }
                 }
-            }
-            .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        TriStateCheckbox(
-            state = when {
-                holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
+                .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TriStateCheckbox(
+                state = when {
+                    holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
 
-                holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
+                    holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
 
-                else -> ToggleableState.Off
-            },
-            onClick = null,
-            modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
-        )
-        Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-        Text(
-            buildAnnotatedString {
-                append(calendarCenterName)
-                if (sourceLink.isNotEmpty()) {
-                    append(spacedComma)
-                    withLink(
-                        link = LinkAnnotation.Url(
-                            url = sourceLink,
-                            styles = TextLinkStyles(
-                                SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    textDecoration = TextDecoration.Underline,
+                    else -> ToggleableState.Off
+                },
+                onClick = null,
+                modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
+            )
+            Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
+            Text(
+                buildAnnotatedString {
+                    append(calendarCenterName)
+                    if (sourceLink.isNotEmpty()) {
+                        append(spacedComma)
+                        withLink(
+                            link = LinkAnnotation.Url(
+                                url = sourceLink,
+                                styles = TextLinkStyles(
+                                    SpanStyle(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        textDecoration = TextDecoration.Underline,
+                                    ),
                                 ),
                             ),
-                        ),
-                    ) { append(stringResource(R.string.view_source)) }
-                }
-            },
-        )
+                        ) { append(stringResource(R.string.view_source)) }
+                    }
+                },
+            )
+        }
+        IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
+        IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)
     }
-    IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
-    IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)
 }
 
 @Composable

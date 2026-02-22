@@ -134,7 +134,6 @@ android {
             "IconLocation",
             "DuplicateStrings",
             "ComposeModifierMissing",
-            "ComposeMultipleContentEmitters",
         )
     }
 }
