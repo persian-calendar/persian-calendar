@@ -296,7 +296,7 @@ fun SharedTransitionScope.CompassScreen(
                         if (BuildConfig.DEVELOPMENT) {
                             AppDropdownMenuItem({ Text("Do a rotation") }) {
                                 closeMenu()
-                                // Ugly, but is test only
+                                // Ugly, but is testing only
                                 val animator = ValueAnimator.ofFloat(0f, 1f)
                                 animator.duration = 10.seconds.inWholeMilliseconds
                                 animator.addUpdateListener {
