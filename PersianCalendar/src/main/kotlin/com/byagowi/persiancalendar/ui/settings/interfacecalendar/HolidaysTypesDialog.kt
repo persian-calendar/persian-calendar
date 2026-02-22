@@ -178,14 +178,15 @@ fun CountryEvents(
     nonHolidaysKey: String,
     destinationItem: String?,
     modifier: Modifier = Modifier,
-    hideFromAccessibility: Boolean = true,
+    // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
+    hideTheFirstRowFromAccessibility: Boolean = true,
 ) {
     Column(modifier) {
         Row(
             Modifier
                 .fillMaxWidth()
                 .then(
-                    if (hideFromAccessibility) {
+                    if (hideTheFirstRowFromAccessibility) {
                         Modifier.semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                             .clearAndSetSemantics {}
                     } else Modifier,
