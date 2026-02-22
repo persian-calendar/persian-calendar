@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="400dp"
-        android:height="400dp"
+        android:width="200dp"
+        android:height="200dp"
         android:drawable="@drawable/splash_icon"
-        android:gravity="center"
-        tools:ignore="UnusedAttribute" />
+        android:gravity="center" />
 </layer-list>
