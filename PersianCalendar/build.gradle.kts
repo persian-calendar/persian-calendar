@@ -135,7 +135,6 @@ android {
             "DuplicateStrings",
             "ComposeModifierMissing",
             "ComposeMultipleContentEmitters",
-            "ComposeUnstableReceiver",
         )
     }
 }

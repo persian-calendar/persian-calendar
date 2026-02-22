@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -15,6 +16,7 @@ import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 
+@Stable
 data class ShiftWorkSettings(
     val recurs: Boolean,
     val startingJdn: Jdn?,

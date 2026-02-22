@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Paint
 import android.graphics.RectF
@@ -56,7 +57,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -880,7 +880,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: Animatable<Long, AnimationVector1D>)
     }
 }
 
-@Stable
+@SuppressLint("ComposeUnstableReceiver")
 @Composable
 private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState, solarDraw: SolarDraw) {
     Box(
@@ -902,7 +902,7 @@ private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState, solar
     )
 }
 
-@Stable
+@SuppressLint("ComposeUnstableReceiver")
 @Composable
 private fun Cell(
     color: Color,

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
+import android.annotation.SuppressLint
 import android.widget.RemoteViews
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.preferences
 import java.util.GregorianCalendar
 
+@SuppressLint("ComposeUnstableReceiver")
 class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         return create1x1RemoteViews(
@@ -44,6 +46,7 @@ class Widget1x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         val jdn = Jdn.today()
@@ -68,6 +71,7 @@ class Widget4x1ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         val jdn = Jdn.today()
@@ -93,6 +97,7 @@ class Widget2x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         val jdn = Jdn.today()
@@ -119,6 +124,7 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         val today = Jdn.today()
@@ -133,6 +139,7 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews {
         val prayTimes = coordinates?.calculatePrayTimes()
@@ -148,6 +155,7 @@ class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews =
         createMapRemoteViews(this, size, System.currentTimeMillis())
@@ -158,6 +166,7 @@ class WidgetMapConfigurationActivity : BaseWidgetConfigurationActivity() {
     }
 }
 
+@SuppressLint("ComposeUnstableReceiver")
 class WidgetMonthViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun preview(size: DpSize): RemoteViews =
         createMonthViewRemoteViews(this, size, Jdn.today())
