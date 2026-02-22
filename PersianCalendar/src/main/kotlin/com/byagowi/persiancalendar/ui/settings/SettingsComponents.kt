@@ -168,10 +168,10 @@ private const val widgetSize = 52f
 
 @Composable
 fun SettingsColor(
+    key: String,
+    isBackgroundPick: Boolean,
     title: String,
     summary: String? = null,
-    isBackgroundPick: Boolean,
-    key: String,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current

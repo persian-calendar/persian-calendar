@@ -30,10 +30,10 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 
 @Composable
 fun ColumnScope.EncourageActionLayout(
-    modifier: Modifier = Modifier,
     header: String,
-    acceptButton: String = stringResource(R.string.settings),
+    modifier: Modifier = Modifier,
     hideOnAccept: Boolean = true,
+    acceptButton: String = stringResource(R.string.settings),
     discardAction: () -> Unit = {},
     acceptAction: () -> Unit,
 ) {

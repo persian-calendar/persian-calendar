@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.LayoutDirection
 
 @Composable
 fun ExpandArrow(
-    modifier: Modifier = Modifier,
     isExpanded: Boolean,
+    modifier: Modifier = Modifier,
     tint: Color = LocalContentColor.current,
     contentDescription: String? = null,
     isLineStart: Boolean = false,

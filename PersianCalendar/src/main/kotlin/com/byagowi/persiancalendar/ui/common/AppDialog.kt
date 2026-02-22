@@ -88,8 +88,8 @@ fun BaseAppDialog(
 
 @Composable
 fun AppDialog(
-    title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
+    title: (@Composable () -> Unit)? = null,
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,
@@ -115,8 +115,8 @@ fun AppDialog(
 
 @Composable
 fun AppDialogWithLazyColumn(
-    title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
+    title: (@Composable () -> Unit)? = null,
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,

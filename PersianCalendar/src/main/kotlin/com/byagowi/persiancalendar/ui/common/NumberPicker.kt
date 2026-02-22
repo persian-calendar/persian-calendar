@@ -75,15 +75,15 @@ import kotlin.math.roundToInt
 // MIT licensed
 @Composable
 fun NumberPicker(
+    value: Int,
+    range: IntRange,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     modifier: Modifier = Modifier,
     label: (Int) -> String = numeral::format,
-    range: IntRange,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
     onPreviousLabel: String? = null,
     onNextLabel: String? = null,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
-    value: Int,
     onValueChange: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
@@ -251,9 +251,9 @@ fun NumberPicker(
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
     pendingConfirms: SnapshotStateList<() -> Unit>,
-    modifier: Modifier = Modifier,
     isValid: (Int) -> Boolean,
     initialValue: Int,
+    modifier: Modifier = Modifier,
     onValueChange: (Int) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current

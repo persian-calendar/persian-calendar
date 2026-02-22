@@ -189,12 +189,12 @@ fun ColorPickerDialog(
 
 @Composable
 fun ColorBox(
-    modifier: Modifier = Modifier,
     color: Color,
     size: Dp,
     shape: Shape,
-    background: Brush = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) },
     outlineWidth: Dp,
+    modifier: Modifier = Modifier,
+    background: Brush = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) },
     outlineColor: Color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
     onClick: (() -> Unit)? = null,
     content: (@Composable BoxScope.() -> Unit)? = null,

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -585,8 +586,8 @@ private fun DaysView(
     initialScroll: Int,
     cellHeight: Dp,
     numeral: Numeral,
+    @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
-    scrollableModifier: Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current

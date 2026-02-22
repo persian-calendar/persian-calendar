@@ -213,7 +213,7 @@ fun HoroscopeDialog(timeInMillis: Long = System.currentTimeMillis(), onDismissRe
                 ),
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-            AscendantZodiac(time, it, abjad = false, isYearEquinox = false)
+            AscendantZodiac(time = time, coordinates = it, abjad = false, isYearEquinox = false)
         } ?: Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
     }
 }
@@ -480,9 +480,9 @@ private fun ColumnScope.YearHoroscopeDialogContent(
     }
     HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
     AscendantZodiac(
-        time,
-        coordinates,
-        planetaryModifier,
+        time = time,
+        coordinates = coordinates,
+        modifier = planetaryModifier,
         progress = animationProgress.value,
         abjad = abjad,
         isYearEquinox = true,
@@ -507,10 +507,10 @@ private val ascendantBodies = listOf(
 private fun AscendantZodiac(
     time: Time,
     coordinates: Coordinates,
-    modifier: Modifier = Modifier,
-    progress: Float = 1f,
     isYearEquinox: Boolean,
     abjad: Boolean,
+    modifier: Modifier = Modifier,
+    progress: Float = 1f,
 ) {
     val bodiesZodiac = ascendantBodies.map { body ->
         if (body == Body.Sun && isYearEquinox) {

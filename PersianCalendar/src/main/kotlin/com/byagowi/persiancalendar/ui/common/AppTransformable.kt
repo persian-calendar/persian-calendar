@@ -26,12 +26,12 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun Modifier.appTransformable(
-    disableHorizontalLimit: Boolean = false,
-    disableVerticalLimit: Boolean = false,
-    disablePan: Boolean = false,
     scale: Animatable<Float, AnimationVector1D>,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
+    disableHorizontalLimit: Boolean = false,
+    disableVerticalLimit: Boolean = false,
+    disablePan: Boolean = false,
     contentSize: ((canvasSize: Size) -> Size)? = null,
     onClick: ((x: Float, y: Float, canvasSize: Size) -> Unit)? = null,
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
