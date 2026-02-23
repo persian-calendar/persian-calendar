@@ -216,6 +216,14 @@ fun EarthView(
         arcRect.inset(circleInset, circleInset)
         canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
         tropicalFraction.let {}
+        run {
+            val rectSize = radius * .88f
+            textPath.rewind()
+            textPathRect.set(
+                radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize,
+            )
+            textPath.asAndroidPath().addArc(textPathRect, 180f, 180f)
+        }
         repeat(12) { index ->
             val start = zodiacRanges[index * 2]
             val end = zodiacRanges[index * 2 + 1]
@@ -228,14 +236,9 @@ fun EarthView(
                 drawLine(surfaceColor, start, end)
             }
             rotate(degrees = -(start + end) / 2 + 90) {
-//                val rectSize = radius * .88f
-//                textPath.rewind()
-//                textPathRect.set(
-//                    radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize
-//                )
-//                textPath.addArc(textPathRect, 0f, 180f)
-//                drawTextOnPath(labels[(index + 6) % 12], textPath, 0f, 0f, zodiacPaint)
-                canvas.drawText(labels[index], radius, radius * .12f, zodiacPaint)
+                canvas.drawTextOnPath(
+                    labels[index], textPath.asAndroidPath(), 0f, 0f, zodiacPaint,
+                )
                 canvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
             }
         }
