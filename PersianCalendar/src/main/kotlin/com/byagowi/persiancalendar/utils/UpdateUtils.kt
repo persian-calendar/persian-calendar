@@ -15,7 +15,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -401,8 +400,10 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
 
 private fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
     val roundPath = Path()
-    val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
-    roundPath.addRoundRect(rect, roundSize, roundSize, Path.Direction.CW)
+    roundPath.addRoundRect(
+        0f, 0f, width.toFloat(), height.toFloat(),
+        roundSize, roundSize, Path.Direction.CW,
+    )
     return roundPath
 }
 
@@ -412,9 +413,11 @@ private fun createRoundedBitmap(
     val width = size?.width?.toPx(resources) ?: 250f
     val height = size?.height?.toPx(resources) ?: 250f
     val bitmap = createBitmap(width.roundToInt(), height.roundToInt())
-    val rect = RectF(0f, 0f, width, height)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color }
-    Canvas(bitmap).drawRoundRect(rect, roundSize, roundSize, paint)
+    Canvas(bitmap).drawRoundRect(
+        0f, 0f, width, height,
+        roundSize, roundSize, paint,
+    )
     return bitmap
 }
 

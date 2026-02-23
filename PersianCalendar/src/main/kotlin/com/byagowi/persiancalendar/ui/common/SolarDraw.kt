@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import io.github.cosinekitty.astronomy.Ecliptic
@@ -52,11 +51,15 @@ class SolarDraw(resources: Resources) {
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
             val sr = r * .97f
             val arcWidth = (cos(Math.toRadians(phase)) * sr).toFloat()
-            moonRect.set(cx - sr, cy - sr, cx + sr, cy + sr)
-            moonOval.set(cx - abs(arcWidth), cy - sr, cx + abs(arcWidth), cy + sr)
             ovalPath.rewind()
-            ovalPath.arcTo(moonOval, 90f, if (arcWidth > 0) 180f else -180f)
-            ovalPath.arcTo(moonRect, 270f, 180f)
+            ovalPath.arcTo(
+                cx - abs(arcWidth), cy - sr, cx + abs(arcWidth), cy + sr,
+                90f, if (arcWidth > 0) 180f else -180f, false,
+            )
+            ovalPath.arcTo(
+                cx - sr, cy - sr, cx + sr, cy + sr,
+                270f, 180f, false,
+            )
             ovalPath.close()
             drawPath(ovalPath, moonShadowPaint)
         }
@@ -77,8 +80,6 @@ class SolarDraw(resources: Resources) {
 
     private val moonDrawable = resources.getDrawable(R.drawable.ic_moon, null)
     private val ovalPath = Path()
-    private val moonRect = RectF()
-    private val moonOval = RectF()
 
     private val moonShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x90000000.toInt()
@@ -88,17 +89,16 @@ class SolarDraw(resources: Resources) {
     private val earthDrawable = resources.getDrawable(R.drawable.ic_earth, null)
 
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
-        earthRect.set(cx - r, cy - r, cx + r, cy + r)
         earthDrawable.setBounds(
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt(),
         )
         earthDrawable.draw(canvas)
-        earthRect.inset(r / 18, r / 18)
-        val sunDegree = -sunEcliptic.elon.toFloat()
-        canvas.drawArc(earthRect, sunDegree + 90f, 180f, true, earthShadowPaint)
+        canvas.drawArc(
+            cx - r + r / 18, cy - r + r / 18, cx + r - r / 18, cy + r - r / 18,
+            -sunEcliptic.elon.toFloat() + 90f, 180f, true, earthShadowPaint,
+        )
     }
 
-    private val earthRect = RectF()
     private val earthShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x40000000
         it.style = Paint.Style.FILL_AND_STROKE

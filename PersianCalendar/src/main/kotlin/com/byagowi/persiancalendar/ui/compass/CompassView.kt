@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.annotation.ColorInt
 import androidx.compose.animation.Crossfade
@@ -212,7 +211,7 @@ class CompassView(private val resources: Resources) {
             it.rewind()
             it.moveTo(cx, cy - radius)
             it.lineTo(cx - r, cy)
-            it.arcTo(RectF(cx - r, cy - r, cx + r, cy + r), 180f, -180f)
+            it.arcTo(cx - r, cy - r, cx + r, cy + r, 180f, -180f, false)
             it.close()
         }
     }
