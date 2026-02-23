@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Configuration
 import android.graphics.Paint
-import android.graphics.RectF
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -690,7 +689,6 @@ private fun SharedTransitionScope.SolarDisplay(
 
                 AstronomyMode.SUN -> {
                     val textPath = remember { Path() }
-                    val textPathRect = remember { RectF() }
                     val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
                         stringResource(it.titleStringId) + " " + it.symbol
                     }
@@ -713,13 +711,13 @@ private fun SharedTransitionScope.SolarDisplay(
                             rotate(degrees = -ecliptic.elon.toFloat() + 90) {
                                 textPath.rewind()
                                 val rectSize = radius / 9 * (1 + i) * .95f
-                                textPathRect.set(
+                                textPath.asAndroidPath().addArc(
                                     radius - rectSize,
                                     radius - rectSize,
                                     radius + rectSize,
                                     radius + rectSize,
+                                    0f, 180f,
                                 )
-                                textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
                                 canvas.drawTextOnPath(
                                     heliocentricPlanetsTitles[i],
                                     textPath.asAndroidPath(), 0f, 0f, colorTextPaint,

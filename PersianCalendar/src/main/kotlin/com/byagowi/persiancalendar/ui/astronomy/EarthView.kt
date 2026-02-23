@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.graphics.Paint
-import android.graphics.RectF
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -60,7 +59,6 @@ fun EarthView(
     val contentColor = LocalContentColor.current
     val typeface = resolveAndroidCustomTypeface()
     val textPath = remember { Path() }
-    val textPathRect = remember { RectF() }
     val geocentricPlanetsTitles = geocentricPlanetsList.map {
         stringResource(it.titleStringId) + " " + it.symbol
     }
@@ -74,7 +72,6 @@ fun EarthView(
             it.close()
         }
     }
-    val arcRect = remember { RectF() }
     val zodiacBackgroundPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
         it.color = 0x08808080
         it.style = Paint.Style.FILL
@@ -211,27 +208,30 @@ fun EarthView(
                 )
             }
         }
-        arcRect.set(0f, 0f, 2 * radius, 2 * radius)
-        val circleInset = radius * .05f
-        arcRect.inset(circleInset, circleInset)
-        canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
+        val circleInsetStart = radius * .05f
+        val circleInsetEnd = radius * 1.95f
+        canvas.drawArc(
+            circleInsetStart, circleInsetStart, circleInsetEnd, circleInsetEnd,
+            0f, 360f, true, zodiacBackgroundPaint,
+        )
         tropicalFraction.let {}
         run {
             val rectSize = radius * .88f
             textPath.rewind()
-            textPathRect.set(
+            textPath.asAndroidPath().addArc(
                 radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize,
+                180f, 180f,
             )
-            textPath.asAndroidPath().addArc(textPathRect, 180f, 180f)
         }
         repeat(12) { index ->
             val start = zodiacRanges[index * 2]
             val end = zodiacRanges[index * 2 + 1]
             rotate(degrees = -end + 90) {
                 if (index % 2 == 0) canvas.drawArc(
-                    arcRect, -90f, end - start, true, zodiacForegroundPaint,
+                    circleInsetStart, circleInsetStart, circleInsetEnd, circleInsetEnd,
+                    -90f, end - start, true, zodiacForegroundPaint,
                 )
-                val start = Offset(radius, circleInset)
+                val start = Offset(radius, circleInsetStart)
                 val end = Offset(radius, radius)
                 drawLine(surfaceColor, start, end)
             }
@@ -273,13 +273,11 @@ fun EarthView(
                 }
                 val rectSize = radius / 9 * (1 + r) * .95f
                 textPath.rewind()
-                textPathRect.set(
-                    radius - rectSize,
-                    radius - rectSize,
-                    radius + rectSize,
-                    radius + rectSize,
+                textPath.asAndroidPath().addArc(
+                    radius - rectSize, radius - rectSize,
+                    radius + rectSize, radius + rectSize,
+                    0f, 180f,
                 )
-                textPath.asAndroidPath().addArc(textPathRect, 0f, 180f)
                 canvas.drawTextOnPath(
                     geocentricPlanetsTitles[i],
                     textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
