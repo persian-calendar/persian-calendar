@@ -216,6 +216,26 @@ fun SharedTransitionScope.AstronomyScreen(
         }
     }
 
+    val resetButtonAction: () -> Unit = {
+        coroutineScope.launch {
+            scale.animateTo(
+                targetValue = 1f,
+                animationSpec = spring(
+                    Spring.DampingRatioLowBouncy,
+                    Spring.StiffnessLow,
+                ),
+            )
+        }
+        coroutineScope.launch { offsetX.animateTo(0f) }
+        coroutineScope.launch { offsetY.animateTo(0f) }
+        coroutineScope.launch {
+            timeInMillis.animateTo(
+                targetValue = System.currentTimeMillis(),
+                animationSpec = spring(.9f, Spring.StiffnessLow),
+            )
+        }
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -238,23 +258,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 actions = {
                     val isScaled = scale.value != 1f && !initialAnimation
                     TodayActionButton(visible = jdn != today || isScaled || offsetX.value != 0f || offsetY.value != 0f) {
-                        coroutineScope.launch {
-                            scale.animateTo(
-                                targetValue = 1f,
-                                animationSpec = spring(
-                                    Spring.DampingRatioLowBouncy,
-                                    Spring.StiffnessLow,
-                                ),
-                            )
-                        }
-                        coroutineScope.launch { offsetX.animateTo(0f) }
-                        coroutineScope.launch { offsetY.animateTo(0f) }
-                        coroutineScope.launch {
-                            timeInMillis.animateTo(
-                                targetValue = System.currentTimeMillis(),
-                                animationSpec = spring(.9f, Spring.StiffnessLow),
-                            )
-                        }
+                        resetButtonAction()
                     }
                     AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
@@ -374,7 +378,9 @@ fun SharedTransitionScope.AstronomyScreen(
                                 timeInMillis = timeInMillis,
                             )
                             Spacer(Modifier.weight(1f))
-                            SliderBar(timeInMillis) { isDatePickerDialogShown = true }
+                            SliderBar(timeInMillis, resetButtonAction) {
+                                isDatePickerDialogShown = true
+                            }
                         }
                         SolarDisplay(
                             modifier = Modifier
@@ -452,7 +458,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             }
                         }
                     }
-                    SliderBar(timeInMillis) { isDatePickerDialogShown = true }
+                    SliderBar(timeInMillis, resetButtonAction) { isDatePickerDialogShown = true }
                     Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
@@ -478,6 +484,7 @@ private val oneDay = 1.days.inWholeMilliseconds
 @Composable
 private fun SharedTransitionScope.SliderBar(
     timeInMillis: Animatable<Long, AnimationVector1D>,
+    resetButtonAction: () -> Unit,
     showDatePickerDialog: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -497,11 +504,7 @@ private fun SharedTransitionScope.SliderBar(
                 .combinedClickable(
                     onClick = showDatePickerDialog,
                     onClickLabel = stringResource(R.string.select_date),
-                    onLongClick = {
-                        coroutineScope.launch {
-                            timeInMillis.animateTo(System.currentTimeMillis())
-                        }
-                    },
+                    onLongClick = resetButtonAction,
                     onLongClickLabel = stringResource(R.string.today),
                 )
                 .sharedElement(
