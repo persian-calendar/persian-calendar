@@ -302,12 +302,16 @@ fun SharedTransitionScope.CalendarScreen(
     }
     val isOnlyEventsTab = detailsTabs.size == 1
 
-    val swipeUpActions = persistentMapOf(
-        SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
-        SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
-        SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
-        SwipeUpAction.None to { if (isOnlyEventsTab) bringDay(selectedDay - 7, true, false) },
-    )
+    val swipeUpActions = remember {
+        persistentMapOf(
+            SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
+            SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
+            SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
+            SwipeUpAction.None to {
+                if (isOnlyEventsTab) bringDay(selectedDay - 7, true, false)
+            },
+        )
+    }
 
     var searchTerm by rememberSaveable { mutableStateOf<String?>(null) }
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
@@ -331,14 +335,18 @@ fun SharedTransitionScope.CalendarScreen(
         Animatable(1f)
     } else null
 
-    val swipeDownActions = persistentMapOf(
+    val swipeDownActions = remember {
+        persistentMapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
-        SwipeDownAction.YearView to {
-            searchTerm = null
-            isYearView = true
-        },
-        SwipeDownAction.None to { if (isOnlyEventsTab) bringDay(selectedDay + 7, true, false) },
-    )
+            SwipeDownAction.YearView to {
+                searchTerm = null
+                isYearView = true
+            },
+            SwipeDownAction.None to {
+                if (isOnlyEventsTab) bringDay(selectedDay + 7, true, false)
+            },
+        )
+    }
 
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
