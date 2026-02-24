@@ -663,7 +663,7 @@ fun SharedTransitionScope.CalendarScreen(
 
 private typealias BringDay = (day: Jdn, highlight: Boolean, immediate: Boolean) -> Unit
 
-enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
+private enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
     CALENDAR(R.string.calendar), EVENT(R.string.events), TIMES(R.string.times),
 }
 
