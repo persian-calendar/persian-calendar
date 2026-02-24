@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.graphics.Paint
+import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.input.pointer.util.addPointerInputChange
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
@@ -46,14 +49,15 @@ import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.sign
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun EarthView(
     isTropical: Boolean,
     state: AstronomyState,
     isScaled: Boolean,
+    timeInMillis: Animatable<Long, AnimationVector1D>,
     modifier: Modifier = Modifier,
-    rotationalMinutesChange: (Int) -> Unit,
 ) {
     val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
     val contentColor = LocalContentColor.current
@@ -125,7 +129,6 @@ fun EarthView(
     val labels = Zodiac.entries.map { it.shortTitle(resources) }
     val symbols = Zodiac.entries.map { it.symbol }
     val coroutineScope = rememberCoroutineScope()
-    val rotationVelocity = remember { Animatable(0f) }
     val pointerModifier = Modifier.pointerInput(isScaled) {
         if (!isScaled) awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false)
@@ -135,7 +138,8 @@ fun EarthView(
 
             // Determine rotation speed based on touch position (outer = sun orbit, inner = moon orbit)
             val touchDistance = hypot(down.position.x - centerX, down.position.y - centerY)
-            val rotationSpeed = if (touchDistance > size.width / 4f) {
+            val isSunRotation = touchDistance > size.width / 4f
+            val rotationSpeed = if (isSunRotation) {
                 525949 // minutes in solar year
             } else {
                 39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
@@ -160,14 +164,15 @@ fun EarthView(
                         else -> rawAngleChange
                     }
 
-                    val minutesChange =
-                        -(angleChange * rotationSpeed / PI.toFloat() / 2).toInt()
-                    rotationDirection = minutesChange.sign
+                    val minutesChange = -angleChange * rotationSpeed / PI.toFloat() / 2
+                    rotationDirection = minutesChange.sign.toInt()
 
-                    if (minutesChange != 0) {
-                        rotationalMinutesChange(minutesChange)
-                        velocityTracker.addPosition(change.uptimeMillis, change.position)
+                    coroutineScope.launch {
+                        timeInMillis.snapTo(
+                            timeInMillis.value + (minutesChange * oneMinute).toInt(),
+                        )
                     }
+                    velocityTracker.addPointerInputChange(change)
 
                     previousAngle = currentAngle
                 }
@@ -175,20 +180,18 @@ fun EarthView(
 
             val velocity = velocityTracker.calculateVelocity()
             velocityTracker.resetTracking()
-            val velocityMagnitude = hypot(velocity.x, velocity.y) * rotationSpeed / 2000
+            val velocityMagnitude = hypot(velocity.x, velocity.y) * rotationSpeed
 
             if (velocityMagnitude > 0) coroutineScope.launch {
-                val startVelocity = rotationDirection * velocityMagnitude * 2
-                var lastValue = 0f
-                rotationVelocity.snapTo(0f)
-                rotationVelocity.animateDecay(
-                    initialVelocity = startVelocity,
-                    animationSpec = exponentialDecay(frictionMultiplier = 3f),
-                ) {
-                    val minutesChange = (value - lastValue).toInt()
-                    if (minutesChange != 0) {
-                        rotationalMinutesChange(minutesChange)
-                        lastValue = value
+                animateDecay(
+                    initialValue = 0f,
+                    initialVelocity = rotationDirection * velocityMagnitude / if (isSunRotation) 1_500_000 else 600_000,
+                    animationSpec = SplineBasedFloatDecayAnimationSpec(density),
+                ) { _, velocity ->
+                    if (velocity.isFinite()) coroutineScope.launch {
+                        timeInMillis.snapTo(
+                            timeInMillis.value + (velocity * 1.5f * oneMinute).toInt(),
+                        )
                     }
                 }
             }
@@ -287,3 +290,5 @@ fun EarthView(
         }
     }
 }
+
+private val oneMinute = 1.minutes.inWholeMilliseconds

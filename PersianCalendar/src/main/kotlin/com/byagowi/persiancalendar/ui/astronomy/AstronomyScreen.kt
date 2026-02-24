@@ -558,7 +558,7 @@ private fun SharedTransitionScope.SliderBar(
                         }
                     },
             )
-            ChangesHapticFeedback { timeInMillis.value / oneDay }
+            ChangesHapticFeedback(sampleMillis = 250) { timeInMillis.value / oneDay }
             TimeArrow(::buttonScrollSlider, isPrevious = false)
         }
     }
@@ -652,11 +652,8 @@ private fun SharedTransitionScope.SolarDisplay(
                     state = astronomyState,
                     modifier = canvasModifier,
                     isScaled = isScaled,
-                ) { offset ->
-                    coroutineScope.launch {
-                        timeInMillis.snapTo(timeInMillis.value + offset * oneMinute)
-                    }
-                }
+                    timeInMillis = timeInMillis,
+                )
 
                 AstronomyMode.MOON -> Box(Modifier.aspectRatio(1f)) {
                     Canvas(modifier = canvasModifier) {
