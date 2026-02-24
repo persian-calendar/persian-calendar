@@ -36,7 +36,7 @@ import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 
 @Composable
-fun <T> AppScreenModesDropDown(
+fun <T> AppModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
     values: Iterable<T>,

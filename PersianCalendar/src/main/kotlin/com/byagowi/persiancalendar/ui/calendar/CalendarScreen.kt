@@ -190,7 +190,7 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
-import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
+import com.byagowi.persiancalendar.ui.common.AppModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -1130,7 +1130,7 @@ private fun SharedTransitionScope.Toolbar(
                     ),
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
+                if (isYearView && yearViewCalendar != null) AppModesDropDown(
                     value = yearViewCalendar,
                     onValueChange = onYearViewCalendarChange,
                     values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,

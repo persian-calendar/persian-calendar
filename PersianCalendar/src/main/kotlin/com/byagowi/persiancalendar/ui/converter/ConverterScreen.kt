@@ -85,7 +85,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppIconButton
-import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
+import com.byagowi.persiancalendar.ui.common.AppModesDropDown
 import com.byagowi.persiancalendar.ui.common.CalendarPicker
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePicker
@@ -134,7 +134,7 @@ fun SharedTransitionScope.ConverterScreen(
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
-                    AppScreenModesDropDown(
+                    AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
                         values = ConverterScreenMode.entries,
