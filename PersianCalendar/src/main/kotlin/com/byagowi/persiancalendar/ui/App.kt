@@ -160,6 +160,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     AppNavigationRail(now, railState, backStack, finish)
     SharedTransitionLayout {
         var bringDayCommand by rememberSaveable { mutableStateOf(initialJdn) }
+        val commandBringDay: (Jdn) -> Unit = { day -> bringDayCommand = day }
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         val navigateUp: () -> Unit = {
@@ -169,7 +170,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             // also.
             if (backStack.size < 2) finish() else backStack.removeLastOrNull()
         }
-
         val navigateToHolidaysSettings: (String?) -> Unit = { item ->
             backStack += Screen.Settings(
                 tab = SettingsTab.InterfaceCalendar,
@@ -177,7 +177,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 settingsItem = item,
             )
         }
-        val commandBringDay: (Jdn) -> Unit = { day -> bringDayCommand = day }
 
         NavDisplay(
             backStack = backStack,
