@@ -53,7 +53,7 @@ fun Modifier.appTransformable(
         }
 
         awaitEachGesture {
-            val tracker = VelocityTracker()
+            val tracker = if (disablePan) null else VelocityTracker()
             val down = awaitFirstDown(requireUnconsumed = false)
             val downPosition = down.position
             val downTime = down.uptimeMillis
@@ -97,7 +97,7 @@ fun Modifier.appTransformable(
 
                     event.changes.forEach {
                         if (it.positionChanged()) {
-                            tracker.addPosition(it.uptimeMillis, it.position)
+                            tracker?.addPosition(it.uptimeMillis, it.position)
                             // Check if movement exceeds click threshold
                             if ((it.position - downPosition).getDistance() > viewConfiguration.touchSlop) {
                                 hasMoved = true
@@ -122,21 +122,22 @@ fun Modifier.appTransformable(
             }
 
             if (hasMoved && !disablePan) {
-                val velocity = tracker.calculateVelocity()
+                val velocity = tracker?.calculateVelocity()
                 updateBounds(newScale)
                 coroutineScope.launch {
                     offsetX.animateDecay(
-                        initialVelocity = velocity.x,
+                        initialVelocity = velocity?.x ?: 0f,
                         animationSpec = exponentialDecay(frictionMultiplier = 3f),
                     )
                 }
                 coroutineScope.launch {
                     offsetY.animateDecay(
-                        initialVelocity = velocity.y,
+                        initialVelocity = velocity?.y ?: 0f,
                         animationSpec = exponentialDecay(frictionMultiplier = 3f),
                     )
                 }
             }
+            tracker?.resetTracking()
         }
     }
 }
