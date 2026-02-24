@@ -1130,13 +1130,19 @@ private fun SharedTransitionScope.Toolbar(
                     ),
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (isYearView && yearViewCalendar != null) AppModesDropDown(
-                    value = yearViewCalendar,
+                if (isYearView) AppModesDropDown(
+                    value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
                     values = (enabledCalendars.takeIf { it.size > 1 }
                         ?: language.defaultCalendars).toImmutableList(),
                     small = subtitle.isNotEmpty(),
-                ) { stringResource(it.title) } else Crossfade(targetState = title) { title ->
+                ) {
+                    stringResource(
+                        if (language.isArabicScript && LocalDensity.current.fontScale == 1f) {
+                            it.title
+                        } else it.shortTitle,
+                    )
+                } else Crossfade(targetState = title) { title ->
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleLarge,
