@@ -169,6 +169,16 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             // also.
             if (backStack.size < 2) finish() else backStack.removeLastOrNull()
         }
+
+        val navigateToHolidaysSettings: (String?) -> Unit = { item ->
+            backStack += Screen.Settings(
+                tab = SettingsTab.InterfaceCalendar,
+                settings = PREF_HOLIDAY_TYPES,
+                settingsItem = item,
+            )
+        }
+        val commandBringDay: (Jdn) -> Unit = { day -> bringDayCommand = day }
+
         NavDisplay(
             backStack = backStack,
             onBack = navigateUp,
@@ -183,13 +193,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         bringDayCommand = bringDayCommand,
                         clearBringDayCommand = { bringDayCommand = null },
                         openNavigationRail = openNavigationRail,
-                        navigateToHolidaysSettings = { item ->
-                            backStack += Screen.Settings(
-                                tab = SettingsTab.InterfaceCalendar,
-                                settings = PREF_HOLIDAY_TYPES,
-                                settingsItem = item,
-                            )
-                        },
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
                         navigateToSettingsLocationTabSetAthanAlarm = {
                             backStack += Screen.Settings(
                                 tab = SettingsTab.LocationAthan,
@@ -222,7 +226,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Schedule> {
                     ScheduleScreen(
                         refreshToken = refreshToken,
-                        commandBringDay = { day -> bringDayCommand = day },
+                        commandBringDay = commandBringDay,
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.selectedDay,
                         today = today,
@@ -233,7 +238,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     DaysScreen(
                         refreshToken = refreshToken,
                         refreshCalendar = refreshCalendar,
-                        commandBringDay = { day -> bringDayCommand = day },
+                        commandBringDay = commandBringDay,
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
                         initiallySelectedDay = it.selectedDay,
                         isInitiallyWeek = it.isWeek,
                         navigateUp = navigateUp,

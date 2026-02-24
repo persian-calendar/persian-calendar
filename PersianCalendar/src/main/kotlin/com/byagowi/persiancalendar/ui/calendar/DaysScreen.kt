@@ -167,6 +167,7 @@ fun SharedTransitionScope.DaysScreen(
     commandBringDay: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
+    navigateToHolidaysSettings: (String?) -> Unit,
     isInitiallyWeek: Boolean,
     today: Jdn,
     now: Long,
@@ -451,6 +452,7 @@ fun SharedTransitionScope.DaysScreen(
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
+                                    navigateToHolidaysSettings = navigateToHolidaysSettings,
                                     screenWidth = screenWidth,
                                     scrollState = scrollState,
                                     initialScroll = initialScroll,
@@ -510,6 +512,7 @@ fun SharedTransitionScope.DaysScreen(
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                 snackbarHostState = snackbarHostState,
+                                navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 hasWeekPager = hasWeeksPager,
                                 deviceEvents = dayDeviceEvents,
                                 screenWidth = screenWidth,
@@ -581,6 +584,7 @@ private fun DaysView(
     snackbarHostState: SnackbarHostState,
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
+    navigateToHolidaysSettings: (String?) -> Unit,
     screenWidth: Dp,
     scrollState: ScrollState,
     scale: Animatable<Float, AnimationVector1D>,
@@ -675,6 +679,7 @@ private fun DaysView(
                         eventsWithoutTime[0]
                             .let { if (isExpanded) it else it.take(3) }
                             .toImmutableList(),
+                        navigateToHolidaysSettings,
                     ) { refreshCalendar() }
                 }
                 if (eventsWithoutTime[0].size > 3) {

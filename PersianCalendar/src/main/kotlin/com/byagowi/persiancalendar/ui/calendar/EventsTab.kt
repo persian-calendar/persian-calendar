@@ -278,7 +278,7 @@ private val String.directionality
 @Composable
 fun DayEvents(
     events: ImmutableList<CalendarEvent<*>>,
-    navigateToHolidaysSettings: ((String?) -> Unit)? = null,
+    navigateToHolidaysSettings: ((String?) -> Unit),
     refreshCalendar: () -> Unit,
 ) {
     val language = language
@@ -325,7 +325,7 @@ private fun DayEventContent(
     language: Language,
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     coroutineScope: CoroutineScope,
-    navigateToHolidaysSettings: ((item: String?) -> Unit)?,
+    navigateToHolidaysSettings: ((item: String?) -> Unit),
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
 ) {
@@ -486,7 +486,7 @@ private fun DayEventContent(
                                             .padding(start = 4.dp)
                                             .weight(1f),
                                     )
-                                    if (navigateToHolidaysSettings != null) OutlineSettingsButton(
+                                    OutlineSettingsButton(
                                         modifier = Modifier.padding(
                                             top = 8.dp, start = 4.dp, bottom = 8.dp,
                                         ),

@@ -86,6 +86,7 @@ fun SharedTransitionScope.ScheduleScreen(
     commandBringDay: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
+    navigateToHolidaysSettings: (String?) -> Unit,
     today: Jdn,
     now: Long,
 ) {
@@ -283,7 +284,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                             boundsTransform = appBoundsTransform,
                                         ) else Modifier,
-                                    ) { DayEvents(events) {} }
+                                    ) { DayEvents(events, navigateToHolidaysSettings) {} }
                                 }
                                 if (mainCalendar.getMonthLength(
                                         date.year,
