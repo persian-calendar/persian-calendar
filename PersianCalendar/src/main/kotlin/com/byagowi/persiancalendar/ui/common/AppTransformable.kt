@@ -17,6 +17,7 @@ import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.input.pointer.util.addPointerInputChange
 import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.launch
 
@@ -82,6 +83,7 @@ fun Modifier.appTransformable(
                         targetY =
                             (offsetY.value + focusY) * (newScale / oldScale) - focusY + panChange.y
                     } else if (panChange != Offset.Zero) {
+                        event.changes.forEach { tracker?.addPointerInputChange(event = it) }
                         hasMoved = true
                         targetX = offsetX.value + panChange.x
                         targetY = offsetY.value + panChange.y
@@ -97,7 +99,6 @@ fun Modifier.appTransformable(
 
                     event.changes.forEach {
                         if (it.positionChanged()) {
-                            tracker?.addPosition(it.uptimeMillis, it.position)
                             // Check if movement exceeds click threshold
                             if ((it.position - downPosition).getDistance() > viewConfiguration.touchSlop) {
                                 hasMoved = true
