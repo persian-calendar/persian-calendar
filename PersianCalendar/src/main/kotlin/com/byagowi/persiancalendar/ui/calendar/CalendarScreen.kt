@@ -1133,7 +1133,8 @@ private fun SharedTransitionScope.Toolbar(
                 if (isYearView && yearViewCalendar != null) AppModesDropDown(
                     value = yearViewCalendar,
                     onValueChange = onYearViewCalendarChange,
-                    values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
+                    values = (enabledCalendars.takeIf { it.size > 1 }
+                        ?: language.defaultCalendars).toImmutableList(),
                     small = subtitle.isNotEmpty(),
                 ) { stringResource(it.title) } else Crossfade(targetState = title) { title ->
                     Text(

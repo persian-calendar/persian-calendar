@@ -34,12 +34,13 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun <T> AppModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
-    values: Iterable<T>,
+    values: ImmutableList<T>,
     small: Boolean = false,
     label: @Composable (T) -> String,
 ) {
