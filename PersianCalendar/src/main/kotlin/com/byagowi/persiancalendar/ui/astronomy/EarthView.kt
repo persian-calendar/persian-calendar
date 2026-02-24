@@ -174,6 +174,7 @@ fun EarthView(
             } while (event.changes.any { it.pressed })
 
             val velocity = velocityTracker.calculateVelocity()
+            velocityTracker.resetTracking()
             val velocityMagnitude = hypot(velocity.x, velocity.y) * rotationSpeed / 2000
 
             if (velocityMagnitude > 0) coroutineScope.launch {
