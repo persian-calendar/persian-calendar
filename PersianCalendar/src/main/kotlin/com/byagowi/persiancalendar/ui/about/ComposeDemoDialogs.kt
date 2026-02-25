@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -89,7 +88,6 @@ import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.common.BaseAppDialog
 import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
 import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -642,8 +640,8 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
         }
 
         val scale = rememberSaveable { mutableFloatStateOf(1f) }
-        val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
-        val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+        val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
+        val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -672,8 +670,8 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
                 .graphicsLayer {
                     this.scaleX = scale.floatValue
                     this.scaleY = scale.floatValue
-                    this.translationX = offsetX.value
-                    this.translationY = offsetY.value
+                    this.translationX = offsetX.floatValue
+                    this.translationY = offsetY.floatValue
                 },
         ) {
             val cellSize = cellSize(this.size)

@@ -1,8 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.animation.core.FloatExponentialDecaySpec
+import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateCentroid
@@ -15,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerId
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.input.pointer.util.addPointerInputChange
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.launch
 
@@ -29,8 +30,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun Modifier.appTransformable(
     scale: MutableFloatState,
-    offsetX: Animatable<Float, AnimationVector1D>,
-    offsetY: Animatable<Float, AnimationVector1D>,
+    offsetX: MutableFloatState,
+    offsetY: MutableFloatState,
     disableHorizontalLimit: Boolean = false,
     disableVerticalLimit: Boolean = false,
     disablePan: Boolean = false,
@@ -39,24 +40,26 @@ fun Modifier.appTransformable(
     scaleRange: ClosedFloatingPointRange<Float> = 1f..Float.MAX_VALUE,
 ): Modifier {
     val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
     return this.pointerInput(disablePan) {
         val size = this@pointerInput.size.toSize()
-        fun updateBounds(scale: Float) {
-            if (disableVerticalLimit && disableHorizontalLimit) return
-            val contentSize = contentSize?.invoke(size) ?: size
-            if (!disableHorizontalLimit) {
-                val bound = ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f)
-                offsetX.updateBounds(-bound, bound)
-            }
-            if (!disableVerticalLimit) {
-                val bound = ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f)
-                offsetY.updateBounds(-bound, bound)
-            }
-        }
-
+        var lastPointerId: PointerId? = null
         awaitEachGesture {
+            var xBound = Float.POSITIVE_INFINITY
+            var yBound = Float.POSITIVE_INFINITY
+            fun updateBounds(scale: Float) {
+                if (disableVerticalLimit && disableHorizontalLimit) return
+                val contentSize = contentSize?.invoke(size) ?: size
+                if (!disableHorizontalLimit) {
+                    xBound = ((contentSize.width * scale - size.width) / 2f).coerceAtLeast(0f)
+                }
+                if (!disableVerticalLimit) {
+                    yBound = ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f)
+                }
+            }
             val tracker = if (disablePan) null else VelocityTracker()
             val down = awaitFirstDown(requireUnconsumed = false)
+            lastPointerId = down.id
             val downPosition = down.position
             val downTime = down.uptimeMillis
             var hasMoved = false
@@ -80,22 +83,20 @@ fun Modifier.appTransformable(
                         val focusX = centroid.x - size.width / 2f
                         val focusY = centroid.y - size.height / 2f
                         targetX =
-                            (offsetX.value + focusX) * (newScale / oldScale) - focusX + panChange.x
+                            (offsetX.floatValue + focusX) * (newScale / oldScale) - focusX + panChange.x
                         targetY =
-                            (offsetY.value + focusY) * (newScale / oldScale) - focusY + panChange.y
+                            (offsetY.floatValue + focusY) * (newScale / oldScale) - focusY + panChange.y
                     } else if (panChange != Offset.Zero) {
                         event.changes.forEach { tracker?.addPointerInputChange(event = it) }
                         hasMoved = true
-                        targetX = offsetX.value + panChange.x
-                        targetY = offsetY.value + panChange.y
+                        targetX = offsetX.floatValue + panChange.x
+                        targetY = offsetY.floatValue + panChange.y
                     }
 
                     if (targetX != 0f || targetY != 0f) {
                         updateBounds(newScale)
-                        coroutineScope.launch {
-                            offsetX.snapTo(targetX)
-                            offsetY.snapTo(targetY)
-                        }
+                        offsetX.floatValue = targetX.coerceIn(-xBound, xBound)
+                        offsetY.floatValue = targetY.coerceIn(-yBound, yBound)
                     }
 
                     event.changes.forEach {
@@ -116,8 +117,8 @@ fun Modifier.appTransformable(
                 } && upTime - downTime < viewConfiguration.longPressTimeoutMillis) {
                 val centerX = size.width / 2f
                 val centerY = size.height / 2f
-                val translatedX = upPosition.x - centerX - offsetX.value
-                val translatedY = upPosition.y - centerY - offsetY.value
+                val translatedX = upPosition.x - centerX - offsetX.floatValue
+                val translatedY = upPosition.y - centerY - offsetY.floatValue
                 val x = translatedX / newScale + centerX
                 val y = translatedY / newScale + centerY
                 onClick(x, y, size)
@@ -127,16 +128,26 @@ fun Modifier.appTransformable(
                 val velocity = tracker?.calculateVelocity()
                 updateBounds(newScale)
                 coroutineScope.launch {
-                    offsetX.animateDecay(
+                    animateDecay(
                         initialVelocity = velocity?.x ?: 0f,
-                        animationSpec = exponentialDecay(frictionMultiplier = 3f),
-                    )
+                        initialValue = offsetX.floatValue,
+                        animationSpec = FloatExponentialDecaySpec(frictionMultiplier = 3f),
+                    ) { value, _ ->
+                        if (down.id == lastPointerId) {
+                            offsetX.floatValue = value.coerceIn(-xBound, xBound)
+                        }
+                    }
                 }
                 coroutineScope.launch {
-                    offsetY.animateDecay(
+                    animateDecay(
                         initialVelocity = velocity?.y ?: 0f,
-                        animationSpec = exponentialDecay(frictionMultiplier = 3f),
-                    )
+                        initialValue = offsetY.floatValue,
+                        animationSpec = FloatExponentialDecaySpec(frictionMultiplier = 3f),
+                    ) { value, _ ->
+                        if (down.id == lastPointerId) {
+                            offsetY.floatValue = value.coerceIn(-yBound, yBound)
+                        }
+                    }
                 }
             }
             tracker?.resetTracking()

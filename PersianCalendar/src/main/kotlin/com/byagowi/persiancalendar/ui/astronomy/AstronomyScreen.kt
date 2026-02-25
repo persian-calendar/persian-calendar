@@ -8,8 +8,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
@@ -122,7 +121,6 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -184,11 +182,22 @@ fun SharedTransitionScope.AstronomyScreen(
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val scale = rememberSaveable { mutableFloatStateOf(.25f) }
-    val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
-    val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+    val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
+    val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
 
     val scaledButNotOnCenter by remember {
-        derivedStateOf { scale.floatValue == 1f && (offsetX.value != 0f || offsetY.value != 0f) }
+        derivedStateOf { scale.floatValue == 1f && (offsetX.floatValue != 0f || offsetY.floatValue != 0f) }
+    }
+
+    suspend fun MutableFloatState.animateTo(
+        targetValue: Float,
+        animationSpec: AnimationSpec<Float> = spring(),
+    ) {
+        animate(
+            initialValue = this.floatValue,
+            targetValue = targetValue,
+            animationSpec = animationSpec,
+        ) { value, _ -> this@animateTo.floatValue = value }
     }
     LaunchedEffect(scaledButNotOnCenter) {
         if (scaledButNotOnCenter) {
@@ -211,14 +220,13 @@ fun SharedTransitionScope.AstronomyScreen(
 
     val resetButtonAction: () -> Unit = {
         coroutineScope.launch {
-            animate(
-                initialValue = scale.floatValue,
+            scale.animateTo(
                 targetValue = 1f,
                 animationSpec = spring(
-                    Spring.DampingRatioLowBouncy,
-                    Spring.StiffnessLow,
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow,
                 ),
-            ) { value, _ -> scale.floatValue = value }
+            )
         }
         coroutineScope.launch { offsetX.animateTo(0f) }
         coroutineScope.launch { offsetY.animateTo(0f) }
@@ -247,7 +255,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
                 actions = {
                     TodayActionButton(
-                        visible = jdn != today || isScaled || offsetX.value != 0f || offsetY.value != 0f,
+                        visible = jdn != today || isScaled || offsetX.floatValue != 0f || offsetY.floatValue != 0f,
                     ) { resetButtonAction() }
                     AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
@@ -472,8 +480,7 @@ private suspend fun MutableLongState.animateTo(targetValue: Long) {
         initialValue = 0f,
         targetValue = (targetValue - initialValue).toFloat(),
         animationSpec = spring(dampingRatio = .9f, stiffness = Spring.StiffnessLow),
-    ) { value, _ -> this@animateTo.longValue = value.toLong() + initialValue }
-    this.longValue = targetValue
+    ) { value, _ -> this.longValue = value.toLong() + initialValue }
 }
 
 private val oneMinute = 1.minutes.inWholeMilliseconds
@@ -587,8 +594,8 @@ private fun SharedTransitionScope.TimeArrow(
 private fun SharedTransitionScope.SolarDisplay(
     scale: MutableFloatState,
     isScaled: Boolean,
-    offsetX: Animatable<Float, AnimationVector1D>,
-    offsetY: Animatable<Float, AnimationVector1D>,
+    offsetX: MutableFloatState,
+    offsetY: MutableFloatState,
     timeInMillis: MutableLongState,
     astronomyState: AstronomyState,
     mode: AstronomyMode,
@@ -635,8 +642,8 @@ private fun SharedTransitionScope.SolarDisplay(
             .graphicsLayer {
                 this.scaleX = scale.floatValue
                 this.scaleY = scale.floatValue
-                this.translationX = offsetX.value
-                this.translationY = offsetY.value
+                this.translationX = offsetX.floatValue
+                this.translationY = offsetY.floatValue
             }
         Crossfade(
             targetState = mode,

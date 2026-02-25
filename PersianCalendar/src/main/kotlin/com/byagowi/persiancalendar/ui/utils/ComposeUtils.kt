@@ -6,7 +6,6 @@ import android.view.Window
 import androidx.annotation.ColorRes
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
@@ -97,11 +96,6 @@ val appContentSizeAnimationSpec = spring(
     stiffness = Spring.StiffnessMediumLow,
     dampingRatio = Spring.DampingRatioLowBouncy,
     visibilityThreshold = IntSize.VisibilityThreshold,
-)
-
-val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(
-    save = { it.value },
-    restore = { Animatable(it) },
 )
 
 val AnimatableColorSaver = Saver<Animatable<Color, AnimationVector4D>, Int>(

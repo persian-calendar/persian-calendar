@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -93,7 +92,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.Coordinate
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -183,8 +181,8 @@ fun SharedTransitionScope.MapScreen(
         }
         val mapString = stringResource(R.string.map)
         val scale = rememberSaveable { mutableFloatStateOf(1f) }
-        val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
-        val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
+        val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
+        val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
         if (!showGlobeView) Canvas(
             modifier = Modifier
                 .semantics { this.contentDescription = mapString }
@@ -230,8 +228,8 @@ fun SharedTransitionScope.MapScreen(
                     this.scaleY = scale.floatValue
                     val (width, height) = this.size
                     val mapSize = min(width / 2, height)
-                    this.translationX = offsetX.value.mod(mapSize * 2 * scale.floatValue)
-                    this.translationY = offsetY.value
+                    this.translationX = offsetX.floatValue.mod(mapSize * 2 * scale.value)
+                    this.translationY = offsetY.floatValue
                 },
         ) {
             val (width, height) = this.size
