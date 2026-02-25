@@ -1,8 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.yearview
 
 import android.content.res.Configuration
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.animate
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,6 +30,7 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -89,7 +89,7 @@ fun YearView(
     yearViewCalendar: Calendar?,
     onYearViewCalendarChange: (Calendar) -> Unit,
     lazyListState: LazyListState,
-    scale: Animatable<Float, AnimationVector1D>,
+    scale: MutableFloatState,
     maxWidth: Dp,
     maxHeight: Dp,
     bottomPadding: Dp,
@@ -104,9 +104,10 @@ fun YearView(
 
     val horizontalDivisions = if (isLandscape) 4 else 3
 
-    val width = floor(maxWidth.value / horizontalDivisions * scale.value).coerceAtLeast(1f).dp
-    val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale.value
-    val shape = MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale.value))
+    val width = floor(maxWidth.value / horizontalDivisions * scale.floatValue).coerceAtLeast(1f).dp
+    val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale.floatValue
+    val shape =
+        MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale.floatValue))
 
     val titleHeight = with(LocalDensity.current) {
         (height / 10).coerceAtLeast(20.dp).toSp() / 1.6f
@@ -148,9 +149,9 @@ fun YearView(
 
     val detectZoom = Modifier.detectZoom {
         coroutineScope.launch {
-            val value = scale.value * it
-            scale.snapTo(
-                value.coerceIn(yearSelectionModeScale, horizontalDivisions.toFloat()),
+            scale.floatValue = (scale.floatValue * it).coerceIn(
+                yearSelectionModeScale,
+                horizontalDivisions.toFloat(),
             )
         }
     }
@@ -174,7 +175,7 @@ fun YearView(
             val yearOffset = it - halfPages
 
             Column(Modifier.fillMaxWidth()) {
-                if (scale.value != yearSelectionModeScale) {
+                if (scale.floatValue != yearSelectionModeScale) {
                     val yearDeviceEvents: DeviceCalendarEventsStore = remember(yearOffset, today) {
                         val yearStartJdn = Jdn(
                             calendar.createDate(
@@ -256,8 +257,8 @@ fun YearView(
                         }
                     }
                 }
-                val space = bottomPadding * scale.value.coerceIn(.4f, 1f)
-                val alpha = (.15f * (1 - scale.value)).coerceIn(0f, .15f)
+                val space = bottomPadding * scale.floatValue.coerceIn(.4f, 1f)
+                val alpha = (.15f * (1 - scale.floatValue)).coerceIn(0f, .15f)
                 Spacer(Modifier.height(space))
                 if (yearOffset != halfPages - 1) Box(Modifier.align(Alignment.CenterHorizontally)) {
                     val yearViewYear = yearOffset + todayDate.year + 1
@@ -289,9 +290,9 @@ fun YearView(
                                 .then(detectZoom)
                                 .clickable(onClickLabel = stringResource(R.string.select_year)) {
                                     coroutineScope.launch {
-                                        if (scale.value == yearSelectionModeScale) scale.snapTo(
-                                            1f,
-                                        )
+                                        if (scale.floatValue == yearSelectionModeScale) {
+                                            scale.floatValue = 1f
+                                        }
                                         lazyListState.animateScrollToItem(halfPages + yearOffset + 1)
                                     }
                                 },
@@ -325,12 +326,12 @@ sealed interface YearViewCommand {
 
     suspend fun execute(
         yearViewLazyListState: LazyListState?,
-        yearViewScale: Animatable<Float, AnimationVector1D>?,
+        yearViewScale: MutableFloatState?,
     ) {
         val lazyListState = yearViewLazyListState ?: return
         val scale = yearViewScale ?: return
         when (this) {
-            ToggleYearSelection -> scale.snapTo(if (scale.value > .5f) 0.01f else 1f)
+            ToggleYearSelection -> scale.floatValue = if (scale.floatValue > .5f) 0.01f else 1f
 
             PreviousMonth -> {
                 lazyListState.animateScrollToItem(
@@ -343,7 +344,9 @@ sealed interface YearViewCommand {
             }
 
             TodayMonth -> {
-                scale.animateTo(1f)
+                animate(scale.floatValue, targetValue = 1f) { value, _ ->
+                    scale.floatValue = value
+                }
                 if (abs(lazyListState.firstVisibleItemIndex - halfPages) > 2) {
                     lazyListState.scrollToItem(halfPages)
                 } else lazyListState.animateScrollToItem(halfPages)
@@ -361,8 +364,8 @@ fun yearViewOffset(lazyListState: LazyListState?): Int {
 }
 
 fun yearViewIsInYearSelection(
-    yearViewScale: Animatable<Float, AnimationVector1D>?,
-): Boolean = yearViewScale?.value == yearSelectionModeScale
+    yearViewScale: MutableFloatState?,
+): Boolean = yearViewScale?.floatValue == yearSelectionModeScale
 
 private const val yearSelectionModeScale = .2f
 private const val halfPages = 200

@@ -96,6 +96,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -204,7 +205,6 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
@@ -332,9 +332,7 @@ fun SharedTransitionScope.CalendarScreen(
         selectedMonthOffset,
         yearViewCalendar,
     ) else null
-    val yearViewScale = if (isYearView) rememberSaveable(saver = AnimatableFloatSaver) {
-        Animatable(1f)
-    } else null
+    val yearViewScale = if (isYearView) rememberSaveable { mutableFloatStateOf(1f) } else null
 
     val swipeDownActions = remember {
         persistentMapOf(
@@ -1042,7 +1040,7 @@ private fun SharedTransitionScope.Toolbar(
     onIsYearViewChange: (Boolean) -> Unit,
     isYearViewFraction: Animatable<Float, AnimationVector1D>,
     yearViewLazyListState: LazyListState?,
-    yearViewScale: Animatable<Float, AnimationVector1D>?,
+    yearViewScale: MutableFloatState?,
     selectedMonthOffset: Int,
     selectedDay: Jdn,
     isHighlighted: Boolean,
