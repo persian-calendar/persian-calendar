@@ -10,6 +10,7 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -20,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -45,8 +47,8 @@ val Color.isLight: Boolean get() = this.luminance() > .5
 fun getResourcesColor(@ColorRes id: Int) = Color(LocalResources.current.getColor(id, null))
 
 /**
- * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently
- * let's build our own based on Material's
+ * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed
+ * while we need it frequently let's build our own based on Material's
  */
 @Composable
 @Stable
@@ -66,9 +68,15 @@ fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 @Composable
 fun Modifier.highlightItem(enabled: Boolean): Modifier {
     if (!enabled) return this
-    val alpha = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.1f) }
-    LaunchedEffect(Unit) { alpha.animateTo(0f, tween(4000)) }
-    return background(LocalContentColor.current.copy(alpha = alpha.value))
+    val alpha = rememberSaveable { mutableFloatStateOf(.1f) }
+    LaunchedEffect(Unit) {
+        animate(
+            initialValue = alpha.floatValue,
+            targetValue = 0f,
+            animationSpec = tween(4000),
+        ) { value, _ -> alpha.floatValue = value }
+    }
+    return background(LocalContentColor.current.copy(alpha = alpha.floatValue))
 }
 
 fun View.findDialogWindow(): Window? =
@@ -112,7 +120,7 @@ const val SettingsHorizontalPaddingItem = 24
 // Clickable items in settings should have this height
 const val SettingsItemHeight = SettingsHorizontalPaddingItem * 2
 
-// Common alpha value to blend a component with it's background
+// Common alpha value to blend a component with its background
 const val AppBlendAlpha = .75f
 
 // analogous to compat's listPreferredItemPaddingLeft/Right, it's in .dp
