@@ -10,7 +10,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
@@ -69,6 +68,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -140,7 +140,6 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
-import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -362,10 +361,12 @@ fun SharedTransitionScope.DaysScreen(
                         isWeekMode = true,
                     )
 
-                    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
-                    val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
+                    val scale = remember { mutableFloatStateOf(1f) }
+                    val cellHeight by remember(scale.floatValue) {
+                        mutableStateOf((64 * scale.floatValue).dp)
+                    }
                     val initialScroll =
-                        with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
+                        with(density) { (cellHeight * 7 * scale.floatValue - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
                     val swipeDownOnScrollableModifier = Modifier.detectSwipe {
                         val wasAtTop = scrollState.value == 0
@@ -587,7 +588,7 @@ private fun DaysView(
     navigateToHolidaysSettings: (String?) -> Unit,
     screenWidth: Dp,
     scrollState: ScrollState,
-    scale: Animatable<Float, AnimationVector1D>,
+    scale: MutableFloatState,
     initialScroll: Int,
     cellHeight: Dp,
     numeral: Numeral,
@@ -602,8 +603,7 @@ private fun DaysView(
             onZoom = {
                 if (interaction == null) interaction = Interaction.Zoom
                 if (interaction == Interaction.Zoom) coroutineScope.launch {
-                    val value = scale.value * it
-                    scale.snapTo(value.coerceIn(.5f, 2f))
+                    scale.floatValue = (scale.floatValue * it).coerceIn(.5f, 2f)
                 }
             },
             onRelease = { if (interaction == Interaction.Zoom) interaction = null },
@@ -632,7 +632,7 @@ private fun DaysView(
             val needsHeader =
                 eventsWithTime.all { it.isEmpty() } || maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager)
             derivedStateOf {
-                needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.value
+                needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.floatValue
             }
         }
         val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
@@ -831,10 +831,10 @@ private fun DaysView(
                                             ) {
                                                 offset = Offset(
                                                     cellWidthPx * (column - 1),
-                                                    cellHeightPx * row / scale.value,
+                                                    cellHeightPx * row / scale.floatValue,
                                                 )
                                                 setAddEventBoxEnabled()
-                                                duration = cellHeightPx / scale.value
+                                                duration = cellHeightPx / scale.floatValue
                                                 setSelectedDay(startingDay + column - 1)
                                             }
                                             .semantics {
@@ -988,7 +988,7 @@ private fun DaysView(
                     }
                 }
                 val ySteps = (cellHeightPx / 4).roundToInt()
-                val y = offset?.let { (it.y * scale.value / ySteps).roundToInt() } ?: 0
+                val y = offset?.let { (it.y * scale.floatValue / ySteps).roundToInt() } ?: 0
                 val animatedOffset = if (offset == null) Offset.Zero
                 else animateOffsetAsState(
                     targetValue = Offset(x * cellWidthPx, y * ySteps.toFloat()),
@@ -996,7 +996,7 @@ private fun DaysView(
                         spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
                     },
                 ).value
-                val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
+                val dy = (duration / (cellHeightPx / 4) * scale.floatValue).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
                     animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
@@ -1007,7 +1007,7 @@ private fun DaysView(
                     if (offset == null) {
                         offset = Offset(
                             cellWidthPx * (selectedDay - startingDay),
-                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.value,
+                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
                         )
                         setAddEventBoxEnabled()
                     } else {
@@ -1057,7 +1057,7 @@ private fun DaysView(
                             IntOffset(
                                 (animatedOffset.x + firstColumnPx).roundToInt(),
                                 (animatedOffset.y + if (interaction == Interaction.ExtendUp) {
-                                    duration * scale.value - animatedDuration
+                                    duration * scale.floatValue - animatedDuration
                                 } else 0f).roundToInt(),
                             )
                         }
@@ -1065,7 +1065,7 @@ private fun DaysView(
                             with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) {
                                 (animatedDuration + if (interaction == Interaction.ExtendUp) {
-                                    (offset?.y ?: 0f) * scale.value - animatedOffset.y
+                                    (offset?.y ?: 0f) * scale.floatValue - animatedOffset.y
                                 } else 0f).toDp()
                             },
                         )
@@ -1082,14 +1082,14 @@ private fun DaysView(
                                     val position = offset ?: return@drag
                                     val delta = it.positionChange()
                                     if (interaction == null) interaction = when {
-                                        abs(it.position.y - duration * scale.value) < cellHeightPx * scale.value * .2f -> Interaction.ExtendDown
+                                        abs(it.position.y - duration * scale.floatValue) < cellHeightPx * scale.floatValue * .2f -> Interaction.ExtendDown
 
-                                        abs(it.position.y) < cellHeightPx * scale.value * .2f -> Interaction.ExtendUp
+                                        abs(it.position.y) < cellHeightPx * scale.floatValue * .2f -> Interaction.ExtendUp
                                         else -> Interaction.Move
                                     }
                                     when (interaction) {
                                         Interaction.ExtendDown -> duration =
-                                            (duration + delta.y / scale.value).coerceIn(
+                                            (duration + delta.y / scale.floatValue).coerceIn(
                                                 minimumValue = ySteps * 1f,
                                                 maximumValue = ((ySteps * 24 * 4) - position.y).coerceAtLeast(
                                                     ySteps * 1f,
@@ -1097,19 +1097,19 @@ private fun DaysView(
                                             )
 
                                         Interaction.ExtendUp -> {
-                                            val newValueY = position.y + delta.y / scale.value
+                                            val newValueY = position.y + delta.y / scale.floatValue
                                             offset = position.copy(
                                                 y = newValueY.coerceIn(0f, cellHeightPx * 23),
                                             )
                                             duration =
-                                                (duration - delta.y / scale.value).coerceAtLeast(
+                                                (duration - delta.y / scale.floatValue).coerceAtLeast(
                                                     ySteps * 1f,
                                                 )
                                         }
 
                                         Interaction.Move -> {
                                             val newValueX = position.x + directionSign * delta.x
-                                            val newValueY = position.y + delta.y / scale.value
+                                            val newValueY = position.y + delta.y / scale.floatValue
                                             offset = Offset(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
                                                 newValueY.coerceIn(
@@ -1189,7 +1189,7 @@ private fun DaysView(
                         drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)
                     }
-                    val compact = dy < 3 / scale.value || run {
+                    val compact = dy < 3 / scale.floatValue || run {
                         // This is an ugly hack as the lack of proper autosize here, for now
                         !numeral.isArabicIndicVariants
                     }
