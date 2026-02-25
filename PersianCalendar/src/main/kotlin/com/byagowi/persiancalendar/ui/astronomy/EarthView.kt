@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.graphics.Paint
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.animateFloatAsState
@@ -14,6 +12,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,7 +55,7 @@ fun EarthView(
     isTropical: Boolean,
     state: AstronomyState,
     isScaled: Boolean,
-    timeInMillis: Animatable<Long, AnimationVector1D>,
+    timeInMillis: MutableLongState,
     modifier: Modifier = Modifier,
 ) {
     val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
@@ -168,9 +167,7 @@ fun EarthView(
                     rotationDirection = minutesChange.sign.toInt()
 
                     coroutineScope.launch {
-                        timeInMillis.snapTo(
-                            timeInMillis.value + (minutesChange * oneMinute).toInt(),
-                        )
+                        timeInMillis.longValue += (minutesChange * oneMinute).toLong()
                     }
                     velocityTracker.addPointerInputChange(change)
 
@@ -189,9 +186,7 @@ fun EarthView(
                     animationSpec = SplineBasedFloatDecayAnimationSpec(density),
                 ) { _, velocity ->
                     if (velocity.isFinite()) coroutineScope.launch {
-                        timeInMillis.snapTo(
-                            timeInMillis.value + (velocity * 1.5f * oneMinute).toInt(),
-                        )
+                        timeInMillis.longValue += (velocity * 1.5f * oneMinute).toLong()
                     }
                 }
             }

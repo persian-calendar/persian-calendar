@@ -11,7 +11,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.TwoWayConverter
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
@@ -55,12 +55,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -158,21 +159,12 @@ fun SharedTransitionScope.AstronomyScreen(
     today: Jdn,
     noBackStackAction: (() -> Unit)?,
 ) {
-    val converter = TwoWayConverter<Long, AnimationVector1D>(
-        convertToVector = { AnimationVector1D(initVal = (it - initialTime).toFloat()) },
-        convertFromVector = { it.value.toLong() + initialTime },
-    )
-    val timeInMillis = rememberSaveable(
-        saver = Saver(
-            save = { it.value },
-            restore = { Animatable(initialValue = it, typeConverter = converter) },
-        ),
-    ) { Animatable(initialValue = initialTime, typeConverter = converter) }
+    val timeInMillis = rememberSaveable { mutableLongStateOf(initialTime) }
     LaunchedEffect(Unit) {
         val interval = 10.seconds.inWholeMilliseconds
         while (true) {
             delay(interval)
-            timeInMillis.snapTo(targetValue = timeInMillis.value + interval)
+            timeInMillis.longValue += interval
         }
     }
 
@@ -181,11 +173,11 @@ fun SharedTransitionScope.AstronomyScreen(
     var isDatePickerDialogShown by rememberSaveable { mutableStateOf(false) }
     val jdn by remember {
         derivedStateOf {
-            val date = Date(timeInMillis.value)
+            val date = Date(timeInMillis.longValue)
             Jdn(date.toGregorianCalendar(forceLocalTime = true).toCivilDate())
         }
     }
-    val astronomyState = AstronomyState(timeInMillis.value)
+    val astronomyState = AstronomyState(timeInMillis.longValue)
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -227,12 +219,7 @@ fun SharedTransitionScope.AstronomyScreen(
         }
         coroutineScope.launch { offsetX.animateTo(0f) }
         coroutineScope.launch { offsetY.animateTo(0f) }
-        coroutineScope.launch {
-            timeInMillis.animateTo(
-                targetValue = System.currentTimeMillis(),
-                animationSpec = spring(.9f, Spring.StiffnessLow),
-            )
-        }
+        coroutineScope.launch { timeInMillis.animateTo(System.currentTimeMillis()) }
     }
 
     Scaffold(
@@ -269,7 +256,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     }
 
                     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-                    if (showHoroscopeDialog) HoroscopeDialog(timeInMillis.value) {
+                    if (showHoroscopeDialog) HoroscopeDialog(timeInMillis.longValue) {
                         showHoroscopeDialog = false
                     }
                     var showYearHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
@@ -281,14 +268,14 @@ fun SharedTransitionScope.AstronomyScreen(
 
                     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
                     if (showPlanetaryHoursDialog) coordinates?.also {
-                        PlanetaryHoursDialog(it, timeInMillis.value) {
+                        PlanetaryHoursDialog(it, timeInMillis.longValue) {
                             showPlanetaryHoursDialog = false
                         }
                     }
 
                     var showMoonInScorpioDialog by rememberSaveable { mutableStateOf(false) }
                     if (showMoonInScorpioDialog) MoonInScorpioDialog(
-                        Date(timeInMillis.value).toGregorianCalendar(),
+                        Date(timeInMillis.longValue).toGregorianCalendar(),
                     ) { showMoonInScorpioDialog = false }
 
                     ThreeDotsDropdownMenu { closeMenu ->
@@ -298,7 +285,7 @@ fun SharedTransitionScope.AstronomyScreen(
                         }
                         AppDropdownMenuItem({ Text(stringResource(R.string.map)) }) {
                             closeMenu()
-                            navigateToMap(timeInMillis.value)
+                            navigateToMap(timeInMillis.longValue)
                         }
                         AppDropdownMenuItem({ Text(stringResource(R.string.horoscope)) }) {
                             showHoroscopeDialog = true
@@ -477,26 +464,36 @@ fun SharedTransitionScope.AstronomyScreen(
     }
 }
 
+private suspend fun MutableLongState.animateTo(targetValue: Long) {
+    val initialValue = this.longValue
+    animate(
+        initialValue = 0f,
+        targetValue = (targetValue - initialValue).toFloat(),
+        animationSpec = spring(dampingRatio = .9f, stiffness = Spring.StiffnessLow),
+    ) { value, _ -> this@animateTo.longValue = value.toLong() + initialValue }
+    this.longValue = targetValue
+}
+
 private val oneMinute = 1.minutes.inWholeMilliseconds
 private val oneDay = 1.days.inWholeMilliseconds
 
 @Composable
 private fun SharedTransitionScope.SliderBar(
-    timeInMillis: Animatable<Long, AnimationVector1D>,
+    timeInMillis: MutableLongState,
     resetButtonAction: () -> Unit,
     showDatePickerDialog: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     fun buttonScrollSlider(days: Int) {
         coroutineScope.launch {
-            val newValue = timeInMillis.value + days.days.inWholeMilliseconds
+            val newValue = timeInMillis.longValue + days.days.inWholeMilliseconds
             timeInMillis.animateTo(newValue)
         }
     }
 
     Column(Modifier.fillMaxWidth()) {
         Text(
-            text = Date(timeInMillis.value).toGregorianCalendar().formatDateAndTime(),
+            text = Date(timeInMillis.longValue).toGregorianCalendar().formatDateAndTime(),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -523,7 +520,7 @@ private fun SharedTransitionScope.SliderBar(
             val density = LocalDensity.current
             fun onDelta(velocity: Float) {
                 coroutineScope.launch {
-                    timeInMillis.snapTo(timeInMillis.value + (oneMinute * velocity).toInt())
+                    timeInMillis.longValue += (oneMinute * velocity).toInt()
                 }
             }
             Box(
@@ -546,7 +543,7 @@ private fun SharedTransitionScope.SliderBar(
                         val space = 10.dp.toPx()
                         val linesCount = this.size.width.toInt() / space.roundToInt()
                         repeat(linesCount) {
-                            val x = it * space + timeInMillis.value / oneMinute % space
+                            val x = it * space + timeInMillis.longValue / oneMinute % space
                             val deviation = 2 * (it - linesCount / 2f) / linesCount
                             drawLine(
                                 color = primary,
@@ -558,7 +555,7 @@ private fun SharedTransitionScope.SliderBar(
                         }
                     },
             )
-            ChangesHapticFeedback(sampleMillis = 250) { timeInMillis.value / oneDay }
+            ChangesHapticFeedback(sampleMillis = 250) { timeInMillis.longValue / oneDay }
             TimeArrow(::buttonScrollSlider, isPrevious = false)
         }
     }
@@ -590,7 +587,7 @@ private fun SharedTransitionScope.SolarDisplay(
     isScaled: Boolean,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
-    timeInMillis: Animatable<Long, AnimationVector1D>,
+    timeInMillis: MutableLongState,
     astronomyState: AstronomyState,
     mode: AstronomyMode,
     onModeChange: (AstronomyMode) -> Unit,
@@ -628,7 +625,7 @@ private fun SharedTransitionScope.SolarDisplay(
                     boundsTransform = appBoundsTransform,
                 ),
             selected = false,
-            onClick = { navigateToMap(timeInMillis.value) },
+            onClick = { navigateToMap(timeInMillis.longValue) },
             icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
         val canvasModifier = Modifier
@@ -733,7 +730,7 @@ private fun Header(
     jdn: Jdn,
     mode: AstronomyMode,
     isTropical: Boolean,
-    timeInMillis: Animatable<Long, AnimationVector1D>,
+    timeInMillis: MutableLongState,
     modifier: Modifier = Modifier,
 ) {
     val sunZodiac = if (isTropical) Zodiac.fromTropical(astronomyState.sun.elon)
@@ -772,7 +769,7 @@ private fun Header(
                     jdn = jdn,
                     withOldEraName = language.isPersianOrDari,
                     withEmoji = true,
-                    timeInMillis = timeInMillis.value,
+                    timeInMillis = timeInMillis.longValue,
                 )
             },
         )
@@ -826,7 +823,7 @@ private fun Header(
 }
 
 @Composable
-private fun Seasons(jdn: Jdn, timeInMillis: Animatable<Long, AnimationVector1D>) {
+private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
     val seasonsCache = remember { lruCache(1024, create = ::seasons) }
     val seasonsOrder = remember {
         if (coordinates?.isSouthernHemisphere == true) {
