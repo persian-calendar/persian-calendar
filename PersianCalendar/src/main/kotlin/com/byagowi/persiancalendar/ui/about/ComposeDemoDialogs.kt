@@ -641,7 +641,7 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
             }
         }
 
-        val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+        val scale = rememberSaveable { mutableFloatStateOf(1f) }
         val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
         val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
         Canvas(
@@ -670,8 +670,8 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
                     },
                 )
                 .graphicsLayer {
-                    this.scaleX = scale.value
-                    this.scaleY = scale.value
+                    this.scaleX = scale.floatValue
+                    this.scaleY = scale.floatValue
                     this.translationX = offsetX.value
                     this.translationY = offsetY.value
                 },

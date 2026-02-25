@@ -45,6 +45,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -181,7 +182,7 @@ fun SharedTransitionScope.MapScreen(
             ScreenSurface { Box(Modifier.fillMaxSize()) }
         }
         val mapString = stringResource(R.string.map)
-        val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+        val scale = rememberSaveable { mutableFloatStateOf(1f) }
         val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
         val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
         if (!showGlobeView) Canvas(
@@ -225,11 +226,11 @@ fun SharedTransitionScope.MapScreen(
                     },
                 )
                 .graphicsLayer {
-                    this.scaleX = scale.value
-                    this.scaleY = scale.value
+                    this.scaleX = scale.floatValue
+                    this.scaleY = scale.floatValue
                     val (width, height) = this.size
                     val mapSize = min(width / 2, height)
-                    this.translationX = offsetX.value.mod(mapSize * 2 * scale.value)
+                    this.translationX = offsetX.value.mod(mapSize * 2 * scale.floatValue)
                     this.translationY = offsetY.value
                 },
         ) {
@@ -244,7 +245,7 @@ fun SharedTransitionScope.MapScreen(
                     scale(contentScale, pivot = Offset.Zero) {
                         mapDraw.draw(
                             canvas = this.drawContext.canvas.nativeCanvas,
-                            scale = scale.value * contentScale,
+                            scale = scale.floatValue * contentScale,
                             displayLocation = displayLocation,
                             coordinates = markedCoordinates,
                             directPathDestination = directPathDestination,

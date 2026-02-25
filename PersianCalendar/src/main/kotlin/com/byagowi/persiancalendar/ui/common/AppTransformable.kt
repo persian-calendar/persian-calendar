@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun Modifier.appTransformable(
-    scale: Animatable<Float, AnimationVector1D>,
+    scale: MutableFloatState,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
     disableHorizontalLimit: Boolean = false,
@@ -60,7 +61,7 @@ fun Modifier.appTransformable(
             val downTime = down.uptimeMillis
             var hasMoved = false
             var lastEvent: PointerEvent
-            var newScale = scale.value
+            var newScale = scale.floatValue
             do {
                 val event = awaitPointerEvent()
                 lastEvent = event
@@ -73,9 +74,9 @@ fun Modifier.appTransformable(
                     var targetY = 0f
                     if (zoomChange != 1f) {
                         hasMoved = true
-                        val oldScale = scale.value
-                        newScale = (scale.value * zoomChange).coerceIn(scaleRange)
-                        coroutineScope.launch { scale.snapTo(newScale) }
+                        val oldScale = scale.floatValue
+                        newScale = (scale.floatValue * zoomChange).coerceIn(scaleRange)
+                        coroutineScope.launch { scale.floatValue = newScale }
                         val focusX = centroid.x - size.width / 2f
                         val focusY = centroid.y - size.height / 2f
                         targetX =

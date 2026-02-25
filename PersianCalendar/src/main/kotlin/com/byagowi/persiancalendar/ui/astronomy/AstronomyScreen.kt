@@ -55,9 +55,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -181,12 +183,12 @@ fun SharedTransitionScope.AstronomyScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(.25f) }
+    val scale = rememberSaveable { mutableFloatStateOf(.25f) }
     val offsetX = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
     val offsetY = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(0f) }
 
     val scaledButNotOnCenter by remember {
-        derivedStateOf { scale.value == 1f && (offsetX.value != 0f || offsetY.value != 0f) }
+        derivedStateOf { scale.floatValue == 1f && (offsetX.value != 0f || offsetY.value != 0f) }
     }
     LaunchedEffect(scaledButNotOnCenter) {
         if (scaledButNotOnCenter) {
@@ -198,29 +200,31 @@ fun SharedTransitionScope.AstronomyScreen(
     var initialAnimation by remember { mutableStateOf(true) }
     LaunchedEffect(Unit) {
         if (initialAnimation) {
-            scale.snapTo(.25f)
-            scale.animateTo(
+            animate(
+                initialValue = .25f,
                 targetValue = 1f,
                 animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow),
-            )
+            ) { value, _ -> scale.floatValue = value }
             initialAnimation = false
         }
     }
 
     val resetButtonAction: () -> Unit = {
         coroutineScope.launch {
-            scale.animateTo(
+            animate(
+                initialValue = scale.floatValue,
                 targetValue = 1f,
                 animationSpec = spring(
                     Spring.DampingRatioLowBouncy,
                     Spring.StiffnessLow,
                 ),
-            )
+            ) { value, _ -> scale.floatValue = value }
         }
         coroutineScope.launch { offsetX.animateTo(0f) }
         coroutineScope.launch { offsetY.animateTo(0f) }
         coroutineScope.launch { timeInMillis.animateTo(System.currentTimeMillis()) }
     }
+    val isScaled by remember { derivedStateOf { scale.floatValue != 1f } }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -242,8 +246,9 @@ fun SharedTransitionScope.AstronomyScreen(
                     else NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
-                    val isScaled = scale.value != 1f && !initialAnimation
-                    TodayActionButton(visible = jdn != today || isScaled || offsetX.value != 0f || offsetY.value != 0f) {
+                    TodayActionButton(
+                        visible = jdn != today || isScaled || offsetX.value != 0f || offsetY.value != 0f,
+                    ) {
                         resetButtonAction()
                     }
                     AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
@@ -322,7 +327,6 @@ fun SharedTransitionScope.AstronomyScreen(
             )
         },
     ) { paddingValues ->
-        val isScaled by remember { derivedStateOf { scale.value != 1f } }
         Box(
             Modifier
                 .padding(top = paddingValues.calculateTopPadding())
@@ -583,7 +587,7 @@ private fun SharedTransitionScope.TimeArrow(
 
 @Composable
 private fun SharedTransitionScope.SolarDisplay(
-    scale: Animatable<Float, AnimationVector1D>,
+    scale: MutableFloatState,
     isScaled: Boolean,
     offsetX: Animatable<Float, AnimationVector1D>,
     offsetY: Animatable<Float, AnimationVector1D>,
@@ -631,8 +635,8 @@ private fun SharedTransitionScope.SolarDisplay(
         val canvasModifier = Modifier
             .aspectRatio(1f)
             .graphicsLayer {
-                this.scaleX = scale.value
-                this.scaleY = scale.value
+                this.scaleX = scale.floatValue
+                this.scaleY = scale.floatValue
                 this.translationX = offsetX.value
                 this.translationY = offsetY.value
             }
