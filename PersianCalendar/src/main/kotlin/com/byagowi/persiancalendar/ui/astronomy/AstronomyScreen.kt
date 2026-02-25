@@ -631,7 +631,6 @@ private fun SharedTransitionScope.SolarDisplay(
             onClick = { navigateToMap(timeInMillis.value) },
             icon = { Text("🗺", modifier = Modifier.semantics { this.contentDescription = map }) },
         )
-        val coroutineScope = rememberCoroutineScope()
         val canvasModifier = Modifier
             .aspectRatio(1f)
             .graphicsLayer {
