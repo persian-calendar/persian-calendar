@@ -76,7 +76,7 @@ fun Modifier.appTransformable(
                         hasMoved = true
                         val oldScale = scale.floatValue
                         newScale = (scale.floatValue * zoomChange).coerceIn(scaleRange)
-                        coroutineScope.launch { scale.floatValue = newScale }
+                        scale.floatValue = newScale
                         val focusX = centroid.x - size.width / 2f
                         val focusY = centroid.y - size.height / 2f
                         targetX =
