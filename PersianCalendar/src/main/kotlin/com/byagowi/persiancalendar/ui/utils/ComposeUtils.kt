@@ -5,8 +5,6 @@ import android.view.ViewParent
 import android.view.Window
 import androidx.annotation.ColorRes
 import androidx.compose.animation.BoundsTransform
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animate
@@ -21,13 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
@@ -96,11 +92,6 @@ val appContentSizeAnimationSpec = spring(
     stiffness = Spring.StiffnessMediumLow,
     dampingRatio = Spring.DampingRatioLowBouncy,
     visibilityThreshold = IntSize.VisibilityThreshold,
-)
-
-val AnimatableColorSaver = Saver<Animatable<Color, AnimationVector4D>, Int>(
-    save = { it.value.toArgb() },
-    restore = { androidx.compose.animation.Animatable(Color(it)) },
 )
 
 // When something needs to match with Material default theme corner sizes
