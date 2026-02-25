@@ -37,12 +37,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.enabledCalendars
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.abs
 
 @Composable
@@ -99,8 +97,7 @@ fun DatePickerDialog(
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
         CalendarPicker(
             modifier = Modifier.padding(top = 24.dp, bottom = 16.dp, start = 24.dp, end = 24.dp),
-            items = (enabledCalendars.takeIf { it.size > 1 }
-                ?: language.defaultCalendars).toImmutableList(),
+            items = enabledCalendarsWithDefaultInCompose(),
             backgroundColor = AlertDialogDefaults.containerColor,
             value = calendar,
             betterToUseShortCalendarName = true,

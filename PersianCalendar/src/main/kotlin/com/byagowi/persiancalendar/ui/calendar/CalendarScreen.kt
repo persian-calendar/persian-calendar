@@ -207,6 +207,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -851,7 +852,7 @@ private fun SharedTransitionScope.CalendarsTab(
             jdn = selectedDay,
             today = today,
             selectedCalendar = mainCalendar,
-            shownCalendars = enabledCalendars.toImmutableList(),
+            shownCalendars = remember(enabledCalendars) { enabledCalendars.toImmutableList() },
             isExpanded = isExpanded,
             navigateToAstronomy = navigateToAstronomy,
         )
@@ -1141,8 +1142,7 @@ private fun SharedTransitionScope.Toolbar(
                 if (isYearView) AppModesDropDown(
                     value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
-                    values = (enabledCalendars.takeIf { it.size > 1 }
-                        ?: language.defaultCalendars).toImmutableList(),
+                    values = enabledCalendarsWithDefaultInCompose(),
                     small = subtitle.isNotEmpty(),
                 ) {
                     stringResource(

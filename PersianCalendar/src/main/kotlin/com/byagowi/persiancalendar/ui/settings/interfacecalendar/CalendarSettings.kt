@@ -219,8 +219,10 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         SettingsSingleSelect(
             key = PREF_ISLAMIC_OFFSET,
             // One is formatted with locale's numerals and the other used for keys isn't
-            entries = (-2..2).map { numeral.format(it) }.toImmutableList(),
-            entryValues = (-2..2).map { it.toString() }.toImmutableList(),
+            entries = remember(numeral) {
+                (-2..2).map { numeral.format(it) }.toImmutableList()
+            },
+            entryValues = remember { (-2..2).map { it.toString() }.toImmutableList() },
             persistedValue = islamicCalendarOffset.toString(),
             dialogTitleResId = R.string.islamic_offset,
             title = stringResource(R.string.islamic_offset),
@@ -229,8 +231,8 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     }
     val weekStart = weekStart
     val weekDays = WeekDay.entries.map { it + weekStart.ordinal }
-    val weekDaysTitles = weekDays.map { it.title }.toImmutableList()
-    val weekDaysValues = weekDays.map { it.ordinal.toString() }.toImmutableList()
+    val weekDaysTitles = remember { weekDays.map { it.title }.toImmutableList() }
+    val weekDaysValues = remember { weekDays.map { it.ordinal.toString() }.toImmutableList() }
     SettingsSingleSelect(
         key = PREF_WEEK_START,
         entries = weekDaysTitles,

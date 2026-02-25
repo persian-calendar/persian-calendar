@@ -80,7 +80,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
@@ -91,6 +90,7 @@ import com.byagowi.persiancalendar.ui.common.BaseAppDialog
 import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
 import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.createStatusIcon
@@ -351,7 +351,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
     val today = remember { Jdn.today() } // take this from App.kt's today
     val lazyListState = rememberLazyListState(pagesCount / 2)
     val textStyle = LocalTextStyle.current
-    val calendars = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+    val calendars = enabledCalendarsWithDefaultInCompose()
     var sourceCalendar by rememberSaveable { mutableStateOf(calendars[0]) }
     val otherCalendars = calendars - sourceCalendar
     var destinationCalendar by rememberSaveable(sourceCalendar) { mutableStateOf(otherCalendars[0]) }

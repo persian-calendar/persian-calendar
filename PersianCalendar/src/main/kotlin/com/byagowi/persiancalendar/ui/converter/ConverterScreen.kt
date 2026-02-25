@@ -76,7 +76,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
@@ -99,6 +98,8 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -137,7 +138,7 @@ fun SharedTransitionScope.ConverterScreen(
                     AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
-                        values = ConverterScreenMode.entries.toImmutableList(),
+                        values = remember { ConverterScreenMode.entries.toImmutableList() },
                     ) { stringResource(it.title) }
                 },
                 colors = appTopAppBarColors(),
@@ -520,8 +521,7 @@ private fun ColumnScope.ConverterAndDistance(
         setShareAction {
             val chooserTitle = resources.getString(screenMode.title)
             if (screenMode == ConverterScreenMode.CONVERTER) {
-                val calendarsList =
-                    enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+                val calendarsList = enabledCalendarsWithDefault
                 val otherCalendars = calendarsList - calendar
                 context.shareText(
                     text = listOf(
@@ -576,14 +576,14 @@ private fun ColumnScope.ConverterAndDistance(
     }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+    val calendarsList = enabledCalendarsWithDefaultInCompose()
     if (calendar !in calendarsList) calendar = mainCalendar
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarPicker(
                 value = calendar,
-                items = calendarsList.toImmutableList(),
+                items = calendarsList,
                 backgroundColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             ) { calendar = it }
@@ -622,7 +622,7 @@ private fun ColumnScope.ConverterAndDistance(
     } else {
         CalendarPicker(
             value = calendar,
-            items = calendarsList.toImmutableList(),
+            items = calendarsList,
             backgroundColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) { calendar = it }

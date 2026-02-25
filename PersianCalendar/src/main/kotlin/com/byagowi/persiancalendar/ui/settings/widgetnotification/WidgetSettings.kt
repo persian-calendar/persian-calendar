@@ -98,7 +98,7 @@ fun ColumnScope.WidgetSettings() {
     SettingsMultiSelect(
         key = PREF_WHAT_TO_SHOW_WIDGETS,
         entries = widgetCustomizations.values.map { stringResource(it) }.toImmutableList(),
-        entryValues = widgetCustomizations.keys.toImmutableList(),
+        entryValues = remember { widgetCustomizations.keys.toImmutableList() },
         persistedSet = whatToShowOnWidgets.toImmutableSet(),
         dialogTitleResId = R.string.which_one_to_show,
         title = stringResource(R.string.customize_widget),
