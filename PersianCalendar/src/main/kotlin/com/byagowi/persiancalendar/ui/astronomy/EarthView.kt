@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.PointerId
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.input.pointer.util.addPointerInputChange
@@ -129,8 +130,10 @@ fun EarthView(
     val symbols = Zodiac.entries.map { it.symbol }
     val coroutineScope = rememberCoroutineScope()
     val pointerModifier = Modifier.pointerInput(isScaled) {
+        var lastPointerId: PointerId? = null
         if (!isScaled) awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false)
+            lastPointerId = down.id
             val centerX = size.width / 2f
             val centerY = size.height / 2f
             var previousAngle = atan2(down.position.y - centerY, down.position.x - centerX)
@@ -185,7 +188,7 @@ fun EarthView(
                     initialVelocity = rotationDirection * velocityMagnitude / if (isSunRotation) 1_500_000 else 600_000,
                     animationSpec = SplineBasedFloatDecayAnimationSpec(density),
                 ) { _, velocity ->
-                    if (velocity.isFinite()) coroutineScope.launch {
+                    if (velocity.isFinite() && down.id == lastPointerId) coroutineScope.launch {
                         timeInMillis.longValue += (velocity * 1.5f * oneMinute).toLong()
                     }
                 }
