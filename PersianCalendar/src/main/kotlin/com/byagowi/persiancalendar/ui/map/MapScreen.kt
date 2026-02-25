@@ -228,7 +228,7 @@ fun SharedTransitionScope.MapScreen(
                     this.scaleY = scale.floatValue
                     val (width, height) = this.size
                     val mapSize = min(width / 2, height)
-                    this.translationX = offsetX.floatValue.mod(mapSize * 2 * scale.value)
+                    this.translationX = offsetX.floatValue.mod(mapSize * 2 * scale.floatValue)
                     this.translationY = offsetY.floatValue
                 },
         ) {
