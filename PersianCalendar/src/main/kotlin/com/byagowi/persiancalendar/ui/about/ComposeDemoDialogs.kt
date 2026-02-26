@@ -88,7 +88,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.common.BaseAppDialog
 import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
-import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
 import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.createStatusIcon
@@ -349,7 +349,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
     val today = remember { Jdn.today() } // take this from App.kt's today
     val lazyListState = rememberLazyListState(pagesCount / 2)
     val textStyle = LocalTextStyle.current
-    val calendars = enabledCalendarsWithDefaultInCompose()
+    val calendars = enabledCalendarsWithDefault
     var sourceCalendar by rememberSaveable { mutableStateOf(calendars[0]) }
     val otherCalendars = calendars - sourceCalendar
     var destinationCalendar by rememberSaveable(sourceCalendar) { mutableStateOf(otherCalendars[0]) }

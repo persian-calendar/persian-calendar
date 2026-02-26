@@ -16,7 +16,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.annotation.RememberInComposition
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -32,7 +31,6 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.sample
@@ -176,15 +174,5 @@ fun <T> ChangesHapticFeedback(sampleMillis: Long? = null, block: () -> T) {
 
 // If the user has disabled all the other available calendars, this tries to return the default
 // where it makes more sense
-val enabledCalendarsWithDefault: List<Calendar>
-    @RememberInComposition get() {
-        return enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
-    }
-
-// This turns the above into a guaranteed for Compose immutable list
-@Composable
-fun enabledCalendarsWithDefaultInCompose(): ImmutableList<Calendar> {
-    return remember(enabledCalendars, language) {
-        enabledCalendarsWithDefault.toImmutableList()
-    }
-}
+val enabledCalendarsWithDefault: ImmutableList<Calendar>
+    get() = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars

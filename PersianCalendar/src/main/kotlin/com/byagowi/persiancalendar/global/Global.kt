@@ -9,6 +9,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -148,6 +149,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import java.util.TimeZone
 
@@ -306,8 +308,8 @@ val showTrueNorth by showTrueNorth_
 private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
 
-private val enabledCalendars_ =
-    mutableStateOf(listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
+private val enabledCalendars_: MutableState<ImmutableList<Calendar>> =
+    mutableStateOf(persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
 val enabledCalendars by enabledCalendars_
 
 val mainCalendar get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
@@ -647,13 +649,15 @@ fun updateStoredPreference(context: Context) {
             ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }).splitFilterNotEmpty(
             ",",
         ).map(Calendar::valueOf)
-        enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct()
+        enabledCalendars_.value =
+            (listOf(mainCalendar) + otherCalendars).distinct().toImmutableList()
         secondaryCalendarEnabled_.value = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE,
         )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
-        enabledCalendars_.value = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+        enabledCalendars_.value =
+            persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
         secondaryCalendarEnabled_.value = false
     }.getOrNull().debugAssertNotNull
 

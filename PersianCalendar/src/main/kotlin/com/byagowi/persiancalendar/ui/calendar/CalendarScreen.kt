@@ -208,7 +208,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
-import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
+import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -1150,7 +1150,7 @@ private fun SharedTransitionScope.Toolbar(
                 if (isYearView) AppModesDropDown(
                     value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
-                    values = enabledCalendarsWithDefaultInCompose(),
+                    values = enabledCalendarsWithDefault,
                     small = subtitle.isNotEmpty(),
                 ) {
                     stringResource(

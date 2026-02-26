@@ -99,7 +99,6 @@ import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
-import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefaultInCompose
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -576,7 +575,7 @@ private fun ColumnScope.ConverterAndDistance(
     }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val calendarsList = enabledCalendarsWithDefaultInCompose()
+    val calendarsList = enabledCalendarsWithDefault
     if (calendar !in calendarsList) calendar = mainCalendar
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {
