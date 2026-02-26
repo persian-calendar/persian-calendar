@@ -5,8 +5,8 @@ import android.opengl.GLSurfaceView
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.draggable2D
@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -53,14 +55,15 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
     var isInZooming by remember { mutableStateOf(false) }
-    val zoom = remember { Animatable(.25f) }
+    var zoom by rememberSaveable { mutableFloatStateOf(1f) }
     LaunchedEffect(Unit) {
-        zoom.animateTo(
+        if (zoom == 1f) animate(
+            initialValue = .25f,
             targetValue = 1f,
             animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow),
-        )
+        ) { value, _ -> zoom = value }
     }
-    renderer.overriddenZoom = zoom.value
+    renderer.overriddenZoom = zoom
     AndroidView(
         factory = { context ->
             val glView = GLSurfaceView(context)
@@ -93,7 +96,7 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
                 onlyMultitouch = true,
             ) { factor ->
                 isInZooming = true
-                coroutineScope.launch { zoom.snapTo((zoom.value * factor).coerceIn(.25f, 6f)) }
+                coroutineScope.launch { zoom = (zoom * factor).coerceIn(.25f, 6f) }
             }
             .fillMaxSize(),
     )
