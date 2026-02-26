@@ -22,9 +22,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -318,15 +317,16 @@ fun SharedTransitionScope.CalendarScreen(
     var searchTerm by rememberSaveable { mutableStateOf<String?>(null) }
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
     var isYearView by rememberSaveable { mutableStateOf(false) }
-    val isYearViewFraction = remember { Animatable(if (isYearView) 1f else 0f) }
+    val isYearViewFraction = remember { mutableFloatStateOf(if (isYearView) 1f else 0f) }
     LaunchedEffect(isYearView) {
-        isYearViewFraction.animateTo(
+        animate(
+            initialValue = isYearViewFraction.floatValue,
             targetValue = if (isYearView) 1f else 0f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
             ),
-        )
+        ) { value, _ -> isYearViewFraction.floatValue = value }
     }
     val yearViewLazyListState = if (isYearView) yearViewLazyListState(
         today,
@@ -506,7 +506,7 @@ fun SharedTransitionScope.CalendarScreen(
                 },
             ) { isYearViewState ->
                 if (isYearViewState && yearViewLazyListState != null && yearViewScale != null) {
-                    Box(Modifier.alpha(isYearViewFraction.value.coerceIn(0f, 1f))) {
+                    Box(Modifier.alpha(isYearViewFraction.floatValue.coerceIn(0f, 1f))) {
                         YearView(
                             selectedDay = selectedDay,
                             selectedMonthOffset = selectedMonthOffset,
@@ -1047,7 +1047,7 @@ private fun SharedTransitionScope.Toolbar(
     onYearViewCalendarChange: (Calendar?) -> Unit,
     isYearView: Boolean,
     onIsYearViewChange: (Boolean) -> Unit,
-    isYearViewFraction: Animatable<Float, AnimationVector1D>,
+    isYearViewFraction: MutableFloatState,
     yearViewLazyListState: LazyListState?,
     yearViewScale: MutableFloatState?,
     selectedMonthOffset: Int,
@@ -1203,15 +1203,18 @@ private fun SharedTransitionScope.Toolbar(
         navigationIcon = {
             if (isYearView) PredictiveBackHandler { flow ->
                 runCatching {
-                    flow.collect { isYearViewFraction.snapTo(1 - it.progress) }
+                    flow.collect { isYearViewFraction.floatValue = 1 - it.progress }
                 }.onSuccess { onYearViewBackPressed() }.onFailure {
-                    isYearViewFraction.animateTo(1f)
+                    animate(
+                        initialValue = isYearViewFraction.floatValue,
+                        targetValue = 1f,
+                    ) { value, _ -> isYearViewFraction.floatValue = value }
                 }
             }
-            when (isYearViewFraction.value) {
+            when (isYearViewFraction.floatValue) {
                 0f -> NavigationOpenNavigationRailIcon(openNavigationRail)
                 1f -> NavigationNavigateUpIcon(navigateUp = onYearViewBackPressed)
-                else -> DrawerArrowDrawable { isYearViewFraction.value }
+                else -> DrawerArrowDrawable { isYearViewFraction.floatValue }
             }
         },
         actions = {
