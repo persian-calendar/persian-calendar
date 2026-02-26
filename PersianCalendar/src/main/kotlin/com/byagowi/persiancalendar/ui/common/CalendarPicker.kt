@@ -111,9 +111,9 @@ private fun <T> SegmentedButtonItemsPicker(
         val currentVisualIndex = visualIndex(value)
         val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
         val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
-        fun updateCellPosition(item: T) {
-            val destinationVisualIndex = visualIndex(item)
-            val isForward = visualIndex(item) > currentVisualIndex
+        LaunchedEffect(items, value) {
+            val destinationVisualIndex = visualIndex(value)
+            val isForward = visualIndex(value) > currentVisualIndex
             val first = spring<Float>(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
@@ -135,7 +135,6 @@ private fun <T> SegmentedButtonItemsPicker(
                 )
             }
         }
-        LaunchedEffect(items) { updateCellPosition(value) }
         SingleChoiceSegmentedButtonRow(
             space = 0.dp,
             modifier = Modifier
@@ -203,7 +202,6 @@ private fun <T> SegmentedButtonItemsPicker(
                         onClick = {
                             onValueChange(item)
                             view.performHapticFeedbackVirtualKey()
-                            updateCellPosition(item)
                         },
                         contentPadding = PaddingValues(horizontal = 12.dp),
                         icon = {},

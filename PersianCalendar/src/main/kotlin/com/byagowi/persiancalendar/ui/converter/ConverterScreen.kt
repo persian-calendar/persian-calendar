@@ -496,7 +496,7 @@ private fun ColumnScope.ConverterAndDistance(
     var secondSelectedDate by rememberSaveable { mutableStateOf(today) }
 
     setResetButtonVisibility(
-        when (screenMode) {
+        calendar != mainCalendar || when (screenMode) {
             ConverterScreenMode.CONVERTER -> selectedDate != today
             ConverterScreenMode.DISTANCE -> selectedDate != today || secondSelectedDate != today
             else -> false
@@ -507,6 +507,7 @@ private fun ColumnScope.ConverterAndDistance(
     val resources = LocalResources.current
     LaunchedEffect(key1 = screenMode) {
         setResetAction {
+            calendar = mainCalendar
             when (screenMode) {
                 ConverterScreenMode.CONVERTER -> selectedDate = today
                 ConverterScreenMode.DISTANCE -> {
