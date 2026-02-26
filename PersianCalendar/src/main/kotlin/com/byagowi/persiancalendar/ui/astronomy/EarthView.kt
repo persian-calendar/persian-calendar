@@ -169,9 +169,7 @@ fun EarthView(
                     val minutesChange = -angleChange * rotationSpeed / PI.toFloat() / 2
                     rotationDirection = minutesChange.sign.toInt()
 
-                    coroutineScope.launch {
-                        timeInMillis.longValue += (minutesChange * oneMinute).toLong()
-                    }
+                    timeInMillis.longValue += (minutesChange * oneMinute).toLong()
                     velocityTracker.addPointerInputChange(change)
 
                     previousAngle = currentAngle
@@ -188,7 +186,7 @@ fun EarthView(
                     initialVelocity = rotationDirection * velocityMagnitude / if (isSunRotation) 1_500_000 else 600_000,
                     animationSpec = SplineBasedFloatDecayAnimationSpec(density),
                 ) { _, velocity ->
-                    if (velocity.isFinite() && down.id == lastPointerId) coroutineScope.launch {
+                    if (velocity.isFinite() && down.id == lastPointerId) {
                         timeInMillis.longValue += (velocity * 1.5f * oneMinute).toLong()
                     }
                 }

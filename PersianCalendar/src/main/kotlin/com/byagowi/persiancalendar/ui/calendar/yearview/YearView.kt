@@ -148,12 +148,10 @@ fun YearView(
     val coroutineScope = rememberCoroutineScope()
 
     val detectZoom = Modifier.detectZoom {
-        coroutineScope.launch {
-            scale.floatValue = (scale.floatValue * it).coerceIn(
-                yearSelectionModeScale,
-                horizontalDivisions.toFloat(),
-            )
-        }
+        scale.floatValue = (scale.floatValue * it).coerceIn(
+            yearSelectionModeScale,
+            horizontalDivisions.toFloat(),
+        )
     }
     val language = language
     val selectedDayMonth = calendar.getMonthStartFromMonthsDistance(
