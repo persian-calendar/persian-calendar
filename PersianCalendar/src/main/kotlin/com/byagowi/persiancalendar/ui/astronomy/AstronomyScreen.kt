@@ -534,10 +534,8 @@ private fun SharedTransitionScope.SliderBar(
             TimeArrow(::buttonScrollSlider, isPrevious = true)
             val primary = MaterialTheme.colorScheme.primary
             val density = LocalDensity.current
-            fun onDelta(velocity: Float) {
-                coroutineScope.launch {
-                    timeInMillis.longValue += (oneMinute * velocity).toInt()
-                }
+            val onDelta: (Float) -> Unit = { velocity ->
+                timeInMillis.longValue += (oneMinute * velocity).toInt()
             }
             Box(
                 modifier = Modifier
@@ -546,7 +544,7 @@ private fun SharedTransitionScope.SliderBar(
                     .weight(weight = 1f)
                     .draggable(
                         orientation = Orientation.Horizontal,
-                        state = rememberDraggableState(::onDelta),
+                        state = rememberDraggableState(onDelta),
                         onDragStopped = { velocity ->
                             animateDecay(
                                 initialValue = 0f,
