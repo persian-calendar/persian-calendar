@@ -679,7 +679,8 @@ private fun enableTimesTab(): Boolean {
     if (coordinates != null) return true
     // The placeholder isn't translated to other languages
     if (!language.isPersianOrDari) return false
-    val preferences = LocalContext.current.preferences
+    val context = LocalContext.current
+    val preferences = remember { context.preferences }
     // The user is already dismissed the third tab
     return !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
             // Try to not show the placeholder to established users
