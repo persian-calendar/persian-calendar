@@ -61,9 +61,10 @@ fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 }
 
 @Composable
-fun Modifier.highlightItem(enabled: Boolean): Modifier {
+fun Modifier.highlightItem(enabled: Boolean, isOnBackground: Boolean = false): Modifier {
     if (!enabled) return this
     val alpha = rememberSaveable { mutableFloatStateOf(.1f) }
+    if (isOnBackground) return this
     LaunchedEffect(Unit) {
         animate(
             initialValue = alpha.floatValue,
@@ -71,7 +72,7 @@ fun Modifier.highlightItem(enabled: Boolean): Modifier {
             animationSpec = tween(4000),
         ) { value, _ -> alpha.floatValue = value }
     }
-    return background(LocalContentColor.current.copy(alpha = alpha.floatValue))
+    return this.background(LocalContentColor.current.copy(alpha = alpha.floatValue))
 }
 
 fun View.findDialogWindow(): Window? =

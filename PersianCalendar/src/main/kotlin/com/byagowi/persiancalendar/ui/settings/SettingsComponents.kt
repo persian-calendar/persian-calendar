@@ -156,7 +156,7 @@ fun SettingsClickable(
     SettingsLayout(
         modifier = Modifier
             .clickable { showDialog = true }
-            .highlightItem(defaultOpen && !showDialog),
+            .highlightItem(defaultOpen, showDialog),
         title = title,
         summary = summary,
     )
