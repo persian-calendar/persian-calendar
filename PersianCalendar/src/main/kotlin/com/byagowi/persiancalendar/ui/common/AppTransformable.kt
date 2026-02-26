@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.core.FloatExponentialDecaySpec
+import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -131,7 +131,7 @@ fun Modifier.appTransformable(
                     animateDecay(
                         initialVelocity = velocity?.x ?: 0f,
                         initialValue = offsetX.floatValue,
-                        animationSpec = FloatExponentialDecaySpec(frictionMultiplier = 3f),
+                        animationSpec = SplineBasedFloatDecayAnimationSpec(density),
                     ) { value, _ ->
                         if (down.id == lastPointerId) {
                             offsetX.floatValue = value.coerceIn(-xBound, xBound)
@@ -142,7 +142,7 @@ fun Modifier.appTransformable(
                     animateDecay(
                         initialVelocity = velocity?.y ?: 0f,
                         initialValue = offsetY.floatValue,
-                        animationSpec = FloatExponentialDecaySpec(frictionMultiplier = 3f),
+                        animationSpec = SplineBasedFloatDecayAnimationSpec(density),
                     ) { value, _ ->
                         if (down.id == lastPointerId) {
                             offsetY.floatValue = value.coerceIn(-yBound, yBound)
