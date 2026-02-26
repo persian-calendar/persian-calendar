@@ -113,6 +113,7 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SharedTransitionScope.AboutScreen(
@@ -339,7 +340,7 @@ private fun HelpItems() {
             val title = lines.first()
             val body = lines.drop(1).joinToString("\n").trim()
             title to body
-        }
+        }.toImmutableList()
     }
     Column {
         var expandedItem by rememberSaveable { mutableIntStateOf(-1) }

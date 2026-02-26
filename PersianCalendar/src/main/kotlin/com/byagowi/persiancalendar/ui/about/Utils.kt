@@ -10,16 +10,7 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.generated.credits
 import com.byagowi.persiancalendar.utils.logException
-
-fun getCreditsSections() = credits
-    .split(Regex("^-{4}$", RegexOption.MULTILINE))
-    .map {
-        val lines = it.trim().lines()
-        val parts = lines.first().split(" - ")
-        Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
-    }
 
 fun appStandbyStatus(context: Context): String? {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return null

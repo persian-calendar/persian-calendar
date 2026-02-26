@@ -63,12 +63,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.generated.credits
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SharedTransitionScope.LicensesScreen(navigateUp: () -> Unit) {
@@ -159,7 +161,16 @@ private fun Sidebar(modifier: Modifier = Modifier) {
 
 @Composable
 private fun BoxScope.Licenses() {
-    val sections = remember { getCreditsSections() }
+    val sections = remember {
+        credits
+            .split(Regex("^-{4}$", RegexOption.MULTILINE))
+            .map {
+                val lines = it.trim().lines()
+                val parts = lines.first().split(" - ")
+                Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
+            }
+            .toImmutableList()
+    }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     val listState = rememberLazyListState()
     val expandArrowSizeModifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() })
