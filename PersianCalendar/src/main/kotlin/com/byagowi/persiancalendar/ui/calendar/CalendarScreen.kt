@@ -711,6 +711,7 @@ private fun SharedTransitionScope.detailsTabs(
     val refreshToken by rememberUpdatedState(refreshToken)
     val today by rememberUpdatedState(today)
     val now by rememberUpdatedState(now)
+    val fabPlaceholderHeight by rememberUpdatedState(fabPlaceholderHeight)
     return remember(hasTimesTab, isOnlyEventsTab) {
         listOfNotNull<DetailsTab>(
             if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
