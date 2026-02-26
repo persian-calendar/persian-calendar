@@ -102,6 +102,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -706,6 +707,10 @@ private fun SharedTransitionScope.detailsTabs(
     val hasTimesTab = enableTimesTab() && !removeThirdTab
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
+    val selectedDay by rememberUpdatedState(selectedDay)
+    val refreshToken by rememberUpdatedState(refreshToken)
+    val today by rememberUpdatedState(today)
+    val now by rememberUpdatedState(now)
     return remember(hasTimesTab, isOnlyEventsTab) {
         listOfNotNull<DetailsTab>(
             if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
