@@ -942,11 +942,10 @@ private fun Search(
     today: Jdn,
     bringEvent: (CalendarEvent<*>) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     var alpha by rememberSaveable { mutableFloatStateOf(1f) }
     PredictiveBackHandler { flow ->
         runCatching {
-            flow.collect { coroutineScope.launch { alpha = 1 - it.progress } }
+            flow.collect { alpha = 1 - it.progress }
         }.onSuccess { closeSearch() }.onFailure { alpha = 1f }
     }
     val repository = eventsRepository
