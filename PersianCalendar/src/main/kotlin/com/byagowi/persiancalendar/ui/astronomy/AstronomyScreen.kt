@@ -168,7 +168,8 @@ fun SharedTransitionScope.AstronomyScreen(
         }
     }
 
-    var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
+    val defaultMode = remember { AstronomyMode.entries[0] }
+    var mode by rememberSaveable { mutableStateOf(defaultMode) }
     var isTropical by rememberSaveable { mutableStateOf(false) }
     var isDatePickerDialogShown by rememberSaveable { mutableStateOf(false) }
     val jdn by remember {
@@ -208,6 +209,7 @@ fun SharedTransitionScope.AstronomyScreen(
     }
 
     val resetButtonAction: () -> Unit = {
+        mode = AstronomyMode.EARTH
         coroutineScope.launch {
             animateToValue(
                 state = scale,
@@ -245,7 +247,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
                 actions = {
                     TodayActionButton(
-                        visible = jdn != today || run {
+                        visible = jdn != today || mode != defaultMode || run {
                             isScaled && !initialAnimation
                         } || offsetX.floatValue != 0f || offsetY.floatValue != 0f,
                     ) { resetButtonAction() }
