@@ -255,7 +255,9 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
                 actions = {
                     TodayActionButton(
-                        visible = jdn != today || isScaled || offsetX.floatValue != 0f || offsetY.floatValue != 0f,
+                        visible = jdn != today || run {
+                            isScaled && !initialAnimation
+                        } || offsetX.floatValue != 0f || offsetY.floatValue != 0f,
                     ) { resetButtonAction() }
                     AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
