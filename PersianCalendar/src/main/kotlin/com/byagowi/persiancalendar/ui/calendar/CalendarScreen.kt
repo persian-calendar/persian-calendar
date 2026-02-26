@@ -676,13 +676,14 @@ private enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
 
 @Composable
 private fun enableTimesTab(): Boolean {
+    if (coordinates != null) return true
+    // The placeholder isn't translated to other languages
+    if (!language.isPersianOrDari) return false
     val preferences = LocalContext.current.preferences
-    return coordinates != null || // if coordinates is set, should be shown
-            (language.isPersianOrDari && // The placeholder isn't translated to other languages
-                    // The user is already dismissed the third tab
-                    !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
-                    // Try to not show the placeholder to established users
-                    PREF_APP_LANGUAGE !in preferences)
+    // The user is already dismissed the third tab
+    return !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
+            // Try to not show the placeholder to established users
+            PREF_APP_LANGUAGE !in preferences
 }
 
 private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
@@ -704,59 +705,61 @@ private fun SharedTransitionScope.detailsTabs(
     val hasTimesTab = enableTimesTab() && !removeThirdTab
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
-    return listOfNotNull<DetailsTab>(
-        if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
-            CalendarsTab(
-                selectedDay = selectedDay,
-                interactionSource = interactionSource,
-                minHeight = minHeight,
-                bottomPadding = bottomPadding,
-                today = today,
-                navigateToAstronomy = navigateToAstronomy,
-            )
-        } else null,
-        CalendarScreenTab.EVENT to { _, _, bottomPadding ->
-            EventsTab(
-                navigateToHolidaysSettings = navigateToHolidaysSettings,
-                // See the comment in floatingActionButton
-                fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
-                today = today,
-                now = now,
-                refreshToken = refreshToken,
-                refreshCalendar = refreshCalendar,
-                selectedDay = selectedDay,
-            )
-        },
-        // The optional third tab
-        if (hasTimesTab) CalendarScreenTab.TIMES to { interactionSource, minHeight, bottomPadding ->
-            val coordinates = coordinates
-            if (coordinates == null) Column(Modifier.fillMaxWidth()) {
-                val context = LocalContext.current
-                EncourageActionLayout(
-                    modifier = Modifier.padding(top = 24.dp),
-                    header = stringResource(R.string.ask_user_to_set_location),
-                    discardAction = {
-                        context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
-                        removeThirdTab = true
-                    },
-                    acceptAction = navigateToSettingsLocationTab,
-                    hideOnAccept = false,
+    return remember(hasTimesTab, isOnlyEventsTab) {
+        listOfNotNull<DetailsTab>(
+            if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
+                CalendarsTab(
+                    selectedDay = selectedDay,
+                    interactionSource = interactionSource,
+                    minHeight = minHeight,
+                    bottomPadding = bottomPadding,
+                    today = today,
+                    navigateToAstronomy = navigateToAstronomy,
                 )
-                Spacer(Modifier.height(bottomPadding))
-            } else TimesTab(
-                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                navigateToAstronomy = navigateToAstronomy,
-                coordinates = coordinates,
-                selectedDay = selectedDay,
-                interactionSource = interactionSource,
-                minHeight = minHeight,
-                bottomPadding = bottomPadding,
-                now = now,
-                today = today,
-            )
-        } else null,
-    ).toImmutableList()
+            } else null,
+            CalendarScreenTab.EVENT to { _, _, bottomPadding ->
+                EventsTab(
+                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                    // See the comment in floatingActionButton
+                    fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
+                    today = today,
+                    now = now,
+                    refreshToken = refreshToken,
+                    refreshCalendar = refreshCalendar,
+                    selectedDay = selectedDay,
+                )
+            },
+            // The optional third tab
+            if (hasTimesTab) CalendarScreenTab.TIMES to { interactionSource, minHeight, bottomPadding ->
+                val coordinates = coordinates
+                if (coordinates == null) Column(Modifier.fillMaxWidth()) {
+                    val context = LocalContext.current
+                    EncourageActionLayout(
+                        modifier = Modifier.padding(top = 24.dp),
+                        header = stringResource(R.string.ask_user_to_set_location),
+                        discardAction = {
+                            context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
+                            removeThirdTab = true
+                        },
+                        acceptAction = navigateToSettingsLocationTab,
+                        hideOnAccept = false,
+                    )
+                    Spacer(Modifier.height(bottomPadding))
+                } else TimesTab(
+                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                    navigateToAstronomy = navigateToAstronomy,
+                    coordinates = coordinates,
+                    selectedDay = selectedDay,
+                    interactionSource = interactionSource,
+                    minHeight = minHeight,
+                    bottomPadding = bottomPadding,
+                    now = now,
+                    today = today,
+                )
+            } else null,
+        ).toImmutableList()
+    }
 }
 
 @Composable
