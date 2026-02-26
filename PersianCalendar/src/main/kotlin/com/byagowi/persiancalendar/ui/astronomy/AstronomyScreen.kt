@@ -188,21 +188,10 @@ fun SharedTransitionScope.AstronomyScreen(
     val scaledButNotOnCenter by remember {
         derivedStateOf { scale.floatValue == 1f && (offsetX.floatValue != 0f || offsetY.floatValue != 0f) }
     }
-
-    suspend fun MutableFloatState.animateTo(
-        targetValue: Float,
-        animationSpec: AnimationSpec<Float> = spring(),
-    ) {
-        animate(
-            initialValue = this.floatValue,
-            targetValue = targetValue,
-            animationSpec = animationSpec,
-        ) { value, _ -> this@animateTo.floatValue = value }
-    }
     LaunchedEffect(scaledButNotOnCenter) {
         if (scaledButNotOnCenter) {
-            launch { offsetX.animateTo(0f) }
-            launch { offsetY.animateTo(0f) }
+            launch { animateToValue(offsetX, 0f) }
+            launch { animateToValue(offsetY, 0f) }
         }
     }
 
@@ -220,7 +209,8 @@ fun SharedTransitionScope.AstronomyScreen(
 
     val resetButtonAction: () -> Unit = {
         coroutineScope.launch {
-            scale.animateTo(
+            animateToValue(
+                state = scale,
                 targetValue = 1f,
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioLowBouncy,
@@ -228,9 +218,9 @@ fun SharedTransitionScope.AstronomyScreen(
                 ),
             )
         }
-        coroutineScope.launch { offsetX.animateTo(0f) }
-        coroutineScope.launch { offsetY.animateTo(0f) }
-        coroutineScope.launch { timeInMillis.animateTo(System.currentTimeMillis()) }
+        coroutineScope.launch { animateToValue(offsetX, 0f) }
+        coroutineScope.launch { animateToValue(offsetY, 0f) }
+        coroutineScope.launch { animateToTime(timeInMillis, System.currentTimeMillis()) }
     }
     val isScaled by remember { derivedStateOf { scale.floatValue != 1f } }
 
@@ -469,20 +459,33 @@ fun SharedTransitionScope.AstronomyScreen(
         onDismissRequest = { isDatePickerDialogShown = false },
     ) { jdn ->
         coroutineScope.launch {
-            timeInMillis.animateTo(
-                System.currentTimeMillis() + (jdn - today).days.inWholeMilliseconds,
+            animateToTime(
+                timeInMillis,
+                targetValue = System.currentTimeMillis() + (jdn - today).days.inWholeMilliseconds,
             )
         }
     }
 }
 
-private suspend fun MutableLongState.animateTo(targetValue: Long) {
-    val initialValue = this.longValue
+private suspend fun animateToTime(timeInMillis: MutableLongState, targetValue: Long) {
+    val initialValue = timeInMillis.longValue
     animate(
         initialValue = 0f,
         targetValue = (targetValue - initialValue).toFloat(),
         animationSpec = spring(dampingRatio = .9f, stiffness = Spring.StiffnessLow),
-    ) { value, _ -> this.longValue = value.toLong() + initialValue }
+    ) { value, _ -> timeInMillis.longValue = value.toLong() + initialValue }
+}
+
+private suspend fun animateToValue(
+    state: MutableFloatState,
+    targetValue: Float,
+    animationSpec: AnimationSpec<Float> = spring(),
+) {
+    animate(
+        initialValue = state.floatValue,
+        targetValue = targetValue,
+        animationSpec = animationSpec,
+    ) { value, _ -> state.floatValue = value }
 }
 
 private val oneMinute = 1.minutes.inWholeMilliseconds
@@ -497,8 +500,10 @@ private fun SharedTransitionScope.SliderBar(
     val coroutineScope = rememberCoroutineScope()
     fun buttonScrollSlider(days: Int) {
         coroutineScope.launch {
-            val newValue = timeInMillis.longValue + days.days.inWholeMilliseconds
-            timeInMillis.animateTo(newValue)
+            animateToTime(
+                timeInMillis,
+                targetValue = timeInMillis.longValue + days.days.inWholeMilliseconds,
+            )
         }
     }
 
@@ -871,7 +876,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
                                 this.contentDescription = title + spacedComma + formattedTime
                             }
                             .clickable(onClickLabel = stringResource(R.string.select_date)) {
-                                coroutineScope.launch { timeInMillis.animateTo(time) }
+                                coroutineScope.launch { animateToTime(timeInMillis, time) }
                             }
                             .clearAndSetSemantics {},
                         color = seasonsOrder[cell + row * 2].color,
