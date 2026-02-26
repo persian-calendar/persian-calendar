@@ -108,6 +108,7 @@ import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -180,7 +181,7 @@ fun HoroscopeDialog(timeInMillis: Long = System.currentTimeMillis(), onDismissRe
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             )
             Column {
-                listOf(AstronomyMode.EARTH, AstronomyMode.SUN).forEach {
+                persistentListOf(AstronomyMode.EARTH, AstronomyMode.SUN).forEach {
                     NavigationRailItem(
                         modifier = Modifier.size(56.dp),
                         selected = mode == it,
@@ -218,7 +219,7 @@ fun HoroscopeDialog(timeInMillis: Long = System.currentTimeMillis(), onDismissRe
     }
 }
 
-private val easternHoroscopePositions = listOf(
+private val easternHoroscopePositions = persistentListOf(
     /* 1*/1f / 2 - 1f / 6 to 1f / 2 - 1f / 3,
     /* 2*/1f / 2 - 1f / 6 - 1f / 6 to 1f / 2 - 1f / 3 - 1f / 6,
     /* 3*/1f / 2 - 1f / 3 - 1f / 6 to 1f / 2 - 1f / 3,
@@ -489,17 +490,17 @@ private fun ColumnScope.YearHoroscopeDialogContent(
     )
 }
 
-private val geocentricDistanceBodies = listOf(
+private val geocentricDistanceBodies = persistentListOf(
     Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
     Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto,
 )
 
-private val heliocentricDistanceBodies = listOf(
+private val heliocentricDistanceBodies = persistentListOf(
     Body.Mercury, Body.Venus, Body.Earth, Body.Moon, Body.Mars, Body.Jupiter,
     Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto,
 )
 
-private val ascendantBodies = listOf(
+private val ascendantBodies = persistentListOf(
     Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn,
 )
 
@@ -514,7 +515,7 @@ private fun AscendantZodiac(
 ) {
     val bodiesZodiac = ascendantBodies.map { body ->
         if (body == Body.Sun && isYearEquinox) {
-            // Sometimes 359.99 put it in a incorrect house so let's just hardcode it
+            // Sometimes 359.99 put it in an incorrect house so let's just hardcode it
             return@map body to .0
         }
         val (longitude, _) = geocentricLongitudeAndDistanceOfBody(body, time)
