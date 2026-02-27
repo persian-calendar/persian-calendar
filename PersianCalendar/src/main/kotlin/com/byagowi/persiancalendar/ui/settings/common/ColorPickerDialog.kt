@@ -77,7 +77,7 @@ fun ColorPickerDialog(
         saver = Saver(
             save = { it.value.toArgb() },
             restore = { Animatable(Color(it)) },
-        )
+        ),
     ) { Animatable(initialColor) }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     AppDialog(
@@ -211,8 +211,13 @@ fun ColorBox(
     Box(
         modifier
             .then(
-                Modifier.clip(shape).border(BorderStroke(outlineWidth, outlineColor), shape)
-                    .background(Color.White).background(background).background(color).size(size),
+                Modifier
+                    .clip(shape)
+                    .border(BorderStroke(outlineWidth, outlineColor), shape)
+                    .background(Color.White)
+                    .background(background)
+                    .background(color)
+                    .size(size),
             )
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
     ) { if (content != null) content() }

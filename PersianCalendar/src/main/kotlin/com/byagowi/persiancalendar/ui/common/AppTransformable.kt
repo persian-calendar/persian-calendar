@@ -57,6 +57,7 @@ fun Modifier.appTransformable(
                     yBound = ((contentSize.height * scale - size.height) / 2f).coerceAtLeast(0f)
                 }
             }
+
             val tracker = if (disablePan) null else VelocityTracker()
             val down = awaitFirstDown(requireUnconsumed = false)
             lastPointerId = down.id

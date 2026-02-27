@@ -168,8 +168,7 @@ fun SharedTransitionScope.AstronomyScreen(
         }
     }
 
-    val defaultMode = remember { AstronomyMode.entries[0] }
-    var mode by rememberSaveable { mutableStateOf(defaultMode) }
+    var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
     var isTropical by rememberSaveable { mutableStateOf(false) }
     var isDatePickerDialogShown by rememberSaveable { mutableStateOf(false) }
     val jdn by remember {
@@ -209,7 +208,6 @@ fun SharedTransitionScope.AstronomyScreen(
     }
 
     val resetButtonAction: () -> Unit = {
-        mode = AstronomyMode.EARTH
         coroutineScope.launch {
             animateToValue(
                 state = scale,
@@ -247,7 +245,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
                 actions = {
                     TodayActionButton(
-                        visible = jdn != today || mode != defaultMode || run {
+                        visible = jdn != today || run {
                             isScaled && !initialAnimation
                         } || offsetX.floatValue != 0f || offsetY.floatValue != 0f,
                     ) { resetButtonAction() }
@@ -725,7 +723,7 @@ private fun SharedTransitionScope.SolarDisplay(
                                     radius - rectSize,
                                     radius + rectSize,
                                     radius + rectSize,
-                                    0f, 180f,
+                                    180f, 180f,
                                 )
                                 canvas.drawTextOnPath(
                                     heliocentricPlanetsTitles[i],
