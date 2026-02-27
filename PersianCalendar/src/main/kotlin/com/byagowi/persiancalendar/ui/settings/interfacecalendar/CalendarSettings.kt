@@ -229,10 +229,10 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
             summaryResId = R.string.islamic_offset_summary,
         )
     }
-    val weekStart = weekStart
-    val weekDays = WeekDay.entries.map { it + weekStart.ordinal }
-    val weekDaysTitles = remember { weekDays.map { it.title }.toImmutableList() }
-    val weekDaysValues = remember { weekDays.map { it.ordinal.toString() }.toImmutableList() }
+    val weekDays = remember(weekStart) { WeekDay.entries.map { it + weekStart.ordinal } }
+    val weekDaysTitles = remember(weekDays) { weekDays.map { it.title }.toImmutableList() }
+    val weekDaysValues =
+        remember(weekDays) { weekDays.map { it.ordinal.toString() }.toImmutableList() }
     SettingsSingleSelect(
         key = PREF_WEEK_START,
         entries = weekDaysTitles,
