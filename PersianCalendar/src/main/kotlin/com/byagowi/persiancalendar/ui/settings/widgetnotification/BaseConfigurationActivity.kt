@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -56,7 +55,6 @@ abstract class BaseConfigurationActivity(
         super.onCreate(savedInstanceState)
         onAfterCreate()
         setContent {
-            if (needsBackHandler) BackHandler(onBack = ::onBack)
             SystemTheme {
                 @Composable
                 fun Linear(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
@@ -118,10 +116,7 @@ abstract class BaseConfigurationActivity(
     }
 
     protected open fun onAcceptClick() = finish()
-    protected open fun onBack() = onAcceptClick()
     protected open fun onAfterCreate() = Unit
-
-    protected open val needsBackHandler get() = true
 
     @Composable
     protected abstract fun ColumnScope.Settings()

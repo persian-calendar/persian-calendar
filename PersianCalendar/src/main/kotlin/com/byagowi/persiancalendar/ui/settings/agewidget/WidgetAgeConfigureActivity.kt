@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.agewidget
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.widget.RemoteViews
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,13 +62,12 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         }
     }
 
-    override fun onBack() = finish()
-
     override fun preview(size: DpSize): RemoteViews =
         createAgeRemoteViews(this, size, appWidgetId, Jdn.today(), preferences)
 
     @Composable
     override fun ColumnScope.Settings() {
+        BackHandler(onBack = ::finish)
         val context = LocalContext.current
         val initialTitle = remember {
             context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null).orEmpty()
