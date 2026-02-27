@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
 
-import android.animation.ValueAnimator
 import android.os.Build
 import android.view.HapticFeedbackConstants
-import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
@@ -52,7 +53,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.safePerformHapticFeedback
 import com.byagowi.persiancalendar.utils.preferences
-import kotlin.random.Random
+import kotlinx.coroutines.launch
 
 @Composable
 fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
@@ -68,6 +69,9 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         orderedCalendars.toMutableStateList()
     }
 
+    val coroutineScope = rememberCoroutineScope()
+    var isInRotation by rememberSaveable { mutableStateOf(false) }
+    if (isInRotation) return
     AppDialog(
         title = { Text(stringResource(R.string.calendars_priority)) },
         dismissButton = {
@@ -76,16 +80,20 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         confirmButton = {
             TextButton(
                 onClick = {
-                    onDismissRequest()
                     val result =
                         calendars.mapNotNull { if (it in enabledCalendars) it.name else null }
-                    if (result.isEmpty()) {
-                        val animator = ValueAnimator.ofFloat(0f, 1f)
-                        animator.duration = 3000L
-                        animator.interpolator = AccelerateDecelerateInterpolator()
-                        animator.addUpdateListener { view.rotation = it.animatedFraction * 360f }
-                        if (Random.nextBoolean()) animator.start() else animator.reverse()
+                    if (result.isEmpty()) coroutineScope.launch {
+                        isInRotation = true
+                        val (from, to) = listOf(0f to 360f, 360f to 0f).random()
+                        animate(
+                            initialValue = from,
+                            targetValue = to,
+                            animationSpec = tween(3_000),
+                        ) { value, _ -> view.rotation = value }
+                        view.rotation = 0f
+                        onDismissRequest()
                     } else context.preferences.edit {
+                        onDismissRequest()
                         putString(PREF_MAIN_CALENDAR_KEY, result.first())
                         putString(PREF_OTHER_CALENDARS_KEY, result.drop(1).joinToString(","))
                     }
