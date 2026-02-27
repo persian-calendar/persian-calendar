@@ -1213,7 +1213,7 @@ fun create4x1RemoteViews(
         R.id.textPlaceholder2_4x1,
         buildString {
             append(if (isWidgetClock) widgetTitle else mainDateString)
-            if (showOtherCalendars) append(spacedComma + otherCalendarsDates)
+            if (showOtherCalendars && otherCalendarsDates != null) append(spacedComma + otherCalendarsDates)
         },
     )
     remoteViews.setInt(
@@ -1287,7 +1287,9 @@ fun create2x2RemoteViews(
         R.id.date_2x2,
         buildString {
             append(if (isWidgetClock) widgetTitle else mainDateString)
-            if (showOtherCalendars) appendLine().append(otherCalendarsDates)
+            if (showOtherCalendars && otherCalendarsDates != null) {
+                appendLine().append(otherCalendarsDates)
+            }
         },
     )
 
