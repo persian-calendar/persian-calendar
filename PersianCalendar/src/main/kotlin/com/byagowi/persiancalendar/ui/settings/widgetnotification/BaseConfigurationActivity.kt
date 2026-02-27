@@ -56,7 +56,7 @@ abstract class BaseConfigurationActivity(
         super.onCreate(savedInstanceState)
         onAfterCreate()
         setContent {
-            BackHandler(onBack = ::onBack)
+            if (needsBackHandler) BackHandler(onBack = ::onBack)
             SystemTheme {
                 @Composable
                 fun Linear(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
@@ -120,6 +120,8 @@ abstract class BaseConfigurationActivity(
     protected open fun onAcceptClick() = finish()
     protected open fun onBack() = onAcceptClick()
     protected open fun onAfterCreate() = Unit
+
+    protected open val needsBackHandler get() = true
 
     @Composable
     protected abstract fun ColumnScope.Settings()

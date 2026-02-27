@@ -18,4 +18,5 @@ class ScreensaverConfigurationActivity : BaseConfigurationActivity() {
 
     @Composable
     override fun Background() = DreamContent()
+    override val needsBackHandler: Boolean get() = false
 }
