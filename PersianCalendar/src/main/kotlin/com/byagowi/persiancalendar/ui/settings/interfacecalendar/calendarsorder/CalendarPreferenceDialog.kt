@@ -52,7 +52,6 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.safePerformHapticFeedback
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.collections.immutable.toImmutableList
 import kotlin.random.Random
 
 @Composable
@@ -62,7 +61,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
     val moveUp = stringResource(R.string.move_up)
     val moveDown = stringResource(R.string.move_down)
     val enabledCalendars = rememberSaveable { enabledCalendars.toMutableStateList() }
-    val list = rememberSaveable {
+    val calendars = rememberSaveable {
         val orderedCalendars = enabledCalendars + (Calendar.entries - enabledCalendars.toSet()) -
                 // Don't show Nepali on default locales, at least for now.
                 if (language.showNepaliCalendar) emptySet() else setOf(Calendar.NEPALI)
@@ -78,7 +77,8 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             TextButton(
                 onClick = {
                     onDismissRequest()
-                    val result = list.mapNotNull { if (it in enabledCalendars) it.name else null }
+                    val result =
+                        calendars.mapNotNull { if (it in enabledCalendars) it.name else null }
                     if (result.isEmpty()) {
                         val animator = ValueAnimator.ofFloat(0f, 1f)
                         animator.duration = 3000L
@@ -95,12 +95,11 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
     ) {
         var dragStarted by remember { mutableStateOf(false) }
-        fun onSettle(fromIndex: Int, toIndex: Int) {
-            list.add(toIndex, list.removeAt(fromIndex))
-        }
+        fun onSettle(fromIndex: Int, toIndex: Int): Unit =
+            calendars.add(toIndex, element = calendars.removeAt(fromIndex))
         ReorderableColumn(
             modifier = Modifier.fillMaxSize(),
-            list = list,
+            items = calendars,
             onSettle = ::onSettle,
             onMove = {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -130,7 +129,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                                 CustomAccessibilityAction(moveDown) {
                                     onSettle(i, i + 1)
                                     true
-                                }.takeIf { i < list.size - 1 },
+                                }.takeIf { i < calendars.size - 1 },
                             )
                         }
                         .draggableHandle(

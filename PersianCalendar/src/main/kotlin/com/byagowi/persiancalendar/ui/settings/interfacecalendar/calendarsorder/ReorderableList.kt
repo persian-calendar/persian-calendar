@@ -237,7 +237,7 @@ internal class ReorderableScopeImpl(
 /**
  * A vertical list that can be reordered by dragging and dropping.
  *
- * @param list The list of items to display.
+ * @param items The list of items to display.
  * @param onSettle The function that is called when the list is reordered. This function is only called when the item is dropped.
  * @param verticalArrangement The vertical arrangement of the layout's children.
  * @param horizontalAlignment The horizontal alignment of the layout's children.
@@ -245,7 +245,7 @@ internal class ReorderableScopeImpl(
  */
 @Composable
 fun <T> ReorderableColumn(
-    list: SnapshotStateList<T>,
+    items: SnapshotStateList<T>,
     onSettle: (fromIndex: Int, toIndex: Int) -> Unit,
     modifier: Modifier = Modifier,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
@@ -256,8 +256,8 @@ fun <T> ReorderableColumn(
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
     val spacing = with(density) { verticalArrangement.spacing.toPx() }
-    val reorderableListState = remember(list.toList(), spacing) {
-        ReorderableListState(list.size, spacing, onMove, onSettle, coroutineScope)
+    val reorderableListState = remember(items.toList(), spacing) {
+        ReorderableListState(items.size, spacing, onMove, onSettle, coroutineScope)
     }
 
     Column(
@@ -265,7 +265,7 @@ fun <T> ReorderableColumn(
         verticalArrangement = verticalArrangement,
         horizontalAlignment = horizontalAlignment,
     ) {
-        list.forEachIndexed { i, item ->
+        items.forEachIndexed { i, item ->
             val isDragging by reorderableListState.isItemDragging(i)
             val isAnimating by reorderableListState.isItemAnimating(i)
 
