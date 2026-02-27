@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.global.dreamNoise
 import com.byagowi.persiancalendar.ui.athan.DrawBackground
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random
 
@@ -51,7 +52,7 @@ fun DreamContent() {
 
 @Preview
 @Composable
-internal fun DreamContentPreview() = DreamContent()
+internal fun DreamContentPreview() = SystemTheme { DreamContent() }
 
 private fun brownNoise(): AudioTrack {
     val sampleRate = 22050 // Hz (maximum frequency is 7902.13Hz (B8))

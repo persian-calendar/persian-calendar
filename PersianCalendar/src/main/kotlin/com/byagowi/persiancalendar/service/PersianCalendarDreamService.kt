@@ -12,6 +12,7 @@ import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.byagowi.persiancalendar.ui.theme.SystemTheme
 
 class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, ViewModelStoreOwner {
 
@@ -42,7 +43,7 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, Vie
         composeView.setViewTreeLifecycleOwner(this)
         composeView.setViewTreeViewModelStoreOwner(this)
         composeView.setViewTreeSavedStateRegistryOwner(this)
-        composeView.setContent { DreamContent() }
+        composeView.setContent { SystemTheme { DreamContent() } }
         setContentView(composeView)
     }
 
