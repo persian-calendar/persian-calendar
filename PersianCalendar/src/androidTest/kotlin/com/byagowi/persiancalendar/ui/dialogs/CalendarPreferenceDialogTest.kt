@@ -34,9 +34,9 @@ class CalendarPreferenceDialogTest {
     fun saveRestoreTest() {
         val restorationTester = StateRestorationTester(composeTestRule)
 
-//        restorationTester.setContent {
-//            CalendarPreferenceDialog {}
-//        }
+        restorationTester.setContent {
+            CalendarPreferenceDialog {}
+        }
 
         restorationTester.emulateSavedInstanceStateRestore()
     }
