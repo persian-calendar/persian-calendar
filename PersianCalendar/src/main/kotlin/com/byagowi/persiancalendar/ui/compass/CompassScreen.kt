@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.compass
 
-import android.animation.ValueAnimator
 import android.hardware.GeomagneticField
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -11,6 +10,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -113,7 +113,6 @@ import org.jetbrains.annotations.VisibleForTesting
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -296,13 +295,14 @@ fun SharedTransitionScope.CompassScreen(
                         if (BuildConfig.DEVELOPMENT) {
                             AppDropdownMenuItem({ Text("Do a rotation") }) {
                                 closeMenu()
-                                // Ugly, but is testing only
-                                val animator = ValueAnimator.ofFloat(0f, 1f)
-                                animator.duration = 10.seconds.inWholeMilliseconds
-                                animator.addUpdateListener {
-                                    angle.floatValue = it.animatedFraction * 360
+                                coroutineScope.launch {
+                                    val (from, to) = listOf(0f to 360f, 360f to 0f).random()
+                                    animate(
+                                        initialValue = from,
+                                        targetValue = to,
+                                        animationSpec = tween(10_000),
+                                    ) { value, _ -> angle.floatValue = value }
                                 }
-                                if (Random.nextBoolean()) animator.start() else animator.reverse()
                             }
                         }
                     }
