@@ -66,6 +66,7 @@ import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
@@ -125,12 +126,13 @@ fun YearView(
     val fontFile = resolveFontFile()
     val isBoldFont = isBoldFont
     val context = LocalContext.current
-    val dayPainter = remember(monthColors, widthInPx, fontFile, isBoldFont) {
+    val dayPainter = remember(monthColors, widthInPx, fontFile, isBoldFont, secondaryCalendar) {
         lruCache(
             4,
             create = { height: Float ->
                 DayPainter(
                     context = context,
+                    secondaryCalendar = secondaryCalendar,
                     resources = resources,
                     width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
                     height = height / 7, /* rows count*/

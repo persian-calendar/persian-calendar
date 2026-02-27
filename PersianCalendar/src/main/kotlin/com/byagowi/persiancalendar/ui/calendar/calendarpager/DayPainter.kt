@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
-import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -40,6 +39,7 @@ class DayPainter private constructor(
         height: Float,
         isRtl: Boolean,
         colors: MonthColors,
+        secondaryCalendar: Calendar?,
         fontFile: File? = null,
         isBoldFont: Boolean = false,
         isWidget: Boolean = false,
@@ -47,7 +47,7 @@ class DayPainter private constructor(
         holidayCircleColor: Int? = null,
     ) : this(
         paints = Paints(
-            resources, min(width, height), colors, isWidget, isYearView,
+            resources, secondaryCalendar, min(width, height), colors, isWidget, isYearView,
             holidayCircleColor,
             typeface = fontFile?.let(Typeface::createFromFile).let {
                 if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
@@ -205,6 +205,7 @@ class DayPainter private constructor(
 
 private class Paints(
     resources: Resources,
+    secondaryCalendar: Calendar?,
     diameter: Float,
     colors: MonthColors,
     isWidget: Boolean,

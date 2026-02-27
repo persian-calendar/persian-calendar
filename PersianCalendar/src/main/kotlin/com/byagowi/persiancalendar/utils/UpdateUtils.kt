@@ -889,6 +889,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         dayPainter = DayPainter(
             context = context,
             resources = context.resources,
+            secondaryCalendar = secondaryCalendar,
             width = cellWidth,
             height = cellHeight,
             isRtl = isRtl,

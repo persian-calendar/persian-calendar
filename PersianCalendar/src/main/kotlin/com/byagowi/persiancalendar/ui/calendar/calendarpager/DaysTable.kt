@@ -136,6 +136,7 @@ fun daysTable(
             colors = monthColors,
             fontFile = fontFile,
             isBoldFont = isBoldFont,
+            secondaryCalendar = secondaryCalendar,
         )
     }
     val daysTextSize = diameter * when {
