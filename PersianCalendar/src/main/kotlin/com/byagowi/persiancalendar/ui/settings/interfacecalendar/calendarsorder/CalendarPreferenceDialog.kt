@@ -62,11 +62,11 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
     val moveUp = stringResource(R.string.move_up)
     val moveDown = stringResource(R.string.move_down)
     val enabledCalendars = rememberSaveable { enabledCalendars.toMutableStateList() }
-    var list by rememberSaveable {
+    val list = rememberSaveable {
         val orderedCalendars = enabledCalendars + (Calendar.entries - enabledCalendars.toSet()) -
                 // Don't show Nepali on default locales, at least for now.
                 if (language.showNepaliCalendar) emptySet() else setOf(Calendar.NEPALI)
-        mutableStateOf(orderedCalendars)
+        orderedCalendars.toMutableStateList()
     }
 
     AppDialog(
@@ -96,7 +96,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
     ) {
         var dragStarted by remember { mutableStateOf(false) }
         fun onSettle(fromIndex: Int, toIndex: Int) {
-            list = list.toMutableList().apply { add(toIndex, removeAt(fromIndex)) }
+            list.add(toIndex, list.removeAt(fromIndex))
         }
         ReorderableColumn(
             modifier = Modifier.fillMaxSize(),
