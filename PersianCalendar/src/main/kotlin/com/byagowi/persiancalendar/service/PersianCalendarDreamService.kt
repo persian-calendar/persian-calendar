@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -77,7 +78,7 @@ private fun DreamContent() {
     val isNightMode = isSystemInDarkTheme()
     val resources = LocalResources.current
     val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
-    val patternDrawable = remember(isNightMode, resources) {
+    val patternDrawable = remember(isNightMode, resources, LocalConfiguration.current) {
         val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) resources.getColor(
             if (isNightMode) android.R.color.system_accent1_200
             else android.R.color.system_accent1_400,
