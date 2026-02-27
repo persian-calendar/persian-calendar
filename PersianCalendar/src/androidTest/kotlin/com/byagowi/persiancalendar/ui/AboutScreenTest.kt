@@ -64,7 +64,7 @@ class AboutScreenTest {
     @Test
     fun deviceInformationSmokeTest() {
         composeTestRule.setContent {
-            NavigationMock { DeviceInformationScreen({}) }
+            NavigationMock { DeviceInformationScreen {} }
         }
     }
 

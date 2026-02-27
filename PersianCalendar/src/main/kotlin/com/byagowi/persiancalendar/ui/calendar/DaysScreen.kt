@@ -295,9 +295,7 @@ fun SharedTransitionScope.DaysScreen(
                     },
                     colors = appTopAppBarColors(),
                     navigationIcon = {
-                        if (isAddEventBoxEnabled) BackHandler(enabled = true) {
-                            isAddEventBoxEnabled = false
-                        }
+                        if (isAddEventBoxEnabled) BackHandler { isAddEventBoxEnabled = false }
                         NavigationNavigateUpIcon {
                             if (isAddEventBoxEnabled) isAddEventBoxEnabled = false else navigateUp()
                         }
