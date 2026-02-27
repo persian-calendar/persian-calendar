@@ -165,10 +165,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         val coroutineScope = rememberCoroutineScope()
         val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
         val navigateUp: () -> Unit = {
-            // Empty back stack causes crash, just finish the activity on that situation
-            // It's needed when a part of app is opened from a shortcut but even though it's
-            // handled correctly there are rare crash reports so let's use it in NavDisplay,onBack
-            // also.
+            // Don't simplify this and make sure it's used in NavDisplay's onBack.
             if (backStack.size < 2) finish() else backStack.removeLastOrNull()
         }
         val navigateToHolidaysSettings: (String?) -> Unit = { item ->
