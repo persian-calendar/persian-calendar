@@ -301,7 +301,6 @@ fun SharedTransitionScope.CalendarScreen(
     LaunchedEffect(detailsPagerState.currentPage) {
         context.preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, detailsPagerState.currentPage) }
     }
-    val isOnlyEventsTab = detailsTabs.size == 1
 
     val swipeUpActions = remember {
         persistentMapOf(
@@ -309,7 +308,7 @@ fun SharedTransitionScope.CalendarScreen(
             SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
             SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
             SwipeUpAction.None to {
-                if (isOnlyEventsTab) bringDay(selectedDay - 7, true, false)
+                if (detailsTabs.size == 1) bringDay(selectedDay - 7, true, false)
             },
         )
     }
@@ -343,11 +342,12 @@ fun SharedTransitionScope.CalendarScreen(
                 isYearView = true
             },
             SwipeDownAction.None to {
-                if (isOnlyEventsTab) bringDay(selectedDay + 7, true, false)
+                if (detailsTabs.size == 1) bringDay(selectedDay + 7, true, false)
             },
         )
     }
 
+    val isOnlyEventsTab = detailsTabs.size == 1
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
             if (!isYearView && keyEvent.type == KeyEventType.KeyDown) {
