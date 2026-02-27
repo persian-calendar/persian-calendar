@@ -295,7 +295,10 @@ fun SharedTransitionScope.DaysScreen(
                     },
                     colors = appTopAppBarColors(),
                     navigationIcon = {
-                        if (isAddEventBoxEnabled) BackHandler { isAddEventBoxEnabled = false }
+                        if (isAddEventBoxEnabled) {
+                            @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
+                            BackHandler { isAddEventBoxEnabled = false }
+                        }
                         NavigationNavigateUpIcon {
                             if (isAddEventBoxEnabled) isAddEventBoxEnabled = false else navigateUp()
                         }

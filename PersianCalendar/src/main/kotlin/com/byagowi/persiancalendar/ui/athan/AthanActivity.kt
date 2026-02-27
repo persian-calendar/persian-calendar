@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.athan
 
+import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Intent
 import android.graphics.Color
@@ -148,6 +149,7 @@ class AthanActivity : ComponentActivity() {
         }
 
         setContent {
+            @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
             BackHandler { stop() }
             SystemTheme { AthanActivityContent(prayTime, ::stop) }
         }

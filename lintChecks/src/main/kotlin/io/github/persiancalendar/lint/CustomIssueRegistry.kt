@@ -12,6 +12,7 @@ class CustomIssueRegistry : IssueRegistry() {
         UnsafeCastDetector.ISSUE,
         HapticFeedbackDetector.ISSUE,
         AnimatableSnapToDetector.ISSUE,
+        BackHandlerDetector.ISSUE,
     )
 
     override val api: Int = CURRENT_API

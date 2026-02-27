@@ -67,6 +67,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
+        @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
         BackHandler(onBack = ::finish)
         val context = LocalContext.current
         val initialTitle = remember {

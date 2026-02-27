@@ -281,6 +281,7 @@ fun NumberEdit(
         pendingConfirms += clearFocus
         onDispose { pendingConfirms -= clearFocus }
     }
+    @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
     BackHandler { clearFocus() }
 
     fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
