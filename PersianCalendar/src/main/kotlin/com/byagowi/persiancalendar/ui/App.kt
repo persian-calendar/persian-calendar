@@ -290,7 +290,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     MapScreen(
                         navigateUp = navigateUp,
                         fromSettings = it.fromSettings,
-                        initialTime = it.time,
+                        initialTime = remember { it.time ?: System.currentTimeMillis() },
                         today = today,
                     )
                 }
@@ -345,7 +345,7 @@ private sealed interface Screen : NavKey {
     @Serializable
     data class Map(
         val fromSettings: Boolean = false,
-        val time: Long = System.currentTimeMillis(),
+        val time: Long? = null,
     ) : Screen
 
     @Serializable
