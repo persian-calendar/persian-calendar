@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -141,6 +142,7 @@ val Resources.isDynamicGrayscale: Boolean
         ).all { Color.colorToHSV(getColor(it, null), hsv); hsv[1] < .25 }
     }
 
+@SuppressLint("DirectHapticFeedbackUsage")
 fun View.safePerformHapticFeedback(feedbackConstant: Int) {
     debugLog("safePerformHapticFeedback called")
     runCatching {
@@ -153,6 +155,7 @@ fun View.performHapticFeedbackVirtualKey() {
     safePerformHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 }
 
+@SuppressLint("DirectHapticFeedbackUsage")
 fun HapticFeedback.performLongPress() {
     debugLog("Preformed a haptic feedback long press")
     runCatching {

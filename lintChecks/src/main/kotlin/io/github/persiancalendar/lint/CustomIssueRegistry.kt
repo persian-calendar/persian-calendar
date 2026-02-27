@@ -10,6 +10,7 @@ class CustomIssueRegistry : IssueRegistry() {
         DebugAssertNotNullSafeCallDetector.ISSUE,
         TryCatchDetector.ISSUE,
         UnsafeCastDetector.ISSUE,
+        HapticFeedbackDetector.ISSUE,
     )
 
     override val api: Int = CURRENT_API
