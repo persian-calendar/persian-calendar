@@ -123,6 +123,7 @@ import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -367,7 +368,7 @@ private sealed interface Screen : NavKey {
     data object Exit : Screen // Not a screen but is on the navigation rail, so
 
     companion object {
-        val navEntries = listOf(
+        val navEntries = persistentListOf(
             Triple(Calendar, Icons.Default.DateRange, R.string.calendar),
             Triple(Converter, Icons.Default.SwapVerticalCircle, R.string.date_converter),
             Triple(Compass, Icons.Default.Explore, R.string.compass),
