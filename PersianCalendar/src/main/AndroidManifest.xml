@@ -278,7 +278,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar" />
+            android:theme="@android:style/Theme.DeviceDefault.Wallpaper.NoTitleBar" />
 
         <receiver
             android:name=".Widget1x1"

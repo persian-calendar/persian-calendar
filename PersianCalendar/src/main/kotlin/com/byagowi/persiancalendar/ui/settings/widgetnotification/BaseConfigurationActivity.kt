@@ -68,42 +68,49 @@ abstract class BaseConfigurationActivity(
                 val topBarHeight = WindowInsets.safeDrawing.only(sides = WindowInsetsSides.Vertical)
                     .getTop(LocalDensity.current).toFloat()
                 val topColor = MaterialTheme.colorScheme.background.copy(alpha = .25f)
-                Linear(
-                    Modifier
-                        .drawBehind {
-                            val colors = listOf(topColor, Color.Transparent)
-                            drawRect(
-                                Brush.verticalGradient(colors, startY = 0f, endY = topBarHeight),
-                                size = this.size.copy(height = topBarHeight),
-                            )
-                        }
-                        .safeDrawingPadding()
-                        .padding(16.dp),
-                ) {
-                    Header()
-                    val scrollState = rememberScrollState()
-                    val shape = MaterialTheme.shapes.extraLarge
-                    Box(
+                Box {
+                    Background()
+                    Linear(
                         Modifier
-                            .fillMaxWidth()
-                            .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
-                            .alpha(AppBlendAlpha)
-                            .clip(shape)
-                            .background(MaterialTheme.colorScheme.surfaceBright),
+                            .drawBehind {
+                                val colors = listOf(topColor, Color.Transparent)
+                                drawRect(
+                                    Brush.verticalGradient(
+                                        colors,
+                                        startY = 0f,
+                                        endY = topBarHeight,
+                                    ),
+                                    size = this.size.copy(height = topBarHeight),
+                                )
+                            }
+                            .safeDrawingPadding()
+                            .padding(16.dp),
                     ) {
-                        Column(
+                        Header()
+                        val scrollState = rememberScrollState()
+                        val shape = MaterialTheme.shapes.extraLarge
+                        Box(
                             Modifier
-                                .verticalScroll(scrollState)
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                                .fillMaxWidth()
+                                .then(if (contentNeedsMaxHeight) Modifier.fillMaxSize() else Modifier)
+                                .alpha(AppBlendAlpha)
+                                .clip(shape)
+                                .background(MaterialTheme.colorScheme.surfaceBright),
                         ) {
-                            Spacer(Modifier.height(16.dp))
-                            Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
-                            Spacer(Modifier.height(4.dp))
-                            Settings()
-                            Spacer(Modifier.height(16.dp))
+                            Column(
+                                Modifier
+                                    .verticalScroll(scrollState)
+                                    .fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Spacer(Modifier.height(16.dp))
+                                Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
+                                Spacer(Modifier.height(4.dp))
+                                Settings()
+                                Spacer(Modifier.height(16.dp))
+                            }
+                            ScrollShadow(scrollState)
                         }
-                        ScrollShadow(scrollState)
                     }
                 }
             }
@@ -119,4 +126,7 @@ abstract class BaseConfigurationActivity(
 
     @Composable
     protected open fun Header() = Unit
+
+    @Composable
+    protected open fun Background() = Unit
 }

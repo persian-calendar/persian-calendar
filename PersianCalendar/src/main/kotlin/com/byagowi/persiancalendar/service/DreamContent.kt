@@ -42,9 +42,9 @@ fun DreamContent() {
     Box(Modifier.onSizeChanged { patternDrawable.setSize(it.width, it.height) }) {
         DrawBackground(patternDrawable, durationMillis = 360_000)
     }
-    DisposableEffect(Unit) {
+    if (dreamNoise) DisposableEffect(Unit) {
         val brownNoise = brownNoise()
-        if (dreamNoise) runCatching { brownNoise.play() }.onFailure(logException)
+        runCatching { brownNoise.play() }.onFailure(logException)
         onDispose { runCatching { brownNoise.stop() }.onFailure(logException) }
     }
 }
