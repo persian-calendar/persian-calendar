@@ -36,7 +36,7 @@ class HapticFeedbackDetector : Detector(), SourceCodeScanner {
     }
 
     companion object {
-        private val ISSUE = Issue.create(
+        val ISSUE = Issue.create(
             id = "DirectHapticFeedbackUsage",
             briefDescription = "Direct haptic feedback call",
             explanation = "Direct calls to `performHapticFeedback()` should be avoided.",
