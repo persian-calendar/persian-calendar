@@ -461,7 +461,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                     else ""
                 },
                 dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma),
-            )
+            ).filter { it.isNotEmpty() }
             Text(
                 lines.joinToString("\n"),
                 textAlign = TextAlign.Center,
