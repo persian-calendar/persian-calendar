@@ -461,6 +461,6 @@ fun otherCalendarFormat(
 }
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String): String? {
-    if (enabledCalendars.size < 2) return null
-    return enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn on it) }
+    return enabledCalendars.drop(1).takeIf { it.isNotEmpty() }
+        ?.joinToString(separator) { formatDate(jdn on it) }
 }
