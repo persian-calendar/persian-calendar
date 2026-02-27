@@ -35,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.zIndex
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -235,7 +235,7 @@ internal class ReorderableScopeImpl(
 }
 
 /**
- * A vertically list that can be reordered by dragging and dropping.
+ * A vertical list that can be reordered by dragging and dropping.
  *
  * @param list The list of items to display.
  * @param onSettle The function that is called when the list is reordered. This function is only called when the item is dropped.
@@ -245,7 +245,7 @@ internal class ReorderableScopeImpl(
  */
 @Composable
 fun <T> ReorderableColumn(
-    list: ImmutableList<T>,
+    list: SnapshotStateList<T>,
     onSettle: (fromIndex: Int, toIndex: Int) -> Unit,
     modifier: Modifier = Modifier,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
@@ -256,7 +256,7 @@ fun <T> ReorderableColumn(
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
     val spacing = with(density) { verticalArrangement.spacing.toPx() }
-    val reorderableListState = remember(list, spacing) {
+    val reorderableListState = remember(list.toList(), spacing) {
         ReorderableListState(list.size, spacing, onMove, onSettle, coroutineScope)
     }
 

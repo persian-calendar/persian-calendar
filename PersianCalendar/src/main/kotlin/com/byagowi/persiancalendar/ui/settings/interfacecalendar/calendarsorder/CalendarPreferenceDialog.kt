@@ -100,7 +100,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         }
         ReorderableColumn(
             modifier = Modifier.fillMaxSize(),
-            list = list.toImmutableList(),
+            list = list,
             onSettle = ::onSettle,
             onMove = {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
