@@ -308,12 +308,16 @@ fun yearViewLazyListState(
     selectedMonthOffset: Int,
     yearViewCalendar: Calendar?,
 ): LazyListState {
-    val calendar = yearViewCalendar ?: mainCalendar
-    val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
-        baseJdn = today,
-        monthsDistance = selectedMonthOffset,
-    ).year - (today on calendar).year
-    return rememberLazyListState(halfPages + yearOffsetInMonths)
+    return rememberLazyListState(
+        remember {
+            val calendar = yearViewCalendar ?: mainCalendar
+            val yearOffsetInMonths = calendar.getMonthStartFromMonthsDistance(
+                baseJdn = today,
+                monthsDistance = selectedMonthOffset,
+            ).year - (today on calendar).year
+            halfPages + yearOffsetInMonths
+        },
+    )
 }
 
 sealed interface YearViewCommand {
