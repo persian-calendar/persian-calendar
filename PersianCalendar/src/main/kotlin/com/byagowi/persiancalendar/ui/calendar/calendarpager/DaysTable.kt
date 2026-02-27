@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.collection.IntIntPair
@@ -205,7 +206,12 @@ fun daysTable(
 
             // Handles circle radius change animation, initial selection reveal and hide
             LaunchedEffect(key1 = indicatorCenter != null) {
-                if (indicatorCenter != null) animatedCenter.snapTo(indicatorCenter)
+                if (indicatorCenter != null) {
+                    // It's only the initial so the use here is valid.
+                    // Maybe we could create a new animatable object though.
+                    @SuppressLint("AnimatableSnapTo")
+                    animatedCenter.snapTo(indicatorCenter)
+                }
                 val target = if (indicatorCenter != null) 1f else 0f
                 if (animatedRadius.value != target || animatedRadius.isRunning) animatedRadius.animateTo(
                     targetValue = target,

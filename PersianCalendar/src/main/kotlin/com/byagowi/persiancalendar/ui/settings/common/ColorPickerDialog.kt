@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.BorderStroke
@@ -153,7 +154,10 @@ fun ColorPickerDialog(
                         2 -> color.value.copy(blue = value)
                         else -> color.value.copy(alpha = value)
                     }
-                    coroutineScope.launch { color.snapTo(newColor) }
+                    coroutineScope.launch {
+                        // TODO: Probably better to move away from Animatable object here
+                        @SuppressLint("AnimatableSnapTo") color.snapTo(newColor)
+                    }
                 },
                 colors = when (it) {
                     0 -> Color(0xFFFF1744)
@@ -207,13 +211,8 @@ fun ColorBox(
     Box(
         modifier
             .then(
-                Modifier
-                    .clip(shape)
-                    .border(BorderStroke(outlineWidth, outlineColor), shape)
-                    .background(Color.White)
-                    .background(background)
-                    .background(color)
-                    .size(size),
+                Modifier.clip(shape).border(BorderStroke(outlineWidth, outlineColor), shape)
+                    .background(Color.White).background(background).background(color).size(size),
             )
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
     ) { if (content != null) content() }

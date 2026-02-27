@@ -16,6 +16,7 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -89,6 +90,7 @@ class ReorderableListState internal constructor(
             if (!isItemDragging(i).value) return@DraggableState
 
             coroutineScope.launch {
+                @SuppressLint("AnimatableSnapTo")
                 itemOffsets[i].snapTo(itemOffsets[i].targetValue + it)
             }
 

@@ -16,6 +16,7 @@
 
 package androidx.wear.compose.navigation3
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.CubicBezierEasing
@@ -139,7 +140,7 @@ internal class SwipeToDismissScene<T : Any>(
         LaunchedEffect(currentEntry) {
             if (!isPop) {
                 if (reduceMotionEnabled) {
-                    animationProgress.snapTo(1f)
+                    @SuppressLint("AnimatableSnapTo") animationProgress.snapTo(1f)
                 } else {
                     animationProgress.animateTo(
                         targetValue = 1f,

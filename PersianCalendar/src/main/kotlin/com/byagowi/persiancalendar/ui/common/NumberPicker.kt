@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
@@ -112,7 +113,9 @@ fun NumberPicker(
                 orientation = Orientation.Vertical,
                 state = rememberDraggableState { deltaY ->
                     coroutineScope.launch {
-                        animatedOffset.snapTo(animatedOffset.value + deltaY)
+                        @SuppressLint("AnimatableSnapTo") animatedOffset.snapTo(
+                            animatedOffset.value + deltaY,
+                        )
                     }
                 },
                 onDragStarted = { focusManager.clearFocus() },
@@ -142,7 +145,7 @@ fun NumberPicker(
                                 halfNumbersColumnHeightPx,
                             ),
                         )
-                        animatedOffset.snapTo(0f)
+                        @SuppressLint("AnimatableSnapTo") animatedOffset.snapTo(0f)
                     }
                 },
             )
