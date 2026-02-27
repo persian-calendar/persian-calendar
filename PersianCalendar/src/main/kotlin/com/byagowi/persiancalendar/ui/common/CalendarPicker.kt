@@ -108,12 +108,11 @@ private fun <T> SegmentedButtonItemsPicker(
         val coroutineScope = rememberCoroutineScope()
         val maxWidth = with(density) { this@BoxWithConstraints.maxWidth.toPx() }
         val cellWidth = maxWidth / items.size
-        val currentVisualIndex = visualIndex(value)
-        val cellLeft = remember { Animatable(cellWidth * currentVisualIndex) }
-        val cellRight = remember { Animatable(cellWidth * (currentVisualIndex + 1)) }
+        val cellLeft = remember { Animatable(cellWidth * visualIndex(value)) }
+        val cellRight = remember { Animatable(cellWidth * (visualIndex(value) + 1)) }
         LaunchedEffect(items, value) {
             val destinationVisualIndex = visualIndex(value)
-            val isForward = visualIndex(value) > currentVisualIndex
+            val isForward = cellLeft.value < cellWidth * destinationVisualIndex
             val first = spring<Float>(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
