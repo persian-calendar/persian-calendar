@@ -86,7 +86,7 @@ fun getA11yDaySummary(
 
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
-        if (otherCalendars.isNotEmpty()) {
+        if (otherCalendars != null) {
             appendLine().appendLine().append(resources.getString(R.string.equivalent_to))
                 .append(" ").append(otherCalendars)
         }
@@ -460,5 +460,7 @@ fun otherCalendarFormat(
     }
 }
 
-fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
-    enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn on it) }
+fun dateStringOfOtherCalendars(jdn: Jdn, separator: String): String? {
+    if (enabledCalendars.size < 2) return null
+    return enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn on it) }
+}

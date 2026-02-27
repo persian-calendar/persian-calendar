@@ -446,7 +446,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                 onValueChange = onPagerValueChange,
             )
             val resources = LocalResources.current
-            val lines = listOf(
+            val lines = listOfNotNull(
                 if (language.isPersianOrDari) {
                     "لحظهٔ تحویل سال " + numeral.format(persianYear) + spacedComma + ChineseZodiac.fromPersianCalendar(
                         PersianDate(persianYear, 1, 1),
@@ -461,7 +461,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
                     else ""
                 },
                 dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma),
-            ).filter { it.isNotEmpty() }
+            )
             Text(
                 lines.joinToString("\n"),
                 textAlign = TextAlign.Center,

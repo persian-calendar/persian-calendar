@@ -1174,7 +1174,7 @@ fun create4x1RemoteViews(
     jdn: Jdn,
     date: AbstractDate,
     widgetTitle: String,
-    subtitle: String,
+    otherCalendarsDates: String?,
     clock: Clock,
     preferences: SharedPreferences,
     widgetId: Int,
@@ -1213,7 +1213,7 @@ fun create4x1RemoteViews(
         R.id.textPlaceholder2_4x1,
         buildString {
             append(if (isWidgetClock) widgetTitle else mainDateString)
-            if (showOtherCalendars) append(spacedComma + subtitle)
+            if (showOtherCalendars) append(spacedComma + otherCalendarsDates)
         },
     )
     remoteViews.setInt(
@@ -1233,7 +1233,7 @@ fun create2x2RemoteViews(
     jdn: Jdn,
     date: AbstractDate,
     widgetTitle: String,
-    subtitle: String,
+    otherCalendarsDates: String?,
     prayTimes: PrayTimes?,
     clock: Clock,
     preferences: SharedPreferences,
@@ -1287,7 +1287,7 @@ fun create2x2RemoteViews(
         R.id.date_2x2,
         buildString {
             append(if (isWidgetClock) widgetTitle else mainDateString)
-            if (showOtherCalendars) appendLine().append(subtitle)
+            if (showOtherCalendars) appendLine().append(otherCalendarsDates)
         },
     )
 
@@ -1589,7 +1589,7 @@ private fun setEventsInWidget(
 private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate,
+    context: Context, title: String, otherCalendarsDates: String?, jdn: Jdn, date: AbstractDate,
     prayTimes: PrayTimes?, clock: Clock,
 ) {
     if (!isNotifyDate) {
@@ -1611,7 +1611,7 @@ private fun updateNotification(
 
     val notificationData = NotificationData(
         title = title,
-        subtitle = subtitle,
+        otherCalendarsDates = otherCalendarsDates,
         jdn = jdn,
         date = date,
         owghat = getOwghat(context, prayTimes, clock),
@@ -1650,7 +1650,7 @@ private val notificationTimesColumnsIds = listOf(
 
 private data class NotificationData(
     private val title: String,
-    private val subtitle: String,
+    private val otherCalendarsDates: String?,
     private val jdn: Jdn,
     private val date: AbstractDate,
     private val owghat: String,
@@ -1707,13 +1707,13 @@ private data class NotificationData(
                         withTitle = false,
                     ) + if (owghat.isEmpty()) "" else spacedComma + owghat
 
-                    else -> subtitle
+                    else -> otherCalendarsDates
                 },
             )
 
         val customFontFile = if (customFontName != null) resolveCustomFontPath(context) else null
-        // Dynamic small icon generator, most of the times disabled as it needs API 23 and
-        // we need to have the other path anyway
+        // Dynamic small icon generator, usually disabled as it needs API 23 and, we need to have
+        // the other path anyway
         if (when {
                 customFontFile != null || isBoldFont -> true
                 // Nepali has 32 days months, necessary to use bitmap provided icons
@@ -1768,8 +1768,8 @@ private data class NotificationData(
 
             if (shouldDisableCustomNotification) {
                 val content = listOf(
-                    subtitle, holidays.trim(), nonHolidays, notificationOwghat,
-                ).filter { it.isNotBlank() }.joinToString("\n")
+                    otherCalendarsDates, holidays.trim(), nonHolidays, notificationOwghat,
+                ).filterNot { it.isNullOrBlank() }.joinToString("\n")
                 builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
             } else {
                 builder.setCustomContentView(
@@ -1778,7 +1778,7 @@ private data class NotificationData(
                     ).also {
                         it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
-                        it.setTextViewText(R.id.body, subtitle)
+                        it.setTextViewTextOrHideIfEmpty(R.id.body, otherCalendarsDates ?: "")
                     },
                 )
 
@@ -1788,7 +1788,7 @@ private data class NotificationData(
                     ).also {
                         it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
-                        it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
+                        it.setTextViewTextOrHideIfEmpty(R.id.body, otherCalendarsDates ?: "")
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
                         it.setViewVisibility(
