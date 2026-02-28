@@ -4,10 +4,12 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
 import android.os.Build
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
@@ -16,6 +18,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.currentStateAsState
+import androidx.lifecycle.compose.rememberLifecycleOwner
 import com.byagowi.persiancalendar.global.dreamNoise
 import com.byagowi.persiancalendar.ui.athan.DrawBackground
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
@@ -24,7 +29,7 @@ import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random
 
 @Composable
-fun DreamContent() {
+fun DreamContent(finish: () -> Unit) {
     val isNightMode = isSystemInDarkTheme()
     val resources = LocalResources.current
     val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
@@ -40,19 +45,26 @@ fun DreamContent() {
             dp = dpAsPx,
         )
     }
-    Box(Modifier.onSizeChanged { patternDrawable.setSize(it.width, it.height) }) {
-        DrawBackground(patternDrawable, durationMillis = 360_000)
-    }
-    if (dreamNoise) DisposableEffect(Unit) {
-        val brownNoise = brownNoise()
-        runCatching { brownNoise.play() }.onFailure(logException)
-        onDispose { runCatching { brownNoise.stop() }.onFailure(logException) }
+    Box(
+        Modifier
+            .clickable(indication = null, interactionSource = null, onClick = finish)
+            .onSizeChanged { (width, height) -> patternDrawable.setSize(width, height) },
+    ) { DrawBackground(patternDrawable, durationMillis = 360_000) }
+    if (dreamNoise && run {
+            val lifecycleOwner by rememberLifecycleOwner().lifecycle.currentStateAsState()
+            lifecycleOwner.isAtLeast(Lifecycle.State.RESUMED)
+        }) {
+        DisposableEffect(key1 = Unit) {
+            val brownNoise = brownNoise()
+            runCatching { brownNoise.play() }.onFailure(logException)
+            onDispose { runCatching { brownNoise.stop() }.onFailure(logException) }
+        }
     }
 }
 
 @Preview
 @Composable
-internal fun DreamContentPreview() = SystemTheme { DreamContent() }
+internal fun DreamContentPreview() = SystemTheme { DreamContent {} }
 
 private fun brownNoise(): AudioTrack {
     val sampleRate = 22050 // Hz (maximum frequency is 7902.13Hz (B8))

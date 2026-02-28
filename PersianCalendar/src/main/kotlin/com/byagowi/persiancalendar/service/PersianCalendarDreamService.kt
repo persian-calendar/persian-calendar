@@ -19,13 +19,11 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, Vie
     private val lifecycleRegistry = LifecycleRegistry(this)
     override val lifecycle get() = lifecycleRegistry
 
-    private val savedStateRegistryController = SavedStateRegistryController.create(this).also {
-        it.performAttach()
-    }
+    private val savedStateRegistryController = SavedStateRegistryController.create(this)
     override val savedStateRegistry get() = savedStateRegistryController.savedStateRegistry
 
-    private val internalViewModelStore = ViewModelStore()
-    override val viewModelStore: ViewModelStore get() = internalViewModelStore
+    private val _viewModelStore = ViewModelStore()
+    override val viewModelStore get() = _viewModelStore
 
     override fun onCreate() {
         super.onCreate()
@@ -37,18 +35,30 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, Vie
         super.onAttachedToWindow()
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         isFullscreen = true
-        // isInteractive = true
+        isInteractive = true
+        // isScreenBright = false
         val composeView = ComposeView(this)
         composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         composeView.setViewTreeLifecycleOwner(this)
         composeView.setViewTreeViewModelStoreOwner(this)
         composeView.setViewTreeSavedStateRegistryOwner(this)
-        composeView.setContent { SystemTheme { DreamContent() } }
+        composeView.setContent { SystemTheme { DreamContent(::finish) } }
         setContentView(composeView)
+    }
+
+    override fun onDreamingStarted() {
+        super.onDreamingStarted()
+        lifecycleRegistry.currentState = Lifecycle.State.RESUMED
+    }
+
+    override fun onDreamingStopped() {
+        super.onDreamingStopped()
+        lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        viewModelStore.clear()
     }
 }

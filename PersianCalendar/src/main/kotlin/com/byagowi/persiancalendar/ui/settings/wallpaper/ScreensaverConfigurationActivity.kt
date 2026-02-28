@@ -17,5 +17,5 @@ class ScreensaverConfigurationActivity : BaseConfigurationActivity() {
     }
 
     @Composable
-    override fun Background() = DreamContent()
+    override fun Background() = DreamContent {}
 }
