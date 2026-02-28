@@ -47,7 +47,7 @@ class AstronomyTests {
     fun `Test lunar age`() {
         // https://github.com/BGCX262/zweer-gdr-svn-to-git/blob/6d85903/trunk/library/Zwe/Weather/Moon.php
         listOf(
-            1.84566, 5.53699, 9.22831, 12.91963, 16.61096, 20.30228, 23.99361, 27.68493
+            1.84566, 5.53699, 9.22831, 12.91963, 16.61096, 20.30228, 23.99361, 27.68493,
         ).forEachIndexed { index, it ->
             val lunarAge = LunarAge.fromDegrees((index + .5) * (360 / 8))
             assertEquals(it, lunarAge.days, 1.0e-5)
@@ -79,7 +79,7 @@ class AstronomyTests {
         (1..12).forEach {
             assertEquals(
                 Zodiac.entries[it - 1],
-                Zodiac.fromPersianCalendar(PersianDate(1400, it, 1))
+                Zodiac.fromPersianCalendar(PersianDate(1400, it, 1)),
             )
         }
         assertEquals(Zodiac.LEO, Zodiac.fromPersianCalendar(PersianDate(1400, 5, 1)))
@@ -88,12 +88,12 @@ class AstronomyTests {
     @Test
     fun `Zodiac from ecliptic`() {
         listOf(10, 40, 60, 100, 130, 140, 180, 230, 260, 280, 310, 320, 350).zip(
-            listOf(Zodiac.PISCES) + Zodiac.entries
+            listOf(Zodiac.PISCES) + Zodiac.entries,
         ) { longitude, zodiac ->
             assertEquals(
                 expected = zodiac,
                 actual = Zodiac.fromIau(longitude.toDouble()),
-                message = longitude.toString()
+                message = longitude.toString(),
             )
         }
         (0..11).map { 20 + it * 30 }
@@ -123,7 +123,7 @@ class AstronomyTests {
         }
         listOf(
             1..3 to Season.SPRING, 4..6 to Season.SUMMER,
-            7..9 to Season.AUTUMN, 10..12 to Season.WINTER
+            7..9 to Season.AUTUMN, 10..12 to Season.WINTER,
         ).forEach { (range, season) ->
             range.forEach { assertEquals(season, noLocationSeasons[it - 1]) }
         }
@@ -141,7 +141,7 @@ class AstronomyTests {
         }
         listOf(
             1..3 to Season.AUTUMN, 4..6 to Season.WINTER,
-            7..9 to Season.SPRING, 10..12 to Season.SUMMER
+            7..9 to Season.SPRING, 10..12 to Season.SUMMER,
         ).forEach { (range, season) ->
             range.forEach { assertEquals(season, southernHemisphereSeasons[it - 1]) }
         }
@@ -152,7 +152,7 @@ class AstronomyTests {
         val seasons = seasons(2020)
         listOf(
             seasons.marchEquinox to 1584676196290, seasons.juneSolstice to 1592689411284,
-            seasons.septemberEquinox to 1600781459379, seasons.decemberSolstice to 1608544962334
+            seasons.septemberEquinox to 1600781459379, seasons.decemberSolstice to 1608544962334,
         ).map { (it, time) -> assertEquals(time, it.toMillisecondsSince1970()) }
     }
 
@@ -179,20 +179,20 @@ class AstronomyTests {
     fun `Iranian animal year name`() {
         assertEquals(
             OX,
-            ChineseZodiac.fromPersianCalendar(PersianDate(1400, 1, 1))
+            ChineseZodiac.fromPersianCalendar(PersianDate(1400, 1, 1)),
         )
         assertEquals(
             TIGER,
-            ChineseZodiac.fromPersianCalendar(PersianDate(1401, 1, 1))
+            ChineseZodiac.fromPersianCalendar(PersianDate(1401, 1, 1)),
         )
         listOf(
             MONKEY, ROOSTER, DOG,
             PIG, RAT, OX,
             TIGER, RABBIT, DRAGON,
-            SNAKE, HORSE, GOAT
+            SNAKE, HORSE, GOAT,
         ).zip(1395..1406) { expected, year ->
             assertEquals(
-                expected, ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1))
+                expected, ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1)),
             )
         }
         // Just doesn't crash in negative years
@@ -206,7 +206,7 @@ class AstronomyTests {
         val southern = Coordinates(-10.0, 10.0, 10.0)
         assertEquals(
             LunarAge.Phase.WAXING_CRESCENT.emoji(null),
-            LunarAge.Phase.WANING_CRESCENT.emoji(southern)
+            LunarAge.Phase.WANING_CRESCENT.emoji(southern),
         )
 
         // Just make sure things go well
@@ -232,7 +232,7 @@ class AstronomyTests {
             241.38395110721706, 329.35143674069417, 88.56361718692915,
             162.50276019387098, 233.7188545299278, 322.55668454433277,
             80.71131124720335, 154.8804221204217, 227.34730063093093,
-            305.90002157601714, 69.70791148916334
+            305.90002157601714, 69.70791148916334,
         )
         val midheavens = listOf(
             73.6674692915762, 156.8359554622392, 246.5253026081649,
@@ -248,7 +248,7 @@ class AstronomyTests {
             163.48287952332885, 251.54926299869965, 338.69238641161337,
             70.51027198602742, 153.4841648259337, 247.0387030539855,
             329.96107258615484, 61.762612284235615, 145.29968044985748,
-            234.77117761711645, 318.8433129667867
+            234.77117761711645, 318.8433129667867,
         )
         (1380..1420).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
@@ -350,7 +350,7 @@ class AstronomyTests {
 
             // 1402 to Zodiac.CANCER, // implied
             // 1403 to Zodiac.LEO, // implied
-            1404 to Zodiac.CANCER
+            1404 to Zodiac.CANCER,
         ).map { (year, sign) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val ascendant = houses(35.68, 51.42, time)[0]
@@ -448,13 +448,13 @@ class AstronomyTests {
         }.flatten().let(::assertAll)
 
         listOf(HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE).zip(
-            ChineseZodiac.entries
+            ChineseZodiac.entries,
         ) { worseMatch, yearZodiac ->
             { assertEquals(WORSE, yearZodiac compatibilityWith worseMatch) }
         }.let(::assertAll)
 
         listOf(GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY).zip(
-            ChineseZodiac.entries
+            ChineseZodiac.entries,
         ) { worstMatch, yearZodiac ->
             { assertEquals(WORST, yearZodiac compatibilityWith worstMatch) }
         }.let(::assertAll)
@@ -485,7 +485,7 @@ class AstronomyTests {
         assertEquals(DRAGON.trin, 1)
 
         listOf(
-            WATER, EARTH, WOOD, WOOD, EARTH, FIRE, FIRE, EARTH, METAL, METAL, EARTH, WATER
+            WATER, EARTH, WOOD, WOOD, EARTH, FIRE, FIRE, EARTH, METAL, METAL, EARTH, WATER,
         ).forEachIndexed { i, element ->
             assertEquals(element, ChineseZodiac.entries[i].fixedElement)
         }

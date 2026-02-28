@@ -37,12 +37,12 @@ class ShiftWorkDialogTest {
 
         restorationTester.setContent {
             Column { ShiftWorkDialogContent(today) {} }
-            val value1 = rememberSaveable {
+            rememberSaveable {
                 mutableStateListOf(ShiftWorkRecord("d", 12))
-            }
-            val value2 = rememberSaveable { mutableStateListOf("a") }
-            val value3 = rememberSaveable { mutableStateListOf(today) }
-            val value4 = rememberSaveable { mutableStateOf("a") }
+            }.let {}
+            rememberSaveable { mutableStateListOf("a") }.let {}
+            rememberSaveable { mutableStateListOf(today) }.let {}
+            rememberSaveable { mutableStateOf("a") }.let {}
         }
 
         restorationTester.emulateSavedInstanceStateRestore()

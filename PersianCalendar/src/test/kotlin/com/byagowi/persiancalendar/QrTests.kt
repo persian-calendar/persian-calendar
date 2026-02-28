@@ -37,7 +37,7 @@ class QrTests {
                     val second = result.getOrNull(row * 2)?.get(it) != true
                     if (first) (if (second) "█" else "▀") else (if (second) "▄" else " ")
                 } + "█"
-            }
+            },
         )
     }
 }

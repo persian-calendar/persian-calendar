@@ -50,19 +50,19 @@ class CalendarTests {
             1325, 1329, 1333, 1337, 1342, 1346, 1350, 1354, 1358, 1362, 1366, 1370, 1375, 1379,
             1383, 1387, 1391, 1395, 1399, 1403, 1408, 1412, 1416, 1420, 1424, 1428, 1432, 1436,
             1441, 1445, 1449, 1453, 1457, 1461, 1465, 1469, 1474, 1478, 1482, 1486, 1490, 1494,
-            1498
+            1498,
         )
 
         (1206..1498).forEach {
             assertEquals(
                 if (it in leapYears) 366 else 365,
                 Jdn(PersianDate(it + 1, 1, 1)) - Jdn(PersianDate(it, 1, 1)),
-                it.toString()
+                it.toString(),
             )
             if (1303 < it) assertEquals(
                 if (it in leapYears) 30 else 29,
                 Calendar.SHAMSI.getMonthLength(it, 12),
-                it.toString()
+                it.toString(),
             )
         }
     }
@@ -85,7 +85,7 @@ class CalendarTests {
         "6, 1398, 9, 22",
     )
     fun `weekDay calculations correctness`(
-        weekDay: Int, year: Int, month: Int, dayOfMonth: Int
+        weekDay: Int, year: Int, month: Int, dayOfMonth: Int,
     ) {
         assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDay.ordinal)
     }
@@ -147,12 +147,12 @@ class CalendarTests {
             val jdn = Jdn(CivilDate(1907, 12, 31))
             assertEquals(
                 jdn,
-                Jdn(IslamicDate(1325, 11, 25))
+                Jdn(IslamicDate(1325, 11, 25)),
             )
             val persianDate = jdn.toPersianDate()
             assertEquals(
                 "۱۵ دی جلالی ۸۲۹",
-                jalaliName(persianDate.year, persianDayOfYear(persianDate, jdn))
+                jalaliName(persianDate.year, persianDayOfYear(persianDate, jdn)),
             )
         }
         run {
@@ -160,7 +160,7 @@ class CalendarTests {
             val jdn = Jdn(CivilDate(1921, 4, 10))
             assertEquals(
                 jdn,
-                Jdn(IslamicDate(1339, 8, 1)) // غره means first of it
+                Jdn(IslamicDate(1339, 8, 1)), // غره means first of it
             )
             // We don't have بزگردی yet if not ever
 //            val persianDate = jdn.toPersianDate()
@@ -178,7 +178,7 @@ class CalendarTests {
             val persianDate = jdn.toPersianDate()
             assertEquals(
                 "۳۲ جوزا ۱۳۰۲",
-                formatDate(persianDate)
+                formatDate(persianDate),
             )
         }
     }
@@ -188,14 +188,14 @@ class CalendarTests {
         (Jdn(PersianDate(1200, 1, 1))..<Jdn(PersianDate(1500, 1, 1))).forEach { jdn ->
             val date = jdn.toPersianDate()
             val name = fasliDayName(
-                jdn - Jdn(PersianDate(date.year, 1, 1)) + 1
+                jdn - Jdn(PersianDate(date.year, 1, 1)) + 1,
             )
             val dayOfYear =
                 persianDayOfYear(PersianDate(date.year, date.month, date.dayOfMonth), jdn)
             assertEquals(
                 expected = name,
                 actual = fasliDayName(dayOfYear),
-                message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name
+                message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name,
             )
             jalaliName(jdn.toPersianDate().year, dayOfYear)
             formatAsSeleucidDate(jdn)

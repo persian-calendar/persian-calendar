@@ -25,7 +25,7 @@ class ShiftWorkDialogLogicsTest {
             ShiftWorkRecord("c", 0), // Not empty as type has some value
             ShiftWorkRecord("", 1), // Not empty as type has some value
             ShiftWorkRecord(" ", 1), // Not empty as type has some value
-            ShiftWorkRecord("", 0)
+            ShiftWorkRecord("", 0),
         )
         val expected = listOf(
             ShiftWorkRecord("a", 1),
@@ -33,7 +33,7 @@ class ShiftWorkDialogLogicsTest {
             ShiftWorkRecord("c", 0),
             ShiftWorkRecord("", 1),
             ShiftWorkRecord(" ", 1),
-            ShiftWorkRecord("", 0)
+            ShiftWorkRecord("", 0),
         )
         assertReducerIntegrity(expected, input)
     }
@@ -49,13 +49,13 @@ class ShiftWorkDialogLogicsTest {
             ShiftWorkRecord("a", 1),
             ShiftWorkRecord("b", 1),
             ShiftWorkRecord("c", 1),
-            ShiftWorkRecord("", 0)
+            ShiftWorkRecord("", 0),
         )
         assertReducerIntegrity(expected, input)
     }
 
     private fun assertReducerIntegrity(
-        expected: List<ShiftWorkRecord>, input: List<ShiftWorkRecord>
+        expected: List<ShiftWorkRecord>, input: List<ShiftWorkRecord>,
     ) {
         val actual = input.toMutableList()
         assertTrue(trimEmptyRows(actual)) // changes the state

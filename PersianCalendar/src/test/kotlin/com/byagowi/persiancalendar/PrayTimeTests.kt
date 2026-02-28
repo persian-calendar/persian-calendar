@@ -145,7 +145,7 @@ class PrayTimeTests {
     }
 
     private fun createCalendar(
-        timeZone: String, year: Int, month: Int, dayOfMonth: Int
+        timeZone: String, year: Int, month: Int, dayOfMonth: Int,
     ): GregorianCalendar {
         return GregorianCalendar(TimeZone.getTimeZone(timeZone)).apply {
             set(year, month - 1, dayOfMonth, 0, 0)

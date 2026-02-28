@@ -19,7 +19,7 @@ class CalculatorTests {
                 0.03333333333333333 m
                 2 s
             """.trimIndent(),
-            eval("2s")
+            eval("2s"),
         )
         assertEquals(
             """
@@ -29,7 +29,7 @@ class CalculatorTests {
                 3449.3166666666666 m
                 206959 s
             """.trimIndent(),
-            eval("1d + 2h + 3m + 4s + 4h + 5s - 2030s + 28h")
+            eval("1d + 2h + 3m + 4s + 4h + 5s - 2030s + 28h"),
         )
         assertEquals(
             """
@@ -39,7 +39,7 @@ class CalculatorTests {
                 3449.3166666666666 m
                 206959 s
             """.trimIndent(),
-            eval("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
+            eval("1d 2h 3m 4s + 4h 5s - 2030s + 28h"),
         )
     }
 

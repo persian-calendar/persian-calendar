@@ -25,20 +25,20 @@ class ActivitiesSmokeTest {
         ActivityScenario.launch<MainActivity>(Intent(context, MainActivity::class.java))
         ActivityScenario.launch<AthanActivity>(
             Intent(context, AthanActivity::class.java)
-                .putExtra(KEY_EXTRA_PRAYER, PrayTime.ASR.name)
+                .putExtra(KEY_EXTRA_PRAYER, PrayTime.ASR.name),
         )
 //        ActivityScenario.launch<WidgetConfigurationActivity>(
 //            Intent(context, WidgetConfigurationActivity::class.java)
 //        )
         ActivityScenario.launch<WallpaperConfigurationActivity>(
-            Intent(context, WallpaperConfigurationActivity::class.java)
+            Intent(context, WallpaperConfigurationActivity::class.java),
         )
         ActivityScenario.launch<ScreensaverConfigurationActivity>(
-            Intent(context, ScreensaverConfigurationActivity::class.java)
+            Intent(context, ScreensaverConfigurationActivity::class.java),
         )
         ActivityScenario.launch<WidgetAgeConfigureActivity>(
             Intent(context, WidgetAgeConfigureActivity::class.java)
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0),
         )
     }
 }

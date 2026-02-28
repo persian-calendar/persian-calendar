@@ -142,7 +142,7 @@ class EventsTests {
         "1390, 12, 26, 6",
     )
     fun `getLastWeekDayOfMonth calculations correctness`(
-        year: Int, month: Int, day: Int, weekDay: Int
+        year: Int, month: Int, day: Int, weekDay: Int,
     ) {
         val calendar = Calendar.SHAMSI
         assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, weekDay))
