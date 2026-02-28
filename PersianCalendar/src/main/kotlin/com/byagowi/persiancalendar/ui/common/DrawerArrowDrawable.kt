@@ -21,6 +21,7 @@
 // It's tweaked to match Icons.AutoMirrored.Default.ArrowBack and Icons.Default.Menu
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -56,8 +57,6 @@ fun DrawerArrowDrawable(
 ) {
     val barThickness = with(LocalDensity.current) { 2.dp.toPx() }
     val strokeStyle = remember { Stroke(width = barThickness) }
-    // the amount that overlaps w/ bar size when rotation is max
-    val maxCutForBarSize = barThickness / 2 * ARROW_HEAD_ANGLE_COSINE
     // Use Path instead of canvas operations so that if color has transparency, overlapping sections
     // won't look different
     val path = remember { Path() }
@@ -69,50 +68,7 @@ fun DrawerArrowDrawable(
             .size(16.dp),
     ) {
         val progress = progress()
-        run {
-            // The length of middle bar
-            val barLength = if (quirks) {
-                // Otherwise it won't match Icons.Default.Menu
-                18.dp.toPx()
-            } else 16.dp.toPx()
-            // The space between bars when they are parallel
-            val barGap = 3.dp.toPx()
-            // The length of top and bottom bars when they merge into an arrow
-            val arrowHeadLength = 8.dp.toPx()
-            // Interpolated widths of arrow bars
-            val arrowHeadBarLength = run {
-                val finalValue = sqrt(arrowHeadLength * arrowHeadLength * 2)
-                lerp(start = barLength, stop = finalValue, fraction = progress)
-            }
-            // The length of the middle bar when arrow is shaped
-            val arrowShaftLength = run {
-                val finalValue = 16.dp.toPx()
-                lerp(start = barLength, stop = finalValue, fraction = progress)
-            }
-            // Interpolated size of middle bar
-            val arrowShaftCut = lerp(start = 0f, stop = maxCutForBarSize, fraction = progress)
-            // The rotation of the top and bottom bars (that make the arrow head)
-            val rotation = lerp(start = 0f, stop = ARROW_HEAD_ANGLE, fraction = progress)
-            val arrowWidth = arrowHeadBarLength * cos(rotation)
-            val arrowHeight = arrowHeadBarLength * sin(rotation)
-            val topBottomBarOffset = lerp(
-                start = barGap + barThickness,
-                stop = -maxCutForBarSize,
-                fraction = progress,
-            )
-            val arrowEdge = -arrowShaftLength / 2
-            path.rewind()
-            // draw middle bar
-            path.moveTo(x = arrowEdge + arrowShaftCut, y = 0f)
-            path.relativeLineTo(dx = arrowShaftLength - arrowShaftCut * 2, dy = 0f)
-            // bottom bar
-            path.moveTo(x = arrowEdge, y = topBottomBarOffset)
-            path.relativeLineTo(dx = arrowWidth, dy = arrowHeight)
-            // top bar
-            path.moveTo(x = arrowEdge, y = -topBottomBarOffset)
-            path.relativeLineTo(dx = arrowWidth, dy = -arrowHeight)
-            path.close()
-        }
+        fillDrawerArrowPath(path, quirks, progress, 1.dp.toPx(), barThickness)
         // Rotate the whole canvas if spinning, if not, rotate it 180 to get
         // the arrow pointing the other way for RTL.
         translate(
@@ -137,6 +93,60 @@ fun DrawerArrowDrawable(
             ) { drawPath(path, contentColor, style = strokeStyle) }
         }
     }
+}
+
+@VisibleForTesting
+fun fillDrawerArrowPath(
+    path: Path,
+    quirks: Boolean,
+    progress: Float,
+    dpToPx: Float,
+    barThickness: Float,
+) {
+    // the amount that overlaps w/ bar size when rotation is max
+    val maxCutForBarSize = barThickness / 2 * ARROW_HEAD_ANGLE_COSINE
+    // The length of middle bar
+    val barLength = if (quirks) {
+        // Otherwise it won't match Icons.Default.Menu
+        18 * dpToPx
+    } else 16 * dpToPx
+    // The space between bars when they are parallel
+    val barGap = 3 * dpToPx
+    // The length of top and bottom bars when they merge into an arrow
+    val arrowHeadLength = 8 * dpToPx
+    // Interpolated widths of arrow bars
+    val arrowHeadBarLength = run {
+        val finalValue = sqrt(arrowHeadLength * arrowHeadLength * 2)
+        lerp(start = barLength, stop = finalValue, fraction = progress)
+    }
+    // The length of the middle bar when arrow is shaped
+    val arrowShaftLength = run {
+        val finalValue = 16 * dpToPx
+        lerp(start = barLength, stop = finalValue, fraction = progress)
+    }
+    // Interpolated size of middle bar
+    val arrowShaftCut = lerp(start = 0f, stop = maxCutForBarSize, fraction = progress)
+    // The rotation of the top and bottom bars (that make the arrow head)
+    val rotation = lerp(start = 0f, stop = ARROW_HEAD_ANGLE, fraction = progress)
+    val arrowWidth = arrowHeadBarLength * cos(rotation)
+    val arrowHeight = arrowHeadBarLength * sin(rotation)
+    val topBottomBarOffset = lerp(
+        start = barGap + barThickness,
+        stop = -maxCutForBarSize,
+        fraction = progress,
+    )
+    val arrowEdge = -arrowShaftLength / 2
+    path.rewind()
+    // draw middle bar
+    path.moveTo(x = arrowEdge + arrowShaftCut, y = 0f)
+    path.relativeLineTo(dx = arrowShaftLength - arrowShaftCut * 2, dy = 0f)
+    // bottom bar
+    path.moveTo(x = arrowEdge, y = topBottomBarOffset)
+    path.relativeLineTo(dx = arrowWidth, dy = arrowHeight)
+    // top bar
+    path.moveTo(x = arrowEdge, y = -topBottomBarOffset)
+    path.relativeLineTo(dx = arrowWidth, dy = -arrowHeight)
+    path.close()
 }
 
 private val ARROW_HEAD_ANGLE = Math.toRadians(45.0).toFloat()
