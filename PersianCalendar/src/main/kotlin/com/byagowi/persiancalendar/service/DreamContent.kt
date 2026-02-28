@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
@@ -26,6 +27,9 @@ import com.byagowi.persiancalendar.ui.athan.DrawBackground
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.utils.logException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 @Composable
@@ -50,14 +54,20 @@ fun DreamContent(finish: () -> Unit) {
             .clickable(indication = null, interactionSource = null, onClick = finish)
             .onSizeChanged { (width, height) -> patternDrawable.setSize(width, height) },
     ) { DrawBackground(patternDrawable, durationMillis = 360_000) }
+    val brownNoise by remember { lazy(LazyThreadSafetyMode.NONE) { brownNoise() } }
+    val coroutineScope = rememberCoroutineScope()
     if (dreamNoise && run {
             val lifecycleOwner by rememberLifecycleOwner().lifecycle.currentStateAsState()
             lifecycleOwner.isAtLeast(Lifecycle.State.RESUMED)
         }) {
         DisposableEffect(key1 = Unit) {
-            val brownNoise = brownNoise()
-            runCatching { brownNoise.play() }.onFailure(logException)
-            onDispose { runCatching { brownNoise.stop() }.onFailure(logException) }
+            fun runOnIoThread(block: () -> Unit) {
+                coroutineScope.launch {
+                    withContext(Dispatchers.IO) { runCatching(block).onFailure(logException) }
+                }
+            }
+            runOnIoThread { brownNoise.play() }
+            onDispose { runOnIoThread { brownNoise.stop() } }
         }
     }
 }
