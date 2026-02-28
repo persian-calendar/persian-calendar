@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun <T> AppModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
-    values: ImmutableList<T>,
+    items: ImmutableList<T>,
     small: Boolean = false,
     label: @Composable (T) -> String,
 ) {
@@ -88,7 +88,7 @@ fun <T> AppModesDropDown(
             onDismissRequest = { showMenu = false },
             minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
         ) {
-            values.forEach { entry ->
+            items.forEach { entry ->
                 AppDropdownMenuRadioItem(
                     text = { Text(label(entry)) },
                     isSelected = value == entry,

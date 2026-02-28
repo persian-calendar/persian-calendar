@@ -1149,7 +1149,7 @@ private fun SharedTransitionScope.Toolbar(
                 if (isYearView) AppModesDropDown(
                     value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
-                    values = enabledCalendarsWithDefault,
+                    items = enabledCalendarsWithDefault,
                     small = subtitle.isNotEmpty(),
                 ) {
                     stringResource(

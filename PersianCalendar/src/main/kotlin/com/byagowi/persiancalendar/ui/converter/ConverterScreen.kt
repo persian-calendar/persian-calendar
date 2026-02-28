@@ -137,7 +137,7 @@ fun SharedTransitionScope.ConverterScreen(
                     AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
-                        values = remember { ConverterScreenMode.entries.toImmutableList() },
+                        items = remember { ConverterScreenMode.entries.toImmutableList() },
                     ) { stringResource(it.title) }
                 },
                 colors = appTopAppBarColors(),
