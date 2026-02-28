@@ -42,4 +42,3 @@ users to preview the back navigation before committing to it.""",
         )
     }
 }
-
