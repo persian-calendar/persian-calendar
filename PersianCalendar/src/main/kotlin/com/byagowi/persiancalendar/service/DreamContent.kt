@@ -3,20 +3,19 @@ package com.byagowi.persiancalendar.service
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
-import android.os.Build
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -35,32 +34,25 @@ import kotlin.random.Random
 @Composable
 fun DreamContent(finish: () -> Unit) {
     val isNightMode = isSystemInDarkTheme()
-    val resources = LocalResources.current
-    val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
-    val patternDrawable = remember(isNightMode, resources, LocalConfiguration.current) {
-        val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) resources.getColor(
-            if (isNightMode) android.R.color.system_accent1_200
-            else android.R.color.system_accent1_400,
-            null,
-        ) else null
+    val density = LocalDensity.current
+    val colorScheme = MaterialTheme.colorScheme
+    val patternDrawable = remember(isNightMode, colorScheme) {
         PatternDrawable(
-            preferredTintColor = accentColor,
+            preferredTintColor = colorScheme.primary.toArgb(),
             darkBaseColor = isNightMode,
-            dp = dpAsPx,
+            dp = with(density) { 1.dp.toPx() },
         )
     }
     Box(
         Modifier
             .clickable(indication = null, interactionSource = null, onClick = finish)
-            .onSizeChanged { (width, height) -> patternDrawable.setSize(width, height) },
-    ) { DrawBackground(patternDrawable, durationMillis = 360_000) }
+            .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
+    ) { DrawBackground(patternDrawable) }
     val brownNoise by remember { lazy(LazyThreadSafetyMode.NONE) { brownNoise() } }
     val coroutineScope = rememberCoroutineScope()
-    if (dreamNoise && run {
-            val lifecycleOwner by rememberLifecycleOwner().lifecycle.currentStateAsState()
-            lifecycleOwner.isAtLeast(Lifecycle.State.RESUMED)
-        }) {
-        DisposableEffect(key1 = Unit) {
+    if (dreamNoise) {
+        val lifecycleOwner by rememberLifecycleOwner().lifecycle.currentStateAsState()
+        if (lifecycleOwner.isAtLeast(Lifecycle.State.RESUMED)) DisposableEffect(key1 = Unit) {
             fun runOnIoThread(block: () -> Unit) {
                 coroutineScope.launch {
                     withContext(Dispatchers.IO) { runCatching(block).onFailure(logException) }

@@ -49,7 +49,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
             .fillMaxSize()
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
     ) {
-        DrawBackground(patternDrawable, durationMillis = 180_000)
+        DrawBackground(patternDrawable)
         Column(modifier = Modifier.padding(horizontal = 30.dp, vertical = 80.dp)) {
             val textStyle = LocalTextStyle.current.copy(
                 color = Color.White, fontWeight = FontWeight.Bold,

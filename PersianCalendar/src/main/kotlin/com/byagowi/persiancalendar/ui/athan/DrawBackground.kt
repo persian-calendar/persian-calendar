@@ -17,11 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.byagowi.persiancalendar.entities.PrayTime
 
 @Composable
-fun DrawBackground(patternDrawable: PatternDrawable, durationMillis: Int) {
+fun DrawBackground(patternDrawable: PatternDrawable) {
     val direction = remember { listOf(1, -1).random() }
     val infiniteTransition = rememberInfiniteTransition()
     val animationSpec = infiniteRepeatable<Float>(
-        animation = tween(durationMillis = durationMillis, easing = LinearEasing),
+        animation = tween(durationMillis = 360_000, easing = LinearEasing),
     )
     val rotation by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 360f, animationSpec = animationSpec,
