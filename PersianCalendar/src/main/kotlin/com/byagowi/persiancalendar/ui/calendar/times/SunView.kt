@@ -93,7 +93,6 @@ class SunView(
     }
 
     private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL_AND_STROKE
         it.shader = LinearGradient(
             width * .17f, 0f, width / 2f, 0f, colors.dayColor.toArgb(), colors.middayColor.toArgb(),
             Shader.TileMode.MIRROR,
@@ -143,28 +142,24 @@ class SunView(
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
-        it.style = Paint.Style.FILL
         it.color = colors.sunriseTextColor.toArgb()
     }
     private val middayTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
-        it.style = Paint.Style.FILL
         it.color = colors.middayTextColor.toArgb()
     }
     private val sunsetTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
-        it.style = Paint.Style.FILL
         it.color = colors.sunsetTextColor.toArgb()
     }
     private val belowTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
-        it.style = Paint.Style.FILL
         it.color = colors.textColorSecondary.toArgb()
     }
 
