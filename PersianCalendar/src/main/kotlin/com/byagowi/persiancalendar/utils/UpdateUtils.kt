@@ -478,32 +478,40 @@ fun createSunViewRemoteViews(
     now: Long,
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
-    val color = when {
-        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+    val color = androidx.compose.ui.graphics.Color(
+        when {
+            prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
 
-        else -> selectedWidgetTextColor
-    }
+            else -> selectedWidgetTextColor
+        },
+    )
     val colors = SunViewColors(
-        nightColor = ContextCompat.getColor(
-            context,
-            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_night_color
-            else R.color.sun_view_night_color,
+        nightColor = androidx.compose.ui.graphics.Color(
+            ContextCompat.getColor(
+                context,
+                if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_night_color
+                else R.color.sun_view_night_color,
+            ),
         ),
-        dayColor = ContextCompat.getColor(
-            context,
-            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_day_color
-            else R.color.sun_view_day_color,
+        dayColor = androidx.compose.ui.graphics.Color(
+            ContextCompat.getColor(
+                context,
+                if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_day_color
+                else R.color.sun_view_day_color,
+            ),
         ),
-        middayColor = ContextCompat.getColor(
-            context,
-            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_midday_color
-            else R.color.sun_view_midday_color,
+        middayColor = androidx.compose.ui.graphics.Color(
+            ContextCompat.getColor(
+                context,
+                if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_midday_color
+                else R.color.sun_view_midday_color,
+            ),
         ),
         sunriseTextColor = color,
         middayTextColor = color,
         sunsetTextColor = color,
         textColorSecondary = color,
-        linesColor = ColorUtils.setAlphaComponent(color, 0x60),
+        linesColor = color.copy(alpha = .25f),
     )
     val width = size?.width?.roundToPx(context.resources) ?: 250
     val height = size?.height?.roundToPx(context.resources) ?: 250
@@ -522,7 +530,7 @@ fun createSunViewRemoteViews(
         if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
             selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
         ) createRoundPath(width, height, roundPixelSize) else null
-    remoteViews.setTextColor(R.id.message, color)
+    remoteViews.setTextColor(R.id.message, color.toArgb())
     val message =
         if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else ""
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.message, message)

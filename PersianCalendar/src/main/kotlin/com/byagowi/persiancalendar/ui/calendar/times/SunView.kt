@@ -7,8 +7,9 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
 import android.graphics.Typeface
-import androidx.annotation.ColorInt
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
@@ -29,14 +30,14 @@ import kotlin.math.sqrt
 
 @Immutable
 data class SunViewColors(
-    @get:ColorInt val nightColor: Int,
-    @get:ColorInt val dayColor: Int,
-    @get:ColorInt val middayColor: Int,
-    @get:ColorInt val sunriseTextColor: Int,
-    @get:ColorInt val middayTextColor: Int,
-    @get:ColorInt val sunsetTextColor: Int,
-    @get:ColorInt val textColorSecondary: Int,
-    @get:ColorInt val linesColor: Int,
+    val nightColor: Color,
+    val dayColor: Color,
+    val middayColor: Color,
+    val sunriseTextColor: Color,
+    val middayTextColor: Color,
+    val sunsetTextColor: Color,
+    val textColorSecondary: Color,
+    val linesColor: Color,
 )
 
 /**
@@ -94,7 +95,7 @@ class SunView(
     private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL_AND_STROKE
         it.shader = LinearGradient(
-            width * .17f, 0f, width / 2f, 0f, colors.dayColor, colors.middayColor,
+            width * .17f, 0f, width / 2f, 0f, colors.dayColor.toArgb(), colors.middayColor.toArgb(),
             Shader.TileMode.MIRROR,
         )
     }
@@ -108,7 +109,7 @@ class SunView(
     }
     private val nightPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
-        it.color = colors.nightColor
+        it.color = colors.nightColor.toArgb()
     }
 
     private val nightPath = Path().also {
@@ -134,40 +135,40 @@ class SunView(
     private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = 1 * dp
         it.style = Paint.Style.STROKE
-        it.color = colors.linesColor
+        it.color = colors.linesColor.toArgb()
     }
     private val verticalLinesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = .75f * dp
         it.style = Paint.Style.STROKE
-        it.color = colors.linesColor
+        it.color = colors.linesColor.toArgb()
     }
     private val sunriseTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
         it.style = Paint.Style.FILL
-        it.color = colors.sunriseTextColor
+        it.color = colors.sunriseTextColor.toArgb()
     }
     private val middayTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
         it.style = Paint.Style.FILL
-        it.color = colors.middayTextColor
+        it.color = colors.middayTextColor.toArgb()
     }
     private val sunsetTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
         it.style = Paint.Style.FILL
-        it.color = colors.sunsetTextColor
+        it.color = colors.sunsetTextColor.toArgb()
     }
     private val belowTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.typeface = typeface
         it.textAlign = Paint.Align.CENTER
         it.textSize = fontSize
         it.style = Paint.Style.FILL
-        it.color = colors.textColorSecondary
+        it.color = colors.textColorSecondary.toArgb()
     }
 
     private val solarDraw = SolarDraw(resources)

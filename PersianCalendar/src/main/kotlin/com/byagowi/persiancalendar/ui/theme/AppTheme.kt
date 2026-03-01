@@ -51,7 +51,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -506,13 +505,13 @@ fun appSunViewColors(): SunViewColors {
         else -> android.R.color.system_accent1_100
     } else R.color.sun_view_midday_color
     return SunViewColors(
-        nightColor = getResourcesColor(nightColor).toArgb(),
-        dayColor = getResourcesColor(dayColor).toArgb(),
-        middayColor = getResourcesColor(midDayColor).toArgb(),
-        sunriseTextColor = Color(0xFFFF9800).toArgb(),
-        middayTextColor = Color(0xFFFFC107).toArgb(),
-        sunsetTextColor = Color(0xFFF22424).toArgb(),
-        textColorSecondary = LocalContentColor.current.copy(alpha = AppBlendAlpha).toArgb(),
-        linesColor = MaterialTheme.colorScheme.outlineVariant.toArgb(),
+        nightColor = getResourcesColor(nightColor),
+        dayColor = getResourcesColor(dayColor),
+        middayColor = getResourcesColor(midDayColor),
+        sunriseTextColor = Color(0xFFFF9800),
+        middayTextColor = Color(0xFFFFC107),
+        sunsetTextColor = Color(0xFFF22424),
+        textColorSecondary = LocalContentColor.current.copy(alpha = AppBlendAlpha),
+        linesColor = MaterialTheme.colorScheme.outlineVariant,
     )
 }
