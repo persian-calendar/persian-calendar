@@ -124,11 +124,12 @@ class SunView(
     private val time = Time.fromMillisecondsSince1970(timeInMillis)
     private var sun = sunPosition(time)
     private var moon = eclipticGeoMoon(time)
+    private val dp = resources.dp
     private val fontSize = when {
         language.isArabicScript -> 14f
         language.isTamil -> 11f
         else -> 11.5f
-    } * resources.dp
+    } * dp
 
     private val solarDraw = SolarDraw(resources)
 
@@ -151,7 +152,7 @@ class SunView(
 
             // draw time curve
             paint.also {
-                it.strokeWidth = 3f
+                it.strokeWidth = 1 * dp
                 it.style = Paint.Style.STROKE
                 it.color = colors.linesColor
             }
@@ -159,7 +160,7 @@ class SunView(
             // draw horizon line
             drawLine(0f, height * .75f, width.toFloat(), height * .75f, paint)
             // draw sunset and sunrise tag line indicator
-            paint.strokeWidth = 2f
+            paint.strokeWidth = .75f * dp
             drawLine(width * .17f, height * .3f, width * .17f, height * .7f, paint)
             drawLine(width * .83f, height * .3f, width * .83f, height * .7f, paint)
             drawLine(width / 2f, height * .7f, width / 2f, height * .8f, paint)
