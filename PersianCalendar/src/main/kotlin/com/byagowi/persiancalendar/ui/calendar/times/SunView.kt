@@ -47,7 +47,7 @@ data class SunViewColors(
 class SunView(
     resources: Resources,
     prayTimes: PrayTimes?,
-    private val colors: SunViewColors,
+    colors: SunViewColors,
     private val width: Int,
     private val height: Int,
     timeInMillis: Long,
@@ -100,12 +100,9 @@ class SunView(
         )
     }
 
-    private val segmentByPixel = 2 * PI / width
     private val curvePath = Path().also {
         it.moveTo(0f, height.toFloat())
-        repeat(width + 1) { x ->
-            it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
-        }
+        repeat(width + 1) { x -> it.lineTo(x.toFloat(), getY(x.toFloat())) }
     }
     private val nightPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
@@ -200,7 +197,7 @@ class SunView(
             // draw sun
             val radius = sqrt(width * height * .002f)
             val cx = width * value
-            val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
+            val cy = getY(cx)
             if (value in .17f..0.83f) withRotation(fraction * 900f, cx, cy) {
                 solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) {
@@ -235,6 +232,5 @@ class SunView(
         drawText(b, w * if (isRtl) .30f else .70f, y, belowTextPaint)
     }
 
-    private fun getY(x: Int, segment: Double, height: Int): Float =
-        height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
+    private fun getY(x: Float): Float = height * (.55f + cos(x / width * 2 * PI.toFloat()) * .45f)
 }
