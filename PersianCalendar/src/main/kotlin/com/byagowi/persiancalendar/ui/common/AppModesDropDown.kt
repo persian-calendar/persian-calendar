@@ -41,13 +41,14 @@ fun <T> AppModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
     items: ImmutableList<T>,
+    modifier: Modifier = Modifier,
     small: Boolean = false,
     label: @Composable (T) -> String,
 ) {
     var showMenu by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback = LocalHapticFeedback.current
     Box(
-        Modifier
+        modifier
             .clip(MaterialTheme.shapes.extraLarge)
             .background(LocalContentColor.current.copy(alpha = .175f))
             .clickable(

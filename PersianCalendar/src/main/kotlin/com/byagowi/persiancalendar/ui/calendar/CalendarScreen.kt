@@ -1151,6 +1151,7 @@ private fun SharedTransitionScope.Toolbar(
                     onValueChange = onYearViewCalendarChange,
                     items = enabledCalendarsWithDefault,
                     small = subtitle.isNotEmpty(),
+                    modifier = Modifier.alpha(isYearViewFraction.floatValue.coerceIn(0f, 1f)),
                 ) {
                     stringResource(
                         if (language.isArabicScript && LocalDensity.current.fontScale == 1f) {
