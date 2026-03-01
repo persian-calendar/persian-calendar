@@ -13,11 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.tooling.preview.Preview
-import com.byagowi.persiancalendar.entities.PrayTime
 
 @Composable
-fun DrawBackground(patternDrawable: PatternDrawable) {
+fun PatternCanvas(patternDrawable: PatternDrawable) {
     val direction = remember { listOf(1, -1).random() }
     val infiniteTransition = rememberInfiniteTransition()
     val animationSpec = infiniteRepeatable<Float>(
@@ -30,7 +28,3 @@ fun DrawBackground(patternDrawable: PatternDrawable) {
         drawIntoCanvas { patternDrawable.draw(it.nativeCanvas, rotation * direction) }
     }
 }
-
-@Preview
-@Composable
-internal fun AthanActivityContentPreview() = AthanActivityContent(PrayTime.FAJR) {}

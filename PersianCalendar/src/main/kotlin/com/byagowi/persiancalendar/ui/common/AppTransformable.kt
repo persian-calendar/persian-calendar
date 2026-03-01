@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.launch
 
 /**
- * Similar to [androidx.compose.foundation.gestures.transformable]. That had¬
+ * Similar to [androidx.compose.foundation.gestures.transformable]. That had
  * some shortcomings on a quick look but the decision can be reconsidered.
  */
 @Composable

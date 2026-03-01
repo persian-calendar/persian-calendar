@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
@@ -49,7 +50,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
             .fillMaxSize()
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
     ) {
-        DrawBackground(patternDrawable)
+        PatternCanvas(patternDrawable)
         Column(modifier = Modifier.padding(horizontal = 30.dp, vertical = 80.dp)) {
             val textStyle = LocalTextStyle.current.copy(
                 color = Color.White, fontWeight = FontWeight.Bold,
@@ -89,3 +90,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
         }
     }
 }
+
+@Preview
+@Composable
+internal fun AthanActivityContentPreview() = AthanActivityContent(PrayTime.FAJR) {}

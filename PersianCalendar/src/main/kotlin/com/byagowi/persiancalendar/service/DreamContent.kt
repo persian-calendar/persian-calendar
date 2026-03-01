@@ -22,7 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.compose.rememberLifecycleOwner
 import com.byagowi.persiancalendar.global.dreamNoise
-import com.byagowi.persiancalendar.ui.athan.DrawBackground
+import com.byagowi.persiancalendar.ui.athan.PatternCanvas
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.utils.logException
@@ -36,7 +36,7 @@ fun DreamContent(finish: () -> Unit) {
     val isNightMode = isSystemInDarkTheme()
     val density = LocalDensity.current
     val colorScheme = MaterialTheme.colorScheme
-    val patternDrawable = remember(isNightMode, colorScheme) {
+    val patternDrawable = remember(key1 = isNightMode, key2 = colorScheme) {
         PatternDrawable(
             preferredTintColor = colorScheme.primary.toArgb(),
             darkBaseColor = isNightMode,
@@ -47,8 +47,8 @@ fun DreamContent(finish: () -> Unit) {
         Modifier
             .clickable(indication = null, interactionSource = null, onClick = finish)
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
-    ) { DrawBackground(patternDrawable) }
-    val brownNoise by remember { lazy(LazyThreadSafetyMode.NONE) { brownNoise() } }
+    ) { PatternCanvas(patternDrawable) }
+    val brownNoise by remember { lazy { brownNoise() } }
     val coroutineScope = rememberCoroutineScope()
     if (dreamNoise) {
         val lifecycleOwner by rememberLifecycleOwner().lifecycle.currentStateAsState()
