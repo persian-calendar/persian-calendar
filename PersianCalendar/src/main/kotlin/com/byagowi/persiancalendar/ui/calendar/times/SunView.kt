@@ -91,12 +91,8 @@ class SunView(
         }
     }
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.typeface = typeface
-    }
     private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL_AND_STROKE
-        it.typeface = typeface
         it.shader = LinearGradient(
             width * .17f, 0f, width / 2f, 0f, colors.dayColor, colors.middayColor,
             Shader.TileMode.MIRROR,
@@ -110,6 +106,11 @@ class SunView(
             it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
         }
     }
+    private val nightPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.color = colors.nightColor
+    }
+
     private val nightPath = Path().also {
         it.addPath(curvePath)
         it.setLastPoint(width.toFloat(), height.toFloat())
@@ -130,19 +131,55 @@ class SunView(
         language.isTamil -> 11f
         else -> 11.5f
     } * dp
+    private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.strokeWidth = 1 * dp
+        it.style = Paint.Style.STROKE
+        it.color = colors.linesColor
+    }
+    private val verticalLinesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.strokeWidth = .75f * dp
+        it.style = Paint.Style.STROKE
+        it.color = colors.linesColor
+    }
+    private val sunriseTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.typeface = typeface
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = fontSize
+        it.style = Paint.Style.FILL
+        it.color = colors.sunriseTextColor
+    }
+    private val middayTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.typeface = typeface
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = fontSize
+        it.style = Paint.Style.FILL
+        it.color = colors.middayTextColor
+    }
+    private val sunsetTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.typeface = typeface
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = fontSize
+        it.style = Paint.Style.FILL
+        it.color = colors.sunsetTextColor
+    }
+    private val belowTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.typeface = typeface
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = fontSize
+        it.style = Paint.Style.FILL
+        it.color = colors.textColorSecondary
+    }
 
     private val solarDraw = SolarDraw(resources)
 
     fun draw(canvas: Canvas, fraction: Float) {
         val value = fraction * current
         canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = width / 2f) {
+            val width = this@SunView.width
+            val height = this@SunView.height
             // draw fill of night
             withClip(0f, height * .75f, width * value, height.toFloat()) {
-                paint.also {
-                    it.style = Paint.Style.FILL
-                    it.color = colors.nightColor
-                }
-                drawPath(nightPath, paint)
+                drawPath(nightPath, nightPaint)
             }
 
             // draw fill of day
@@ -151,19 +188,13 @@ class SunView(
             }
 
             // draw time curve
-            paint.also {
-                it.strokeWidth = 1 * dp
-                it.style = Paint.Style.STROKE
-                it.color = colors.linesColor
-            }
-            drawPath(curvePath, paint)
+            drawPath(curvePath, linesPaint)
             // draw horizon line
-            drawLine(0f, height * .75f, width.toFloat(), height * .75f, paint)
+            drawLine(0f, height * .75f, width.toFloat(), height * .75f, linesPaint)
             // draw sunset and sunrise tag line indicator
-            paint.strokeWidth = .75f * dp
-            drawLine(width * .17f, height * .3f, width * .17f, height * .7f, paint)
-            drawLine(width * .83f, height * .3f, width * .83f, height * .7f, paint)
-            drawLine(width / 2f, height * .7f, width / 2f, height * .8f, paint)
+            drawLine(width * .17f, height * .3f, width * .17f, height * .7f, verticalLinesPaint)
+            drawLine(width * .83f, height * .3f, width * .83f, height * .7f, verticalLinesPaint)
+            drawLine(width / 2f, height * .7f, width / 2f, height * .8f, verticalLinesPaint)
 
             // draw sun
             val radius = sqrt(width * height * .002f)
@@ -178,44 +209,29 @@ class SunView(
         }
 
         // draw text
-        paint.also {
-            it.textAlign = Paint.Align.CENTER
-            it.textSize = fontSize
-            it.strokeWidth = 0f
-            it.style = Paint.Style.FILL
-            it.color = colors.sunriseTextColor
-        }
         canvas.drawText(
-            sunriseString, width * if (isRtl) .83f else .17f, height * .2f, paint,
+            sunriseString, width * if (isRtl) .83f else .17f, height * .2f, sunriseTextPaint,
         )
-        paint.color = colors.middayTextColor
-        canvas.drawText(middayString, width / 2f, height * .94f, paint)
-        paint.color = colors.sunsetTextColor
+        canvas.drawText(middayString, width / 2f, height * .94f, middayTextPaint)
         canvas.drawText(
-            sunsetString, width * if (isRtl) .17f else .83f, height * .2f, paint,
+            sunsetString, width * if (isRtl) .17f else .83f, height * .2f, sunsetTextPaint,
         )
 
         // draw remaining time
-        paint.also {
-            it.textAlign = Paint.Align.CENTER
-            it.strokeWidth = 0f
-            it.style = Paint.Style.FILL
-            it.color = colors.textColorSecondary
-        }
         if (language.isTamil) {
             val (a, b) = dayLengthString.split(spacedColon).takeIf { it.size == 2 }
                 ?: listOf("", "")
             val (c, d) = remainingString.split(spacedColon).takeIf { it.size == 2 }
                 ?: listOf("", "")
-            val lineHeight = paint.descent() - paint.ascent()
+            val lineHeight = belowTextPaint.descent() - belowTextPaint.ascent()
             canvas.drawSideText(isRtl, width, height * .94f - lineHeight / 2, a, c)
             canvas.drawSideText(isRtl, width, height * .94f + lineHeight / 2, b, d)
         } else canvas.drawSideText(isRtl, width, height * .94f, dayLengthString, remainingString)
     }
 
     private fun Canvas.drawSideText(isRtl: Boolean, w: Int, y: Float, a: String, b: String) {
-        drawText(a, w * if (isRtl) .70f else .30f, y, paint)
-        drawText(b, w * if (isRtl) .30f else .70f, y, paint)
+        drawText(a, w * if (isRtl) .70f else .30f, y, belowTextPaint)
+        drawText(b, w * if (isRtl) .30f else .70f, y, belowTextPaint)
     }
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
