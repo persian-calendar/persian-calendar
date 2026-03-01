@@ -16,6 +16,8 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DrawerArrowDrawableTest {
+    // This doesn't do meaningful comparison between Compose provided Icons and drawer arrow right now
+    // but at least is good to make sure neither of them have drifted over the time.
     @Test
     fun drawerMenuIcon() {
         assertEquals(
