@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -211,9 +212,11 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     ),
                 )
             }
-            Canvas(Modifier.fillMaxSize()) {
-                sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value / 100_000)
-            }
+            Canvas(
+                Modifier
+                    .semantics { this.contentDescription = sunView.contentDescription }
+                    .fillMaxSize(),
+            ) { sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value / 100_000) }
         } else Box(Modifier.fillMaxSize()) {
             MoonView(
                 jdn = selectedDay,
