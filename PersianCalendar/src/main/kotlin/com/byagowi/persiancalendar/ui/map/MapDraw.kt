@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.animation.ArgbEvaluator
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
@@ -14,6 +13,7 @@ import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.graphics.vector.toPath
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withRotation
@@ -387,7 +387,6 @@ class MapDraw(
         strokeWidth = 5 * dp
         color = mapForegroundColor ?: defaultMisc
     }
-    private val argbEvaluator = ArgbEvaluator()
 
     private val drawEasterEggs by lazy(LazyThreadSafetyMode.NONE) {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -464,9 +463,9 @@ class MapDraw(
                 if (i >= points.size - 1) return@forEachIndexed
                 val (x2, y2) = points[i + 1]
                 if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
-                pathPaint.color = (argbEvaluator.evaluate(
-                    i.toFloat() / points.size, Color.BLACK, Color.RED,
-                ) as? Int) ?: 0
+                pathPaint.color = ColorUtils.blendARGB(
+                    Color.BLACK, Color.RED, i.toFloat() / points.size,
+                )
                 canvas.drawLine(x1, y1, x2, y2, pathPaint)
             }
             val center = points[points.size / 2]

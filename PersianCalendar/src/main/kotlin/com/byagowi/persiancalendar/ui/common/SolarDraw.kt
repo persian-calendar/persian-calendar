@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.animation.ArgbEvaluator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import io.github.cosinekitty.astronomy.Ecliptic
@@ -14,9 +14,8 @@ import kotlin.math.abs
 import kotlin.math.cos
 
 class SolarDraw(resources: Resources) {
-    private val argbEvaluator = ArgbEvaluator()
     fun sunColor(progress: Float): Int =
-        (argbEvaluator.evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt()) as? Int) ?: 0
+        ColorUtils.blendARGB(0xFFFFF9C4.toInt(), 0xFFFF9100.toInt(), progress)
 
     fun sun(
         canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false,
