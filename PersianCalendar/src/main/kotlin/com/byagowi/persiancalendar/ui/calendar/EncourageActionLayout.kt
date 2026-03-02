@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
@@ -52,14 +54,18 @@ fun ColumnScope.EncourageActionLayout(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(4.dp))
-            Row {
+            Row(
+                modifier = Modifier
+                    .sizeIn(maxWidth = 400.dp)
+                    .align(Alignment.CenterHorizontally),
+            ) {
                 OutlinedButton(
                     onClick = {
                         discardAction()
                         shown = false
                     },
                     Modifier.weight(1f),
-                ) { Text(stringResource(R.string.ignore)) }
+                ) { Text(stringResource(R.string.ignore), textAlign = TextAlign.Center) }
                 Spacer(Modifier.width(8.dp))
                 val defaultButtonColors = ButtonDefaults.buttonColors()
                 Button(
@@ -74,7 +80,7 @@ fun ColumnScope.EncourageActionLayout(
                         disabledContainerColor = animateColor(defaultButtonColors.disabledContainerColor).value,
                         disabledContentColor = animateColor(defaultButtonColors.disabledContentColor).value,
                     ),
-                ) { Text(acceptButton) }
+                ) { Text(acceptButton, textAlign = TextAlign.Center) }
             }
         }
     }
