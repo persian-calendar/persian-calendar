@@ -59,6 +59,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -130,7 +131,7 @@ fun SharedTransitionScope.TimesTab(
             ExpandArrow(
                 modifier = Modifier.size(with(LocalDensity.current) { 20.sp.toDp() }),
                 isExpanded = isExpanded,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = animateColor(MaterialTheme.colorScheme.primary).value,
             )
         }
         if (calculationMethod != language.preferredCalculationMethod) Text(

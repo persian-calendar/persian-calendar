@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.animate
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -50,7 +51,7 @@ fun SharedTransitionScope.Times(
         ) {
             val isJafari = calculationMethod.isJafari
             val times = PrayTime.allTimes(isJafari)
-            val nextTimeColor = nextTimeColor()
+            val nextTimeColor by animateColor(nextTimeColor())
             val nextPrayTime =
                 if (isToday) prayTimes.getNextTime(now, times, isExpanded, isJafari)
                 else null
