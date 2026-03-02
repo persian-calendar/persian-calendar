@@ -1210,10 +1210,9 @@ private fun SharedTransitionScope.Toolbar(
                     ) { value, _ -> isYearViewFraction.floatValue = value }
                 }
             }
-            val fraction = isYearViewFraction.floatValue
             NavigationMenuArrow(
-                fraction = fraction,
-                action = if (fraction == 0f) openNavigationRail else onYearViewBackPressed,
+                fraction = isYearViewFraction.floatValue,
+                action = if (isYearViewFraction.floatValue == 0f) openNavigationRail else onYearViewBackPressed,
             )
         },
         actions = {

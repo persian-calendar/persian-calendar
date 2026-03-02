@@ -47,6 +47,7 @@ import kotlin.math.sqrt
 @Stable
 @Composable
 fun DrawerArrowDrawable(
+    fraction: Float,
     modifier: Modifier = Modifier,
     // Whether bars should spin or not during progress
     spin: Boolean = false,
@@ -55,11 +56,9 @@ fun DrawerArrowDrawable(
     verticalMirror: Boolean = false,
     // Quirks to match with Icons.AutoMirrored.Default.ArrowBack and Icons.Default.Menu
     quirks: Boolean = true,
-    // Callback to get progress value from value in a more efficient way, [0-1]
-    progress: () -> Float,
 ) {
     val barThickness = with(LocalDensity.current) { 2.dp.toPx() }
-    val strokeStyle = remember { Stroke(width = barThickness) }
+    val strokeStyle = remember(barThickness) { Stroke(width = barThickness) }
     // Use Path instead of canvas operations so that if color has transparency, overlapping sections
     // won't look different
     val path = remember { Path() }
@@ -70,14 +69,13 @@ fun DrawerArrowDrawable(
             .padding(16.dp)
             .size(16.dp),
     ) {
-        val progress = progress()
-        fillDrawerArrowPath(path, quirks, progress, 1.dp.toPx(), barThickness)
+        fillDrawerArrowPath(path, quirks, fraction, 1.dp.toPx(), barThickness)
         // Rotate the whole canvas if spinning, if not, rotate it 180 to get
         // the arrow pointing the other way for RTL.
         translate(
             left = this.size.width / 2 + if (quirks) {
                 // otherwise it won't match Icons.AutoMirrored.Default.ArrowBack
-                progress * (if (isRtl) -1 else 1).dp.toPx()
+                fraction * (if (isRtl) -1 else 1).dp.toPx()
             } else 0f,
             top = this.size.height / 2,
         ) {
@@ -87,7 +85,7 @@ fun DrawerArrowDrawable(
                     lerp(
                         start = if (isRtl) 0f else -180f,
                         stop = if (isRtl) 180f else 0f,
-                        fraction = progress,
+                        fraction = fraction,
                     ) * if (verticalMirror xor isRtl) -1 else 1
                 } else {
                     if (isRtl) 180f else 0f
@@ -102,7 +100,7 @@ fun DrawerArrowDrawable(
 fun fillDrawerArrowPath(
     path: Path,
     quirks: Boolean,
-    progress: Float,
+    fraction: Float,
     dpToPx: Float,
     barThickness: Float,
 ) {
@@ -120,23 +118,23 @@ fun fillDrawerArrowPath(
     // Interpolated widths of arrow bars
     val arrowHeadBarLength = run {
         val finalValue = sqrt(arrowHeadLength * arrowHeadLength * 2)
-        lerp(start = barLength, stop = finalValue, fraction = progress)
+        lerp(start = barLength, stop = finalValue, fraction = fraction)
     }
     // The length of the middle bar when arrow is shaped
     val arrowShaftLength = run {
         val finalValue = 16 * dpToPx
-        lerp(start = barLength, stop = finalValue, fraction = progress)
+        lerp(start = barLength, stop = finalValue, fraction = fraction)
     }
     // Interpolated size of middle bar
-    val arrowShaftCut = lerp(start = 0f, stop = maxCutForBarSize, fraction = progress)
+    val arrowShaftCut = lerp(start = 0f, stop = maxCutForBarSize, fraction = fraction)
     // The rotation of the top and bottom bars (that make the arrow head)
-    val rotation = lerp(start = 0f, stop = ARROW_HEAD_ANGLE, fraction = progress)
+    val rotation = lerp(start = 0f, stop = ARROW_HEAD_ANGLE, fraction = fraction)
     val arrowWidth = arrowHeadBarLength * cos(rotation)
     val arrowHeight = arrowHeadBarLength * sin(rotation)
     val topBottomBarOffset = lerp(
         start = barGap + barThickness,
         stop = -maxCutForBarSize,
-        fraction = progress,
+        fraction = fraction,
     )
     val arrowEdge = -arrowShaftLength / 2
     path.rewind()

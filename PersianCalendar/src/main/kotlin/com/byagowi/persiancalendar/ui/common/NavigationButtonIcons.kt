@@ -41,6 +41,7 @@ fun SharedTransitionScope.NavigationMenuArrow(fraction: Float, action: () -> Uni
     ) {
         IconButton(onClick = dropUnlessStarted(block = action)) {
             DrawerArrowDrawable(
+                fraction = fraction,
                 modifier = Modifier
                     .semantics { this.contentDescription = title }
                     .sharedElement(
@@ -51,7 +52,7 @@ fun SharedTransitionScope.NavigationMenuArrow(fraction: Float, action: () -> Uni
                         animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                         boundsTransform = appBoundsTransform,
                     ),
-            ) { fraction }
+            )
         }
     }
 }
