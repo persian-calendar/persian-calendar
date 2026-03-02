@@ -77,38 +77,38 @@ fun EarthView(
             it.close()
         }
     }
-    val zodiacBackgroundPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.color = 0x08808080
-        it.style = Paint.Style.FILL
+    val zodiacForegroundPaint = remember {
+        Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = 0x18808080 }
     }
-    val zodiacForegroundPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.color = 0x18808080
-        it.style = Paint.Style.FILL
-    }
-    val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.textAlign = Paint.Align.CENTER
-        it.typeface = typeface
-        it.color = contentColor.toArgb()
-    }
-    val zodiacPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.color = 0xFF808080.toInt()
-        it.strokeWidth = with(density) { 1.dp.toPx() }
-        it.textSize = with(density) { 10.dp.toPx() }
-        it.textAlign = Paint.Align.CENTER
-        it.typeface = typeface
-    }
-    val zodiacSymbolPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-        it.color = 0x38808080
-        it.strokeWidth = with(density) { 1.dp.toPx() }
-        it.textSize = with(density) { 20.dp.toPx() }
-        it.textAlign = Paint.Align.CENTER
-        val context = LocalContext.current
-        it.typeface = remember(context) {
-            ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+    val colorTextPaint = remember(typeface) {
+        Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.textAlign = Paint.Align.CENTER
+            it.typeface = typeface
         }
-        if (isBoldFont) it.isFakeBoldText = true
     }
-    val moonOrbitStroke = Stroke(with(density) { 1.dp.toPx() })
+    colorTextPaint.color = contentColor.toArgb()
+    val zodiacPaint = remember(typeface) {
+        Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.color = 0xFF808080.toInt()
+            it.strokeWidth = with(density) { 1.dp.toPx() }
+            it.textSize = with(density) { 10.dp.toPx() }
+            it.textAlign = Paint.Align.CENTER
+            it.typeface = typeface
+        }
+    }
+    val context = LocalContext.current
+    val zodiacSymbolPaint = remember {
+        Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.color = 0x38808080
+            it.strokeWidth = with(density) { 1.dp.toPx() }
+            it.textSize = with(density) { 20.dp.toPx() }
+            it.textAlign = Paint.Align.CENTER
+            it.typeface =
+                ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+            if (isBoldFont) it.isFakeBoldText = true
+        }
+    }
+    val moonOrbitStroke = remember { Stroke(with(density) { 1.dp.toPx() }) }
     val tropicalFraction by animateFloatAsState(
         targetValue = if (isTropical) 1f else 0f,
         animationSpec = spring(
@@ -127,8 +127,8 @@ fun EarthView(
     }
     val resources = LocalResources.current
     val solarDraw = remember(resources) { SolarDraw(resources) }
-    val labels = Zodiac.entries.map { it.shortTitle(resources) }
-    val symbols = Zodiac.entries.map { it.symbol }
+    val labels = remember(resources) { Zodiac.entries.map { it.shortTitle(resources) } }
+    val symbols = remember { Zodiac.entries.map { it.symbol } }
     val coroutineScope = rememberCoroutineScope()
     val pointerModifier = Modifier.pointerInput(isScaled) {
         var lastPointerId: PointerId? = null
@@ -203,10 +203,7 @@ fun EarthView(
         }
         val circleInsetStart = radius * .05f
         val circleInsetEnd = radius * 1.95f
-        canvas.drawArc(
-            circleInsetStart, circleInsetStart, circleInsetEnd, circleInsetEnd,
-            0f, 360f, true, zodiacBackgroundPaint,
-        )
+        drawCircle(Color(0x08808080), radius = circleInsetStart)
         tropicalFraction.let {}
         run {
             val rectSize = radius * .88f

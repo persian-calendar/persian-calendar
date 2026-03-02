@@ -700,11 +700,14 @@ private fun SharedTransitionScope.SolarDisplay(
                     val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
                         stringResource(it.titleStringId) + " " + it.symbol
                     }
-                    val colorTextPaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }.also {
-                        it.textAlign = Paint.Align.CENTER
-                        it.typeface = resolveAndroidCustomTypeface()
-                        it.color = LocalContentColor.current.toArgb()
+                    val typeface = resolveAndroidCustomTypeface()
+                    val colorTextPaint = remember(typeface) {
+                        Paint(Paint.ANTI_ALIAS_FLAG).also {
+                            it.textAlign = Paint.Align.CENTER
+                            it.typeface = typeface
+                        }
                     }
+                    colorTextPaint.color = LocalContentColor.current.toArgb()
                     Canvas(modifier = canvasModifier) {
                         val radius = this.center.x
                         val canvas = this.drawContext.canvas.nativeCanvas

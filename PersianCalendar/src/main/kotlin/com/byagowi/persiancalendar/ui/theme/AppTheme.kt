@@ -154,8 +154,11 @@ fun resolveCustomFontPath(context: Context): File? =
     File(context.filesDir, STORED_FONT_NAME).takeIf { it.exists() }
 
 @Composable
-fun resolveFontFile(): File? =
-    if (customFontName != null) resolveCustomFontPath(LocalContext.current) else null
+fun resolveFontFile(): File? {
+    if (customFontName == null) return null
+    val context = LocalContext.current
+    return remember { resolveCustomFontPath(context) }
+}
 
 @Composable
 fun resolveAndroidCustomTypeface(): Typeface? {
