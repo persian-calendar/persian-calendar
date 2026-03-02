@@ -104,10 +104,12 @@ fun AppTheme(content: @Composable () -> Unit) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
-            LocalUriHandler provides object : UriHandler {
-                override fun openUri(uri: String) = runCatching {
-                    CustomTabsIntent.Builder().build().launchUrl(context, uri.toUri())
-                }.getOrNull().debugAssertNotNull ?: Unit
+            LocalUriHandler provides remember {
+                object : UriHandler {
+                    override fun openUri(uri: String) = runCatching {
+                        CustomTabsIntent.Builder().build().launchUrl(context, uri.toUri())
+                    }.getOrNull().debugAssertNotNull ?: Unit
+                }
             },
         ) {
             Box(
