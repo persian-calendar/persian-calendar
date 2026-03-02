@@ -42,6 +42,7 @@ import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
+import com.byagowi.persiancalendar.utils.handleAngleWrapping
 import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
 import kotlinx.coroutines.launch
@@ -157,15 +158,7 @@ fun EarthView(
                 if (change.pressed) {
                     val currentAngle =
                         atan2(change.position.y - centerY, change.position.x - centerX)
-                    val rawAngleChange = currentAngle - previousAngle
-
-                    // Handle angle wrapping
-                    val angleChange = when {
-                        rawAngleChange > PI -> (2 * PI - rawAngleChange).toFloat()
-                        rawAngleChange < -PI -> (2 * PI + rawAngleChange).toFloat()
-                        else -> rawAngleChange
-                    }
-
+                    val angleChange = handleAngleWrapping(currentAngle - previousAngle)
                     val minutesChange = -angleChange * rotationSpeed / PI.toFloat() / 2
                     rotationDirection = minutesChange.sign.toInt()
 

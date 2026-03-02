@@ -114,3 +114,16 @@ inline val <T> T.debugAssertNotNull: T
 fun debugLog(vararg message: Any?) {
     if (BuildConfig.DEVELOPMENT) Log.d(LOG_TAG, message.joinToString(", "))
 }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun handleAngleWrapping(angleChange: Float, pi: Float = Math.PI.toFloat()): Float {
+    return when {
+        angleChange > pi -> 2 * pi - angleChange
+        angleChange < -pi -> 2 * pi + angleChange
+        else -> angleChange
+    }
+}
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun handleAngleWrappingDegrees(angleChange: Float): Float =
+    handleAngleWrapping(angleChange, 180f)

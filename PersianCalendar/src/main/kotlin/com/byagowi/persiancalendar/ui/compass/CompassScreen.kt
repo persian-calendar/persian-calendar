@@ -107,6 +107,7 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.utils.handleAngleWrappingDegrees
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.VisibleForTesting
@@ -551,17 +552,15 @@ private abstract class BaseSensorListener : SensorEventListener {
         val angle = if (isStopped) -getDeclination else value + orientation
         if (!isStopped) checkIfA11yAnnounceIsNeeded(angle)
         azimuth = lowPass(angle, azimuth)
-        setAngle(azimuth.let { if (it.isFinite()) it else 0f })
+        setAngle(azimuth)
     }
 
     /**
      * https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      * https://developer.android.com/reference/android/hardware/SensorEvent.html#values
      */
-    private fun lowPass(input: Float, output: Float): Float = when {
-        abs(180 - input) > 170 -> input
-        else -> output + alpha * (input - output)
-    }
+    private fun lowPass(input: Float, output: Float): Float =
+        output + alpha * handleAngleWrappingDegrees(input - output)
 }
 
 private abstract class OrientationSensorListener : BaseSensorListener() {
