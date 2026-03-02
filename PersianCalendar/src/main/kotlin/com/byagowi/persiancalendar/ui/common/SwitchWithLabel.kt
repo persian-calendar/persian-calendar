@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.ui.utils.performLongPress
 fun SwitchWithLabel(
     label: String,
     checked: Boolean,
+    useUncheckedBorderColorForChecked: Boolean = false,
     labelBeforeSwitch: Boolean = false,
     onValueChange: (Boolean) -> Unit,
 ) {
@@ -42,7 +43,7 @@ fun SwitchWithLabel(
             checked = checked,
             onCheckedChange = null,
             modifier = Modifier.minimumInteractiveComponentSize(),
-            colors = appSwitchColors(),
+            colors = appSwitchColors(useUncheckedBorderColorForChecked),
         )
         if (!labelBeforeSwitch) {
             Spacer(Modifier.width(8.dp))

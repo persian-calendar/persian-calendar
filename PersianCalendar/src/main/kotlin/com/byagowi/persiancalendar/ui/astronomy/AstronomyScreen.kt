@@ -254,6 +254,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             label = stringResource(R.string.tropical),
                             checked = isTropical,
                             labelBeforeSwitch = true,
+                            useUncheckedBorderColorForChecked = true,
                             onValueChange = { isTropical = it },
                         )
                     }

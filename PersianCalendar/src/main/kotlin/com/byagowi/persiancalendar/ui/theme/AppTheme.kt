@@ -302,12 +302,15 @@ fun appTopAppBarColors(): TopAppBarColors {
 }
 
 @Composable
-fun appSwitchColors(): SwitchColors {
+fun appSwitchColors(useUncheckedBorderColorForChecked: Boolean = false): SwitchColors {
     val defaultColors = SwitchDefaults.colors()
     return defaultColors.copy(
         checkedThumbColor = animateColor(defaultColors.checkedThumbColor).value,
         checkedTrackColor = animateColor(defaultColors.checkedTrackColor).value,
-        checkedBorderColor = animateColor(defaultColors.checkedBorderColor).value,
+        checkedBorderColor = animateColor(
+            if (useUncheckedBorderColorForChecked) defaultColors.uncheckedBorderColor
+            else defaultColors.checkedBorderColor,
+        ).value,
         checkedIconColor = animateColor(defaultColors.checkedIconColor).value,
         uncheckedThumbColor = animateColor(defaultColors.uncheckedThumbColor).value,
         uncheckedTrackColor = animateColor(defaultColors.uncheckedTrackColor).value,
