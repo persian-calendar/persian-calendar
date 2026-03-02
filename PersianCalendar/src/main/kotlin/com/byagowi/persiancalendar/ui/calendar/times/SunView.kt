@@ -174,32 +174,28 @@ class SunView(
             withClip(0f, height * .75f, width * value, height.toFloat()) {
                 drawPath(nightPath, nightPaint)
             }
-
             // draw fill of day
             withClip(0f, 0f, width * value, height * .75f) {
                 drawPath(curvePath, dayPaint)
             }
-
-            // draw time curve
-            drawPath(curvePath, linesPaint)
-            // draw horizon line
-            drawLine(0f, height * .75f, width.toFloat(), height * .75f, linesPaint)
-            // draw sunset and sunrise tag line indicator
-            drawLine(width * .17f, height * .3f, width * .17f, height * .7f, verticalLinesPaint)
-            drawLine(width * .83f, height * .3f, width * .83f, height * .7f, verticalLinesPaint)
-            drawLine(width / 2f, height * .7f, width / 2f, height * .8f, verticalLinesPaint)
-
-            // draw sun
-            val radius = sqrt(width * height * .002f)
-            val cx = width * value
-            val cy = getY(cx)
-            if (value in .17f..0.83f) withRotation(fraction * 900f, cx, cy) {
-                solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
-            } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) {
-                // cancel parent flip
-                solarDraw.moon(canvas, sun, moon, cx, cy, radius)
-            }
         }
+
+        // draw time curve
+        canvas.drawPath(curvePath, linesPaint)
+        // draw horizon line
+        canvas.drawLine(0f, height * .75f, width.toFloat(), height * .75f, linesPaint)
+        // draw sunset and sunrise labels line indicators
+        canvas.drawLine(width * .17f, height * .3f, width * .17f, height * .7f, verticalLinesPaint)
+        canvas.drawLine(width * .83f, height * .3f, width * .83f, height * .7f, verticalLinesPaint)
+        canvas.drawLine(width / 2f, height * .7f, width / 2f, height * .8f, verticalLinesPaint)
+
+        // draw sun/moon
+        val radius = sqrt(width * height * .002f)
+        val cx = width * if (isRtl) 1 - value else value
+        val cy = getY(cx)
+        if (value in .17f..0.83f) canvas.withRotation(fraction * if (isRtl) -900 else 900, cx, cy) {
+            solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
+        } else solarDraw.moon(canvas, sun, moon, cx, cy, radius)
 
         // draw text
         canvas.drawText(
