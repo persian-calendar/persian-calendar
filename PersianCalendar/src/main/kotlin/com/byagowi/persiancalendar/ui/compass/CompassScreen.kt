@@ -545,6 +545,7 @@ private abstract class BaseSensorListener : SensorEventListener {
     abstract fun checkIfA11yAnnounceIsNeeded(angle: Float)
 
     protected fun update(value: Float) {
+        if (!value.isFinite()) return
         // angle between the magnetic north direction
         // 0=North, 90=East, 180=South, 270=West
         val angle = if (isStopped) -getDeclination else value + orientation
