@@ -195,9 +195,7 @@ import com.byagowi.persiancalendar.ui.common.AppModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
-import com.byagowi.persiancalendar.ui.common.DrawerArrowDrawable
-import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
+import com.byagowi.persiancalendar.ui.common.NavigationMenuArrow
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -1212,11 +1210,11 @@ private fun SharedTransitionScope.Toolbar(
                     ) { value, _ -> isYearViewFraction.floatValue = value }
                 }
             }
-            when (isYearViewFraction.floatValue) {
-                0f -> NavigationOpenNavigationRailIcon(openNavigationRail)
-                1f -> NavigationNavigateUpIcon(navigateUp = onYearViewBackPressed)
-                else -> DrawerArrowDrawable { isYearViewFraction.floatValue }
-            }
+            val fraction = isYearViewFraction.floatValue
+            NavigationMenuArrow(
+                fraction = fraction,
+                action = if (fraction == 0f) openNavigationRail else onYearViewBackPressed,
+            )
         },
         actions = {
             AnimatedVisibility(visible = isYearView) {

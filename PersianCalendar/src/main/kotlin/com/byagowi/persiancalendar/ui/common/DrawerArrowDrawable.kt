@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -43,8 +44,10 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+@Stable
 @Composable
 fun DrawerArrowDrawable(
+    modifier: Modifier = Modifier,
     // Whether bars should spin or not during progress
     spin: Boolean = false,
     // Whether we should mirror animation when animation is reversed, only meaningful
@@ -63,7 +66,7 @@ fun DrawerArrowDrawable(
     val contentColor = LocalContentColor.current
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Canvas(
-        Modifier
+        modifier
             .padding(16.dp)
             .size(16.dp),
     ) {
