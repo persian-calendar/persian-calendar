@@ -104,7 +104,6 @@ class SunView(
         repeat(width + 1) { x -> it.lineTo(x.toFloat(), getY(x.toFloat())) }
     }
     private val nightPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
         it.color = colors.nightColor.toArgb()
     }
 
@@ -135,7 +134,6 @@ class SunView(
     }
     private val verticalLinesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = .75f * dp
-        it.style = Paint.Style.STROKE
         it.color = colors.linesColor.toArgb()
     }
     private val sunriseTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
