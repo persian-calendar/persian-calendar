@@ -3,11 +3,14 @@ package com.byagowi.persiancalendar.ui.converter
 import android.graphics.Path.Direction
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +26,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withScale
@@ -99,5 +103,13 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
             }
             context.shareBinaryFile(bitmap.toPngByteArray(), "result.png", "image/png")
         }
+    }
+}
+
+@Composable
+@Preview
+internal fun QrViewPreview() = Box(Modifier.background(Color.Black)) {
+    CompositionLocalProvider(LocalContentColor provides Color.Gray) {
+        QrView("https://example.com") {}
     }
 }
