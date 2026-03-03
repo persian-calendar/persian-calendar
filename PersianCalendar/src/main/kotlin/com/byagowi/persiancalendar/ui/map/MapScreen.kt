@@ -57,7 +57,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -222,15 +221,7 @@ fun SharedTransitionScope.MapScreen(
                             }
                         }
                     },
-                )
-                .graphicsLayer {
-                    this.scaleX = scale.floatValue
-                    this.scaleY = scale.floatValue
-                    val (width, height) = this.size
-                    val mapSize = min(width / 2, height)
-                    this.translationX = offsetX.floatValue.mod(mapSize * 2 * scale.floatValue)
-                    this.translationY = offsetY.floatValue
-                },
+                ),
         ) {
             val (width, height) = this.size
             val mapSize = min(width / 2, height)
@@ -238,17 +229,27 @@ fun SharedTransitionScope.MapScreen(
             mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
             mapDraw.updateMap(timeInMillis.longValue, mapType)
             formattedTime = mapDraw.maskFormattedTime
-            repeat(if (width > height) 3 else 2) { tileIndex ->
-                translate(left = (tileIndex - 1) * mapSize * 2, top = (height - mapSize) / 2) {
-                    scale(contentScale, pivot = Offset.Zero) {
-                        mapDraw.draw(
-                            canvas = this.drawContext.canvas.nativeCanvas,
-                            scale = scale.floatValue * contentScale,
-                            displayLocation = displayLocation,
-                            coordinates = markedCoordinates,
-                            directPathDestination = directPathDestination,
-                            displayGrid = displayGrid,
-                        )
+            translate(
+                left = offsetX.floatValue.mod(mapSize * 2 * scale.floatValue),
+                top = offsetY.floatValue,
+            ) {
+                scale(scale.floatValue) {
+                    repeat(if (width > height) 3 else 2) { tileIndex ->
+                        translate(
+                            left = (tileIndex - 1) * mapSize * 2,
+                            top = (height - mapSize) / 2,
+                        ) {
+                            scale(contentScale, pivot = Offset.Zero) {
+                                mapDraw.draw(
+                                    canvas = this.drawContext.canvas.nativeCanvas,
+                                    scale = scale.floatValue * contentScale,
+                                    displayLocation = displayLocation,
+                                    coordinates = markedCoordinates,
+                                    directPathDestination = directPathDestination,
+                                    displayGrid = displayGrid,
+                                )
+                            }
+                        }
                     }
                 }
             }
