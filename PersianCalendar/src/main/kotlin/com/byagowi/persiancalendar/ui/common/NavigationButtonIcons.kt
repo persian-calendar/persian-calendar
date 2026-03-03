@@ -1,7 +1,11 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
@@ -40,19 +44,21 @@ fun SharedTransitionScope.NavigationMenuArrow(fraction: Float, action: () -> Uni
         state = rememberTooltipState(),
     ) {
         IconButton(onClick = dropUnlessStarted(block = action)) {
-            DrawerArrowDrawable(
-                fraction = fraction,
-                modifier = Modifier
-                    .semantics { this.contentDescription = title }
-                    .sharedElement(
-                        sharedContentState = rememberSharedContentState(
-                            if (fraction == 0f) SHARED_CONTENT_KEY_MENU_ICON
-                            else SHARED_CONTENT_KEY_ARROW_ICON,
-                        ),
-                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                        boundsTransform = appBoundsTransform,
+            val modifier = Modifier
+                .semantics { this.contentDescription = title }
+                .sharedElement(
+                    sharedContentState = rememberSharedContentState(
+                        if (fraction == 0f) SHARED_CONTENT_KEY_MENU_ICON
+                        else SHARED_CONTENT_KEY_ARROW_ICON,
                     ),
-            )
+                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                    boundsTransform = appBoundsTransform,
+                )
+            when (fraction) {
+                0f -> Icon(imageVector = Icons.Default.Menu, null, modifier)
+                1f -> Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, null, modifier)
+                else -> DrawerArrowDrawable(fraction = fraction, modifier = modifier)
+            }
         }
     }
 }
