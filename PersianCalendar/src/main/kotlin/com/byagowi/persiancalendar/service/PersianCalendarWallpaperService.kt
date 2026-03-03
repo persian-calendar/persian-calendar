@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
@@ -62,7 +63,7 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
                             null,
                         ) else null
                     patternDrawable = PatternDrawable(
-                        preferredTintColor = accentColor,
+                        preferredTintColor = accentColor?.let { Color(it) },
                         darkBaseColor = if (wallpaperAutomatic) isNightMode else wallpaperDark,
                         dp = resources.dp,
                     )

@@ -34,7 +34,7 @@ fun DreamContent(finish: () -> Unit) {
     val colorScheme = MaterialTheme.colorScheme
     val patternDrawable = remember(key1 = isNightMode, key2 = colorScheme) {
         PatternDrawable(
-            preferredTintColor = colorScheme.primary.toArgb(),
+            preferredTintColor = colorScheme.primary,
             darkBaseColor = isNightMode,
             dp = with(density) { 1.dp.toPx() },
         )

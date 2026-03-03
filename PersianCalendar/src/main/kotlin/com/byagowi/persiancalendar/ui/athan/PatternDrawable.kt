@@ -2,14 +2,13 @@ package com.byagowi.persiancalendar.ui.athan
 
 import android.graphics.BitmapShader
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.LinearGradient
-import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
-import androidx.annotation.ColorInt
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
@@ -20,7 +19,6 @@ import androidx.core.graphics.withScale
 import androidx.core.graphics.xor
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.utils.rotateBy
-import com.byagowi.persiancalendar.ui.utils.toPath
 import com.byagowi.persiancalendar.ui.utils.translateBy
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -31,15 +29,15 @@ import kotlin.math.tan
 
 class PatternDrawable(
     prayerKey: PrayTime = PrayTime.athans.random(),
-    preferredTintColor: Int? = prayerKey.tint.toArgb(),
+    preferredTintColor: Color? = prayerKey.tint,
     var rotationDegree: Float = 0f,
     private val darkBaseColor: Boolean = false,
     private val dp: Float,
 ) {
-    private val tintColor = preferredTintColor ?: prayerKey.tint.toArgb()
+    private val tintColor = preferredTintColor ?: prayerKey.tint
 
-    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val backgroundPaint = Paint()
+    private val foregroundPaint = Paint()
     private var centerX = 0f
     private var centerY = 0f
     private var oldWidth = 0
@@ -51,7 +49,7 @@ class PatternDrawable(
 
         backgroundPaint.shader = LinearGradient(
             0f, 0f, 0f, height.toFloat(),
-            tintColor, if (darkBaseColor) Color.BLACK else Color.WHITE,
+            tintColor.toArgb(), (if (darkBaseColor) Color.Black else Color.White).toArgb(),
             Shader.TileMode.CLAMP,
         )
         val pattern = listOf(
@@ -68,8 +66,10 @@ class PatternDrawable(
     }
 
     fun draw(canvas: Canvas, rotationDegree: Float = this.rotationDegree) {
-        canvas.drawPaint(backgroundPaint)
-        canvas.withRotation(rotationDegree, centerX, centerY) { drawPaint(foregroundPaint) }
+        canvas.drawPaint(backgroundPaint.asFrameworkPaint())
+        canvas.withRotation(
+            rotationDegree, centerX, centerY,
+        ) { drawPaint(foregroundPaint.asFrameworkPaint()) }
     }
 }
 
@@ -81,7 +81,7 @@ private interface Pattern {
     fun draw(canvas: Canvas)
 }
 
-private class FirstPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class FirstPattern(private val tintColor: Color, size: Float) : Pattern {
     // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
     override val width = size / 2
     override val height = size / 2
@@ -92,53 +92,65 @@ private class FirstPattern(@get:ColorInt private val tintColor: Int, size: Float
     private val s = sin(PI.toFloat() / 4) / 2
 
     private fun path(order: Boolean): Path {
-        val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath(true)
+        val triangle = Path().also {
+            val list = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t)
+            it.moveTo(list[0].first, list[0].second)
+            list.drop(1).forEach { (x, y) -> it.lineTo(x, y) }
+            it.close()
+        }
         val sumOfTwo = triangle or triangle.rotateBy(180f, .5f, .5f)
         val sum = sumOfTwo and sumOfTwo.rotateBy(90f, .5f, .5f)
         return if (order) sum + sum.rotateBy(45f, .5f, .5f)
         else sum xor sum.rotateBy(45f, .5f, .5f)
     }
 
+    private val paint1 = Paint().also { it.color = tintColor.copy(alpha = .05f) }.asFrameworkPaint()
+    private val paint2 = Paint().also { it.color = tintColor.copy(alpha = .10f) }.asFrameworkPaint()
+    private val cornerPath = Path().also {
+        val list = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f)
+        it.moveTo(list[0].first, list[0].second)
+        list.drop(1).forEach { (x, y) -> it.lineTo(x, y) }
+        it.close()
+    }
+
     override fun draw(canvas: Canvas) {
         canvas.withScale(width * 2, height * 2) {
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            paint.style = Paint.Style.FILL
-            paint.color = ColorUtils.setAlphaComponent(tintColor, 0x10)
-            canvas.drawPath(path(true), paint)
-            canvas.drawPath(path(false), paint)
-            paint.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
-            val corner =
-                listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath(true)
-            canvas.drawPath(corner, paint)
+            canvas.drawPath(path(true), paint1)
+            canvas.drawPath(path(false), paint1)
+            canvas.drawPath(cornerPath, paint2)
         }
     }
 }
 
-private class SecondPattern(@get:ColorInt private val tintColor: Int, private val size: Float) :
-    Pattern {
+private class SecondPattern(private val tintColor: Color, private val size: Float) : Pattern {
     // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-4/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
     override val height = size
     override val tileModeX = Shader.TileMode.MIRROR
     override val tileModeY = Shader.TileMode.MIRROR
 
-    override fun draw(canvas: Canvas) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.STROKE
-            it.color = ColorUtils.setAlphaComponent(tintColor, 0x40)
-            it.strokeWidth = width / 40
-        }
+    private val paint = Paint().also {
+        it.style = PaintingStyle.Stroke
+        it.color = tintColor.copy(alpha = .25f)
+        it.strokeWidth = width / 40
+    }.asFrameworkPaint()
+    private val lines = Path().also {
         val s = .5f - sin(PI.toFloat() / 8) / 2
         val t = tan(PI.toFloat() / 6) * s
-        val lines =
-            listOf(0f to s * size, width / 2 to height / 2, t * size to s / 2 * size, width to 0f)
-                .toPath(false)
+        val listOf = listOf(
+            0f to s * size, width / 2 to height / 2, t * size to s / 2 * size, width to 0f,
+        )
+        it.moveTo(listOf[0].first, listOf[0].second)
+        listOf.drop(1).forEach { (x, y) -> it.lineTo(x, y) }
+    }
+
+    override fun draw(canvas: Canvas) {
         canvas.drawPath(lines, paint)
         canvas.withRotation(180f, width / 2, height / 2) { drawPath(lines, paint) }
     }
 }
 
-private class ThirdPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class ThirdPattern(private val tintColor: Color, size: Float) : Pattern {
     // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
     override val width = size / 2
     override val height = size / 2
@@ -159,40 +171,45 @@ private class ThirdPattern(@get:ColorInt private val tintColor: Int, size: Float
         } + path.last()
     }
 
-    override fun draw(canvas: Canvas) {
+    private val paint = Paint().also { it.color = tintColor.copy(alpha = .125f) }.asFrameworkPaint()
+    private val path = Path().also {
         val path = (0..0).fold(listOf(0f to 1f, 1f to 0f)) { acc, _ -> splitPath(acc) }
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.FILL
-            it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
-        }
-        canvas.withScale(width, height) { drawPath((path + (1f to 1f)).toPath(true), paint) }
+        val pairs = (path + (1f to 1f))
+        if (pairs.isNotEmpty()) it.moveTo(pairs[0].first, pairs[0].second)
+        pairs.drop(1).forEach { (x, y) -> it.lineTo(x, y) }
+        it.close()
+    }
+
+    override fun draw(canvas: Canvas) {
+        canvas.withScale(width, height) { drawPath(path, paint) }
     }
 }
 
-private class FourthPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class FourthPattern(private val tintColor: Color, size: Float) : Pattern {
     // https://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-2/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
     override val height = size
     override val tileModeX = Shader.TileMode.MIRROR
     override val tileModeY = Shader.TileMode.MIRROR
 
+    private val paint = Paint().also {
+        it.style = PaintingStyle.Stroke
+        it.color = tintColor.copy(alpha = .25f)
+        it.strokeWidth = width / 40
+    }.asFrameworkPaint()
+    private val lines = floatArrayOf(
+        width / 2, 0f, width, height / 2,
+        0f, height / 2, width / 4, height / 4,
+        width / 4, height / 4, width, height / 4,
+    )
+
     override fun draw(canvas: Canvas) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.STROKE
-            it.color = ColorUtils.setAlphaComponent(tintColor, 0x40)
-            it.strokeWidth = width / 40
-        }
-        val lines = floatArrayOf(
-            width / 2, 0f, width, height / 2,
-            0f, height / 2, width / 4, height / 4,
-            width / 4, height / 4, width, height / 4,
-        )
         canvas.drawLines(lines, paint)
         canvas.withRotation(180f, width / 2, height / 2) { drawLines(lines, paint) }
     }
 }
 
-private class SpiralPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class SpiralPattern(private val tintColor: Color, size: Float) : Pattern {
     // Not enabled, just as an experiment on how spiral pattern and hexagon tiling would work
     // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/paths/polylines
     override val width = size
@@ -212,13 +229,14 @@ private class SpiralPattern(@get:ColorInt private val tintColor: Int, size: Floa
         return result
     }
 
+    private val paint = Paint().also {
+        it.style = PaintingStyle.Stroke
+        it.color = tintColor.copy(alpha = .5f)
+        it.strokeWidth = width / 80
+    }.asFrameworkPaint()
+
     override fun draw(canvas: Canvas) {
         val path = pattern()
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.STROKE
-            it.color = ColorUtils.setAlphaComponent(tintColor, 0x80)
-            it.strokeWidth = width / 80
-        }
         canvas.drawPath(path, paint)
         canvas.drawPath(path.translateBy(width / 2, height / 2), paint)
         canvas.drawPath(path.translateBy(-width / 2, height / 2), paint)
