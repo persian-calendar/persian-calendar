@@ -49,16 +49,34 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
         val cells = qr.size // cells in a row or a column
         val cellSize = size / (qr.size.takeIf { it != 0 } ?: return)
         val r = roundness * cellSize / 2 * 1f
+        fun on(i: Int, j: Int) = (i > 6 || j > 6) && (cells - i > 7 || j > 6) && (i > 6 || cells - j > 7) && qr[i][j]
         repeat(cells) { i ->
             repeat(cells) { j ->
-                if ((i > 6 || j > 6) && (cells - i > 7 || j > 6) && (i > 6 || cells - j > 7)) {
-                    if (qr[i][j]) canvas.drawRoundRect(
-                        i * cellSize, j * cellSize, (i + 1) * cellSize, (j + 1) * cellSize,
-                        r, r, paint,
-                    )
-                }
+                if (on(i, j)) canvas.drawRoundRect(
+                    i * cellSize, j * cellSize, (i + 1) * cellSize, (j + 1) * cellSize,
+                    r, r, paint,
+                )
             }
         }
+        fun lines(vertical: Boolean) = repeat(cells) { i ->
+            var j = 0
+            while (j < cells - 1) {
+                if (if (vertical) on(i, j) else on(j, i)) {
+                    var k = j + 1
+                    while (k < cells && if (vertical) on(i, k) else on(k, i)) ++k
+                    if (j != k) canvas.drawRect(
+                        cellSize * if (vertical) i + 0f else j + .5f,
+                        cellSize * if (vertical) j + .5f else i + 0f,
+                        cellSize * if (vertical) i + 1f else k - .5f,
+                        cellSize * if (vertical) k - .5f else i + 1f,
+                        paint,
+                    )
+                }
+                ++j
+            }
+        }
+        lines(vertical = false)
+        lines(vertical = true)
         path.rewind()
         path.asAndroidPath().addRoundRect(
             0f, 0f, cellSize * 7, cellSize * 7,
