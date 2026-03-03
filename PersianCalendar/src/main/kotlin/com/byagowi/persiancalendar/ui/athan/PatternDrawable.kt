@@ -1,23 +1,22 @@
 package com.byagowi.persiancalendar.ui.athan
 
 import android.graphics.BitmapShader
-import android.graphics.Canvas
 import android.graphics.LinearGradient
-import android.graphics.Matrix
-import android.graphics.Path
 import android.graphics.Shader
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.copy
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.graphics.and
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
-import androidx.core.graphics.or
-import androidx.core.graphics.plus
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
-import androidx.core.graphics.xor
 import com.byagowi.persiancalendar.entities.PrayTime
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -58,13 +57,16 @@ class PatternDrawable(
             // ::FourthPattern
         ).random()(tintColor, 80 * dp)
         val bitmap = createBitmap(pattern.width.toInt(), pattern.height.toInt())
-            .applyCanvas(pattern::draw)
+            .applyCanvas { pattern.draw(Canvas(this)) }
         foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)
         centerX = listOf(-.5f, .5f, 1.5f).random() * width
         centerY = listOf(-.5f, .5f, 1.5f).random() * height
     }
 
-    fun draw(canvas: Canvas, rotationDegree: Float = this.rotationDegree) {
+    fun draw(canvas: Canvas, rotationDegree: Float = this.rotationDegree) =
+        draw(canvas.nativeCanvas, rotationDegree)
+
+    fun draw(canvas: android.graphics.Canvas, rotationDegree: Float = this.rotationDegree) {
         canvas.drawPaint(backgroundPaint.asFrameworkPaint())
         canvas.withRotation(
             rotationDegree, centerX, centerY,
@@ -90,6 +92,12 @@ private class FirstPattern(private val tintColor: Color, size: Float) : Pattern 
     private val t = tan(PI.toFloat() / 8)
     private val s = sin(PI.toFloat() / 4) / 2
 
+    private fun Path.rotateBy(degrees: Float, pivotX: Float, pivotY: Float): Path {
+        val matrix = Matrix()
+        matrix.resetToPivotedTransform(pivotX = pivotX, pivotY = pivotY, rotationZ = degrees)
+        return copy().also { it.transform(matrix) }
+    }
+
     private fun path(order: Boolean): Path {
         val triangle = Path().also {
             val list = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t)
@@ -105,8 +113,8 @@ private class FirstPattern(private val tintColor: Color, size: Float) : Pattern 
     private val path1 = path(true)
     private val path2 = path(false)
 
-    private val paint1 = Paint().also { it.color = tintColor.copy(alpha = .05f) }.asFrameworkPaint()
-    private val paint2 = Paint().also { it.color = tintColor.copy(alpha = .10f) }.asFrameworkPaint()
+    private val paint1 = Paint().also { it.color = tintColor.copy(alpha = .05f) }
+    private val paint2 = Paint().also { it.color = tintColor.copy(alpha = .10f) }
     private val cornerPath = Path().also {
         val list = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f)
         it.moveTo(list[0].first, list[0].second)
@@ -115,7 +123,7 @@ private class FirstPattern(private val tintColor: Color, size: Float) : Pattern 
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.withScale(width * 2, height * 2) {
+        canvas.nativeCanvas.withScale(width * 2, height * 2) {
             canvas.drawPath(path1, paint1)
             canvas.drawPath(path2, paint1)
             canvas.drawPath(cornerPath, paint2)
@@ -134,7 +142,7 @@ private class SecondPattern(private val tintColor: Color, private val size: Floa
         it.style = PaintingStyle.Stroke
         it.color = tintColor.copy(alpha = .25f)
         it.strokeWidth = width / 40
-    }.asFrameworkPaint()
+    }
     private val lines = Path().also {
         val s = .5f - sin(PI.toFloat() / 8) / 2
         val t = tan(PI.toFloat() / 6) * s
@@ -147,7 +155,9 @@ private class SecondPattern(private val tintColor: Color, private val size: Floa
 
     override fun draw(canvas: Canvas) {
         canvas.drawPath(lines, paint)
-        canvas.withRotation(180f, width / 2, height / 2) { drawPath(lines, paint) }
+        canvas.nativeCanvas.withRotation(180f, width / 2, height / 2) {
+            canvas.drawPath(lines, paint)
+        }
     }
 }
 
@@ -172,7 +182,7 @@ private class ThirdPattern(private val tintColor: Color, size: Float) : Pattern 
         } + path.last()
     }
 
-    private val paint = Paint().also { it.color = tintColor.copy(alpha = .125f) }.asFrameworkPaint()
+    private val paint = Paint().also { it.color = tintColor.copy(alpha = .125f) }
     private val path = Path().also {
         val path = (0..0).fold(listOf(0f to 1f, 1f to 0f)) { acc, _ -> splitPath(acc) }
         val pairs = (path + (1f to 1f))
@@ -182,7 +192,9 @@ private class ThirdPattern(private val tintColor: Color, size: Float) : Pattern 
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.withScale(width, height) { drawPath(path, paint) }
+        canvas.nativeCanvas.withScale(width, height) {
+            canvas.drawPath(path, paint)
+        }
     }
 }
 
@@ -205,8 +217,10 @@ private class FourthPattern(private val tintColor: Color, size: Float) : Pattern
     )
 
     override fun draw(canvas: Canvas) {
-        canvas.drawLines(lines, paint)
-        canvas.withRotation(180f, width / 2, height / 2) { drawLines(lines, paint) }
+        canvas.nativeCanvas.drawLines(lines, paint)
+        canvas.nativeCanvas.withRotation(180f, width / 2, height / 2) {
+            drawLines(lines, paint)
+        }
     }
 }
 
@@ -217,6 +231,12 @@ private class SpiralPattern(private val tintColor: Color, size: Float) : Pattern
     override val height = size * 1.7f
     override val tileModeX = Shader.TileMode.REPEAT
     override val tileModeY = Shader.TileMode.REPEAT
+
+    private val paint = Paint().also {
+        it.style = PaintingStyle.Stroke
+        it.color = tintColor.copy(alpha = .5f)
+        it.strokeWidth = width / 80
+    }
 
     private fun pattern(): Path {
         val result = Path()
@@ -230,24 +250,17 @@ private class SpiralPattern(private val tintColor: Color, size: Float) : Pattern
         return result
     }
 
-    private val paint = Paint().also {
-        it.style = PaintingStyle.Stroke
-        it.color = tintColor.copy(alpha = .5f)
-        it.strokeWidth = width / 80
-    }.asFrameworkPaint()
+    private val path1 = pattern()
+    private val path2 = path1.copy().also { it.translate(Offset(width / 2, height / 2)) }
+    private val path3 = path1.copy().also { it.translate(Offset(-width / 2, height / 2)) }
+    private val path4 = path1.copy().also { it.translate(Offset(width / 2, -height / 2)) }
+    private val path5 = path1.copy().also { it.translate(Offset(-width / 2, -height / 2)) }
 
     override fun draw(canvas: Canvas) {
-        val path = pattern()
-        canvas.drawPath(path, paint)
-        canvas.drawPath(path.translateBy(width / 2, height / 2), paint)
-        canvas.drawPath(path.translateBy(-width / 2, height / 2), paint)
-        canvas.drawPath(path.translateBy(width / 2, -height / 2), paint)
-        canvas.drawPath(path.translateBy(-width / 2, -height / 2), paint)
+        canvas.drawPath(path1, paint)
+        canvas.drawPath(path2, paint)
+        canvas.drawPath(path3, paint)
+        canvas.drawPath(path4, paint)
+        canvas.drawPath(path5, paint)
     }
 }
-
-private fun Path.rotateBy(degree: Float, pivotX: Float, pivotY: Float) =
-    Path().also { it.addPath(this, Matrix().apply { setRotate(degree, pivotX, pivotY) }) }
-
-private fun Path.translateBy(dx: Float, dy: Float) =
-    Path().also { it.addPath(this, Matrix().apply { setTranslate(dx, dy) }) }

@@ -25,6 +25,6 @@ fun PatternCanvas(patternDrawable: PatternDrawable) {
         initialValue = 0f, targetValue = 360f, animationSpec = animationSpec,
     )
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawIntoCanvas { patternDrawable.draw(it.nativeCanvas, rotation * direction) }
+        drawIntoCanvas { patternDrawable.draw(it, rotation * direction) }
     }
 }
