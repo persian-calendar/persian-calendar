@@ -12,10 +12,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
@@ -32,12 +34,13 @@ import io.github.persiancalendar.qr.qr
 fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
     val qr = remember(text) { qr(text) }
     val paint = remember { Paint() }
-    paint.color = LocalContentColor.current
+    val contentColor by rememberUpdatedState(LocalContentColor.current)
     val path = remember { Path() }
     var isRounded by rememberSaveable { mutableStateOf(true) }
     val roundness by animateFloatAsState(if (isRounded) 1f else 0f)
 
     fun drawQr(canvas: Canvas, size: Float) {
+        paint.color = contentColor
         val roundness = roundness
         val cells = qr.size // cells in a row or a column
         val cellSize = size / (qr.size.takeIf { it != 0 } ?: return)
@@ -83,7 +86,7 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
     ) { drawQr(drawContext.canvas, size = this.size.width) }
 
     val context = LocalContext.current
-    val surfaceColor = MaterialTheme.colorScheme.surface
+    val surfaceColor by rememberUpdatedState(MaterialTheme.colorScheme.surface)
     LaunchedEffect(Unit) {
         setShareAction {
             val size = 1280f
