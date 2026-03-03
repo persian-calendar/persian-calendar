@@ -10,10 +10,10 @@ import android.graphics.Rect
 import android.hardware.GeomagneticField
 import androidx.annotation.RawRes
 import androidx.compose.ui.graphics.asAndroidPath
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.compose.ui.graphics.vector.toPath
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withRotation
@@ -463,9 +463,11 @@ class MapDraw(
                 if (i >= points.size - 1) return@forEachIndexed
                 val (x2, y2) = points[i + 1]
                 if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
-                pathPaint.color = ColorUtils.blendARGB(
-                    Color.BLACK, Color.RED, i.toFloat() / points.size,
-                )
+                pathPaint.color = lerp(
+                    start = androidx.compose.ui.graphics.Color.Black,
+                    stop = androidx.compose.ui.graphics.Color.Red,
+                    fraction = i.toFloat() / points.size,
+                ).toArgb()
                 canvas.drawLine(x1, y1, x2, y2, pathPaint)
             }
             val center = points[points.size / 2]

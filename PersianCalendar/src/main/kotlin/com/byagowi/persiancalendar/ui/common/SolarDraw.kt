@@ -5,7 +5,9 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import androidx.core.graphics.ColorUtils
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import io.github.cosinekitty.astronomy.Ecliptic
@@ -14,8 +16,13 @@ import kotlin.math.abs
 import kotlin.math.cos
 
 class SolarDraw(resources: Resources) {
-    fun sunColor(progress: Float): Int =
-        ColorUtils.blendARGB(0xFFFFF9C4.toInt(), 0xFFFF9100.toInt(), progress)
+    fun sunColor(progress: Float): Int {
+        return lerp(
+            start = Color(0xFFFFF9C4.toInt()),
+            stop = Color(0xFFFF9100.toInt()),
+            fraction = progress,
+        ).toArgb()
+    }
 
     fun sun(
         canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false,

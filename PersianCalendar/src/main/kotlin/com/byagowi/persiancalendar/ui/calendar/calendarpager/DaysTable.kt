@@ -315,9 +315,9 @@ fun daysTable(
                                 blendMode = BlendMode.SrcOut,
                                 center = animatedCenter.value,
                                 color = lerp(
-                                    fraction = holidayFraction,
                                     start = holidaysColor,
                                     stop = indicatorFillColor,
+                                    fraction = holidayFraction,
                                 ),
                                 radius = cellRadius * radiusFraction + todayAddition,
                             )

@@ -1173,9 +1173,9 @@ private fun SharedTransitionScope.Toolbar(
                             }"
                             else subtitle,
                             style = lerp(
-                                MaterialTheme.typography.titleMedium,
-                                MaterialTheme.typography.titleLarge,
-                                fraction,
+                                start = MaterialTheme.typography.titleMedium,
+                                stop = MaterialTheme.typography.titleLarge,
+                                fraction = fraction,
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
