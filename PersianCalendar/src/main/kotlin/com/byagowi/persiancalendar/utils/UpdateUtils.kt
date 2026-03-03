@@ -128,7 +128,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
-import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.byagowi.persiancalendar.ui.calendar.times.SunViewDraw
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
@@ -515,7 +515,7 @@ fun createSunViewRemoteViews(
     )
     val width = size?.width?.roundToPx(context.resources) ?: 250
     val height = size?.height?.roundToPx(context.resources) ?: 250
-    val sunView = SunView(
+    val sunView = SunViewDraw(
         resources = context.resources,
         prayTimes = prayTimes,
         colors = colors,

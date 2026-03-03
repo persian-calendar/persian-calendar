@@ -7,9 +7,30 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
 import android.graphics.Typeface
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
@@ -18,10 +39,13 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
+import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.GregorianCalendar
 import kotlin.math.PI
@@ -44,7 +68,7 @@ data class SunViewColors(
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class SunView(
+class SunViewDraw(
     resources: Resources,
     prayTimes: PrayTimes?,
     colors: SunViewColors,
@@ -166,8 +190,8 @@ class SunView(
     fun draw(canvas: Canvas, fraction: Float) {
         val value = fraction * current
         canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = width / 2f) {
-            val width = this@SunView.width
-            val height = this@SunView.height
+            val width = this@SunViewDraw.width
+            val height = this@SunViewDraw.height
             // draw fill of night
             withClip(0f, height * .75f, width * value, height.toFloat()) {
                 drawPath(nightPath, nightPaint)
@@ -223,3 +247,61 @@ class SunView(
 
     private fun getY(x: Float): Float = height * (.55 + cos(x / width * 2 * PI) * .45).toFloat()
 }
+
+@Composable
+fun SunView(
+    prayTimes: PrayTimes,
+    sunViewColors: SunViewColors,
+    now: Long,
+    typeface: Typeface?,
+    modifier: Modifier = Modifier,
+) {
+    BoxWithConstraints(modifier) {
+        val resources = LocalResources.current
+        val density = LocalDensity.current
+        val width = this.maxWidth
+        val height = this.maxHeight
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        val sunView = remember(
+            resources, prayTimes, sunViewColors, density, now, typeface, isRtl,
+        ) {
+            SunViewDraw(
+                resources = resources,
+                prayTimes = prayTimes,
+                colors = sunViewColors,
+                width = with(density) { width.roundToPx() },
+                height = with(density) { height.roundToPx() },
+                timeInMillis = now,
+                typeface = typeface,
+                isRtl = isRtl,
+            )
+        }
+        val fraction = remember { Animatable(0f) }
+        LaunchedEffect(Unit) {
+            fraction.animateTo(
+                targetValue = 100_000f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessVeryLow,
+                ),
+            )
+        }
+        Canvas(
+            Modifier
+                .semantics { this.contentDescription = sunView.contentDescription }
+                .fillMaxSize(),
+        ) { sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value / 100_000) }
+    }
+}
+
+@Preview
+@Composable
+internal fun SunViewPreview() = SunView(
+    prayTimes = Coordinates(35.0, 55.0, 0.0).calculatePrayTimes(),
+    sunViewColors = appSunViewColors(),
+    now = GregorianCalendar(2000, 1, 1, 15, 0).timeInMillis,
+    typeface = null,
+    modifier = Modifier
+        .background(Color.White)
+        .size(400.dp, 100.dp),
+)

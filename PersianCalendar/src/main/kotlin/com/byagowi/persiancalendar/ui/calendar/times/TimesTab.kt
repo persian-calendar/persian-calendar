@@ -2,15 +2,10 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,18 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
@@ -183,41 +174,8 @@ private fun SharedTransitionScope.AstronomicalOverview(
     ) { state ->
         val sunViewColors = appSunViewColors()
         val typeface = resolveAndroidCustomTypeface()
-        val resources = LocalResources.current
-        val density = LocalDensity.current
-        if (state) BoxWithConstraints {
-            val width = this.maxWidth
-            val height = this.maxHeight
-            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-            val sunView = remember(
-                resources, prayTimes, sunViewColors, density, now, typeface, isRtl,
-            ) {
-                SunView(
-                    resources = resources,
-                    prayTimes = prayTimes,
-                    colors = sunViewColors,
-                    width = with(density) { width.roundToPx() },
-                    height = with(density) { height.roundToPx() },
-                    timeInMillis = now,
-                    typeface = typeface,
-                    isRtl = isRtl,
-                )
-            }
-            val fraction = remember { Animatable(0f) }
-            LaunchedEffect(Unit) {
-                fraction.animateTo(
-                    targetValue = 100_000f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessVeryLow,
-                    ),
-                )
-            }
-            Canvas(
-                Modifier
-                    .semantics { this.contentDescription = sunView.contentDescription }
-                    .fillMaxSize(),
-            ) { sunView.draw(this.drawContext.canvas.nativeCanvas, fraction.value / 100_000) }
+        if (state) {
+            SunView(prayTimes, sunViewColors, now, typeface)
         } else Box(Modifier.fillMaxSize()) {
             MoonView(
                 jdn = selectedDay,
