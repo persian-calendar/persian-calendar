@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.athan
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.LinearGradient
+import android.graphics.Matrix
 import android.graphics.Path
 import android.graphics.Shader
 import androidx.compose.ui.graphics.Color
@@ -18,8 +19,6 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.graphics.xor
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.ui.utils.rotateBy
-import com.byagowi.persiancalendar.ui.utils.translateBy
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -103,6 +102,8 @@ private class FirstPattern(private val tintColor: Color, size: Float) : Pattern 
         return if (order) sum + sum.rotateBy(45f, .5f, .5f)
         else sum xor sum.rotateBy(45f, .5f, .5f)
     }
+    private val path1 = path(true)
+    private val path2 = path(false)
 
     private val paint1 = Paint().also { it.color = tintColor.copy(alpha = .05f) }.asFrameworkPaint()
     private val paint2 = Paint().also { it.color = tintColor.copy(alpha = .10f) }.asFrameworkPaint()
@@ -115,8 +116,8 @@ private class FirstPattern(private val tintColor: Color, size: Float) : Pattern 
 
     override fun draw(canvas: Canvas) {
         canvas.withScale(width * 2, height * 2) {
-            canvas.drawPath(path(true), paint1)
-            canvas.drawPath(path(false), paint1)
+            canvas.drawPath(path1, paint1)
+            canvas.drawPath(path2, paint1)
             canvas.drawPath(cornerPath, paint2)
         }
     }
@@ -244,3 +245,9 @@ private class SpiralPattern(private val tintColor: Color, size: Float) : Pattern
         canvas.drawPath(path.translateBy(-width / 2, -height / 2), paint)
     }
 }
+
+private fun Path.rotateBy(degree: Float, pivotX: Float, pivotY: Float) =
+    Path().also { it.addPath(this, Matrix().apply { setRotate(degree, pivotX, pivotY) }) }
+
+private fun Path.translateBy(dx: Float, dy: Float) =
+    Path().also { it.addPath(this, Matrix().apply { setTranslate(dx, dy) }) }

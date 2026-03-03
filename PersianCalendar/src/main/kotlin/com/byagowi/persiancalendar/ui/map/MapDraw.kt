@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
@@ -25,8 +26,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.scaleBy
-import com.byagowi.persiancalendar.ui.utils.translateBy
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -83,6 +82,12 @@ class MapDraw(
         // https://github.com/persian-calendar/persian-calendar/blob/5a7ff8a/PersianCalendar/src/main/kotlin/com/byagowi/persiancalendar/ui/map/PathParser.kt
         return addPathNodes(path).toPath().asAndroidPath()
     }
+
+    private fun Path.translateBy(dx: Float, dy: Float) =
+        Path().also { it.addPath(this, Matrix().apply { setTranslate(dx, dy) }) }
+
+    private fun Path.scaleBy(sx: Float, sy: Float) =
+        Path().also { it.addPath(this, Matrix().apply { setScale(sx, sy) }) }
 
     private val mapPath: Path = createPathFromResourceText(resources, R.raw.worldmap)
     private val timezones: Path by lazy(LazyThreadSafetyMode.NONE) {
