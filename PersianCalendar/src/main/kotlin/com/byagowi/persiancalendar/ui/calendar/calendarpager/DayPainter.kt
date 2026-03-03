@@ -245,20 +245,17 @@ private class Paints(
         if (typeface != null) it.typeface = typeface
     }
     val selectedDayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
         it.color = colors.indicatorFill.toArgb()
         it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
         if (typeface != null) it.typeface = typeface
     }
     val selectedDayPaintHoliday = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
         it.color = colors.holidays.toArgb()
         it.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
         if (typeface != null) it.typeface = typeface
     }
     val holidayPaint = holidayCircleColor?.let { color ->
         Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.FILL
             it.color = color
         }
     }

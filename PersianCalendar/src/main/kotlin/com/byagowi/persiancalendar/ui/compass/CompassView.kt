@@ -116,7 +116,6 @@ class CompassView(private val resources: Resources) {
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
-        it.style = Paint.Style.FILL
     }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = Color.GRAY
@@ -146,7 +145,6 @@ class CompassView(private val resources: Resources) {
     }
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF009000.toInt()
-        it.style = Paint.Style.FILL_AND_STROKE
         val dashSize = 4 * dp
         it.pathEffect = DashPathEffect(floatArrayOf(dashSize, dashSize / 2), 0f)
     }

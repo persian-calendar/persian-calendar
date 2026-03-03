@@ -89,7 +89,6 @@ class SolarDraw(resources: Resources) {
 
     private val moonShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x90000000.toInt()
-        it.style = Paint.Style.FILL_AND_STROKE
     }
 
     private val earthDrawable = resources.getDrawable(R.drawable.ic_earth, null)
@@ -107,6 +106,5 @@ class SolarDraw(resources: Resources) {
 
     private val earthShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x40000000
-        it.style = Paint.Style.FILL_AND_STROKE
     }
 }

@@ -40,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
@@ -242,7 +241,7 @@ private val foregroundColors = listOf(
 private fun createCheckerBoard(tileSize: Float): ShaderBrush {
     val image = ImageBitmap(tileSize.roundToInt() * 2, tileSize.roundToInt() * 2)
     val canvas = Canvas(image)
-    val fill = Paint().also { it.style = PaintingStyle.Fill; it.color = Color(0x22000000) }
+    val fill = Paint().also { it.color = Color(0x22000000) }
     canvas.drawRect(0f, 0f, tileSize, tileSize, fill)
     canvas.drawRect(tileSize, tileSize, tileSize * 2, tileSize * 2, fill)
     return ShaderBrush(ImageShader(image, TileMode.Repeated, TileMode.Repeated))
