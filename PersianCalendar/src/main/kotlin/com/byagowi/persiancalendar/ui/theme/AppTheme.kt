@@ -163,7 +163,6 @@ fun resolveFontFile(): File? {
 @Composable
 fun resolveAndroidCustomTypeface(): Typeface? {
     val fontFile = resolveFontFile()
-    val isBoldFont = isBoldFont
     return remember(fontFile, isBoldFont) {
         fontFile?.let(Typeface::createFromFile).let {
             if (isBoldFont) Typeface.create(it, Typeface.BOLD) else it
@@ -198,7 +197,6 @@ fun resolveTypography(): Typography {
             labelSmall = typography.labelSmall.copy(fontFamily = font),
         )
     } ?: MaterialTheme.typography
-    val isBoldFont = isBoldFont
     return if (isBoldFont) result.copy(
         displayLarge = result.displayLarge.copy(fontWeight = FontWeight.Bold),
         displayMedium = result.displayMedium.copy(fontWeight = FontWeight.Bold),
@@ -225,8 +223,7 @@ fun resolveTypography(): Typography {
 // The app's theme after custom dark/light theme is applied
 @Composable
 private fun effectiveTheme(): Theme {
-    val explicitlySetTheme = userSetTheme
-    if (explicitlySetTheme != Theme.SYSTEM_DEFAULT) return explicitlySetTheme
+    if (userSetTheme != Theme.SYSTEM_DEFAULT) return userSetTheme
     return if (isSystemInDarkTheme()) {
         if (isPowerSaveMode(LocalContext.current)) Theme.BLACK else systemDarkTheme
     } else systemLightTheme
@@ -275,9 +272,7 @@ private fun appColorScheme(): ColorScheme {
 
 @Composable
 private fun appShapes(): Shapes {
-    if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
-    val isCyberpunk = isCyberpunk
-    return if (isCyberpunk) Shapes(
+    return if (BuildConfig.DEVELOPMENT && isCyberpunk) Shapes(
         extraSmall = CutCornerShape(MaterialTheme.shapes.extraSmall.topStart),
         small = CutCornerShape(MaterialTheme.shapes.small.topStart),
         medium = CutCornerShape(MaterialTheme.shapes.medium.topStart),
@@ -344,11 +339,9 @@ fun isDynamicGrayscale(): Boolean =
 
 @Composable
 private fun appBackground(): Brush {
-    val backgroundColor = MaterialTheme.colorScheme.background
     val theme = effectiveTheme()
-    val isGradient = isGradient
     val backgroundGradientStart by animateColor(
-        if (!isGradient) backgroundColor
+        if (!isGradient) MaterialTheme.colorScheme.background
         else if (theme.isDynamicColors) getResourcesColor(
             when (theme) {
                 Theme.LIGHT -> android.R.color.system_accent1_500
@@ -367,7 +360,7 @@ private fun appBackground(): Brush {
         },
     )
     val backgroundGradientEnd by animateColor(
-        if (!isGradient) backgroundColor
+        if (!isGradient) MaterialTheme.colorScheme.background
         else if (theme.isDynamicColors) getResourcesColor(
             when (theme) {
                 Theme.LIGHT -> android.R.color.system_accent1_900
@@ -408,7 +401,6 @@ fun appSliderColor(): SliderColors {
 
 @Composable
 fun appMonthColors(): MonthColors {
-    val contentColor = LocalContentColor.current
     val theme = effectiveTheme()
     val colorAppointments = if (theme.isDynamicColors) getResourcesColor(
         when (theme) {
@@ -470,9 +462,9 @@ fun appMonthColors(): MonthColors {
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
     val indicatorFillColor =
-        contentColor.copy(alpha = if (theme.isDark == true) AppBlendAlpha else 1f)
+        LocalContentColor.current.copy(alpha = if (theme.isDark == true) AppBlendAlpha else 1f)
     return MonthColors(
-        contentColor = contentColor,
+        contentColor = LocalContentColor.current,
         appointments = colorAppointments,
         holidays = colorHolidays,
         holidaysFill = holidaysFillColor,
