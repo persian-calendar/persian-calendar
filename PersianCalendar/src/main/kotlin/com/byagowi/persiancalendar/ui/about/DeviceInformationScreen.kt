@@ -56,7 +56,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -87,6 +86,7 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -196,7 +196,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
     if (showScheduleDialog) ScheduleAlarm { showScheduleDialog = false }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
-            listOf<Triple<ImageVector, String, () -> Unit>>(
+            persistentListOf(
                 Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(
                     Icons.Default.Settings,
