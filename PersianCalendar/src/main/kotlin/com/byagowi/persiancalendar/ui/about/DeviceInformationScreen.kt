@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -112,7 +113,7 @@ fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
         val primaryColor = MaterialTheme.colorScheme.primary
         val activity = LocalActivity.current
         val items = remember(primaryColor) {
-            createItemsList(activity ?: return@remember emptyList(), primaryColor)
+            createItemsList(activity ?: return@remember emptyList(), primaryColor).toImmutableList()
         }
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
