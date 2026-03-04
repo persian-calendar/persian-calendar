@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -85,6 +86,7 @@ private fun WearApp() {
                             UtilitiesScreen(
                                 navigateToConverter = { backStack += Screen.Converter },
                                 navigateToCalendar = { backStack += Screen.Calendar },
+                                navigateToGlobe = { backStack += Screen.Globe },
                                 navigateToSettings = { backStack += Screen.Settings },
                             )
                         }
@@ -103,6 +105,7 @@ private fun WearApp() {
                                 day = it.jdn,
                             )
                         }
+                        entry<Screen.Globe> { GlobeScreen() }
                         entry<Screen.Settings> { SettingsScreen(preferences) }
                     },
                 )
@@ -126,6 +129,9 @@ private sealed interface Screen : NavKey {
 
     @Serializable
     data object Converter : Screen
+
+    @Serializable
+    data object Globe : Screen
 
     @Serializable
     data class Day(val jdn: Jdn) : Screen

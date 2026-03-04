@@ -128,8 +128,8 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
-import com.byagowi.persiancalendar.ui.calendar.times.SunViewDraw
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
+import com.byagowi.persiancalendar.ui.calendar.times.SunViewDraw
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
