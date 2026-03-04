@@ -43,11 +43,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -104,6 +106,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
+
 @Composable
 fun SharedTransitionScope.MapScreen(
     navigateUp: () -> Unit,
@@ -119,11 +122,11 @@ fun SharedTransitionScope.MapScreen(
     var displayLocation by rememberSaveable { mutableStateOf(true) }
     var displayGrid by rememberSaveable { mutableStateOf(false) }
     var isDirectPathMode by rememberSaveable { mutableStateOf(false) }
-    var markedCoordinates by remember { mutableStateOf(coordinates) }
-    var dialogInputCoordinates by remember { mutableStateOf<Coordinates?>(null) }
-    var directPathDestination by remember { mutableStateOf<Coordinates?>(null) }
-
-    LaunchedEffect(key1 = coordinates) { markedCoordinates = coordinates }
+    var markedCoordinates by rememberSaveable(coordinates, saver = CoordinatesSaver) {
+        mutableStateOf(coordinates)
+    }
+    var dialogInputCoordinates by rememberSaveable(saver = CoordinatesSaver) { mutableStateOf(null) }
+    var directPathDestination by rememberSaveable(saver = CoordinatesSaver) { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
         val interval = 1.minutes.inWholeMilliseconds
@@ -444,6 +447,15 @@ fun SharedTransitionScope.MapScreen(
         }
     }
 }
+
+private val CoordinatesSaver = listSaver<MutableState<Coordinates?>, Double>(
+    save = { listOfNotNull(it.value?.latitude, it.value?.longitude, it.value?.elevation) },
+    restore = {
+        if (it.size == 3) {
+            mutableStateOf(Coordinates(it[0], it[1], it[2]))
+        } else null
+    },
+)
 
 @Composable
 private fun SharedTransitionScope.TimeArrow(
