@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
 import com.byagowi.persiancalendar.R
 import kotlin.math.PI
 
@@ -99,44 +100,49 @@ half4 main(float2 fragCoord) {
         ),
     )
     val colorScheme = MaterialTheme.colorScheme
-    BoxWithConstraints(modifier.aspectRatio(1f), contentAlignment = Alignment.Center) {
-        Canvas(
-            Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    runtimeShader.setFloatUniform(
-                        "u_resolution", this.size.width, this.size.height,
-                    )
-                    runtimeShader.setFloatUniform("u_zoom", zoom)
-                    runtimeShader.setFloatUniform("u_x", rotation)
-                    runtimeShader.setFloatUniform("u_y", y)
-                    this.renderEffect = RenderEffect.createRuntimeShaderEffect(
-                        runtimeShader, "content",
-                    ).asComposeRenderEffect()
-                },
-        ) {
-            val scale = this.drawContext.size.height / 2f / (180 * 16)
-            drawRect(colorScheme.primaryContainer)
-            scale(scaleX = scale, scaleY = scale * 2, pivot = Offset.Zero) {
-                drawPath(path, colorScheme.primary)
-            }
-        }
-        val width = this.maxWidth
-        val height = this.maxHeight
-        val density = LocalDensity.current
-        Box(
-            Modifier
-                .transformable(
-                    rememberTransformableState { zoomChange, panChange, _ ->
-                        zoom = (zoom * zoomChange).coerceAtLeast(.25f)
-                        if (x.floatValue.isNaN()) x.floatValue = rotation
-                        x.floatValue += panChange.x / with(density) { width.toPx() } * 4 / zoom
-                        y = (y + panChange.y / with(density) { height.toPx() } * -4 / zoom)
-                            .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
+    ScreenScaffold(modifier) {
+        BoxWithConstraints(Modifier.aspectRatio(1f), contentAlignment = Alignment.Center) {
+            Canvas(
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        runtimeShader.setFloatUniform(
+                            "u_resolution", this.size.width, this.size.height,
+                        )
+                        runtimeShader.setFloatUniform("u_zoom", zoom)
+                        runtimeShader.setFloatUniform("u_x", rotation)
+                        runtimeShader.setFloatUniform("u_y", y)
+                        this.renderEffect = RenderEffect.createRuntimeShaderEffect(
+                            runtimeShader, "content",
+                        ).asComposeRenderEffect()
                     },
-                )
-                .fillMaxSize(.7f),
-        )
+            ) {
+                val scale = this.drawContext.size.height / 2f / (180 * 16)
+                drawRect(colorScheme.primaryContainer)
+                scale(scaleX = scale, scaleY = scale * 2, pivot = Offset.Zero) {
+                    drawPath(path, colorScheme.primary)
+                }
+            }
+            val width = this.maxWidth
+            val height = this.maxHeight
+            val density = LocalDensity.current
+            Box(
+                Modifier
+                    .transformable(
+                        rememberTransformableState { zoomChange, panChange, _ ->
+                            zoom = (zoom * zoomChange).coerceAtLeast(.25f)
+                            if (x.floatValue.isNaN()) x.floatValue = rotation
+                            x.floatValue += panChange.x / with(density) { width.toPx() } * 4 / zoom
+                            y =
+                                (y + panChange.y / with(density) { height.toPx() } * -4 / zoom).coerceIn(
+                                    -PI.toFloat() / 3,
+                                    PI.toFloat() / 3,
+                                )
+                        },
+                    )
+                    .fillMaxSize(.7f),
+            )
+        }
     }
 }
 
