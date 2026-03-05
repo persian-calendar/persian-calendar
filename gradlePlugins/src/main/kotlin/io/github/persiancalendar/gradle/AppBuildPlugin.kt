@@ -8,7 +8,7 @@ class AppBuildPlugin : Plugin<Project> {
         target.tasks.register("codegenerators", CodeGenerators::class.java) {
             execute(target)
         }
-        target.tasks.register("eventsgenerators", CodeGenerators::class.java) {
+        target.tasks.register("wearcodegenerators", CodeGenerators::class.java) {
             execute(target, true)
         }
     }

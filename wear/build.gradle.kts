@@ -104,4 +104,4 @@ dependencies {
     lintChecks(project(":lintChecks"))
 }
 
-tasks.named("preBuild").configure { dependsOn(getTasksByName("eventsgenerators", false)) }
+tasks.named("preBuild").configure { dependsOn(getTasksByName("wearcodegenerators", false)) }
