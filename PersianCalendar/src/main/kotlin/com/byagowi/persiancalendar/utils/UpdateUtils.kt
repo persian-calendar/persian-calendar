@@ -1096,7 +1096,7 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
                 mapDraw.draw(
                     canvas = this,
                     scale = scale,
-                    coordinates = coordinates,
+                    coordinates = coordinates?.toEarthPosition(),
                     displayLocation = true,
                     directPathDestination = null,
                     displayGrid = false,

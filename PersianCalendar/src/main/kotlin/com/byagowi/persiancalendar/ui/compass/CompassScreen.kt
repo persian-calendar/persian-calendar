@@ -109,6 +109,7 @@ import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.handleAngleWrappingDegrees
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.toEarthPosition
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.VisibleForTesting
 import java.util.GregorianCalendar
@@ -182,10 +183,8 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     val angle = rememberSaveable { mutableFloatStateOf(0f) }
-    val qiblaHeading = coordinates?.run {
-        val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
-        EarthPosition(latitude, longitude).toEarthHeading(qibla)
-    }
+    val qiblaHeading = coordinates?.toEarthPosition()
+        ?.toEarthHeading(EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE))
 
     val declination = remember(coordinates, now) {
         derivedStateOf {

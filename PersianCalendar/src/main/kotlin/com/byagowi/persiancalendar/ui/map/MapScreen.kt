@@ -43,13 +43,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -77,6 +75,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
+import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
@@ -96,8 +95,8 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.utils.toEarthPosition
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
@@ -122,11 +121,11 @@ fun SharedTransitionScope.MapScreen(
     var displayLocation by rememberSaveable { mutableStateOf(true) }
     var displayGrid by rememberSaveable { mutableStateOf(false) }
     var isDirectPathMode by rememberSaveable { mutableStateOf(false) }
-    var markedCoordinates by rememberSaveable(coordinates, saver = CoordinatesSaver) {
-        mutableStateOf(coordinates)
+    var markedCoordinates by rememberSaveable(coordinates) {
+        mutableStateOf(coordinates?.toEarthPosition())
     }
-    var dialogInputCoordinates by rememberSaveable(saver = CoordinatesSaver) { mutableStateOf(null) }
-    var directPathDestination by rememberSaveable(saver = CoordinatesSaver) { mutableStateOf(null) }
+    var dialogInputCoordinates by rememberSaveable { mutableStateOf<EarthPosition?>(null) }
+    var directPathDestination by rememberSaveable { mutableStateOf<EarthPosition?>(null) }
 
     LaunchedEffect(Unit) {
         val interval = 1.minutes.inWholeMilliseconds
@@ -144,13 +143,13 @@ fun SharedTransitionScope.MapScreen(
     var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
     var saveCoordinates by rememberSaveable { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
-        inputCoordinates = dialogInputCoordinates,
+        inputCoordinates = dialogInputCoordinates?.toCoordinates(),
         isFromMap = true,
         onDismissRequest = { showCoordinatesDialog = false },
         saveCoordinates = saveCoordinates,
         toggleSaveCoordinates = { saveCoordinates = it },
         notifyChange = {
-            markedCoordinates = it
+            markedCoordinates = it.toEarthPosition()
             displayLocation = true
         },
     )
@@ -216,7 +215,7 @@ fun SharedTransitionScope.MapScreen(
                                 Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
                             } else {
                                 val coords =
-                                    Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                                    EarthPosition(latitude.toDouble(), longitude.toDouble())
                                 if (isDirectPathMode) directPathDestination = coords else {
                                     dialogInputCoordinates = coords
                                     showCoordinatesDialog = true
@@ -447,15 +446,6 @@ fun SharedTransitionScope.MapScreen(
         }
     }
 }
-
-private val CoordinatesSaver = listSaver<MutableState<Coordinates?>, Double>(
-    save = { listOfNotNull(it.value?.latitude, it.value?.longitude, it.value?.elevation) },
-    restore = {
-        if (it.size == 3) {
-            mutableStateOf(Coordinates(it[0], it[1], it[2]))
-        } else null
-    },
-)
 
 @Composable
 private fun SharedTransitionScope.TimeArrow(

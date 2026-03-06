@@ -48,7 +48,6 @@ import io.github.cosinekitty.astronomy.radiansToDegrees
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
-import io.github.persiancalendar.praytimes.Coordinates
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.acos
@@ -425,8 +424,8 @@ class MapDraw(
         canvas: Canvas,
         scale: Float,
         displayLocation: Boolean,
-        coordinates: Coordinates?,
-        directPathDestination: Coordinates?,
+        coordinates: EarthPosition?,
+        directPathDestination: EarthPosition?,
         displayGrid: Boolean,
     ) {
         canvas.drawRect(backgroundMapRect, backgroundPaint)
@@ -454,12 +453,9 @@ class MapDraw(
             pinDrawable.draw(canvas)
         }
         if (coordinates != null && directPathDestination != null) {
-            val from = EarthPosition(coordinates.latitude, coordinates.longitude)
-            val to = EarthPosition(
-                directPathDestination.latitude,
-                directPathDestination.longitude,
-            )
-            val points = from.intermediatePoints(to, 24).map { (latitude, longitude) ->
+            val points = coordinates.intermediatePoints(
+                directPathDestination, 24,
+            ).map { (latitude, longitude) ->
                 val userX = (longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - latitude.toFloat()) * mapScaleFactor
                 userX to userY
@@ -481,7 +477,7 @@ class MapDraw(
                 atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
                     .toDouble(),
             ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
-            val heading = from.toEarthHeading(to)
+            val heading = coordinates.toEarthHeading(directPathDestination)
             canvas.withRotation(textDegree, center.first, center.second) {
                 drawText(heading.km, center.first, center.second - 2 * dp, textPaint)
             }

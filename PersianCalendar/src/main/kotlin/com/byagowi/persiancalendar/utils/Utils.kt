@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.highLatitudesMethod
@@ -66,6 +67,7 @@ fun Coordinates.calculatePrayTimes(
 val Coordinates.isSouthernHemisphere get() = latitude < .0
 
 fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elevation)
+fun Coordinates.toEarthPosition() = EarthPosition(this.latitude, this.longitude)
 
 val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 fun showUnsupportedActionToast(context: Context) {

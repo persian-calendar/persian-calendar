@@ -1,7 +1,10 @@
 package com.byagowi.persiancalendar.entities
 
 import android.location.Location
+import android.os.Parcelable
 import com.byagowi.persiancalendar.global.language
+import io.github.persiancalendar.praytimes.Coordinates
+import kotlinx.parcelize.Parcelize
 import kotlin.math.PI
 import kotlin.math.asin
 import kotlin.math.atan2
@@ -12,10 +15,13 @@ import kotlin.math.roundToLong
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-data class EarthPosition(val latitude: Double, val longitude: Double) {
+@Parcelize
+data class EarthPosition(val latitude: Double, val longitude: Double) : Parcelable {
     class EarthHeading(metres: Float, val heading: Float) {
         val km = language.formatKm((metres / 1000).roundToLong())
     }
+
+    fun toCoordinates(): Coordinates = Coordinates(latitude, longitude, .0)
 
     fun toEarthHeading(target: EarthPosition): EarthHeading {
         val result = FloatArray(3)
