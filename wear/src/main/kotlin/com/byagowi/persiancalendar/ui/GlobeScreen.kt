@@ -12,6 +12,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculatePan
@@ -28,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.drawscope.scale
@@ -42,10 +44,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.util.fastAny
+import androidx.wear.compose.foundation.requestFocusOnHierarchyActive
+import androidx.wear.compose.foundation.rotary.RotaryScrollableBehavior
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.globeRuntimeShader
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 
@@ -141,6 +147,23 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                             }
                         }
                     }
+                    .requestFocusOnHierarchyActive()
+                    .rotaryScrollable(
+                        behavior = remember {
+                            object : RotaryScrollableBehavior {
+                                override suspend fun CoroutineScope.performScroll(
+                                    timestampMillis: Long,
+                                    delta: Float,
+                                    inputDeviceId: Int,
+                                    orientation: Orientation,
+                                ) {
+                                    if (x.floatValue.isNaN()) x.floatValue = rotation
+                                    x.floatValue += -delta / with(density) { width.toPx() } / zoom
+                                }
+                            }
+                        },
+                        focusRequester = remember { FocusRequester() },
+                    )
                     .fillMaxSize(.7f),
             )
         }
