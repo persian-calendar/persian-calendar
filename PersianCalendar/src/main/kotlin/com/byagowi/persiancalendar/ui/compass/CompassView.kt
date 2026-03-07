@@ -102,7 +102,7 @@ fun Compass(
     }
 }
 
-class CompassView(private val resources: Resources) {
+private class CompassView(private val resources: Resources) {
     var isTrueNorth: Boolean = true
     var declination = 0f
     fun trueNorth(angle: Float) = angle + if (isTrueNorth) declination else 0f
