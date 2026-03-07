@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.animate
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow

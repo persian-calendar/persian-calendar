@@ -110,6 +110,7 @@ private class FirstPattern(private val tintColor: Color, size: Float) : Pattern 
         return if (order) sum + sum.rotateBy(45f, .5f, .5f)
         else sum xor sum.rotateBy(45f, .5f, .5f)
     }
+
     private val path1 = path(true)
     private val path2 = path(false)
 
