@@ -52,7 +52,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
         val intent = intent ?: return@lazy defaultValue
 
         run {
-            // first try to get it from intent's extras, most of the times it is here
+            // first try to get it from intent's extras, usually it is here
             val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, defaultValue)
             if (id != defaultValue) return@lazy id
         }
