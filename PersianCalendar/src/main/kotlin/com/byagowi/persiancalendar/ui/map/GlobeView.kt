@@ -9,8 +9,10 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.gestures.draggable2D
-import androidx.compose.foundation.gestures.rememberDraggable2DState
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,12 +26,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerId
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.input.pointer.util.addPointerInputChange
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withScale
 import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.generated.globeFragmentShader
-import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.launch
@@ -54,7 +65,6 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
 
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
-    var isInZooming by remember { mutableStateOf(false) }
     var zoom by rememberSaveable { mutableFloatStateOf(1f) }
     LaunchedEffect(Unit) {
         if (zoom == 1f) animate(
@@ -77,26 +87,38 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
             if (renderer.isSurfaceCreated) it.queueEvent { renderer.loadTexture(bitmap) }
         },
         modifier = Modifier
-            .draggable2D(
-                enabled = !isInZooming,
-                state = rememberDraggable2DState { (dx, dy) -> onDelta(dx, dy) },
-                onDragStopped = { (dx, _) ->
+            .pointerInput(Unit) {
+                var lastPointerId: PointerId? = null
+                awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    lastPointerId = down.id
+                    val tracker = VelocityTracker()
+                    do {
+                        val event = awaitPointerEvent()
+                        val zoomChange = event.calculateZoom()
+                        if (zoomChange != 1f) {
+                            zoom = (zoom * zoomChange).coerceIn(.25f, 6f)
+                        } else {
+                            event.changes.forEach {
+                                tracker.addPointerInputChange(it)
+                                it.consume()
+                            }
+                            val panChange = event.calculatePan()
+                            onDelta(panChange.x, panChange.y)
+                        }
+                    } while (event.changes.fastAny { it.pressed })
+                    val velocity = tracker.calculateVelocity().x
+                    tracker.resetTracking()
                     coroutineScope.launch {
                         animateDecay(
                             initialValue = 0f,
-                            initialVelocity = dx,
+                            initialVelocity = velocity,
                             animationSpec = SplineBasedFloatDecayAnimationSpec(density),
-                        ) { _, dx -> if (dx.isFinite()) onDelta(dx / 20, 0f) }
+                        ) { _, dx ->
+                            if (down.id == lastPointerId && dx.isFinite()) onDelta(dx / 20, 0f)
+                        }
                     }
-                },
-            )
-            .detectZoom(
-                onRelease = { isInZooming = false },
-                // Otherwise it intercepts pointer inputs of draggable2d
-                onlyMultitouch = true,
-            ) { factor ->
-                isInZooming = true
-                coroutineScope.launch { zoom = (zoom * factor).coerceIn(.25f, 6f) }
+                }
             }
             .fillMaxSize(),
     )
@@ -123,4 +145,27 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+internal fun GlobeViewPreview() {
+    val globeTextureSize = 2048
+    val bitmap = createBitmap(globeTextureSize, globeTextureSize)
+    val resources = LocalResources.current
+    val mapDraw = remember(resources) { MapDraw(resources) }
+    bitmap.applyCanvas {
+        val scale = globeTextureSize / 2f / mapDraw.mapHeight
+        withScale(x = scale, y = scale * 2) {
+            mapDraw.draw(
+                canvas = this,
+                scale = scale,
+                displayLocation = false,
+                coordinates = null,
+                directPathDestination = null,
+                displayGrid = true,
+            )
+        }
+    }
+    GlobeView(bitmap) {}
 }
