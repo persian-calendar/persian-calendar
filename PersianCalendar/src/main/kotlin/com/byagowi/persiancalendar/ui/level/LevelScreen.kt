@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -46,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.keepScreenOn
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -84,23 +84,18 @@ fun SharedTransitionScope.LevelScreen(
 
     if (isFullscreen) DisposableEffect(Unit) {
         val window = activity?.window ?: return@DisposableEffect onDispose {}
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-
-        onDispose {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-        }
+        onDispose { windowInsetsController.show(WindowInsetsCompat.Type.systemBars()) }
     }
 
     val angleToShow1 = remember { mutableFloatStateOf(0f) }
     val angleToShow2 = remember { mutableFloatStateOf(0f) }
     var showTwoAngles by remember { mutableStateOf(false) }
 
-    Column {
+    Column(if (isFullscreen) Modifier.keepScreenOn() else Modifier) {
         AnimatedVisibility(visible = !isFullscreen) {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.level)) },

@@ -37,7 +37,11 @@ import com.byagowi.persiancalendar.global.cityName
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
+fun AthanActivityContent(
+    prayTime: PrayTime,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
     val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
     val darkBaseColor = isSystemInDarkTheme()
     val patternDrawable = remember(darkBaseColor) {
@@ -45,7 +49,7 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
         PatternDrawable(prayTime, darkBaseColor = darkBaseColor, dp = dpAsPx)
     }
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxSize()
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },

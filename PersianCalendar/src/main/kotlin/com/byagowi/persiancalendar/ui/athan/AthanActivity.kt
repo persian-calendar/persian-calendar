@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.athan
 
-import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Intent
 import android.graphics.Color
@@ -16,9 +15,10 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.keepScreenOn
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
@@ -136,22 +136,17 @@ class AthanActivity : ComponentActivity() {
             setTurnScreenOn(true)
             getSystemService<KeyguardManager>()?.requestDismissKeyguard(this, null)
             window.addFlags(
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-                        WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON,
             )
         } else {
             @Suppress("DEPRECATION")
             window.addFlags(
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
             )
         }
 
         setContent {
-            @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
-            BackHandler { stop() }
-            SystemTheme { AthanActivityContent(prayTime, ::stop) }
+            SystemTheme { AthanActivityContent(prayTime, Modifier.keepScreenOn(), ::stop) }
         }
 
         handler.postDelayed(stopTask, 10.seconds.inWholeMilliseconds)
