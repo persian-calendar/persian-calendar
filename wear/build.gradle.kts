@@ -70,6 +70,8 @@ kotlin {
 dependencies {
     // implementation("androidx.wear.compose:compose-navigation3:1.6.0-alpha08")
     implementation(libs.persiancalendar.calendar)
+    // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
+    implementation(libs.astronomy)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.activity)
     implementation(libs.compose.material.icons.extended)
