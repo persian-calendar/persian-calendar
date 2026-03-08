@@ -70,12 +70,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.PI
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun GlobeScreen(modifier: Modifier = Modifier) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-    val runtimeShader = remember { RuntimeShader(globeRuntimeShader) }
+    val runtimeShader = remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) RuntimeShader(globeRuntimeShader)
+        else null
+    }
     val resources = LocalResources.current
     val path = remember {
         addPathNodes(
@@ -99,7 +101,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
             var timeInMillis by remember { mutableLongStateOf(System.currentTimeMillis()) }
             LaunchedEffect(key1 = Unit) {
                 while (true) {
-                    delay(30.seconds)
+                    delay(5.minutes)
                     timeInMillis = System.currentTimeMillis()
                 }
             }
@@ -111,15 +113,17 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                 Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        runtimeShader.setFloatUniform(
-                            "u_resolution", this.size.width, this.size.height,
-                        )
-                        runtimeShader.setFloatUniform("u_zoom", zoom)
-                        runtimeShader.setFloatUniform("u_x", rotation)
-                        runtimeShader.setFloatUniform("u_y", y)
-                        this.renderEffect = RenderEffect.createRuntimeShaderEffect(
-                            runtimeShader, "content",
-                        ).asComposeRenderEffect()
+                        if (runtimeShader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            runtimeShader.setFloatUniform(
+                                "u_resolution", this.size.width, this.size.height,
+                            )
+                            runtimeShader.setFloatUniform("u_zoom", zoom)
+                            runtimeShader.setFloatUniform("u_x", rotation)
+                            runtimeShader.setFloatUniform("u_y", y)
+                            this.renderEffect = RenderEffect.createRuntimeShaderEffect(
+                                runtimeShader, "content",
+                            ).asComposeRenderEffect()
+                        }
                     },
             ) {
                 val size = this.drawContext.size

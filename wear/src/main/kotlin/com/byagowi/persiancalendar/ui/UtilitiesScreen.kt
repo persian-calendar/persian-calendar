@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.os.Build
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +20,7 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun UtilitiesScreen(
@@ -35,12 +35,10 @@ fun UtilitiesScreen(
         ScalingLazyColumn(state = scrollState) {
             item { ListHeader { Text("ابزارها") } }
             items(
-                listOfNotNull(
+                persistentListOf(
                     Triple(navigateToConverter, Icons.Default.SwapVerticalCircle, "مبدل"),
                     Triple(navigateToCalendar, Icons.Default.CalendarMonth, "تقویم"),
-                    Triple(navigateToGlobe, Icons.Default.Map, "زمین").takeIf {
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                    },
+                    Triple(navigateToGlobe, Icons.Default.Map, "زمین"),
                     Triple(navigateToSettings, Icons.Default.Settings, "تنظیمات"),
                 ),
             ) { (action, icon, title) ->
