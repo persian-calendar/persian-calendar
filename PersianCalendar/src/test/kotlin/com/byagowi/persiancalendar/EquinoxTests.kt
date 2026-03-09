@@ -85,6 +85,28 @@ class EquinoxTests {
         /* should be 29:45 */
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1381.pdf
         "2002, 3, 20, 22, 46, 0", /* should be 2 */
+        // https://calendar.ut.ac.ir/تحويل-سال-هاي-گذشته
+        "2001, 3, 20, 17, 0, 53", /* should be 20 */
+        "2000, 3, 20, 11, 5, 15", /* should be 14 */
+        "1999, 3, 21, 5, 16, 1", /* should be 15:48 */
+        "1998, 3, 20, 23, 24, 19", /* should be 31 */
+        "1997, 3, 20, 17, 24, 53", /* should be 46 */
+        "1996, 3, 20, 11, 33, 3", /* should be 10 */
+        "1995, 3, 21, 5, 44, 32", /* should be 35 */
+        "1994, 3, 20, 23, 57, 55", /* should be 58:13 */
+        "1993, 3, 20, 18, 10, 47", /* should be 50 */
+        "1992, 3, 20, 12, 18, 9", /* should be 11 */
+        "1991, 3, 21, 6, 32, 3", /* should be 4 */
+        "1990, 3, 21, 0, 49, 0", /* should be 26 */
+        "1989, 3, 20, 18, 58, 17", /* should be 29 */
+        "1988, 3, 20, 13, 9, 7", /* should be 8:56 */
+        "1987, 3, 21, 7, 22, 1", /* should be 8 */
+        "1986, 3, 21, 1, 32, 40", /* should be 56 */
+        "1985, 3, 20, 19, 43, 54", /* should be 56 */
+        "1984, 3, 20, 13, 54, 2", /* should be 31 */
+        "1983, 3, 21, 8, 8, 35", /* should be 53 */
+        "1982, 3, 21, 2, 25, 21", /* should be 59 */
+        "1981, 3, 20, 20, 32, 48", /* should be 33:31 */
     )
     fun test_not_change(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
         val calendar = GregorianCalendar(TimeZone.getTimeZone(IRAN_TIMEZONE_ID))
