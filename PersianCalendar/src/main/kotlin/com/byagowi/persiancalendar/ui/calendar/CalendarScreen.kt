@@ -300,7 +300,7 @@ fun SharedTransitionScope.CalendarScreen(
         context.preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, detailsPagerState.currentPage) }
     }
 
-    val swipeUpActions = remember {
+    val swipeUpActions = remember(detailsTabs.size) {
         persistentMapOf(
             SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
             SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
@@ -332,7 +332,7 @@ fun SharedTransitionScope.CalendarScreen(
     ) else null
     val yearViewScale = if (isYearView) rememberSaveable { mutableFloatStateOf(1f) } else null
 
-    val swipeDownActions = remember {
+    val swipeDownActions = remember(detailsTabs.size) {
         persistentMapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
             SwipeDownAction.YearView to {
