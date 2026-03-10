@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.SplineBasedFloatDecayAnimationSpec
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -67,7 +68,11 @@ import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.time.Duration.Companion.minutes
@@ -135,6 +140,20 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                 if (dayNightMask != null) drawImage(dayNightMask, dstSize = size.toIntSize())
             }
             val coroutineScope = rememberCoroutineScope()
+            val scrollDelta = remember { MutableSharedFlow<Float>() }
+            val motionScheme = MaterialTheme.motionScheme
+            suspend fun zoomOverscrollEffect() {
+                if (zoom !in .5f..3f) animate(
+                    initialValue = zoom,
+                    targetValue = if (zoom > 3f) 3f else .5f,
+                    animationSpec = motionScheme.defaultEffectsSpec(),
+                ) { value, _ -> zoom = value }
+            }
+            @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
+                scrollDelta.onEach { delta ->
+                    zoom = (zoom + delta / 1000).coerceAtLeast(.1f)
+                }.debounce(50).collect { zoomOverscrollEffect() }
+            }
             Box(
                 Modifier
                     .pointerInput(Unit) {
@@ -146,9 +165,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                             do {
                                 val event = awaitPointerEvent()
                                 val zoomChange = event.calculateZoom()
-                                if (zoomChange != 1f) {
-                                    zoom = (zoom * zoomChange).coerceIn(.5f, 3f)
-                                } else {
+                                if (zoomChange != 1f) zoom *= zoomChange else {
                                     event.changes.forEach {
                                         tracker.addPointerInputChange(it)
                                         it.consume()
@@ -164,6 +181,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                                     )
                                 }
                             } while (event.changes.fastAny { it.pressed })
+                            coroutineScope.launch { zoomOverscrollEffect() }
                             val velocity = tracker.calculateVelocity().x
                             tracker.resetTracking()
                             coroutineScope.launch {
@@ -188,9 +206,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                                     delta: Float,
                                     inputDeviceId: Int,
                                     orientation: Orientation,
-                                ) {
-                                    zoom = (zoom + delta / 1000).coerceIn(.5f, 3f)
-                                }
+                                ) = scrollDelta.emit(delta)
                             }
                         },
                         focusRequester = remember { FocusRequester() },
