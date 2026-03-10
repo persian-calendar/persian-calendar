@@ -60,11 +60,11 @@ abstract class CodeGenerators : DefaultTask() {
         setProperty("isWear", isWear)
         val generateDir = generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
 
-        listOfNotNull(
-            "events",
-            "cities".takeIf { !isWear },
-            "districts".takeIf { !isWear },
-        ).forEach { name ->
+        buildList {
+            add("events")
+            if (!isWear) add("cities")
+            if (!isWear) add("districts")
+        }.forEach { name ->
             val input = projectDir / "data" / "$name.json"
             inputs.file(input)
             val output = generateDir / "$name.kt"
@@ -89,11 +89,11 @@ abstract class CodeGenerators : DefaultTask() {
         generatedAppSrcDir.mkdirs()
         val projectDir = pl.projectDirectory.asFile
         val isWear = getIsWear().get()
-        listOfNotNull(
-            "events" to ::generateEventsCode,
-            ("cities" to ::generateCitiesCode).takeIf { !isWear },
-            ("districts" to ::generateDistrictsCode).takeIf { !isWear },
-        ).forEach { (name, generator) ->
+        buildList {
+            add("events" to ::generateEventsCode)
+            if (!isWear) add("cities" to ::generateCitiesCode)
+            if (!isWear) add("districts" to ::generateDistrictsCode)
+        }.forEach { (name, generator) ->
             val input = projectDir / "data" / "$name.json"
             val builder = FileSpec.builder(packageName, name)
             generator(input, builder)
@@ -106,14 +106,14 @@ abstract class CodeGenerators : DefaultTask() {
         val builder = FileSpec.builder(packageName, "TextStore")
         val projectDir = pl.projectDirectory.asFile
         val rootDir = projectDir.parentFile
-        listOfNotNull(
-            (rootDir / "THANKS.md" to "credits").takeIf { !isWear },
-            (rootDir / "FAQ.fa.md" to "faq").takeIf { !isWear },
-            (projectDir / "shaders" / "common.vert" to "commonVertexShader").takeIf { !isWear },
-            (projectDir / "shaders" / "globe.frag" to "globeFragmentShader").takeIf { !isWear },
-            (projectDir / "shaders" / "globe.agsl" to "globeRuntimeShader").takeIf { isWear },
-            (projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader").takeIf { !isWear },
-        ).forEach { (textFile, fieldName) ->
+        buildList {
+            if (!isWear) add(rootDir / "THANKS.md" to "credits")
+            if (!isWear) add(rootDir / "FAQ.fa.md" to "faq")
+            if (!isWear) add(projectDir / "shaders" / "common.vert" to "commonVertexShader")
+            if (!isWear) add(projectDir / "shaders" / "globe.frag" to "globeFragmentShader")
+            if (isWear) add(projectDir / "shaders" / "globe.agsl" to "globeRuntimeShader")
+            if (!isWear) add(projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader")
+        }.forEach { (textFile, fieldName) ->
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class, KModifier.CONST)
                     .initializer(buildCodeBlock { addStatement("%S", textFile.readText()) })
