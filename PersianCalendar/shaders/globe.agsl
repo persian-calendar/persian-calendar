@@ -24,11 +24,11 @@ vec4 main(float2 fragCoord) {
             vec3(xy, sqrt(R * R - r * r)); // the third component, z, is height of points over globe surface
         // Converts x/y/z to texture coordinates https://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Textured_Spheres
         vec2 longLat = vec2((-atan(xyz.x, xyz.z) - x) / PI / 2.0, -asin(xyz.y / R) / PI + .5);
-        return content.eval(vec2(mod(.5 + longLat.x, 1.0) * u_resolution.x, (longLat.y) * u_resolution.y));
+        return content.eval(vec2(mod(.5 + longLat.x, 1.0) * u_resolution.x, longLat.y * u_resolution.y));
     } else {
         float v = 4.4 - r / R * 3.7; // Globe's glow
         // Adds random stars
-        if (rand(vec2(floor(-x * 10.0 + xy.x / 4.0), floor(u_y * 10.0 + xy.y / 4.0))) > 0.997)
+        if (rand(vec2(floor(-u_x * 10.0 + xy.x / 3.0), floor(u_y * 10.0 + xy.y / 3.0))) > 0.996)
             v = 1.0;
         return vec4(v, v, v, 1.0);
     }
