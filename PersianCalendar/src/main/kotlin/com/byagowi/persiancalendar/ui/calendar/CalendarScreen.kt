@@ -1381,23 +1381,23 @@ private fun SharedTransitionScope.Menu(
 
         swipeUpActions.forEach { (item, action) ->
             if (item != SwipeUpAction.None) ActionItem(
-                item,
-                action,
-                PREF_SWIPE_UP_ACTION,
-                item.titleId,
-                preferredSwipeUpAction,
-                Icons.TwoTone.SwipeUp,
+                item = item,
+                action = action,
+                prefKey = PREF_SWIPE_UP_ACTION,
+                title = item.titleId,
+                preferredAction = preferredSwipeUpAction,
+                swipeIcon = Icons.TwoTone.SwipeUp,
             ) { (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name }
         }
 
         swipeDownActions.forEach { (item, action) ->
             if (item != SwipeDownAction.None) ActionItem(
-                item,
-                action,
-                PREF_SWIPE_DOWN_ACTION,
-                item.titleId,
-                preferredSwipeDownAction,
-                Icons.TwoTone.SwipeDown,
+                item = item,
+                action = action,
+                prefKey = PREF_SWIPE_DOWN_ACTION,
+                title = item.titleId,
+                preferredAction = preferredSwipeDownAction,
+                swipeIcon = Icons.TwoTone.SwipeDown,
             ) { (if (preferredSwipeDownAction == item) SwipeDownAction.None else item).name }
         }
 
