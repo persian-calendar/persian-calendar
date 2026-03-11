@@ -20,7 +20,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -48,10 +47,10 @@ import kotlin.math.PI
 
 @Composable
 fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
-    val renderer by remember {
-        val renderer = GLRenderer(onSurfaceCreated = { it.loadTexture(bitmap) })
-        renderer.fragmentShader = globeFragmentShader
-        mutableStateOf(renderer)
+    val renderer = remember {
+        GLRenderer(onSurfaceCreated = { it.loadTexture(bitmap) }).also {
+            it.fragmentShader = globeFragmentShader
+        }
     }
     val startTime = remember { System.nanoTime() }
     fun onDelta(dx: Float, dy: Float) {
