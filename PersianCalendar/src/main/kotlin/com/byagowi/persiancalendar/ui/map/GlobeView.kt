@@ -52,10 +52,9 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
             it.fragmentShader = globeFragmentShader
         }
     }
-    val startTime = remember { System.nanoTime() }
     fun onDelta(dx: Float, dy: Float) {
         if (dx != 0f && renderer.overriddenTime == 0f)
-            renderer.overriddenTime = (System.nanoTime() - startTime) / 1e9f
+            renderer.overriddenTime = System.nanoTime() / 1e9f
         renderer.overriddenTime += dx / renderer.overriddenZoom / 200
         renderer.overriddenY =
             (renderer.overriddenY + dy / renderer.overriddenZoom / 200)
