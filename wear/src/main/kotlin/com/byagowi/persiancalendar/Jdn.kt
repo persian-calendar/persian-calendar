@@ -6,6 +6,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.util.GregorianCalendar
@@ -34,6 +35,8 @@ value class Jdn(val value: Long) : Parcelable {
 
     operator fun rangeUntil(that: Jdn): Sequence<Jdn> =
         (this.value..<that.value).asSequence().map(::Jdn)
+
+    val isYearSupportedOnApp get() = (this.toPersianDate().year - IranianIslamicDateConverter.latestSupportedYearOfIran) in -1..0
 
     companion object {
         @RememberInComposition

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +31,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.complicationHideWeekDay
 import com.byagowi.persiancalendar.complicationMonthNumber
 import com.byagowi.persiancalendar.complicationWeekdayInitial
@@ -40,10 +42,12 @@ import com.byagowi.persiancalendar.iranNonHolidaysKey
 import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import kotlinx.coroutines.launch
+import java.util.TimeZone
 
 @Composable
 fun SettingsScreen(
     preferences: Preferences?,
+    today: Jdn,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScalingLazyListState()
@@ -92,13 +96,19 @@ fun SettingsScreen(
         }
 
         ScalingLazyColumn(state = scrollState) {
-            item {
-                ListSubHeader {
-                    Text("نمایش رویدادها", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            if (today.isYearSupportedOnApp && TimeZone.getDefault().id == "Asia/Tehran") {
+                item {
+                    ListSubHeader {
+                        Text(
+                            "نمایش رویدادها",
+                            Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
+                item { EventsSwitch(iranNonHolidaysKey, "غیرتعطیل رسمی\nدانشگاه تهران") }
+                item { EventsSwitch(internationalKey, "بین‌المللی") }
             }
-            item { EventsSwitch(iranNonHolidaysKey, "غیرتعطیل رسمی\nدانشگاه تهران") }
-            item { EventsSwitch(internationalKey, "بین‌المللی") }
             item {
                 ListSubHeader {
                     Text(
@@ -158,6 +168,6 @@ val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
 @Composable
 internal fun SettingsPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { SettingsScreen(null) }
+        AppScaffold { SettingsScreen(null, remember { Jdn.today() }) }
     }
 }

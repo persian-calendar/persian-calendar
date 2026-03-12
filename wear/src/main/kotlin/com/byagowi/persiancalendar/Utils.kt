@@ -6,6 +6,7 @@ import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.tiles.TileService.getUpdater
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
+import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 fun Context.requestComplicationsUpdate() {
     listOf(

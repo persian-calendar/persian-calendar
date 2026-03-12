@@ -70,9 +70,11 @@ import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -104,7 +106,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
     val context = LocalContext.current
-    run {
+    if ((language.isIranExclusive || language.isAfghanistanExclusive || !eventsRepository.isEmpty) && remember { Jdn.today() }.isYearSupportedOnApp) {
         var shownOnce by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.events), stringResource(R.string.events_summary),

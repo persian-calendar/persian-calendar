@@ -106,7 +106,7 @@ private fun WearApp() {
                             )
                         }
                         entry<Screen.Globe> { GlobeScreen() }
-                        entry<Screen.Settings> { SettingsScreen(preferences) }
+                        entry<Screen.Settings> { SettingsScreen(preferences, today) }
                     },
                 )
             }

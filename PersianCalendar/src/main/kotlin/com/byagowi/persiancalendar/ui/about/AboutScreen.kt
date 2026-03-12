@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
@@ -42,7 +41,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Palette
@@ -93,9 +91,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
@@ -105,13 +103,10 @@ import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
-import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
-import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
-import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import kotlinx.collections.immutable.toImmutableList
 
@@ -131,8 +126,6 @@ fun SharedTransitionScope.AboutScreen(
                     NavigationOpenNavigationRailIcon(openNavigationRail)
                 },
                 actions = {
-                    val context = LocalContext.current
-                    ShareActionButton { shareApplication(context) }
                     AppIconButton(
                         icon = Icons.Default.PermDeviceInformation,
                         title = stringResource(R.string.device_information),
@@ -248,23 +241,6 @@ private fun Header() {
     }
 }
 
-private fun shareApplication(context: Context) {
-    runCatching {
-        context.startActivity(
-            Intent.createChooser(
-                Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
-                    val textToShare = """${context.getString(R.string.app_name)}
-https://github.com/persian-calendar/persian-calendar"""
-                    putExtra(Intent.EXTRA_TEXT, textToShare)
-                },
-                context.getString(R.string.share),
-            ),
-        )
-    }.onFailure(logException).onFailure { context.bringMarketPage() }
-}
-
 @Composable
 private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
     Column(
@@ -304,18 +280,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Bug report
-        Text(
-            stringResource(R.string.about_support_developers),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
-        )
-        AboutScreenButton(
-            icon = Icons.Default.BugReport,
-            action = ::launchReportIntent,
-            title = R.string.about_report_bug,
-            summary = R.string.about_report_bug_sum,
-        )
-        run {
+        if (remember { Jdn.today() }.isYearSupportedOnApp) {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = Icons.Default.Email,
@@ -424,13 +389,6 @@ private fun AboutScreenButton(
             }
         }
     }
-}
-
-private fun launchReportIntent(context: Context) {
-    runCatching {
-        val uri = "https://github.com/persian-calendar/persian-calendar/issues/new".toUri()
-        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-    }.onFailure(logException)
 }
 
 @Composable

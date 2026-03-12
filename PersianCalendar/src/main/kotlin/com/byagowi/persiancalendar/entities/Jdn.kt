@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.entities
 import android.os.Parcelable
 import androidx.compose.runtime.annotation.RememberInComposition
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Time
@@ -88,6 +89,8 @@ value class Jdn(val value: Long) : Parcelable {
 
     operator fun rangeUntil(that: Jdn): Sequence<Jdn> =
         (this.value..<that.value).asSequence().map(::Jdn)
+
+    val isYearSupportedOnApp get() = (this.toPersianDate().year - supportedYearOfIranCalendar) in -1..0
 
     companion object {
         // Better to use App provided today() where possible

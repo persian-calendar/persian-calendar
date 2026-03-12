@@ -17,8 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -27,7 +29,6 @@ import androidx.wear.compose.foundation.ScrollInfoProvider
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.EdgeButton
@@ -35,6 +36,8 @@ import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListSubHeader
+import androidx.wear.compose.material3.LocalContentColor
+import androidx.wear.compose.material3.LocalTextStyle
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.ScreenStage
 import androidx.wear.compose.material3.Text
@@ -47,7 +50,6 @@ import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.generateEntries
 import com.byagowi.persiancalendar.generated.EventSource
-import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
 fun MainScreen(
@@ -82,17 +84,13 @@ fun MainScreen(
             withWeekDayName = false,
         )
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-        var showWarningDialog by rememberSaveable {
-            val currentYear = today.toPersianDate().year
-            val isOutDated = currentYear > IranianIslamicDateConverter.latestSupportedYearOfIran
-            mutableStateOf(isOutDated)
-        }
-        AlertDialog(
-            showWarningDialog,
-            { showWarningDialog = false },
-            title = { Text("برنامه قدیمی است\n\nمناسبت‌ها دقیق نیست") },
-            edgeButton = { EdgeButton({ showWarningDialog = false }) { Text("متوجه شدم") } },
-        )
+//        var showWarningDialog by rememberSaveable { mutableStateOf(today.isAppOutDated) }
+//        AlertDialog(
+//            showWarningDialog,
+//            { showWarningDialog = false },
+//            title = { Text("برنامه قدیمی است\n\nمناسبتی درون برنامه وجود ندارد") },
+//            edgeButton = { EdgeButton({ showWarningDialog = false }) { Text("متوجه شدم") } },
+//        )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
             val entries = generateEntries(
                 localeUtils, today, enabledEvents, days = 14, withYear = true,
@@ -127,7 +125,10 @@ fun EventView(it: Entry, modifier: Modifier = Modifier) {
         Column {
             AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
                 Text(
-                    it.title,
+                    when (val type = it.type) {
+                        is EntryType.Holiday if type.source == EventSource.Iran -> "عمومی رسمی، "
+                        else -> ""
+                    } + it.title,
                     maxLines = if (state) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
@@ -136,7 +137,7 @@ fun EventView(it: Entry, modifier: Modifier = Modifier) {
                 )
             }
             when (val type = it.type) {
-                is EntryType.Holiday if type.source == EventSource.Iran -> "تعطیل"
+                is EntryType.Holiday if type.source == EventSource.Iran -> "تعطیلی به مناسبت"
                 is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
                 is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
                 else -> null

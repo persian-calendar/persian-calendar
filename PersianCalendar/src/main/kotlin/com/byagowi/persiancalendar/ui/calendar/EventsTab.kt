@@ -340,6 +340,7 @@ private fun DayEventContent(
         event.source == EventSource.Afghanistan -> true
         else -> false
     }
+    val comprehensive = event.isHoliday && event.source == EventSource.Iran
     Row(
         Modifier
             .fillMaxWidth()
@@ -369,7 +370,7 @@ private fun DayEventContent(
         Column(modifier = Modifier.weight(1f, fill = false)) {
             SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                 Text(
-                    text = title,
+                    text = (if (comprehensive) "تعطیلی عمومی رسمی به مناسبت " else "") + title,
                     color = contentColor,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         textDirection = TextDirection.Content,
@@ -407,7 +408,9 @@ private fun DayEventContent(
                         event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                         event.source == EventSource.International -> stringResource(R.string.international)
                         event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
-                        event.source == EventSource.Iran -> """تقویم رسمی کشور
+                        event.source == EventSource.Iran -> if (comprehensive) {
+                            """تعطیلی رسمی به مناسبت $title از تقویم رسمی کشور تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
+                        } else (if (event.isHoliday) "" else "گزیدهٔ ") + """تقویم رسمی کشور
 تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
 
                         else -> ""
@@ -431,7 +434,7 @@ private fun DayEventContent(
                                         .fillMaxWidth(),
                                     contentAlignment = Alignment.Center,
                                 ) {
-                                    // It won't use the theme level defined uri handler but it's ok
+                                    // It won't use the theme level defined uri handler but, it's ok
                                     // since it's a PDF
                                     val uriHandler = LocalUriHandler.current
                                     FilledTonalButton(

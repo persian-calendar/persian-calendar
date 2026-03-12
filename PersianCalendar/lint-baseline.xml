@@ -14,6 +14,28 @@
 
     <issue
         id="UnusedResources"
+        message="The resource `R.string.outdated_app` appears to be unused"
+        errorLine1="    &lt;string name=&quot;outdated_app&quot;>Due to being outdated, things can be inaccurate&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="17"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.update` appears to be unused"
+        errorLine1="    &lt;string name=&quot;update&quot;>Update&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
         message="The resource `R.string.default_athan_summary` appears to be unused"
         errorLine1="    &lt;string name=&quot;default_athan_summary&quot;>Return to default Athan&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -31,6 +53,39 @@
         <location
             file="src/main/res/values/strings.xml"
             line="180"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.about_support_developers` appears to be unused"
+        errorLine1="    &lt;string name=&quot;about_support_developers&quot;>Developer Support&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="194"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.about_report_bug` appears to be unused"
+        errorLine1="    &lt;string name=&quot;about_report_bug&quot;>Report bug on GitHub&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="195"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.about_report_bug_sum` appears to be unused"
+        errorLine1="    &lt;string name=&quot;about_report_bug_sum&quot;>Preferred bug reporting or requesting for new feature, needs a GitHub account&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="196"
             column="13"/>
     </issue>
 

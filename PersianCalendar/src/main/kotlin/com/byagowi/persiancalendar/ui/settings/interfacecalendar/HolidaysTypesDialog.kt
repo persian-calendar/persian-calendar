@@ -116,12 +116,12 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     )
                 }
 
-                if (language.isAfghanistanExclusive) {
-                    Afghanistan()
+                if (language.isIranExclusive) {
                     Iran()
+                    Afghanistan()
                 } else {
-                    Iran()
                     Afghanistan()
+                    Iran()
                 }
             } else {
                 CountryEvents(

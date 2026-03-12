@@ -93,6 +93,11 @@ data class EventsRepository(
     )
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
+        if (!jdn.isYearSupportedOnApp) return deviceEvents.getEvents(
+            jdn.toCivilDate(),
+            IrregularCalendarEventsStore(empty()),
+            deviceEvents,
+        )
         return listOf(
             persianCalendarEvents.getEvents(jdn.toPersianDate(), irregularCalendarEventsStore),
             islamicCalendarEvents.getEvents(jdn.toIslamicDate(), irregularCalendarEventsStore),
@@ -103,6 +108,7 @@ data class EventsRepository(
     }
 
     fun getEnabledEvents(jdn: Jdn): List<CalendarEvent<*>> {
+        if (!jdn.isYearSupportedOnApp) return emptyList()
         return listOf(
             persianCalendarEvents.getAllEvents(),
             islamicCalendarEvents.getAllEvents(),
