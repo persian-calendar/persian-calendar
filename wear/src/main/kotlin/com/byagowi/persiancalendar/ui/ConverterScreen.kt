@@ -2,24 +2,32 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.DatePickerDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.PickerGroup
 import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
@@ -28,7 +36,7 @@ fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
 
     var selectedIndex by rememberSaveable { mutableIntStateOf(1) }
     // This one could use rememberPickerState but the rest doesn't as we need to control the keys
-    // and it's great they were generous enough to make PickerState public say unlike pager state…
+    // and, it's great they were generous enough to make PickerState public say unlike pager state…
     val calendarPickerState = rememberSaveable(saver = PickerState.Saver) {
         PickerState(3, 0, false)
     }
@@ -70,7 +78,7 @@ fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
     }
 
     ScreenScaffold(modifier) {
-        val pickerStates = listOf(
+        val pickerStates = persistentListOf(
             calendarPickerState,
             dayPickerState,
             monthPickerState,
@@ -117,5 +125,13 @@ fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
             day = currentJdn,
             calendarIndex = calendarIndex,
         )
+    }
+}
+
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Composable
+internal fun ConverterScreenPreview() {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        AppScaffold { ConverterScreen(remember { Jdn.today() }) }
     }
 }

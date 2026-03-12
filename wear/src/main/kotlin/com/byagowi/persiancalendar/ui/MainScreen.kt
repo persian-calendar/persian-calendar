@@ -158,7 +158,7 @@ private fun EventButton(
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
-internal fun MainPreview() {
+internal fun MainScreenPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         val today = remember { Jdn.today() }
         AppScaffold { MainScreen(LocaleUtils(), {}, {}, null, today) }
