@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -606,12 +607,14 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
     BaseAppDialog(
         title = {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                Text(
-                    text = title,
-                    fontSize = 14.sp,
-                    lineHeight = 16.sp,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                Crossfade(targetState = title) { title ->
+                    Text(
+                        text = title,
+                        fontSize = 14.sp,
+                        lineHeight = 16.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         },
         onDismissRequest = onDismissRequest,
@@ -659,12 +662,15 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
                         val index = floor(x / cellSize).toInt() + run {
                             floor((y - canvasTop(canvasSize)) / cellSize).toInt() * 18
                         }
-                        elementsIndices.getOrNull(index)?.let { atomicNumber ->
-                            val info =
-                                elements.getOrNull(atomicNumber - 1)?.split(",") ?: return@let
-                            title = "$atomicNumber ${info[0]} ${info[1]}\n${info[2]}"
+                        when (index) {
+                            144 -> playMusic = true
+                            161 -> showRawData = true
+                            else -> elementsIndices.getOrNull(index)?.let { atomicNumber ->
+                                val info =
+                                    elements.getOrNull(atomicNumber - 1)?.split(",") ?: return@let
+                                title = "$atomicNumber ${info[0]} ${info[1]}\n${info[2]}"
+                            }
                         }
-                        if (index == 161) showRawData = true else if (index == 144) playMusic = true
                     },
                 )
                 .graphicsLayer {
