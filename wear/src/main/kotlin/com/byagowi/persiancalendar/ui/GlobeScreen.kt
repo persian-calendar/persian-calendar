@@ -57,6 +57,7 @@ import androidx.wear.compose.foundation.rotary.RotaryScrollableBehavior
 import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.globeRuntimeShader
 import io.github.cosinekitty.astronomy.Aberration
@@ -246,6 +247,6 @@ private fun dayNightMask(timeInMillis: Long): ImageBitmap? {
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Preview
+@Preview(device = WearDevices.LARGE_ROUND)
 @Composable
 internal fun GlobeScreenPreview() = GlobeScreen()
