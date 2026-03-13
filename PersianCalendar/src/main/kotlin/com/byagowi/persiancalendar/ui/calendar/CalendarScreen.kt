@@ -963,6 +963,11 @@ private fun Search(
     @OptIn(ExperimentalMaterial3Api::class) SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
+                modifier = if (isSearchExpanded) Modifier.padding(
+                    paddingValues = WindowInsets.safeDrawing.only(
+                        sides = WindowInsetsSides.Horizontal,
+                    ).asPaddingValues(),
+                ) else Modifier,
                 query = searchTerm ?: "",
                 onQueryChange = onSearchTermChange,
                 onSearch = {},
