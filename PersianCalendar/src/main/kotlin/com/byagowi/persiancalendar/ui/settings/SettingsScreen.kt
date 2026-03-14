@@ -324,6 +324,11 @@ enum class SettingsTab(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.location,
+                subtitle = {
+                    if (language.isUserAbleToReadPersian && coordinates == null) {
+                        "اگر مایلید اوقات نمایش داده شود این بخش را تنظیم کنید"
+                    } else null
+                },
             ) { LocationSettings(navigateToMap) }
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
