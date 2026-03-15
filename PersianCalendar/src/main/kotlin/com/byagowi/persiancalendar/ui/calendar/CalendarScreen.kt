@@ -150,6 +150,7 @@ import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
+import com.byagowi.persiancalendar.PREF_OUTDATED_SHOWN
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
@@ -653,16 +654,17 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     val eventsRepository = eventsRepository
-    val resources = LocalResources.current
     LaunchedEffect(today, eventsRepository) {
-        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar) {
-            if (snackbarHostState.showSnackbar(
-                    resources.getString(R.string.outdated_app),
+        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar && language.isIranExclusive) {
+            val preferences = context.preferences
+            if (PREF_OUTDATED_SHOWN !in preferences) {
+                snackbarHostState.showSnackbar(
+                    message = "تقویم بروز نیست و مناسبتی در این سال نمایش نمی‌دهد، اگر بروزرسانی وجود ندارد احتمالاً باید برنامه‌ای دیگر استفاده کنید",
                     duration = SnackbarDuration.Long,
-                    actionLabel = resources.getString(R.string.update),
                     withDismissAction = true,
-                ) == SnackbarResult.ActionPerformed
-            ) context.bringMarketPage()
+                )
+                preferences.edit { putBoolean(PREF_OUTDATED_SHOWN, true) }
+            }
         }
     }
 }
