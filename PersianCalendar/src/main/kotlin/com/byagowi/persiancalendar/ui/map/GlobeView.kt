@@ -54,7 +54,7 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
     }
     fun onDelta(dx: Float, dy: Float) {
         if (dx != 0f && renderer.overriddenTime == 0f)
-            renderer.overriddenTime = System.nanoTime() / 1e9f
+            renderer.overriddenTime = (System.nanoTime() - renderer.startTime) / 1e9f
         renderer.overriddenTime += dx / renderer.overriddenZoom / 200
         renderer.overriddenY =
             (renderer.overriddenY + dy / renderer.overriddenZoom / 200)

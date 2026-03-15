@@ -69,6 +69,7 @@ class GLRenderer(
     private val perVertex = 3
     private val vertexStride = perVertex * floatSize
     private val vertexCount = 3
+    val startTime = System.nanoTime()
 
     override fun onDrawFrame(gl: GL10?) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
@@ -85,7 +86,7 @@ class GLRenderer(
             positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0,
         )
         GLES20.glUniform2f(resolutionHandle, width, height)
-        val time = System.nanoTime() / 1e9f
+        val time = (System.nanoTime() - startTime) / 1e9f
         GLES20.glUniform1f(timeHandle, time)
         GLES20.glUniform1f(xHandle, if (overriddenTime == 0f) time else overriddenTime)
         GLES20.glUniform1f(yHandle, overriddenY)
