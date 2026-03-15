@@ -76,7 +76,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
@@ -207,18 +206,19 @@ fun SharedTransitionScope.EventsTab(
         }
 
         val context = LocalContext.current
-        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
-            Spacer(Modifier.height(16.dp))
-            EncourageActionLayout(
-                header = stringResource(R.string.warn_if_events_not_set),
-                discardAction = {
-                    context.preferences.edit {
-                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
-                    }
-                },
-                acceptAction = { navigateToHolidaysSettings(null) },
-            )
-        } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
+//        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
+//            Spacer(Modifier.height(16.dp))
+//            EncourageActionLayout(
+//                header = stringResource(R.string.warn_if_events_not_set),
+//                discardAction = {
+//                    context.preferences.edit {
+//                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+//                    }
+//                },
+//                acceptAction = { navigateToHolidaysSettings(null) },
+//            )
+//        } else
+        if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
             var showDialog by remember { mutableStateOf(false) }
             if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
