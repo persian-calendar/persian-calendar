@@ -94,7 +94,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
     var zoom by remember { mutableFloatStateOf(1f) }
     val x = remember { mutableFloatStateOf(Float.NaN) }
     var y by remember { mutableFloatStateOf(0f) }
-    val rotation by if (!x.floatValue.isNaN()) x else rememberInfiniteTransition().animateFloat(
+    val time by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
@@ -124,7 +124,11 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                                 "u_resolution", this.size.width, this.size.height,
                             )
                             runtimeShader.setFloatUniform("u_zoom", zoom)
-                            runtimeShader.setFloatUniform("u_x", rotation)
+                            runtimeShader.setFloatUniform("u_time", time)
+                            runtimeShader.setFloatUniform(
+                                "u_x",
+                                if (x.floatValue.isNaN()) time else x.floatValue,
+                            )
                             runtimeShader.setFloatUniform("u_y", y)
                             this.renderEffect = RenderEffect.createRuntimeShaderEffect(
                                 runtimeShader, "content",
@@ -172,7 +176,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                                         it.consume()
                                     }
                                     val panChange = event.calculatePan()
-                                    if (x.floatValue.isNaN()) x.floatValue = rotation
+                                    if (x.floatValue.isNaN()) x.floatValue = time
                                     val widthPx = with(density) { width.toPx() }
                                     x.floatValue += panChange.x / widthPx * 4 / zoom
                                     val heightPx = with(density) { height.toPx() }
