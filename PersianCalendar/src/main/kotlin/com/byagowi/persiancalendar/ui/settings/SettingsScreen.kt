@@ -333,7 +333,7 @@ enum class SettingsTab(
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.athan,
+                title = R.string.times,
                 subtitle = {
                     if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
                 },

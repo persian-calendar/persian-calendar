@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
@@ -31,9 +30,9 @@ fun ColumnScope.LocationSettings(navigateToMap: (() -> Unit)? = null) {
     SettingsClickable(stringResource(R.string.coordinates), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
     }
-    AnimatedVisibility(language.isPersian && coordinates != null) {
+    AnimatedVisibility(coordinates != null) {
         val context = LocalContext.current
-        SettingsClickable("عدم نمایش اوقات") {
+        SettingsClickable(stringResource(R.string.dont_show_times)) {
             citiesStore["CUSTOM"]?.let { context.preferences.saveCity(it) }
         }
     }
