@@ -44,6 +44,7 @@ fun Modifier.appTransformable(
     return this.pointerInput(disablePan) {
         val size = this@pointerInput.size.toSize()
         var lastPointerId: PointerId? = null
+        val tracker = if (disablePan) null else VelocityTracker()
         awaitEachGesture {
             var xBound = Float.POSITIVE_INFINITY
             var yBound = Float.POSITIVE_INFINITY
@@ -58,7 +59,6 @@ fun Modifier.appTransformable(
                 }
             }
 
-            val tracker = if (disablePan) null else VelocityTracker()
             val down = awaitFirstDown(requireUnconsumed = false)
             lastPointerId = down.id
             val downPosition = down.position

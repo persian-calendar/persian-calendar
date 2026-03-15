@@ -163,10 +163,10 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
                 Modifier
                     .pointerInput(Unit) {
                         var lastPointerId: PointerId? = null
+                        val tracker = VelocityTracker()
                         awaitEachGesture {
                             val down = awaitFirstDown(requireUnconsumed = false)
                             lastPointerId = down.id
-                            val tracker = VelocityTracker()
                             do {
                                 val event = awaitPointerEvent()
                                 val zoomChange = event.calculateZoom()

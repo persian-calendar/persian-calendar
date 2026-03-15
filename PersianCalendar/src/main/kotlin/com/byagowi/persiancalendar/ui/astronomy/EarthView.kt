@@ -132,6 +132,7 @@ fun EarthView(
     val coroutineScope = rememberCoroutineScope()
     val pointerModifier = Modifier.pointerInput(isScaled) {
         var lastPointerId: PointerId? = null
+        val velocityTracker = VelocityTracker()
         if (!isScaled) awaitEachGesture {
             val down = awaitFirstDown(requireUnconsumed = false)
             lastPointerId = down.id
@@ -148,7 +149,6 @@ fun EarthView(
                 39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
             }
 
-            val velocityTracker = VelocityTracker()
             var rotationDirection = 0
 
             do {
