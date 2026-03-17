@@ -135,25 +135,27 @@ data class EventsRepository(
         if (skipEvent(record, calendar)) return null
 
         val holiday = determineIsHoliday(record)
+        val title =
+            (if (record.isHoliday && record.source == EventSource.Iran) "تعطیلی رسمی به مناسبت " else "") + record.title
         return (when (calendar) {
             Calendar.SHAMSI -> {
                 val date = PersianDate(everyYear, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(record.title, holiday, date, record.source)
+                CalendarEvent.PersianCalendarEvent(title, holiday, date, record.source)
             }
 
             Calendar.GREGORIAN -> {
                 val date = CivilDate(everyYear, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(record.title, holiday, date, record.source)
+                CalendarEvent.GregorianCalendarEvent(title, holiday, date, record.source)
             }
 
             Calendar.ISLAMIC -> {
                 val date = IslamicDate(everyYear, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(record.title, holiday, date, record.source)
+                CalendarEvent.IslamicCalendarEvent(title, holiday, date, record.source)
             }
 
             Calendar.NEPALI -> {
                 val date = NepaliDate(everyYear, record.month, record.day)
-                CalendarEvent.NepaliCalendarEvent(record.title, holiday, date, record.source)
+                CalendarEvent.NepaliCalendarEvent(title, holiday, date, record.source)
             }
         } as? T).debugAssertNotNull
     }

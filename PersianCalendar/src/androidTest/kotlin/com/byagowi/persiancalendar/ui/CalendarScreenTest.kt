@@ -19,7 +19,7 @@ class CalendarScreenTest {
         composeTestRule.setContent {
             NavigationMock {
                 val now = System.currentTimeMillis()
-                CalendarScreen(0, {}, null, {}, {}, {}, {}, {}, {}, {}, { _, _ -> }, today, now)
+                CalendarScreen(0, {}, null, {}, {}, {}, {}, {}, {}, {}, {}, { _, _ -> }, today, now)
             }
         }
     }

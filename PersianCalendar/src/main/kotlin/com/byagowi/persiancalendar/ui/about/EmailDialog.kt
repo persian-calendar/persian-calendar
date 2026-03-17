@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun EmailDialog(onDismissRequest: () -> Unit) {
@@ -43,21 +44,36 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
         LocalLayoutDirection provides LayoutDirection.Rtl,
     ) {
         AppDialog(
-            confirmButton = {
-                TextButton(onClick = onDismissRequest) { Text("متوجه شدم") }
-            },
-            neutralButton = {
-                TextButton(onClick = { firstPass = false }) { Text("سایر امکانات") }
-            },
+            confirmButton = { TextButton(onClick = onDismissRequest) { Text("متوجه شدم") } },
+            neutralButton = { TextButton(onClick = { firstPass = false }) { Text("سایر امکانات") } },
             onDismissRequest = onDismissRequest,
         ) {
             Text(
-                """هدف اصلی این برنامه نمایش تعطیلی‌های رسمی کشورهای حمایت شده است و سایر مناسبت‌ها بعدها توسط سایر افراد به برنامه اضافه شده است که به‌صورت پیش‌فرض در برنامه فعال نیست و مانند سایر امکانات این برنامه دارای تضمین کامل بودن یا صحت عملکرد نیست.
+                """بسیاری از بازخوردهای دریافت شده در این برنامه در رابطه با مناسبت‌هاست حال آنکه هدف اصلی این برنامه به دلیل مستقل‌بودن، محدودیت حجمی و مشارکت‌کنندگان از ابتدا نمایش تعطیلی‌های رسمی کشورهای حمایت شده بوده است و سایر مناسبت‌ها بعدها توسط سایر افراد به برنامه اضافه شده است که به‌صورت پیش‌فرض در برنامه فعال نیست.
 
-اگر مناسبت‌های این برنامه مناسب یا کافی نیست لطفاً منابع یا برنامه‌های دیگر را بیازمایید چرا که این برنامه امکانات محدودی در نمایش مناسبت‌ها دارد و تمرکز آن بر تعطیلی‌هاست.
-
-همچنین می‌توان در تقویم دستگاه مناسبت‌های کشورهای مختلف را فعال کرد که در این برنامه نیز نمایش داده می‌شود که راهنمایی در زیر دکمهٔ زیر قرار دارد.
+اگر مناسبت‌های غیرتعطیل این برنامه را اشتباه یا ناکافی یافته‌اید پیشنهاد می‌شود منابع یا برنامه‌های زیر را مقایسه و بررسی کنید چرا که این برنامه به دلیل آنلاین نبودن توان محدودی در نمایش به‌روز مناسبت‌ها دارد و تمرکز آن بر صحت نمایش تعطیلی‌های عمومیست. این برنامه دارای هیچ منبع یا حمایت مالی نبوده و به صورت فنی دسترسی به اینترنت ندارد که به همین دلیل نیز امکان نمایش آنلاین جهت نمایش بهتر مناسبت‌ها در آن ممکن نیست.
 """.trim(),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(all = 16.dp),
+            )
+            val urlHandler = LocalUriHandler.current
+            persistentListOf(
+                "تایم.آی‌آر" to "https://www.time.ir/",
+                "دانشگاه تهران" to "https://calendar.ut.ac.ir/",
+                "باحساب" to "https://www.bahesab.ir/",
+            ).forEach { (title, url) ->
+                FilledTonalButton(
+                    onClick = {
+                        urlHandler.openUri(url)
+                        onDismissRequest()
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(.7f),
+                ) { Text(title) }
+            }
+            Text(
+                "همچنین می‌توان در تقویم دستگاه مناسبت‌های کشورهای مختلف را فعال کرد که در این برنامه نیز نمایش داده می‌شود که راهنمای آن با زدن دکمهٔ زیر قابل مشاهده است.",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(all = 16.dp),
             )
@@ -97,58 +113,6 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
         )
     }
 }
-
-//@Composable
-//fun More() {
-//    AnimatedVisibility(eventsRepository.iranOthers && language.isPersian) {
-//        var showDialog by rememberSaveable { mutableStateOf(false) }
-//        if (showDialog) AppDialog(onDismissRequest = { showDialog = false }) {
-//            Text(
-//                "منابع آنلاین برای سایر مناسبت‌های تقویمی",
-//                style = MaterialTheme.typography.bodyLarge,
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 24.dp, bottom = 16.dp)
-//                    .align(Alignment.CenterHorizontally),
-//            )
-//            val urlHandler = LocalUriHandler.current
-//            persistentListOf(
-//                "مرکز تقویم دانشگاه تهران" to "https://calendar.ut.ac.ir/",
-//                "باحساب" to "https://www.bahesab.ir/",
-//                "تایم.آی‌آر" to "https://www.time.ir/",
-//            ).shuffled().forEach { (title, url) ->
-//                FilledTonalButton(
-//                    onClick = {
-//                        urlHandler.openUri(url)
-//                        showDialog = false
-//                    },
-//                    modifier = Modifier
-//                        .align(Alignment.CenterHorizontally)
-//                        .fillMaxWidth(.7f),
-//                ) { Text(title) }
-//            }
-//            EnableInDeviceCalendar { showDialog = false }
-//            TextButton(
-//                onClick = { showDialog = false },
-//                modifier = Modifier
-//                    .padding(top = 8.dp, bottom = 12.dp)
-//                    .align(Alignment.CenterHorizontally),
-//            ) { Text(stringResource(R.string.close)) }
-//        }
-//        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-//            Box(
-//                Modifier
-//                    .padding(top = 8.dp)
-//                    .alpha(AppBlendAlpha)
-//                    .clip(MaterialTheme.shapes.large)
-//                    .background(MaterialTheme.colorScheme.surfaceVariant)
-//                    .clickable { showDialog = true }
-//                    .padding(horizontal = 12.dp, vertical = 1.dp),
-//            ) { Text("سایر مناسبت‌ها") }
-//        }
-//    }
-//}
 
 @Composable
 fun ColumnScope.EnableInDeviceCalendar(onDismissRequest: () -> Unit) {

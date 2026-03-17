@@ -93,6 +93,7 @@
     <string name="show_device_calendar_events_summary">نمایش رویدادهای شخصی</string>
     <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">افزودن رویداد</string>
+    <string name="no_event">رویدادی برای این روز یافت نشد</string>
     <string name="not_supported_action">دستگاه از این کنش پشتیبانی نمی‌کند</string>
     <string name="customize_widget_summary">چه چیزهایی در ویجت و اعلان نمایش داده شوند</string>
     <string name="customize_widget">شخصی‌سازی ویجت و اعلان</string>
@@ -126,7 +127,6 @@
     <string name="sunrise_sun_view">طلوع</string>
     <string name="midday_sun_view">ظهر</string>
     <string name="sunset_sun_view">غروب</string>
-    <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد</string>
     <string name="nothing_scheduled">برنامه‌ای تنظیم نشده</string>
     <string name="length_of_day">طول روز</string>
     <string name="remaining_daylight">باقی‌مانده</string>
