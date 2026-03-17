@@ -224,7 +224,6 @@ import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
-import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -655,7 +654,7 @@ fun SharedTransitionScope.CalendarScreen(
 
     val eventsRepository = eventsRepository
     LaunchedEffect(today, eventsRepository) {
-        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranHolidays && today.toPersianDate().year > supportedYearOfIranCalendar && language.isIranExclusive) {
+        if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranOthers && !today.isYearSupportedOnApp && language.isIranExclusive) {
             val preferences = context.preferences
             if (PREF_OUTDATED_SHOWN !in preferences) {
                 snackbarHostState.showSnackbar(
