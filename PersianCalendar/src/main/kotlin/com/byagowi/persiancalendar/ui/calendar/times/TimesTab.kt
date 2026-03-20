@@ -1,15 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,16 +30,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
@@ -54,7 +48,6 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.title
@@ -62,15 +55,12 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
-fun SharedTransitionScope.TimesTab(
+fun TimesTab(
     selectedDay: Jdn,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     coordinates: Coordinates,
-    interactionSource: MutableInteractionSource,
-    minHeight: Dp,
-    bottomPadding: Dp,
     now: Long,
     today: Jdn,
 ) {
@@ -87,10 +77,7 @@ fun SharedTransitionScope.TimesTab(
     Column(
         Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = minHeight)
             .clickable(
-                indication = null,
-                interactionSource = interactionSource,
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
             ),
@@ -146,7 +133,6 @@ fun SharedTransitionScope.TimesTab(
             discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
             acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
         )
-        Spacer(Modifier.height(bottomPadding))
     }
 }
 
@@ -159,7 +145,7 @@ private fun showEnableAthanForPersianUsers(): Boolean {
 }
 
 @Composable
-private fun SharedTransitionScope.AstronomicalOverview(
+private fun AstronomicalOverview(
     selectedDay: Jdn,
     prayTimes: PrayTimes,
     now: Long,
@@ -183,11 +169,11 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .size(70.dp)
                     .align(Alignment.Center)
                     .semantics { this.hideFromAccessibility() }
-                    .sharedBounds(
-                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                        boundsTransform = appBoundsTransform,
-                    )
+//                    .sharedBounds(
+//                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+//                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+//                        boundsTransform = appBoundsTransform,
+//                    )
                     .clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,

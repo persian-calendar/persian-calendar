@@ -60,9 +60,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -74,11 +71,12 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.SwipeDown
 import androidx.compose.material.icons.twotone.SwipeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -86,10 +84,12 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -98,10 +98,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -142,7 +142,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
@@ -201,7 +200,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -224,10 +222,8 @@ import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
@@ -277,37 +273,12 @@ fun SharedTransitionScope.CalendarScreen(
     val density = LocalDensity.current
     var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
 
-    val detailsTabs = detailsTabs(
-        refreshToken = refreshToken,
-        refreshCalendar = refreshCalendar,
-        selectedDay = selectedDay,
-        navigateToHolidaysSettings = navigateToHolidaysSettings,
-        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-        navigateToAstronomy = navigateToAstronomy,
-        today = today,
-        now = now,
-        fabPlaceholderHeight = fabPlaceholderHeight,
-    )
-    val detailsPagerState = rememberPagerState(
-        initialPage = remember {
-            CalendarScreenTab.entries.getOrNull(context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
-                ?: CalendarScreenTab.entries[0]
-        }.ordinal.coerceAtMost(detailsTabs.size - 1),
-        pageCount = detailsTabs::size,
-    )
-    LaunchedEffect(detailsPagerState.currentPage) {
-        context.preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, detailsPagerState.currentPage) }
-    }
-
-    val swipeUpActions = remember(detailsTabs.size) {
+    val swipeUpActions = remember {
         persistentMapOf(
             SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
             SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
             SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
-            SwipeUpAction.None to {
-                if (detailsTabs.size == 1) bringDay(selectedDay - 7, true, false)
-            },
+            SwipeUpAction.None to { bringDay(selectedDay - 7, true, false) },
         )
     }
 
@@ -332,20 +303,17 @@ fun SharedTransitionScope.CalendarScreen(
     ) else null
     val yearViewScale = if (isYearView) rememberSaveable { mutableFloatStateOf(1f) } else null
 
-    val swipeDownActions = remember(detailsTabs.size) {
+    val swipeDownActions = remember {
         persistentMapOf(
 //            SwipeDownAction.MonthView to { navigateToMonthView() },
             SwipeDownAction.YearView to {
                 searchTerm = null
                 isYearView = true
             },
-            SwipeDownAction.None to {
-                if (detailsTabs.size == 1) bringDay(selectedDay + 7, true, false)
-            },
+            SwipeDownAction.None to { bringDay(selectedDay + 7, true, false) },
         )
     }
 
-    val isOnlyEventsTab = detailsTabs.size == 1
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
             if (!isYearView && keyEvent.type == KeyEventType.KeyDown) {
@@ -451,7 +419,7 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = (detailsPagerState.currentPage == CalendarScreenTab.EVENT.ordinal || isOnlyEventsTab) && !isYearView,
+                visible = !isYearView,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -559,12 +527,17 @@ fun SharedTransitionScope.CalendarScreen(
                             Details(
                                 selectedDay = selectedDay,
                                 bringDay = bringDay,
-                                tabs = detailsTabs,
-                                pagerState = detailsPagerState,
-                                contentMinHeight = maxHeight,
-                                scrollableTabs = true,
                                 bottomPadding = bottomPaddingWithMinimum,
-                                isOnlyEventsTab = isOnlyEventsTab,
+                                today = today,
+                                now = now,
+                                refreshCalendar = refreshCalendar,
+                                refreshToken = refreshToken,
+                                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                navigateToAstronomy = navigateToAstronomy,
+                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                fabPlaceholderHeight = fabPlaceholderHeight,
+                                scrollableTabs = true,
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
@@ -635,11 +608,16 @@ fun SharedTransitionScope.CalendarScreen(
                                     Details(
                                         bringDay = bringDay,
                                         selectedDay = selectedDay,
-                                        tabs = detailsTabs,
-                                        pagerState = detailsPagerState,
-                                        contentMinHeight = detailsMinHeight,
                                         bottomPadding = bottomPaddingWithMinimum,
-                                        isOnlyEventsTab = isOnlyEventsTab,
+                                        today = today,
+                                        now = now,
+                                        refreshCalendar = refreshCalendar,
+                                        refreshToken = refreshToken,
+                                        navigateToAstronomy = navigateToAstronomy,
+                                        navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                                        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                        fabPlaceholderHeight = fabPlaceholderHeight,
                                         modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
                                     )
                                 }
@@ -687,43 +665,39 @@ private fun enableTimesTab(): Boolean {
             PREF_APP_LANGUAGE !in preferences
 }
 
-private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SharedTransitionScope.detailsTabs(
+private fun SharedTransitionScope.Details(
     selectedDay: Jdn,
-    refreshToken: Int,
-    refreshCalendar: () -> Unit,
-    navigateToHolidaysSettings: (item: String?) -> Unit,
-    navigateToSettingsLocationTab: () -> Unit,
-    navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
-    navigateToAstronomy: (Jdn) -> Unit,
+    bringDay: BringDay,
+    bottomPadding: Dp,
     today: Jdn,
     now: Long,
+    refreshCalendar: () -> Unit,
+    refreshToken: Int,
+    navigateToHolidaysSettings: (item: String?) -> Unit,
+    navigateToAstronomy: (Jdn) -> Unit,
+    navigateToSettingsLocationTab: () -> Unit,
+    navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     fabPlaceholderHeight: Dp?,
-): ImmutableList<DetailsTab> {
-    var removeThirdTab by rememberSaveable { mutableStateOf(false) }
-    val hasTimesTab = enableTimesTab() && !removeThirdTab
-    val isOnlyEventsTab =
-        !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
-    val selectedDay by rememberUpdatedState(selectedDay)
-    val refreshToken by rememberUpdatedState(refreshToken)
-    val today by rememberUpdatedState(today)
-    val now by rememberUpdatedState(now)
-    val fabPlaceholderHeight by rememberUpdatedState(fabPlaceholderHeight)
-    return remember(hasTimesTab, isOnlyEventsTab) {
-        listOfNotNull<DetailsTab>(
-            if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
-                CalendarsTab(
-                    selectedDay = selectedDay,
-                    interactionSource = interactionSource,
-                    minHeight = minHeight,
-                    bottomPadding = bottomPadding,
-                    today = today,
-                    navigateToAstronomy = navigateToAstronomy,
-                )
-            } else null,
-            CalendarScreenTab.EVENT to { _, _, bottomPadding ->
+    modifier: Modifier = Modifier,
+    scrollableTabs: Boolean = false,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        BoxWithConstraints(
+            Modifier.detectHorizontalSwipe(selectedDay) {
+                { isLeft ->
+                    val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
+                    bringDay(newJdn, true, false)
+                }
+            },
+        ) {
+            val detailsWidth = this.maxWidth
+            // Currently scrollable tabs only happen on landscape layout
+            val scrollState = if (scrollableTabs) rememberScrollState() else null
+            Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
                 EventsTab(
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     // See the comment in floatingActionButton
@@ -733,133 +707,141 @@ private fun SharedTransitionScope.detailsTabs(
                     refreshToken = refreshToken,
                     refreshCalendar = refreshCalendar,
                     selectedDay = selectedDay,
-                )
-            },
-            // The optional third tab
-            if (hasTimesTab) CalendarScreenTab.TIMES to { interactionSource, minHeight, bottomPadding ->
-                val coordinates = coordinates
-                if (coordinates == null) Column(Modifier.fillMaxWidth()) {
-                    val context = LocalContext.current
-                    EncourageActionLayout(
-                        modifier = Modifier.padding(top = 24.dp),
-                        header = stringResource(R.string.ask_user_to_set_location),
-                        discardAction = {
-                            context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
-                            removeThirdTab = true
-                        },
-                        acceptAction = navigateToSettingsLocationTab,
-                        hideOnAccept = false,
+                ) {
+                    var removeThirdTab by rememberSaveable { mutableStateOf(false) }
+                    val hasTimesTab = enableTimesTab() && !removeThirdTab
+                    val buttons = listOfNotNull(
+                        Pair(R.string.calendar) @Composable {
+                            CalendarsTab(
+                                selectedDay = selectedDay,
+                                today = today,
+                                navigateToAstronomy = navigateToAstronomy,
+                            )
+                        }.takeIf { enabledCalendars.size != 1 },
+                        Pair(R.string.times) @Composable {
+                            val coordinates = coordinates
+                            if (coordinates == null) Column(Modifier.fillMaxWidth()) {
+                                val context = LocalContext.current
+                                EncourageActionLayout(
+                                    modifier = Modifier.padding(top = 24.dp),
+                                    header = stringResource(R.string.ask_user_to_set_location),
+                                    discardAction = {
+                                        context.preferences.edit {
+                                            putBoolean(PREF_DISMISSED_OWGHAT, true)
+                                        }
+                                        removeThirdTab = true
+                                    },
+                                    acceptAction = navigateToSettingsLocationTab,
+                                    hideOnAccept = false,
+                                )
+                                Spacer(Modifier.height(bottomPadding))
+                            } else TimesTab(
+                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                navigateToAstronomy = navigateToAstronomy,
+                                coordinates = coordinates,
+                                selectedDay = selectedDay,
+                                now = now,
+                                today = today,
+                            )
+                        }.takeIf { hasTimesTab },
                     )
-                    Spacer(Modifier.height(bottomPadding))
-                } else TimesTab(
-                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                    navigateToAstronomy = navigateToAstronomy,
-                    coordinates = coordinates,
-                    selectedDay = selectedDay,
-                    interactionSource = interactionSource,
-                    minHeight = minHeight,
-                    bottomPadding = bottomPadding,
-                    now = now,
-                    today = today,
-                )
-            } else null,
-        ).toImmutableList()
-    }
-}
 
-@Composable
-private fun Details(
-    selectedDay: Jdn,
-    bringDay: BringDay,
-    tabs: ImmutableList<DetailsTab>,
-    pagerState: PagerState,
-    contentMinHeight: Dp,
-    bottomPadding: Dp,
-    isOnlyEventsTab: Boolean,
-    modifier: Modifier = Modifier,
-    scrollableTabs: Boolean = false,
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
-        val coroutineScope = rememberCoroutineScope()
-        if (!isOnlyEventsTab) PrimaryTabRow(
-            selectedTabIndex = pagerState.currentPage,
-            divider = {},
-            containerColor = Color.Transparent,
-            indicator = {
-                val offset = pagerState.currentPage.coerceAtMost(tabs.size - 1)
-                val tabIndicatorColor by animateColor(MaterialTheme.colorScheme.primary)
-                TabRowDefaults.PrimaryIndicator(
-                    modifier = Modifier.tabIndicatorOffset(selectedTabIndex = offset),
-                    color = tabIndicatorColor,
-                )
-            },
-        ) {
-            tabs.forEachIndexed { index, (tab, _) ->
-                Tab(
-                    text = { Text(stringResource(tab.titleId)) },
-                    modifier = Modifier.clip(MaterialTheme.shapes.large),
-                    selected = pagerState.currentPage == index,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                )
-            }
-        }
-
-        HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
-            /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
-            val tabMinHeight = contentMinHeight - (if (isOnlyEventsTab) 0 else 48).dp
-            Box(
-                if (isOnlyEventsTab) run {
-                    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-                    Modifier
-                        .detectHorizontalSwipe(selectedDay) {
-                            { isLeft ->
-                                val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
-                                bringDay(newJdn, true, false)
+                    val coroutineScope = rememberCoroutineScope()
+                    var openedTab by remember { mutableIntStateOf(-1) }
+                    val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
+                    Box(contentAlignment = Alignment.Center) {
+                        buttons.zip(tooltipStates) { (_, content), tooltipState ->
+                            TooltipBox(
+                                onDismissRequest = {
+                                    openedTab = -1
+                                    coroutineScope.launch { tooltipState.dismiss() }
+                                },
+                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                    positioning = TooltipAnchorPosition.Above,
+                                ),
+                                tooltip = {
+                                    RichTooltip(
+                                        maxWidth = detailsWidth - 48.dp,
+                                        tonalElevation = 12.dp,
+                                        caretShape = TooltipDefaults.caretShape(),
+                                    ) { content() }
+                                },
+                                enableUserInput = false,
+                                state = tooltipState,
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                            ) {
+                                Box(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(1.dp),
+                                )
                             }
                         }
-                        .then(modifier)
-                } else Modifier,
-            ) {
-                // Currently scrollable tabs only happen on landscape layout
-                val scrollState = if (scrollableTabs) rememberScrollState() else null
-                Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
-                    tabs[index].second(interactionSource, tabMinHeight, bottomPadding)
+                    }
+                    Row(
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        buttons.forEachIndexed { index, (stringId, _) ->
+                            val tooltipState = tooltipStates[index]
+                            DisposableEffect(Unit) {
+                                onDispose { if (openedTab == index) openedTab = -1 }
+                            }
+                            AnimatedVisibility(
+                                visible = openedTab == -1 || openedTab == index,
+                            ) {
+                                FilledTonalButton(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            if (tooltipState.isVisible) {
+                                                tooltipState.dismiss()
+                                                openedTab = -1
+                                            } else {
+                                                openedTab = index
+                                                tooltipState.show()
+                                            }
+                                        }
+                                    },
+                                    modifier = Modifier.padding(horizontal = 4.dp),
+                                ) {
+                                    Row(
+                                        Modifier.alpha(.6f),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) { Text(stringResource(stringId)) }
+                                }
+                            }
+                        }
+                    }
                 }
-                if (scrollState != null) ScrollShadow(scrollState)
             }
+            if (scrollState != null) ScrollShadow(scrollState)
         }
     }
 }
 
 @Composable
-private fun SharedTransitionScope.CalendarsTab(
+private fun CalendarsTab(
     selectedDay: Jdn,
-    interactionSource: MutableInteractionSource,
-    minHeight: Dp,
-    bottomPadding: Dp,
     today: Jdn,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Column(
-        Modifier
-            .defaultMinSize(minHeight = minHeight)
-            .clickable(
-                indication = null,
-                interactionSource = interactionSource,
-                onClickLabel = stringResource(R.string.more),
-                onClick = { isExpanded = !isExpanded },
-            ),
+        Modifier.clickable(
+            onClickLabel = stringResource(R.string.more),
+            onClick = { isExpanded = !isExpanded },
+        ),
     ) {
         Spacer(Modifier.height(24.dp))
         CalendarsOverview(
             jdn = selectedDay,
             today = today,
             selectedCalendar = mainCalendar,
-            shownCalendars = remember(enabledCalendars) { enabledCalendars.toImmutableList() },
+            shownCalendars = enabledCalendars,
             isExpanded = isExpanded,
             navigateToAstronomy = navigateToAstronomy,
         )
@@ -909,7 +891,6 @@ private fun SharedTransitionScope.CalendarsTab(
                 ) else requestExemption()
             }
         }
-        Spacer(Modifier.height(bottomPadding))
     }
 }
 

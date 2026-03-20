@@ -119,7 +119,7 @@ import kotlinx.coroutines.launch
 import java.util.Date
 
 @Composable
-fun SharedTransitionScope.CalendarsOverview(
+fun CalendarsOverview(
     jdn: Jdn,
     today: Jdn,
     selectedCalendar: Calendar,
@@ -153,11 +153,6 @@ fun SharedTransitionScope.CalendarsOverview(
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .semantics { this.hideFromAccessibility() }
-                        .sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                            boundsTransform = appBoundsTransform,
-                        )
                         .clickable { navigateToAstronomy(jdn) }
                         .size(20.dp),
                 )

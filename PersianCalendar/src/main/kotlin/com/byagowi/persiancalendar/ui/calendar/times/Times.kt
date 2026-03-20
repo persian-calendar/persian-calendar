@@ -36,7 +36,7 @@ import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
 
 @Composable
-fun SharedTransitionScope.Times(
+fun Times(
     isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean,
 ) {
     AnimatedContent(isExpanded) { isExpandedState ->
@@ -58,14 +58,7 @@ fun SharedTransitionScope.Times(
                 if (isExpandedState || prayTime.isAlwaysShown(isJafari)) Column(
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
-                        .defaultMinSize(minWidth = ItemWidth.dp)
-                        .sharedBounds(
-                            rememberSharedContentState(
-                                key = SHARED_CONTENT_KEY_TIME + prayTime.name,
-                            ),
-                            animatedVisibilityScope = this@AnimatedContent,
-                            boundsTransform = appBoundsTransform,
-                        ),
+                        .defaultMinSize(minWidth = ItemWidth.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val textColor by animateColor(

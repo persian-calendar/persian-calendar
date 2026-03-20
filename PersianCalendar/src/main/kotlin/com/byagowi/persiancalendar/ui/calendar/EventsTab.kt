@@ -16,6 +16,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.Brightness7
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Yard
@@ -136,6 +139,7 @@ fun SharedTransitionScope.EventsTab(
     fabPlaceholderHeight: Dp,
     today: Jdn,
     now: Long,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         Modifier
@@ -198,11 +202,8 @@ fun SharedTransitionScope.EventsTab(
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
-            ) {
-                DayEvents(events, navigateToHolidaysSettings) {
-                    refreshCalendar()
-                }
-            }
+            ) { DayEvents(events, navigateToHolidaysSettings) { refreshCalendar() } }
+            content()
         }
 
         val context = LocalContext.current
