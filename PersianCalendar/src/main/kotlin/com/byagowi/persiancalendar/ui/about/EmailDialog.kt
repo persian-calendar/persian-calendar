@@ -30,16 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.eventsRepository
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun EmailDialog(onDismissRequest: () -> Unit) {
-    var firstPass by rememberSaveable {
-        mutableStateOf(language.isUserAbleToReadPersian || eventsRepository.iranOthers)
-    }
+    var firstPass by rememberSaveable { mutableStateOf(eventsRepository.iranOthers) }
     if (firstPass) return CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
     ) {
@@ -49,9 +46,9 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
             onDismissRequest = onDismissRequest,
         ) {
             Text(
-                """بسیاری از بازخوردهای دریافت شده در این برنامه در رابطه با مناسبت‌هاست حال آنکه هدف اصلی این برنامه به دلیل مستقل‌بودن، محدودیت حجمی و مشارکت‌کنندگان از ابتدا نمایش تعطیلی‌های رسمی کشورهای حمایت شده بوده است و سایر مناسبت‌ها بعدها توسط سایر افراد به برنامه اضافه شده است که به‌صورت پیش‌فرض در برنامه فعال نیست.
+                """بسیاری از بازخوردهای دریافت شده در این برنامه دربارهٔ مناسبت‌هاست حال آنکه به دلیل محدودیت منابع و حجم برنامه نمایش تعطیلی‌های رسمی اولویت برنامه بوده است.
 
-اگر مناسبت‌های غیرتعطیل این برنامه را اشتباه یا ناکافی یافته‌اید پیشنهاد می‌شود منابع یا برنامه‌های زیر را مقایسه و بررسی کنید چرا که این برنامه به دلیل آنلاین نبودن توان محدودی در نمایش به‌روز مناسبت‌ها دارد و تمرکز آن بر صحت نمایش تعطیلی‌های عمومیست. این برنامه دارای هیچ منبع یا حمایت مالی نبوده و به صورت فنی دسترسی به اینترنت ندارد که به همین دلیل نیز امکان نمایش آنلاین جهت نمایش بهتر مناسبت‌ها در آن ممکن نیست.
+اگر مناسبت‌های غیرتعطیل این برنامه را اشتباه یا ناکافی یافته‌اید پیشنهاد می‌شود برای داشتن بهتر مناسبت‌ها منابع زیر را بررسی و مقایسه کنید چرا که به دلیل آفلاین بودن این برنامه توان محدودی در نمایش مناسبت‌ها دارد.
 """.trim(),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(all = 16.dp),
@@ -60,7 +57,7 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
             persistentListOf(
                 "تایم.آی‌آر" to "https://www.time.ir/",
                 "دانشگاه تهران" to "https://calendar.ut.ac.ir/",
-                "باحساب" to "https://www.bahesab.ir/",
+                "باحساب" to "https://www.bahesab.ir/time/",
             ).forEach { (title, url) ->
                 FilledTonalButton(
                     onClick = {
