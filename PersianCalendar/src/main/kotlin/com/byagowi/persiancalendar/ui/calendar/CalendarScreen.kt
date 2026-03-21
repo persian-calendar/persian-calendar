@@ -98,7 +98,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -819,13 +818,11 @@ private fun Details(
                 )
 
                 val coroutineScope = rememberCoroutineScope()
-                var openedTab by remember { mutableIntStateOf(-1) }
                 val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
                 Box(contentAlignment = Alignment.Center) {
                     buttons.zip(tooltipStates) { (_, content), tooltipState ->
                         TooltipBox(
                             onDismissRequest = {
-                                openedTab = -1
                                 coroutineScope.launch { tooltipState.dismiss() }
                             },
                             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
@@ -858,22 +855,14 @@ private fun Details(
                 ) {
                     buttons.forEachIndexed { index, (stringId, _) ->
                         val tooltipState = tooltipStates[index]
-                        DisposableEffect(Unit) {
-                            onDispose { if (openedTab == index) openedTab = -1 }
-                        }
                         AnimatedVisibility(
-                            visible = openedTab == -1 || openedTab == index,
+                            visible = tooltipStates.none { it.isVisible } || tooltipState.isVisible,
                         ) {
                             FilledTonalButton(
                                 onClick = {
                                     coroutineScope.launch {
-                                        if (tooltipState.isVisible) {
-                                            tooltipState.dismiss()
-                                            openedTab = -1
-                                        } else {
-                                            openedTab = index
-                                            tooltipState.show()
-                                        }
+                                        if (tooltipState.isVisible) tooltipState.dismiss()
+                                        else tooltipState.show()
                                     }
                                 },
                                 modifier = Modifier.padding(horizontal = 4.dp),
