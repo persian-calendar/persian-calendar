@@ -881,7 +881,7 @@ private fun Details(
                         colors = SegmentedButtonDefaults.colors().copy(
                             inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
                         ),
-                        border = BorderStroke(0.dp, Color.Transparent),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                         selected = tooltipState.isVisible,
                         icon = {},
                         shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
