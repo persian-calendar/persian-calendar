@@ -30,13 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.eventsRepository
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun EmailDialog(onDismissRequest: () -> Unit) {
-    var firstPass by rememberSaveable { mutableStateOf(eventsRepository.iranOthers) }
+    var firstPass by rememberSaveable {
+        mutableStateOf(eventsRepository.iranOthers || language.isUserAbleToReadPersian)
+    }
     if (firstPass) return CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
     ) {

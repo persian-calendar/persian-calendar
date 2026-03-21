@@ -36,6 +36,17 @@
 
     <issue
         id="UnusedResources"
+        message="The resource `R.string.warn_if_events_not_set` appears to be unused"
+        errorLine1="    &lt;string name=&quot;warn_if_events_not_set&quot;>To select and show preferred holidays and events, visit the Settings&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="67"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
         message="The resource `R.string.default_athan_summary` appears to be unused"
         errorLine1="    &lt;string name=&quot;default_athan_summary&quot;>Return to default Athan&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
