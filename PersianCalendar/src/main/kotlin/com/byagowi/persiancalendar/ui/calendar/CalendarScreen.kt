@@ -30,6 +30,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
@@ -49,7 +50,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -61,7 +61,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -117,9 +116,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -130,7 +127,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
@@ -157,12 +153,14 @@ import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
@@ -220,6 +218,7 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.collections.immutable.ImmutableMap
@@ -271,7 +270,6 @@ fun SharedTransitionScope.CalendarScreen(
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val density = LocalDensity.current
-    var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
 
     val swipeUpActions = remember {
         persistentMapOf(
@@ -285,16 +283,27 @@ fun SharedTransitionScope.CalendarScreen(
     var searchTerm by rememberSaveable { mutableStateOf<String?>(null) }
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
     var isYearView by rememberSaveable { mutableStateOf(false) }
-    val isYearViewFraction = remember { mutableFloatStateOf(if (isYearView) 1f else 0f) }
+    val backButtonFraction = remember { mutableFloatStateOf(if (isYearView) 1f else 0f) }
     LaunchedEffect(isYearView) {
         animate(
-            initialValue = isYearViewFraction.floatValue,
+            initialValue = backButtonFraction.floatValue,
             targetValue = if (isYearView) 1f else 0f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
             ),
-        ) { value, _ -> isYearViewFraction.floatValue = value }
+        ) { value, _ -> backButtonFraction.floatValue = value }
+    }
+    var isAddEventBoxEnabled by remember { mutableStateOf(false) }
+    LaunchedEffect(isAddEventBoxEnabled) {
+        animate(
+            initialValue = backButtonFraction.floatValue,
+            targetValue = if (isAddEventBoxEnabled) 1f else 0f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessLow,
+            ),
+        ) { value, _ -> backButtonFraction.floatValue = value }
     }
     val yearViewLazyListState = if (isYearView) yearViewLazyListState(
         today,
@@ -392,7 +401,9 @@ fun SharedTransitionScope.CalendarScreen(
                         yearViewScale = yearViewScale,
                         isYearView = isYearView,
                         onIsYearViewChange = { isYearView = it },
-                        isYearViewFraction = isYearViewFraction,
+                        backButtonFraction = backButtonFraction,
+                        isAddEventBoxEnabled = isAddEventBoxEnabled,
+                        onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                         yearViewCalendar = yearViewCalendar,
                         onYearViewCalendarChange = { yearViewCalendar = it },
                         isLandscape = isLandscape,
@@ -408,12 +419,6 @@ fun SharedTransitionScope.CalendarScreen(
             }
         },
         floatingActionButton = {
-            // Window height fallback for older device isn't consistent, let's just
-            // use some hardcoded value in detailsTabs() instead
-            val windowHeightPx = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                LocalActivity.current?.windowManager?.currentWindowMetrics?.bounds?.height()
-            } else null
-
             val isCurrentDestination = run {
                 val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
@@ -422,11 +427,6 @@ fun SharedTransitionScope.CalendarScreen(
                 visible = !isYearView,
                 modifier = Modifier
                     .padding(end = 8.dp)
-                    .onGloballyPositioned {
-                        if (windowHeightPx != null) fabPlaceholderHeight = with(density) {
-                            (windowHeightPx - it.positionInWindow().y).toDp()
-                        } + 4.dp
-                    }
                     .renderInSharedTransitionScopeOverlay(
                         renderInOverlay = { isCurrentDestination && isTransitionActive },
                     ),
@@ -472,7 +472,7 @@ fun SharedTransitionScope.CalendarScreen(
                 },
             ) { isYearViewState ->
                 if (isYearViewState && yearViewLazyListState != null && yearViewScale != null) {
-                    Box(Modifier.alpha(isYearViewFraction.floatValue.coerceIn(0f, 1f))) {
+                    Box(Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f))) {
                         YearView(
                             selectedDay = selectedDay,
                             selectedMonthOffset = selectedMonthOffset,
@@ -502,6 +502,13 @@ fun SharedTransitionScope.CalendarScreen(
                 }
 
                 if (!isYearViewState) {
+                    val scale = remember { mutableFloatStateOf(1f) }
+                    val cellHeight by remember(scale.floatValue) {
+                        mutableStateOf((64 * scale.floatValue).dp)
+                    }
+                    val initialScroll =
+                        with(LocalDensity.current) { (cellHeight * 7 * scale.floatValue - 16.dp).roundToPx() }
+                    val scrollState = rememberScrollState(initialScroll)
                     if (isLandscape) Row {
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(
@@ -530,14 +537,19 @@ fun SharedTransitionScope.CalendarScreen(
                                 bottomPadding = bottomPaddingWithMinimum,
                                 today = today,
                                 now = now,
+                                addEvent = addEvent,
+                                snackbarHostState = snackbarHostState,
+                                isAddEventBoxEnabled = isAddEventBoxEnabled,
+                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
+                                initialScroll = initialScroll,
+                                scale = scale,
+                                cellHeight = cellHeight,
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 navigateToAstronomy = navigateToAstronomy,
                                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                fabPlaceholderHeight = fabPlaceholderHeight,
-                                scrollableTabs = true,
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
@@ -545,84 +557,73 @@ fun SharedTransitionScope.CalendarScreen(
                                             WindowInsetsSides.End,
                                         ),
                                     ),
+                                scrollState = scrollState,
                             )
                         }
-                    } else {
-                        val scrollState = rememberScrollState()
-                        Box {
-                            Column(
-                                modifier = Modifier
-                                    .clip(materialCornerExtraLargeTop())
-                                    .verticalScroll(scrollState)
-                                    .detectSwipe {
-                                        val wasAtTop = scrollState.value == 0
-                                        val wasAtEnd = scrollState.value == scrollState.maxValue
-                                        { isUp: Boolean ->
-                                            when {
-                                                isUp && wasAtEnd -> {
-                                                    swipeUpActions[preferredSwipeUpAction]
-                                                }
-
-                                                !isUp && wasAtTop -> {
-                                                    swipeDownActions[preferredSwipeDownAction]
-                                                }
-
-                                                else -> null
-                                            }?.invoke()
-                                        }
-                                    },
-                            ) {
-                                var calendarHeight by remember {
-                                    mutableStateOf(pagerSize.height / 7 * 6)
+                    } else Column(Modifier.clip(materialCornerExtraLargeTop())) {
+                        var calendarHeight by remember {
+                            mutableStateOf(pagerSize.height / 7 * 6)
+                        }
+                        Box(
+                            Modifier
+                                .detectSwipe {
+                                    { isUp: Boolean ->
+                                        when {
+                                            isUp -> swipeUpActions[preferredSwipeUpAction]
+                                            !isUp -> swipeDownActions[preferredSwipeDownAction]
+                                            else -> null
+                                        }?.invoke()
+                                    }
                                 }
-                                Box(
-                                    Modifier
-                                        .offset { IntOffset(0, scrollState.value * 3 / 4) }
-                                        .onSizeChanged {
-                                            calendarHeight = with(density) { it.height.toDp() }
-                                        }
-                                        .animateContentSize(appContentSizeAnimationSpec),
-                                ) {
-                                    CalendarPager(
-                                        selectedDay = selectedDay,
-                                        isHighlighted = isHighlighted,
-                                        refreshToken = refreshToken,
-                                        changeSelectedDay = { day: Jdn ->
-                                            isHighlighted = true
-                                            selectedDay = day
-                                        },
-                                        today = today,
-                                        calendarPagerState = calendarPagerState,
-                                        yearViewCalendar = yearViewCalendar,
-                                        addEvent = addEvent,
-                                        suggestedPagerSize = pagerSize,
-                                        navigateToDays = navigateToDays,
-                                    )
+                                .onSizeChanged {
+                                    calendarHeight = with(density) { it.height.toDp() }
                                 }
+                                .animateContentSize(appContentSizeAnimationSpec),
+                        ) {
+                            CalendarPager(
+                                selectedDay = selectedDay,
+                                isHighlighted = isHighlighted,
+                                refreshToken = refreshToken,
+                                changeSelectedDay = { day: Jdn ->
+                                    isHighlighted = true
+                                    selectedDay = day
+                                },
+                                today = today,
+                                calendarPagerState = calendarPagerState,
+                                yearViewCalendar = yearViewCalendar,
+                                addEvent = addEvent,
+                                suggestedPagerSize = pagerSize,
+                                navigateToDays = navigateToDays,
+                            )
+                        }
 
-                                val detailsMinHeight = maxHeight - calendarHeight
-                                ScreenSurface(
-                                    workaroundClipBug = true,
-                                    mayNeedDragHandleToDivide = true,
-                                ) {
-                                    Details(
-                                        bringDay = bringDay,
-                                        selectedDay = selectedDay,
-                                        bottomPadding = bottomPaddingWithMinimum,
-                                        today = today,
-                                        now = now,
-                                        refreshCalendar = refreshCalendar,
-                                        refreshToken = refreshToken,
-                                        navigateToAstronomy = navigateToAstronomy,
-                                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                                        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                        fabPlaceholderHeight = fabPlaceholderHeight,
-                                        modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                                    )
-                                }
-                            }
-                            ScrollShadow(scrollState, skipTop = true)
+                        val detailsMinHeight = maxHeight - calendarHeight
+                        ScreenSurface(
+                            workaroundClipBug = true,
+                            mayNeedDragHandleToDivide = true,
+                        ) {
+                            Details(
+                                bringDay = bringDay,
+                                selectedDay = selectedDay,
+                                bottomPadding = bottomPaddingWithMinimum,
+                                today = today,
+                                addEvent = addEvent,
+                                snackbarHostState = snackbarHostState,
+                                isAddEventBoxEnabled = isAddEventBoxEnabled,
+                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
+                                now = now,
+                                scrollState = scrollState,
+                                initialScroll = initialScroll,
+                                scale = scale,
+                                cellHeight = cellHeight,
+                                refreshCalendar = refreshCalendar,
+                                refreshToken = refreshToken,
+                                navigateToAstronomy = navigateToAstronomy,
+                                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                            )
                         }
                     }
                 }
@@ -667,21 +668,27 @@ private fun enableTimesTab(): Boolean {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SharedTransitionScope.Details(
+private fun Details(
     selectedDay: Jdn,
     bringDay: BringDay,
     bottomPadding: Dp,
     today: Jdn,
     now: Long,
+    addEvent: (AddEventData) -> Unit,
+    snackbarHostState: SnackbarHostState,
+    initialScroll: Int,
+    cellHeight: Dp,
+    scale: MutableFloatState,
+    isAddEventBoxEnabled: Boolean,
+    onAddEventBoxEnabledChange: () -> Unit,
     refreshCalendar: () -> Unit,
     refreshToken: Int,
     navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
-    fabPlaceholderHeight: Dp?,
+    scrollState: ScrollState,
     modifier: Modifier = Modifier,
-    scrollableTabs: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
@@ -695,130 +702,151 @@ private fun SharedTransitionScope.Details(
             },
         ) {
             val detailsWidth = this.maxWidth
-            // Currently scrollable tabs only happen on landscape layout
-            val scrollState = if (scrollableTabs) rememberScrollState() else null
-            Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
-                EventsTab(
-                    navigateToHolidaysSettings = navigateToHolidaysSettings,
-                    // See the comment in floatingActionButton
-                    fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
-                    today = today,
-                    now = now,
-                    refreshToken = refreshToken,
-                    refreshCalendar = refreshCalendar,
-                    selectedDay = selectedDay,
-                ) {
-                    var removeThirdTab by rememberSaveable { mutableStateOf(false) }
-                    val hasTimesTab = enableTimesTab() && !removeThirdTab
-                    val buttons = listOfNotNull(
-                        Pair(R.string.calendar) @Composable {
-                            CalendarsTab(
-                                selectedDay = selectedDay,
-                                today = today,
-                                navigateToAstronomy = navigateToAstronomy,
-                            )
-                        }.takeIf { enabledCalendars.size != 1 },
-                        Pair(R.string.times) @Composable {
-                            val coordinates = coordinates
-                            if (coordinates == null) Column(Modifier.fillMaxWidth()) {
-                                val context = LocalContext.current
-                                EncourageActionLayout(
-                                    modifier = Modifier.padding(top = 24.dp),
-                                    header = stringResource(R.string.ask_user_to_set_location),
-                                    discardAction = {
-                                        context.preferences.edit {
-                                            putBoolean(PREF_DISMISSED_OWGHAT, true)
-                                        }
-                                        removeThirdTab = true
-                                    },
-                                    acceptAction = navigateToSettingsLocationTab,
-                                    hideOnAccept = false,
-                                )
-                                Spacer(Modifier.height(bottomPadding))
-                            } else TimesTab(
-                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                navigateToAstronomy = navigateToAstronomy,
-                                coordinates = coordinates,
-                                selectedDay = selectedDay,
-                                now = now,
-                                today = today,
-                            )
-                        }.takeIf { hasTimesTab },
-                    )
 
-                    val coroutineScope = rememberCoroutineScope()
-                    var openedTab by remember { mutableIntStateOf(-1) }
-                    val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
-                    Box(contentAlignment = Alignment.Center) {
-                        buttons.zip(tooltipStates) { (_, content), tooltipState ->
-                            TooltipBox(
-                                onDismissRequest = {
-                                    openedTab = -1
-                                    coroutineScope.launch { tooltipState.dismiss() }
+            val context = LocalContext.current
+            val dayDeviceEvents = remember(
+                refreshToken, isShowDeviceCalendarEvents, selectedDay,
+            ) {
+                if (isShowDeviceCalendarEvents) {
+                    context.readDayDeviceEvents(selectedDay)
+                } else EventsStore.empty()
+            }
+            DaysView(
+                bottomPadding = bottomPadding,
+                setAddAction = {
+                    // Better to keep add button to act as before here
+                },
+                startingDay = selectedDay,
+                selectedDay = selectedDay,
+                setSelectedDay = {
+                    // Not needed for one day view
+                },
+                addEvent = addEvent,
+                refreshCalendar = refreshCalendar,
+                days = 1,
+                now = now,
+                isAddEventBoxEnabled = isAddEventBoxEnabled,
+                onAddEventBoxEnabledChange = onAddEventBoxEnabledChange,
+                snackbarHostState = snackbarHostState,
+                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                hasWeekPager = true,
+                deviceEvents = dayDeviceEvents,
+                screenWidth = detailsWidth,
+                scrollState = scrollState,
+                scale = scale,
+                initialScroll = initialScroll,
+                cellHeight = cellHeight,
+                scrollableModifier = Modifier,
+                numeral = numeral,
+            ) {
+                var removeThirdTab by rememberSaveable { mutableStateOf(false) }
+                val hasTimesTab = enableTimesTab() && !removeThirdTab
+                val buttons = listOfNotNull(
+                    Pair(R.string.calendar) @Composable {
+                        CalendarsTab(
+                            selectedDay = selectedDay,
+                            today = today,
+                            navigateToAstronomy = navigateToAstronomy,
+                        )
+                    }.takeIf { enabledCalendars.size != 1 },
+                    Pair(R.string.times) @Composable {
+                        val coordinates = coordinates
+                        if (coordinates == null) Column(Modifier.fillMaxWidth()) {
+                            val context = LocalContext.current
+                            EncourageActionLayout(
+                                modifier = Modifier.padding(top = 24.dp),
+                                header = stringResource(R.string.ask_user_to_set_location),
+                                discardAction = {
+                                    context.preferences.edit {
+                                        putBoolean(PREF_DISMISSED_OWGHAT, true)
+                                    }
+                                    removeThirdTab = true
                                 },
-                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                    positioning = TooltipAnchorPosition.Above,
-                                ),
-                                tooltip = {
-                                    RichTooltip(
-                                        maxWidth = detailsWidth - 48.dp,
-                                        tonalElevation = 12.dp,
-                                        caretShape = TooltipDefaults.caretShape(),
-                                    ) { content() }
-                                },
-                                enableUserInput = false,
-                                state = tooltipState,
-                                modifier = Modifier.padding(horizontal = 4.dp),
-                            ) {
-                                Box(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(1.dp),
-                                )
-                            }
+                                acceptAction = navigateToSettingsLocationTab,
+                                hideOnAccept = false,
+                            )
+                            Spacer(Modifier.height(bottomPadding))
+                        } else TimesTab(
+                            navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                            navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                            navigateToAstronomy = navigateToAstronomy,
+                            coordinates = coordinates,
+                            selectedDay = selectedDay,
+                            now = now,
+                            today = today,
+                        )
+                    }.takeIf { hasTimesTab },
+                )
+
+                val coroutineScope = rememberCoroutineScope()
+                var openedTab by remember { mutableIntStateOf(-1) }
+                val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
+                Box(contentAlignment = Alignment.Center) {
+                    buttons.zip(tooltipStates) { (_, content), tooltipState ->
+                        TooltipBox(
+                            onDismissRequest = {
+                                openedTab = -1
+                                coroutineScope.launch { tooltipState.dismiss() }
+                            },
+                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                positioning = TooltipAnchorPosition.Above,
+                            ),
+                            tooltip = {
+                                RichTooltip(
+                                    maxWidth = detailsWidth - 48.dp,
+                                    tonalElevation = 12.dp,
+                                    caretShape = TooltipDefaults.caretShape(),
+                                ) { content() }
+                            },
+                            enableUserInput = false,
+                            state = tooltipState,
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                        ) {
+                            Box(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp),
+                            )
                         }
                     }
-                    Row(
-                        Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(vertical = 8.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        buttons.forEachIndexed { index, (stringId, _) ->
-                            val tooltipState = tooltipStates[index]
-                            DisposableEffect(Unit) {
-                                onDispose { if (openedTab == index) openedTab = -1 }
-                            }
-                            AnimatedVisibility(
-                                visible = openedTab == -1 || openedTab == index,
-                            ) {
-                                FilledTonalButton(
-                                    onClick = {
-                                        coroutineScope.launch {
-                                            if (tooltipState.isVisible) {
-                                                tooltipState.dismiss()
-                                                openedTab = -1
-                                            } else {
-                                                openedTab = index
-                                                tooltipState.show()
-                                            }
+                }
+                Row(
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    buttons.forEachIndexed { index, (stringId, _) ->
+                        val tooltipState = tooltipStates[index]
+                        DisposableEffect(Unit) {
+                            onDispose { if (openedTab == index) openedTab = -1 }
+                        }
+                        AnimatedVisibility(
+                            visible = openedTab == -1 || openedTab == index,
+                        ) {
+                            FilledTonalButton(
+                                onClick = {
+                                    coroutineScope.launch {
+                                        if (tooltipState.isVisible) {
+                                            tooltipState.dismiss()
+                                            openedTab = -1
+                                        } else {
+                                            openedTab = index
+                                            tooltipState.show()
                                         }
-                                    },
-                                    modifier = Modifier.padding(horizontal = 4.dp),
-                                ) {
-                                    Row(
-                                        Modifier.alpha(.6f),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) { Text(stringResource(stringId)) }
-                                }
+                                    }
+                                },
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                            ) {
+                                Row(
+                                    Modifier.alpha(.6f),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) { Text(stringResource(stringId)) }
                             }
                         }
                     }
                 }
             }
-            if (scrollState != null) ScrollShadow(scrollState)
         }
     }
 }
@@ -1032,7 +1060,9 @@ private fun SharedTransitionScope.Toolbar(
     onYearViewCalendarChange: (Calendar?) -> Unit,
     isYearView: Boolean,
     onIsYearViewChange: (Boolean) -> Unit,
-    isYearViewFraction: MutableFloatState,
+    backButtonFraction: MutableFloatState,
+    isAddEventBoxEnabled: Boolean,
+    onAddEventBoxEnabledChange: (Boolean) -> Unit,
     yearViewLazyListState: LazyListState?,
     yearViewScale: MutableFloatState?,
     selectedMonthOffset: Int,
@@ -1052,9 +1082,14 @@ private fun SharedTransitionScope.Toolbar(
     val yearViewOffset = yearViewOffset(yearViewLazyListState)
     val yearViewIsInYearSelection = yearViewIsInYearSelection(yearViewScale)
 
-    val onYearViewBackPressed = {
-        onIsYearViewChange(false)
-        onYearViewCalendarChange(null)
+    val onBackPressed = {
+        when {
+            isYearView -> {
+                onIsYearViewChange(false)
+                onYearViewCalendarChange(null)
+            }
+            isAddEventBoxEnabled -> onAddEventBoxEnabledChange(false)
+        }
     }
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -1136,7 +1171,7 @@ private fun SharedTransitionScope.Toolbar(
                     onValueChange = onYearViewCalendarChange,
                     items = enabledCalendarsWithDefault,
                     small = subtitle.isNotEmpty(),
-                    modifier = Modifier.alpha(isYearViewFraction.floatValue.coerceIn(0f, 1f)),
+                    modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),
                 ) {
                     stringResource(
                         if (language.isArabicScript && LocalDensity.current.fontScale == 1f) {
@@ -1187,19 +1222,19 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            if (isYearView) PredictiveBackHandler { flow ->
+            if (isYearView || isAddEventBoxEnabled) PredictiveBackHandler { flow ->
                 runCatching {
-                    flow.collect { isYearViewFraction.floatValue = 1 - it.progress }
-                }.onSuccess { onYearViewBackPressed() }.onFailure {
+                    flow.collect { backButtonFraction.floatValue = 1 - it.progress }
+                }.onSuccess { onBackPressed() }.onFailure {
                     animate(
-                        initialValue = isYearViewFraction.floatValue,
+                        initialValue = backButtonFraction.floatValue,
                         targetValue = 1f,
-                    ) { value, _ -> isYearViewFraction.floatValue = value }
+                    ) { value, _ -> backButtonFraction.floatValue = value }
                 }
             }
             NavigationMenuArrow(
-                fraction = isYearViewFraction.floatValue,
-                action = if (isYearViewFraction.floatValue == 0f) openNavigationRail else onYearViewBackPressed,
+                fraction = backButtonFraction.floatValue,
+                action = if (backButtonFraction.floatValue == 0f) openNavigationRail else onBackPressed,
             )
         },
         actions = {

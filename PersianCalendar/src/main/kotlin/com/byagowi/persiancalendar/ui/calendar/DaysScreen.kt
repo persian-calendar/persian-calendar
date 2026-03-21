@@ -25,6 +25,7 @@ import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -452,7 +453,7 @@ fun SharedTransitionScope.DaysScreen(
                                     deviceEvents = weekDeviceEvents,
                                     now = now,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                    setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
+                                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
                                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                                     screenWidth = screenWidth,
@@ -512,7 +513,7 @@ fun SharedTransitionScope.DaysScreen(
                                 days = 1,
                                 now = now,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
+                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
                                 snackbarHostState = snackbarHostState,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 hasWeekPager = hasWeeksPager,
@@ -571,7 +572,7 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
 
 @SuppressLint("ComposeModifierWithoutDefault")
 @Composable
-private fun DaysView(
+fun DaysView(
     setAddAction: (() -> Unit) -> Unit,
     startingDay: Jdn,
     selectedDay: Jdn,
@@ -582,7 +583,7 @@ private fun DaysView(
     now: Long,
     days: Int,
     isAddEventBoxEnabled: Boolean,
-    setAddEventBoxEnabled: () -> Unit,
+    onAddEventBoxEnabledChange: () -> Unit,
     snackbarHostState: SnackbarHostState,
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
@@ -595,6 +596,7 @@ private fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
+    content: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -633,7 +635,7 @@ private fun DaysView(
             val needsHeader =
                 eventsWithTime.all { it.isEmpty() } || maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager)
             derivedStateOf {
-                needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.floatValue
+                (needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.floatValue) || content != null
             }
         }
         val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
@@ -682,6 +684,7 @@ private fun DaysView(
                             .toImmutableList(),
                         navigateToHolidaysSettings,
                     ) { refreshCalendar() }
+                    content?.invoke(this)
                 }
                 if (eventsWithoutTime[0].size > 3) {
                     Spacer(Modifier.height(4.dp))
@@ -834,7 +837,7 @@ private fun DaysView(
                                                     cellWidthPx * (column - 1),
                                                     cellHeightPx * row / scale.floatValue,
                                                 )
-                                                setAddEventBoxEnabled()
+                                                onAddEventBoxEnabledChange()
                                                 duration = cellHeightPx / scale.floatValue
                                                 setSelectedDay(startingDay + column - 1)
                                             }
@@ -1010,7 +1013,7 @@ private fun DaysView(
                             cellWidthPx * (selectedDay - startingDay),
                             ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
                         )
-                        setAddEventBoxEnabled()
+                        onAddEventBoxEnabledChange()
                     } else {
                         val time = selectedDay.toGregorianCalendar()
                         run {
