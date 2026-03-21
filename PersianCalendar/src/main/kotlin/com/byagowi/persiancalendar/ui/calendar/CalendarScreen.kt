@@ -30,6 +30,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,7 +73,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.SwipeDown
 import androidx.compose.material.icons.twotone.SwipeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -81,6 +81,9 @@ import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -848,32 +851,25 @@ private fun Details(
                         }
                     }
                 }
-                Row(
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
+                SingleChoiceSegmentedButtonRow(Modifier.align(Alignment.CenterHorizontally)) {
                     buttons.forEachIndexed { index, (stringId, _) ->
                         val tooltipState = tooltipStates[index]
-                        AnimatedVisibility(
-                            visible = tooltipStates.none { it.isVisible } || tooltipState.isVisible,
-                        ) {
-                            FilledTonalButton(
-                                onClick = {
-                                    coroutineScope.launch {
-                                        if (tooltipState.isVisible) tooltipState.dismiss()
-                                        else tooltipState.show()
-                                    }
-                                },
-                                modifier = Modifier.padding(horizontal = 4.dp),
-                            ) {
-                                Row(
-                                    Modifier.alpha(.6f),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) { Text(stringResource(stringId)) }
-                            }
-                        }
+                        SegmentedButton(
+                            onClick = {
+                                coroutineScope.launch {
+                                    if (tooltipState.isVisible) tooltipState.dismiss()
+                                    else tooltipState.show()
+                                }
+                            },
+                            colors = SegmentedButtonDefaults.colors().copy(
+                                inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            ),
+                            border = BorderStroke(0.dp, Color.Transparent),
+                            selected = tooltipState.isVisible,
+                            icon = {},
+                            shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
+                            label = { Text(stringResource(stringId), Modifier.alpha(.6f)) },
+                        )
                     }
                 }
 
