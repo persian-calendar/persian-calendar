@@ -1347,9 +1347,11 @@ private fun SharedTransitionScope.Toolbar(
             }
 
             AnimatedVisibility(!isYearView) {
-                TodayActionButton(selectedMonthOffset != 0 || isHighlighted) {
-                    onYearViewCalendarChange(null)
-                    bringDay(today, false, false)
+                TodayActionButton(selectedMonthOffset != 0 || isHighlighted || isAddEventBoxEnabled) {
+                    if (isAddEventBoxEnabled) onAddEventBoxEnabledChange(false) else {
+                        onYearViewCalendarChange(null)
+                        bringDay(today, false, false)
+                    }
                 }
             }
             AnimatedVisibility(!isYearView) {

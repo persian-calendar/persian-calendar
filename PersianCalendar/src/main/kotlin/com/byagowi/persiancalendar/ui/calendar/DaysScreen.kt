@@ -1099,16 +1099,16 @@ fun DaysView(
                                     val position = offset ?: return@drag
                                     val delta = it.positionChange()
                                     if (interaction == null) interaction = when {
-                                        abs(it.position.y - duration * scale.floatValue) < cellHeightPx * scale.floatValue * .2f -> Interaction.ExtendDown
+                                        abs(it.position.y - duration * scale.floatValue) < cellHeightPx / scale.floatValue * .2f -> Interaction.ExtendDown
 
-                                        abs(it.position.y) < cellHeightPx * scale.floatValue * .2f -> Interaction.ExtendUp
+                                        abs(it.position.y) < cellHeightPx / scale.floatValue * .2f -> Interaction.ExtendUp
                                         else -> Interaction.Move
                                     }
                                     when (interaction) {
                                         Interaction.ExtendDown -> duration =
                                             (duration + delta.y / scale.floatValue).coerceIn(
-                                                minimumValue = ySteps * 1f,
-                                                maximumValue = ((ySteps * 24 * 4) - position.y).coerceAtLeast(
+                                                minimumValue = ySteps * 1f / scale.floatValue,
+                                                maximumValue = (ySteps * 24 * 4 / scale.floatValue - position.y).coerceAtLeast(
                                                     ySteps * 1f,
                                                 ),
                                             )
@@ -1116,7 +1116,10 @@ fun DaysView(
                                         Interaction.ExtendUp -> {
                                             val newValueY = position.y + delta.y / scale.floatValue
                                             offset = position.copy(
-                                                y = newValueY.coerceIn(0f, cellHeightPx * 23),
+                                                y = newValueY.coerceIn(
+                                                    0f,
+                                                    cellHeightPx / scale.floatValue * 23,
+                                                ),
                                             )
                                             duration =
                                                 (duration - delta.y / scale.floatValue).coerceAtLeast(
@@ -1131,7 +1134,7 @@ fun DaysView(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
                                                 newValueY.coerceIn(
                                                     0f,
-                                                    cellHeightPx * 24 - duration,
+                                                    cellHeightPx / scale.floatValue * 24 - duration,
                                                 ),
                                             )
 
