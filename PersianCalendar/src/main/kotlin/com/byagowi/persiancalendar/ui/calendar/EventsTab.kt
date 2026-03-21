@@ -9,18 +9,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,8 +25,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.Brightness7
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Yard
@@ -52,7 +46,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -74,14 +67,10 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -99,25 +88,20 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
-import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
-import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.preferences
-import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.ImmutableList
@@ -129,112 +113,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
-
-@Composable
-fun SharedTransitionScope.EventsTab(
-    navigateToHolidaysSettings: (String?) -> Unit,
-    selectedDay: Jdn,
-    refreshToken: Int,
-    refreshCalendar: () -> Unit,
-    fabPlaceholderHeight: Dp,
-    today: Jdn,
-    now: Long,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
-    ) {
-        val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-        AnimatedVisibility(visible = shiftWorkTitle != null) {
-            AnimatedContent(
-                targetState = shiftWorkTitle.orEmpty(),
-                transitionSpec = appCrossfadeSpec,
-            ) { state ->
-                SelectionContainer {
-                    Text(
-                        state,
-                        style = MaterialTheme.typography.titleLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                    )
-                }
-            }
-        }
-        val shiftWorkInDaysDistance =
-            shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
-        AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
-            AnimatedContent(
-                targetState = shiftWorkInDaysDistance.orEmpty(),
-                transitionSpec = appCrossfadeSpec,
-            ) { state ->
-                SelectionContainer {
-                    Text(
-                        state,
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            }
-        }
-
-        Column(Modifier.padding(horizontal = 24.dp)) {
-            val context = LocalContext.current
-            val deviceEvents = remember(selectedDay, refreshToken) {
-                context.readDayDeviceEvents(selectedDay)
-            }
-            val events = readEvents(selectedDay, now, deviceEvents)
-            Spacer(Modifier.height(16.dp))
-            AnimatedVisibility(events.isEmpty()) {
-                Text(
-                    stringResource(R.string.no_event),
-                    Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                )
-            }
-            Column(
-                Modifier.sharedBounds(
-                    rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                    boundsTransform = appBoundsTransform,
-                ),
-            ) { DayEvents(events, navigateToHolidaysSettings) { refreshCalendar() } }
-            content()
-        }
-
-        val context = LocalContext.current
-//        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
-//            Spacer(Modifier.height(16.dp))
-//            EncourageActionLayout(
-//                header = stringResource(R.string.warn_if_events_not_set),
-//                discardAction = {
-//                    context.preferences.edit {
-//                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
-//                    }
-//                },
-//                acceptAction = { navigateToHolidaysSettings(null) },
-//            )
-//        } else
-        if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
-            var showDialog by remember { mutableStateOf(false) }
-            if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
-
-            Spacer(Modifier.height(16.dp))
-            EncourageActionLayout(
-                header = stringResource(R.string.ask_calendar_permission),
-                discardAction = {
-                    context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
-                },
-                acceptButton = stringResource(R.string.yes),
-                acceptAction = { showDialog = true },
-            )
-        }
-    }
-}
 
 @Composable
 fun eventColor(event: CalendarEvent<*>): Color {

@@ -683,7 +683,8 @@ fun DaysView(
                             .let { if (isExpanded) it else it.take(3) }
                             .toImmutableList(),
                         navigateToHolidaysSettings,
-                    ) { refreshCalendar() }
+                        refreshCalendar,
+                    )
                     content?.invoke(this)
                 }
                 if (eventsWithoutTime[0].size > 3) {

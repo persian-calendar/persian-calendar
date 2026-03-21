@@ -61,6 +61,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -125,6 +126,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -147,6 +149,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_OUTDATED_SHOWN
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
@@ -169,6 +172,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.applyOffset
@@ -739,6 +743,42 @@ private fun Details(
                 scrollableModifier = Modifier,
                 numeral = numeral,
             ) {
+                val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+                AnimatedVisibility(visible = shiftWorkTitle != null) {
+                    AnimatedContent(
+                        targetState = shiftWorkTitle.orEmpty(),
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state ->
+                        SelectionContainer {
+                            Text(
+                                state,
+                                style = MaterialTheme.typography.titleLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp),
+                            )
+                        }
+                    }
+                }
+                val shiftWorkInDaysDistance =
+                    shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
+                AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
+                    AnimatedContent(
+                        targetState = shiftWorkInDaysDistance.orEmpty(),
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state ->
+                        SelectionContainer {
+                            Text(
+                                state,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    }
+                }
+
                 var removeThirdTab by rememberSaveable { mutableStateOf(false) }
                 val hasTimesTab = enableTimesTab() && !removeThirdTab
                 val buttons = listOfNotNull(
@@ -845,6 +885,34 @@ private fun Details(
                             }
                         }
                     }
+                }
+
+//        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
+//            Spacer(Modifier.height(16.dp))
+//            EncourageActionLayout(
+//                header = stringResource(R.string.warn_if_events_not_set),
+//                discardAction = {
+//                    context.preferences.edit {
+//                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+//                    }
+//                },
+//                acceptAction = { navigateToHolidaysSettings(null) },
+//            )
+//        } else
+                val context = LocalContext.current
+                if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
+                    var showDialog by remember { mutableStateOf(false) }
+                    if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+
+                    Spacer(Modifier.height(16.dp))
+                    EncourageActionLayout(
+                        header = stringResource(R.string.ask_calendar_permission),
+                        discardAction = {
+                            context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                        },
+                        acceptButton = stringResource(R.string.yes),
+                        acceptAction = { showDialog = true },
+                    )
                 }
             }
         }
