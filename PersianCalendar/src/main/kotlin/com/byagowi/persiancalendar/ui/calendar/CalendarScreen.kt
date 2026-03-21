@@ -120,7 +120,9 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -278,6 +280,8 @@ fun SharedTransitionScope.CalendarScreen(
 
     val density = LocalDensity.current
 
+    var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
+
     val swipeUpActions = remember {
         persistentMapOf(
             SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
@@ -426,6 +430,10 @@ fun SharedTransitionScope.CalendarScreen(
             }
         },
         floatingActionButton = {
+            val windowHeightPx = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                LocalActivity.current?.windowManager?.currentWindowMetrics?.bounds?.height()
+            } else null
+
             val isCurrentDestination = run {
                 val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
@@ -434,6 +442,11 @@ fun SharedTransitionScope.CalendarScreen(
                 visible = !isYearView,
                 modifier = Modifier
                     .padding(end = 8.dp)
+                    .onGloballyPositioned {
+                        if (windowHeightPx != null) fabPlaceholderHeight = with(density) {
+                            (windowHeightPx - it.positionInWindow().y).toDp()
+                        } + 4.dp
+                    }
                     .renderInSharedTransitionScopeOverlay(
                         renderInOverlay = { isCurrentDestination && isTransitionActive },
                     ),
@@ -554,6 +567,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
                                 initialScroll = initialScroll,
                                 scale = scale,
+                                fabPlaceholderHeight = fabPlaceholderHeight,
                                 cellHeight = cellHeight,
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
@@ -626,6 +640,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 scrollState = scrollState,
                                 initialScroll = initialScroll,
                                 scale = scale,
+                                fabPlaceholderHeight = fabPlaceholderHeight,
                                 cellHeight = cellHeight,
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
@@ -684,6 +699,7 @@ private fun Details(
     addEvent: (AddEventData) -> Unit,
     snackbarHostState: SnackbarHostState,
     initialScroll: Int,
+    fabPlaceholderHeight: Dp?,
     cellHeight: Dp,
     scale: MutableFloatState,
     isAddEventBoxEnabled: Boolean,
@@ -745,6 +761,7 @@ private fun Details(
                 cellHeight = cellHeight,
                 scrollableModifier = Modifier,
                 numeral = numeral,
+                fabPlaceholderHeight = fabPlaceholderHeight,
             ) {
                 val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
                 AnimatedVisibility(visible = shiftWorkTitle != null) {

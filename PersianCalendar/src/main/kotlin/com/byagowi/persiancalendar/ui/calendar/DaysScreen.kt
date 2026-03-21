@@ -596,6 +596,7 @@ fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
+    fabPlaceholderHeight: Dp? = null,
     content: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -690,12 +691,18 @@ fun DaysView(
                         refreshCalendar,
                     )
                     content?.invoke(this)
+                    if (eventsWithoutTime[0].size > 3) {
+                        Spacer(Modifier.height(4.dp))
+                        ExpandArrow(
+                            isExpanded = isExpanded,
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        if (isExpanded && fabPlaceholderHeight != null) {
+                            Spacer(Modifier.height(fabPlaceholderHeight))
+                        }
+                    } else Spacer(Modifier.height(12.dp))
                 }
-                if (eventsWithoutTime[0].size > 3) {
-                    Spacer(Modifier.height(4.dp))
-                    ExpandArrow(isExpanded = isExpanded)
-                    Spacer(Modifier.height(8.dp))
-                } else Spacer(Modifier.height(12.dp))
             } else if (maxDayAllDayEvents != 0) Row(
                 verticalAlignment = Alignment.Bottom,
                 modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier,
