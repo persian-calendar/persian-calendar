@@ -670,10 +670,11 @@ fun DaysView(
                 } else Modifier).padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                val scrollState = rememberScrollState()
                 Column(
                     Modifier
                         .animateContentSize(appContentSizeAnimationSpec)
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(scrollState),
                 ) {
                     Spacer(Modifier.height(16.dp))
                     if (events[0].isEmpty()) Text(
@@ -698,9 +699,9 @@ fun DaysView(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
                         Spacer(Modifier.height(8.dp))
-                        if (isExpanded && fabPlaceholderHeight != null) {
-                            Spacer(Modifier.height(fabPlaceholderHeight))
-                        }
+                        if (isExpanded && fabPlaceholderHeight != null && run {
+                                scrollState.canScrollBackward || scrollState.canScrollForward
+                            }) Spacer(Modifier.height(fabPlaceholderHeight))
                     } else Spacer(Modifier.height(12.dp))
                 }
             } else if (maxDayAllDayEvents != 0) Row(

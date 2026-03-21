@@ -34,8 +34,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -797,7 +795,7 @@ private fun Details(
                 }
             }
 
-            var removeThirdTab by rememberSaveable { mutableStateOf(false) }
+            var removeThirdTab by remember { mutableStateOf(false) }
             val hasTimesTab = enableTimesTab() && !removeThirdTab
             val buttons = listOfNotNull(
                 Pair(R.string.calendar) @Composable {
