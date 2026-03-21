@@ -713,186 +713,184 @@ private fun Details(
     scrollState: ScrollState,
     modifier: Modifier = Modifier,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
-        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-        BoxWithConstraints(
-            Modifier.detectHorizontalSwipe(selectedDay) {
-                { isLeft ->
-                    val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
-                    bringDay(newJdn, true, false)
-                }
-            },
-        ) {
-            val detailsWidth = this.maxWidth
-
-            val context = LocalContext.current
-            val dayDeviceEvents = remember(
-                refreshToken, isShowDeviceCalendarEvents, selectedDay,
-            ) {
-                if (isShowDeviceCalendarEvents) {
-                    context.readDayDeviceEvents(selectedDay)
-                } else EventsStore.empty()
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    BoxWithConstraints(
+        modifier.detectHorizontalSwipe(selectedDay) {
+            { isLeft ->
+                val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
+                bringDay(newJdn, true, false)
             }
-            DaysView(
-                bottomPadding = bottomPadding,
-                setAddAction = {
-                    // Better to keep add button to act as before here
-                },
-                startingDay = selectedDay,
-                selectedDay = selectedDay,
-                setSelectedDay = {
-                    // Not needed for one day view
-                },
-                addEvent = addEvent,
-                refreshCalendar = refreshCalendar,
-                days = 1,
-                now = now,
-                isAddEventBoxEnabled = isAddEventBoxEnabled,
-                onAddEventBoxEnabledChange = onAddEventBoxEnabledChange,
-                snackbarHostState = snackbarHostState,
-                navigateToHolidaysSettings = navigateToHolidaysSettings,
-                hasWeekPager = true,
-                deviceEvents = dayDeviceEvents,
-                screenWidth = detailsWidth,
-                scrollState = scrollState,
-                scale = scale,
-                initialScroll = initialScroll,
-                cellHeight = cellHeight,
-                scrollableModifier = Modifier,
-                numeral = numeral,
-                fabPlaceholderHeight = fabPlaceholderHeight,
-            ) {
-                val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-                AnimatedVisibility(visible = shiftWorkTitle != null) {
-                    AnimatedContent(
-                        targetState = shiftWorkTitle.orEmpty(),
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state ->
-                        SelectionContainer {
-                            Text(
-                                state,
-                                style = MaterialTheme.typography.titleLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 16.dp),
-                            )
-                        }
-                    }
-                }
-                val shiftWorkInDaysDistance =
-                    shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
-                AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
-                    AnimatedContent(
-                        targetState = shiftWorkInDaysDistance.orEmpty(),
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state ->
-                        SelectionContainer {
-                            Text(
-                                state,
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
-                }
+        },
+    ) {
+        val detailsWidth = this.maxWidth
 
-                var removeThirdTab by rememberSaveable { mutableStateOf(false) }
-                val hasTimesTab = enableTimesTab() && !removeThirdTab
-                val buttons = listOfNotNull(
-                    Pair(R.string.calendar) @Composable {
-                        CalendarsTab(
-                            selectedDay = selectedDay,
-                            today = today,
-                            navigateToAstronomy = navigateToAstronomy,
+        val context = LocalContext.current
+        val dayDeviceEvents = remember(
+            refreshToken, isShowDeviceCalendarEvents, selectedDay,
+        ) {
+            if (isShowDeviceCalendarEvents) {
+                context.readDayDeviceEvents(selectedDay)
+            } else EventsStore.empty()
+        }
+        DaysView(
+            bottomPadding = bottomPadding,
+            setAddAction = {
+                // Better to keep add button to act as before here
+            },
+            startingDay = selectedDay,
+            selectedDay = selectedDay,
+            setSelectedDay = {
+                // Not needed for one day view
+            },
+            addEvent = addEvent,
+            refreshCalendar = refreshCalendar,
+            days = 1,
+            now = now,
+            isAddEventBoxEnabled = isAddEventBoxEnabled,
+            onAddEventBoxEnabledChange = onAddEventBoxEnabledChange,
+            snackbarHostState = snackbarHostState,
+            navigateToHolidaysSettings = navigateToHolidaysSettings,
+            hasWeekPager = true,
+            deviceEvents = dayDeviceEvents,
+            screenWidth = detailsWidth,
+            scrollState = scrollState,
+            scale = scale,
+            initialScroll = initialScroll,
+            cellHeight = cellHeight,
+            scrollableModifier = Modifier,
+            numeral = numeral,
+            fabPlaceholderHeight = fabPlaceholderHeight,
+        ) {
+            val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+            AnimatedVisibility(visible = shiftWorkTitle != null) {
+                AnimatedContent(
+                    targetState = shiftWorkTitle.orEmpty(),
+                    transitionSpec = appCrossfadeSpec,
+                ) { state ->
+                    SelectionContainer {
+                        Text(
+                            state,
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
                         )
-                    }.takeIf { enabledCalendars.size != 1 },
-                    Pair(R.string.times) @Composable {
-                        val coordinates = coordinates
-                        if (coordinates == null) Column(Modifier.fillMaxWidth()) {
-                            val context = LocalContext.current
-                            EncourageActionLayout(
-                                modifier = Modifier.padding(top = 24.dp),
-                                header = stringResource(R.string.ask_user_to_set_location),
-                                discardAction = {
-                                    context.preferences.edit {
-                                        putBoolean(PREF_DISMISSED_OWGHAT, true)
-                                    }
-                                    removeThirdTab = true
-                                },
-                                acceptAction = navigateToSettingsLocationTab,
-                                hideOnAccept = false,
-                            )
-                            Spacer(Modifier.height(bottomPadding))
-                        } else TimesTab(
-                            navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                            navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                            navigateToAstronomy = navigateToAstronomy,
-                            coordinates = coordinates,
-                            selectedDay = selectedDay,
-                            now = now,
-                            today = today,
+                    }
+                }
+            }
+            val shiftWorkInDaysDistance =
+                shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
+            AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
+                AnimatedContent(
+                    targetState = shiftWorkInDaysDistance.orEmpty(),
+                    transitionSpec = appCrossfadeSpec,
+                ) { state ->
+                    SelectionContainer {
+                        Text(
+                            state,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
                         )
-                    }.takeIf { hasTimesTab },
-                )
+                    }
+                }
+            }
 
-                val coroutineScope = rememberCoroutineScope()
-                val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
-                Box(contentAlignment = Alignment.Center) {
-                    buttons.zip(tooltipStates) { (_, content), tooltipState ->
-                        TooltipBox(
-                            onDismissRequest = {
-                                coroutineScope.launch { tooltipState.dismiss() }
-                            },
-                            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                positioning = TooltipAnchorPosition.Above,
-                            ),
-                            tooltip = {
-                                RichTooltip(
-                                    maxWidth = detailsWidth - 48.dp,
-                                    tonalElevation = 12.dp,
-                                    caretShape = TooltipDefaults.caretShape(),
-                                ) {
-                                    Box(Modifier.verticalScroll(rememberScrollState())) {
-                                        content()
-                                    }
+            var removeThirdTab by rememberSaveable { mutableStateOf(false) }
+            val hasTimesTab = enableTimesTab() && !removeThirdTab
+            val buttons = listOfNotNull(
+                Pair(R.string.calendar) @Composable {
+                    CalendarsTab(
+                        selectedDay = selectedDay,
+                        today = today,
+                        navigateToAstronomy = navigateToAstronomy,
+                    )
+                }.takeIf { enabledCalendars.size != 1 },
+                Pair(R.string.times) @Composable {
+                    val coordinates = coordinates
+                    if (coordinates == null) Column(Modifier.fillMaxWidth()) {
+                        val context = LocalContext.current
+                        EncourageActionLayout(
+                            modifier = Modifier.padding(top = 24.dp),
+                            header = stringResource(R.string.ask_user_to_set_location),
+                            discardAction = {
+                                context.preferences.edit {
+                                    putBoolean(PREF_DISMISSED_OWGHAT, true)
                                 }
+                                removeThirdTab = true
                             },
-                            enableUserInput = false,
-                            state = tooltipState,
-                            modifier = Modifier.padding(horizontal = 4.dp),
-                        ) {
-                            Box(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(1.dp),
-                            )
-                        }
-                    }
-                }
-                SingleChoiceSegmentedButtonRow(Modifier.align(Alignment.CenterHorizontally)) {
-                    buttons.forEachIndexed { index, (stringId, _) ->
-                        val tooltipState = tooltipStates[index]
-                        SegmentedButton(
-                            onClick = {
-                                coroutineScope.launch {
-                                    if (tooltipState.isVisible) tooltipState.dismiss()
-                                    else tooltipState.show()
+                            acceptAction = navigateToSettingsLocationTab,
+                            hideOnAccept = false,
+                        )
+                        Spacer(Modifier.height(bottomPadding))
+                    } else TimesTab(
+                        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                        navigateToAstronomy = navigateToAstronomy,
+                        coordinates = coordinates,
+                        selectedDay = selectedDay,
+                        now = now,
+                        today = today,
+                    )
+                }.takeIf { hasTimesTab },
+            )
+
+            val coroutineScope = rememberCoroutineScope()
+            val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
+            Box(contentAlignment = Alignment.Center) {
+                buttons.zip(tooltipStates) { (_, content), tooltipState ->
+                    TooltipBox(
+                        onDismissRequest = {
+                            coroutineScope.launch { tooltipState.dismiss() }
+                        },
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                            positioning = TooltipAnchorPosition.Above,
+                        ),
+                        tooltip = {
+                            RichTooltip(
+                                maxWidth = detailsWidth - 48.dp,
+                                tonalElevation = 12.dp,
+                                caretShape = TooltipDefaults.caretShape(),
+                            ) {
+                                Box(Modifier.verticalScroll(rememberScrollState())) {
+                                    content()
                                 }
-                            },
-                            colors = SegmentedButtonDefaults.colors().copy(
-                                inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            ),
-                            border = BorderStroke(0.dp, Color.Transparent),
-                            selected = tooltipState.isVisible,
-                            icon = {},
-                            shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
-                            label = { Text(stringResource(stringId), Modifier.alpha(.6f)) },
+                            }
+                        },
+                        enableUserInput = false,
+                        state = tooltipState,
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                    ) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(1.dp),
                         )
                     }
                 }
+            }
+            SingleChoiceSegmentedButtonRow(Modifier.align(Alignment.CenterHorizontally)) {
+                buttons.forEachIndexed { index, (stringId, _) ->
+                    val tooltipState = tooltipStates[index]
+                    SegmentedButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                if (tooltipState.isVisible) tooltipState.dismiss()
+                                else tooltipState.show()
+                            }
+                        },
+                        colors = SegmentedButtonDefaults.colors().copy(
+                            inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        ),
+                        border = BorderStroke(0.dp, Color.Transparent),
+                        selected = tooltipState.isVisible,
+                        icon = {},
+                        shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
+                        label = { Text(stringResource(stringId), Modifier.alpha(.6f)) },
+                    )
+                }
+            }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
 //            Spacer(Modifier.height(16.dp))
@@ -906,21 +904,20 @@ private fun Details(
 //                acceptAction = { navigateToHolidaysSettings(null) },
 //            )
 //        } else
-                val context = LocalContext.current
-                if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
-                    var showDialog by remember { mutableStateOf(false) }
-                    if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+            val context = LocalContext.current
+            if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
+                var showDialog by remember { mutableStateOf(false) }
+                if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
-                    Spacer(Modifier.height(16.dp))
-                    EncourageActionLayout(
-                        header = stringResource(R.string.ask_calendar_permission),
-                        discardAction = {
-                            context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
-                        },
-                        acceptButton = stringResource(R.string.yes),
-                        acceptAction = { showDialog = true },
-                    )
-                }
+                Spacer(Modifier.height(16.dp))
+                EncourageActionLayout(
+                    header = stringResource(R.string.ask_calendar_permission),
+                    discardAction = {
+                        context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                    },
+                    acceptButton = stringResource(R.string.yes),
+                    acceptAction = { showDialog = true },
+                )
             }
         }
     }
