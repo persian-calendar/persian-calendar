@@ -514,8 +514,12 @@ fun SharedTransitionScope.CalendarScreen(
                         mutableStateOf((64 * scale.floatValue).dp)
                     }
                     val initialScroll =
-                        with(LocalDensity.current) { (cellHeight * 7 * scale.floatValue - 16.dp).roundToPx() }
+                        with(LocalDensity.current) { (cellHeight * 7 - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
+                    LaunchedEffect(selectedDay) {
+                        isAddEventBoxEnabled = false
+                        scrollState.animateScrollTo(initialScroll)
+                    }
                     if (isLandscape) Row {
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(

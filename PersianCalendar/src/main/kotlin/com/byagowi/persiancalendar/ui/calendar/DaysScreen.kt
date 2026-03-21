@@ -669,15 +669,19 @@ fun DaysView(
                 } else Modifier).padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(Modifier.height(16.dp))
-                if (events[0].isEmpty()) Text(
-                    stringResource(R.string.no_event),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                )
-                Column(Modifier.animateContentSize(appContentSizeAnimationSpec)) {
+                Column(
+                    Modifier
+                        .animateContentSize(appContentSizeAnimationSpec)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(Modifier.height(16.dp))
+                    if (events[0].isEmpty()) Text(
+                        stringResource(R.string.no_event),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                    )
                     DayEvents(
                         eventsWithoutTime[0]
                             .let { if (isExpanded) it else it.take(3) }
