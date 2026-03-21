@@ -87,7 +87,7 @@ fun calendarPagerSize(
         DpSize(width, height)
     } else DpSize(
         maxWidth,
-        (maxHeight / 2f).coerceIn(280.dp, 440.dp).let { if (twoRows) it / 7 * 2 else it },
+        (maxHeight / 2.25f).coerceIn(280.dp, 440.dp).let { if (twoRows) it / 7 * 2 else it },
     )
 }
 
