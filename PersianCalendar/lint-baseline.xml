@@ -14,134 +14,13 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.string.outdated_app` appears to be unused"
-        errorLine1="    &lt;string name=&quot;outdated_app&quot;>Due to being outdated, things can be inaccurate&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="17"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.update` appears to be unused"
-        errorLine1="    &lt;string name=&quot;update&quot;>Update&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="18"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.warn_if_events_not_set` appears to be unused"
-        errorLine1="    &lt;string name=&quot;warn_if_events_not_set&quot;>To select and show preferred holidays and events, visit the Settings&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="67"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.default_athan_summary` appears to be unused"
-        errorLine1="    &lt;string name=&quot;default_athan_summary&quot;>Return to default Athan&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="179"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.returned_to_default` appears to be unused"
-        errorLine1="    &lt;string name=&quot;returned_to_default&quot;>Returned to default&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="180"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.about_support_developers` appears to be unused"
-        errorLine1="    &lt;string name=&quot;about_support_developers&quot;>Developer Support&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="194"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.about_report_bug` appears to be unused"
-        errorLine1="    &lt;string name=&quot;about_report_bug&quot;>Report bug on GitHub&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="195"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.about_report_bug_sum` appears to be unused"
-        errorLine1="    &lt;string name=&quot;about_report_bug_sum&quot;>Preferred bug reporting or requesting for new feature, needs a GitHub account&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="196"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.chinese_calendar` appears to be unused"
-        errorLine1="    &lt;string name=&quot;chinese_calendar&quot;>Chinese Calendar&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="378"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.string.month_view` appears to be unused"
         errorLine1="    &lt;string name=&quot;month_view&quot;>Month view&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="396"
+            line="386"
             column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.daily_schedule` appears to be unused"
-        errorLine1="    &lt;string name=&quot;daily_schedule&quot;>Daily schedule&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="397"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.plurals.seconds` appears to be unused"
-        errorLine1="    &lt;plurals name=&quot;seconds&quot;>"
-        errorLine2="             ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="436"
-            column="14"/>
     </issue>
 
 </issues>

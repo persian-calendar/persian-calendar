@@ -26,7 +26,6 @@
     <string name="enable_notify">Notificações persistentes para todos os tipos de data</string>
     <string name="help">Ajuda</string>
     <string name="more">Mais</string>
-    <string name="update">Atualizar</string>
     <string name="calendar">Calendário</string>
     <string name="settings">Definições</string>
     <string name="about">Acerca</string>
@@ -76,7 +75,6 @@
     <string name="athan_alarm">Alarme Athan</string>
     <string name="custom_athan">Selecionar Athan</string>
     <string name="athan_volume">Athan Volume</string>
-    <string name="about_report_bug">Reportar erro no GitHub</string>
     <string name="about_email_sum">Envie um email aos autores da app</string>
     <string name="remove">Remover</string>
     <string name="pm">PM</string>
@@ -145,14 +143,12 @@
     <string name="days_distance">Distância</string>
     <string name="animal_year_name_rooster">Galo</string>
     <string name="aries">Carneiro</string>
-    <string name="warn_if_events_not_set">Para selecionar a mostrar feriados e eventos preferidos, consulte as definições</string>
     <string name="skin">Interface</string>
     <string name="select_skin">Selecionar interface</string>
     <string name="show_device_calendar_events">Calendário de eventos pessoais</string>
     <string name="week_start">Início da semana</string>
     <string name="pray_methods">Métodos de calculação</string>
     <string name="version">Versão %1$s</string>
-    <string name="about_support_developers">Apoiar o programador</string>
     <string name="about_developers">Contribuidores (ordem aleatória)</string>
     <string name="shift_work_reset_button">Desativar ou reprogramar</string>
     <string name="device_information">Informações do dispositivo</string>
@@ -180,7 +176,6 @@
     <string name="pluto">Plutão</string>
     <string name="sun">Sol</string>
     <string name="moon">Lua</string>
-    <string name="chinese_calendar">Calendário Chinês</string>
     <string name="chinese">Chinês</string>
     <string name="more_options">Mais opções</string>
     <string name="yes">Sim</string>

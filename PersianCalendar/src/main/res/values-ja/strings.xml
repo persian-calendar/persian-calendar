@@ -82,7 +82,6 @@
     <string name="add_event">予定を追加</string>
     <string name="add">追加</string>
     <string name="help">ヘルプ</string>
-    <string name="about_report_bug">問題を報告します</string>
     <string name="about_send_mail">電子メール</string>
     <string name="about_developers">開発者</string>
     <string name="sunrise_sun_view">日の出</string>
@@ -233,12 +232,9 @@
     <string name="nepal">ネパール</string>
     <string name="calculator">電卓</string>
     <string name="days_distance">日数計算</string>
-    <string name="outdated_app">更新されていないため、情報が間違っている場合があります</string>
     <string name="no_event">この日は予定や招待がありません</string>
     <string name="search_in_events">予定を検索</string>
     <string name="start_of_year_diff">今年 %1$s 日 (%2$s 週 / %3$s か月) 目</string>
-    <string name="update">更新</string>
-    <string name="warn_if_events_not_set">設定から、お好みの祝日や予定を表示するように変更できます</string>
     <string name="more">詳細</string>
     <string name="end_of_year_diff">今年はあと %1$s 日 (%2$s 週 / %3$s か月)</string>
     <string name="moon_in_scorpio">月星座はさそり座です</string>

@@ -74,7 +74,6 @@
     <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم‌شده باشد کار می‌کند</string>
-    <string name="warn_if_events_not_set">جهت فعال‌ساری رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
@@ -97,18 +96,14 @@
     <string name="which_one_to_show">کدام یک نمایش داده شود</string>
     <string name="notification_athan">اذان به صورت اعلان</string>
     <string name="enable_notification_athan">نمایش اذان به‌عنوان یک اعلان و لرزش دستگاه</string>
-    <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
     <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
     <string name="custom_athan">انتخاب اذان</string>
-    <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">اذان پیش‌فرض</string>
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="licenses">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>
     <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده‌شده در تقویم فارسی و کتابخانه‌های استفاده‌شده را بررسی کنید.</string>
     <string name="help">راهنما</string>
-    <string name="about_report_bug">گزارش اشکال</string>
-    <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
     <string name="about_send_mail">رایانامه</string>
     <string name="about_no_client">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
     <string name="about_developers">توسعه‌دهندگان</string>
@@ -174,8 +169,6 @@
     <string name="south">جنوب</string>
     <string name="west">غرب</string>
     <string name="qibla">قبله</string>
-    <string name="outdated_app">به دلیل قدیمی بودن نسخه مناسبت‌های ممکن صحیح نباشد</string>
-    <string name="update">بروزرسانی</string>
     <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="remove">حذف</string>

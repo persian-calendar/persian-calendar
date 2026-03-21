@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="returned_to_default">Retour aux valeurs par défaut</string>
     <string name="location_access">Accès à la localisation</string>
     <string name="calendar_access">Accès au calendrier</string>
     <string name="version">Version %1$s</string>
     <string name="about_license_title">Licence de l’application</string>
     <string name="licenses">Licence</string>
-    <string name="about_report_bug_sum">Préférable pour signaler les erreurs ou demander une nouvelle fonctionnalité, ce qui nécessite un compte GitHub</string>
-    <string name="about_report_bug">Signaler un erreur sur GitHub</string>
     <string name="about_no_client">Aucun client de messagerie n’est installé</string>
     <string name="about_email_sum">Envoyer un courriel personnel aux auteurs de l’application</string>
     <string name="about_send_mail">Courriel</string>
@@ -124,7 +121,6 @@
     <string name="south">Sud</string>
     <string name="east">Est</string>
     <string name="north">Nord</string>
-    <string name="set_location">Pour obtenir la position du Soleil et de la Lune, ainsi que la Qibla, définissez la position dans les paramètres.</string>
     <string name="resume">Reprendre</string>
     <string name="stop">Arrêter</string>
     <string name="level">Niveau</string>
@@ -151,7 +147,6 @@
     <string name="sunset_sun_view">Coucher du soleil</string>
     <string name="midday_sun_view">Midi</string>
     <string name="sunrise_sun_view">Lever du soleil</string>
-    <string name="warn_if_events_not_set">Pour sélectionner et afficher les jours fériés et les évènements préférés, rendez-vous dans les Paramètres</string>
     <string name="no_event">Aucun évènement ou rendez-vous pour ce jour</string>
     <string name="events">Évènements</string>
     <string name="moon_in_scorpio">La Lune est en Scorpion</string>
@@ -196,8 +191,6 @@
     <string name="date_converter">Convertisseur de date</string>
     <string name="converter">Convertisseur</string>
     <string name="calendar">Calendrier</string>
-    <string name="update">Mettre à jour</string>
-    <string name="outdated_app">En raison de leur ancienneté, les informations peuvent être inexactes</string>
     <string name="continue_button">Continuer</string>
     <string name="cancel">Annuler</string>
     <string name="more">Plus</string>
@@ -217,13 +210,11 @@
     <string name="shift_work_starting_date">%1$s, sélectionné sur le calendrier, est le jour de début du travail par postes.</string>
     <string name="shift_work_settings">Paramètres de travail par postes</string>
     <string name="week_days_name_column">colonne %1$s dans le tableau des jours</string>
-    <string name="about_support_developers">Assistance développeur</string>
     <string name="about_license_sum">Vérifier la licence GPLv3 et les autres conditions de licence utilisées pour Calendrier persan.</string>
     <string name="phone_calendar_required">Cette partie de l’application nécessite l’autorisation du calendrier. Si vous l’autorisez, vos évènements personnels seront affichés sur le calendrier.</string>
     <string name="phone_location_required">Cette partie de l’application nécessite une autorisation de localisation. Si vous choisissez de la refuser, vous devez saisir manuellement votre latitude et votre longitude.</string>
     <string name="athan_volume_summary">Régler le volume de l’alarme</string>
     <string name="athan_volume">Volume de l’athan</string>
-    <string name="default_athan_summary">Retour à l’Athan par défaut</string>
     <string name="default_athan">Athan par défaut</string>
     <string name="custom_notification_is_set">La notification personnalisée vient d’être définie</string>
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
@@ -362,7 +353,6 @@
     <string name="summer">Été</string>
     <string name="tropical">Tropicale</string>
     <string name="calculator">Calculatrice</string>
-    <string name="chinese_calendar">Calendrier chinois</string>
     <string name="chinese">chinois</string>
     <string name="mercury">Mercure</string>
     <string name="venus">Vénus</string>
@@ -382,11 +372,6 @@
     <string name="exit_full_screen">Quitter le plein écran</string>
     <string name="color_gradient">Dégradé de couleurs</string>
     <string name="qr_code">Code QR</string>
-    <plurals name="seconds">
-        <item quantity="one">%1$s seconde</item>
-        <item quantity="many">%1$s secondes</item>
-        <item quantity="other">%1$s secondes</item>
-    </plurals>
     <string name="time_zones">Fuseaux horaires</string>
     <plurals name="weeks">
         <item quantity="one">%1$s semaine</item>
@@ -413,7 +398,6 @@
     <string name="nothing_scheduled">Rien de panifié</string>
     <string name="starting_date">Date de début</string>
     <string name="month_view">Vue mensuelle</string>
-    <string name="daily_schedule">Planification journalière</string>
     <string name="vibration">Vibration</string>
     <string name="schedule">Agenda</string>
     <string name="print">Imprimer</string>

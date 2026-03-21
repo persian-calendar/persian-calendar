@@ -62,7 +62,6 @@
     <string name="year_name">Name des Jahres</string>
     <string name="widget_mini_name">Persischer Kalender (klein)</string>
     <string name="today">Heute</string>
-    <string name="update">Aktualisieren</string>
     <string name="widget_name">Persischer Kalender</string>
     <string name="remaining_daylight">Verbleibend</string>
     <string name="scorpio">Skorpion</string>
@@ -72,7 +71,6 @@
     <string name="times">Zeiten</string>
     <string name="ask_user_to_set_location">Legen Sie den Ort in den Einstellungen fest, um diesen Ort korrekt anzuzeigen</string>
     <string name="n_hours_minutes">%1$sStunde %2$sMinuten</string>
-    <string name="outdated_app">Aufgrund der Veralterung können die Dinge ungenau sein</string>
     <string name="stop">Stoppen</string>
     <string name="language">Sprache</string>
     <string name="skin">Skin</string>
@@ -96,7 +94,6 @@
     <string name="nothing_scheduled">Nichts geplant</string>
     <string name="ask_calendar_permission">Möchten Sie Ihre persönlichen Ereignisse aus dem Kalender Ihres Geräts aktivieren?</string>
     <string name="compass_not_found">Kompasssensor nicht gefunden</string>
-    <string name="set_location">Um den Standort von Sonne und Mond sowie die Qibla-Richtung zu erhalten, legen Sie den Standort in den Einstellungen fest.</string>
     <string name="east">Ost</string>
     <string name="notify_date_lock_screen">Benachrichtigung auf dem Sperrbildschirm anzeigen</string>
     <string name="sagittarius">Schütze</string>
@@ -156,13 +153,11 @@
     <string name="enable_ascending_athan_volume">Das Adhanvolumen erreicht in einer Minute den Höchstwert</string>
     <string name="pray_methods">Berechnungsmethoden</string>
     <string name="custom_notification_is_set">Benutzerdefinierte Benachrichtigung ist gerade eingestellt</string>
-    <string name="returned_to_default">Auf Standard zurückgestellt</string>
     <string name="athan_volume">Adhan Volumen</string>
     <string name="athan_volume_summary">Der Alarm Lautstärke einstellen</string>
     <string name="athan_disabled_summary">Um den Adhan-Alarm auszulösen, wählen Sie einen Ort aus oder geben Sie die Koordinaten oben ein</string>
     <string name="custom_athan">Adhan wählen</string>
     <string name="default_athan">Standard Adhan</string>
-    <string name="default_athan_summary">Zurück zum Standard Adhan</string>
     <string name="location_access">Standortzugriff</string>
     <string name="calendar_access">Kalenderzugriff</string>
     <string name="version">Version %1$s</string>
@@ -194,14 +189,10 @@
     <string name="fajr">Fajr</string>
     <string name="zodiac">Sternzeichen</string>
     <string name="virgo">Jungfrau</string>
-    <string name="warn_if_events_not_set">Um bevorzugte Feiertage und Ereignisse auszuwählen und anzuzeigen, besuchen Sie die Einstellungen</string>
     <string name="events">Ereignisse</string>
     <string name="length_of_day">Tageszeit</string>
     <string name="am">Uhr</string>
     <string name="holiday">Feiertag</string>
-    <string name="about_support_developers">Support für Entwickler</string>
-    <string name="about_report_bug">Bug auf GitHub melden</string>
-    <string name="about_report_bug_sum">Bevorzugt Fehlerberichte oder Anfragen für neue Funktionen, benötigt ein GitHub-Konto</string>
     <string name="about_developers">Entwickler (zufällige Reihenfolge)</string>
     <string name="holiday_reason">Feiertag wegen %1$s</string>
     <string name="pm">Uhr</string>
@@ -325,15 +316,10 @@
         <item quantity="one">%1$s Arbeitstag</item>
         <item quantity="other">%1$s Arbeitstage</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%1$s Sekunde</item>
-        <item quantity="other">%1$s Sekunden</item>
-    </plurals>
     <plurals name="months">
         <item quantity="one">%1$s Monat</item>
         <item quantity="other">%1$s Monate</item>
     </plurals>
-    <string name="daily_schedule">Tagesablauf</string>
     <plurals name="minutes">
         <item quantity="one">%1$s Minute</item>
         <item quantity="other">%1$s Minuten</item>
@@ -346,7 +332,6 @@
     <string name="show_secondary_calendar">Zweitkalender anzeigen</string>
     <string name="nepal">Nepal</string>
     <string name="calculator">Rechner</string>
-    <string name="chinese_calendar">Chinesischer Kalender</string>
     <string name="tropical">Tropisch</string>
     <string name="full_screen">Vollbild</string>
     <string name="screensaver_settings">Bildschirmschoner Einstellungen</string>

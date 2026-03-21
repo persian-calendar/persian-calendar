@@ -2,10 +2,8 @@
 <resources>
     <string name="close">Chiusura</string>
     <string name="converter">convertitore</string>
-    <string name="outdated_app">A causa dell’obsolescenza, le cose possono essere imprecise</string>
     <string name="date_converter">Convertitore di data</string>
     <string name="compass">Bussola</string>
-    <string name="update">aggiornamento</string>
     <string name="help">aiuto</string>
     <string name="more">più</string>
     <string name="widget_name">Calendario Persiano</string>
@@ -55,7 +53,6 @@
     <string name="sagittarius">Sagittario</string>
     <string name="events">Eventi</string>
     <string name="no_event">Nessun evento o appuntamento per questo giorno</string>
-    <string name="warn_if_events_not_set">Per selezionare e vedere le festività e gli eventi preferiti, controllate le Impostazioni</string>
     <string name="length_of_day">Dì</string>
     <string name="remaining_daylight">Rimanente</string>
     <string name="times">Orari</string>
@@ -71,7 +68,6 @@
     <string name="compass_not_found">Bussola non trovata</string>
     <string name="level">Livello</string>
     <string name="resume">Riprendi</string>
-    <string name="set_location">Per ottenere la posizione del Sole e della Luna e ladirezione della Qibla, impostate la vostra posizione.</string>
     <string name="north">Nord</string>
     <string name="stop">Ferma</string>
     <string name="east">Est</string>
@@ -95,7 +91,6 @@
     <string name="end_of_year_diff">%1$s giorni (~%2$s settimane o %3$s mesi) alla fine dell’anno</string>
     <string name="calibrate_compass_summary">Per migliorare la sensibilità della bussola allontanate il telefono da ogni oggetto magnetico, ruotate ed inclinatelo avanti ed indietro su ogni asse.</string>
     <string name="moon">Luna</string>
-    <string name="chinese_calendar">Calendario Cinese</string>
     <string name="chinese">Cinese</string>
     <string name="live_wallpaper_settings">Impostazioni dello sfondo animato</string>
     <string name="screensaver_settings">Impostazioni salvaschermo</string>
@@ -210,7 +205,6 @@
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
     <string name="custom_notification_is_set">La notifica personalizzata è appena stata impostata</string>
     <string name="default_athan">Athan predefinito</string>
-    <string name="default_athan_summary">Torna all’Athan predefinito</string>
     <string name="athan_volume">Volume di Athan</string>
     <string name="athan_volume_summary">Imposta il volume del’allarme</string>
     <string name="athan_disabled_summary">Per impostare l’allarme Athan, scegli una località o inserisci le coordinate</string>
@@ -349,7 +343,6 @@
     <string name="sample_inputs">Esempi di input</string>
     <string name="year_view">Vista annuale</string>
     <string name="month_view">Vista mensile</string>
-    <string name="daily_schedule">Routine quotidiana</string>
     <string name="exempt_app_battery_optimization">Desideri aggiungere l’app all’eccezione di ottimizzazione della batteria per una corretta funzionalità delle notifiche?</string>
     <string name="widget_background_transparency">Trasparenza dello sfondo del widget</string>
     <string name="save">Salva</string>
@@ -373,11 +366,6 @@
         <item quantity="one">%1$s giorno lavorativo</item>
         <item quantity="many">%1$s giorni lavorativi</item>
         <item quantity="other">%1$s giorni lavorativi</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%1$s secondo</item>
-        <item quantity="many">%1$s secondi</item>
-        <item quantity="other">%1$s secondi</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s minuto</item>

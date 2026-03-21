@@ -14,8 +14,6 @@
     <string name="more">More</string>
     <string name="cancel">Cancel</string>
     <string name="continue_button">Continue</string>
-    <string name="outdated_app">Due to being outdated, things can be inaccurate</string>
-    <string name="update">Update</string>
     <!--Navigation rail items-->
     <string name="calendar">Calendar</string>
     <string name="date_converter">Date Converter</string>
@@ -64,7 +62,6 @@
     <string name="events">Events</string>
     <string name="no_event">No event or appointment for this day</string>
     <string name="nothing_scheduled">Nothing scheduled</string>
-    <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
     <string name="ask_calendar_permission">"Would you like to enable your personal events from your device’s calendar?"</string>
     <string name="sunrise_sun_view">Sunrise</string>
     <string name="midday_sun_view">Midday</string>
@@ -98,7 +95,6 @@
     <string name="level">Level</string>
     <string name="stop">Stop</string>
     <string name="resume">Resume</string>
-    <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings.</string>
     <string name="north">North</string>
     <string name="east">East</string>
     <string name="south">South</string>
@@ -176,8 +172,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
     <string name="custom_notification_is_set">Custom notification is just set</string>
     <string name="default_athan">Default Athan</string>
-    <string name="default_athan_summary">Return to default Athan</string>
-    <string name="returned_to_default">Returned to default</string>
     <string name="athan_volume">Athan Volume</string>
     <string name="athan_volume_summary">Set the volume for the alarm</string>
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
@@ -191,9 +185,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="licenses">License</string>
     <string name="about_license_title">Application License</string>
     <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
-    <string name="about_support_developers">Developer Support</string>
-    <string name="about_report_bug">Report bug on GitHub</string>
-    <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
     <string name="about_send_mail">E-Mail</string>
     <string name="about_email_sum">Send personal email to the authors of the app</string>
     <string name="about_no_client">No email client is installed</string>
@@ -375,7 +366,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!-- Used in astronomy screen, see https://en.wikipedia.org/wiki/Tropical_year and https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology -->
     <string name="tropical">Tropical</string>
     <string name="calculator">Calculator</string>
-    <string name="chinese_calendar">Chinese Calendar</string>
     <string name="chinese">Chinese</string>
     <string name="live_wallpaper_settings">Live wallpaper settings</string>
     <string name="screensaver_settings">Screensaver settings</string>
@@ -394,7 +384,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="sample_inputs">Sample inputs</string>
     <string name="year_view">Year view</string>
     <string name="month_view">Month view</string>
-    <string name="daily_schedule">Daily schedule</string>
     <string name="exempt_app_battery_optimization">Would you like to add the app to battery optimization exception for correct functionality of the notification?</string>
     <string name="widget_background_transparency">Widget background transparency</string>
     <string name="save">Save</string>
@@ -432,10 +421,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <plurals name="work_days">
         <item quantity="one">%1$s work day</item>
         <item quantity="other">%1$s work days</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%1$s second</item>
-        <item quantity="other">%1$s seconds</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s minute</item>

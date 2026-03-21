@@ -143,6 +143,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.EXPANDED_CALENDAR_STATE_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
@@ -323,7 +324,7 @@ fun SharedTransitionScope.CalendarScreen(
 
     val swipeDownActions = remember {
         persistentMapOf(
-//            SwipeDownAction.MonthView to { navigateToMonthView() },
+            SwipeDownAction.MonthView to { navigateToMonthView(selectedDay) },
             SwipeDownAction.YearView to {
                 searchTerm = null
                 isYearView = true
@@ -800,6 +801,7 @@ private fun Details(
             val buttons = listOfNotNull(
                 Pair(R.string.calendar) @Composable {
                     CalendarsTab(
+                        modifier = Modifier.padding(vertical = 12.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
@@ -823,6 +825,7 @@ private fun Details(
                         )
                         Spacer(Modifier.height(bottomPadding))
                     } else TimesTab(
+                        modifier = Modifier.padding(vertical = 12.dp),
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                         navigateToAstronomy = navigateToAstronomy,
@@ -885,7 +888,7 @@ private fun Details(
                         selected = tooltipState.isVisible,
                         icon = {},
                         shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
-                        label = { Text(stringResource(stringId), Modifier.alpha(.6f)) },
+                        label = { Text(stringResource(stringId), Modifier.alpha(.65f)) },
                     )
                 }
             }
@@ -925,16 +928,23 @@ private fun Details(
 private fun CalendarsTab(
     selectedDay: Jdn,
     today: Jdn,
+    modifier: Modifier = Modifier,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
-    var isExpanded by rememberSaveable { mutableStateOf(true) }
+    val context = LocalContext.current
+    var isExpanded by remember {
+        mutableStateOf(context.preferences.getBoolean(EXPANDED_CALENDAR_STATE_KEY, false))
+    }
+    LaunchedEffect(isExpanded) {
+        context.preferences.edit { putBoolean(EXPANDED_CALENDAR_STATE_KEY, isExpanded) }
+    }
+
     Column(
-        Modifier.clickable(
+        modifier.clickable(
             onClickLabel = stringResource(R.string.more),
             onClick = { isExpanded = !isExpanded },
         ),
     ) {
-        Spacer(Modifier.height(24.dp))
         CalendarsOverview(
             jdn = selectedDay,
             today = today,
@@ -1485,7 +1495,7 @@ private fun SharedTransitionScope.Menu(
         }
 
         swipeDownActions.forEach { (item, action) ->
-            if (item != SwipeDownAction.None) ActionItem(
+            if (item != SwipeDownAction.None && !item.hidden) ActionItem(
                 item = item,
                 action = action,
                 prefKey = PREF_SWIPE_DOWN_ACTION,

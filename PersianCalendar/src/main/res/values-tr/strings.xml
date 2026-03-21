@@ -11,7 +11,6 @@
     <string name="ordibehesht">Ordibehesht</string>
     <string name="farvardin">Farvardin</string>
     <string name="esfand">Esfand</string>
-    <string name="warn_if_events_not_set">Tercih edilen tatilleri ve etkinlikleri seçmek ve göstermek için “Ayarlar”ı ziyaret edin</string>
     <string name="wait_for_gps">Lütfen bekleyin… Bir dakika sonra yine hiçbir şey görünmüyorsa, diğer seçenekleri deneyin</string>
     <string name="customize_widget_summary">Daha belirgin hale getirmek için bildirim ve widget’larda ne gösterilmelidir</string>
     <string name="shift_work_starting_date_edit">%1$s, daha önce seçilen vardiyalı çalışma başlangıç günüdür.</string>
@@ -156,9 +155,6 @@
     <string name="about_no_client">Kurulu e-posta istemcisi yok</string>
     <string name="about_email_sum">Uygulamanın yazarlarına kişisel e-posta gönder</string>
     <string name="about_send_mail">E-Posta</string>
-    <string name="about_report_bug_sum">Tercih edilen hata raporlama veya yeni özellik isteme, GitHub hesabına ihtiyaç duyar</string>
-    <string name="about_report_bug">GitHub’da hata bildir</string>
-    <string name="about_support_developers">Geliştirici Desteği</string>
     <string name="about_license_sum">İran Takviminde kullanılan GPLv3 Lisansını ve diğer lisans koşullarını kontrol edin.</string>
     <string name="about_license_title">Uygulama Lisansı</string>
     <string name="licenses">Lisans</string>
@@ -170,8 +166,6 @@
     <string name="athan_disabled_summary">Ezan alarmını kurmak için bir konum seç veya yukarıdaki koordinatları gir</string>
     <string name="athan_volume_summary">Alarmın sesini ayarla</string>
     <string name="athan_volume">Ezan Ses Seviyesi</string>
-    <string name="returned_to_default">Varsayılana döndürüldü</string>
-    <string name="default_athan_summary">Varsayılan ezana dön</string>
     <string name="default_athan">Varsayılan Ezan</string>
     <string name="custom_notification_is_set">Müezzin sesi ayarlandı</string>
     <string name="abdulbasit">Abdulbasıt Abdus Samed</string>
@@ -243,7 +237,6 @@
     <string name="south">Güney</string>
     <string name="east">Doğu</string>
     <string name="north">Kuzey</string>
-    <string name="set_location">Güneş ve Ay konumu ve Kıble yönünü bulmak için ayarlarda konumu ayarlayın.</string>
     <string name="resume">Devam et</string>
     <string name="stop">Durdur</string>
     <string name="level">Düzey</string>
@@ -317,8 +310,6 @@
     <string name="date_converter">Tarih Dönüştürücü</string>
     <string name="converter">Dönüştürücü</string>
     <string name="calendar">Takvim</string>
-    <string name="update">Güncelle</string>
-    <string name="outdated_app">Eski bir sürüm kullandığınız için, tarih doğru olmayabilir</string>
     <string name="continue_button">Devam Et</string>
     <string name="cancel">İptal</string>
     <string name="more">Daha</string>
@@ -364,7 +355,6 @@
     <string name="none">Hiçbiri</string>
     <string name="show_sun_and_moon_path_in_24_hours">24 Saatteki Güneş ve Ay Hareketlerini Göster</string>
     <string name="calculator">Hesap makinesi</string>
-    <string name="chinese_calendar">Çin Takvimi</string>
     <string name="chinese">Çin</string>
     <string name="enable_notification">Tarih bildirimini etkinleştirmek ister misiniz\?</string>
     <string name="tropical">Tropikal</string>
@@ -375,10 +365,6 @@
     <plurals name="weeks">
         <item quantity="one">%1$s hafta</item>
         <item quantity="other">%1$s hafta</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%1$s saniye</item>
-        <item quantity="other">%1$s saniye</item>
     </plurals>
     <string name="qr_code">Kare Kod</string>
     <string name="color_gradient">Renk Eğimi</string>
@@ -404,7 +390,6 @@
     <string name="nothing_scheduled">Planlanan bir şey yok</string>
     <string name="starting_date">Başlangıç tarihi</string>
     <string name="month_view">Ay görünümü</string>
-    <string name="daily_schedule">Günlük plan</string>
     <string name="vibration">Titreşim</string>
     <string name="schedule">Plan</string>
     <string name="print">Yazdır</string>

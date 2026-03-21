@@ -35,7 +35,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -69,7 +68,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.PREF_COMPASS_SET_LOCATION_IGNORED
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.QIBLA_LATITUDE
@@ -165,22 +163,6 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     val resources = LocalResources.current
-
-    fun showSetLocationMessage() {
-        coroutineScope.launch {
-            when (snackbarHostState.showSnackbar(
-                resources.getString(R.string.set_location),
-                duration = SnackbarDuration.Long,
-                actionLabel = resources.getString(R.string.settings),
-                withDismissAction = true,
-            )) {
-                SnackbarResult.ActionPerformed -> navigateToSettingsLocationTab()
-                SnackbarResult.Dismissed -> context.preferences.edit {
-                    putBoolean(PREF_COMPASS_SET_LOCATION_IGNORED, true)
-                }
-            }
-        }
-    }
 
     val angle = rememberSaveable { mutableFloatStateOf(0f) }
     val qiblaHeading = coordinates?.toEarthPosition()
@@ -374,9 +356,7 @@ fun SharedTransitionScope.CompassScreen(
                             icon = Icons.Default.Info,
                             title = stringResource(R.string.help),
                         ) {
-                            if (coordinates == null) {
-                                showSetLocationMessage()
-                            } else showSnackbarMessage(
+                            showSnackbarMessage(
                                 resources.getString(
                                     if (sensorNotFound) R.string.compass_not_found
                                     else R.string.calibrate_compass_summary,
@@ -464,11 +444,6 @@ fun SharedTransitionScope.CompassScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("compass: ON_RESUME")
-                if (coordinates == null) {
-                    if (!context.preferences.getBoolean(PREF_COMPASS_SET_LOCATION_IGNORED, false)) {
-                        showSetLocationMessage()
-                    }
-                }
                 if (orientationSensor != null) {
                     sensorManager.registerListener(
                         orientationSensorListener,

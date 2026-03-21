@@ -40,7 +40,6 @@
     <string name="more">Бештар</string>
     <string name="cancel">Mанъ</string>
     <string name="continue_button">Идома</string>
-    <string name="update">Навсозӣ</string>
     <string name="calendar">Тақвим</string>
     <string name="settings">Танзимот</string>
     <string name="exit">Хуруҷ</string>
@@ -64,7 +63,6 @@
     <string name="incorrect_date">Рӯзи воридшуда эътибор надорад.</string>
     <string name="level">Сатҳ</string>
     <string name="stop">Ист</string>
-    <string name="set_location">Барои он ки макони Офтоб ва Моҳ ва самти қибла дошта бошед, маконро дар танзимот танзим кунед.</string>
     <string name="north">Шимол</string>
     <string name="east">Шарқ</string>
     <string name="south">Ҷануб</string>
@@ -106,8 +104,6 @@
     <string name="phone_calendar_required">Ин қисми барнома ба иҷозати тақвим ниёз дорад, агар шумо ба он иҷозат диҳед, рӯйдодҳои шахсии шумо дар тақвим нишон дода мешаванд.</string>
     <string name="version">Версияи %1$s</string>
     <string name="licenses">Иҷозатнома</string>
-    <string name="about_support_developers">Дастгирии таҳиягарон</string>
-    <string name="about_report_bug">Гузориш дар бораи хато дар GitHub</string>
     <string name="about_send_mail">Почтаи электронӣ</string>
     <string name="about_email_sum">Ба муаллифони барнома паёми шахсӣ фиристед</string>
     <string name="about_no_client">Ягон барнома барои фиристодани почтаи электронӣ вуҷуд надорад</string>
@@ -154,7 +150,6 @@
     <string name="gregorian_calendar">Тақвими Григорӣ</string>
     <string name="gregorian_calendar_short">Григорӣ</string>
     <string name="shift_work_morning">Субҳ</string>
-    <string name="outdated_app">Аз сабаби кӯҳна шудан, чизҳо метавонанд нодуруст бошанд</string>
     <string name="date_converter">Табдилдиҳандаи сана</string>
     <string name="converter">Табдилдиҳандаи</string>
     <string name="animal_year_name_rooster">Хурӯс</string>
@@ -168,7 +163,6 @@
     <string name="animal_year_name_horse">Асп</string>
     <string name="events">Рӯйдодҳо</string>
     <string name="no_event">Дар ин рӯз ягон чорабинӣ ё таъинот нест</string>
-    <string name="warn_if_events_not_set">Барои интихоб ва нишон додани идҳо ва рӯйдодҳои афзалиятнок, ба Танзимотҳо равед</string>
     <string name="midnight">Нимашаб</string>
     <string name="month">Моҳ</string>
     <string name="select_month">Моҳро интихоб кунед</string>
@@ -190,7 +184,6 @@
     <string name="pray_methods">Усулҳои ҳисоб</string>
     <string name="about_license_title">Литсензияи барнома</string>
     <string name="about_developers">Таҳиягарон (ба таври тасодуфӣ Ба тартиб оварда шудаанд)</string>
-    <string name="about_report_bug_sum">Ҳисоботи хатогиҳои афзалиятнок ё дархости хусусияти нав, ба ҳисоби GitHub ниёз дорад</string>
     <string name="phone_location_required">Ин қисми барнома ба иҷозати ҷойгиршавӣ ниёз дорад, агар шумо инкор карданро интихоб кунед, шумо бояд фарохӣ ва дарозии худро дастӣ ворид кунед.</string>
     <string name="previous_x">%1$s гузашта</string>
     <string name="next_x">%1$s оянда</string>
@@ -310,8 +303,6 @@
     <string name="abdulbasit">Абдулбасит Абдул Самад</string>
     <string name="custom_notification_is_set">Овози дархостшуда муқаррар карда шуд</string>
     <string name="default_athan">Азони пешфарз</string>
-    <string name="default_athan_summary">Бозгашт ба намози пешфарз</string>
-    <string name="returned_to_default">Ба ҳолати муқаррарӣ баргашт</string>
     <string name="athan_volume">Ҳаҷми овози азон</string>
     <string name="athan_volume_summary">танзим ҳаҷми овози азон</string>
     <string name="athan_disabled_summary">Барои фаъол кардани танзимоти азон, маконро таъин кунед</string>

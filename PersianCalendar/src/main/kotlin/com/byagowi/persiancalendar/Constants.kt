@@ -5,6 +5,7 @@ import android.os.Build
 
 const val LOG_TAG = "PersianCalendar"
 
+const val EXPANDED_CALENDAR_STATE_KEY = "ExpandedCalendarState"
 const val EXPANDED_TIME_STATE_KEY = "ExpandedTimeState"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"
@@ -199,7 +200,6 @@ const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy
 const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to a level
 const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns compass icon to a compass
 const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen to astronomy's
-const val SHARED_CONTENT_KEY_TIME = "time" // a prefix
 const val SHARED_CONTENT_PREVIOUS_ARROW = "previousArrow"
 const val SHARED_CONTENT_NEXT_ARROW = "nextArrow"
 const val SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT = "daysScreenSurfaceContent"

@@ -19,8 +19,6 @@
     <string name="abdulbasit">அப்துல் பாசித் அப்துல் சமத்</string>
     <string name="custom_notification_is_set">தனிப்பயன் அறிவிப்பு இப்போது அமைக்கப்பட்டது</string>
     <string name="default_athan">இயல்புநிலை இறைஅழைப்பு</string>
-    <string name="default_athan_summary">இயல்புநிலை இறைஅழைப்புக்குத் திரும்பு</string>
-    <string name="returned_to_default">இயல்புநிலைக்கு திரும்பியது</string>
     <string name="athan_volume">இறைஅழைப்பு ஒலியளவு</string>
     <string name="athan_volume_summary">அறிவிப்பொலி அளவை அமை</string>
     <string name="athan_disabled_summary">இறைஅழைப்பு அறிவிப்பொலியை அமைக்க, ஒரு இடத்தைத் தேர்வுசெய்க அல்லது மேலே உள்ள ஆயங்களை உள்ளிடவும்</string>
@@ -32,9 +30,6 @@
     <string name="licenses">உரிமம்</string>
     <string name="about_license_title">பயன்பாடு உரிமம்</string>
     <string name="about_license_sum">இறை நாட்காட்டியில் பயன்படுத்தப்படும் சிபிஎல்ப3 மற்றும் பிற உரிம விதிமுறைகளைச் சரிபார்.</string>
-    <string name="about_support_developers">உருவாக்குபவர் உதவி</string>
-    <string name="about_report_bug">அறிவிலிவேள்வியில் பிழையைப் புகாரளி</string>
-    <string name="about_report_bug_sum">விருப்பமான பிழை அறிக்கையிடல் அல்லது புதிய சிறப்புக்கூறுக் கோருவது, அறிவிலிவேள்வி கணக்குத் தேவை</string>
     <string name="about_send_mail">மின்னஞ்சல்</string>
     <string name="about_email_sum">ஆசிரியர்களுக்கு மின்னஞ்சலை அனுப்பவும்</string>
     <string name="about_no_client">மின்னஞ்சல் வாடிக்கையாளர் எதுவும் நிறுவப்படவில்லை</string>
@@ -193,7 +188,6 @@
     <string name="moon">நிலா</string>
     <string name="tropical">வெப்பமண்டல</string>
     <string name="calculator">கணிப்பான்</string>
-    <string name="chinese_calendar">சீன நாட்காட்டி</string>
     <string name="chinese">சீன</string>
     <string name="live_wallpaper_settings">நேரடி சுவர்த்தாள் அமைப்புகள்</string>
     <string name="screensaver_settings">திரைக் காப்பி அமைப்புகள்</string>
@@ -211,7 +205,6 @@
     <string name="yes">ஆம்</string>
     <string name="sample_inputs">மாதிரி உள்ளீடுகள்</string>
     <string name="year_view">ஆண்டு பார்வை</string>
-    <string name="daily_schedule">நாள் அட்டவணை</string>
     <string name="exempt_app_battery_optimization">அறிவிப்பின் சரியான செயல்பாட்டிற்கு மின்கலம் உகப்பாக்கம் விதிவிலக்குக்குப் பயன்பாட்டைச் சேர்க்க விரும்புகிறீர்களா?</string>
     <string name="widget_background_transparency">நிரல்பலகை பின்னணி வெளிப்படைத்தன்மை</string>
     <string name="save">சேமி</string>
@@ -225,10 +218,6 @@
     <plurals name="work_days">
         <item quantity="one">%1$s பணி நாள்</item>
         <item quantity="other">%1$s பணி நாள்கள்</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%1$s நொடி</item>
-        <item quantity="other">%1$s நொடிகள்</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s நிமையம்</item>
@@ -263,8 +252,6 @@
     <string name="more">மேலும்</string>
     <string name="cancel">விடு</string>
     <string name="continue_button">தொடர்</string>
-    <string name="outdated_app">காலாவதியானதால், பொருட்கள் செம்மையில்லாததாக இருக்கக்கூடும்</string>
-    <string name="update">புதுப்பி</string>
     <string name="calendar">நாட்காட்டி</string>
     <string name="date_converter">தேதி மாற்றி</string>
     <string name="converter">மாற்றி</string>
@@ -308,7 +295,6 @@
     <string name="moon_in_scorpio">நிலா விருச்சிகத்தில் உள்ளது</string>
     <string name="events">நிகழ்வுகள்</string>
     <string name="no_event">இந்த நாளில் நிகழ்வு அல்லது சந்திப்பு இல்லை</string>
-    <string name="warn_if_events_not_set">விருப்பமான விடுமுறைகள் மற்றும் நிகழ்வுகளைத் தேர்ந்தெடுத்து காட்ட, அமைப்புகளைப் பார்வையிடவும்</string>
     <string name="ask_calendar_permission">உங்கள் கருவியின் நாட்காட்டியிலிருந்து உங்கள் தனிப்பட்ட நிகழ்வுகளை இயக்க விரும்புகிறீர்களா?</string>
     <string name="sunrise_sun_view">புலர்</string>
     <string name="midday_sun_view">நண்பகல்</string>
@@ -336,7 +322,6 @@
     <string name="level">நிலை</string>
     <string name="stop">நிறுத்து</string>
     <string name="resume">மீண்டும் தொடங்கு</string>
-    <string name="set_location">ஞாயிறு மற்றும் நிலா இருப்பிடம் மற்றும் முத்தம் திசையை வைத்திருக்க, அமைப்புகளில் இருப்பிடத்தை அமை.</string>
     <string name="north">வடக்கு</string>
     <string name="east">கிழக்கு</string>
     <string name="south">தெற்கு</string>

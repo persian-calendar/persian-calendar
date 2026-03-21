@@ -76,7 +76,6 @@
     <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که مکان‌یاب دستگاه از تنظیمات روشن است. اگر روشن کردن آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم‌شده باشد کار می‌کند.</string>
-    <string name="warn_if_events_not_set">جهت روشن کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="ask_calendar_permission">مایلید رویدادهای شخصی‌تان از تقویم دستگاه نمایش داده شود؟</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
@@ -101,22 +100,17 @@
     <string name="which_one_to_show">کدام یک نمایش داده شود</string>
     <string name="notification_athan">اذان به صورت اعلان</string>
     <string name="enable_notification_athan">نمایش اذان به‌عنوان یک اعلان و لرزش دستگاه</string>
-    <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
     <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
     <string name="custom_athan">انتخاب اذان</string>
-    <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">صدای پیش‌فرض</string>
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="licenses">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>
     <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده‌شده در تقویم فارسی و کتابخانه‌های استفاده‌شده را بررسی کنید.</string>
     <string name="help">راهنما</string>
-    <string name="about_report_bug">گزارش اشکال</string>
-    <string name="about_report_bug_sum">راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب</string>
     <string name="about_send_mail">رایانامه</string>
     <string name="about_no_client">برنامه‌ای جهت ارسال رایانامه نصب نیست</string>
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
-    <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
     <string name="gps_internet_description">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید.
 \n
@@ -163,7 +157,6 @@
 - از اشیاء مغناطیسی دور شوید.
 - دستگاه را برگردانید و آن را روی سطح مسطحی مانند میز، چند بار بچرخانید.
 - در ساختمان‌های با اسکلت فلزی، قطب نما عملکرد دقیقی نخواهد داشت."</string>
-    <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد کنید.</string>
     <string name="moon_in_scorpio">قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
@@ -190,8 +183,6 @@
     <string name="south">جنوب</string>
     <string name="west">غرب</string>
     <string name="qibla">قبله</string>
-    <string name="outdated_app">تقویم به‌روز نیست؛ مناسبت‌ها ممکن است نادرست باشد</string>
-    <string name="update">بروزرسانی</string>
     <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="ask_user_to_set_location">برای نمایش صحیح این بخش مکان خود را در تنظیمات انتخاب کنید</string>
@@ -199,10 +190,6 @@
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
     <string name="shift_work_reset_button">خاموش‌سازی یا برنامه‌ریزی مجدد</string>
-    <plurals name="seconds">
-        <item quantity="one">%1$s ثانیه</item>
-        <item quantity="other">%1$s ثانیه</item>
-    </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s دقیقه</item>
         <item quantity="other">%1$s دقیقه</item>
@@ -388,7 +375,6 @@
     <string name="moon">ماه</string>
     <string name="tropical">اعتدالی</string>
     <string name="calculator">حسابگر</string>
-    <string name="chinese_calendar">تقویم چینی</string>
     <string name="chinese">چینی</string>
     <string name="live_wallpaper_settings">تنظیمات کاغذ دیواری زنده</string>
     <string name="screensaver_settings">تنظیمات محافظ صفحهٔ نمایش</string>
@@ -407,7 +393,6 @@
     <string name="sample_inputs">ورودی‌های نمونه</string>
     <string name="year_view">نمای سال</string>
     <string name="month_view">نمای ماه</string>
-    <string name="daily_schedule">برنامهٔ روزانه</string>
     <string name="exempt_app_battery_optimization">مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟</string>
     <string name="widget_background_transparency">شفافیت پس‌زمینهٔ ویجت</string>
     <string name="save">ذخیره</string>

@@ -63,6 +63,7 @@ fun TimesTab(
     coordinates: Coordinates,
     now: Long,
     today: Jdn,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     var isExpanded by remember {
@@ -75,14 +76,13 @@ fun TimesTab(
     val prayTimes = coordinates.calculatePrayTimes(selectedDay.toGregorianCalendar())
 
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .clickable(
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
             ),
     ) {
-        Spacer(Modifier.height(16.dp))
         val isToday = selectedDay == today
         AstronomicalOverview(selectedDay, prayTimes, now, isToday, navigateToAstronomy)
         Spacer(Modifier.height(16.dp))

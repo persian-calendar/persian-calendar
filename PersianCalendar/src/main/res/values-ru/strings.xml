@@ -23,8 +23,6 @@
     <string name="search_in_events">Поиск в событиях</string>
     <string name="app_name">Календарь</string>
     <string name="widget_name">Персидский календарь</string>
-    <string name="outdated_app">Из-за того, что они устарели, вещи могут быть неточными</string>
-    <string name="update">ОБНОВИТЬ</string>
     <string name="not_supported_action">Календарь устройства не поддерживает действие</string>
     <string name="today">Сегодня</string>
     <string name="days_distance">Расстояние</string>
@@ -59,7 +57,6 @@
     <string name="moon_in_scorpio">Луна в Скорпионе</string>
     <string name="events">События</string>
     <string name="no_event">Нет событий или встреч на этот день</string>
-    <string name="warn_if_events_not_set">Чтобы выбрать и отобразить предпочтительные праздники и события, посетите Настройки</string>
     <string name="sunrise_sun_view">Восход</string>
     <string name="midday_sun_view">Полдень</string>
     <string name="sunset_sun_view">Закат</string>
@@ -85,7 +82,6 @@
     <string name="level">Уровень</string>
     <string name="stop">Остановить</string>
     <string name="resume">Запустить</string>
-    <string name="set_location">Чтобы иметь местоположение Солнца и Луны и направление Киблы, установите местоположение в настройках.</string>
     <string name="north">Север</string>
     <string name="east">Восток</string>
     <string name="south">Юг</string>
@@ -235,7 +231,6 @@
     <string name="tropical">Тропический</string>
     <string name="chinese">Китайский</string>
     <string name="calculator">Калькулятор</string>
-    <string name="chinese_calendar">Китайский календарь</string>
     <string name="live_wallpaper_settings">Настройки живых обоев</string>
     <string name="screensaver_settings">Настройки заставки</string>
     <string name="location">Место</string>
@@ -257,16 +252,12 @@
     <string name="enable_ascending_athan_volume">Уровень громкости Азана достигает максимального значения за одну минуту</string>
     <string name="abdulbasit">Абдул-Басит Абдель-Самад</string>
     <string name="custom_notification_is_set">Пользовательское уведомление просто настроено</string>
-    <string name="returned_to_default">Возврат к умолчанию</string>
     <string name="athan_volume">Громкость Азана</string>
     <string name="location_access">Доступ к местоположению</string>
     <string name="calendar_access">Доступ к календарю</string>
     <string name="licenses">Лицензия</string>
     <string name="about_license_title">Лицензия программы</string>
     <string name="about_license_sum">Проверьте лицензию GPLv3 и другие условия лицензии, используемые в Persian Calendar.</string>
-    <string name="about_support_developers">Поддержка разработчиков</string>
-    <string name="about_report_bug">Сообщить об ошибке на GitHub</string>
-    <string name="about_report_bug_sum">Для предпочтительного сообщения об ошибках или запроса новой функции требуется учетная запись GitHub</string>
     <string name="about_send_mail">Электронная почта</string>
     <string name="about_email_sum">Отправить личную электронную почту авторам приложения</string>
     <string name="about_no_client">Почтовый клиент не установлен</string>
@@ -343,12 +334,6 @@
         <item quantity="many">%1$s %2$s дней</item>
         <item quantity="other">%1$s %2$s дней</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%1$s секунда</item>
-        <item quantity="few">%1$s секунды</item>
-        <item quantity="many">%1$s секунд</item>
-        <item quantity="other">%1$s секунд</item>
-    </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s минута</item>
         <item quantity="few">%1$s минуты</item>
@@ -389,7 +374,6 @@
     <string name="ascending_athan_volume">Возрастающий уровень громкости Азана</string>
     <string name="custom_athan">Выберите Азан</string>
     <string name="default_athan">Aзан по умолчанию</string>
-    <string name="default_athan_summary">Восстановить Азан по умолчанию</string>
     <string name="athan_volume_summary">Установите громкость будильника</string>
     <string name="athan_disabled_summary">Чтобы установить будильник Азанa, выберите место или введите координаты выше</string>
     <string name="phone_location_required">Для этой части приложения требуется разрешение на определение местоположения. Если вы выберете запрет, вам придется ввести широту и долготу вручную.</string>

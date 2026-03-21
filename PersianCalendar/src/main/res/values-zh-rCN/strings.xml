@@ -12,9 +12,7 @@
     <string name="more">更多</string>
     <string name="cancel">取消</string>
     <string name="continue_button">继续</string>
-    <string name="update">更新</string>
     <string name="calendar">日历</string>
-    <string name="outdated_app">当前应用版本过旧，数据可能存在不准确的情况</string>
     <string name="date_converter">日期转换</string>
     <string name="converter">转换</string>
     <string name="compass">指南针</string>
@@ -75,7 +73,6 @@
     <string name="midnight">午夜</string>
     <string name="start_of_year_diff">自今年年初已过 %1$s 天（约 %2$s 周或 %3$s 个月）</string>
     <string name="end_of_year_diff">距今年年末还剩 %1$s 天（约 %2$s 周或 %3$s 个月）</string>
-    <string name="warn_if_events_not_set">请先在设置界面中，选择要显示的节假日和活动信息</string>
     <string name="animal_year_name_ox">丑牛</string>
     <string name="asr">晡礼</string>
     <string name="zodiac">星座</string>
@@ -88,7 +85,6 @@
     <string name="level">水平仪</string>
     <string name="stop">停止</string>
     <string name="resume">恢复</string>
-    <string name="set_location">请在设置中设定位置，以获取太阳和月亮的位置以及朝向。</string>
     <string name="north">北</string>
     <string name="east">东</string>
     <string name="south">南</string>
@@ -153,9 +149,6 @@
     <string name="phone_calendar_required">此功能需要日历权限，授权后即可在日历中显示您的个人活动。</string>
     <string name="licenses">许可</string>
     <string name="about_license_title">应用程序许可</string>
-    <string name="about_support_developers">开发者支持</string>
-    <string name="about_report_bug">在 GitHub 上报告问题</string>
-    <string name="about_report_bug_sum">建议用于提交错误或请求新功能，需要 GitHub 账号</string>
     <string name="about_email_sum">向应用开发者发送私人邮件</string>
     <string name="about_developers">开发者名单（排名不分先后）</string>
     <string name="previous_x">上个%1$s</string>
@@ -308,8 +301,6 @@
     <string name="custom_athan">选择宣礼</string>
     <string name="custom_notification_is_set">自定义通知设置成功</string>
     <string name="default_athan">默认宣礼</string>
-    <string name="default_athan_summary">重置为默认宣礼</string>
-    <string name="returned_to_default">已恢复为默认</string>
     <string name="athan_volume">宣礼音量</string>
     <string name="athan_volume_summary">设置闹钟的音量</string>
     <string name="athan_disabled_summary">设置宣礼闹钟前，请先在上方选择位置或输入坐标</string>
@@ -339,7 +330,6 @@
     <string name="nepali_calendar">尼泊尔历（维克拉姆历）</string>
     <string name="nepali_calendar_short">尼泊尔历</string>
     <string name="nepal">尼泊尔</string>
-    <string name="chinese_calendar">农历</string>
     <string name="chinese">农历</string>
     <string name="week_days_name_column">日历区域的星期栏，%1$s</string>
     <string name="equivalent_to">在其他日历中对应的日期为</string>
@@ -396,15 +386,11 @@
     <plurals name="work_days">
         <item quantity="other">%1$s 个工作日</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="other">%1$s 秒</item>
-    </plurals>
     <plurals name="weeks">
         <item quantity="other">%1$s 周</item>
     </plurals>
     <string name="nothing_scheduled">无安排活动</string>
     <string name="schedule">时间表</string>
-    <string name="daily_schedule">每日时间表</string>
     <string name="starting_date">起始日期</string>
     <string name="planetary_hours">行星时</string>
     <string name="horoscope">天宫图</string>

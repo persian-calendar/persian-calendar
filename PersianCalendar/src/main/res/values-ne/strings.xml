@@ -2,7 +2,6 @@
 <resources>
     <string name="widget_age_name">फारसी पात्रो उमेर ()</string>
     <string name="widget_name">फारसी पात्रो</string>
-    <string name="outdated_app">पुरानो भएको कारण, चीजहरू गलत हुन सक्छ</string>
     <string name="app_name">फारसी पात्रो</string>
     <string name="widget_mini_name">फारसी पात्रो (सानो )</string>
     <string name="close">बन्द</string>
@@ -13,14 +12,12 @@
     <string name="more">अन्य</string>
     <string name="cancel">रद्द</string>
     <string name="continue_button">जारी राख्नुहोस्</string>
-    <string name="update">अपडेट</string>
     <string name="calendar">पात्रो</string>
     <string name="date_converter">मीती परिवर्तन</string>
     <string name="converter">मीती परिवर्तन</string>
     <string name="code">ne</string>
     <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन।</string>
     <string name="moon_in_scorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
-    <string name="warn_if_events_not_set">मनपर्ने बिदा र घटनाहरू चयन गर्न र देखाउन, सेटिङहरूमा जानुहोस्</string>
     <string name="spring_equinox">वर्षको वसन्त रितु समय %1$s: %2$s</string>
     <string name="compass">कम्पास</string>
     <string name="settings">सेटिंग</string>
@@ -96,7 +93,6 @@
     <string name="enable_notification_athan">एक सूचना र उपकरण कम्पन रूपमा Athan देखाउनुहोस्</string>
     <string name="athan_alarm">एथन अलार्म</string>
     <string name="custom_athan">Athan चयन गर्नुहोस्</string>
-    <string name="returned_to_default">पूर्वनिर्धारितमा फर्कियो</string>
     <string name="athan_volume_summary">अलार्मको लागि भोल्युम सेट गर्नुहोस्</string>
     <string name="about_license_title">आवेदन लाइसेन्स</string>
     <string name="phone_location_required">एपको यो भागलाई स्थान अनुमति चाहिन्छ, यदि तपाईंले अस्वीकार गर्न चाहनुहुन्छ भने तपाईंले आफ्नो अक्षांश र देशान्तर म्यानुअल रूपमा प्रविष्ट गर्नुपर्नेछ।</string>
@@ -115,7 +111,6 @@
     <string name="level">स्तर</string>
     <string name="stop">रोक</string>
     <string name="resume">पुन: सुरु गर्नुहोस्</string>
-    <string name="set_location">सूर्य र चन्द्र स्थान, र Qibla दिशा पाउनको लागि, सेटिङ्हरूमा स्थान सेट गर्नुहोस्।</string>
     <string name="north">उत्तर</string>
     <string name="east">पूर्व</string>
     <string name="south">दक्षिण</string>
@@ -168,7 +163,6 @@
     <string name="enable_ascending_athan_volume">एथन भोल्युम एक मिनेटमा अधिकतम मानमा पुग्छ</string>
     <string name="abdulbasit">अब्दुल बासित अब्दुल समद</string>
     <string name="default_athan">पूर्वनिर्धारित Athan</string>
-    <string name="default_athan_summary">पूर्वनिर्धारित Athan मा फर्कनुहोस्</string>
     <string name="athan_volume">एथन भोल्युम</string>
     <string name="athan_disabled_summary">Athan अलार्म सेट गर्न, स्थान छान्नुहोस् वा माथिको निर्देशांकहरू प्रविष्ट गर्नुहोस्</string>
     <string name="location_access">स्थान पहुँच</string>
@@ -228,9 +222,6 @@
     </plurals>
     <string name="asr">Asr</string>
     <string name="maghrib">मघरिब</string>
-    <string name="about_support_developers">विकासकर्ता समर्थन</string>
-    <string name="about_report_bug">GitHub मा बग रिपोर्ट गर्नुहोस्</string>
-    <string name="about_report_bug_sum">रुचाइएको बग रिपोर्टिङ वा नयाँ सुविधाको लागि अनुरोध, GitHub खाता चाहिन्छ</string>
     <string name="about_email_sum">एपका विकासकर्ताहरूलाई व्यक्तिगत इमेल पठाउनुहोस्</string>
     <string name="about_developers">विकासकर्ताहरू (अनियमित रूपमा राखिएको)</string>
     <string name="previous_x">अघिल्लो %1$s</string>

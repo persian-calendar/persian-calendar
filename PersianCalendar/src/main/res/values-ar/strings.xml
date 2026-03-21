@@ -13,8 +13,6 @@
     <string name="more">المزيد</string>
     <string name="cancel">إلغاء</string>
     <string name="continue_button">استمر</string>
-    <string name="outdated_app">بسبب إستخدامك لنسخة قديمة من التطبيق، التاريخ قد لا يكون صحيحاً</string>
-    <string name="update">حدّث</string>
     <!--Navigation rail items-->
     <string name="calendar">التقويم</string>
     <string name="date_converter">محول التاريخ</string>
@@ -61,7 +59,6 @@
     <string name="moon_in_scorpio">القمر في العقرب</string>
     <string name="events">المناسبات</string>
     <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم</string>
-    <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطل إذهب إلى الإعدادات &gt; المناسبات</string>
     <string name="sunrise_sun_view">الشروق</string>
     <string name="midday_sun_view">الظهر</string>
     <string name="sunset_sun_view">الغروب</string>
@@ -94,7 +91,6 @@
     <string name="level">المستوى</string>
     <string name="stop">إيقاف</string>
     <string name="resume">تشغيل</string>
-    <string name="set_location">لمعرفة مكان الشمس والقمر والقبلة، حدد مكانك من الإعدادات &gt; المكان والأذان.</string>
     <string name="north">الشمال</string>
     <string name="east">الشرق</string>
     <string name="south">الجنوب</string>
@@ -172,8 +168,6 @@
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="custom_notification_is_set">تم تخصيص صوت المؤذن</string>
     <string name="default_athan">صوت المؤذن الإفتراضي</string>
-    <string name="default_athan_summary">الرجوع إلى صوت المؤذن الإفتراضي</string>
-    <string name="returned_to_default">تم الرجوع إلى صوت المؤذن الإفتراضي</string>
     <string name="athan_volume">التحكم بمستوى صوت الأذان</string>
     <string name="athan_volume_summary">مستوى الصوت</string>
     <string name="athan_disabled_summary">لتفعيل منبه الأذان، حدد المكان أو أدخل الإحداثيات اللازمة</string>
@@ -187,9 +181,6 @@
     <string name="licenses">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
     <string name="about_license_sum">راجع رخصة GPLv3 المستخدمة في تطبيق التقويم الفارسي.</string>
-    <string name="about_support_developers">دعم المطورين</string>
-    <string name="about_report_bug">الإبلاغ عن الأخطاء</string>
-    <string name="about_report_bug_sum">للإبلاغ عن الأخطاء وطلب ميزات جديدة يرجى إستخدام خدمة Github</string>
     <string name="about_send_mail">البريد الإلكتروني</string>
     <string name="about_email_sum">إرسال بريد إلكتروني لمطوري التطبيق</string>
     <string name="about_no_client">تعذّر العثور على تطبيق البريد الإلكتروني</string>
@@ -420,7 +411,6 @@
     <string name="spring">الربيع</string>
     <string name="tropical">مدارية</string>
     <string name="calculator">حاسبة</string>
-    <string name="chinese_calendar">التقويم الصيني</string>
     <string name="chinese">صيني</string>
     <string name="screensaver_settings">إعدادات شاشة التوقف</string>
     <string name="live_wallpaper_settings">إعدادات الخلفية المتحركة</string>
@@ -441,14 +431,6 @@
         <item quantity="other">%1$s يوم العمل</item>
     </plurals>
     <string name="navigate_up">انتقال للأعلى</string>
-    <plurals name="seconds">
-        <item quantity="zero">%1$s ثانية</item>
-        <item quantity="one">%1$s ثانية</item>
-        <item quantity="two">%1$s ثانيتين</item>
-        <item quantity="few">%1$s ثواني</item>
-        <item quantity="many">%1$s ثانية</item>
-        <item quantity="other">%1$s ثانية</item>
-    </plurals>
     <string name="open_navigation_rail">فتح درج التنقل</string>
     <string name="more_options">المزيد من الخيارات</string>
     <string name="yes">نعم</string>
@@ -463,7 +445,6 @@
     <string name="week_view">العرض أسبوعي</string>
     <string name="schedule">الجدول</string>
     <string name="print">طباعة</string>
-    <string name="daily_schedule">الجدول اليومي</string>
     <string name="day_view">العرض اليومي</string>
     <string name="vibration">الاهتزاز</string>
     <string name="starting_date">تاريخ البدء</string>

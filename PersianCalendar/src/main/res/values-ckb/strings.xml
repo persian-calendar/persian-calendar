@@ -76,7 +76,6 @@
     <string name="wait_for_gps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا.</string>
-    <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن</string>
     <string name="days_distance">مەودا</string>
     <string name="calendars_priority">ڕۆژژمێری سەرەکی</string>
     <string name="calendars_priority_summary">گۆڕینی ڕۆژژمێری سەرەکی، ڕیزبەندی و چالاکیی ڕۆژژمێرەکان</string>
@@ -99,23 +98,18 @@
     <string name="which_one_to_show">کامەیان نیشان بدرێ</string>
     <string name="notification_athan">ئاگاداریی بانگ</string>
     <string name="enable_notification_athan">ڕاگەیاندنی بانگ بە ئاگاداری و لەرینەوەی ئامراز</string>
-    <string name="returned_to_default">گەڕایەوە بۆ ڕێکخستنی بنەڕەتی</string>
     <string name="custom_notification_is_set">دەنگی داواکراو رێکخرا</string>
     <string name="custom_athan">ھەڵبژاردنی بانگ</string>
-    <string name="default_athan_summary">گەڕانەوە بۆ بانگی بنەڕەتی</string>
     <string name="default_athan">بانگی بنەڕەتی</string>
     <string name="abdulbasit">عەبدولباست عەبدوسسەمەد</string>
     <string name="licenses">مۆڵەت</string>
     <string name="about_license_title">مۆڵەتی بەرنامە</string>
     <string name="about_license_sum">تاوتوێکردنی مۆڵەتی GPLv3 و مەرجەکانی تری بەکارھێنراو لە ڕۆژژمێری فارسیدا.</string>
     <string name="help">یارمەتی</string>
-    <string name="about_report_bug">ڕاپۆرتی ھەڵە</string>
     <string name="about_send_mail">ئیمەیل</string>
     <string name="about_no_client">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە</string>
     <string name="about_developers">پەرەپێدەران (بە شێوەیەکی هەڕەمەکی ریزکراون)</string>
-    <string name="about_support_developers">پشتیوانی لە پەرەپێدەر</string>
     <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەرانی بەرنامە</string>
-    <string name="about_report_bug_sum">ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ</string>
     <string name="gps_internet_description">تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
 \n
 \nبەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە.</string>
@@ -158,7 +152,6 @@
     <string name="animal_year_name_goat">بزن</string>
     <string name="level">تەراز</string>
     <string name="calibrate_compass_summary">بۆ باشترکردنی دیقەتی ڕووگەنوێن، لە شتی موگناتیسی دوور بنەوە، سەر و خوار بە ئامرازکە بکەن و لە گشت تەوەرەکاندا بیھێنن و بیبەن.</string>
-    <string name="set_location">بۆ نیشاندانی شوێنی خۆر، مانگ و ئاراستەی ڕووگە لە بەشی ڕێکخستندا شوێنەکەتان ڕێک بخەن.</string>
     <string name="moon_in_scorpio">ڕۆژانی مانگ لە دووپشکدا</string>
     <string name="astronomy">ئەستێرەناسی</string>
     <string name="astronomical_info_summary">نیشاندانی زانیاریگەلێک وەک کەلوو، ناوی ساڵ و مانگ لە دووپشکدا</string>
@@ -185,8 +178,6 @@
     <string name="south">باشوور</string>
     <string name="west">ڕۆژاوا</string>
     <string name="qibla">ڕووگە</string>
-    <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
-    <string name="update">نوێکردنەوە</string>
     <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵی %1$s: %2$s</string>
     <string name="shift_work_settings">ڕێکخستنی نۆرەکار</string>
     <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه</string>
@@ -374,7 +365,6 @@
     <string name="high_latitudes_one_seventh">حەوت یەک</string>
     <string name="none">ھیچیان</string>
     <string name="show_sun_and_moon_path_in_24_hours">نیشاندانی بازی خۆر و مانگ لە ٢٤ کاتکۆی داھاتوودا</string>
-    <string name="chinese_calendar">ڕۆژژمێری چینی</string>
     <string name="chinese">چینی</string>
     <string name="screensaver_settings">ڕێکخستنەکانی شاشەپارێز</string>
     <string name="live_wallpaper_settings">ڕێکخستنەکانی نەخشەوێنە زیندوو</string>
@@ -383,10 +373,6 @@
     <string name="add_quick_settings_tile">زیادکردنی کاشیی ڕێکخستنی خێرا</string>
     <string name="true_north">باکووری ڕاستی</string>
     <string name="yes">بەڵێ</string>
-    <plurals name="seconds">
-        <item quantity="one">تەنها یەک چرکە</item>
-        <item quantity="other">%1$s چرکە</item>
-    </plurals>
     <string name="sample_inputs">داتایی نموونەیی</string>
     <string name="navigate_up">ڕۆیشتن بۆ سەرەوە</string>
     <string name="qr_code">کۆدی وەڵامدانەوەی خێرا</string>
@@ -406,7 +392,6 @@
     <string name="week_view">پێشاندانی حەفتانە</string>
     <string name="schedule">بەرنامە</string>
     <string name="print">چاپکردن</string>
-    <string name="daily_schedule">بەرنامەی ڕۆژانە</string>
     <string name="day_view">پێشاندانی ڕۆژانە</string>
     <string name="vibration">لەرزین</string>
 </resources>
