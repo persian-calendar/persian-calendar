@@ -453,7 +453,7 @@ fun SharedTransitionScope.DaysScreen(
                                     deviceEvents = weekDeviceEvents,
                                     now = now,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
+                                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                                     snackbarHostState = snackbarHostState,
                                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                                     screenWidth = screenWidth,
@@ -513,7 +513,7 @@ fun SharedTransitionScope.DaysScreen(
                                 days = 1,
                                 now = now,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
+                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                                 snackbarHostState = snackbarHostState,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 hasWeekPager = hasWeeksPager,
@@ -583,7 +583,7 @@ fun DaysView(
     now: Long,
     days: Int,
     isAddEventBoxEnabled: Boolean,
-    onAddEventBoxEnabledChange: () -> Unit,
+    onAddEventBoxEnabledChange: (Boolean) -> Unit,
     snackbarHostState: SnackbarHostState,
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
@@ -664,17 +664,21 @@ fun DaysView(
                 interactionSource = null,
                 indication = null,
             ) { isExpanded = !isExpanded }
-            if (days == 1) Column(
-                (if (eventsWithoutTime[0].size > 3) {
-                    clickToExpandModifier
-                } else Modifier).padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            if (days == 1) Box(
+                modifier = if (eventsWithoutTime[0].size > 3) clickToExpandModifier else Modifier,
             ) {
                 val scrollState = rememberScrollState()
                 Column(
                     Modifier
                         .animateContentSize(appContentSizeAnimationSpec)
-                        .verticalScroll(scrollState),
+                        .verticalScroll(scrollState)
+                        .then(
+                            if (isAddEventBoxEnabled) Modifier.clickable(
+                                indication = null,
+                                interactionSource = null,
+                            ) { onAddEventBoxEnabledChange(false) } else Modifier,
+                        )
+                        .padding(horizontal = 24.dp),
                 ) {
                     Spacer(Modifier.height(16.dp))
                     if (events[0].isEmpty()) Text(
@@ -684,25 +688,30 @@ fun DaysView(
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp),
                     )
+                    val headerHasFilled =
+                        scrollState.canScrollBackward || scrollState.canScrollForward
                     DayEvents(
-                        eventsWithoutTime[0]
+                        (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0]
                             .let { if (isExpanded) it else it.take(3) }
                             .toImmutableList(),
                         navigateToHolidaysSettings,
                         refreshCalendar,
                     )
-                    content?.invoke(this)
                     if (eventsWithoutTime[0].size > 3) {
                         Spacer(Modifier.height(4.dp))
                         ExpandArrow(
                             isExpanded = isExpanded,
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
+                        content?.invoke(this)
                         Spacer(Modifier.height(8.dp))
-                        if (isExpanded && fabPlaceholderHeight != null && run {
-                                scrollState.canScrollBackward || scrollState.canScrollForward
-                            }) Spacer(Modifier.height(fabPlaceholderHeight))
-                    } else Spacer(Modifier.height(12.dp))
+                        if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
+                            Spacer(Modifier.height(fabPlaceholderHeight))
+                        }
+                    } else {
+                        content?.invoke(this)
+                        Spacer(Modifier.height(12.dp))
+                    }
                 }
             } else if (maxDayAllDayEvents != 0) Row(
                 verticalAlignment = Alignment.Bottom,
@@ -850,7 +859,7 @@ fun DaysView(
                                                     cellWidthPx * (column - 1),
                                                     cellHeightPx * row / scale.floatValue,
                                                 )
-                                                onAddEventBoxEnabledChange()
+                                                onAddEventBoxEnabledChange(true)
                                                 duration = cellHeightPx / scale.floatValue
                                                 setSelectedDay(startingDay + column - 1)
                                             }
@@ -1026,7 +1035,7 @@ fun DaysView(
                             cellWidthPx * (selectedDay - startingDay),
                             ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
                         )
-                        onAddEventBoxEnabledChange()
+                        onAddEventBoxEnabledChange(true)
                     } else {
                         val time = selectedDay.toGregorianCalendar()
                         run {
