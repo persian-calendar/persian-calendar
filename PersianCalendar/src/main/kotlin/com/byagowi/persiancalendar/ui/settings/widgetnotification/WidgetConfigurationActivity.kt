@@ -141,11 +141,8 @@ class WidgetWeekViewConfigurationActivity : BaseWidgetConfigurationActivity() {
 
 @SuppressLint("ComposeUnstableReceiver")
 class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
-    override fun preview(size: DpSize): RemoteViews {
-        val prayTimes = coordinates?.calculatePrayTimes()
-        val now = System.currentTimeMillis()
-        return createSunViewRemoteViews(this, size, prayTimes, now)
-    }
+    override fun preview(size: DpSize): RemoteViews =
+        createSunViewRemoteViews(this, size, System.currentTimeMillis())
 
     @Composable
     override fun ColumnScope.Settings() {

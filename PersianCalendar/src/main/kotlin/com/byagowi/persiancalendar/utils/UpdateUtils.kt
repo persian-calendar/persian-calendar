@@ -146,6 +146,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.lang.ref.WeakReference
 import java.util.Date
+import java.util.TimeZone
 import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -268,7 +269,7 @@ fun update(context: Context, updateDate: Boolean) {
             )
         }
         updateFromRemoteViews<WidgetSunView>(context, now) { size, _ ->
-            createSunViewRemoteViews(context, size, prayTimes, now)
+            createSunViewRemoteViews(context, size, now)
         }
         updateFromRemoteViews<WidgetMonthView>(context, now) { size, _ ->
             createMonthViewRemoteViews(context, size, jdn)
@@ -474,9 +475,11 @@ fun createAgeRemoteViews(
 fun createSunViewRemoteViews(
     context: Context,
     size: DpSize?,
-    prayTimes: PrayTimes?,
     now: Long,
 ): RemoteViews {
+    val prayTimes = (coordinates ?: Coordinates(35.68, 51.42, 0.0).takeIf {
+        TimeZone.getDefault().id == IRAN_TIMEZONE_ID
+    })?.calculatePrayTimes()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = androidx.compose.ui.graphics.Color(
         when {
