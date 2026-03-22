@@ -850,7 +850,7 @@ fun DaysView(
                         }
                     },
                 ) {
-                    repeat(9) { column ->
+                    repeat(days + 2) { column ->
                         Column {
                             if (column == 0) Spacer(Modifier.height(cellHeight / 2))
                             repeat(24) { row ->
