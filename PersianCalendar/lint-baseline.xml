@@ -1,26 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <issues format="6" by="lint 9.0.1" type="baseline" client="gradle" dependencies="true" name="AGP (9.0.1)" variant="all" version="9.0.1">
 
-    <issue
-        id="UnusedAttribute"
-        message="Attribute `enableOnBackInvokedCallback` is only used in API level 33 and higher (current min is 23)"
-        errorLine1="        android:enableOnBackInvokedCallback=&quot;true&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="56"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.month_view` appears to be unused"
-        errorLine1="    &lt;string name=&quot;month_view&quot;>Month view&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="386"
-            column="13"/>
-    </issue>
-
 </issues>

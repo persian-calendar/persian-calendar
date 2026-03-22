@@ -97,6 +97,7 @@ import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
@@ -124,8 +125,10 @@ fun eventColor(event: CalendarEvent<*>): Color {
 
         event.isHoliday || event is CalendarEvent.EquinoxCalendarEvent -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.surfaceVariant
-    }
+    }.copy(alpha = eventsAlpha)
 }
+
+private const val eventsAlpha = .85f
 
 fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
     event: CalendarEvent.DeviceCalendarEvent, context: Context,
@@ -136,7 +139,8 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
 }
 
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
-fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
+fun eventTextColor(color: Color): Color =
+    (if (color.isLight) Color.Black else Color.White).copy(eventsAlpha)
 
 private val String.directionality
     get() = this.firstNotNullOfOrNull {
