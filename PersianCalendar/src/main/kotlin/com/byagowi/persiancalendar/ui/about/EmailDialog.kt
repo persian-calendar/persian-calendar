@@ -45,7 +45,9 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
     ) {
         AppDialog(
             confirmButton = { TextButton(onClick = onDismissRequest) { Text("متوجه شدم") } },
-            neutralButton = { TextButton(onClick = { firstPass = false }) { Text("سایر امکانات") } },
+            neutralButton = {
+                TextButton(onClick = { firstPass = false }) { Text("سایر امکانات") }
+            },
             onDismissRequest = onDismissRequest,
         ) {
             Text(

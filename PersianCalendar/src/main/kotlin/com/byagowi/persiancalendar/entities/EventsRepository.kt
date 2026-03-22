@@ -136,7 +136,7 @@ data class EventsRepository(
 
         val holiday = determineIsHoliday(record)
         val title =
-            (if (record.isHoliday && record.source == EventSource.Iran) "تعطیلی رسمی به مناسبت " else "") + record.title
+            (if (record.isHoliday && record.source == EventSource.Iran || (record.source == EventSource.Afghanistan && language.isPersianOrDari)) "تعطیلی رسمی به مناسبت " else "") + record.title
         return (when (calendar) {
             Calendar.SHAMSI -> {
                 val date = PersianDate(everyYear, record.month, record.day)

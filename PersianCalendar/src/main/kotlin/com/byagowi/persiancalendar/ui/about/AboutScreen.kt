@@ -424,7 +424,7 @@ private fun Developers() {
     )
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Ltr,
-        LocalMinimumInteractiveComponentSize provides Dp.Unspecified,
+        LocalMinimumInteractiveComponentSize provides 0.dp,
     ) {
         FlowRow(
             Modifier

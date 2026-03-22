@@ -15,6 +15,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -97,7 +98,6 @@ import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
-import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
@@ -159,7 +159,7 @@ private val String.directionality
     }
 
 @Composable
-fun DayEvents(
+fun ColumnScope.DayEvents(
     events: ImmutableList<CalendarEvent<*>>,
     navigateToHolidaysSettings: ((String?) -> Unit),
     refreshCalendar: () -> Unit,

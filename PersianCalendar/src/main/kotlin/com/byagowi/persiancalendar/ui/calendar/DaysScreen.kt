@@ -153,6 +153,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.toCivilDate
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
@@ -597,7 +598,7 @@ fun DaysView(
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
     fabPlaceholderHeight: Dp? = null,
-    content: (@Composable ColumnScope.() -> Unit)? = null,
+    content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -672,16 +673,16 @@ fun DaysView(
                     Modifier
                         .animateContentSize(appContentSizeAnimationSpec)
                         .verticalScroll(scrollState)
+                        .fillMaxWidth()
                         .then(
                             if (isAddEventBoxEnabled) Modifier.clickable(
                                 indication = null,
                                 interactionSource = null,
                             ) { onAddEventBoxEnabledChange(false) } else Modifier,
-                        )
-                        .padding(horizontal = 24.dp),
+                        ),
                 ) {
                     Spacer(Modifier.height(16.dp))
-                    if (events[0].isEmpty()) Text(
+                    if (events[0].none { it.source == null }) Text(
                         stringResource(R.string.no_event),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -690,26 +691,32 @@ fun DaysView(
                     )
                     val headerHasFilled =
                         scrollState.canScrollBackward || scrollState.canScrollForward
-                    DayEvents(
+                    val displayedEvents =
                         (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0]
-                            .let { if (isExpanded) it else it.take(3) }
-                            .toImmutableList(),
-                        navigateToHolidaysSettings,
-                        refreshCalendar,
-                    )
-                    if (eventsWithoutTime[0].size > 3) {
+                            .filter { content == null || it.source == null }
+                    Column(Modifier.padding(horizontal = 24.dp)) {
+                        DayEvents(
+                            displayedEvents.let { if (isExpanded) it else it.take(3) }
+                                .toImmutableList(),
+                            navigateToHolidaysSettings,
+                            refreshCalendar,
+                        )
+                    }
+                    val appointments =
+                        eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
+                    if (displayedEvents.size > 3) {
                         Spacer(Modifier.height(4.dp))
                         ExpandArrow(
                             isExpanded = isExpanded,
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
-                        content?.invoke(this)
+                        content?.invoke(this, appointments)
                         Spacer(Modifier.height(8.dp))
                         if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
                             Spacer(Modifier.height(fabPlaceholderHeight))
                         }
                     } else {
-                        content?.invoke(this)
+                        content?.invoke(this, appointments)
                         Spacer(Modifier.height(12.dp))
                     }
                 }

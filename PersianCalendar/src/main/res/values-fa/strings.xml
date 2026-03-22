@@ -185,7 +185,7 @@
     <string name="qibla">قبله</string>
     <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
-    <string name="ask_user_to_set_location">برای نمایش صحیح این بخش مکان خود را در تنظیمات انتخاب کنید</string>
+    <string name="ask_user_to_set_location">برای نمایش این بخش مکان خود را در تنظیمات انتخاب کنید</string>
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>

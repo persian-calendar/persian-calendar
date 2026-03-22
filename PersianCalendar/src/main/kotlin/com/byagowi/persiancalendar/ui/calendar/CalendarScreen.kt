@@ -9,7 +9,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.PowerManager
 import android.provider.CalendarContract
-import android.provider.Settings
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -27,8 +26,12 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
@@ -38,6 +41,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -61,7 +65,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -74,8 +77,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -87,11 +90,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -100,6 +99,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -143,7 +143,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.EXPANDED_CALENDAR_STATE_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
@@ -206,6 +205,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -759,7 +759,7 @@ private fun Details(
             scrollableModifier = Modifier,
             numeral = numeral,
             fabPlaceholderHeight = fabPlaceholderHeight,
-        ) {
+        ) { appointments ->
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
             AnimatedVisibility(visible = shiftWorkTitle != null) {
                 AnimatedContent(
@@ -798,21 +798,38 @@ private fun Details(
 
             var removeThirdTab by remember { mutableStateOf(false) }
             val hasTimesTab = enableTimesTab() && !removeThirdTab
+            var selectedButton by remember(selectedDay) { mutableIntStateOf(-1) }
             val buttons = listOfNotNull(
-                Pair(R.string.calendar) @Composable {
+                Triple(stringResource(R.string.calendar), false) @Composable {
                     CalendarsTab(
-                        modifier = Modifier.padding(vertical = 12.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
                     )
                 }.takeIf { enabledCalendars.size != 1 },
-                Pair(R.string.times) @Composable {
+                Triple(
+                    if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events),
+                    appointments.isNotEmpty(),
+                ) @Composable {
+                    if (appointments.isEmpty()) Text(
+                        text = if (language.isPersianOrDari) {
+                            "مناسبتی برای این روز یافت نشد"
+                        } else stringResource(R.string.no_event),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) else Column(Modifier.padding(horizontal = 24.dp)) {
+                        DayEvents(
+                            appointments,
+                            navigateToHolidaysSettings,
+                            refreshCalendar,
+                        )
+                    }
+                }.takeIf { !eventsRepository.isEmpty },
+                Triple(stringResource(R.string.times), false) @Composable {
                     val coordinates = coordinates
                     if (coordinates == null) Column(Modifier.fillMaxWidth()) {
                         val context = LocalContext.current
                         EncourageActionLayout(
-                            modifier = Modifier.padding(top = 24.dp),
                             header = stringResource(R.string.ask_user_to_set_location),
                             discardAction = {
                                 context.preferences.edit {
@@ -823,9 +840,7 @@ private fun Details(
                             acceptAction = navigateToSettingsLocationTab,
                             hideOnAccept = false,
                         )
-                        Spacer(Modifier.height(bottomPadding))
                     } else TimesTab(
-                        modifier = Modifier.padding(vertical = 12.dp),
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                         navigateToAstronomy = navigateToAstronomy,
@@ -837,60 +852,48 @@ private fun Details(
                 }.takeIf { hasTimesTab },
             )
 
-            val coroutineScope = rememberCoroutineScope()
-            val tooltipStates = buttons.map { rememberTooltipState(isPersistent = true) }
-            Box(contentAlignment = Alignment.Center) {
-                buttons.zip(tooltipStates) { (_, content), tooltipState ->
-                    TooltipBox(
-                        onDismissRequest = {
-                            coroutineScope.launch { tooltipState.dismiss() }
-                        },
-                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                            positioning = TooltipAnchorPosition.Above,
-                        ),
-                        tooltip = {
-                            RichTooltip(
-                                maxWidth = detailsWidth - 48.dp,
-                                tonalElevation = 12.dp,
-                                caretShape = TooltipDefaults.caretShape(),
-                            ) {
-                                Box(Modifier.verticalScroll(rememberScrollState())) {
-                                    content()
-                                }
-                            }
-                        },
-                        enableUserInput = false,
-                        state = tooltipState,
-                        modifier = Modifier.padding(horizontal = 4.dp),
+            SingleChoiceSegmentedButtonRow(
+                Modifier
+                    .padding(vertical = 4.dp)
+                    .align(Alignment.CenterHorizontally),
+            ) {
+                buttons.forEachIndexed { index, (text, highlighted, _) ->
+                    CompositionLocalProvider(
+                        LocalMinimumInteractiveComponentSize provides 0.dp,
                     ) {
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(1.dp),
+                        SegmentedButton(
+                            onClick = {
+                                selectedButton = if (selectedButton == index) -1 else index
+                            },
+                            contentPadding = PaddingValues(0.dp),
+                            colors = SegmentedButtonDefaults.colors().copy(
+                                inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            ),
+                            border = BorderStroke(
+                                1.dp,
+                                animateColor(
+                                    if (highlighted) MaterialTheme.colorScheme.primary.copy(alpha = .5f)
+                                    else MaterialTheme.colorScheme.outlineVariant,
+                                ).value,
+                            ),
+                            selected = selectedButton == index,
+                            icon = {},
+                            shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
+                            label = { Text(text, modifier = Modifier.alpha(.65f)) },
                         )
                     }
                 }
             }
-            SingleChoiceSegmentedButtonRow(Modifier.align(Alignment.CenterHorizontally)) {
-                buttons.forEachIndexed { index, (stringId, _) ->
-                    val tooltipState = tooltipStates[index]
-                    SegmentedButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                if (tooltipState.isVisible) tooltipState.dismiss()
-                                else tooltipState.show()
-                            }
-                        },
-                        colors = SegmentedButtonDefaults.colors().copy(
-                            inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        ),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                        selected = tooltipState.isVisible,
-                        icon = {},
-                        shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
-                        label = { Text(stringResource(stringId), Modifier.alpha(.65f)) },
-                    )
-                }
+            AnimatedContent(
+                targetState = selectedButton,
+                transitionSpec = {
+                    (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
+                },
+            ) {
+                val (_, _, content) = run {
+                    buttons.getOrNull(it)
+                } ?: return@AnimatedContent Spacer(Modifier.fillMaxWidth())
+                Box(Modifier.padding(top = 4.dp)) { content() }
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
@@ -914,7 +917,12 @@ private fun Details(
                 EncourageActionLayout(
                     header = stringResource(R.string.ask_calendar_permission),
                     discardAction = {
-                        context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                        context.preferences.edit {
+                            putBoolean(
+                                PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+                                false,
+                            )
+                        }
                     },
                     acceptButton = stringResource(R.string.yes),
                     acceptAction = { showDialog = true },
@@ -931,13 +939,7 @@ private fun CalendarsTab(
     modifier: Modifier = Modifier,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
-    val context = LocalContext.current
-    var isExpanded by remember {
-        mutableStateOf(context.preferences.getBoolean(EXPANDED_CALENDAR_STATE_KEY, false))
-    }
-    LaunchedEffect(isExpanded) {
-        context.preferences.edit { putBoolean(EXPANDED_CALENDAR_STATE_KEY, isExpanded) }
-    }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier.clickable(
@@ -969,36 +971,37 @@ private fun CalendarsTab(
                     context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
-        } else if (showEncourageToExemptFromBatteryOptimizations()) {
-            fun ignore() {
-                val preferences = context.preferences
-                preferences.edit {
-                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
-                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
-                }
-            }
-
-            fun requestExemption() {
-                runCatching {
-                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
-            }
-
-            val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission(),
-            ) { requestExemption() }
-
-            EncourageActionLayout(
-                header = stringResource(R.string.exempt_app_battery_optimization),
-                acceptButton = stringResource(R.string.yes),
-                discardAction = ::ignore,
-            ) {
-                val alarmManager = context.getSystemService<AlarmManager>()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
-                    Manifest.permission.SCHEDULE_EXACT_ALARM,
-                ) else requestExemption()
-            }
         }
+//        else if (showEncourageToExemptFromBatteryOptimizations()) {
+//            fun ignore() {
+//                val preferences = context.preferences
+//                preferences.edit {
+//                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
+//                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
+//                }
+//            }
+//
+//            fun requestExemption() {
+//                runCatching {
+//                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+//                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
+//            }
+//
+//            val launcher = rememberLauncherForActivityResult(
+//                ActivityResultContracts.RequestPermission(),
+//            ) { requestExemption() }
+//
+//            EncourageActionLayout(
+//                header = stringResource(R.string.exempt_app_battery_optimization),
+//                acceptButton = stringResource(R.string.yes),
+//                discardAction = ::ignore,
+//            ) {
+//                val alarmManager = context.getSystemService<AlarmManager>()
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
+//                    Manifest.permission.SCHEDULE_EXACT_ALARM,
+//                ) else requestExemption()
+//            }
+//        }
     }
 }
 
@@ -1007,7 +1010,7 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
-    if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
+    if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 1) return false
     val alarmManager = context.getSystemService<AlarmManager>()
     if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) return true
     return !isIgnoringBatteryOptimizations(context)
@@ -1168,6 +1171,7 @@ private fun SharedTransitionScope.Toolbar(
                 onIsYearViewChange(false)
                 onYearViewCalendarChange(null)
             }
+
             isAddEventBoxEnabled -> onAddEventBoxEnabledChange(false)
         }
     }
