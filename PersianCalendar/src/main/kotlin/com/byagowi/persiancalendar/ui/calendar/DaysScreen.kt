@@ -229,7 +229,7 @@ fun SharedTransitionScope.DaysScreen(
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     fun onSwipeDown(isUp: Boolean) {
         if (!isLandscape && !isUp) when (preferredSwipeUpAction) {
-            SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
+            SwipeUpAction.WeekView -> navigateUp()
             else -> {}
         }
     }

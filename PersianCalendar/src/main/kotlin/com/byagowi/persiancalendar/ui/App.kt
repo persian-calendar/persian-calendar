@@ -197,15 +197,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 settings = PREF_ATHAN_ALARM,
                             )
                         },
-                        navigateToSchedule = { selectedDay ->
-                            backStack += Screen.Schedule(selectedDay)
-                        },
-                        navigateToDays = { jdn, isWeek ->
-                            backStack += Screen.Days(selectedDay = jdn, isWeek = isWeek)
-                        },
-                        navigateToMonthView = { selectedDay ->
-                            backStack += Screen.Month(selectedDay)
-                        },
+                        navigateToSchedule = { day -> backStack += Screen.Schedule(day) },
+                        navigateToWeek = { day -> backStack += Screen.Week(day) },
+                        navigateToMonthView = { day -> backStack += Screen.Month(day) },
                         navigateToSettingsLocationTab = {
                             backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
                         },
@@ -215,10 +209,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
                 entry<Screen.Month> {
-                    MonthScreen(
-                        navigateUp = navigateUp,
-                        initiallySelectedDay = it.selectedDay,
-                    )
+                    MonthScreen(navigateUp = navigateUp, initiallySelectedDay = it.day)
                 }
                 entry<Screen.Schedule> {
                     ScheduleScreen(
@@ -226,19 +217,19 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         commandBringDay = commandBringDay,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         navigateUp = navigateUp,
-                        initiallySelectedDay = it.selectedDay,
+                        initiallySelectedDay = it.day,
                         today = today,
                         now = now,
                     )
                 }
-                entry<Screen.Days> {
+                entry<Screen.Week> {
                     DaysScreen(
                         refreshToken = refreshToken,
                         refreshCalendar = refreshCalendar,
                         commandBringDay = commandBringDay,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        initiallySelectedDay = it.selectedDay,
-                        isInitiallyWeek = it.isWeek,
+                        initiallySelectedDay = it.day,
+                        isInitiallyWeek = true,
                         navigateUp = navigateUp,
                         today = today,
                         now = now,
@@ -319,13 +310,13 @@ private sealed interface Screen : NavKey {
     data object Calendar : Screen
 
     @Serializable
-    data class Schedule(val selectedDay: Jdn) : Screen
+    data class Schedule(val day: Jdn) : Screen
 
     @Serializable
-    data class Days(val selectedDay: Jdn, val isWeek: Boolean = false) : Screen
+    data class Week(val day: Jdn) : Screen
 
     @Serializable
-    data class Month(val selectedDay: Jdn) : Screen
+    data class Month(val day: Jdn) : Screen
 
     @Serializable
     data object Converter : Screen

@@ -8,6 +8,7 @@ import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.nepaliEvents
 import com.byagowi.persiancalendar.generated.persianEvents
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -104,12 +105,12 @@ data class EventsRepository(
             nepaliCalendarEvents.getEvents(jdn.toNepaliDate(), irregularCalendarEventsStore),
             gregorianCalendarEvents
                 .getEvents(jdn.toCivilDate(), irregularCalendarEventsStore, deviceEvents),
-        ).flatten()
+        ).flatten().filter { it.isHoliday || it.date.calendar in enabledCalendars }
     }
 
     fun getEnabledEvents(jdn: Jdn): List<CalendarEvent<*>> {
         if (!jdn.isYearSupportedOnApp) return emptyList()
-        return listOf(
+        return (listOf(
             persianCalendarEvents.getAllEvents(),
             islamicCalendarEvents.getAllEvents(),
             nepaliCalendarEvents.getAllEvents(),
@@ -126,7 +127,7 @@ data class EventsRepository(
             val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendar)
                 .filter { event -> event.date.month < it.month }
             thisYear + nextYear
-        }
+        }).filter { it.isHoliday || it.date.calendar in enabledCalendars }
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(

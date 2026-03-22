@@ -100,7 +100,7 @@ fun daysTable(
     arrowAction: PageArrowAction,
     secondaryCalendar: Calendar?,
     modifier: Modifier = Modifier,
-    onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
+    onWeekClick: ((Jdn) -> Unit)? = null,
     isWeekMode: Boolean = false,
 ): @Composable (
     monthStartDate: AbstractDate, monthStartJdn: Jdn,
@@ -363,7 +363,6 @@ fun daysTable(
                                                         (day + it).weekDay !in weekEnds
                                                     } ?: 0)
                                                 },
-                                                true,
                                             )
                                         } else Modifier,
                                     ),

@@ -33,7 +33,7 @@ fun CalendarPager(
     addEvent: (AddEventData) -> Unit,
     today: Jdn,
     suggestedPagerSize: DpSize,
-    navigateToDays: (Jdn, Boolean) -> Unit,
+    navigateToWeek: (Jdn) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val daysTable = daysTable(
@@ -42,7 +42,7 @@ fun CalendarPager(
         today = today,
         refreshToken = refreshToken,
         setSelectedDay = changeSelectedDay,
-        onWeekClick = navigateToDays,
+        onWeekClick = navigateToWeek,
         arrowAction = { isPrevious, isLongClick ->
             coroutineScope.launch {
                 val page = clampPageNumber(

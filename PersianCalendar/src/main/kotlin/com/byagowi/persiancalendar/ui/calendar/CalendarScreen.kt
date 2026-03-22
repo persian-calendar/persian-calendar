@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.PowerManager
 import android.provider.CalendarContract
+import android.provider.Settings
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -250,7 +251,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
-    navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
+    navigateToWeek: (Jdn) -> Unit,
     today: Jdn,
     now: Long,
 ) {
@@ -284,8 +285,7 @@ fun SharedTransitionScope.CalendarScreen(
     val swipeUpActions = remember {
         persistentMapOf(
             SwipeUpAction.Schedule to { navigateToSchedule(selectedDay) },
-            SwipeUpAction.DayView to { navigateToDays(selectedDay, false) },
-            SwipeUpAction.WeekView to { navigateToDays(selectedDay, true) },
+            SwipeUpAction.WeekView to { navigateToWeek(selectedDay) },
             SwipeUpAction.None to { bringDay(selectedDay - 7, true, false) },
         )
     }
@@ -337,13 +337,8 @@ fun SharedTransitionScope.CalendarScreen(
         modifier = Modifier.onKeyEvent { keyEvent ->
             if (!isYearView && keyEvent.type == KeyEventType.KeyDown) {
                 when (keyEvent.key) {
-                    Key.D -> {
-                        navigateToDays(selectedDay, false)
-                        true
-                    }
-
                     Key.W -> {
-                        navigateToDays(selectedDay, true)
+                        navigateToWeek(selectedDay)
                         true
                     }
 
@@ -547,7 +542,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 yearViewCalendar = yearViewCalendar,
                                 addEvent = addEvent,
                                 suggestedPagerSize = pagerSize,
-                                navigateToDays = navigateToDays,
+                                navigateToWeek = navigateToWeek,
                             )
                         }
                         ScreenSurface(
@@ -617,7 +612,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 yearViewCalendar = yearViewCalendar,
                                 addEvent = addEvent,
                                 suggestedPagerSize = pagerSize,
-                                navigateToDays = navigateToDays,
+                                navigateToWeek = navigateToWeek,
                             )
                         }
 
@@ -971,37 +966,36 @@ private fun CalendarsTab(
                     context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+        } else if (showEncourageToExemptFromBatteryOptimizations()) {
+            fun ignore() {
+                val preferences = context.preferences
+                preferences.edit {
+                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
+                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
+                }
+            }
+
+            fun requestExemption() {
+                runCatching {
+                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
+            }
+
+            val launcher = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { requestExemption() }
+
+            EncourageActionLayout(
+                header = stringResource(R.string.exempt_app_battery_optimization),
+                acceptButton = stringResource(R.string.yes),
+                discardAction = ::ignore,
+            ) {
+                val alarmManager = context.getSystemService<AlarmManager>()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
+                    Manifest.permission.SCHEDULE_EXACT_ALARM,
+                ) else requestExemption()
+            }
         }
-//        else if (showEncourageToExemptFromBatteryOptimizations()) {
-//            fun ignore() {
-//                val preferences = context.preferences
-//                preferences.edit {
-//                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
-//                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
-//                }
-//            }
-//
-//            fun requestExemption() {
-//                runCatching {
-//                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-//                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
-//            }
-//
-//            val launcher = rememberLauncherForActivityResult(
-//                ActivityResultContracts.RequestPermission(),
-//            ) { requestExemption() }
-//
-//            EncourageActionLayout(
-//                header = stringResource(R.string.exempt_app_battery_optimization),
-//                acceptButton = stringResource(R.string.yes),
-//                discardAction = ::ignore,
-//            ) {
-//                val alarmManager = context.getSystemService<AlarmManager>()
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
-//                    Manifest.permission.SCHEDULE_EXACT_ALARM,
-//                ) else requestExemption()
-//            }
-//        }
     }
 }
 

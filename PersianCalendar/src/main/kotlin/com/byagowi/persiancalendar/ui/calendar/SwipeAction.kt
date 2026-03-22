@@ -4,10 +4,7 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 
 enum class SwipeUpAction(@get:StringRes val titleId: Int) {
-    WeekView(R.string.week_view),
-    DayView(R.string.day_view),
-    Schedule(R.string.schedule),
-    None(R.string.empty),
+    WeekView(R.string.week_view), Schedule(R.string.schedule), None(R.string.empty),
 }
 
 enum class SwipeDownAction(@get:StringRes val titleId: Int, val hidden: Boolean = false) {
