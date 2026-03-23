@@ -6,7 +6,6 @@ import io.github.persiancalendar.praytimes.Coordinates
 
 const val LOG_TAG = "PersianCalendar"
 
-const val EXPANDED_CALENDAR_STATE_KEY = "ExpandedCalendarState"
 const val EXPANDED_TIME_STATE_KEY = "ExpandedTimeState"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"
@@ -201,6 +200,7 @@ const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots" // Make sure menu ico
 const val SHARED_CONTENT_KEY_SHARE_BUTTON = "shareButton" // Animate placement of share button
 const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map
 const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens
+const val SHARED_CONTENT_KEY_TIMES_ITEM = "timesItem" // a prefix
 const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to a level
 const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns compass icon to a compass
 const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen to astronomy's

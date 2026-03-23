@@ -687,7 +687,7 @@ private fun enableTimesTab(): Boolean {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Details(
+private fun SharedTransitionScope.Details(
     selectedDay: Jdn,
     bringDay: BringDay,
     bottomPadding: Dp,

@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIMES_ITEM
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
@@ -28,12 +30,13 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.nextTimeColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
 
 @Composable
-fun Times(
+fun SharedTransitionScope.Times(
     isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean,
 ) {
     AnimatedContent(isExpanded) { isExpandedState ->
@@ -55,7 +58,14 @@ fun Times(
                 if (isExpandedState || prayTime.isAlwaysShown(isJafari)) Column(
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
-                        .defaultMinSize(minWidth = ItemWidth.dp),
+                        .defaultMinSize(minWidth = ItemWidth.dp)
+                        .sharedBounds(
+                            rememberSharedContentState(
+                                key = SHARED_CONTENT_KEY_TIMES_ITEM + prayTime.name,
+                            ),
+                            animatedVisibilityScope = this@AnimatedContent,
+                            boundsTransform = appBoundsTransform,
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val textColor by animateColor(

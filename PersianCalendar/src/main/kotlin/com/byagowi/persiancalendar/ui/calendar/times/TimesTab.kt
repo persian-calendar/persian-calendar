@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -55,7 +56,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
-fun TimesTab(
+fun SharedTransitionScope.TimesTab(
     selectedDay: Jdn,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
