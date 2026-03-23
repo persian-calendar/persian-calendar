@@ -69,10 +69,7 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                 onClick = {
                     onDismissRequest()
                     context.preferences.edit {
-                        putStringSet(
-                            PREF_HOLIDAY_TYPES,
-                            enabledTypes.toSet(),
-                        )
+                        putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet())
                     }
                 },
             ) { Text(stringResource(R.string.accept)) }
@@ -122,13 +119,6 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     )
                 }
 
-                ItemCheckBox(
-                    stringResource(R.string.international),
-                    enabledTypes,
-                    EventsRepository.internationalKey,
-                    destinationItem = destinationItem,
-                    indented = false,
-                )
                 if (language.isIranExclusive) {
                     Iran()
                     Afghanistan()
@@ -136,6 +126,13 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     Afghanistan()
                     Iran()
                 }
+                ItemCheckBox(
+                    stringResource(R.string.international),
+                    enabledTypes,
+                    EventsRepository.internationalKey,
+                    destinationItem = destinationItem,
+                    indented = false,
+                )
             } else {
                 CountryEvents(
                     calendarCenterName = stringResource(R.string.nepal),
@@ -177,8 +174,7 @@ fun CountryEvents(
                 .fillMaxWidth()
                 .then(
                     if (hideTheFirstRowFromAccessibility) {
-                        Modifier
-                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        Modifier.semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                             .clearAndSetSemantics {}
                     } else Modifier,
                 )

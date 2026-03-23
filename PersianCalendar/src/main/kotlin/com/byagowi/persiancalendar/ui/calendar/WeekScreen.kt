@@ -635,9 +635,7 @@ fun DaysView(
         val hasHeader by remember(events) {
             val needsHeader =
                 eventsWithTime.all { it.isEmpty() } || maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || content != null
-            derivedStateOf {
-                needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll
-            }
+            derivedStateOf { needsHeader && scrollState.value <= initialScroll }
         }
         val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
             refreshCalendar()

@@ -136,6 +136,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -857,10 +858,11 @@ private fun SharedTransitionScope.Details(
                             border = BorderStroke(
                                 1.dp,
                                 animateColor(
-                                    if (highlighted) MaterialTheme.colorScheme.primary.copy(alpha = AppBlendAlpha)
+                                    if (highlighted) MaterialTheme.colorScheme.primary.copy(alpha = .85f)
                                     else MaterialTheme.colorScheme.outlineVariant,
                                 ).value,
                             ),
+                            modifier = if (highlighted) Modifier.zIndex(1f) else Modifier,
                             selected = selectedButton == index,
                             icon = {},
                             shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
