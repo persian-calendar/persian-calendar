@@ -791,8 +791,6 @@ private fun Details(
                 }
             }
 
-            var removeThirdTab by remember { mutableStateOf(false) }
-            val hasTimesTab = enableTimesTab() && !removeThirdTab
             var selectedButton by remember(selectedDay) { mutableIntStateOf(-1) }
             val buttons = listOfNotNull(
                 Triple(stringResource(R.string.calendar), false) @Composable {
@@ -825,21 +823,7 @@ private fun Details(
                 }.takeIf { !eventsRepository.isEmpty },
                 Triple(stringResource(R.string.times), false) @Composable {
                     val coordinates = coordinates
-                    if (coordinates == null) Column(Modifier.fillMaxWidth()) {
-                        val context = LocalContext.current
-                        EncourageActionLayout(
-                            modifier = Modifier.padding(bottom = 8.dp),
-                            header = stringResource(R.string.ask_user_to_set_location),
-                            discardAction = {
-                                context.preferences.edit {
-                                    putBoolean(PREF_DISMISSED_OWGHAT, true)
-                                }
-                                removeThirdTab = true
-                            },
-                            acceptAction = navigateToSettingsLocationTab,
-                            hideOnAccept = false,
-                        )
-                    } else TimesTab(
+                    if (coordinates != null) TimesTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -849,7 +833,7 @@ private fun Details(
                         now = now,
                         today = today,
                     )
-                }.takeIf { hasTimesTab },
+                }.takeIf { coordinates != null },
             )
 
             SingleChoiceSegmentedButtonRow(
