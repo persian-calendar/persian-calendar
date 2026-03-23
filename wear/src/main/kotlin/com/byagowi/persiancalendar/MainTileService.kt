@@ -7,6 +7,7 @@ import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.wrap
 import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.protolayout.material3.Typography
@@ -95,11 +96,28 @@ class MainTileService : TileService() {
                         .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
                     todayEntries.drop(1).take(if (todayEntries.size > 4) 2 else 3).map {
                         if (it.type is EntryType.Holiday) text(
-                            it.title.layoutString, color = colorScheme.primary,
+                            ("تعطیلی رسمی به مناسبت " + it.title).layoutString, color = colorScheme.primary,
                         ) else text(it.title.layoutString)
                     }.forEach(column::addContent)
                     if (todayEntries.size > 4) column.addContent(text("…".layoutString))
-                    column.build()
+                    val box = LayoutElementBuilders.Box.Builder()
+                        .setWidth(expand())
+                        .setHeight(expand())
+                        .setModifiers(
+                            ModifiersBuilders.Modifiers.Builder()
+                                .setBackground(
+                                    ModifiersBuilders.Background.Builder().setColor(
+                                        colorScheme.surfaceContainer.colorProp,
+                                    ).setCorner(
+                                        ModifiersBuilders.Corner.Builder()
+                                            .setRadius(dp(24f))
+                                            .build()
+                                    ).build()
+                                )
+                                .build()
+                        )
+                    box.addContent(column.build())
+                    box.build()
                 },
                 bottomSlot = {
                     val activityComponent =
