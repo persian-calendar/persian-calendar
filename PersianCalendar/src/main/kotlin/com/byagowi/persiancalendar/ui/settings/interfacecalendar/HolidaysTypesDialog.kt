@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -100,6 +99,13 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                         nonHolidaysKey = EventsRepository.iranOthersKey,
                         destinationItem = destinationItem,
                     )
+                    if (!language.isAfghanistanExclusive) ItemCheckBox(
+                        stringResource(R.string.iran_ancient),
+                        enabledTypes,
+                        EventsRepository.iranAncientKey,
+                        destinationItem = destinationItem,
+                        indented = false,
+                    )
                 }
 
                 @Composable
@@ -116,6 +122,13 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     )
                 }
 
+                ItemCheckBox(
+                    stringResource(R.string.international),
+                    enabledTypes,
+                    EventsRepository.internationalKey,
+                    destinationItem = destinationItem,
+                    indented = false,
+                )
                 if (language.isIranExclusive) {
                     Iran()
                     Afghanistan()
@@ -135,29 +148,6 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     destinationItem = destinationItem,
                 )
             }
-            Box(
-                Modifier.defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                Text(
-                    stringResource(R.string.other_holidays),
-                    modifier = Modifier
-                        .padding(horizontal = SettingsHorizontalPaddingItem.dp)
-                        .semantics { this.hideFromAccessibility() },
-                )
-            }
-            if (!language.isAfghanistanExclusive) IndentedCheckBox(
-                stringResource(R.string.iran_ancient),
-                enabledTypes,
-                EventsRepository.iranAncientKey,
-                destinationItem = destinationItem,
-            )
-            IndentedCheckBox(
-                stringResource(R.string.international),
-                enabledTypes,
-                EventsRepository.internationalKey,
-                destinationItem = destinationItem,
-            )
         }
     }
 }
@@ -236,17 +226,18 @@ fun CountryEvents(
                 },
             )
         }
-        IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
-        IndentedCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)
+        ItemCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
+        ItemCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)
     }
 }
 
 @Composable
-private fun IndentedCheckBox(
+private fun ItemCheckBox(
     label: String,
     enabledTypes: SnapshotStateList<String>,
     key: String,
     destinationItem: String?,
+    indented: Boolean = true,
 ) {
     Row(
         Modifier
@@ -257,7 +248,9 @@ private fun IndentedCheckBox(
             }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(
-                start = (24/*checkbox size*/ + HolidaysHorizontalPaddingItem + SettingsHorizontalPaddingItem).dp,
+                start = ((if (indented) {
+                    24/*checkbox size*/ + HolidaysHorizontalPaddingItem
+                } else 0) + SettingsHorizontalPaddingItem).dp,
                 end = HolidaysHorizontalPaddingItem.dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
