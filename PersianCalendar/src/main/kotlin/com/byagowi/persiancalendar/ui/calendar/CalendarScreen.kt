@@ -519,7 +519,7 @@ fun SharedTransitionScope.CalendarScreen(
                 if (!isYearViewState) {
                     val scale = remember {
                         mutableFloatStateOf(
-                            (maxHeight.value / (25f * defaultCellHeight).coerceAtLeast(.5f)),
+                            (maxHeight.value / (25f * defaultCellHeight)).coerceAtLeast(.5f),
                         )
                     }
                     val cellHeight = (defaultCellHeight * scale.floatValue).dp
