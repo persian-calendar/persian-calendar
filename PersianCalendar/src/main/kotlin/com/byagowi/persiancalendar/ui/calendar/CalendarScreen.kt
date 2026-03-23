@@ -790,7 +790,7 @@ private fun Details(
                 }
             }
 
-            var selectedButton by remember(selectedDay) { mutableIntStateOf(-1) }
+            var selectedButton by rememberSaveable { mutableIntStateOf(-1) }
             val buttons = listOfNotNull(
                 Triple(stringResource(R.string.calendar), false) @Composable {
                     CalendarsTab(
