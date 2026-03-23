@@ -573,6 +573,8 @@ fun SharedTransitionScope.CalendarScreen(
                                 navigateToAstronomy = navigateToAstronomy,
                                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                swipeUpActions = swipeUpActions,
+                                swipeDownActions = swipeDownActions,
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
@@ -643,6 +645,8 @@ fun SharedTransitionScope.CalendarScreen(
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
                                 navigateToAstronomy = navigateToAstronomy,
+                                swipeUpActions = swipeUpActions,
+                                swipeDownActions = swipeDownActions,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -709,6 +713,8 @@ private fun SharedTransitionScope.Details(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     scrollState: ScrollState,
+    swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
+    swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
     modifier: Modifier = Modifier,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -755,7 +761,17 @@ private fun SharedTransitionScope.Details(
             scale = scale,
             initialScroll = initialScroll,
             cellHeight = cellHeight,
-            scrollableModifier = Modifier,
+            scrollableModifier = Modifier.detectSwipe {
+                val wasAtTop = scrollState.value == 0
+                val wasAtEnd = scrollState.value == scrollState.maxValue
+                { isUp: Boolean ->
+                    when {
+                        isUp && wasAtEnd -> swipeUpActions[preferredSwipeUpAction]
+                        !isUp && wasAtTop -> swipeDownActions[preferredSwipeDownAction]
+                        else -> null
+                    }?.invoke()
+                }
+            },
             numeral = numeral,
             fabPlaceholderHeight = fabPlaceholderHeight,
         ) { appointments ->
