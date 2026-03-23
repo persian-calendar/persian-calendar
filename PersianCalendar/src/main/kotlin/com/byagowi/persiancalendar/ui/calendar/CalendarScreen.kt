@@ -209,6 +209,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
@@ -766,9 +767,7 @@ private fun Details(
                             state,
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
@@ -856,7 +855,7 @@ private fun Details(
                             border = BorderStroke(
                                 1.dp,
                                 animateColor(
-                                    if (highlighted) MaterialTheme.colorScheme.primary.copy(alpha = .5f)
+                                    if (highlighted) MaterialTheme.colorScheme.primary.copy(alpha = AppBlendAlpha)
                                     else MaterialTheme.colorScheme.outlineVariant,
                                 ).value,
                             ),
