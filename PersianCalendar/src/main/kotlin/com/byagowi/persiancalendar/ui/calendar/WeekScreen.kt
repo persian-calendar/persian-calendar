@@ -364,9 +364,7 @@ fun SharedTransitionScope.WeekScreen(
                     )
 
                     val scale = remember { mutableFloatStateOf(1f) }
-                    val cellHeight by remember(scale.floatValue) {
-                        mutableStateOf((64 * scale.floatValue).dp)
-                    }
+                    val cellHeight = (defaultCellHeight * scale.floatValue).dp
                     val initialScroll =
                         with(density) { (cellHeight * 7 * scale.floatValue - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
@@ -569,6 +567,8 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
     }
     return events.indices.map { EventDivision(events[it], colors[it], columnsCount[it]) }
 }
+
+const val defaultCellHeight = 64
 
 @SuppressLint("ComposeModifierWithoutDefault")
 @Composable
