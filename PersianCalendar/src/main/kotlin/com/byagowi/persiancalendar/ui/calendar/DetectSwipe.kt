@@ -54,6 +54,7 @@ fun Modifier.detectHorizontalSwipe(
         val detectorInstance = detector()
         horizontalDrag(downId) {
             xAccumulation += it.positionChange().x
+            it.consume()
             if (!disable && abs(xAccumulation) > thresholdPx) {
                 detectorInstance(xAccumulation < 0f)
                 disable = true
