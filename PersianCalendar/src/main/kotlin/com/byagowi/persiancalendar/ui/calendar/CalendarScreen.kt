@@ -837,7 +837,7 @@ private fun Details(
                 }.takeIf { coordinates != null },
             )
 
-            SingleChoiceSegmentedButtonRow(
+            if (buttons.isNotEmpty()) SingleChoiceSegmentedButtonRow(
                 Modifier
                     .padding(vertical = 4.dp)
                     .align(Alignment.CenterHorizontally),
