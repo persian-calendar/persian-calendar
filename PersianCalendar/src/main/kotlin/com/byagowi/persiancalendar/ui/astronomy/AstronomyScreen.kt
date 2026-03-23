@@ -307,7 +307,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             closeMenu()
                         }
                         if (coordinates != null) AppDropdownMenuItem(
-                            { Text(stringResource(R.string.planetary_hours)) },
+                            text = { Text(stringResource(R.string.planetary_hours)) },
                         ) {
                             showPlanetaryHoursDialog = true
                             closeMenu()
