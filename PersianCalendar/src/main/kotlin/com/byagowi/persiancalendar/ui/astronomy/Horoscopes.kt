@@ -85,6 +85,8 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.kabulCoordinates
+import com.byagowi.persiancalendar.tehranCoordinates
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NumberEdit
@@ -419,17 +421,9 @@ private fun ColumnScope.YearHoroscopeDialogContent(
         !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
             settingsCoordinates to settingsCityName
         }
-
-        language.isAfghanistanExclusive -> {
-            val kabulCoordinates = Coordinates(34.53, 69.16, 0.0)
-            kabulCoordinates to if (language.isArabicScript) "کابل" else "Kabul"
-        }
-
+        language.isAfghanistanExclusive -> kabulCoordinates to if (language.isArabicScript) "کابل" else "Kabul"
         // So the user would be able to verify it with the calendar book published
-        else -> {
-            val tehranCoordinates = Coordinates(35.68, 51.42, 0.0)
-            tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"
-        }
+        else -> tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"
     }
 
     val time = seasons(gregorianYear).marchEquinox

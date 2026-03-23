@@ -118,9 +118,11 @@ import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
+import com.byagowi.persiancalendar.kabulCoordinates
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
 import com.byagowi.persiancalendar.service.widgetWidthCellKey
+import com.byagowi.persiancalendar.tehranCoordinates
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
@@ -477,9 +479,12 @@ fun createSunViewRemoteViews(
     size: DpSize?,
     now: Long,
 ): RemoteViews {
-    val prayTimes = (coordinates ?: Coordinates(35.68, 51.42, 0.0).takeIf {
-        TimeZone.getDefault().id == IRAN_TIMEZONE_ID
-    })?.calculatePrayTimes()
+    val prayTimes = when {
+        coordinates != null -> coordinates
+        language.isAfghanistanExclusive -> kabulCoordinates
+        language.isIranExclusive || TimeZone.getDefault().id == IRAN_TIMEZONE_ID -> tehranCoordinates
+        else -> null
+    }?.calculatePrayTimes()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = androidx.compose.ui.graphics.Color(
         when {

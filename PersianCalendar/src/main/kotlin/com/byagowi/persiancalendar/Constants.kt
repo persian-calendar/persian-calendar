@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import android.graphics.Color
 import android.os.Build
+import io.github.persiancalendar.praytimes.Coordinates
 
 const val LOG_TAG = "PersianCalendar"
 
@@ -177,6 +178,9 @@ const val OWGHAT_LOCATION_KEY = "owghat_location"
 val DEFAULT_WIDGET_CUSTOMIZATIONS = setOf(
     OTHER_CALENDARS_KEY, NON_HOLIDAYS_EVENTS_KEY, OWGHAT_KEY, OWGHAT_LOCATION_KEY,
 )
+
+val kabulCoordinates = Coordinates(34.53, 69.16, 0.0)
+val tehranCoordinates = Coordinates(35.68, 51.42, 0.0)
 
 const val QIBLA_LATITUDE = 21.422522
 const val QIBLA_LONGITUDE = 39.826181
