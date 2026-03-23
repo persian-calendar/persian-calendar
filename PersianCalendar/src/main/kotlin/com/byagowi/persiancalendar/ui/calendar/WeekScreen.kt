@@ -709,15 +709,15 @@ fun DaysView(
                             isExpanded = isExpanded,
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
-                        content?.invoke(this, appointments)
-                        Spacer(Modifier.height(8.dp))
+                        if (content != null) {
+                            content(this, appointments)
+                        } else Spacer(Modifier.height(8.dp))
                         if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
                             Spacer(Modifier.height(fabPlaceholderHeight))
                         }
-                    } else {
-                        content?.invoke(this, appointments)
-                        Spacer(Modifier.height(12.dp))
-                    }
+                    } else if (content != null) {
+                        content(this, appointments)
+                    } else Spacer(Modifier.height(12.dp))
                 }
             } else if (maxDayAllDayEvents != 0) Row(
                 verticalAlignment = Alignment.Bottom,

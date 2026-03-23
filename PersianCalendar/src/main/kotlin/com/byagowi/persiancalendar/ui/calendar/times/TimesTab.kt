@@ -76,12 +76,13 @@ fun TimesTab(
     val prayTimes = coordinates.calculatePrayTimes(selectedDay.toGregorianCalendar())
 
     Column(
-        modifier
+        Modifier
             .fillMaxWidth()
             .clickable(
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
-            ),
+            )
+            .then(modifier),
     ) {
         val isToday = selectedDay == today
         AstronomicalOverview(selectedDay, prayTimes, now, isToday, navigateToAstronomy)

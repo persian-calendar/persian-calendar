@@ -229,7 +229,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         commandBringDay = commandBringDay,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         initiallySelectedDay = it.day,
-                        isInitiallyWeek = true,
                         navigateUp = navigateUp,
                         today = today,
                         now = now,

@@ -797,6 +797,7 @@ private fun Details(
             val buttons = listOfNotNull(
                 Triple(stringResource(R.string.calendar), false) @Composable {
                     CalendarsTab(
+                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
@@ -806,18 +807,20 @@ private fun Details(
                     if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events),
                     appointments.isNotEmpty(),
                 ) @Composable {
-                    if (appointments.isEmpty()) Text(
-                        text = if (language.isPersianOrDari) {
-                            "مناسبتی برای این روز یافت نشد"
-                        } else stringResource(R.string.no_event),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) else Column(Modifier.padding(horizontal = 24.dp)) {
-                        DayEvents(
-                            appointments,
-                            navigateToHolidaysSettings,
-                            refreshCalendar,
-                        )
+                    Box(Modifier.padding(bottom = 8.dp)) {
+                        if (appointments.isEmpty()) Text(
+                            text = if (language.isPersianOrDari) {
+                                "مناسبتی برای این روز یافت نشد"
+                            } else stringResource(R.string.no_event),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) else Column(Modifier.padding(horizontal = 24.dp)) {
+                            DayEvents(
+                                appointments,
+                                navigateToHolidaysSettings,
+                                refreshCalendar,
+                            )
+                        }
                     }
                 }.takeIf { !eventsRepository.isEmpty },
                 Triple(stringResource(R.string.times), false) @Composable {
@@ -825,6 +828,7 @@ private fun Details(
                     if (coordinates == null) Column(Modifier.fillMaxWidth()) {
                         val context = LocalContext.current
                         EncourageActionLayout(
+                            modifier = Modifier.padding(bottom = 8.dp),
                             header = stringResource(R.string.ask_user_to_set_location),
                             discardAction = {
                                 context.preferences.edit {
@@ -836,6 +840,7 @@ private fun Details(
                             hideOnAccept = false,
                         )
                     } else TimesTab(
+                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                         navigateToAstronomy = navigateToAstronomy,
@@ -887,7 +892,11 @@ private fun Details(
             ) {
                 val (_, _, content) = run {
                     buttons.getOrNull(it)
-                } ?: return@AnimatedContent Spacer(Modifier.fillMaxWidth())
+                } ?: return@AnimatedContent Spacer(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(8.dp),
+                )
                 Box(Modifier.padding(top = 4.dp)) { content() }
             }
 
@@ -908,7 +917,6 @@ private fun Details(
                 var showDialog by remember { mutableStateOf(false) }
                 if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
-                Spacer(Modifier.height(16.dp))
                 EncourageActionLayout(
                     header = stringResource(R.string.ask_calendar_permission),
                     discardAction = {
@@ -922,6 +930,7 @@ private fun Details(
                     acceptButton = stringResource(R.string.yes),
                     acceptAction = { showDialog = true },
                 )
+                Spacer(Modifier.height(8.dp))
             }
         }
     }
@@ -937,10 +946,12 @@ private fun CalendarsTab(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        modifier.clickable(
-            onClickLabel = stringResource(R.string.more),
-            onClick = { isExpanded = !isExpanded },
-        ),
+        Modifier
+            .clickable(
+                onClickLabel = stringResource(R.string.more),
+                onClick = { isExpanded = !isExpanded },
+            )
+            .then(modifier),
     ) {
         CalendarsOverview(
             jdn = selectedDay,
