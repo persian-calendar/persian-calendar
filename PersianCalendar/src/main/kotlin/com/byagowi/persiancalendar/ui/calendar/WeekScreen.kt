@@ -807,7 +807,7 @@ fun DaysView(
                 val tableWidthPx = with(density) { tableWidth.toPx() }
                 val cellWidthPx = tableWidthPx / days
                 val cellHeightPx = with(density) { cellHeight.toPx() }
-                var offset by remember(tableWidthPx) { mutableStateOf<Offset?>(null) }
+                var offset by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
                 var duration by remember { mutableFloatStateOf(cellHeightPx) }
                 val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                 val directionSign = if (isRtl) -1 else 1
@@ -859,6 +859,9 @@ fun DaysView(
                                                 indication = null,
                                                 interactionSource = null,
                                             ) {
+                                                if (!isAddEventBoxEnabled) {
+                                                    interaction = Interaction.AddBox
+                                                }
                                                 offset = Offset(
                                                     cellWidthPx * (column - 1),
                                                     cellHeightPx * row / scale.floatValue,
@@ -1009,23 +1012,23 @@ fun DaysView(
                 }
 
                 // Add event box
-                val x = offset?.let { (it.x / cellWidthPx).roundToInt() } ?: 0
+                val x = (offset.x / cellWidthPx).roundToInt()
                 LaunchedEffect(selectedDay) {
                     val selectedDayIndex = selectedDay - startingDay
-                    offset?.let {
-                        if (selectedDayIndex != x) offset =
-                            it.copy(x = selectedDayIndex * cellWidthPx)
+                    if (selectedDayIndex != x) {
+                        offset = offset.copy(x = selectedDayIndex * cellWidthPx)
                     }
                 }
                 val ySteps = (cellHeightPx / 4).roundToInt()
-                val y = offset?.let { (it.y * scale.floatValue / ySteps).roundToInt() } ?: 0
-                val animatedOffset = if (offset == null) Offset.Zero
-                else animateOffsetAsState(
+                val y = (offset.y * scale.floatValue / ySteps).roundToInt()
+                val animatedOffset by animateOffsetAsState(
                     targetValue = Offset(x * cellWidthPx, y * ySteps.toFloat()),
-                    animationSpec = if (interaction == Interaction.Zoom) snap() else {
-                        spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
+                    animationSpec = when (interaction) {
+                        Interaction.Zoom, Interaction.AddBox -> snap()
+                        else -> spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
                     },
-                ).value
+                )
+                if (interaction == Interaction.AddBox) interaction = null
                 val dy = (duration / (cellHeightPx / 4) * scale.floatValue).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
@@ -1034,7 +1037,7 @@ fun DaysView(
                 val widthReduction = remember { Animatable(defaultWidthReductionPx) }
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
-                    if (offset == null) {
+                    if (!isAddEventBoxEnabled) {
                         offset = Offset(
                             cellWidthPx * (selectedDay - startingDay),
                             ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
@@ -1074,12 +1077,10 @@ fun DaysView(
                 LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                     if (resetOnNextRefresh) {
                         duration = cellHeightPx / 4 * 4f
-                        offset = null
+                        offset = Offset.Zero
+                        onAddEventBoxEnabledChange(false)
                         resetOnNextRefresh = false
                     }
-                }
-                LaunchedEffect(isAddEventBoxEnabled) {
-                    if (!isAddEventBoxEnabled && offset != null) offset = null
                 }
                 Box(
                     Modifier
@@ -1095,7 +1096,7 @@ fun DaysView(
                             with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) {
                                 (animatedDuration + if (interaction == Interaction.ExtendUp) {
-                                    (offset?.y ?: 0f) * scale.floatValue - animatedOffset.y
+                                    offset.y * scale.floatValue - animatedOffset.y
                                 } else 0f).toDp()
                             },
                         )
@@ -1109,7 +1110,8 @@ fun DaysView(
                                 val id = awaitFirstDown().id
                                 coroutineScope.launch { widthReduction.animateTo(0f) }
                                 drag(id) {
-                                    val position = offset ?: return@drag
+                                    if (!isAddEventBoxEnabled) return@drag
+                                    val position = offset
                                     val delta = it.positionChange()
                                     if (interaction == null) interaction = when {
                                         abs(it.position.y - duration * scale.floatValue) < cellHeightPx / scale.floatValue * .2f -> Interaction.ExtendDown
@@ -1171,12 +1173,13 @@ fun DaysView(
                     contentAlignment = Alignment.Center,
                 ) addEventBox@{
                     val alpha by animateFloatAsState(
-                        targetValue = if (offset == null) 0f else 1f,
+                        targetValue = if (isAddEventBoxEnabled) 1f else 0f,
                         animationSpec = spring(
-                            Spring.DampingRatioNoBouncy, Spring.StiffnessLow,
+                            dampingRatio = Spring.DampingRatioNoBouncy,
+                            stiffness = Spring.StiffnessMedium,
                         ),
                     )
-                    if (offset == null) return@addEventBox
+                    if (alpha == 0f) return@addEventBox
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
                     val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
                     val primaryWithAlpha = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
@@ -1245,7 +1248,7 @@ fun DaysView(
     }
 }
 
-private enum class Interaction { ExtendUp, ExtendDown, Move, Zoom }
+private enum class Interaction { ExtendUp, ExtendDown, Move, Zoom, AddBox }
 
 private const val weeksLimit = 25000 // this should be an even number
 private const val daysLimit = 175000 // this should be an even number
