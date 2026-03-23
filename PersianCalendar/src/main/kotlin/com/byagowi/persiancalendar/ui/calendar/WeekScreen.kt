@@ -162,14 +162,13 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 @Composable
-fun SharedTransitionScope.DaysScreen(
+fun SharedTransitionScope.WeekScreen(
     refreshToken: Int,
     refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
     navigateToHolidaysSettings: (String?) -> Unit,
-    isInitiallyWeek: Boolean,
     today: Jdn,
     now: Long,
 ) {
@@ -182,7 +181,7 @@ fun SharedTransitionScope.DaysScreen(
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
     val dayInitialPage = remember(today) { dayPageFromJdn(selectedDay, today) }
     val dayPagerState = rememberPagerState(initialPage = dayInitialPage) { daysLimit }
-    var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
+    var isWeekView by rememberSaveable { mutableStateOf(true) }
     val setSelectedDayInWeekPager = { jdn: Jdn ->
         selectedDay = jdn
         isHighlighted = true

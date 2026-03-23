@@ -107,7 +107,7 @@ import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
-import com.byagowi.persiancalendar.ui.calendar.DaysScreen
+import com.byagowi.persiancalendar.ui.calendar.WeekScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -223,7 +223,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
                 entry<Screen.Week> {
-                    DaysScreen(
+                    WeekScreen(
                         refreshToken = refreshToken,
                         refreshCalendar = refreshCalendar,
                         commandBringDay = commandBringDay,
