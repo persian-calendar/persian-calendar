@@ -771,7 +771,7 @@ private fun SharedTransitionScope.Details(
             },
             numeral = numeral,
             fabPlaceholderHeight = fabPlaceholderHeight,
-        ) { appointments ->
+        ) { appointments, onHasContentChange ->
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
             AnimatedVisibility(visible = shiftWorkTitle != null) {
                 AnimatedContent(
@@ -808,7 +808,7 @@ private fun SharedTransitionScope.Details(
 
             var selectedButton by rememberSaveable { mutableIntStateOf(-1) }
             val buttons = listOfNotNull(
-                Triple(stringResource(R.string.calendar), false) @Composable {
+                Pair(stringResource(R.string.calendar)) @Composable {
                     CalendarsTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         selectedDay = selectedDay,
@@ -816,9 +816,8 @@ private fun SharedTransitionScope.Details(
                         navigateToAstronomy = navigateToAstronomy,
                     )
                 }.takeIf { enabledCalendars.size != 1 },
-                Triple(
+                Pair(
                     if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events),
-                    appointments.isNotEmpty(),
                 ) @Composable {
                     Box(Modifier.padding(bottom = 8.dp)) {
                         if (appointments.isEmpty()) Text(
@@ -835,8 +834,8 @@ private fun SharedTransitionScope.Details(
                             )
                         }
                     }
-                }.takeIf { !eventsRepository.isEmpty },
-                Triple(stringResource(R.string.times), false) @Composable {
+                }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
+                Pair(stringResource(R.string.times)) @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
@@ -850,11 +849,12 @@ private fun SharedTransitionScope.Details(
                     )
                 }.takeIf { coordinates != null },
             )
+            onHasContentChange(buttons.isNotEmpty())
 
             if (buttons.isNotEmpty()) SingleChoiceSegmentedButtonRow(
                 Modifier.align(Alignment.CenterHorizontally),
             ) {
-                buttons.forEachIndexed { index, (text, highlighted, _) ->
+                buttons.forEachIndexed { index, (text, _) ->
                     CompositionLocalProvider(
                         LocalMinimumInteractiveComponentSize provides 0.dp,
                     ) {
@@ -884,7 +884,7 @@ private fun SharedTransitionScope.Details(
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
             ) {
-                val (_, _, content) = run {
+                val (_, content) = run {
                     buttons.getOrNull(it)
                 } ?: return@AnimatedContent Spacer(
                     Modifier

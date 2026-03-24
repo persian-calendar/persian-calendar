@@ -598,7 +598,7 @@ fun DaysView(
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
     fabPlaceholderHeight: Dp? = null,
-    content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>) -> Unit)? = null,
+    content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>, (Boolean) -> Unit) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -633,8 +633,9 @@ fun DaysView(
             dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
         }
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
-        val hasHeader by remember(events) {
-            val needsHeader = maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || content != null
+        var hasContent by remember { mutableStateOf(true) }
+        val hasHeader by remember(events, hasContent) {
+            val needsHeader = maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || (content != null && hasContent)
             derivedStateOf { needsHeader && scrollState.value <= initialScroll }
         }
         val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
@@ -701,13 +702,13 @@ fun DaysView(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
                         if (content != null) {
-                            content(this, appointments)
+                            content(this, appointments) { hasContent = it }
                         } else Spacer(Modifier.height(8.dp))
                         if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
                             Spacer(Modifier.height(fabPlaceholderHeight))
                         }
                     } else if (content != null) {
-                        content(this, appointments)
+                        content(this, appointments) { hasContent = it }
                     } else Spacer(Modifier.height(12.dp))
                 }
             } else if (maxDayAllDayEvents != 0) Row(
