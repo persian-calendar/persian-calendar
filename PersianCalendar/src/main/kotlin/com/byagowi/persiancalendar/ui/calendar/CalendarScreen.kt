@@ -210,7 +210,6 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
@@ -520,7 +519,7 @@ fun SharedTransitionScope.CalendarScreen(
                 if (!isYearViewState) {
                     val scale = remember {
                         mutableFloatStateOf(
-                            (maxHeight.value / (25f * defaultCellHeight)).coerceAtLeast(.5f),
+                            (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),
                         )
                     }
                     val cellHeight = (defaultCellHeight * scale.floatValue).dp
