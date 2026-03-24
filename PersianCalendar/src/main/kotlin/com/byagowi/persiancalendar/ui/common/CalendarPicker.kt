@@ -64,7 +64,7 @@ fun CalendarPicker(
     betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
 ) {
-    SegmentedButtonItemsPicker(
+    if (items.size >= 2) SegmentedButtonItemsPicker(
         value = value,
         items = items,
         backgroundColor = backgroundColor,
