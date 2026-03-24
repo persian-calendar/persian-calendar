@@ -136,7 +136,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -207,7 +206,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -854,9 +852,7 @@ private fun SharedTransitionScope.Details(
             )
 
             if (buttons.isNotEmpty()) SingleChoiceSegmentedButtonRow(
-                Modifier
-                    .padding(vertical = 4.dp)
-                    .align(Alignment.CenterHorizontally),
+                Modifier.align(Alignment.CenterHorizontally),
             ) {
                 buttons.forEachIndexed { index, (text, highlighted, _) ->
                     CompositionLocalProvider(
@@ -872,12 +868,8 @@ private fun SharedTransitionScope.Details(
                             ),
                             border = BorderStroke(
                                 1.dp,
-                                animateColor(
-                                    if (highlighted) MaterialTheme.colorScheme.primary.copy(alpha = .85f)
-                                    else MaterialTheme.colorScheme.outlineVariant,
-                                ).value,
+                                MaterialTheme.colorScheme.outlineVariant,
                             ),
-                            modifier = if (highlighted) Modifier.zIndex(1f) else Modifier,
                             selected = selectedButton == index,
                             icon = {},
                             shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
