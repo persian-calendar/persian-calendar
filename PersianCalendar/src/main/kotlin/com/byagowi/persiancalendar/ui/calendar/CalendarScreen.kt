@@ -524,7 +524,7 @@ fun SharedTransitionScope.CalendarScreen(
                     }
                     val cellHeight = (defaultCellHeight * scale.floatValue).dp
                     val initialScroll =
-                        with(LocalDensity.current) { (cellHeight * 7 - 16.dp).roundToPx() }
+                        with(LocalDensity.current) { (cellHeight * initialHour - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
                     LaunchedEffect(selectedDay) {
                         isAddEventBoxEnabled = false
