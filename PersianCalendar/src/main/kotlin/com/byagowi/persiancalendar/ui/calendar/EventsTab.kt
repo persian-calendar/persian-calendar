@@ -227,7 +227,7 @@ private fun DayEventContent(
         Modifier
             .fillMaxWidth()
             .padding(vertical = 2.dp)
-            .clip(MaterialTheme.shapes.medium)
+            .clip(MaterialTheme.shapes.small)
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {

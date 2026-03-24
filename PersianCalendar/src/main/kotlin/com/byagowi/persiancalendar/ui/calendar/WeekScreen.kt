@@ -919,7 +919,8 @@ fun DaysView(
                                     with(density) { ((end - start) * cellHeightPx).toDp() - heightSizeReduction },
                                 )
                                 .clickable { launcher.viewEvent(event, context) }
-                                .background(color, MaterialTheme.shapes.small),
+                                .background(color, MaterialTheme.shapes.small)
+                                .padding(all = 4.dp),
                         )
                     }
                 }
