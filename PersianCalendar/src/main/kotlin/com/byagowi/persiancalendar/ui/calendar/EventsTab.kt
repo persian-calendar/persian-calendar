@@ -226,7 +226,7 @@ private fun DayEventContent(
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 2.dp)
             .clip(MaterialTheme.shapes.medium)
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
