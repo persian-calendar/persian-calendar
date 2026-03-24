@@ -105,8 +105,11 @@ data class EventsRepository(
             nepaliCalendarEvents.getEvents(jdn.toNepaliDate(), irregularCalendarEventsStore),
             gregorianCalendarEvents
                 .getEvents(jdn.toCivilDate(), irregularCalendarEventsStore, deviceEvents),
-        ).flatten().filter { it.isHoliday || it.date.calendar in enabledCalendars }
+        ).flatten().filterEvents()
     }
+
+    fun List<CalendarEvent<*>>.filterEvents(): List<CalendarEvent<*>> =
+        this.filter { it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC }
 
     fun getEnabledEvents(jdn: Jdn): List<CalendarEvent<*>> {
         if (!jdn.isYearSupportedOnApp) return emptyList()
@@ -127,7 +130,7 @@ data class EventsRepository(
             val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendar)
                 .filter { event -> event.date.month < it.month }
             thisYear + nextYear
-        }).filter { it.isHoliday || it.date.calendar in enabledCalendars }
+        }).filterEvents()
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
