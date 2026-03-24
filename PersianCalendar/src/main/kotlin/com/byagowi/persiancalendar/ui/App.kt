@@ -107,8 +107,8 @@ import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
-import com.byagowi.persiancalendar.ui.calendar.WeekScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
+import com.byagowi.persiancalendar.ui.calendar.WeekScreen
 import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen

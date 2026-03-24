@@ -967,7 +967,7 @@ private fun CalendarsTab(
         val context = LocalContext.current
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS,
-            ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences
+            ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
         ) {
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission(),
