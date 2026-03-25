@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
@@ -68,8 +67,7 @@ fun EarthView(
     val geocentricPlanetsTitles = geocentricPlanetsList.map {
         stringResource(it.titleStringId) + " " + it.symbol
     }
-    val density = LocalDensity.current
-    val trianglePath = remember(density) { Path() }
+    val trianglePath = remember { Path() }
     val zodiacForegroundColor = Color(0x18808080)
     val colorTextPaint = remember(typeface) {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -81,8 +79,6 @@ fun EarthView(
     val zodiacPaint = remember(typeface) {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.color = 0xFF808080.toInt()
-            it.strokeWidth = with(density) { 1.dp.toPx() }
-            it.textSize = with(density) { 10.dp.toPx() }
             it.textAlign = Paint.Align.CENTER
             it.typeface = typeface
         }
@@ -91,15 +87,12 @@ fun EarthView(
     val zodiacSymbolPaint = remember {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.color = 0x38808080
-            it.strokeWidth = with(density) { 1.dp.toPx() }
-            it.textSize = with(density) { 20.dp.toPx() }
             it.textAlign = Paint.Align.CENTER
             it.typeface =
                 ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
             if (isBoldFont) it.isFakeBoldText = true
         }
     }
-    val moonOrbitStroke = remember { Stroke(with(density) { 1.dp.toPx() }) }
     val tropicalFraction by animateFloatAsState(
         targetValue = if (isTropical) 1f else 0f,
         animationSpec = spring(
@@ -121,6 +114,7 @@ fun EarthView(
     val labels = remember(resources) { Zodiac.entries.map { it.shortTitle(resources) } }
     val symbols = remember { Zodiac.entries.map { it.symbol } }
     val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
     val pointerModifier = Modifier.pointerInput(isScaled) {
         var lastPointerId: PointerId? = null
         val velocityTracker = VelocityTracker()
@@ -211,6 +205,10 @@ fun EarthView(
                 180f, 180f,
             )
         }
+        zodiacPaint.strokeWidth = unit
+        zodiacPaint.textSize = unit * 10
+        zodiacSymbolPaint.strokeWidth = unit
+        zodiacSymbolPaint.textSize = unit * 20
         val nativeCanvas = this.drawContext.canvas.nativeCanvas
         run {
             val arcTopLeft = Offset(circleInsetStart, circleInsetStart)
@@ -247,7 +245,7 @@ fun EarthView(
             translate(left = radius) { drawPath(trianglePath, Color(0xFFEEBB22)) }
         }
         val moonDegree = state.moon.lon.toFloat()
-        drawCircle(Color(0x40808080), radius * .25f, style = moonOrbitStroke)
+        drawCircle(Color(0x40808080), radius * .25f, style = Stroke(unit))
         rotate(degrees = -moonDegree + 90) {
             val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
             solarDraw.moon(
