@@ -444,7 +444,7 @@ fun SharedTransitionScope.WeekScreen(
                                     hasWeekPager = hasWeeksPager,
                                     startingDay = pageWeekStart,
                                     selectedDay = selectedDay,
-                                    setSelectedDay = setSelectedDayInWeekPager,
+                                    onSelectedDayChange = setSelectedDayInWeekPager,
                                     addEvent = addEvent,
                                     refreshCalendar = refreshCalendar,
                                     days = 7,
@@ -505,7 +505,7 @@ fun SharedTransitionScope.WeekScreen(
                                 },
                                 startingDay = pageDay,
                                 selectedDay = selectedDay,
-                                setSelectedDay = { selectedDay = it; isHighlighted = true },
+                                onSelectedDayChange = { selectedDay = it; isHighlighted = true },
                                 addEvent = addEvent,
                                 refreshCalendar = refreshCalendar,
                                 days = 1,
@@ -577,7 +577,7 @@ fun DaysView(
     onAddActionChange: (() -> Unit) -> Unit,
     startingDay: Jdn,
     selectedDay: Jdn,
-    setSelectedDay: (Jdn) -> Unit,
+    onSelectedDayChange: (Jdn) -> Unit,
     bottomPadding: Dp,
     addEvent: (AddEventData) -> Unit,
     refreshCalendar: () -> Unit,
@@ -861,7 +861,7 @@ fun DaysView(
                                                 )
                                                 onAddEventBoxEnabledChange(true)
                                                 duration = cellHeightPx / scale.floatValue
-                                                setSelectedDay(startingDay + column - 1)
+                                                onSelectedDayChange(startingDay + column - 1)
                                             }
                                             .semantics {
                                                 if (isTalkBackEnabled) {
@@ -1150,7 +1150,7 @@ fun DaysView(
 
                                             val effectiveColumn =
                                                 (position.x / cellWidthPx).roundToInt()
-                                            setSelectedDay(startingDay + effectiveColumn)
+                                            onSelectedDayChange(startingDay + effectiveColumn)
                                         }
 
                                         Interaction.Zoom -> {}

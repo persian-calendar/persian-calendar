@@ -35,7 +35,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -519,19 +518,6 @@ fun SharedTransitionScope.CalendarScreen(
                 }
 
                 if (!isYearViewState) {
-                    val scale = remember {
-                        mutableFloatStateOf(
-                            (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),
-                        )
-                    }
-                    val cellHeight = (defaultCellHeight * scale.floatValue).dp
-                    val initialScroll =
-                        with(LocalDensity.current) { (cellHeight * initialHour - 16.dp).roundToPx() }
-                    val scrollState = rememberScrollState(initialScroll)
-                    LaunchedEffect(selectedDay) {
-                        isAddEventBoxEnabled = false
-                        scrollState.animateScrollTo(initialScroll)
-                    }
                     if (isLandscape) Row {
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(
@@ -565,10 +551,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 snackbarHostState = snackbarHostState,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
-                                initialScroll = initialScroll,
-                                scale = scale,
                                 fabPlaceholderHeight = fabPlaceholderHeight,
-                                cellHeight = cellHeight,
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
@@ -584,7 +567,6 @@ fun SharedTransitionScope.CalendarScreen(
                                             WindowInsetsSides.End,
                                         ),
                                     ),
-                                scrollState = scrollState,
                             )
                         }
                     } else Column(Modifier.clip(materialCornerExtraLargeTop())) {
@@ -640,11 +622,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                                 now = now,
-                                scrollState = scrollState,
-                                initialScroll = initialScroll,
-                                scale = scale,
                                 fabPlaceholderHeight = fabPlaceholderHeight,
-                                cellHeight = cellHeight,
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
                                 navigateToAstronomy = navigateToAstronomy,
@@ -704,10 +682,7 @@ private fun SharedTransitionScope.Details(
     now: Long,
     addEvent: (AddEventData) -> Unit,
     snackbarHostState: SnackbarHostState,
-    initialScroll: Int,
     fabPlaceholderHeight: Dp?,
-    cellHeight: Dp,
-    scale: MutableFloatState,
     isAddEventBoxEnabled: Boolean,
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
     refreshCalendar: () -> Unit,
@@ -716,7 +691,6 @@ private fun SharedTransitionScope.Details(
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
-    scrollState: ScrollState,
     swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
     swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
     modifier: Modifier = Modifier,
@@ -740,12 +714,25 @@ private fun SharedTransitionScope.Details(
                 context.readDayDeviceEvents(selectedDay)
             } else EventsStore.empty()
         }
+        val scale = remember {
+            mutableFloatStateOf(
+                (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),
+            )
+        }
+        val cellHeight = (defaultCellHeight * scale.floatValue).dp
+        val initialScroll =
+            with(LocalDensity.current) { (cellHeight * initialHour - 16.dp).roundToPx() }
+        val scrollState = rememberScrollState(initialScroll)
+        LaunchedEffect(selectedDay) {
+            onAddEventBoxEnabledChange(false)
+            scrollState.animateScrollTo(initialScroll)
+        }
         DaysView(
             bottomPadding = bottomPadding,
             onAddActionChange = onAddActionChange,
             startingDay = selectedDay,
             selectedDay = selectedDay,
-            setSelectedDay = {
+            onSelectedDayChange = {
                 // Not needed for one day view
             },
             addEvent = addEvent,
