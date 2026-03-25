@@ -808,17 +808,15 @@ private fun SharedTransitionScope.Details(
 
             var selectedButton by rememberSaveable { mutableIntStateOf(-1) }
             val buttons = listOfNotNull(
-                Pair(stringResource(R.string.calendar)) @Composable {
+                (stringResource(R.string.calendar) to @Composable {
                     CalendarsTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
                     )
-                }.takeIf { enabledCalendars.size != 1 },
-                Pair(
-                    if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events),
-                ) @Composable {
+                }).takeIf { enabledCalendars.size != 1 },
+                ((if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) to @Composable {
                     Box(Modifier.padding(bottom = 8.dp)) {
                         if (appointments.isEmpty()) Text(
                             text = if (language.isPersianOrDari) {
@@ -834,8 +832,8 @@ private fun SharedTransitionScope.Details(
                             )
                         }
                     }
-                }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
-                Pair(stringResource(R.string.times)) @Composable {
+                }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
+                (stringResource(R.string.times) to @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
@@ -847,7 +845,7 @@ private fun SharedTransitionScope.Details(
                         now = now,
                         today = today,
                     )
-                }.takeIf { coordinates != null },
+                }).takeIf { coordinates != null },
             )
             onHasContentChange(buttons.isNotEmpty())
 
