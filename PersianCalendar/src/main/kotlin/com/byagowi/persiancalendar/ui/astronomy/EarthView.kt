@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
@@ -69,9 +70,7 @@ fun EarthView(
     }
     val density = LocalDensity.current
     val trianglePath = remember(density) { Path() }
-    val zodiacForegroundPaint = remember {
-        Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = 0x18808080 }
-    }
+    val zodiacForegroundColor = Color(0x18808080)
     val colorTextPaint = remember(typeface) {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.textAlign = Paint.Align.CENTER
@@ -179,7 +178,8 @@ fun EarthView(
         }
     }
     Canvas(modifier = pointerModifier.then(modifier)) {
-        val unit = this.size.width / 280
+        val radius = this.center.x
+        val unit = radius / 140
         run {
             trianglePath.rewind()
             trianglePath.moveTo(0f, 6 * unit)
@@ -188,8 +188,6 @@ fun EarthView(
             trianglePath.close()
         }
 
-        val radius = this.center.x
-        val canvas = this.drawContext.canvas.nativeCanvas
         repeat(12) {
             rotate(degrees = it * 30f) {
                 drawLine(
@@ -213,30 +211,37 @@ fun EarthView(
                 180f, 180f,
             )
         }
+        val arcTopLeft = Offset(circleInsetStart, circleInsetStart)
+        val arcSize = Size(circleInsetEnd - circleInsetStart, circleInsetEnd - circleInsetStart)
+        val nativeCanvas = this.drawContext.canvas.nativeCanvas
         repeat(12) { index ->
             val start = zodiacRanges[index * 2]
             val end = zodiacRanges[index * 2 + 1]
             rotate(degrees = -end + 90) {
-                if (index % 2 == 0) canvas.drawArc(
-                    circleInsetStart, circleInsetStart, circleInsetEnd, circleInsetEnd,
-                    -90f, end - start, true, zodiacForegroundPaint,
+                if (index % 2 == 0) drawArc(
+                    topLeft = arcTopLeft,
+                    size = arcSize,
+                    startAngle = -90f,
+                    sweepAngle = end - start,
+                    useCenter = true,
+                    color = zodiacForegroundColor,
                 )
                 val start = Offset(radius, circleInsetStart)
                 val end = Offset(radius, radius)
-                drawLine(surfaceColor, start, end)
+                drawLine(surfaceColor, start, end, strokeWidth = unit)
             }
             rotate(degrees = -(start + end) / 2 + 90) {
-                canvas.drawTextOnPath(
+                nativeCanvas.drawTextOnPath(
                     labels[index], textPath.asAndroidPath(), 0f, 0f, zodiacPaint,
                 )
-                canvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
+                nativeCanvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
             }
         }
         val cr = radius / 8f
-        solarDraw.earth(canvas, radius, radius, cr / 1.5f, state.sun)
+        solarDraw.earth(nativeCanvas, radius, radius, cr / 1.5f, state.sun)
         val sunDegree = state.sun.elon.toFloat()
         rotate(degrees = -sunDegree + 90) {
-            solarDraw.sun(canvas, radius, radius / 2.5f, cr)
+            solarDraw.sun(nativeCanvas, radius, radius / 2.5f, cr)
             translate(left = radius) { drawPath(trianglePath, Color(0xFFEEBB22)) }
         }
         val moonDegree = state.moon.lon.toFloat()
@@ -244,7 +249,7 @@ fun EarthView(
         rotate(degrees = -moonDegree + 90) {
             val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
             solarDraw.moon(
-                canvas, state.sun, state.moon, radius,
+                nativeCanvas, state.sun, state.moon, radius,
                 radius * moonDistance.toFloat() * .75f, cr / 1.9f,
             )
             translate(left = radius) { drawPath(trianglePath, Color(0x78808080)) }
@@ -268,7 +273,7 @@ fun EarthView(
                     radius + rectSize, radius + rectSize,
                     0f, 180f,
                 )
-                canvas.drawTextOnPath(
+                nativeCanvas.drawTextOnPath(
                     geocentricPlanetsTitles[i],
                     textPath.asAndroidPath(), 0f, 0f, colorTextPaint,
                 )
