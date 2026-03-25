@@ -685,14 +685,13 @@ fun DaysView(
                     val displayedEvents =
                         (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0]
                             .filter { content == null || it.source == null }
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        DayEvents(
-                            displayedEvents.let { if (isExpanded) it else it.take(3) }
-                                .toImmutableList(),
-                            navigateToHolidaysSettings,
-                            refreshCalendar,
-                        )
-                    }
+                    DayEvents(
+                        events = displayedEvents.let { if (isExpanded) it else it.take(3) }
+                            .toImmutableList(),
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
+                        refreshCalendar = refreshCalendar,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
                     val appointments =
                         eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
                     if (displayedEvents.size > 3) {

@@ -159,41 +159,45 @@ private val String.directionality
     }
 
 @Composable
-fun ColumnScope.DayEvents(
+fun DayEvents(
     events: ImmutableList<CalendarEvent<*>>,
     navigateToHolidaysSettings: ((String?) -> Unit),
     refreshCalendar: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val language = language
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
-    events.forEach { event ->
-        val backgroundColor by animateColor(eventColor(event))
-        AnimatedContent(
-            targetState = event.title.let { title ->
-                (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "$title\n$it" } ?: title
-            },
-            transitionSpec = {
-                when (event) {
-                    is CalendarEvent.EquinoxCalendarEvent -> noTransitionSpec
-                    else -> appCrossfadeSpec
-                }()
-            },
-        ) { title ->
-            val titleDirection = title.directionality ?: LocalLayoutDirection.current
-            val originalLayoutDirection = LocalLayoutDirection.current
-            CompositionLocalProvider(LocalLayoutDirection provides titleDirection) {
-                DayEventContent(
-                    navigateToHolidaysSettings = navigateToHolidaysSettings,
-                    backgroundColor = backgroundColor,
-                    event = event,
-                    title = title,
-                    launcher = launcher,
-                    language = language,
-                    numeral = numeral,
-                    coroutineScope = coroutineScope,
-                    originalLayoutDirection = originalLayoutDirection,
-                )
+    Column(modifier = modifier) {
+        events.forEach { event ->
+            val backgroundColor by animateColor(eventColor(event))
+            AnimatedContent(
+                targetState = event.title.let { title ->
+                    (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "$title\n$it" }
+                        ?: title
+                },
+                transitionSpec = {
+                    when (event) {
+                        is CalendarEvent.EquinoxCalendarEvent -> noTransitionSpec
+                        else -> appCrossfadeSpec
+                    }()
+                },
+            ) { title ->
+                val titleDirection = title.directionality ?: LocalLayoutDirection.current
+                val originalLayoutDirection = LocalLayoutDirection.current
+                CompositionLocalProvider(LocalLayoutDirection provides titleDirection) {
+                    DayEventContent(
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
+                        backgroundColor = backgroundColor,
+                        event = event,
+                        title = title,
+                        launcher = launcher,
+                        language = language,
+                        numeral = numeral,
+                        coroutineScope = coroutineScope,
+                        originalLayoutDirection = originalLayoutDirection,
+                    )
+                }
             }
         }
     }

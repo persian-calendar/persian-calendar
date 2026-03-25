@@ -273,13 +273,12 @@ fun SharedTransitionScope.ScheduleScreen(
                                             },
                                         )
                                     }
-                                    Column(Modifier.padding(top = 4.dp, start = 4.dp)) {
-                                        DayEvents(
-                                            events,
-                                            navigateToHolidaysSettings,
-                                            refreshCalendar,
-                                        )
-                                    }
+                                    DayEvents(
+                                        events = events,
+                                        navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                        refreshCalendar = refreshCalendar,
+                                        modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+                                    )
                                 }
                                 if (mainCalendar.getMonthLength(
                                         date.year,

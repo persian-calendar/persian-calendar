@@ -824,13 +824,12 @@ private fun SharedTransitionScope.Details(
                             } else stringResource(R.string.no_event),
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth(),
-                        ) else Column(Modifier.padding(horizontal = 24.dp)) {
-                            DayEvents(
-                                appointments,
-                                navigateToHolidaysSettings,
-                                refreshCalendar,
-                            )
-                        }
+                        ) else DayEvents(
+                            events = appointments,
+                            navigateToHolidaysSettings = navigateToHolidaysSettings,
+                            refreshCalendar = refreshCalendar,
+                            modifier = Modifier.padding(horizontal = 24.dp),
+                        )
                     }
                 }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
                 (stringResource(R.string.times) to @Composable {
