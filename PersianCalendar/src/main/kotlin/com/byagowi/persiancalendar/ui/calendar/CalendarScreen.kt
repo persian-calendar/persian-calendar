@@ -274,6 +274,7 @@ fun SharedTransitionScope.CalendarScreen(
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    var addAction by remember { mutableStateOf({}) }
     val addEvent = addEvent(refreshCalendar, snackbarHostState)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -447,7 +448,10 @@ fun SharedTransitionScope.CalendarScreen(
                 exit = scaleOut(),
             ) {
                 AppFloatingActionButton(
-                    onClick = { addEvent(AddEventData.fromJdn(selectedDay)) },
+                    onClick = {
+                        if (isTalkBackEnabled) addEvent(AddEventData.fromJdn(selectedDay))
+                        else addAction()
+                    },
                 ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
             }
         },
@@ -552,6 +556,7 @@ fun SharedTransitionScope.CalendarScreen(
                         ) {
                             Details(
                                 selectedDay = selectedDay,
+                                onAddActionChange = { addAction = it },
                                 bringDay = bringDay,
                                 bottomPadding = bottomPaddingWithMinimum,
                                 today = today,
@@ -626,6 +631,7 @@ fun SharedTransitionScope.CalendarScreen(
                         ) {
                             Details(
                                 bringDay = bringDay,
+                                onAddActionChange = { addAction = it },
                                 selectedDay = selectedDay,
                                 bottomPadding = bottomPaddingWithMinimum,
                                 today = today,
@@ -691,6 +697,7 @@ private fun enableTimesTab(): Boolean {
 @Composable
 private fun SharedTransitionScope.Details(
     selectedDay: Jdn,
+    onAddActionChange: (() -> Unit) -> Unit,
     bringDay: BringDay,
     bottomPadding: Dp,
     today: Jdn,
@@ -735,9 +742,7 @@ private fun SharedTransitionScope.Details(
         }
         DaysView(
             bottomPadding = bottomPadding,
-            setAddAction = {
-                // Better to keep add button to act as before here
-            },
+            onAddActionChange = onAddActionChange,
             startingDay = selectedDay,
             selectedDay = selectedDay,
             setSelectedDay = {

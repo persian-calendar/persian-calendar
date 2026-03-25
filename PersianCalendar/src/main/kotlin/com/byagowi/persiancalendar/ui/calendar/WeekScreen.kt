@@ -438,7 +438,7 @@ fun SharedTransitionScope.WeekScreen(
                                     ) else Modifier,
                                     scrollableModifier = swipeDownOnScrollableModifier,
                                     bottomPadding = bottomPadding,
-                                    setAddAction = {
+                                    onAddActionChange = {
                                         if (weekPagerState.currentPage == page) addAction = it
                                     },
                                     hasWeekPager = hasWeeksPager,
@@ -500,7 +500,7 @@ fun SharedTransitionScope.WeekScreen(
 
                             DaysView(
                                 bottomPadding = bottomPadding,
-                                setAddAction = {
+                                onAddActionChange = {
                                     if (dayPagerState.currentPage == page) addAction = it
                                 },
                                 startingDay = pageDay,
@@ -574,7 +574,7 @@ const val initialHour = 8
 @SuppressLint("ComposeModifierWithoutDefault")
 @Composable
 fun DaysView(
-    setAddAction: (() -> Unit) -> Unit,
+    onAddActionChange: (() -> Unit) -> Unit,
     startingDay: Jdn,
     selectedDay: Jdn,
     setSelectedDay: (Jdn) -> Unit,
@@ -1032,6 +1032,7 @@ fun DaysView(
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
                     if (!isAddEventBoxEnabled) {
+                        interaction = Interaction.AddBox
                         offset = Offset(
                             cellWidthPx * (selectedDay - startingDay),
                             ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
@@ -1067,7 +1068,7 @@ fun DaysView(
                         resetOnNextRefresh = true
                     }
                 }
-                setAddAction(addAction)
+                onAddActionChange(addAction)
                 LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                     if (resetOnNextRefresh) {
                         duration = cellHeightPx / 4 * 4f
@@ -1192,13 +1193,13 @@ fun DaysView(
                             height = this.size.height - heightSizeReductionPx,
                         )
                         drawRoundRect(
-                            background,
+                            color = background,
                             size = rectSize,
                             topLeft = rectTopLeft,
                             cornerRadius = CornerRadius(SmallShapeCornerSize.dp.toPx()),
                         )
                         drawRoundRect(
-                            primaryWithAlpha,
+                            color = primaryWithAlpha,
                             topLeft = rectTopLeft,
                             size = rectSize,
                             style = Stroke(1.dp.toPx()),
