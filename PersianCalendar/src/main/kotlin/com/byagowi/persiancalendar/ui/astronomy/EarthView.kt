@@ -68,15 +68,7 @@ fun EarthView(
         stringResource(it.titleStringId) + " " + it.symbol
     }
     val density = LocalDensity.current
-    val trianglePath = remember(density) {
-        Path().also {
-            val dp = with(density) { 1.dp.toPx() }
-            it.moveTo(0f, 6 * dp)
-            it.lineTo(-5 * dp, .5f * dp)
-            it.lineTo(5 * dp, .5f * dp)
-            it.close()
-        }
-    }
+    val trianglePath = remember(density) { Path() }
     val zodiacForegroundPaint = remember {
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = 0x18808080 }
     }
@@ -187,16 +179,24 @@ fun EarthView(
         }
     }
     Canvas(modifier = pointerModifier.then(modifier)) {
+        val unit = this.size.width / 280
+        run {
+            trianglePath.rewind()
+            trianglePath.moveTo(0f, 6 * unit)
+            trianglePath.lineTo(-5 * unit, .5f * unit)
+            trianglePath.lineTo(5 * unit, .5f * unit)
+            trianglePath.close()
+        }
+
         val radius = this.center.x
         val canvas = this.drawContext.canvas.nativeCanvas
-        val dp = 1.dp.toPx()
         repeat(12) {
             rotate(degrees = it * 30f) {
                 drawLine(
                     color = Color.Gray,
-                    start = Offset(size.width - dp / 2, radius),
-                    end = Offset(size.width - 6 * dp, radius),
-                    strokeWidth = (if (it == 0) 2 else 1) * dp,
+                    start = Offset(size.width - unit / 2, radius),
+                    end = Offset(size.width - 6 * unit, radius),
+                    strokeWidth = (if (it == 0) 2 else 1) * unit,
                     alpha = if (it == 0) .5f else (tropicalFraction / 2),
                 )
             }
