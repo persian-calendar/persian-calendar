@@ -701,13 +701,13 @@ fun DaysView(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
                         if (content != null) {
-                            content(this, appointments) { hasContent = it }
+                            content(appointments) { hasContent = it }
                         } else Spacer(Modifier.height(8.dp))
                         if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
                             Spacer(Modifier.height(fabPlaceholderHeight))
                         }
                     } else if (content != null) {
-                        content(this, appointments) { hasContent = it }
+                        content(appointments) { hasContent = it }
                     } else Spacer(Modifier.height(12.dp))
                 }
             } else if (maxDayAllDayEvents != 0) Row(
