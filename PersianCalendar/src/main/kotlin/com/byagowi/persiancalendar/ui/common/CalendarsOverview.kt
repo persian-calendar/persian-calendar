@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -66,7 +67,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -88,6 +91,7 @@ import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -115,7 +119,7 @@ import kotlinx.coroutines.launch
 import java.util.Date
 
 @Composable
-fun CalendarsOverview(
+fun SharedTransitionScope.CalendarsOverview(
     jdn: Jdn,
     today: Jdn,
     selectedCalendar: Calendar,
@@ -150,7 +154,12 @@ fun CalendarsOverview(
                         .padding(end = 8.dp)
                         .semantics { this.hideFromAccessibility() }
                         .clickable { navigateToAstronomy(jdn) }
-                        .size(20.dp),
+                        .size(20.dp)
+                        .sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                            boundsTransform = appBoundsTransform,
+                        ),
                 )
             }
             AnimatedContent(

@@ -920,7 +920,7 @@ private fun SharedTransitionScope.Details(
 }
 
 @Composable
-private fun CalendarsTab(
+private fun SharedTransitionScope.CalendarsTab(
     selectedDay: Jdn,
     today: Jdn,
     modifier: Modifier = Modifier,

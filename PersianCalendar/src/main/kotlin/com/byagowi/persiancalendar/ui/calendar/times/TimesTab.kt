@@ -34,10 +34,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
@@ -49,6 +51,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.title
@@ -147,7 +150,7 @@ private fun showEnableAthanForPersianUsers(): Boolean {
 }
 
 @Composable
-private fun AstronomicalOverview(
+private fun SharedTransitionScope.AstronomicalOverview(
     selectedDay: Jdn,
     prayTimes: PrayTimes,
     now: Long,
@@ -171,11 +174,11 @@ private fun AstronomicalOverview(
                     .size(70.dp)
                     .align(Alignment.Center)
                     .semantics { this.hideFromAccessibility() }
-//                    .sharedBounds(
-//                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-//                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-//                        boundsTransform = appBoundsTransform,
-//                    )
+                    .sharedBounds(
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                        boundsTransform = appBoundsTransform,
+                    )
                     .clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,

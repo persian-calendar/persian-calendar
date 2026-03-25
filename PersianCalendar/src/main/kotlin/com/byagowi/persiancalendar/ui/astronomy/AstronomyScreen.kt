@@ -894,7 +894,7 @@ private fun SharedTransitionScope.MoonIcon(astronomyState: AstronomyState, solar
         modifier = Modifier
             .size(24.dp)
             .sharedBounds(
-                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                 boundsTransform = appBoundsTransform,
             )
