@@ -854,6 +854,7 @@ fun DaysView(
                                             ) {
                                                 if (!isAddEventBoxEnabled) {
                                                     interaction = Interaction.AddBox
+                                                    duration = cellHeightPx / scale.floatValue
                                                 }
                                                 offset = Offset(
                                                     cellWidthPx * (column - 1),
@@ -1033,6 +1034,7 @@ fun DaysView(
                 val addAction = {
                     if (!isAddEventBoxEnabled) {
                         interaction = Interaction.AddBox
+                        duration = cellHeightPx / scale.floatValue
                         offset = Offset(
                             cellWidthPx * (selectedDay - startingDay),
                             ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
