@@ -669,7 +669,6 @@ fun DaysView(
                 val scrollState = rememberScrollState()
                 Column(
                     Modifier
-                        .animateContentSize(appContentSizeAnimationSpec)
                         .verticalScroll(scrollState)
                         .fillMaxWidth()
                         .then(
@@ -690,7 +689,10 @@ fun DaysView(
                             .toImmutableList(),
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         refreshCalendar = refreshCalendar,
-                        modifier = Modifier.padding(horizontal = 24.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateContentSize(appContentSizeAnimationSpec)
+                            .padding(horizontal = 24.dp)
                     )
                     val appointments =
                         eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
