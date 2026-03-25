@@ -10,7 +10,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -67,7 +65,6 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.logException
@@ -81,6 +78,7 @@ import kotlin.math.abs
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
     refreshToken: Int,
+    refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
@@ -276,7 +274,11 @@ fun SharedTransitionScope.ScheduleScreen(
                                         )
                                     }
                                     Column(Modifier.padding(top = 4.dp, start = 4.dp)) {
-                                        DayEvents(events, navigateToHolidaysSettings) {}
+                                        DayEvents(
+                                            events,
+                                            navigateToHolidaysSettings,
+                                            refreshCalendar,
+                                        )
                                     }
                                 }
                                 if (mainCalendar.getMonthLength(

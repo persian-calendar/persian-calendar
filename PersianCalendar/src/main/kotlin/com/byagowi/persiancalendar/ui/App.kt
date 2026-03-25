@@ -214,6 +214,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Schedule> {
                     ScheduleScreen(
                         refreshToken = refreshToken,
+                        refreshCalendar = refreshCalendar,
                         commandBringDay = commandBringDay,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         navigateUp = navigateUp,
