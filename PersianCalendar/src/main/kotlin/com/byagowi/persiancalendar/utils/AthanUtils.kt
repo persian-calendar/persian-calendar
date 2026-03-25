@@ -40,6 +40,9 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -101,12 +104,12 @@ fun startAthanActivity(context: Context, prayTime: PrayTime?) {
     )
 }
 
-fun getEnabledAlarms(context: Context): Set<PrayTime> {
-    if (coordinates == null) return emptySet()
-    return (context.preferences.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
+fun getEnabledAlarms(context: Context): ImmutableSet<PrayTime> {
+    if (coordinates == null) return persistentSetOf()
+    return (context.preferences.getString(PREF_ATHAN_ALARM, null)?.trim()
+        ?: return persistentSetOf())
         .splitFilterNotEmpty(",")
-        .mapNotNull { PrayTime.fromName(it) }
-        .toSet()
+        .mapNotNull { PrayTime.fromName(it) }.toImmutableSet()
 }
 
 fun scheduleAlarms(context: Context) {
