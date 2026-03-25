@@ -249,7 +249,7 @@ private fun readDeviceEvents(
 }
 
 fun createSearchRegex(searchTerm: String): Regex =
-    Regex("\\b" + Regex.escape(searchTerm), RegexOption.IGNORE_CASE)
+    Regex("^" + Regex.escape(searchTerm), RegexOption.IGNORE_CASE)
 
 fun Context.readDaysDeviceEvents(
     jdn: Jdn,

@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.cityName
+import com.byagowi.persiancalendar.ui.common.PatternCanvas
+import com.byagowi.persiancalendar.ui.common.PatternDrawable
 import kotlin.time.Duration.Companion.seconds
 
 @Composable

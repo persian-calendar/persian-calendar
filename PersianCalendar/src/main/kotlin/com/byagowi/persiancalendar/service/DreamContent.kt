@@ -20,8 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.compose.rememberLifecycleOwner
 import com.byagowi.persiancalendar.global.dreamNoise
-import com.byagowi.persiancalendar.ui.athan.PatternCanvas
-import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.common.PatternCanvas
+import com.byagowi.persiancalendar.ui.common.PatternDrawable
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random

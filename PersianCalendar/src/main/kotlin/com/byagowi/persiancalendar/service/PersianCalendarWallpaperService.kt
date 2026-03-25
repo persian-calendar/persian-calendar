@@ -29,7 +29,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.global.wallpaperAlternative
 import com.byagowi.persiancalendar.global.wallpaperAutomatic
 import com.byagowi.persiancalendar.global.wallpaperDark
-import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.common.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.logException
