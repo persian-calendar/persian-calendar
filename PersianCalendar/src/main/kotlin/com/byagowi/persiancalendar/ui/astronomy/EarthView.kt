@@ -211,30 +211,32 @@ fun EarthView(
                 180f, 180f,
             )
         }
-        val arcTopLeft = Offset(circleInsetStart, circleInsetStart)
-        val arcSize = Size(circleInsetEnd - circleInsetStart, circleInsetEnd - circleInsetStart)
         val nativeCanvas = this.drawContext.canvas.nativeCanvas
-        repeat(12) { index ->
-            val start = zodiacRanges[index * 2]
-            val end = zodiacRanges[index * 2 + 1]
-            rotate(degrees = -end + 90) {
-                if (index % 2 == 0) drawArc(
-                    topLeft = arcTopLeft,
-                    size = arcSize,
-                    startAngle = -90f,
-                    sweepAngle = end - start,
-                    useCenter = true,
-                    color = zodiacForegroundColor,
-                )
-                val start = Offset(radius, circleInsetStart)
-                val end = Offset(radius, radius)
-                drawLine(surfaceColor, start, end, strokeWidth = unit)
-            }
-            rotate(degrees = -(start + end) / 2 + 90) {
-                nativeCanvas.drawTextOnPath(
-                    labels[index], textPath.asAndroidPath(), 0f, 0f, zodiacPaint,
-                )
-                nativeCanvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
+        run {
+            val arcTopLeft = Offset(circleInsetStart, circleInsetStart)
+            val arcSize = Size(circleInsetEnd - circleInsetStart, circleInsetEnd - circleInsetStart)
+            val lineStart = Offset(radius, circleInsetStart)
+            val lineEnd = Offset(radius, radius)
+            repeat(12) { index ->
+                val start = zodiacRanges[index * 2]
+                val end = zodiacRanges[index * 2 + 1]
+                rotate(degrees = -end + 90) {
+                    if (index % 2 == 0) drawArc(
+                        topLeft = arcTopLeft,
+                        size = arcSize,
+                        startAngle = -90f,
+                        sweepAngle = end - start,
+                        useCenter = true,
+                        color = zodiacForegroundColor,
+                    )
+                    drawLine(surfaceColor, lineStart, lineEnd, strokeWidth = unit)
+                }
+                rotate(degrees = -(start + end) / 2 + 90) {
+                    nativeCanvas.drawTextOnPath(
+                        labels[index], textPath.asAndroidPath(), 0f, 0f, zodiacPaint,
+                    )
+                    nativeCanvas.drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
+                }
             }
         }
         val cr = radius / 8f
