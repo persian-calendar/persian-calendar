@@ -87,9 +87,9 @@ fun SharedTransitionScope.TimesTab(
     ) {
         val isToday = selectedDay == today
         AstronomicalOverview(selectedDay, prayTimes, now, isToday, navigateToAstronomy)
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(4.dp))
         Times(isExpanded, prayTimes, now, isToday)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(4.dp))
         Row(
             Modifier.align(Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,

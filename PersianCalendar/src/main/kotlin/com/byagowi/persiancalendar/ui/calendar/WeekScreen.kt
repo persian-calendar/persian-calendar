@@ -679,7 +679,7 @@ fun DaysView(
                             ) { onAddEventBoxEnabledChange(false) } else Modifier,
                         ),
                 ) {
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(12.dp))
                     val headerHasFilled =
                         scrollState.canScrollBackward || scrollState.canScrollForward
                     val displayedEvents =

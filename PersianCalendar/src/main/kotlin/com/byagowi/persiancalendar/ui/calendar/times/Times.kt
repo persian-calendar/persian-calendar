@@ -43,7 +43,7 @@ fun SharedTransitionScope.Times(
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             maxItemsInEachRow = if (
                 LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
             ) Int.MAX_VALUE else 3,
@@ -60,7 +60,7 @@ fun SharedTransitionScope.Times(
                         .padding(horizontal = 2.dp)
                         .defaultMinSize(minWidth = ItemWidth.dp)
                         .sharedBounds(
-                            rememberSharedContentState(
+                            sharedContentState = rememberSharedContentState(
                                 key = SHARED_CONTENT_KEY_TIMES_ITEM + prayTime.name,
                             ),
                             animatedVisibilityScope = this@AnimatedContent,
@@ -76,7 +76,6 @@ fun SharedTransitionScope.Times(
                         targetState = prayTimes[prayTime].toFormattedString(),
                         transitionSpec = appCrossfadeSpec,
                     ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
-                    Spacer(Modifier.height(8.dp))
                 }
             }
         }
