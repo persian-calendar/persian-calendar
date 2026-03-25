@@ -234,17 +234,13 @@ enum class Language(val code: String, val nativeName: String) {
     val defaultCalendars: ImmutableList<Calendar>
         get() = when {
             this == FA -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            this == EN_IR -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
             prefersGregorianCalendar -> persistentListOf(Calendar.GREGORIAN)
-
-            prefersIslamicCalendar -> persistentListOf(
-                Calendar.ISLAMIC, Calendar.GREGORIAN, Calendar.SHAMSI,
-            )
-
+            prefersIslamicCalendar -> persistentListOf(Calendar.ISLAMIC, Calendar.GREGORIAN)
+            prefersNepaliCalendar -> persistentListOf(Calendar.NEPALI, Calendar.GREGORIAN)
             prefersPersianCalendar -> persistentListOf(
                 Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
             )
-
-            prefersNepaliCalendar -> persistentListOf(Calendar.NEPALI, Calendar.GREGORIAN)
             else -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
         }
 
