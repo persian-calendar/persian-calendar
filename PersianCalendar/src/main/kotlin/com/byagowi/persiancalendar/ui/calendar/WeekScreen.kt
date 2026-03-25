@@ -801,7 +801,7 @@ fun DaysView(
                 val cellWidthPx = tableWidthPx / days
                 val cellHeightPx = with(density) { cellHeight.toPx() }
                 var offset by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
-                var duration by remember { mutableFloatStateOf(cellHeightPx) }
+                var duration by remember { mutableFloatStateOf(cellHeightPx / scale.floatValue) }
                 val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                 val directionSign = if (isRtl) -1 else 1
                 val heightSizeReduction = 3.dp
