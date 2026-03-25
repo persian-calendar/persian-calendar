@@ -862,7 +862,7 @@ private fun SharedTransitionScope.Details(
                             onClick = {
                                 selectedButton = if (selectedButton == index) -1 else index
                             },
-                            contentPadding = PaddingValues(0.dp),
+                            contentPadding = PaddingValues.Zero,
                             colors = SegmentedButtonDefaults.colors().copy(
                                 inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
                             ),

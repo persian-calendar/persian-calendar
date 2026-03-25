@@ -195,7 +195,6 @@ const val SHARED_CONTENT_KEY_CARD_CONTENT = "cardContent" // Common card content
 const val SHARED_CONTENT_KEY_STOP = "stop" // Make sure stop only in bottom app bar is stay put
 const val SHARED_CONTENT_KEY_MENU_ICON = "menuIcon"
 const val SHARED_CONTENT_KEY_ARROW_ICON = "arrowIcon"
-const val SHARED_CONTENT_KEY_EVENTS = "events" // Make sure schedule events animates nicely
 const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots" // Make sure menu icon is stay put
 const val SHARED_CONTENT_KEY_SHARE_BUTTON = "shareButton" // Animate placement of share button
 const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map

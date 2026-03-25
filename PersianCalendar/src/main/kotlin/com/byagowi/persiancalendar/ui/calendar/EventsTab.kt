@@ -227,7 +227,7 @@ private fun DayEventContent(
         Modifier
             .fillMaxWidth()
             .padding(vertical = 2.dp)
-            .clip(MaterialTheme.shapes.medium)
+            .clip(MaterialTheme.shapes.small)
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
@@ -244,7 +244,7 @@ private fun DayEventContent(
                     R.string.holiday_reason, event.title,
                 ) else event.oneLinerTitleWithTime
             }
-            .padding(all = 8.dp),
+            .padding(all = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {

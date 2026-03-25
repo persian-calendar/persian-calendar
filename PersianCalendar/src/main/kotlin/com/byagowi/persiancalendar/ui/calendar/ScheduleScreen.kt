@@ -48,9 +48,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
@@ -249,7 +247,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                 commandBringDay(jdn)
                                                 navigateUp()
                                             }
-                                            .size(36.dp)
+                                            .size(32.dp)
                                             .background(
                                                 when {
                                                     jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
@@ -277,14 +275,9 @@ fun SharedTransitionScope.ScheduleScreen(
                                             },
                                         )
                                     }
-                                    Spacer(Modifier.width(8.dp))
-                                    Column(
-                                        if (baseJdn == jdn) Modifier.sharedBounds(
-                                            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                            boundsTransform = appBoundsTransform,
-                                        ) else Modifier,
-                                    ) { DayEvents(events, navigateToHolidaysSettings) {} }
+                                    Column(Modifier.padding(top = 4.dp, start = 4.dp)) {
+                                        DayEvents(events, navigateToHolidaysSettings) {}
+                                    }
                                 }
                                 if (mainCalendar.getMonthLength(
                                         date.year,
