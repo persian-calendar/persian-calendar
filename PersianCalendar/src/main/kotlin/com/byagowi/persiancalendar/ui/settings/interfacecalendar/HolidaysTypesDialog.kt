@@ -174,7 +174,8 @@ fun CountryEvents(
                 .fillMaxWidth()
                 .then(
                     if (hideTheFirstRowFromAccessibility) {
-                        Modifier.semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        Modifier
+                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                             .clearAndSetSemantics {}
                     } else Modifier,
                 )

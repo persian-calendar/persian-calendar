@@ -635,7 +635,8 @@ fun DaysView(
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
         var hasContent by remember { mutableStateOf(true) }
         val hasHeader by remember(events, hasContent) {
-            val needsHeader = maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || (content != null && hasContent)
+            val needsHeader =
+                maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || (content != null && hasContent)
             derivedStateOf { needsHeader && scrollState.value <= initialScroll }
         }
         val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
@@ -692,7 +693,7 @@ fun DaysView(
                         modifier = Modifier
                             .fillMaxWidth()
                             .animateContentSize(appContentSizeAnimationSpec)
-                            .padding(horizontal = 24.dp)
+                            .padding(horizontal = 24.dp),
                     )
                     val appointments =
                         eventsWithoutTime[0].filter { it.source != null }.toImmutableList()

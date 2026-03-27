@@ -421,6 +421,7 @@ private fun ColumnScope.YearHoroscopeDialogContent(
         !isUserLocatedInIranOrAfghanistan && settingsCoordinates != null && settingsCityName != null && !language.isIranExclusive -> {
             settingsCoordinates to settingsCityName
         }
+
         language.isAfghanistanExclusive -> kabulCoordinates to if (language.isArabicScript) "کابل" else "Kabul"
         // So the user would be able to verify it with the calendar book published
         else -> tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"

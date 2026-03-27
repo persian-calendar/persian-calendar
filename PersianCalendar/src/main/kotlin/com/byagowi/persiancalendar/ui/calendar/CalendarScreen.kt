@@ -66,6 +66,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -176,6 +177,7 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
+import com.byagowi.persiancalendar.ui.about.NoteOnAppointments
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.applyOffset
@@ -800,31 +802,55 @@ private fun SharedTransitionScope.Details(
 
             var selectedButton by rememberSaveable { mutableIntStateOf(-1) }
             val buttons = listOfNotNull(
-                (stringResource(R.string.calendar) to @Composable {
+                Pair(stringResource(R.string.calendar)) @Composable {
                     CalendarsTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
                     )
-                }).takeIf { enabledCalendars.size != 1 },
-                ((if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) to @Composable {
-                    Box(Modifier.padding(bottom = 8.dp)) {
+                }.takeIf { enabledCalendars.size != 1 },
+                Pair(if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) @Composable {
+                    Row(
+                        verticalAlignment =
+                            if (appointments.isEmpty()) Alignment.CenterVertically else Alignment.Top,
+                        modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
+                    ) {
                         if (appointments.isEmpty()) Text(
                             text = if (language.isPersianOrDari) {
                                 "مناسبتی برای این روز یافت نشد"
                             } else stringResource(R.string.no_event),
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.weight(1f),
                         ) else DayEvents(
                             events = appointments,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
                             refreshCalendar = refreshCalendar,
-                            modifier = Modifier.padding(horizontal = 24.dp),
+                            modifier = Modifier.weight(1f),
                         )
+                        if (when {
+                                eventsRepository.iranOthers -> true
+                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
+                                else -> false
+                            } && !isTalkBackEnabled
+                        ) {
+                            var showDialog by rememberSaveable { mutableStateOf(false) }
+                            if (showDialog) NoteOnAppointments(
+                                onDismissRequest = { showDialog = false },
+                            )
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.Help,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .padding(start = 8.dp)
+                                    .clickable { showDialog = true },
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                     }
-                }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
-                (stringResource(R.string.times) to @Composable {
+                }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
+                Pair(stringResource(R.string.times)) @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
                         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
@@ -836,7 +862,7 @@ private fun SharedTransitionScope.Details(
                         now = now,
                         today = today,
                     )
-                }).takeIf { coordinates != null },
+                }.takeIf { coordinates != null },
             )
             onHasContentChange(buttons.isNotEmpty())
 

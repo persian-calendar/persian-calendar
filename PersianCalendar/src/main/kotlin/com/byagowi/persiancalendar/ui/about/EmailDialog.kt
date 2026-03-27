@@ -40,48 +40,7 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
     var firstPass by rememberSaveable {
         mutableStateOf(eventsRepository.iranOthers || language.isUserAbleToReadPersian)
     }
-    if (firstPass) return CompositionLocalProvider(
-        LocalLayoutDirection provides LayoutDirection.Rtl,
-    ) {
-        AppDialog(
-            confirmButton = { TextButton(onClick = onDismissRequest) { Text("متوجه شدم") } },
-            neutralButton = {
-                TextButton(onClick = { firstPass = false }) { Text("سایر امکانات") }
-            },
-            onDismissRequest = onDismissRequest,
-        ) {
-            Text(
-                """بسیاری از بازخوردهای دریافت شده در این برنامه دربارهٔ مناسبت‌هاست حال آنکه به دلیل محدودیت حجم و منابع برنامه نمایش تعطیلی‌های رسمی همواره هدف اصلی برنامه بوده است.
-
-اگر مناسبت‌های غیرتعطیل این برنامه را اشتباه یا ناکافی یافته‌اید پیشنهاد می‌شود برای داشتن بهتر مناسبت‌ها منابع زیر را بررسی و مقایسه کنید چرا که به دلیل آفلاین بودن این برنامه توان محدودی در نمایش مناسبت‌ها دارد.
-""".trim(),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(all = 16.dp),
-            )
-            val urlHandler = LocalUriHandler.current
-            persistentListOf(
-                "تایم.آی‌آر" to "https://www.time.ir/",
-                "دانشگاه تهران" to "https://calendar.ut.ac.ir/",
-                "باحساب" to "https://www.bahesab.ir/time/",
-            ).forEach { (title, url) ->
-                FilledTonalButton(
-                    onClick = {
-                        urlHandler.openUri(url)
-                        onDismissRequest()
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(.7f),
-                ) { Text(title) }
-            }
-            Text(
-                "همچنین می‌توان در تقویم دستگاه مناسبت‌های کشورهای مختلف را فعال کرد که در این برنامه نیز نمایش داده می‌شود که راهنمای آن با زدن دکمهٔ زیر قابل مشاهده است.",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(all = 16.dp),
-            )
-            EnableInDeviceCalendar(onDismissRequest)
-        }
-    }
+    if (firstPass) NoteOnAppointments(onDismissRequest) { firstPass = false }
     var message by rememberSaveable { mutableStateOf("") }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -113,6 +72,50 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
                 .align(Alignment.End)
                 .padding(end = 8.dp),
         )
+    }
+}
+
+@Composable
+fun NoteOnAppointments(onDismissRequest: () -> Unit, nextStep: (() -> Unit)? = null) {
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl,
+    ) {
+        AppDialog(
+            confirmButton = { TextButton(onClick = onDismissRequest) { Text("متوجه شدم") } },
+            neutralButton = { if (nextStep != null) TextButton(onClick = nextStep) { Text("سایر امکانات") } },
+            onDismissRequest = onDismissRequest,
+        ) {
+            Text(
+                """به دلیل محدودیت‌هایی از جمله در حجم، آفلاین‌بودن، اختلاف نظر در منابع و احتمال عدم تطابق با رویدادها در زمان رخ‌دادن آن‌ها در این برناهه همواره هدف اصلی نمایش صحیح تعطیلی‌های رسمی به دلیل اهمیت بنیادین آن‌ها در برنامه‌ریزی کارها در زندگی واقعی بوده است. در نسخه‌های پیشین این برنامه مناسبت‌های غیرتعطیل قرار نداده شده بود که بعدها توسط سایر توسعه‌دهندگان به پروژه اضافه شدند که به همین دلیل ناقص بوده و بصورت پیش‌فرض غیرفعال هستند.
+
+اگر مناسبت‌های غیرتعطیل این برنامه را ناقص یا اشتباه یافته‌اید پیشنهاد می‌شود از منابع آنلاین زیر به مناسبت‌های بیشتر دسترسی یابید.
+""".trim(),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(all = 16.dp),
+            )
+            val urlHandler = LocalUriHandler.current
+            persistentListOf(
+                "باحساب" to "https://www.bahesab.ir/time/",
+                "دانشگاه تهران" to "https://calendar.ut.ac.ir/",
+                "تایم.آی‌آر" to "https://www.time.ir/",
+            ).forEach { (title, url) ->
+                FilledTonalButton(
+                    onClick = {
+                        urlHandler.openUri(url)
+                        onDismissRequest()
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(.7f),
+                ) { Text(title) }
+            }
+            Text(
+                "همچنین می‌توان در تقویم دستگاه مناسبت‌های کشورهای مختلف را فعال کرد که در این برنامه نیز نمایش داده می‌شود که راهنمای آن با زدن دکمهٔ زیر قابل مشاهده است.",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(all = 16.dp),
+            )
+            EnableInDeviceCalendar(onDismissRequest)
+        }
     }
 }
 
