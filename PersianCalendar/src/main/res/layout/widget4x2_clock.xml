@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/widget4x2_owghat_layout" />
+            <include layout="@layout/widget4x2_times_layout" />
 
             <include layout="@layout/widget4x2_events" />
 

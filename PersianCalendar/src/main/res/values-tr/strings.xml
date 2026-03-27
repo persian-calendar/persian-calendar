@@ -55,8 +55,8 @@
     <string name="safar">Safer</string>
     <string name="muharram">Muharrem</string>
     <string name="dey">Dey</string>
-    <string name="widget_customization_owghat_location">2x2’de namaz vakitlerinin konumu ve bildirim (ayarlanmışsa)</string>
-    <string name="widget_customization_owghat">2x2 pencerede namaz vakitleri ve bildirim (ayarlanmışsa)</string>
+    <string name="widget_customization_times_location">2x2’de namaz vakitlerinin konumu ve bildirim (ayarlanmışsa)</string>
+    <string name="widget_customization_times">2x2 pencerede namaz vakitleri ve bildirim (ayarlanmışsa)</string>
     <string name="widget_customization_non_holiday_events">2x2 widget ve bildirimde tatil dışı</string>
     <string name="widget_customization_other_calendars">1x4 ve 2x2 widget’lardaki diğer takvimler</string>
     <string name="view_source">Kaynağı Görüntüle</string>

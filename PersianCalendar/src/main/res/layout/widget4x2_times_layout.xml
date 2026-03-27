@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget4x2_owghat"
+    android:id="@+id/widget4x2_times"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="start"
@@ -10,7 +10,7 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/textPlaceholder4owghat_1_4x2"
+        android:id="@+id/textPlaceholder4times_1_4x2"
         style="@style/WidgetTextStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
         android:background="@color/widget_divider" />
 
     <TextView
-        android:id="@+id/textPlaceholder4owghat_2_4x2"
+        android:id="@+id/textPlaceholder4times_2_4x2"
         style="@style/WidgetTextStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -44,7 +44,7 @@
         android:background="@color/widget_divider" />
 
     <TextView
-        android:id="@+id/textPlaceholder4owghat_3_4x2"
+        android:id="@+id/textPlaceholder4times_3_4x2"
         style="@style/WidgetTextStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -61,7 +61,7 @@
         android:background="@color/widget_divider" />
 
     <TextView
-        android:id="@+id/textPlaceholder4owghat_4_4x2"
+        android:id="@+id/textPlaceholder4times_4_4x2"
         style="@style/WidgetTextStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -78,7 +78,7 @@
         android:background="@color/widget_divider" />
 
     <TextView
-        android:id="@+id/textPlaceholder4owghat_5_4x2"
+        android:id="@+id/textPlaceholder4times_5_4x2"
         style="@style/WidgetTextStyle"
         android:layout_width="0dp"
         android:layout_height="match_parent"

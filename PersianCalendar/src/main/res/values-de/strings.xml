@@ -246,7 +246,7 @@
     <string name="iran_ancient">Alter Iran (auf Persisch)</string>
     <string name="iran_others">Andere Ereignisse im Iran</string>
     <string name="widget_customization_other_calendars">Andere Kalender auf 1x4 und 2x2 Widgets</string>
-    <string name="widget_customization_owghat_location">Lage der Gebetszeiten auf 2x2 und Benachrichtigung (falls eingestellt)</string>
+    <string name="widget_customization_times_location">Lage der Gebetszeiten auf 2x2 und Benachrichtigung (falls eingestellt)</string>
     <string name="farvardin">Farvardin</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="tir">Tir</string>
@@ -292,7 +292,7 @@
     <string name="wednesday">Mittwoch</string>
     <string name="wednesday_short">Mi</string>
     <string name="thursday_short">Do</string>
-    <string name="widget_customization_owghat">Gebetszeiten auf Widgets und Benachrichtigungen (falls eingestellt)</string>
+    <string name="widget_customization_times">Gebetszeiten auf Widgets und Benachrichtigungen (falls eingestellt)</string>
     <string name="widget_customization_non_holiday_events">Nicht-Feiertage auf 2x2-Widget und Benachrichtigung</string>
     <string name="saturday_short">Sa</string>
     <string name="sunday_short">So</string>

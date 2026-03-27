@@ -177,8 +177,8 @@
     <string name="afghanistan_others">他のアフガニスタンのイベント</string>
     <string name="widget_customization_other_calendars">2×2及び1×4ウィジェットの他のカレンダー</string>
     <string name="widget_customization_non_holiday_events">2×2ウィジェットの非休日祝日と通知</string>
-    <string name="widget_customization_owghat">2×2ウィジェットでの礼拝時刻と通知（設定されている場合）</string>
-    <string name="widget_customization_owghat_location">2×2ウィジェットでの場所と礼拝時刻と通知（設定されている場合）</string>
+    <string name="widget_customization_times">2×2ウィジェットでの礼拝時刻と通知（設定されている場合）</string>
+    <string name="widget_customization_times_location">2×2ウィジェットでの場所と礼拝時刻と通知（設定されている場合）</string>
     <string name="farvardin">ファルヴァルディーン</string>
     <string name="ordibehesht">オルディーベヘシト</string>
     <string name="khordad">ホルダード</string>

@@ -91,8 +91,8 @@ fun ColumnScope.WidgetSettings() {
         mapOf(
             OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
             NON_HOLIDAYS_EVENTS_KEY to R.string.widget_customization_non_holiday_events,
-            OWGHAT_KEY to R.string.widget_customization_owghat,
-            OWGHAT_LOCATION_KEY to R.string.widget_customization_owghat_location,
+            OWGHAT_KEY to R.string.widget_customization_times,
+            OWGHAT_LOCATION_KEY to R.string.widget_customization_times_location,
         )
     }
     SettingsMultiSelect(

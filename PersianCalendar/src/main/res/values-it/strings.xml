@@ -288,8 +288,8 @@
     <string name="view_source">Vista fonte</string>
     <string name="widget_customization_other_calendars">Altri calendari sui widget 1x4 e 2x2</string>
     <string name="widget_customization_non_holiday_events">Non festività su 2x2 widget e notifica</string>
-    <string name="widget_customization_owghat">Orari di preghiera sui widget e notifiche (se impostate)</string>
-    <string name="widget_customization_owghat_location">Posizione degli orari di preghiera su 2x2 e notifica (se impostata)</string>
+    <string name="widget_customization_times">Orari di preghiera sui widget e notifiche (se impostate)</string>
+    <string name="widget_customization_times_location">Posizione degli orari di preghiera su 2x2 e notifica (se impostata)</string>
     <string name="farvardin">Farvardin</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Khordad</string>

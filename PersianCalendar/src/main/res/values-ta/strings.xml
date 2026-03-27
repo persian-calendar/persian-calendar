@@ -105,8 +105,8 @@
     <string name="view_source">மூலத்தைக் காண்க</string>
     <string name="widget_customization_other_calendars">1x4 மற்றும் 2x2 நிரல்பலகைகளில் உள்ள பிற நாட்காட்டிகள்</string>
     <string name="widget_customization_non_holiday_events">2x2 நிரல்பலகை மற்றும் அறிவிப்பில் விடுமுறை அல்லாத</string>
-    <string name="widget_customization_owghat">நிரல்பலகை மற்றும் அறிவிப்பில் வழிபடு நேரங்கள்</string>
-    <string name="widget_customization_owghat_location">2x2 இல் வழிபாடு நேரங்களின் இடம் மற்றும் அறிவிப்பு</string>
+    <string name="widget_customization_times">நிரல்பலகை மற்றும் அறிவிப்பில் வழிபடு நேரங்கள்</string>
+    <string name="widget_customization_times_location">2x2 இல் வழிபாடு நேரங்களின் இடம் மற்றும் அறிவிப்பு</string>
     <string name="farvardin">ஃபாரவார்டின்</string>
     <string name="ordibehesht">ஆர்டிப்இசச்</string>
     <string name="khordad">கோர்டாட்</string>

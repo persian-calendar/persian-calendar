@@ -146,7 +146,7 @@ import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
-import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
+import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
@@ -668,7 +668,7 @@ private fun enableTimesTab(): Boolean {
     val context = LocalContext.current
     val preferences = remember { context.preferences }
     // The user is already dismissed the third tab
-    return !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
+    return !preferences.getBoolean(PREF_DISMISSED_TIMES, false) &&
             // Try to not show the placeholder to established users
             PREF_APP_LANGUAGE !in preferences
 }

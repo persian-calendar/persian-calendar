@@ -214,8 +214,8 @@
     <string name="afghanistan_holidays">Рӯзҳои истироҳат дар Афғонистон</string>
     <string name="widget_customization_other_calendars">Тақвимҳои дигар дар виджетҳои 1x4 ва 2x2</string>
     <string name="widget_customization_non_holiday_events">Рӯзҳои истироҳат дар виҷети 2х2 ва огоҳӣ</string>
-    <string name="widget_customization_owghat">Вақтҳои намоз дар виджетҳо ва огоҳӣ (агар таъин шуда бошад)</string>
-    <string name="widget_customization_owghat_location">Ҷойгиршавии вақти намоз дар 2х2 ва огоҳӣ (агар муқаррар шуда бошад)</string>
+    <string name="widget_customization_times">Вақтҳои намоз дар виджетҳо ва огоҳӣ (агар таъин шуда бошад)</string>
+    <string name="widget_customization_times_location">Ҷойгиршавии вақти намоз дар 2х2 ва огоҳӣ (агар муқаррар шуда бошад)</string>
     <string name="farvardin">Фарвардин</string>
     <string name="ordibehesht">Урдибиҳишт</string>
     <string name="khordad">Хурдод</string>

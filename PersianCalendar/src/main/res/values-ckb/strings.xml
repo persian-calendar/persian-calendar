@@ -280,8 +280,8 @@
     <string name="view_source">نیشاندانی سەرچاوە</string>
     <string name="widget_customization_other_calendars">ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</string>
     <string name="widget_customization_non_holiday_events">ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</string>
-    <string name="widget_customization_owghat">کاتە شەرعییەکان لە ویجیت و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
-    <string name="widget_customization_owghat_location">شوێن لە لای کاتە شەرعییەکاندا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
+    <string name="widget_customization_times">کاتە شەرعییەکان لە ویجیت و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
+    <string name="widget_customization_times_location">شوێن لە لای کاتە شەرعییەکاندا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
     <string name="farvardin">خاکەلێوە</string>
     <string name="ordibehesht">گوڵان</string>
     <string name="khordad">جۆزەردان</string>

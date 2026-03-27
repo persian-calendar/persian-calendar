@@ -25,7 +25,7 @@
     <string name="select_skin">تنظیم پوسته</string>
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>
-    <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات شرعی</string>
+    <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات</string>
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (اختیاری)</string>
     <string name="coordinates">مختصات جغرافیایی</string>
@@ -286,8 +286,8 @@
     <string name="view_source">مشاهدهٔ منبع</string>
     <string name="widget_customization_other_calendars">دیگر تقویم‌ها در ویجت ماه، ۴×۱ و ۲×۲</string>
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
-    <string name="widget_customization_owghat">اوقات شرعی در ویجت و اعلان (در صورت تنظیم)</string>
-    <string name="widget_customization_owghat_location">مکان اوقات شرعی در ویجت ۲×۲ و اعلان</string>
+    <string name="widget_customization_times">اوقات در ویجت و اعلان (در صورت تنظیم)</string>
+    <string name="widget_customization_times_location">مکان اوقات در ویجت ۲×۲ و اعلان</string>
     <string name="farvardin">فروردین</string>
     <string name="ordibehesht">اردیبهشت</string>
     <string name="khordad">خرداد</string>
@@ -343,7 +343,7 @@
     <string name="friday_short">ج</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
-    <string name="month_pray_times">اوقات شرعی ماه</string>
+    <string name="month_pray_times">اوقات در ماه</string>
     <string name="high_latitudes_method">شیوهٔ عرض‌های جغرافیایی بالا</string>
     <string name="high_latitudes_night_middle">نیمهٔ شب</string>
     <string name="high_latitudes_angle_based">بر پایهٔ زاویه</string>

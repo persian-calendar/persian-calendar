@@ -182,8 +182,8 @@
     <string name="ordibehesht">Ордибехешт</string>
     <string name="january">Январь</string>
     <string name="widget_customization_non_holiday_events">Нерабочие праздничные дни в виджете 2x2 и уведомлении</string>
-    <string name="widget_customization_owghat">Времена молитв в виджетах и уведомлениях (если установлено)</string>
-    <string name="widget_customization_owghat_location">Местоположение времён молитв в виджетах 2x2 и уведомлениях (если установлено)</string>
+    <string name="widget_customization_times">Времена молитв в виджетах и уведомлениях (если установлено)</string>
+    <string name="widget_customization_times_location">Местоположение времён молитв в виджетах 2x2 и уведомлениях (если установлено)</string>
     <string name="khordad">Хордад</string>
     <string name="tir">Тир</string>
     <string name="mordad">Мордад</string>

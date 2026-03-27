@@ -277,8 +277,8 @@
     <string name="bahman">11 月</string>
     <string name="esfand">12 月</string>
     <string name="widget_customization_other_calendars">在 1×4 和 2×2 微件中显示其他日历</string>
-    <string name="widget_customization_owghat">若已设置，在微件和通知中显示礼拜时间</string>
-    <string name="widget_customization_owghat_location">若已设置，在 2×2 微件和通知中显示礼拜时间对应位置</string>
+    <string name="widget_customization_times">若已设置，在微件和通知中显示礼拜时间</string>
+    <string name="widget_customization_times_location">若已设置，在 2×2 微件和通知中显示礼拜时间对应位置</string>
     <string name="widget_customization_non_holiday_events">在 2×2 微件和通知中显示非节假日活动</string>
     <string name="month_pray_times">本月礼拜时间</string>
     <string name="sun">太阳</string>

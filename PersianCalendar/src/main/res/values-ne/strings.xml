@@ -277,8 +277,8 @@
     <string name="view_source">स्रोत हेर्नुहोस्</string>
     <string name="widget_customization_other_calendars">1x4 र 2x2 विजेटहरूमा अन्य पात्रोहरू</string>
     <string name="widget_customization_non_holiday_events">2x2 विजेट र सूचनामा गैर-बिदाहरू</string>
-    <string name="widget_customization_owghat">विजेट र सूचनामा प्रार्थना समय (यदि सेट गरिएको छ)</string>
-    <string name="widget_customization_owghat_location">२x२ मा प्रार्थना समयको स्थान र सूचना (यदि सेट गरिएको छ)</string>
+    <string name="widget_customization_times">विजेट र सूचनामा प्रार्थना समय (यदि सेट गरिएको छ)</string>
+    <string name="widget_customization_times_location">२x२ मा प्रार्थना समयको स्थान र सूचना (यदि सेट गरिएको छ)</string>
     <string name="farvardin">फारवर्डिन</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">खोर्दाद</string>

@@ -358,8 +358,8 @@
     <string name="none">Ninguno</string>
     <string name="show_sun_and_moon_path_in_24_hours">Mostrar la trayectoria del Sol y la Luna en 24 horas</string>
     <string name="widget_customization_non_holiday_events">Widget y notificación de no festivos en 2x2</string>
-    <string name="widget_customization_owghat">Tiempos de oración en widgets y notificaciones (si está configurado)</string>
-    <string name="widget_customization_owghat_location">Ubicación de los tiempos de oración en 2x2 y notificación (si está configurado)</string>
+    <string name="widget_customization_times">Tiempos de oración en widgets y notificaciones (si está configurado)</string>
+    <string name="widget_customization_times_location">Ubicación de los tiempos de oración en 2x2 y notificación (si está configurado)</string>
     <string name="sun_view">Vista solar</string>
     <string name="asr_hanafi_juristic">Método de Asr Hanafí para azán</string>
     <string name="high_latitudes_angle_based">Basado en ángulo</string>

@@ -1269,7 +1269,7 @@ fun create2x2RemoteViews(
         },
     )
     remoteViews.setTextViewTextSizeSp(R.id.date_2x2, 14 * scale)
-    remoteViews.setTextViewTextSizeSp(R.id.owghat_2x2, 14 * scale)
+    remoteViews.setTextViewTextSizeSp(R.id.times_2x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.holiday_2x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.event_2x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.time_2x2, 34 * scale)
@@ -1280,7 +1280,7 @@ fun create2x2RemoteViews(
     remoteViews.setRoundBackground(context.resources, R.id.widget_layout2x2_background, size)
     remoteViews.setDirection(R.id.widget_layout2x2, context.resources)
     remoteViews.setupForegroundTextColors(
-        R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2,
+        R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.times_2x2,
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_2x2)
     if (prefersWidgetsDynamicColors) remoteViews.setColor(
@@ -1293,10 +1293,10 @@ fun create2x2RemoteViews(
 
     val owghat = getOwghat(context, prayTimes, clock)
     if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
-        remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
-        remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
+        remoteViews.setTextViewText(R.id.times_2x2, owghat)
+        remoteViews.setViewVisibility(R.id.times_2x2, View.VISIBLE)
     } else {
-        remoteViews.setViewVisibility(R.id.owghat_2x2, View.GONE)
+        remoteViews.setViewVisibility(R.id.times_2x2, View.GONE)
     }
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
@@ -1316,11 +1316,11 @@ fun create2x2RemoteViews(
 
 @IdRes
 private val widget4x2TimesViewsIds = listOf(
-    R.id.textPlaceholder4owghat_1_4x2,
-    R.id.textPlaceholder4owghat_2_4x2,
-    R.id.textPlaceholder4owghat_3_4x2,
-    R.id.textPlaceholder4owghat_4_4x2,
-    R.id.textPlaceholder4owghat_5_4x2,
+    R.id.textPlaceholder4times_1_4x2,
+    R.id.textPlaceholder4times_2_4x2,
+    R.id.textPlaceholder4times_3_4x2,
+    R.id.textPlaceholder4times_4_4x2,
+    R.id.textPlaceholder4times_5_4x2,
 )
 
 private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
@@ -1360,11 +1360,11 @@ fun create4x2RemoteViews(
     )
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder1_4x2, 13 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder2_4x2, 13 * scale)
-    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4owghat_1_4x2, 14 * scale)
-    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4owghat_2_4x2, 14 * scale)
-    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4owghat_3_4x2, 14 * scale)
-    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4owghat_4_4x2, 14 * scale)
-    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4owghat_5_4x2, 14 * scale)
+    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4times_1_4x2, 14 * scale)
+    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4times_2_4x2, 14 * scale)
+    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4times_3_4x2, 14 * scale)
+    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4times_4_4x2, 14 * scale)
+    remoteViews.setTextViewTextSizeSp(R.id.textPlaceholder4times_5_4x2, 14 * scale)
     remoteViews.setTextViewTextSizeSp(R.id.event_4x2, 13 * scale)
 
     if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
@@ -1375,11 +1375,11 @@ fun create4x2RemoteViews(
         R.id.textPlaceholder0_4x2,
         R.id.textPlaceholder1_4x2,
         R.id.textPlaceholder2_4x2,
-        R.id.textPlaceholder4owghat_3_4x2,
-        R.id.textPlaceholder4owghat_1_4x2,
-        R.id.textPlaceholder4owghat_4_4x2,
-        R.id.textPlaceholder4owghat_2_4x2,
-        R.id.textPlaceholder4owghat_5_4x2,
+        R.id.textPlaceholder4times_3_4x2,
+        R.id.textPlaceholder4times_1_4x2,
+        R.id.textPlaceholder4times_4_4x2,
+        R.id.textPlaceholder4times_2_4x2,
+        R.id.textPlaceholder4times_5_4x2,
         R.id.event_4x2,
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x2)
@@ -1448,10 +1448,10 @@ fun create4x2RemoteViews(
         )
         remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
 
-        remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
+        remoteViews.setViewVisibility(R.id.widget4x2_times, View.VISIBLE)
         remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.VISIBLE)
     } else {
-        remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
+        remoteViews.setViewVisibility(R.id.widget4x2_times, View.GONE)
         remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
     }
 
