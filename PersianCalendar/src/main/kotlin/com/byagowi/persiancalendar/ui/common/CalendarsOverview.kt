@@ -170,7 +170,6 @@ fun SharedTransitionScope.CalendarsOverview(
                 transitionSpec = appCrossfadeSpec,
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
         }
-        Spacer(Modifier.height(8.dp))
         CalendarsFlow(shownCalendars, jdn, isExpanded, numeral)
         Spacer(Modifier.height(4.dp))
 

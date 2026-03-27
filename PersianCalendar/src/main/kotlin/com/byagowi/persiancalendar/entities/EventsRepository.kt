@@ -94,8 +94,8 @@ data class EventsRepository(
     )
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
-        if (!jdn.isYearSupportedOnApp) return deviceEvents.getEvents(
-            jdn.toCivilDate(),
+        if (!jdn.isYearSupportedOnAppAndNextYear || !Jdn.today().isYearSupportedOnApp) return deviceEvents.getEvents(
+            date = jdn.toCivilDate(),
             IrregularCalendarEventsStore(empty()),
             deviceEvents,
         )

@@ -91,6 +91,7 @@ value class Jdn(val value: Long) : Parcelable {
         (this.value..<that.value).asSequence().map(::Jdn)
 
     val isYearSupportedOnApp get() = (this.toPersianDate().year - supportedYearOfIranCalendar) in -1..0
+    val isYearSupportedOnAppAndNextYear get() = (this.toPersianDate().year - supportedYearOfIranCalendar) in -1..1
 
     companion object {
         // Better to use App provided today() where possible
