@@ -343,7 +343,6 @@
     <string name="sample_inputs">Esempi di input</string>
     <string name="year_view">Vista annuale</string>
     <string name="month_view">Vista mensile</string>
-    <string name="exempt_app_battery_optimization">Desideri aggiungere l’app all’eccezione di ottimizzazione della batteria per una corretta funzionalità delle notifiche?</string>
     <string name="widget_background_transparency">Trasparenza dello sfondo del widget</string>
     <string name="save">Salva</string>
     <string name="holidays_in_red">Vacanze in colore rosso</string>

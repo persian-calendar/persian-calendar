@@ -205,7 +205,6 @@
     <string name="yes">ஆம்</string>
     <string name="sample_inputs">மாதிரி உள்ளீடுகள்</string>
     <string name="year_view">ஆண்டு பார்வை</string>
-    <string name="exempt_app_battery_optimization">அறிவிப்பின் சரியான செயல்பாட்டிற்கு மின்கலம் உகப்பாக்கம் விதிவிலக்குக்குப் பயன்பாட்டைச் சேர்க்க விரும்புகிறீர்களா?</string>
     <string name="widget_background_transparency">நிரல்பலகை பின்னணி வெளிப்படைத்தன்மை</string>
     <string name="save">சேமி</string>
     <string name="holidays_in_red">சிவப்பு நிறத்தில் விடுமுறை</string>

@@ -383,7 +383,6 @@
     <string name="yes">Evet</string>
     <string name="sample_inputs">Örnek girdiler</string>
     <string name="year_view">Yıl görünümü</string>
-    <string name="exempt_app_battery_optimization">Bildirimin doğru çalışması için uygulamayı pil iyileştirmesi istisnasına eklemek ister misiniz?</string>
     <string name="save">Kaydet</string>
     <string name="holidays_in_red">Tatiller kırmızı renkte</string>
     <string name="add_widget">Widget ekle</string>

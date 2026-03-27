@@ -368,7 +368,6 @@
     <string name="sample_inputs">示例输入</string>
     <string name="year_view">年视图</string>
     <string name="month_view">月视图</string>
-    <string name="exempt_app_battery_optimization">是否将应用加入电池优化例外列表以确保通知功能正常？</string>
     <string name="save">保存</string>
     <string name="holidays_in_red">以红色显示节假日</string>
     <string name="vibration">振动</string>

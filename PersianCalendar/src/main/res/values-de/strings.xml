@@ -373,7 +373,6 @@
     <string name="moon">Mond</string>
     <string name="chinese">Chinesisch</string>
     <string name="year_view">Jahresansicht</string>
-    <string name="exempt_app_battery_optimization">Möchten Sie die App zur Ausnahme für die Batterieoptimierung hinzufügen, damit die Benachrichtigung korrekt funktioniert?</string>
     <string name="vibration">Vibration</string>
     <string name="print">Drucken</string>
     <string name="week_view">Wochenansicht</string>

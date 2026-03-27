@@ -44,7 +44,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -133,11 +132,11 @@ fun SharedTransitionScope.TimesTab(
                 )
                 .align(Alignment.CenterHorizontally),
         )
-        if (showEnableAthanForPersianUsers()) EncourageActionLayout(
-            header = "مایلید برنامه اذان پخش کند؟",
-            discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
-            acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
-        )
+//        if (showEnableAthanForPersianUsers()) EncourageActionLayout(
+//            header = "مایلید برنامه اذان پخش کند؟",
+//            discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
+//            acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
+//        )
     }
 }
 

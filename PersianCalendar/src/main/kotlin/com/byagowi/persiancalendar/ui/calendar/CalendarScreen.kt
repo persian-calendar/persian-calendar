@@ -986,36 +986,37 @@ private fun SharedTransitionScope.CalendarsTab(
                     context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
-        } else if (showEncourageToExemptFromBatteryOptimizations()) {
-            fun ignore() {
-                val preferences = context.preferences
-                preferences.edit {
-                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
-                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
-                }
-            }
-
-            fun requestExemption() {
-                runCatching {
-                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
-            }
-
-            val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission(),
-            ) { requestExemption() }
-
-            EncourageActionLayout(
-                header = stringResource(R.string.exempt_app_battery_optimization),
-                acceptButton = stringResource(R.string.yes),
-                discardAction = ::ignore,
-            ) {
-                val alarmManager = context.getSystemService<AlarmManager>()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
-                    Manifest.permission.SCHEDULE_EXACT_ALARM,
-                ) else requestExemption()
-            }
         }
+//        else if (showEncourageToExemptFromBatteryOptimizations()) {
+//            fun ignore() {
+//                val preferences = context.preferences
+//                preferences.edit {
+//                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
+//                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
+//                }
+//            }
+//
+//            fun requestExemption() {
+//                runCatching {
+//                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+//                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
+//            }
+//
+//            val launcher = rememberLauncherForActivityResult(
+//                ActivityResultContracts.RequestPermission(),
+//            ) { requestExemption() }
+//
+//            EncourageActionLayout(
+//                header = stringResource(R.string.exempt_app_battery_optimization),
+//                acceptButton = stringResource(R.string.yes),
+//                discardAction = ::ignore,
+//            ) {
+//                val alarmManager = context.getSystemService<AlarmManager>()
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
+//                    Manifest.permission.SCHEDULE_EXACT_ALARM,
+//                ) else requestExemption()
+//            }
+//        }
     }
 }
 
