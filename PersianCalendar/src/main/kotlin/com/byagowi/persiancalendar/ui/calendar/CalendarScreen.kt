@@ -797,7 +797,9 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
-            var selectedButton by rememberSaveable { mutableIntStateOf(-1) }
+            var selectedButton by rememberSaveable {
+                mutableIntStateOf(if (enabledCalendars.size > 1) 0 else -1)
+            }
             val buttons = listOfNotNull(
                 Pair(stringResource(R.string.calendar)) @Composable {
                     CalendarsTab(
@@ -806,7 +808,7 @@ private fun SharedTransitionScope.Details(
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
                     )
-                }.takeIf { enabledCalendars.size != 1 },
+                }.takeIf { enabledCalendars.size > 1 },
                 Pair(if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) @Composable {
                     Row(
                         verticalAlignment =
