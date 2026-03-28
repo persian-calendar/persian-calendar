@@ -177,7 +177,6 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
-import com.byagowi.persiancalendar.ui.about.NoteOnAppointments
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.applyOffset
@@ -828,26 +827,26 @@ private fun SharedTransitionScope.Details(
                             refreshCalendar = refreshCalendar,
                             modifier = Modifier.weight(1f),
                         )
-                        if (when {
-                                eventsRepository.iranOthers -> true
-                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
-                                else -> false
-                            } && !isTalkBackEnabled
-                        ) {
-                            var showDialog by rememberSaveable { mutableStateOf(false) }
-                            if (showDialog) NoteOnAppointments(
-                                onDismissRequest = { showDialog = false },
-                            )
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.Help,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .padding(start = 8.dp)
-                                    .clickable { showDialog = true },
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
+//                        if (when {
+//                                eventsRepository.iranOthers -> true
+//                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
+//                                else -> false
+//                            } && !isTalkBackEnabled
+//                        ) {
+//                            var showDialog by rememberSaveable { mutableStateOf(false) }
+//                            if (showDialog) NoteOnAppointments(
+//                                onDismissRequest = { showDialog = false },
+//                            )
+//                            Icon(
+//                                imageVector = Icons.AutoMirrored.Default.Help,
+//                                contentDescription = null,
+//                                modifier = Modifier
+//                                    .size(36.dp)
+//                                    .padding(start = 8.dp)
+//                                    .clickable { showDialog = true },
+//                                tint = MaterialTheme.colorScheme.primary,
+//                            )
+//                        }
                     }
                 }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
                 Pair(stringResource(R.string.times)) @Composable {

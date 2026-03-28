@@ -40,7 +40,7 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
     var firstPass by rememberSaveable {
         mutableStateOf(eventsRepository.iranOthers || language.isUserAbleToReadPersian)
     }
-    if (firstPass) NoteOnAppointments(onDismissRequest) { firstPass = false }
+    if (firstPass) return NoteOnAppointments(onDismissRequest) { firstPass = false }
     var message by rememberSaveable { mutableStateOf("") }
     AppDialog(
         onDismissRequest = onDismissRequest,

@@ -129,7 +129,7 @@ fun EventView(it: Entry, modifier: Modifier = Modifier) {
                         is EntryType.Holiday if type.source == EventSource.Iran -> "عمومی رسمی، "
                         else -> ""
                     } + it.title,
-                    maxLines = if (state) Int.MAX_VALUE else 1,
+//                    maxLines = if (state) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .fillMaxWidth()
