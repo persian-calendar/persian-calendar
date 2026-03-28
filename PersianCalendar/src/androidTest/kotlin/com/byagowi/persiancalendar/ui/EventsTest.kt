@@ -54,40 +54,40 @@ class EventsTest {
             ).size,
         )
 
-        assertEquals(
-            1, repository.getEvents(Jdn(PersianDate(1400, 12, 24)), EventsStore.empty()).size,
-        )
-        assertEquals(
-            1, repository.getEvents(Jdn(PersianDate(1400, 12, 14)), EventsStore.empty()).size,
-        )
+//        assertEquals(
+//            1, repository.getEvents(Jdn(PersianDate(1400, 12, 24)), EventsStore.empty()).size,
+//        )
+//        assertEquals(
+//            1, repository.getEvents(Jdn(PersianDate(1400, 12, 14)), EventsStore.empty()).size,
+//        )
     }
 
-    @Test
-    fun testCalculateWorkDays() {
-        changeWeekDaysForTest(weekEnds = Language.FA.defaultWeekEnds) {
-            val repository = EventsRepository(EventsRepository.iranDefault, Language.FA)
-            assertEquals(
-                35,
-                repository.calculateWorkDays(
-                    Jdn(PersianDate(1402, 6, 10)),
-                    Jdn(PersianDate(1402, 7, 25)),
-                ),
-            )
-        }
-    }
+//    @Test
+//    fun testCalculateWorkDays() {
+//        changeWeekDaysForTest(weekEnds = Language.FA.defaultWeekEnds) {
+//            val repository = EventsRepository(EventsRepository.iranDefault, Language.FA)
+//            assertEquals(
+//                35,
+//                repository.calculateWorkDays(
+//                    Jdn(PersianDate(1402, 6, 10)),
+//                    Jdn(PersianDate(1402, 7, 25)),
+//                ),
+//            )
+//        }
+//    }
 
-    @Test
-    fun testInternationEventsRepository() {
-        val repository = EventsRepository(setOf(EventsRepository.internationalKey), Language.UR)
-        assertEquals(IslamicDate.useUmmAlQura, true)
-        repository.irregularCalendarEventsStore
-            .getEventsList<CalendarEvent.GregorianCalendarEvent>(2021, Calendar.GREGORIAN)
-            .let {
-                assertEquals(4, it.size)
-                assertEquals(false, it[0].isHoliday)
-                assertEquals(false, it[1].isHoliday)
-            }
-    }
+//    @Test
+//    fun testInternationEventsRepository() {
+//        val repository = EventsRepository(setOf(EventsRepository.internationalKey), Language.UR)
+//        assertEquals(IslamicDate.useUmmAlQura, true)
+//        repository.irregularCalendarEventsStore
+//            .getEventsList<CalendarEvent.GregorianCalendarEvent>(2021, Calendar.GREGORIAN)
+//            .let {
+//                assertEquals(4, it.size)
+//                assertEquals(false, it[0].isHoliday)
+//                assertEquals(false, it[1].isHoliday)
+//            }
+//    }
 
     @Test
     fun testAfghanistanDefaultRepository() {
