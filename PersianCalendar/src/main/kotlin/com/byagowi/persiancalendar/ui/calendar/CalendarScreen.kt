@@ -926,25 +926,27 @@ private fun SharedTransitionScope.Details(
 //                acceptAction = { navigateToHolidaysSettings(null) },
 //            )
 //        } else
-            val context = LocalContext.current
-            if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
-                var showDialog by remember { mutableStateOf(false) }
-                if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+            if (false) {
+                val context = LocalContext.current
+                if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
+                    var showDialog by remember { mutableStateOf(false) }
+                    if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
-                EncourageActionLayout(
-                    header = stringResource(R.string.ask_calendar_permission),
-                    discardAction = {
-                        context.preferences.edit {
-                            putBoolean(
-                                PREF_SHOW_DEVICE_CALENDAR_EVENTS,
-                                false,
-                            )
-                        }
-                    },
-                    acceptButton = stringResource(R.string.yes),
-                    acceptAction = { showDialog = true },
-                )
-                Spacer(Modifier.height(8.dp))
+                    EncourageActionLayout(
+                        header = stringResource(R.string.ask_calendar_permission),
+                        discardAction = {
+                            context.preferences.edit {
+                                putBoolean(
+                                    PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+                                    false,
+                                )
+                            }
+                        },
+                        acceptButton = stringResource(R.string.yes),
+                        acceptAction = { showDialog = true },
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
             }
         }
     }
@@ -976,21 +978,25 @@ private fun SharedTransitionScope.CalendarsTab(
             navigateToAstronomy = navigateToAstronomy,
         )
 
-        val context = LocalContext.current
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS,
-            ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
-        ) {
-            val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission(),
-            ) { isGranted -> context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
-            EncourageActionLayout(
-                header = stringResource(R.string.enable_notification),
-                acceptButton = stringResource(R.string.yes),
-                discardAction = {
-                    context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
-                },
-            ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+        if (false) {
+            val context = LocalContext.current
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                    context, Manifest.permission.POST_NOTIFICATIONS,
+                ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
+            ) {
+                val launcher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.RequestPermission(),
+                ) { isGranted ->
+                    context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+                }
+                EncourageActionLayout(
+                    header = stringResource(R.string.enable_notification),
+                    acceptButton = stringResource(R.string.yes),
+                    discardAction = {
+                        context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                    },
+                ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+            }
         }
 //        else if (showEncourageToExemptFromBatteryOptimizations()) {
 //            fun ignore() {
