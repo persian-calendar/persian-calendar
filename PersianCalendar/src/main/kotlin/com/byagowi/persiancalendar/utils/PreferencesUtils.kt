@@ -93,6 +93,8 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
         language.isNepali -> {
             putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.nepalDefault)
         }
+
+        else -> putStringSet(PREF_HOLIDAY_TYPES, emptySet())
     }
 
     putString(PREF_MAIN_CALENDAR_KEY, language.defaultCalendars[0].name)
