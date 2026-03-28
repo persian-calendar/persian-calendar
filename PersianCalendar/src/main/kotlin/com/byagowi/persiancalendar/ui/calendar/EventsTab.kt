@@ -67,6 +67,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
@@ -256,6 +257,8 @@ private fun DayEventContent(
             SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                 Text(
                     text = title,
+                    maxLines = if (event.source != null) 1 else Int.MAX_VALUE,
+                    overflow = TextOverflow.Ellipsis,
                     color = contentColor,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         textDirection = TextDirection.Content,
