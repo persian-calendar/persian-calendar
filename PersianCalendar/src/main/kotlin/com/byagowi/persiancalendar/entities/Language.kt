@@ -214,9 +214,6 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    private val prefersNepaliCalendar: Boolean
-        get() = isNepali
-
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersPersianCalendar: Boolean
         get() = when (this) {
@@ -231,12 +228,11 @@ enum class Language(val code: String, val nativeName: String) {
             this == TR -> persistentListOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
             this == AR || this == OTA -> persistentListOf(Calendar.ISLAMIC, Calendar.GREGORIAN)
             prefersGregorianCalendar -> persistentListOf(Calendar.GREGORIAN)
-            prefersNepaliCalendar -> persistentListOf(Calendar.NEPALI, Calendar.GREGORIAN)
+            this == NE -> persistentListOf(Calendar.NEPALI, Calendar.GREGORIAN)
             prefersPersianCalendar -> persistentListOf(
                 Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
             )
-
-            else -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            else -> persistentListOf(Calendar.GREGORIAN)
         }
 
     val defaultWeekStart
