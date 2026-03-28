@@ -9,7 +9,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.PowerManager
 import android.provider.CalendarContract
-import android.provider.Settings
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -66,7 +65,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -815,18 +813,24 @@ private fun SharedTransitionScope.Details(
                             if (appointments.isEmpty()) Alignment.CenterVertically else Alignment.Top,
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
                     ) {
-                        if (appointments.isEmpty()) Text(
-                            text = if (language.isPersianOrDari) {
-                                "مناسبتی برای این روز یافت نشد"
-                            } else stringResource(R.string.no_event),
-                            textAlign = TextAlign.Center,
+                        AnimatedContent(
+                            targetState = appointments.isEmpty(),
+                            transitionSpec = {
+                                (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
+                            },
                             modifier = Modifier.weight(1f),
-                        ) else DayEvents(
-                            events = appointments,
-                            navigateToHolidaysSettings = navigateToHolidaysSettings,
-                            refreshCalendar = refreshCalendar,
-                            modifier = Modifier.weight(1f),
-                        )
+                        ) { appointmentsIsEmpty ->
+                            if (appointmentsIsEmpty) Text(
+                                text = if (language.isPersianOrDari) {
+                                    "مناسبتی برای این روز یافت نشد"
+                                } else stringResource(R.string.no_event),
+                                textAlign = TextAlign.Center,
+                            ) else DayEvents(
+                                events = appointments,
+                                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                refreshCalendar = refreshCalendar,
+                            )
+                        }
 //                        if (when {
 //                                eventsRepository.iranOthers -> true
 //                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
