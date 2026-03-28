@@ -798,7 +798,9 @@ private fun SharedTransitionScope.Details(
             }
 
             var selectedButton by rememberSaveable {
-                mutableIntStateOf(if (enabledCalendars.size > 1) 0 else -1)
+                mutableIntStateOf(
+                    if (enabledCalendars.size == 1 || isShowDeviceCalendarEvents || !(language.isIranExclusive || language.isAfghanistanExclusive) || !today.isYearSupportedOnApp) -1 else 0,
+                )
             }
             val buttons = listOfNotNull(
                 Pair(stringResource(R.string.calendar)) @Composable {
