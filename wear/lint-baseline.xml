@@ -2,6 +2,17 @@
 <issues format="6" by="lint 9.0.1" type="baseline" client="gradle" dependencies="true" name="AGP (9.0.1)" variant="all" version="9.0.1">
 
     <issue
+        id="UnusedContentLambdaTargetStateParameter"
+        message="Target state parameter `state` is not used"
+        errorLine1="            AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->"
+        errorLine2="                                                                             ~~~~~">
+        <location
+            file="src/main/kotlin/com/byagowi/persiancalendar/ui/MainScreen.kt"
+            line="126"
+            column="78"/>
+    </issue>
+
+    <issue
         id="ConvertToWebp"
         message="One or more images in this project can be converted to the WebP format which typically results in smaller file sizes, even for lossless conversion">
         <location
