@@ -30,6 +30,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -49,6 +50,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.preferences
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
@@ -96,13 +98,6 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                         nonHolidaysKey = EventsRepository.iranOthersKey,
                         destinationItem = destinationItem,
                     )
-                    if (!language.isAfghanistanExclusive) ItemCheckBox(
-                        stringResource(R.string.iran_ancient),
-                        enabledTypes,
-                        EventsRepository.iranAncientKey,
-                        destinationItem = destinationItem,
-                        indented = false,
-                    )
                 }
 
                 @Composable
@@ -126,8 +121,15 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     Afghanistan()
                     Iran()
                 }
+                if (!language.isAfghanistanExclusive) ItemCheckBox(
+                    AnnotatedString(stringResource(R.string.iran_ancient)),
+                    enabledTypes,
+                    EventsRepository.iranAncientKey,
+                    destinationItem = destinationItem,
+                    indented = false,
+                )
                 ItemCheckBox(
-                    stringResource(R.string.international),
+                    AnnotatedString(stringResource(R.string.international)),
                     enabledTypes,
                     EventsRepository.internationalKey,
                     destinationItem = destinationItem,
@@ -169,68 +171,66 @@ fun CountryEvents(
     hideTheFirstRowFromAccessibility: Boolean = true,
 ) {
     Column(modifier) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .then(
-                    if (hideTheFirstRowFromAccessibility) {
-                        Modifier
-                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                            .clearAndSetSemantics {}
-                    } else Modifier,
-                )
-                .clickable {
-                    if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-                        enabledTypes -= holidaysKey
-                        enabledTypes -= nonHolidaysKey
-                    } else {
-                        if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
-                        if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
-                    }
-                }
-                .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            TriStateCheckbox(
-                state = when {
-                    holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
-
-                    holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
-
-                    else -> ToggleableState.Off
-                },
-                onClick = null,
-                modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
-            )
-            Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-            Text(
-                buildAnnotatedString {
-                    append(calendarCenterName)
-                    if (sourceLink.isNotEmpty()) {
-                        append(spacedComma)
-                        withLink(
-                            link = LinkAnnotation.Url(
-                                url = sourceLink,
-                                styles = TextLinkStyles(
-                                    SpanStyle(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        textDecoration = TextDecoration.Underline,
-                                    ),
+//        Row(
+//            Modifier
+//                .fillMaxWidth()
+//                .then(
+//                    if (hideTheFirstRowFromAccessibility) {
+//                        Modifier
+//                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+//                            .clearAndSetSemantics {}
+//                    } else Modifier,
+//                )
+//                .clickable {
+//                    if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
+//                        enabledTypes -= holidaysKey
+//                        enabledTypes -= nonHolidaysKey
+//                    } else {
+//                        if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
+//                        if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
+//                    }
+//                }
+//                .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
+//            verticalAlignment = Alignment.CenterVertically,
+//        ) {
+//            TriStateCheckbox(
+//                state = when {
+//                    holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
+//
+//                    holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
+//
+//                    else -> ToggleableState.Off
+//                },
+//                onClick = null,
+//                modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
+//            )
+//            Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
+//        }
+        listOf(holidaysTitle to holidaysKey, nonHolidaysTitle to nonHolidaysKey).map { (title, key) ->
+            buildAnnotatedString {
+                append(title)
+                if (sourceLink.isNotEmpty()) {
+                    append(spacedComma)
+                    withLink(
+                        link = LinkAnnotation.Url(
+                            url = sourceLink,
+                            styles = TextLinkStyles(
+                                SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textDecoration = TextDecoration.Underline,
                                 ),
                             ),
-                        ) { append(stringResource(R.string.view_source)) }
-                    }
-                },
-            )
-        }
-        ItemCheckBox(holidaysTitle, enabledTypes, holidaysKey, destinationItem)
-        ItemCheckBox(nonHolidaysTitle, enabledTypes, nonHolidaysKey, destinationItem)
+                        ),
+                    ) { append(stringResource(R.string.view_source)) }
+                }
+            } to key
+        }.forEach { (title, key) -> ItemCheckBox(title, enabledTypes, key, destinationItem, indented = false) }
     }
 }
 
 @Composable
 private fun ItemCheckBox(
-    label: String,
+    label: AnnotatedString,
     enabledTypes: SnapshotStateList<String>,
     key: String,
     destinationItem: String?,
