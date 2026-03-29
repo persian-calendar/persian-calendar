@@ -150,7 +150,7 @@ fun daysTable(
     val contentColor = LocalContentColor.current
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
     val todayIndicatorStroke = with(density) {
-        Stroke(width = (if (isBoldFont) 3 else 2).dp.toPx())
+        Stroke(width = todayCircleWidth.toPx())
     }
     val indicatorFillColor by animateColor(monthColors.indicatorFill)
     val todayOutlineColor by animateColor(monthColors.todayOutline)
@@ -469,6 +469,8 @@ fun daysTable(
         }
     }
 }
+
+val todayCircleWidth get() = (if (isBoldFont) 3 else 2).dp
 
 // A bitset useful for a 7x7 table, seven days of seven weeks
 @VisibleForTesting

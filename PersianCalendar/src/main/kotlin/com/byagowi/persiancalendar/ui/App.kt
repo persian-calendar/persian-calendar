@@ -209,7 +209,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
                 entry<Screen.Month> {
-                    MonthScreen(navigateUp = navigateUp, initiallySelectedDay = it.day)
+                    MonthScreen(
+                        navigateUp = navigateUp,
+                        initiallySelectedDay = it.day,
+                        now = now,
+                        today = today,
+                        refreshCalendar = refreshCalendar,
+                        commandBringDay = commandBringDay,
+                    )
                 }
                 entry<Screen.Schedule> {
                     ScheduleScreen(

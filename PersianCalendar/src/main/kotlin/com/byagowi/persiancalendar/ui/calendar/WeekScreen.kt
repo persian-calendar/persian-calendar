@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -302,8 +303,9 @@ fun SharedTransitionScope.WeekScreen(
                     colors = appTopAppBarColors(),
                     navigationIcon = {
                         if (isAddEventBoxEnabled) {
-                            @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
-                            BackHandler { isAddEventBoxEnabled = false }
+                            @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler") BackHandler {
+                                isAddEventBoxEnabled = false
+                            }
                         }
                         NavigationNavigateUpIcon {
                             if (isAddEventBoxEnabled) isAddEventBoxEnabled = false else navigateUp()
@@ -634,8 +636,11 @@ fun DaysView(
                     },
             )
         }
-        val eventsWithoutTime = events.map { dayEvents ->
-            dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
+        val eventsWithoutTime = remember(events) {
+            events.map { dayEvents ->
+                dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
+                    .toImmutableList()
+            }.toImmutableList()
         }
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
         var hasContent by remember { mutableStateOf(true) }
@@ -663,132 +668,83 @@ fun DaysView(
                 WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
             ),
         ) {
-            var isExpanded by rememberSaveable { mutableStateOf(false) }
-            val clickToExpandModifier = Modifier.clickable(
-                onClickLabel = stringResource(R.string.more),
-                interactionSource = null,
-                indication = null,
-            ) { isExpanded = !isExpanded }
-            if (days == 1) Box(
-                modifier = if (eventsWithoutTime[0].size > 3) clickToExpandModifier else Modifier,
-            ) {
-                val scrollState = rememberScrollState()
-                Column(
-                    Modifier
-                        .verticalScroll(scrollState)
-                        .fillMaxWidth()
-                        .then(
-                            if (isAddEventBoxEnabled) Modifier.clickable(
-                                indication = null,
-                                interactionSource = null,
-                            ) { onAddEventBoxEnabledChange(false) } else Modifier,
-                        ),
-                ) {
-                    Spacer(Modifier.height(12.dp))
-                    val headerHasFilled =
-                        scrollState.canScrollBackward || scrollState.canScrollForward
-                    val displayedEvents =
-                        (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0]
-                            .filter { content == null || it.source == null }
-                    DayEvents(
-                        events = displayedEvents.let { if (isExpanded) it else it.take(3) }
-                            .toImmutableList(),
-                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        refreshCalendar = refreshCalendar,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateContentSize(appContentSizeAnimationSpec)
-                            .padding(horizontal = 24.dp),
-                    )
-                    val appointments =
-                        eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
-                    if (displayedEvents.size > 3) {
-                        Spacer(Modifier.height(4.dp))
-                        ExpandArrow(
-                            isExpanded = isExpanded,
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
-                        if (content != null) {
-                            content(appointments) { hasContent = it }
-                        } else Spacer(Modifier.height(8.dp))
-                        if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
-                            Spacer(Modifier.height(fabPlaceholderHeight))
-                        }
-                    } else if (content != null) {
-                        content(appointments) { hasContent = it }
-                    } else Spacer(Modifier.height(12.dp))
-                }
-            } else if (maxDayAllDayEvents != 0) Row(
-                verticalAlignment = Alignment.Bottom,
-                modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier,
-            ) {
+            if (days == 1) {
+                var isExpanded by rememberSaveable { mutableStateOf(false) }
+                val clickToExpandModifier = Modifier.clickable(
+                    onClickLabel = stringResource(R.string.more),
+                    interactionSource = null,
+                    indication = null,
+                ) { isExpanded = !isExpanded }
                 Box(
-                    Modifier
-                        .width(pagerArrowSizeAndPadding.dp)
-                        .padding(bottom = 2.dp),
-                    contentAlignment = Alignment.BottomCenter,
-                ) { if (maxDayAllDayEvents > 3) ExpandArrow(isExpanded = isExpanded) }
-                Row(
-                    Modifier
-                        .padding(end = pagerArrowSizeAndPadding.dp)
-                        .animateContentSize(appContentSizeAnimationSpec),
+                    modifier = if (eventsWithoutTime[0].size > 3) clickToExpandModifier else Modifier,
                 ) {
-                    val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
-                        lineHeight = 24.sp,
-                        textDirection = TextDirection.Content,
-                    )
-                    val weekStart = weekStart
-                    eventsWithoutTime.forEachIndexed { i, dayEvents ->
-                        Column(Modifier.weight(1f)) {
-                            if (!hasWeekPager) {
-                                val weekDay = weekStart + i
-                                val weekDayTitle = weekDay.title
-                                val isLandscape =
-                                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                                Text(
-                                    text = if (isLandscape) weekDayTitle else weekDay.shortTitle,
-                                    maxLines = 1,
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier
-                                        .width(cellWidth)
-                                        .semantics { this.contentDescription = weekDayTitle },
-                                )
+                    val scrollState = rememberScrollState()
+                    Column(
+                        Modifier
+                            .verticalScroll(scrollState)
+                            .fillMaxWidth()
+                            .then(
+                                if (isAddEventBoxEnabled) Modifier.clickable(
+                                    indication = null,
+                                    interactionSource = null,
+                                ) { onAddEventBoxEnabledChange(false) } else Modifier,
+                            ),
+                    ) {
+                        Spacer(Modifier.height(12.dp))
+                        val headerHasFilled =
+                            scrollState.canScrollBackward || scrollState.canScrollForward
+                        val displayedEvents =
+                            (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
+                        DayEvents(
+                            events = displayedEvents.let { if (isExpanded) it else it.take(3) }
+                                .toImmutableList(),
+                            navigateToHolidaysSettings = navigateToHolidaysSettings,
+                            refreshCalendar = refreshCalendar,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateContentSize(appContentSizeAnimationSpec)
+                                .padding(horizontal = 24.dp),
+                        )
+                        val appointments =
+                            eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
+                        if (displayedEvents.size > 3) {
+                            Spacer(Modifier.height(4.dp))
+                            ExpandArrow(
+                                isExpanded = isExpanded,
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                            )
+                            if (content != null) {
+                                content(appointments) { hasContent = it }
+                            } else Spacer(Modifier.height(8.dp))
+                            if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
+                                Spacer(Modifier.height(fabPlaceholderHeight))
                             }
-                            dayEvents.forEachIndexed { i, event ->
-                                if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
-                                    val color = eventColor(event)
-                                    Text(
-                                        " " + event.title,
-                                        maxLines = 1,
-                                        style = headerTextStyle,
-                                        color = eventTextColor(color),
-                                        modifier = Modifier
-                                            .requiredWidth(cellWidth - defaultWidthReduction)
-                                            .padding(
-                                                top = if (i == 0) 2.dp else 0.dp,
-                                                bottom = 2.dp,
-                                            )
-                                            .clip(MaterialTheme.shapes.small)
-                                            .background(eventColor(event))
-                                            .clickable {
-                                                if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                    launcher.viewEvent(event, context)
-                                                } else coroutineScope.launch {
-                                                    snackbarHostState.showSnackbar(event.title)
-                                                }
-                                            },
-                                    )
-                                }
-                                if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
-                                    " +" + numeral.format(dayEvents.size - 3),
-                                    modifier = Modifier.padding(bottom = 4.dp),
-                                    maxLines = 1,
-                                    style = headerTextStyle,
-                                )
-                            }
-                        }
+                        } else if (content != null) {
+                            content(appointments) { hasContent = it }
+                        } else Spacer(Modifier.height(12.dp))
                     }
+                }
+            } else if (maxDayAllDayEvents != 0) EventsColumn(
+                cellWidth = cellWidth,
+                events = eventsWithoutTime,
+                defaultWidthReduction = defaultWidthReduction,
+                launcher = launcher,
+                snackbarHostState = snackbarHostState,
+            ) { dayIndex ->
+                if (!hasWeekPager) {
+                    val weekDay = weekStart + dayIndex
+                    val weekDayTitle = weekDay.title
+                    val isLandscape =
+                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    Text(
+                        text = if (isLandscape) weekDayTitle else weekDay.shortTitle,
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .width(cellWidth)
+                            .semantics { this.contentDescription = weekDayTitle },
+                    )
                 }
             }
         }
@@ -1257,6 +1213,85 @@ fun DaysView(
                 }
             }
             ScrollShadow(scrollState)
+        }
+    }
+}
+
+@Composable
+fun EventsColumn(
+    cellWidth: Dp,
+    events: ImmutableList<ImmutableList<CalendarEvent<*>>>,
+    defaultWidthReduction: Dp,
+    launcher: ManagedActivityResultLauncher<Long, Void?>,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    header: @Composable (i: Int) -> Unit = {},
+) {
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    val clickToExpandModifier = Modifier.clickable(
+        onClickLabel = stringResource(R.string.more),
+        interactionSource = null,
+        indication = null,
+    ) { isExpanded = !isExpanded }
+    val maxEventsCount = events.maxOf { it.size }
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        modifier = modifier.then(if (maxEventsCount > 3) clickToExpandModifier else Modifier),
+    ) {
+        Box(
+            Modifier
+                .width(pagerArrowSizeAndPadding.dp)
+                .padding(bottom = 2.dp),
+            contentAlignment = Alignment.BottomCenter,
+        ) { if (maxEventsCount > 3) ExpandArrow(isExpanded = isExpanded) }
+        Row(
+            Modifier
+                .animateContentSize(appContentSizeAnimationSpec)
+                .padding(end = pagerArrowSizeAndPadding.dp),
+        ) {
+            events.forEachIndexed { i, dayEvents ->
+                val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
+                    lineHeight = 24.sp,
+                    textDirection = TextDirection.Content,
+                )
+                val context = LocalContext.current
+                val coroutineScope = rememberCoroutineScope()
+                Column(Modifier.weight(1f)) {
+                    header(i)
+                    dayEvents.forEachIndexed { i, event ->
+                        if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                            val color = eventColor(event)
+                            Text(
+                                " " + event.title,
+                                maxLines = 1,
+                                style = headerTextStyle,
+                                color = eventTextColor(color),
+                                modifier = Modifier
+                                    .requiredWidth(cellWidth - defaultWidthReduction)
+                                    .padding(
+                                        top = if (i == 0) 2.dp else 0.dp,
+                                        bottom = 2.dp,
+                                    )
+                                    .clip(MaterialTheme.shapes.small)
+                                    .background(eventColor(event))
+                                    .clickable {
+                                        if (event is CalendarEvent.DeviceCalendarEvent) {
+                                            launcher.viewEvent(event, context)
+                                        } else coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(event.title)
+                                        }
+                                    },
+                            )
+                        }
+                        if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
+                            " +" + numeral.format(dayEvents.size - 3),
+                            modifier = Modifier.padding(bottom = 4.dp),
+                            maxLines = 1,
+                            style = headerTextStyle,
+                        )
+                    }
+                }
+            }
         }
     }
 }

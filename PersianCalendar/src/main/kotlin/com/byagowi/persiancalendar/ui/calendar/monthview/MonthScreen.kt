@@ -1,12 +1,17 @@
 package com.byagowi.persiancalendar.ui.calendar.monthview
 
 import android.content.res.Configuration
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,10 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -27,36 +36,54 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.ui.calendar.EventsColumn
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
+import com.byagowi.persiancalendar.ui.calendar.ViewEventContract
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
+import com.byagowi.persiancalendar.ui.calendar.readEvents
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.theme.animateColor
+import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SharedTransitionScope.MonthScreen(
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
+    now: Long,
+    today: Jdn,
+    refreshCalendar: () -> Unit,
+    commandBringDay: (Jdn) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val initialItem = ITEMS_COUNT / 2
@@ -70,15 +97,19 @@ fun SharedTransitionScope.MonthScreen(
     }
     val focusedDate = focusedJdn on mainCalendar
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
-        modifier = modifier.detectSwipe {
-            { isUp ->
-                if (!isLandscape && isUp) when (preferredSwipeDownAction) {
-                    SwipeDownAction.MonthView -> navigateUp()
-                    else -> {}
+        modifier = modifier
+            .detectSwipe {
+                { isUp ->
+                    if (!isLandscape && isUp) when (preferredSwipeDownAction) {
+                        SwipeDownAction.MonthView -> navigateUp()
+                        else -> {}
+                    }
                 }
             }
-        },
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = .15f)),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -109,25 +140,27 @@ fun SharedTransitionScope.MonthScreen(
             val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
             val density = LocalDensity.current
             val diameter = min(cellWidth, cellHeight)
-            val daysTextSize = diameter * when {
-                mainCalendarNumeral.isArabicIndicVariants && customFontName == null -> 25
-                mainCalendarNumeral.isTamil -> 16
-                else -> 18
-            } / 40
-            val daysStyle = LocalTextStyle.current.copy(
-                fontSize = with(density) { daysTextSize.toSp() },
-            )
-            val weekStart = weekStart
 
-            Column(
-                modifier = Modifier.padding(
-                    top = paddingValues.calculateTopPadding(),
-                    start = pagerArrowSizeAndPadding.dp,
-                ),
-            ) {
-                Row {
+            Column(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
+                val defaultWidthReduction = 2.dp
+                val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
+                    refreshCalendar()
+                }
+                val fontFile = resolveFontFile()
+                val daysTextSize = diameter * when {
+                    mainCalendarNumeral.isTamil -> 16
+                    mainCalendarNumeral.isArabicIndicVariants && fontFile == null -> 25
+                    else -> 18
+                } / 40
+                val daysStyle = LocalTextStyle.current.copy(
+                    fontSize = with(density) { daysTextSize.toSp() },
+                )
+                Row(Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
                     repeat(7) { column ->
-                        Box(contentAlignment = Alignment.Center, modifier = cellsSizeModifier) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = cellsSizeModifier.weight(1f),
+                        ) {
                             val weekDay = weekStart + column
                             val description = stringResource(
                                 R.string.week_days_name_column,
@@ -143,42 +176,84 @@ fun SharedTransitionScope.MonthScreen(
                         }
                     }
                 }
+                val monthColors = appMonthColors()
+                val holidaysFillColor by animateColor(monthColors.holidaysFill)
+                val todayOutlineColor by animateColor(monthColors.todayOutline)
+                val holidaysColor by animateColor(monthColors.holidays)
+                val monthStart = Jdn(
+                    mainCalendar.getMonthStartFromMonthsDistance(initiallySelectedDay, 0)
+                )
+                val baseJdn = monthStart - (monthStart.weekDay - weekStart)
                 LazyColumn(state = state) {
                     items(ITEMS_COUNT) { index ->
-                        val jdn = indexToJdn(initiallySelectedDay, index)
-                        Row {
-                            repeat(7) { column ->
-                                val weekDayPosition = weekStart.ordinal + column
-                                val dayJdn = jdn + weekDayPosition
-                                val dayDate = dayJdn on mainCalendar
-//                                val monthStartDate =
-//                                    mainCalendar.createDate(dayDate.year, dayDate.month, 1)
-//                                val monthStartJdn = Jdn(monthStartDate)
-//                                val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
-//                                val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
-//                                val weekNumber = monthStartWeekOfYear
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = cellsSizeModifier,
-//                                        .then(
-//                                        if (true) Modifier.sharedBounds(
-//                                            rememberSharedContentState(
-//                                                "$SHARED_CONTENT_KEY_WEEK_NUMBER$monthStartJdn-$weekNumber"
-//                                            ),
-//                                            animatedVisibilityScope = animatedContentScope,
-//                                        ) else Modifier
-//                                    )
-                                ) {
-                                    Text(
-                                        mainCalendarNumeral.format(dayDate.dayOfMonth),
-                                        style = daysStyle,
-                                        modifier = Modifier.alpha(
-                                            if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year)
-                                                1f else AppBlendAlpha,
-
-                                            ),
+                        val weekJdn = indexToJdn(baseJdn, index)
+                        val context = LocalContext.current
+                        val resources = LocalResources.current
+                        val deviceEvents = remember(index) { context.readWeekDeviceEvents(weekJdn) }
+                        val events = (0..<7).map { index ->
+                            readEvents(weekJdn + index, now, deviceEvents)
+                        }.toImmutableList()
+                        EventsColumn(
+                            cellWidth = cellWidth,
+                            events = events,
+                            defaultWidthReduction = defaultWidthReduction,
+                            launcher = launcher,
+                            snackbarHostState = snackbarHostState,
+                        ) { column ->
+                            val jdn = weekJdn + column
+                            val dayDate = jdn on mainCalendar
+                            val isHoliday = events[column].any { it.isHoliday }
+//                            val monthStartDate =
+//                                mainCalendar.createDate(dayDate.year, dayDate.month, 1)
+//                            val monthStartJdn = Jdn(monthStartDate)
+//                            val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
+//                            val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
+//                            val weekNumber = monthStartWeekOfYear
+                            val isToday = jdn == today
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = cellsSizeModifier
+                                    .aspectRatio(1f)
+                                    .then(
+                                        if (isToday) Modifier.border(
+                                            width = todayCircleWidth,
+                                            color = todayOutlineColor,
+                                            shape = CircleShape,
+                                        ) else Modifier,
                                     )
-                                }
+                                    .clip(CircleShape)
+                                    .background(
+                                        if (isHoliday) holidaysFillColor else Color.Transparent,
+                                    )
+                                    .clickable {
+                                        commandBringDay(jdn)
+                                        navigateUp()
+                                    },
+                            ) {
+                                Text(
+                                    mainCalendarNumeral.format(dayDate.dayOfMonth),
+                                    color = if (isHoliday) holidaysColor else LocalContentColor.current,
+                                    style = daysStyle,
+                                    modifier = Modifier
+                                        .alpha(
+                                            if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
+                                            else AppBlendAlpha,
+                                        )
+                                        .semantics {
+                                            if (isTalkBackEnabled) {
+                                                this.contentDescription = getA11yDaySummary(
+                                                    resources = resources,
+                                                    jdn = jdn,
+                                                    isToday = isToday,
+                                                    deviceCalendarEvents = EventsStore.empty(),
+                                                    withZodiac = isToday,
+                                                    withOtherCalendars = false,
+                                                    withTitle = true,
+                                                    withWeekOfYear = false,
+                                                )
+                                            }
+                                        },
+                                )
                             }
                         }
                     }

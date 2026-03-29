@@ -8,6 +8,6 @@ enum class SwipeUpAction(@get:StringRes val titleId: Int) {
 }
 
 enum class SwipeDownAction(@get:StringRes val titleId: Int, val hidden: Boolean = false) {
-    YearView(R.string.year_view), MonthView(R.string.month_view, hidden = true),
+    YearView(R.string.year_view), MonthView(R.string.month_view),
     None(R.string.empty),
 }
