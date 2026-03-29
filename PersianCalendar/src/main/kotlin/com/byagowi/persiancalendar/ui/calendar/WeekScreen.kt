@@ -730,7 +730,7 @@ fun DaysView(
                 defaultWidthReduction = defaultWidthReduction,
                 launcher = launcher,
                 snackbarHostState = snackbarHostState,
-            ) { dayIndex ->
+            ) { dayIndex, content ->
                 if (!hasWeekPager) {
                     val weekDay = weekStart + dayIndex
                     val weekDayTitle = weekDay.title
@@ -746,6 +746,7 @@ fun DaysView(
                             .semantics { this.contentDescription = weekDayTitle },
                     )
                 }
+                content()
             }
         }
 
@@ -1225,7 +1226,7 @@ fun EventsColumn(
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    header: @Composable (i: Int) -> Unit = {},
+    content: @Composable ColumnScope.(i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val clickToExpandModifier = Modifier.clickable(
@@ -1257,38 +1258,39 @@ fun EventsColumn(
                 val context = LocalContext.current
                 val coroutineScope = rememberCoroutineScope()
                 Column(Modifier.weight(1f)) {
-                    header(i)
-                    dayEvents.forEachIndexed { i, event ->
-                        if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
-                            val color = eventColor(event)
-                            Text(
-                                " " + event.title,
+                    content(i) {
+                        dayEvents.forEachIndexed { i, event ->
+                            if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                                val color = eventColor(event)
+                                Text(
+                                    " " + event.title,
+                                    maxLines = 1,
+                                    style = headerTextStyle,
+                                    color = eventTextColor(color),
+                                    modifier = Modifier
+                                        .requiredWidth(cellWidth - defaultWidthReduction)
+                                        .padding(
+                                            top = if (i == 0) 2.dp else 0.dp,
+                                            bottom = 2.dp,
+                                        )
+                                        .clip(MaterialTheme.shapes.small)
+                                        .background(eventColor(event))
+                                        .clickable {
+                                            if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                launcher.viewEvent(event, context)
+                                            } else coroutineScope.launch {
+                                                snackbarHostState.showSnackbar(event.title)
+                                            }
+                                        },
+                                )
+                            }
+                            if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
+                                " +" + numeral.format(dayEvents.size - 3),
+                                modifier = Modifier.padding(bottom = 4.dp),
                                 maxLines = 1,
                                 style = headerTextStyle,
-                                color = eventTextColor(color),
-                                modifier = Modifier
-                                    .requiredWidth(cellWidth - defaultWidthReduction)
-                                    .padding(
-                                        top = if (i == 0) 2.dp else 0.dp,
-                                        bottom = 2.dp,
-                                    )
-                                    .clip(MaterialTheme.shapes.small)
-                                    .background(eventColor(event))
-                                    .clickable {
-                                        if (event is CalendarEvent.DeviceCalendarEvent) {
-                                            launcher.viewEvent(event, context)
-                                        } else coroutineScope.launch {
-                                            snackbarHostState.showSnackbar(event.title)
-                                        }
-                                    },
                             )
                         }
-                        if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
-                            " +" + numeral.format(dayEvents.size - 3),
-                            modifier = Modifier.padding(bottom = 4.dp),
-                            maxLines = 1,
-                            style = headerTextStyle,
-                        )
                     }
                 }
             }

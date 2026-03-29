@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -203,11 +204,17 @@ fun SharedTransitionScope.MonthScreen(
                             defaultWidthReduction = defaultWidthReduction,
                             launcher = launcher,
                             snackbarHostState = snackbarHostState,
-                        ) { column ->
+                        ) { column, content ->
                             val jdn = weekJdn + column
                             val dayDate = jdn on mainCalendar
                             val isHoliday =
                                 events[column].any { it.isHoliday } || jdn.weekDay in weekEnds
+                            val alphaModifier = Modifier.alpha(
+                                animateFloatAsState(
+                                    if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
+                                    else outOfMonthAlpha,
+                                ).value,
+                            )
 //                            val monthStartDate =
 //                                mainCalendar.createDate(dayDate.year, dayDate.month, 1)
 //                            val monthStartJdn = Jdn(monthStartDate)
@@ -219,12 +226,7 @@ fun SharedTransitionScope.MonthScreen(
                                 contentAlignment = Alignment.Center,
                                 modifier = cellsSizeModifier
                                     .aspectRatio(1f)
-                                    .alpha(
-                                        animateFloatAsState(
-                                            if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
-                                            else outOfMonthAlpha,
-                                        ).value,
-                                    )
+                                    .then(alphaModifier)
                                     .then(
                                         if (isToday) Modifier.border(
                                             width = todayCircleWidth,
@@ -270,6 +272,7 @@ fun SharedTransitionScope.MonthScreen(
                                     },
                                 )
                             }
+                            Column(alphaModifier) { content() }
                         }
                     }
                 }
