@@ -108,7 +108,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
     val context = LocalContext.current
-    if ((language.isIranExclusive || language.isAfghanistanExclusive || !eventsRepository.isEmpty) && remember { Jdn.today() }.isYearSupportedOnApp) {
+    AnimatedVisibility(
+        (language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars) && remember { Jdn.today() }.isYearSupportedOnApp,
+    ) {
         var shownOnce by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.events), stringResource(R.string.events_summary),
@@ -213,7 +215,7 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
             )
         }
     }
-    if (Calendar.ISLAMIC in enabledCalendars) {
+    AnimatedVisibility(Calendar.ISLAMIC in enabledCalendars) {
         LaunchedEffect(Unit) {
             val preferences = context.preferences
             if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
