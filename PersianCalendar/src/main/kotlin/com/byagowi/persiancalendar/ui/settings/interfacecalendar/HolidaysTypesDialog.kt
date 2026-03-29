@@ -126,14 +126,12 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                     enabledTypes,
                     EventsRepository.iranAncientKey,
                     destinationItem = destinationItem,
-                    indented = false,
                 )
                 ItemCheckBox(
                     AnnotatedString(stringResource(R.string.international)),
                     enabledTypes,
                     EventsRepository.internationalKey,
                     destinationItem = destinationItem,
-                    indented = false,
                 )
             } else {
                 CountryEvents(
@@ -167,8 +165,8 @@ fun CountryEvents(
     nonHolidaysKey: String,
     destinationItem: String?,
     modifier: Modifier = Modifier,
-    // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
-    hideTheFirstRowFromAccessibility: Boolean = true,
+//    // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
+//    hideTheFirstRowFromAccessibility: Boolean = true,
 ) {
     Column(modifier) {
 //        Row(
@@ -224,7 +222,7 @@ fun CountryEvents(
                     ) { append(stringResource(R.string.view_source)) }
                 }
             } to key
-        }.forEach { (title, key) -> ItemCheckBox(title, enabledTypes, key, destinationItem, indented = false) }
+        }.forEach { (title, key) -> ItemCheckBox(title, enabledTypes, key, destinationItem) }
     }
 }
 
@@ -234,7 +232,6 @@ private fun ItemCheckBox(
     enabledTypes: SnapshotStateList<String>,
     key: String,
     destinationItem: String?,
-    indented: Boolean = true,
 ) {
     Row(
         Modifier
@@ -245,9 +242,7 @@ private fun ItemCheckBox(
             }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(
-                start = ((if (indented) {
-                    24/*checkbox size*/ + HolidaysHorizontalPaddingItem
-                } else 0) + SettingsHorizontalPaddingItem).dp,
+                start = SettingsHorizontalPaddingItem.dp,
                 end = HolidaysHorizontalPaddingItem.dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
