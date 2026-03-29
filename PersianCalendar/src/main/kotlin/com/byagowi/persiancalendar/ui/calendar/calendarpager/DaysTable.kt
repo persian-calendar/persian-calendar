@@ -396,7 +396,7 @@ fun daysTable(
                                     },
                                 )
                                 .alpha(
-                                    alpha = (if (isBeforeMonth || isAfterMonth) .5f else 1f).let {
+                                    alpha = (if (isBeforeMonth || isAfterMonth) outOfMonthAlpha else 1f).let {
                                         if (onlyWeek != null) animateFloatAsState(
                                             targetValue = it,
                                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
@@ -496,6 +496,7 @@ typealias PageArrowAction = (isPrevious: Boolean, isLongClick: Boolean) -> Unit
 
 private const val pagerArrowSize = MaterialIconDimension + 8 * 2
 const val pagerArrowSizeAndPadding = pagerArrowSize + 4
+const val outOfMonthAlpha = .5f
 
 @Composable
 private fun PagerArrow(

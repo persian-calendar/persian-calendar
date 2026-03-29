@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -55,11 +56,13 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.EventsColumn
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.ViewEventContract
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.outOfMonthAlpha
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
@@ -177,11 +180,12 @@ fun SharedTransitionScope.MonthScreen(
                     }
                 }
                 val monthColors = appMonthColors()
+                val indicatorFillColor by animateColor(monthColors.indicatorFill)
                 val holidaysFillColor by animateColor(monthColors.holidaysFill)
                 val todayOutlineColor by animateColor(monthColors.todayOutline)
                 val holidaysColor by animateColor(monthColors.holidays)
                 val monthStart = Jdn(
-                    mainCalendar.getMonthStartFromMonthsDistance(initiallySelectedDay, 0)
+                    mainCalendar.getMonthStartFromMonthsDistance(initiallySelectedDay, 0),
                 )
                 val baseJdn = monthStart - (monthStart.weekDay - weekStart)
                 LazyColumn(state = state) {
@@ -202,7 +206,8 @@ fun SharedTransitionScope.MonthScreen(
                         ) { column ->
                             val jdn = weekJdn + column
                             val dayDate = jdn on mainCalendar
-                            val isHoliday = events[column].any { it.isHoliday }
+                            val isHoliday =
+                                events[column].any { it.isHoliday } || jdn.weekDay in weekEnds
 //                            val monthStartDate =
 //                                mainCalendar.createDate(dayDate.year, dayDate.month, 1)
 //                            val monthStartJdn = Jdn(monthStartDate)
@@ -214,6 +219,12 @@ fun SharedTransitionScope.MonthScreen(
                                 contentAlignment = Alignment.Center,
                                 modifier = cellsSizeModifier
                                     .aspectRatio(1f)
+                                    .alpha(
+                                        animateFloatAsState(
+                                            if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
+                                            else outOfMonthAlpha,
+                                        ).value,
+                                    )
                                     .then(
                                         if (isToday) Modifier.border(
                                             width = todayCircleWidth,
@@ -223,7 +234,12 @@ fun SharedTransitionScope.MonthScreen(
                                     )
                                     .clip(CircleShape)
                                     .background(
-                                        if (isHoliday) holidaysFillColor else Color.Transparent,
+                                        when {
+                                            isHoliday && initiallySelectedDay == jdn && today != jdn -> holidaysColor
+                                            initiallySelectedDay == jdn && today != jdn -> indicatorFillColor
+                                            isHoliday -> holidaysFillColor
+                                            else -> Color.Transparent
+                                        },
                                     )
                                     .clickable {
                                         commandBringDay(jdn)
@@ -232,27 +248,26 @@ fun SharedTransitionScope.MonthScreen(
                             ) {
                                 Text(
                                     mainCalendarNumeral.format(dayDate.dayOfMonth),
-                                    color = if (isHoliday) holidaysColor else LocalContentColor.current,
+                                    color = when {
+                                        initiallySelectedDay == jdn && today != jdn -> MaterialTheme.colorScheme.background
+                                        isHoliday -> holidaysColor
+                                        else -> LocalContentColor.current
+                                    },
                                     style = daysStyle,
-                                    modifier = Modifier
-                                        .alpha(
-                                            if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
-                                            else AppBlendAlpha,
-                                        )
-                                        .semantics {
-                                            if (isTalkBackEnabled) {
-                                                this.contentDescription = getA11yDaySummary(
-                                                    resources = resources,
-                                                    jdn = jdn,
-                                                    isToday = isToday,
-                                                    deviceCalendarEvents = EventsStore.empty(),
-                                                    withZodiac = isToday,
-                                                    withOtherCalendars = false,
-                                                    withTitle = true,
-                                                    withWeekOfYear = false,
-                                                )
-                                            }
-                                        },
+                                    modifier = Modifier.semantics {
+                                        if (isTalkBackEnabled) {
+                                            this.contentDescription = getA11yDaySummary(
+                                                resources = resources,
+                                                jdn = jdn,
+                                                isToday = isToday,
+                                                deviceCalendarEvents = EventsStore.empty(),
+                                                withZodiac = isToday,
+                                                withOtherCalendars = false,
+                                                withTitle = true,
+                                                withWeekOfYear = false,
+                                            )
+                                        }
+                                    },
                                 )
                             }
                         }
