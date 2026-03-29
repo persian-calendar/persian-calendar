@@ -1,9 +1,8 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,79 +31,83 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.preferences
 
-@SuppressLint("ComposeModifierMissing")
 @Composable
-fun ColumnScope.InterfaceSettings(destination: String? = null) {
-    val context = LocalContext.current
-    run {
-        val themeDisplayName = stringResource(
-            run {
-                val currentKey = context.preferences.getString(PREF_THEME, null)
-                Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
-            }.title,
-        )
-        Box(
-            Modifier
-                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                .clearAndSetSemantics {},
-        ) {
-            SettingsClickable(
-                title = stringResource(R.string.select_skin),
-                summary = themeDisplayName,
-                defaultOpen = destination == PREF_THEME,
-            ) { onDismissRequest -> ThemeDialog(onDismissRequest = onDismissRequest) }
+fun InterfaceSettings(
+    modifier: Modifier = Modifier,
+    destination: String? = null,
+) {
+    Column(modifier = modifier) {
+        val context = LocalContext.current
+        run {
+            val themeDisplayName = stringResource(
+                run {
+                    val currentKey = context.preferences.getString(PREF_THEME, null)
+                    Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
+                }.title,
+            )
+            Box(
+                Modifier
+                    .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                    .clearAndSetSemantics {},
+            ) {
+                SettingsClickable(
+                    title = stringResource(R.string.select_skin),
+                    summary = themeDisplayName,
+                    defaultOpen = destination == PREF_THEME,
+                ) { onDismissRequest -> ThemeDialog(onDismissRequest = onDismissRequest) }
+            }
         }
-    }
-    SettingsClickable(
-        title = stringResource(R.string.language),
-        summary = language.nativeName,
-    ) { onDismissRequest -> LanguageDialog(onDismissRequest = onDismissRequest) }
-    AnimatedVisibility(language.isPersian) {
-        SettingsSwitch(
-            key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            value = englishGregorianPersianMonths,
-            title = "ماه‌های میلادی با نام انگلیسی",
-            summary = "جون، جولای، آگوست، …",
-        )
-    }
-    AnimatedVisibility(language.isArabic) {
-        SettingsSwitch(
-            key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
-            value = easternGregorianArabicMonths,
-            title = "السنة الميلادية بالاسماء الشرقية",
-            summary = "كانون الثاني، شباط، آذار، …",
-        )
-    }
-    AnimatedVisibility(language == Language.AZB) {
-        SettingsSwitch(
-            key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
-            value = alternativePersianMonthsInAzeri,
-            title = "آذربایجان دیلینده ایل آیلار",
-            summary = "آغلارگۆلر، گۆلن، قیزاران، …",
-        )
-    }
-    AnimatedVisibility(language == Language.EN_IR) {
-        SettingsSwitch(
-            key = PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
-            value = englishWeekDaysInIranEnglish,
-            title = "English weekday names",
-            summary = "Sunday, Monday, Tuesday, …",
-        )
-    }
-    AnimatedVisibility(language == Language.EN_US) {
-        SettingsSwitch(
-            key = PREF_ISO8601_DATE_FORMAT,
-            value = iso8601DateFormat,
-            title = "ISO 8601 date format",
-            summary = "Use a date format like 2026-01-01",
-        )
-    }
-    AnimatedVisibility(language.canHaveLocalNumeral) {
-        SettingsSwitch(
-            key = PREF_LOCAL_NUMERAL,
-            value = localNumeralPreference,
-            title = stringResource(R.string.native_digits),
-            summary = stringResource(R.string.enable_native_digits),
-        )
+        SettingsClickable(
+            title = stringResource(R.string.language),
+            summary = language.nativeName,
+        ) { onDismissRequest -> LanguageDialog(onDismissRequest = onDismissRequest) }
+        AnimatedVisibility(language.isPersian) {
+            SettingsSwitch(
+                key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+                value = englishGregorianPersianMonths,
+                title = "ماه‌های میلادی با نام انگلیسی",
+                summary = "جون، جولای، آگوست، …",
+            )
+        }
+        AnimatedVisibility(language.isArabic) {
+            SettingsSwitch(
+                key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
+                value = easternGregorianArabicMonths,
+                title = "السنة الميلادية بالاسماء الشرقية",
+                summary = "كانون الثاني، شباط، آذار، …",
+            )
+        }
+        AnimatedVisibility(language == Language.AZB) {
+            SettingsSwitch(
+                key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
+                value = alternativePersianMonthsInAzeri,
+                title = "آذربایجان دیلینده ایل آیلار",
+                summary = "آغلارگۆلر، گۆلن، قیزاران، …",
+            )
+        }
+        AnimatedVisibility(language == Language.EN_IR) {
+            SettingsSwitch(
+                key = PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH,
+                value = englishWeekDaysInIranEnglish,
+                title = "English weekday names",
+                summary = "Sunday, Monday, Tuesday, …",
+            )
+        }
+        AnimatedVisibility(language == Language.EN_US) {
+            SettingsSwitch(
+                key = PREF_ISO8601_DATE_FORMAT,
+                value = iso8601DateFormat,
+                title = "ISO 8601 date format",
+                summary = "Use a date format like 2026-01-01",
+            )
+        }
+        AnimatedVisibility(language.canHaveLocalNumeral) {
+            SettingsSwitch(
+                key = PREF_LOCAL_NUMERAL,
+                value = localNumeralPreference,
+                title = stringResource(R.string.native_digits),
+                summary = stringResource(R.string.enable_native_digits),
+            )
+        }
     }
 }

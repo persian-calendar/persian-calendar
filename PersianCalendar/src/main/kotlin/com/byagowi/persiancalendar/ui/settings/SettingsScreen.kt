@@ -290,7 +290,7 @@ enum class SettingsTab(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
                 title = R.string.pref_ui,
-            ) { InterfaceSettings(destination) }
+            ) { InterfaceSettings(destination = destination) }
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
@@ -331,7 +331,7 @@ enum class SettingsTab(
                         "اگر مایلید اوقات نمایش داده شود این بخش را تنظیم کنید"
                     } else null
                 },
-            ) { LocationSettings(navigateToMap) }
+            ) { LocationSettings(navigateToMap = navigateToMap) }
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,

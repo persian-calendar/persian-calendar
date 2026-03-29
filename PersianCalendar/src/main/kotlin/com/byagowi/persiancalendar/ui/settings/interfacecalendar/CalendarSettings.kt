@@ -1,13 +1,12 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -106,158 +105,167 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
 
-@SuppressLint("ComposeModifierMissing")
 @Composable
-fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
-    val context = LocalContext.current
-    AnimatedVisibility(
-        (language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars) && remember { Jdn.today() }.isYearSupportedOnApp,
-    ) {
-        var shownOnce by rememberSaveable { mutableStateOf(false) }
-        SettingsClickable(
-            title = stringResource(R.string.events),
-            summary = stringResource(R.string.events_summary),
-            defaultOpen = destination == PREF_HOLIDAY_TYPES && destinationItem != PREF_SHOW_DEVICE_CALENDAR_EVENTS,
-        ) { onDismissRequest ->
-            HolidaysTypesDialog(destinationItem = destinationItem.takeIf { !shownOnce }) {
-                shownOnce = true
-                onDismissRequest()
+fun CalendarSettings(
+    destination: String?,
+    destinationItem: String?,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        val context = LocalContext.current
+        AnimatedVisibility(
+            (language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars) && remember { Jdn.today() }.isYearSupportedOnApp,
+        ) {
+            var shownOnce by rememberSaveable { mutableStateOf(false) }
+            SettingsClickable(
+                title = stringResource(R.string.events),
+                summary = stringResource(R.string.events_summary),
+                defaultOpen = destination == PREF_HOLIDAY_TYPES && destinationItem != PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+            ) { onDismissRequest ->
+                HolidaysTypesDialog(destinationItem = destinationItem.takeIf { !shownOnce }) {
+                    shownOnce = true
+                    onDismissRequest()
+                }
             }
         }
-    }
-    Box(Modifier.highlightItem(destinationItem == PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
-        var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsSwitch(
-            key = PREF_SHOW_DEVICE_CALENDAR_EVENTS,
-            value = isShowDeviceCalendarEvents,
-            title = stringResource(R.string.show_device_calendar_events),
-            summary = stringResource(R.string.show_device_calendar_events_summary),
-            onBeforeToggle = {
-                if (it && ActivityCompat.checkSelfPermission(
-                        context, Manifest.permission.READ_CALENDAR,
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    showPermissionDialog = true
-                    false
-                } else it
-            },
-            extraWidget = {
-                var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
-                Row {
-                    AnimatedVisibility(
-                        isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty(),
-                    ) { FilledSettingsButton { showEventsSettingsDialog = true } }
-                }
-                if (showEventsSettingsDialog) EventsSettingsDialog {
-                    showEventsSettingsDialog = false
-                }
-            },
-        )
-        if (showPermissionDialog) AskForCalendarPermissionDialog { showPermissionDialog = false }
-    }
-    SettingsClickable(
-        title = stringResource(R.string.calendars_priority),
-        summary = stringResource(R.string.calendars_priority_summary),
-    ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest = onDismissRequest) }
-    WeekOfYearSetting()
-    run {
-        val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
-        SettingsSwitch(
-            key = PREF_ASTRONOMICAL_FEATURES,
-            value = isAstronomicalExtraFeaturesEnabled,
-            title = stringResource(R.string.astronomy),
-            summary = stringResource(R.string.astronomical_info_summary),
-            onBeforeToggle = {
-                val preferences = context.preferences
-                if (PREF_SHOW_MOON_IN_SCORPIO !in preferences) preferences.edit {
-                    putBoolean(PREF_SHOW_MOON_IN_SCORPIO, DEFAULT_SHOW_MOON_IN_SCORPIO)
-                }
-                it
-            },
-        )
-        val showMoonInScorpio = showMoonInScorpio
-        AnimatedVisibility(isAstronomicalExtraFeaturesEnabled) {
+        Box(Modifier.highlightItem(destinationItem == PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
+            var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
             SettingsSwitch(
-                key = PREF_SHOW_MOON_IN_SCORPIO,
-                value = showMoonInScorpio,
-                title = stringResource(R.string.moon_in_scorpio),
-                extraWidget = {
-                    Row(
-                        Modifier
-                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                            .clearAndSetSemantics {},
+                key = PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+                value = isShowDeviceCalendarEvents,
+                title = stringResource(R.string.show_device_calendar_events),
+                summary = stringResource(R.string.show_device_calendar_events_summary),
+                onBeforeToggle = {
+                    if (it && ActivityCompat.checkSelfPermission(
+                            context, Manifest.permission.READ_CALENDAR,
+                        ) != PackageManager.PERMISSION_GRANTED
                     ) {
-                        @OptIn(ExperimentalMaterial3Api::class) AnimatedVisibility(showMoonInScorpio) {
-                            val coroutine = rememberCoroutineScope()
-                            val tooltipState = rememberTooltipState()
-                            TooltipBox(
-                                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                                    TooltipAnchorPosition.Above,
-                                ),
-                                tooltip = { PlainTooltip { Text("نشان عقرب در ستاره‌شناسی") } },
-                                state = tooltipState,
-                                enableUserInput = false,
-                                modifier = if (language.isPersianOrDari) Modifier.clickable(
-                                    indication = null,
-                                    interactionSource = null,
-                                ) { coroutine.launch { tooltipState.show() } } else Modifier,
-                            ) {
-                                Text(
-                                    Zodiac.SCORPIO.symbol,
-                                    fontFamily = FontFamily(
-                                        Font(R.font.notosanssymbolsregularzodiacsubset),
-                                    ),
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.padding(horizontal = 8.dp),
-                                )
-                            }
-                        }
+                        showPermissionDialog = true
+                        false
+                    } else it
+                },
+                extraWidget = {
+                    var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
+                    Row {
+                        AnimatedVisibility(
+                            isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty(),
+                        ) { FilledSettingsButton { showEventsSettingsDialog = true } }
+                    }
+                    if (showEventsSettingsDialog) EventsSettingsDialog {
+                        showEventsSettingsDialog = false
                     }
                 },
-                summary = if (language.isPersianOrDari) "نمایش قمر در عقرب در تقویم" else null,
             )
-        }
-    }
-    AnimatedVisibility(Calendar.ISLAMIC in enabledCalendars) {
-        LaunchedEffect(Unit) {
-            val preferences = context.preferences
-            if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
-                putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET.toString())
+            if (showPermissionDialog) AskForCalendarPermissionDialog {
+                showPermissionDialog = false
             }
         }
+        SettingsClickable(
+            title = stringResource(R.string.calendars_priority),
+            summary = stringResource(R.string.calendars_priority_summary),
+        ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest = onDismissRequest) }
+        WeekOfYearSetting()
+        run {
+            val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
+            SettingsSwitch(
+                key = PREF_ASTRONOMICAL_FEATURES,
+                value = isAstronomicalExtraFeaturesEnabled,
+                title = stringResource(R.string.astronomy),
+                summary = stringResource(R.string.astronomical_info_summary),
+                onBeforeToggle = {
+                    val preferences = context.preferences
+                    if (PREF_SHOW_MOON_IN_SCORPIO !in preferences) preferences.edit {
+                        putBoolean(PREF_SHOW_MOON_IN_SCORPIO, DEFAULT_SHOW_MOON_IN_SCORPIO)
+                    }
+                    it
+                },
+            )
+            val showMoonInScorpio = showMoonInScorpio
+            AnimatedVisibility(isAstronomicalExtraFeaturesEnabled) {
+                SettingsSwitch(
+                    key = PREF_SHOW_MOON_IN_SCORPIO,
+                    value = showMoonInScorpio,
+                    title = stringResource(R.string.moon_in_scorpio),
+                    extraWidget = {
+                        Row(
+                            Modifier
+                                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                                .clearAndSetSemantics {},
+                        ) {
+                            @OptIn(ExperimentalMaterial3Api::class) AnimatedVisibility(
+                                showMoonInScorpio,
+                            ) {
+                                val coroutine = rememberCoroutineScope()
+                                val tooltipState = rememberTooltipState()
+                                TooltipBox(
+                                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                                        TooltipAnchorPosition.Above,
+                                    ),
+                                    tooltip = { PlainTooltip { Text("نشان عقرب در ستاره‌شناسی") } },
+                                    state = tooltipState,
+                                    enableUserInput = false,
+                                    modifier = if (language.isPersianOrDari) Modifier.clickable(
+                                        indication = null,
+                                        interactionSource = null,
+                                    ) { coroutine.launch { tooltipState.show() } } else Modifier,
+                                ) {
+                                    Text(
+                                        Zodiac.SCORPIO.symbol,
+                                        fontFamily = FontFamily(
+                                            Font(R.font.notosanssymbolsregularzodiacsubset),
+                                        ),
+                                        fontSize = 20.sp,
+                                        modifier = Modifier.padding(horizontal = 8.dp),
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    summary = if (language.isPersianOrDari) "نمایش قمر در عقرب در تقویم" else null,
+                )
+            }
+        }
+        AnimatedVisibility(Calendar.ISLAMIC in enabledCalendars) {
+            LaunchedEffect(Unit) {
+                val preferences = context.preferences
+                if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
+                    putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET.toString())
+                }
+            }
+            SettingsSingleSelect(
+                key = PREF_ISLAMIC_OFFSET,
+                // One is formatted with locale's numerals and the other used for keys isn't
+                entries = remember(numeral) {
+                    (-2..2).map { numeral.format(it) }.toImmutableList()
+                },
+                entryValues = remember { (-2..2).map { it.toString() }.toImmutableList() },
+                persistedValue = islamicCalendarOffset.toString(),
+                dialogTitleResId = R.string.islamic_offset,
+                title = stringResource(R.string.islamic_offset),
+                summaryResId = R.string.islamic_offset_summary,
+            )
+        }
+        val weekDays = remember(weekStart) { WeekDay.entries.map { it + weekStart.ordinal } }
+        val weekDaysTitles = remember(weekDays) { weekDays.map { it.title }.toImmutableList() }
+        val weekDaysValues =
+            remember(weekDays) { weekDays.map { it.ordinal.toString() }.toImmutableList() }
         SettingsSingleSelect(
-            key = PREF_ISLAMIC_OFFSET,
-            // One is formatted with locale's numerals and the other used for keys isn't
-            entries = remember(numeral) {
-                (-2..2).map { numeral.format(it) }.toImmutableList()
-            },
-            entryValues = remember { (-2..2).map { it.toString() }.toImmutableList() },
-            persistedValue = islamicCalendarOffset.toString(),
-            dialogTitleResId = R.string.islamic_offset,
-            title = stringResource(R.string.islamic_offset),
-            summaryResId = R.string.islamic_offset_summary,
+            key = PREF_WEEK_START,
+            entries = weekDaysTitles,
+            entryValues = weekDaysValues,
+            persistedValue = weekStart.ordinal.toString(),
+            dialogTitleResId = R.string.week_start_summary,
+            title = stringResource(R.string.week_start),
+        )
+        SettingsMultiSelect(
+            key = PREF_WEEK_ENDS,
+            entries = weekDaysTitles,
+            entryValues = weekDaysValues,
+            persistedSet = weekEnds.map { it.ordinal.toString() }.toImmutableSet(),
+            dialogTitleResId = R.string.week_ends_summary,
+            title = stringResource(R.string.week_ends),
         )
     }
-    val weekDays = remember(weekStart) { WeekDay.entries.map { it + weekStart.ordinal } }
-    val weekDaysTitles = remember(weekDays) { weekDays.map { it.title }.toImmutableList() }
-    val weekDaysValues =
-        remember(weekDays) { weekDays.map { it.ordinal.toString() }.toImmutableList() }
-    SettingsSingleSelect(
-        key = PREF_WEEK_START,
-        entries = weekDaysTitles,
-        entryValues = weekDaysValues,
-        persistedValue = weekStart.ordinal.toString(),
-        dialogTitleResId = R.string.week_start_summary,
-        title = stringResource(R.string.week_start),
-    )
-    SettingsMultiSelect(
-        key = PREF_WEEK_ENDS,
-        entries = weekDaysTitles,
-        entryValues = weekDaysValues,
-        persistedSet = weekEnds.map { it.ordinal.toString() }.toImmutableSet(),
-        dialogTitleResId = R.string.week_ends_summary,
-        title = stringResource(R.string.week_ends),
-    )
 }
 
 @Composable

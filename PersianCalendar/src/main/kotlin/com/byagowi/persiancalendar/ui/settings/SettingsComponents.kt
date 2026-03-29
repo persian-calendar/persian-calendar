@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -90,7 +89,7 @@ fun LazyListScope.settingsSection(
     disableStickyHeader: Boolean,
     @StringRes title: Int,
     subtitle: @Composable () -> String? = { null },
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     if (disableStickyHeader) item {
         SettingsSectionLayout(title = title, subtitle = subtitle)
@@ -106,7 +105,7 @@ fun LazyListScope.settingsSection(
             ) else Modifier,
         ) { SettingsSectionLayout(title = title, subtitle = subtitle) }
     }
-    item { Column { content() } }
+    item { content() }
 }
 
 @SuppressLint("ComposableLambdaParameterNaming")

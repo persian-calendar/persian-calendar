@@ -92,7 +92,7 @@ import java.io.File
 
 @SuppressLint("ComposeModifierMissing")
 @Composable
-fun AppTheme(content: @Composable () -> Unit, ) {
+fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = appColorScheme(),
         typography = resolveTypography(),

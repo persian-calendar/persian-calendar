@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -11,7 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -83,212 +82,218 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 import kotlinx.collections.immutable.toImmutableList
 
-@SuppressLint("ComposeModifierMissing")
 @Composable
-fun ColumnScope.AthanSettings(destination: String?) {
-    val context = LocalContext.current
-    val resources = LocalResources.current
-    val isLocationSet = coordinates != null
-    AnimatedVisibility(isLocationSet) {
-        SettingsSingleSelect(
-            key = PREF_PRAY_TIME_METHOD,
-            entries = remember(resources) {
-                CalculationMethod.entries.map { it.title(resources) }.toImmutableList()
-            },
-            entryValues = remember { CalculationMethod.entries.map { it.name }.toImmutableList() },
-            persistedValue = calculationMethod.name,
-            dialogTitleResId = R.string.pray_methods_calculation,
-            title = stringResource(R.string.pray_methods),
-        )
-    }
-    AnimatedVisibility(coordinates?.isHighLatitude == true) {
-        SettingsSingleSelect(
-            key = PREF_HIGH_LATITUDES_METHOD,
-            entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) }
-                .toImmutableList(),
-            entryValues = remember {
-                HighLatitudesMethod.entries.map { it.name }.toImmutableList()
-            },
-            persistedValue = highLatitudesMethod.name,
-            dialogTitleResId = R.string.high_latitudes_method,
-            title = stringResource(R.string.high_latitudes_method),
-        )
-    }
-    AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
-        SettingsSwitch(
-            key = PREF_ASR_HANAFI_JURISTIC,
-            value = asrMethod == AsrMethod.Hanafi,
-            title = stringResource(R.string.asr_hanafi_juristic),
-        )
-    }
-    AnimatedVisibility(isLocationSet) {
-        SettingsClickable(
-            title = stringResource(R.string.athan_gap),
-            summary = stringResource(R.string.athan_gap_summary),
-        ) { onDismissRequest -> AthanGapDialog(onDismissRequest = onDismissRequest) }
-    }
-
-    @Composable
-    fun ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest: () -> Unit): Boolean {
-        var result by remember {
-            mutableStateOf(
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                        ActivityCompat.checkSelfPermission(
-                            context, Manifest.permission.POST_NOTIFICATIONS,
-                        ) == PackageManager.PERMISSION_GRANTED,
+fun AthanSettings(
+    destination: String?,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        val context = LocalContext.current
+        val resources = LocalResources.current
+        val isLocationSet = coordinates != null
+        AnimatedVisibility(isLocationSet) {
+            SettingsSingleSelect(
+                key = PREF_PRAY_TIME_METHOD,
+                entries = remember(resources) {
+                    CalculationMethod.entries.map { it.title(resources) }.toImmutableList()
+                },
+                entryValues = remember {
+                    CalculationMethod.entries.map { it.name }.toImmutableList()
+                },
+                persistedValue = calculationMethod.name,
+                dialogTitleResId = R.string.pray_methods_calculation,
+                title = stringResource(R.string.pray_methods),
             )
         }
-        if (result) return true
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission(),
-        ) { isGranted ->
-            if (!isGranted) {
-                Toast.makeText(
+        AnimatedVisibility(coordinates?.isHighLatitude == true) {
+            SettingsSingleSelect(
+                key = PREF_HIGH_LATITUDES_METHOD,
+                entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) }
+                    .toImmutableList(),
+                entryValues = remember {
+                    HighLatitudesMethod.entries.map { it.name }.toImmutableList()
+                },
+                persistedValue = highLatitudesMethod.name,
+                dialogTitleResId = R.string.high_latitudes_method,
+                title = stringResource(R.string.high_latitudes_method),
+            )
+        }
+        AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
+            SettingsSwitch(
+                key = PREF_ASR_HANAFI_JURISTIC,
+                value = asrMethod == AsrMethod.Hanafi,
+                title = stringResource(R.string.asr_hanafi_juristic),
+            )
+        }
+        AnimatedVisibility(isLocationSet) {
+            SettingsClickable(
+                title = stringResource(R.string.athan_gap),
+                summary = stringResource(R.string.athan_gap_summary),
+            ) { onDismissRequest -> AthanGapDialog(onDismissRequest = onDismissRequest) }
+        }
+
+        @Composable
+        fun ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest: () -> Unit): Boolean {
+            var result by remember {
+                mutableStateOf(
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                            ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.POST_NOTIFICATIONS,
+                            ) == PackageManager.PERMISSION_GRANTED,
+                )
+            }
+            if (result) return true
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission(),
+            ) { isGranted ->
+                if (!isGranted) {
+                    Toast.makeText(
+                        context,
+                        "اگر امکان فعال‌سازی اعلان وجود ندارد احتمالاً نیاز باشد برنامه را حذف و مجدداً نصب کنید.",
+                        Toast.LENGTH_LONG,
+                    ).show()
+                    onDismissRequest()
+                }
+                result = true
+                context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
+                updateStoredPreference(context)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) LaunchedEffect(Unit) {
+                if (language.isPersianOrDari) Toast.makeText(
                     context,
-                    "اگر امکان فعال‌سازی اعلان وجود ندارد احتمالاً نیاز باشد برنامه را حذف و مجدداً نصب کنید.",
+                    "جهت عملکرد صحیح اذان برنامه به دسترسی اعلان نیاز دارد.",
                     Toast.LENGTH_LONG,
                 ).show()
-                onDismissRequest()
+                launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
-            result = true
-            context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
-            updateStoredPreference(context)
+            return false
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) LaunchedEffect(Unit) {
-            if (language.isPersianOrDari) Toast.makeText(
-                context,
-                "جهت عملکرد صحیح اذان برنامه به دسترسی اعلان نیاز دارد.",
-                Toast.LENGTH_LONG,
-            ).show()
-            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-        return false
-    }
 
-    AnimatedVisibility(isLocationSet) {
-        SettingsClickable(
-            title = stringResource(R.string.athan_alarm),
-            summary = stringResource(R.string.athan_alarm_summary),
-            defaultOpen = destination == PREF_ATHAN_ALARM,
-        ) { onDismissRequest ->
-            if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
-                PrayerSelectDialog(onDismissRequest = onDismissRequest)
+        AnimatedVisibility(isLocationSet) {
+            SettingsClickable(
+                title = stringResource(R.string.athan_alarm),
+                summary = stringResource(R.string.athan_alarm_summary),
+                defaultOpen = destination == PREF_ATHAN_ALARM,
+            ) { onDismissRequest ->
+                if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
+                    PrayerSelectDialog(onDismissRequest = onDismissRequest)
+                }
             }
         }
-    }
-    AnimatedVisibility(isLocationSet) {
-        SettingsClickable(
-            title = stringResource(R.string.custom_athan),
-            summary = athanSoundName?.takeIf { it.isNotBlank() }
-                ?: stringResource(R.string.default_athan),
-        ) { onDismissRequest -> AthanSelectDialog(onDismissRequest = onDismissRequest) }
-    }
-    AnimatedVisibility(isLocationSet) {
-        SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
-            if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
-                PrayerSelectPreviewDialog(onDismissRequest = onDismissRequest)
+        AnimatedVisibility(isLocationSet) {
+            SettingsClickable(
+                title = stringResource(R.string.custom_athan),
+                summary = athanSoundName?.takeIf { it.isNotBlank() }
+                    ?: stringResource(R.string.default_athan),
+            ) { onDismissRequest -> AthanSelectDialog(onDismissRequest = onDismissRequest) }
+        }
+        AnimatedVisibility(isLocationSet) {
+            SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
+                if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
+                    PrayerSelectPreviewDialog(onDismissRequest = onDismissRequest)
+                }
             }
         }
-    }
-    AnimatedVisibility(isLocationSet && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission(),
-        ) { isGranted ->
-            context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
-            updateStoredPreference(context)
-        }
-        SettingsSwitch(
-            key = PREF_NOTIFICATION_ATHAN,
-            value = notificationAthan,
-            title = stringResource(R.string.notification_athan),
-            summary = stringResource(R.string.enable_notification_athan),
-            onBeforeToggle = { value ->
-                AthanNotification.invalidateChannel(context)
-                if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                        context, Manifest.permission.POST_NOTIFICATIONS,
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    false
-                } else value
-            },
-        )
-    }
-    AnimatedVisibility(isLocationSet && notificationAthan && language.isPersianOrDari) {
-        SettingsHelp(stringResource(R.string.notification_athan_help))
-    }
-    AnimatedVisibility(isLocationSet && !notificationAthan) {
-        SettingsSwitch(
-            key = PREF_ASCENDING_ATHAN_VOLUME,
-            value = ascendingAthan,
-            title = stringResource(R.string.ascending_athan_volume),
-            summary = stringResource(R.string.enable_ascending_athan_volume),
-        )
-    }
-    AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
-        SettingsClickable(
-            title = stringResource(R.string.athan_volume),
-            summary = stringResource(R.string.athan_volume_summary),
-        ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest = onDismissRequest) }
-    }
-    AnimatedVisibility(isLocationSet) {
-        SettingsSwitch(
-            key = PREF_ATHAN_VIBRATION,
-            value = athanVibration,
-            title = stringResource(R.string.vibration),
-            summary = language.tryTranslateAthanVibrationSummary(),
-            onBeforeToggle = {
-                AthanNotification.invalidateChannel(context)
-                it
-            },
-        )
-    }
-    AnimatedVisibility(isLocationSet) {
-        var midnightSummary by remember(resources) {
-            mutableStateOf(getMidnightMethodPreferenceSummary(context, resources))
-        }
-        SettingsClickable(
-            title = stringResource(R.string.midnight),
-            summary = midnightSummary,
-        ) { onDismissRequest ->
-            AppDialog(
-                title = { Text(stringResource(R.string.midnight)) },
-                onDismissRequest = onDismissRequest,
-                dismissButton = {
-                    TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
-                },
-            ) {
-                val currentSelectionKey =
-                    context.preferences.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
-                (listOf(midnightDefaultTitle(resources) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
-                    .map {
-                        midnightMethodToString(resources, it) to it.name
-                    }).forEach { (title, key) ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(SettingsItemHeight.dp)
-                            .clickable {
-                                onDismissRequest()
-                                context.preferences.edit {
-                                    if (key == "DEFAULT") remove(PREF_MIDNIGHT_METHOD)
-                                    else putString(PREF_MIDNIGHT_METHOD, key)
-                                }
-                                midnightSummary = title
-                            }
-                            .padding(horizontal = SettingsHorizontalPaddingItem.dp),
+        AnimatedVisibility(isLocationSet && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            val launcher = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { isGranted ->
+                context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
+                updateStoredPreference(context)
+            }
+            SettingsSwitch(
+                key = PREF_NOTIFICATION_ATHAN,
+                value = notificationAthan,
+                title = stringResource(R.string.notification_athan),
+                summary = stringResource(R.string.enable_notification_athan),
+                onBeforeToggle = { value ->
+                    AthanNotification.invalidateChannel(context)
+                    if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                            context, Manifest.permission.POST_NOTIFICATIONS,
+                        ) != PackageManager.PERMISSION_GRANTED
                     ) {
-                        RadioButton(selected = key == currentSelectionKey, onClick = null)
-                        Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                        Text(
-                            title,
-                            maxLines = 1,
-                            autoSize = TextAutoSize.StepBased(
-                                minFontSize = 9.sp,
-                                maxFontSize = LocalTextStyle.current.fontSize,
-                            ),
-                        )
+                        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        false
+                    } else value
+                },
+            )
+        }
+        AnimatedVisibility(isLocationSet && notificationAthan && language.isPersianOrDari) {
+            SettingsHelp(stringResource(R.string.notification_athan_help))
+        }
+        AnimatedVisibility(isLocationSet && !notificationAthan) {
+            SettingsSwitch(
+                key = PREF_ASCENDING_ATHAN_VOLUME,
+                value = ascendingAthan,
+                title = stringResource(R.string.ascending_athan_volume),
+                summary = stringResource(R.string.enable_ascending_athan_volume),
+            )
+        }
+        AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
+            SettingsClickable(
+                title = stringResource(R.string.athan_volume),
+                summary = stringResource(R.string.athan_volume_summary),
+            ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest = onDismissRequest) }
+        }
+        AnimatedVisibility(isLocationSet) {
+            SettingsSwitch(
+                key = PREF_ATHAN_VIBRATION,
+                value = athanVibration,
+                title = stringResource(R.string.vibration),
+                summary = language.tryTranslateAthanVibrationSummary(),
+                onBeforeToggle = {
+                    AthanNotification.invalidateChannel(context)
+                    it
+                },
+            )
+        }
+        AnimatedVisibility(isLocationSet) {
+            var midnightSummary by remember(resources) {
+                mutableStateOf(getMidnightMethodPreferenceSummary(context, resources))
+            }
+            SettingsClickable(
+                title = stringResource(R.string.midnight),
+                summary = midnightSummary,
+            ) { onDismissRequest ->
+                AppDialog(
+                    title = { Text(stringResource(R.string.midnight)) },
+                    onDismissRequest = onDismissRequest,
+                    dismissButton = {
+                        TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+                    },
+                ) {
+                    val currentSelectionKey =
+                        context.preferences.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
+                    (listOf(midnightDefaultTitle(resources) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
+                        .map {
+                            midnightMethodToString(resources, it) to it.name
+                        }).forEach { (title, key) ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(SettingsItemHeight.dp)
+                                .clickable {
+                                    onDismissRequest()
+                                    context.preferences.edit {
+                                        if (key == "DEFAULT") remove(PREF_MIDNIGHT_METHOD)
+                                        else putString(PREF_MIDNIGHT_METHOD, key)
+                                    }
+                                    midnightSummary = title
+                                }
+                                .padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                        ) {
+                            RadioButton(selected = key == currentSelectionKey, onClick = null)
+                            Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
+                            Text(
+                                title,
+                                maxLines = 1,
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 9.sp,
+                                    maxFontSize = LocalTextStyle.current.fontSize,
+                                ),
+                            )
+                        }
                     }
                 }
             }
