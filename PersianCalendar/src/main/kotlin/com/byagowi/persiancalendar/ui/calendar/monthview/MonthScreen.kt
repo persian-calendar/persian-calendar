@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.ui.calendar.detectSwipe
 import com.byagowi.persiancalendar.ui.calendar.readEvents
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -79,6 +80,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 
 @Composable
 fun SharedTransitionScope.MonthScreen(
@@ -102,6 +104,7 @@ fun SharedTransitionScope.MonthScreen(
     val focusedDate = focusedJdn on mainCalendar
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         modifier = modifier
             .detectSwipe {
@@ -131,7 +134,13 @@ fun SharedTransitionScope.MonthScreen(
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
-                actions = {},
+                actions = {
+                    TodayActionButton(
+                        visible = remember {
+                            derivedStateOf { state.firstVisibleItemIndex != initialItem }
+                        }.value,
+                    ) { coroutineScope.launch { state.animateScrollToItem(index = initialItem) } }
+                },
             )
         },
     ) { paddingValues ->
