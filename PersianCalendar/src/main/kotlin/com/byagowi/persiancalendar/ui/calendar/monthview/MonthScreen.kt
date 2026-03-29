@@ -21,6 +21,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -68,6 +71,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPa
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
 import com.byagowi.persiancalendar.ui.calendar.readEvents
+import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
@@ -140,6 +144,22 @@ fun SharedTransitionScope.MonthScreen(
                             derivedStateOf { state.firstVisibleItemIndex != initialItem }
                         }.value,
                     ) { coroutineScope.launch { state.animateScrollToItem(index = initialItem) } }
+                    AppIconButton(
+                        icon = Icons.Default.KeyboardArrowDown,
+                        title = stringResource(R.string.next_x, stringResource(R.string.week)),
+                    ) {
+                        coroutineScope.launch {
+                            state.animateScrollToItem(index = state.firstVisibleItemIndex + 1)
+                        }
+                    }
+                    AppIconButton(
+                        icon = Icons.Default.KeyboardArrowUp,
+                        title = stringResource(R.string.previous_x, stringResource(R.string.week)),
+                    ) {
+                        coroutineScope.launch {
+                            state.animateScrollToItem(index = state.firstVisibleItemIndex - 1)
+                        }
+                    }
                 },
             )
         },
