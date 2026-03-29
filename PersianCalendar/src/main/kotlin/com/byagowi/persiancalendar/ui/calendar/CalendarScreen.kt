@@ -447,8 +447,9 @@ fun SharedTransitionScope.CalendarScreen(
             ) {
                 AppFloatingActionButton(
                     onClick = {
-                        if (isTalkBackEnabled) addEvent(AddEventData.fromJdn(selectedDay))
-                        else addAction()
+                        if ((isTalkBackEnabled || !isShowDeviceCalendarEvents) && !isAddEventBoxEnabled) {
+                            addEvent(AddEventData.fromJdn(selectedDay))
+                        } else addAction()
                     },
                 ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
             }

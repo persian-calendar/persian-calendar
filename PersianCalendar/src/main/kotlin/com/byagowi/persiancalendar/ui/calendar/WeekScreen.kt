@@ -818,6 +818,80 @@ fun DaysView(
                     )
                 }
 
+                // Add event box
+                val x = (offset.x / cellWidthPx).roundToInt()
+                LaunchedEffect(selectedDay) {
+                    val selectedDayIndex = selectedDay - startingDay
+                    if (selectedDayIndex != x) {
+                        offset = offset.copy(x = selectedDayIndex * cellWidthPx)
+                    }
+                }
+                val ySteps = (cellHeightPx / 4).roundToInt()
+                val y = (offset.y * scale.floatValue / ySteps).roundToInt()
+                val animatedOffset by animateOffsetAsState(
+                    targetValue = Offset(x * cellWidthPx, y * ySteps.toFloat()),
+                    animationSpec = when (interaction) {
+                        Interaction.Zoom, Interaction.AddBox -> snap()
+                        else -> spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
+                    },
+                )
+                if (interaction == Interaction.AddBox) interaction = null
+                val dy = (duration / (cellHeightPx / 4) * scale.floatValue).roundToInt()
+                val animatedDuration by animateFloatAsState(
+                    targetValue = dy * (cellHeightPx / 4),
+                    animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
+                )
+                val widthReduction = remember { Animatable(defaultWidthReductionPx) }
+                var resetOnNextRefresh by remember { mutableStateOf(false) }
+                LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                    if (resetOnNextRefresh) {
+                        duration = cellHeightPx / 4 * 4f
+                        offset = Offset.Zero
+                        onAddEventBoxEnabledChange(false)
+                        resetOnNextRefresh = false
+                    }
+                }
+                val addAction = {
+                    if (!isAddEventBoxEnabled && !isTalkBackEnabled) {
+                        interaction = Interaction.AddBox
+                        duration = cellHeightPx / scale.floatValue
+                        offset = Offset(
+                            cellWidthPx * (selectedDay - startingDay),
+                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
+                        )
+                        onAddEventBoxEnabledChange(true)
+                    } else {
+                        val time = selectedDay.toGregorianCalendar()
+                        run {
+                            val minutes = y * 15
+                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
+                            time[GregorianCalendar.MINUTE] = minutes % 60
+                        }
+                        time[GregorianCalendar.SECOND] = 0
+                        time[GregorianCalendar.MILLISECOND] = 0
+                        val beginTime = time.time
+                        run {
+                            val minutes = (y + dy) * 15
+                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
+                            time[GregorianCalendar.MINUTE] = minutes % 60
+                        }
+                        val endTime = time.time
+                        addEvent(
+                            AddEventData(
+                                beginTime = beginTime,
+                                endTime = endTime,
+                                allDay = false,
+                                description = dayTitleSummary(
+                                    selectedDay,
+                                    selectedDay on mainCalendar,
+                                ),
+                            ),
+                        )
+                        resetOnNextRefresh = true
+                    }
+                }
+                onAddActionChange(addAction)
+
                 // Time cells and table
                 val outlineVariant = MaterialTheme.colorScheme.outlineVariant
                 Row(
@@ -854,6 +928,7 @@ fun DaysView(
                                             .clickable(
                                                 indication = null,
                                                 interactionSource = null,
+                                                onClickLabel = stringResource(R.string.add_event),
                                             ) {
                                                 if (!isAddEventBoxEnabled) {
                                                     interaction = Interaction.AddBox
@@ -866,6 +941,7 @@ fun DaysView(
                                                 onAddEventBoxEnabledChange(true)
                                                 duration = cellHeightPx / scale.floatValue
                                                 onSelectedDayChange(startingDay + column - 1)
+                                                if (isTalkBackEnabled) addAction()
                                             }
                                             .semantics {
                                                 if (isTalkBackEnabled) {
@@ -1009,79 +1085,6 @@ fun DaysView(
                     }
                 }
 
-                // Add event box
-                val x = (offset.x / cellWidthPx).roundToInt()
-                LaunchedEffect(selectedDay) {
-                    val selectedDayIndex = selectedDay - startingDay
-                    if (selectedDayIndex != x) {
-                        offset = offset.copy(x = selectedDayIndex * cellWidthPx)
-                    }
-                }
-                val ySteps = (cellHeightPx / 4).roundToInt()
-                val y = (offset.y * scale.floatValue / ySteps).roundToInt()
-                val animatedOffset by animateOffsetAsState(
-                    targetValue = Offset(x * cellWidthPx, y * ySteps.toFloat()),
-                    animationSpec = when (interaction) {
-                        Interaction.Zoom, Interaction.AddBox -> snap()
-                        else -> spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
-                    },
-                )
-                if (interaction == Interaction.AddBox) interaction = null
-                val dy = (duration / (cellHeightPx / 4) * scale.floatValue).roundToInt()
-                val animatedDuration by animateFloatAsState(
-                    targetValue = dy * (cellHeightPx / 4),
-                    animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
-                )
-                val widthReduction = remember { Animatable(defaultWidthReductionPx) }
-                var resetOnNextRefresh by remember { mutableStateOf(false) }
-                val addAction = {
-                    if (!isAddEventBoxEnabled) {
-                        interaction = Interaction.AddBox
-                        duration = cellHeightPx / scale.floatValue
-                        offset = Offset(
-                            cellWidthPx * (selectedDay - startingDay),
-                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.floatValue,
-                        )
-                        onAddEventBoxEnabledChange(true)
-                    } else {
-                        val time = selectedDay.toGregorianCalendar()
-                        run {
-                            val minutes = y * 15
-                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
-                            time[GregorianCalendar.MINUTE] = minutes % 60
-                        }
-                        time[GregorianCalendar.SECOND] = 0
-                        time[GregorianCalendar.MILLISECOND] = 0
-                        val beginTime = time.time
-                        run {
-                            val minutes = (y + dy) * 15
-                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
-                            time[GregorianCalendar.MINUTE] = minutes % 60
-                        }
-                        val endTime = time.time
-                        addEvent(
-                            AddEventData(
-                                beginTime = beginTime,
-                                endTime = endTime,
-                                allDay = false,
-                                description = dayTitleSummary(
-                                    selectedDay,
-                                    selectedDay on mainCalendar,
-                                ),
-                            ),
-                        )
-                        resetOnNextRefresh = true
-                    }
-                }
-                onAddActionChange(addAction)
-                LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-                    if (resetOnNextRefresh) {
-                        duration = cellHeightPx / 4 * 4f
-                        offset = Offset.Zero
-                        onAddEventBoxEnabledChange(false)
-                        resetOnNextRefresh = false
-                    }
-                }
                 Box(
                     Modifier
                         .offset {
@@ -1104,7 +1107,12 @@ fun DaysView(
                             indication = null,
                             interactionSource = null,
                             onClickLabel = stringResource(R.string.add_event),
-                        ) { addAction() }
+                        ) {
+                            if (days == 1 && isAddEventBoxEnabled && !isShowDeviceCalendarEvents && !isTalkBackEnabled) {
+                                offset = Offset.Zero
+                                onAddEventBoxEnabledChange(false)
+                            } else addAction()
+                        }
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val id = awaitFirstDown().id

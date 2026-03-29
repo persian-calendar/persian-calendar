@@ -82,7 +82,7 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
             )
         }
 
-        language.isIranExclusive -> {
+        language.isIranExclusive || language.isUserAbleToReadPersian -> {
             val enabledHolidays = EventsRepository(this@saveLanguage, language, emptySet())
             if (enabledHolidays.isEmpty || enabledHolidays.onlyAfghanistanHolidaysIsEnabled) putStringSet(
                 PREF_HOLIDAY_TYPES,
