@@ -33,6 +33,13 @@ private val fasliMonthNames = listOf(
     "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
 )
 
+// سالنمای راستی
+private const val yearOffset = 2359
+private val fasliAlternativeMonthNames = listOf(
+    "فَرَوَشی", "اشاوهیشتا", "هه‌اورتات", "تِشتریا", "اَمرتات", "خشتره‌ویریه",
+    "میترا", "آبان", "آتر", "دتوشو", "وهومن", "سپنتاآرمیتی",
+)
+
 @VisibleForTesting
 fun fasliDayName(dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
@@ -59,11 +66,13 @@ fun jalaliName(persianYear: Int?, dayOfYear: Int): String {
 // endregion
 
 // Looks better with Persian as Roozbeh
-val persianDelimiter = " ــــ "
+const val persianDelimiter = " ــــ "
 
 fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
     val dayOfYear = persianDayOfYear(persianDate, jdn)
-    return jalaliName(persianDate.year, dayOfYear) + persianDelimiter + fasliDayName(dayOfYear)
+    val persianYear = persianDate.year
+    val jalali = jalaliName(persianYear, dayOfYear)
+    return jalali + persianDelimiter + fasliDayName(dayOfYear) //+ " " + numeral.format(persianYear + yearOffset)
 }
 
 fun jalaliDayOfYear(date: PersianDate): String {
