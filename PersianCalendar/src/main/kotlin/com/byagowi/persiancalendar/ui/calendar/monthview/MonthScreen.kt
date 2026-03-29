@@ -99,9 +99,12 @@ fun SharedTransitionScope.MonthScreen(
     val initialItem = ITEMS_COUNT / 2
     val state = rememberLazyListState(initialItem, 0)
     val weekStartJdn = initiallySelectedDay - initiallySelectedDay.weekDay.ordinal
+    val monthStart = Jdn(
+        mainCalendar.getMonthStartFromMonthsDistance(initiallySelectedDay, 0),
+    )
     val focusedJdn by remember {
         derivedStateOf {
-            if (state.firstVisibleItemIndex == initialItem) initiallySelectedDay
+            if (state.firstVisibleItemIndex == initialItem) monthStart
             else (weekStartJdn + 3 + (state.firstVisibleItemIndex - initialItem) * 7)
         }
     }
@@ -214,9 +217,6 @@ fun SharedTransitionScope.MonthScreen(
                 val holidaysFillColor by animateColor(monthColors.holidaysFill)
                 val todayOutlineColor by animateColor(monthColors.todayOutline)
                 val holidaysColor by animateColor(monthColors.holidays)
-                val monthStart = Jdn(
-                    mainCalendar.getMonthStartFromMonthsDistance(initiallySelectedDay, 0),
-                )
                 val baseJdn = monthStart - (monthStart.weekDay - weekStart)
                 LazyColumn(state = state) {
                     items(ITEMS_COUNT) { index ->
