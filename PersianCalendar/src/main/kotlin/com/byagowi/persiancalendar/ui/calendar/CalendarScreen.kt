@@ -806,7 +806,6 @@ private fun SharedTransitionScope.Details(
             val buttons = listOfNotNull(
                 Pair(stringResource(R.string.calendar)) @Composable {
                     CalendarsTab(
-                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
@@ -965,12 +964,12 @@ private fun SharedTransitionScope.CalendarsTab(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        Modifier
+        modifier
             .clickable(
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
             )
-            .then(modifier),
+            .padding(top = 4.dp, bottom = 8.dp),
     ) {
         CalendarsOverview(
             jdn = selectedDay,
