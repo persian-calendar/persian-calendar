@@ -296,7 +296,7 @@ private fun DayEventContent(
                         event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                         event.source == EventSource.International -> stringResource(R.string.international)
                         event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
-                        event.source == EventSource.Iran -> """تقویم رسمی کشور
+                        event.source == EventSource.Iran -> (if (event.isHoliday) "${event.title} از " else "") + """تقویم رسمی
 تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
 
                         else -> ""
