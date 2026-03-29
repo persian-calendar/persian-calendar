@@ -35,10 +35,12 @@ fun BaseAppDialog(
     neutralButton: (@Composable () -> Unit)?,
     confirmButton: (@Composable () -> Unit)?,
     dismissButton: (@Composable () -> Unit)?,
+    modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(),
     content: @Composable BoxScope.() -> Unit,
 ) {
     @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         properties = properties,
     ) {
@@ -89,6 +91,7 @@ fun BaseAppDialog(
 @Composable
 fun AppDialog(
     onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
     title: (@Composable () -> Unit)? = null,
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
@@ -102,6 +105,7 @@ fun AppDialog(
         neutralButton = neutralButton,
         confirmButton = confirmButton,
         dismissButton = dismissButton,
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier
@@ -116,6 +120,7 @@ fun AppDialog(
 @Composable
 fun AppDialogWithLazyColumn(
     onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
     title: (@Composable () -> Unit)? = null,
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
@@ -124,6 +129,7 @@ fun AppDialogWithLazyColumn(
     content: LazyListScope.() -> Unit,
 ) {
     BaseAppDialog(
+        modifier = modifier,
         title = title,
         onDismissRequest = onDismissRequest,
         neutralButton = neutralButton,

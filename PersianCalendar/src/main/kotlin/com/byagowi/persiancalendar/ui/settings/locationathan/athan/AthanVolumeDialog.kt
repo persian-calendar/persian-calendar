@@ -32,7 +32,10 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
-fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
+fun AthanVolumeDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     var volume by rememberSaveable { mutableIntStateOf(context.preferences.athanVolume) }
 
@@ -73,6 +76,7 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
             ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         Slider(
             value = volume.toFloat(),

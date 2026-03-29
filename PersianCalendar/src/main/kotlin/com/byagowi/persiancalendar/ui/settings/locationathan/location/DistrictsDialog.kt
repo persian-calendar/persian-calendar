@@ -32,7 +32,11 @@ import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
 
 @Composable
-fun ProvincesDialog(onDismissRequest: () -> Unit, navigateUp: () -> Unit) {
+fun ProvincesDialog(
+    onDismissRequest: () -> Unit,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
     if (province != null) return DistrictsDialog(
         province = province.orEmpty(),
@@ -40,6 +44,7 @@ fun ProvincesDialog(onDismissRequest: () -> Unit, navigateUp: () -> Unit) {
         navigateUp = { province = null },
     )
     AppDialogWithLazyColumn(
+        modifier = modifier,
         title = { Text("انتخاب استان") },
         onDismissRequest = navigateUp,
     ) {
@@ -57,7 +62,12 @@ fun ProvincesDialog(onDismissRequest: () -> Unit, navigateUp: () -> Unit) {
 }
 
 @Composable
-fun DistrictsDialog(onSuccess: () -> Unit, navigateUp: () -> Unit, province: String) {
+fun DistrictsDialog(
+    onSuccess: () -> Unit,
+    navigateUp: () -> Unit,
+    province: String,
+    modifier: Modifier = Modifier,
+) {
     val districts = remember {
         val language = language
         (districtsStore[province] ?: emptyList()).flatMap { county ->
@@ -66,7 +76,11 @@ fun DistrictsDialog(onSuccess: () -> Unit, navigateUp: () -> Unit, province: Str
         }.sortedBy { (district, _) -> language.prepareForSort(district[0/*district name*/]) }
     }
     val context = LocalContext.current
-    AppDialogWithLazyColumn(title = { Text(province) }, onDismissRequest = navigateUp) {
+    AppDialogWithLazyColumn(
+        title = { Text(province) },
+        onDismissRequest = navigateUp,
+        modifier = modifier,
+    ) {
         itemsIndexed(districts, { _, (district, _) -> district }) { index, (district, county) ->
             Box(
                 contentAlignment = Alignment.CenterStart,

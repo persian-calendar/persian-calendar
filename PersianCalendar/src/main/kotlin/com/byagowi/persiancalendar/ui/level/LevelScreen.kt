@@ -76,6 +76,7 @@ import kotlin.time.Duration.Companion.seconds
 fun SharedTransitionScope.LevelScreen(
     navigateUp: () -> Unit,
     navigateToCompass: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var isStopped by rememberSaveable { mutableStateOf(false) }
     var cmInchFlip by rememberSaveable { mutableStateOf(false) }
@@ -95,7 +96,7 @@ fun SharedTransitionScope.LevelScreen(
     val angleToShow2 = remember { mutableFloatStateOf(0f) }
     var showTwoAngles by remember { mutableStateOf(false) }
 
-    Column(if (isFullscreen) Modifier.keepScreenOn() else Modifier) {
+    Column(modifier.then(if (isFullscreen) Modifier.keepScreenOn() else Modifier)) {
         AnimatedVisibility(visible = !isFullscreen) {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.level)) },

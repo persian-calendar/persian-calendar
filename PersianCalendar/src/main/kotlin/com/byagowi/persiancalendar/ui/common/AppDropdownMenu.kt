@@ -61,11 +61,12 @@ fun AppDropdownMenuItem(
 fun AppDropdownMenuRadioItem(
     text: @Composable () -> Unit,
     isSelected: Boolean,
+    modifier: Modifier = Modifier,
     withRadio: Boolean = true,
     setSelected: () -> Unit,
 ) {
     AppDropdownMenuItem(
-        modifier = Modifier.selectable(isSelected, onClick = setSelected, role = Role.RadioButton),
+        modifier = modifier.selectable(isSelected, onClick = setSelected, role = Role.RadioButton),
         text = text,
         trailingIcon = { if (withRadio) RadioButton(selected = isSelected, onClick = null) },
     ) { setSelected() }
@@ -76,10 +77,11 @@ fun AppDropdownMenuRadioItem(
 fun AppDropdownMenuCheckableItem(
     text: @Composable () -> Unit,
     isChecked: Boolean,
+    modifier: Modifier = Modifier,
     onValueChange: (Boolean) -> Unit,
 ) {
     AppDropdownMenuItem(
-        modifier = Modifier.toggleable(
+        modifier = modifier.toggleable(
             value = isChecked,
             onValueChange = onValueChange,
             role = Role.Checkbox,
@@ -94,9 +96,11 @@ fun AppDropdownMenuCheckableItem(
 fun AppDropdownMenuExpandableItem(
     text: @Composable () -> Unit,
     isExpanded: Boolean,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     AppDropdownMenuItem(
+        modifier = modifier,
         text = text,
         trailingIcon = { ExpandArrow(isExpanded = isExpanded) },
         onClick = onClick,

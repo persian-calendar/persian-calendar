@@ -95,6 +95,7 @@ fun YearView(
     maxHeight: Dp,
     bottomPadding: Dp,
     today: Jdn,
+    modifier: Modifier = Modifier,
     selectMonth: (calendar: Calendar, monthsDistance: Int) -> Unit,
 ) {
     if (yearViewCalendar == null) onYearViewCalendarChange(mainCalendar)
@@ -163,13 +164,15 @@ fun YearView(
 
     LazyColumn(
         state = lazyListState,
-        modifier = detectZoom.detectHorizontalSwipe(calendar) {
-            { isLeft ->
-                val calendars = enabledCalendarsWithDefault
-                val index = calendars.indexOf(calendar) + if (isLeft xor isRtl) 1 else -1
-                onYearViewCalendarChange(calendars[index.mod(calendars.size)])
-            }
-        },
+        modifier = modifier
+            .then(detectZoom)
+            .detectHorizontalSwipe(calendar) {
+                { isLeft ->
+                    val calendars = enabledCalendarsWithDefault
+                    val index = calendars.indexOf(calendar) + if (isLeft xor isRtl) 1 else -1
+                    onYearViewCalendarChange(calendars[index.mod(calendars.size)])
+                }
+            },
     ) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages

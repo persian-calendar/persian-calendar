@@ -122,6 +122,7 @@ fun SharedTransitionScope.ConverterScreen(
     navigateToAstronomy: (Jdn) -> Unit,
     noBackStackAction: (() -> Unit)?,
     today: Jdn,
+    modifier: Modifier = Modifier,
     initialScreenMode: ConverterScreenMode = ConverterScreenMode.entries[0],
 ) {
     var screenMode by rememberSaveable { mutableStateOf(initialScreenMode) }
@@ -130,6 +131,7 @@ fun SharedTransitionScope.ConverterScreen(
     var resetAction by remember { mutableStateOf({}) }
     val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     Scaffold(
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -168,7 +170,7 @@ fun SharedTransitionScope.ConverterScreen(
                         )
                     }
                     AnimatedVisibility(visible = !anyPendingConfirm) {
-                        ShareActionButton(shareAction)
+                        ShareActionButton(action = shareAction)
                     }
                 },
             )
@@ -188,9 +190,9 @@ fun SharedTransitionScope.ConverterScreen(
                         AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
                             TimeZones(
                                 pendingConfirms = pendingConfirms,
-                                setShareAction = { shareAction = it },
-                                setResetAction = { resetAction = it },
-                                setResetButtonVisibility = { resetButtonVisibility = it },
+                                onShareActionChange = { shareAction = it },
+                                onResetActionChange = { resetAction = it },
+                                onResetButtonVisibilityChange = { resetButtonVisibility = it },
                             )
                         }
 
@@ -206,9 +208,9 @@ fun SharedTransitionScope.ConverterScreen(
                                     sharedTransitionScope = this@ConverterScreen,
                                     pendingConfirms = pendingConfirms,
                                     screenMode = screenMode,
-                                    setShareAction = { shareAction = it },
-                                    setResetAction = { resetAction = it },
-                                    setResetButtonVisibility = { resetButtonVisibility = it },
+                                    onShareActionChange = { shareAction = it },
+                                    onResetActionChange = { resetAction = it },
+                                    onResetButtonVisibilityChange = { resetButtonVisibility = it },
                                     today = today,
                                 )
                             }
@@ -217,9 +219,9 @@ fun SharedTransitionScope.ConverterScreen(
                         AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 Calculator(
-                                    setShareAction = { shareAction = it },
-                                    setResetAction = { resetAction = it },
-                                    setResetButtonVisibility = { resetButtonVisibility = it },
+                                    onShareActionChange = { shareAction = it },
+                                    onResetActionChange = { resetAction = it },
+                                    onResetButtonVisibilityChange = { resetButtonVisibility = it },
                                 )
                             }
                         }
@@ -227,9 +229,9 @@ fun SharedTransitionScope.ConverterScreen(
                         AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 QrCode(
-                                    setShareAction = { shareAction = it },
-                                    setResetAction = { resetAction = it },
-                                    setResetButtonVisibility = { resetButtonVisibility = it },
+                                    onShareActionChange = { shareAction = it },
+                                    onResetActionChange = { resetAction = it },
+                                    onResetButtonVisibilityChange = { resetButtonVisibility = it },
                                 )
                             }
                         }
@@ -252,9 +254,9 @@ private val oneMinutes = 1.minutes.inWholeMilliseconds
 @Composable
 private fun TimeZones(
     pendingConfirms: SnapshotStateList<() -> Unit>,
-    setShareAction: (() -> Unit) -> Unit,
-    setResetAction: (() -> Unit) -> Unit,
-    setResetButtonVisibility: (Boolean) -> Unit,
+    onShareActionChange: (() -> Unit) -> Unit,
+    onResetActionChange: (() -> Unit) -> Unit,
+    onResetButtonVisibilityChange: (Boolean) -> Unit,
 ) {
     var firstTimeZone by rememberSaveable { mutableStateOf(TimeZone.getDefault()) }
     val utc = TimeZone.getTimeZone("UTC")
@@ -262,14 +264,14 @@ private fun TimeZones(
     val clock = remember { mutableLongStateOf(System.currentTimeMillis()) }
     val context = LocalContext.current
     val chooserTitle = stringResource(ConverterScreenMode.TIME_ZONES.title)
-    setResetButtonVisibility(
+    onResetButtonVisibilityChange(
         run {
             val sameClock = abs(clock.longValue - System.currentTimeMillis()) > oneMinutes
             sameClock || firstTimeZone != TimeZone.getDefault() || secondTimeZone != utc
         },
     )
     LaunchedEffect(key1 = Unit) {
-        setShareAction {
+        onShareActionChange {
             context.shareText(
                 listOf(firstTimeZone, secondTimeZone).joinToString("\n") { timeZone ->
                     timeZone.displayName + ": " + Clock(
@@ -281,7 +283,7 @@ private fun TimeZones(
                 chooserTitle,
             )
         }
-        setResetAction {
+        onResetActionChange {
             firstTimeZone = TimeZone.getDefault()
             secondTimeZone = utc
             clock.longValue = System.currentTimeMillis()
@@ -341,13 +343,13 @@ private fun TimeZones(
 
 @Composable
 private fun Calculator(
-    setShareAction: (() -> Unit) -> Unit,
-    setResetAction: (() -> Unit) -> Unit,
-    setResetButtonVisibility: (Boolean) -> Unit,
+    onShareActionChange: (() -> Unit) -> Unit,
+    onResetActionChange: (() -> Unit) -> Unit,
+    onResetButtonVisibilityChange: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     var input by rememberSaveable { mutableStateOf("") }
-    setResetButtonVisibility(input.isNotEmpty())
+    onResetButtonVisibilityChange(input.isNotEmpty())
     DisposableEffect(Unit) {
         val preferences = context.preferences
         val currentInput = input
@@ -365,8 +367,8 @@ private fun Calculator(
     }.getOrElse { it.message }.orEmpty()
     val chooserTitle = stringResource(ConverterScreenMode.CALCULATOR.title)
     LaunchedEffect(key1 = Unit) {
-        setShareAction { context.shareText(result, chooserTitle) }
-        setResetAction { input = "" }
+        onShareActionChange { context.shareText(result, chooserTitle) }
+        onResetActionChange { input = "" }
     }
     val defaultTextFieldColors = TextFieldDefaults.colors()
     val textFieldColors = defaultTextFieldColors.copy(
@@ -418,13 +420,13 @@ private fun Calculator(
 
 @Composable
 private fun QrCode(
-    setShareAction: (() -> Unit) -> Unit,
-    setResetAction: (() -> Unit) -> Unit,
-    setResetButtonVisibility: (Boolean) -> Unit,
+    onShareActionChange: (() -> Unit) -> Unit,
+    onResetActionChange: (() -> Unit) -> Unit,
+    onResetButtonVisibilityChange: (Boolean) -> Unit,
 ) {
     var input by rememberSaveable { mutableStateOf("https://example.com") }
-    LaunchedEffect(key1 = Unit) { setResetAction { input = "" } }
-    setResetButtonVisibility(input.isNotEmpty())
+    LaunchedEffect(key1 = Unit) { onResetActionChange { input = "" } }
+    onResetButtonVisibilityChange(input.isNotEmpty())
 
     @Composable
     fun ColumnScope.SampleInputButton() {
@@ -451,7 +453,9 @@ private fun QrCode(
     }
 
     @Composable
-    fun Qr() = Crossfade(targetState = input) { text -> QrView(text, setShareAction) }
+    fun Qr() = Crossfade(targetState = input) { text ->
+        QrView(text, onShareActionChange = onShareActionChange)
+    }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         Column(modifier = Modifier.weight(1f)) {
@@ -486,16 +490,16 @@ private fun ColumnScope.ConverterAndDistance(
     sharedTransitionScope: SharedTransitionScope,
     pendingConfirms: SnapshotStateList<() -> Unit>,
     screenMode: ConverterScreenMode,
-    setShareAction: (() -> Unit) -> Unit,
-    setResetAction: (() -> Unit) -> Unit,
-    setResetButtonVisibility: (Boolean) -> Unit,
+    onShareActionChange: (() -> Unit) -> Unit,
+    onResetActionChange: (() -> Unit) -> Unit,
+    onResetButtonVisibilityChange: (Boolean) -> Unit,
     today: Jdn,
 ) {
     var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
     var selectedDate by rememberSaveable { mutableStateOf(today) }
     var secondSelectedDate by rememberSaveable { mutableStateOf(today) }
 
-    setResetButtonVisibility(
+    onResetButtonVisibilityChange(
         when (screenMode) {
             ConverterScreenMode.CONVERTER -> selectedDate != today
             ConverterScreenMode.DISTANCE -> selectedDate != today || secondSelectedDate != today
@@ -506,7 +510,7 @@ private fun ColumnScope.ConverterAndDistance(
     val context = LocalContext.current
     val resources = LocalResources.current
     LaunchedEffect(key1 = screenMode) {
-        setResetAction {
+        onResetActionChange {
             when (screenMode) {
                 ConverterScreenMode.CONVERTER -> selectedDate = today
                 ConverterScreenMode.DISTANCE -> {
@@ -517,7 +521,7 @@ private fun ColumnScope.ConverterAndDistance(
                 else -> {}
             }
         }
-        setShareAction {
+        onShareActionChange {
             val chooserTitle = resources.getString(screenMode.title)
             if (screenMode == ConverterScreenMode.CONVERTER) {
                 val calendarsList = enabledCalendarsWithDefault
@@ -567,9 +571,9 @@ private fun ColumnScope.ConverterAndDistance(
             DatePicker(
                 today = today,
                 calendar = calendar,
-                jdn = secondSelectedDate,
+                value = secondSelectedDate,
                 pendingConfirms = pendingConfirms,
-                setJdn = { secondSelectedDate = it },
+                onValueChange = { secondSelectedDate = it },
             )
         }
     }
@@ -589,9 +593,9 @@ private fun ColumnScope.ConverterAndDistance(
             DatePicker(
                 today = today,
                 calendar = calendar,
-                jdn = selectedDate,
+                value = selectedDate,
                 pendingConfirms = pendingConfirms,
-                setJdn = { selectedDate = it },
+                onValueChange = { selectedDate = it },
             )
         }
         Spacer(Modifier.width(8.dp))
@@ -628,9 +632,9 @@ private fun ColumnScope.ConverterAndDistance(
         DatePicker(
             today = today,
             calendar = calendar,
-            jdn = selectedDate,
+            value = selectedDate,
             pendingConfirms = pendingConfirms,
-            setJdn = { selectedDate = it },
+            onValueChange = { selectedDate = it },
         )
         AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
             val cardColors = CardDefaults.cardColors()

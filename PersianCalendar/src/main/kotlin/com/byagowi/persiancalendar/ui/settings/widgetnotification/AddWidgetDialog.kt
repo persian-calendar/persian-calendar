@@ -23,9 +23,15 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 
 @Composable
-fun AddWidgetDialog(closeDialog: () -> Unit) {
+fun AddWidgetDialog(
+    modifier: Modifier = Modifier,
+    closeDialog: () -> Unit,
+) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-    AppDialog(onDismissRequest = closeDialog) {
+    AppDialog(
+        onDismissRequest = closeDialog,
+        modifier = modifier,
+    ) {
         val context = LocalContext.current
         val widgetManager = AppWidgetManager.getInstance(context)
         val widgets = runCatching {

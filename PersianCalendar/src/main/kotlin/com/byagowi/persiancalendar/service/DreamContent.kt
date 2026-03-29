@@ -27,7 +27,10 @@ import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random
 
 @Composable
-fun DreamContent(finish: () -> Unit) {
+fun DreamContent(
+    modifier: Modifier = Modifier,
+    finish: () -> Unit,
+) {
     val isNightMode = isSystemInDarkTheme()
     val density = LocalDensity.current
     val colorScheme = MaterialTheme.colorScheme
@@ -39,7 +42,7 @@ fun DreamContent(finish: () -> Unit) {
         )
     }
     Box(
-        Modifier
+        modifier
             .clickable(indication = null, interactionSource = null, onClick = finish)
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
     ) { PatternCanvas(patternDrawable) }

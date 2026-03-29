@@ -159,6 +159,7 @@ fun SharedTransitionScope.AstronomyScreen(
     initialTime: Long,
     today: Jdn,
     noBackStackAction: (() -> Unit)?,
+    modifier: Modifier = Modifier,
 ) {
     val timeInMillis = rememberSaveable { mutableLongStateOf(initialTime) }
     LaunchedEffect(Unit) {
@@ -226,6 +227,7 @@ fun SharedTransitionScope.AstronomyScreen(
     val isScaled by remember { derivedStateOf { scale.floatValue != 1f } }
 
     Scaffold(
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -261,9 +263,9 @@ fun SharedTransitionScope.AstronomyScreen(
                     }
 
                     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-                    if (showHoroscopeDialog) HoroscopeDialog(timeInMillis.longValue) {
-                        showHoroscopeDialog = false
-                    }
+                    if (showHoroscopeDialog) HoroscopeDialog(
+                        timeInMillis = timeInMillis.longValue,
+                    ) { showHoroscopeDialog = false }
                     var showYearHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
                     if (showYearHoroscopeDialog) {
                         YearHoroscopeDialog(jdn.toPersianDate().year) {
@@ -273,7 +275,7 @@ fun SharedTransitionScope.AstronomyScreen(
 
                     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
                     if (showPlanetaryHoursDialog) coordinates?.also {
-                        PlanetaryHoursDialog(it, timeInMillis.longValue) {
+                        PlanetaryHoursDialog(coordinates = it, now = timeInMillis.longValue) {
                             showPlanetaryHoursDialog = false
                         }
                     }
@@ -577,6 +579,7 @@ private fun SharedTransitionScope.SliderBar(
 private fun SharedTransitionScope.TimeArrow(
     buttonScrollSlider: (Int) -> Unit,
     isPrevious: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     TimeArrow(
         onClick = { buttonScrollSlider(if (isPrevious) -1 else 1) },
@@ -590,6 +593,7 @@ private fun SharedTransitionScope.TimeArrow(
             stringResource(R.string.year),
         ),
         isPrevious = isPrevious,
+        modifier = modifier,
     )
 }
 

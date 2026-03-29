@@ -70,6 +70,7 @@ fun ColorPickerDialog(
     isBackgroundPick: Boolean,
     initialColor: Color,
     persistColor: (Color) -> Unit,
+    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
 ) {
     val color = rememberSaveable(
@@ -93,6 +94,7 @@ fun ColorPickerDialog(
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         var showEditor by rememberSaveable { mutableStateOf(false) }
         val background = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }

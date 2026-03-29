@@ -137,9 +137,11 @@ fun SharedTransitionScope.SettingsScreen(
     initialTab: SettingsTab,
     destination: String?,
     destinationItem: String?,
+    modifier: Modifier = Modifier,
 ) {
 //    var isAtTop by remember { mutableStateOf(true) }
     Scaffold(
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             Column(Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)) {
@@ -204,7 +206,7 @@ fun SharedTransitionScope.SettingsScreen(
                 SettingsTab.entries.forEachIndexed { index, tab ->
                     val isLandscape =
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                    val modifier = Modifier.clip(MaterialTheme.shapes.large)
+                    val tabModifier = Modifier.clip(MaterialTheme.shapes.large)
                     val isSelected = pagerState.currentPage == index
                     fun onClick() {
                         coroutineScope.launch { pagerState.animateScrollToPage(index) }
@@ -217,13 +219,13 @@ fun SharedTransitionScope.SettingsScreen(
                                 tab.Title()
                             }
                         },
-                        modifier = modifier,
+                        modifier = tabModifier,
                         selected = isSelected,
                         onClick = ::onClick,
                     ) else Tab(
                         icon = { tab.Icon(isSelected) },
                         text = { tab.Title() },
-                        modifier = modifier,
+                        modifier = tabModifier,
                         selected = isSelected,
                         onClick = ::onClick,
                     )
@@ -342,19 +344,21 @@ enum class SettingsTab(
     );
 
     @Composable
-    fun Title() {
+    fun Title(modifier: Modifier = Modifier) {
         Text(
             stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
                 secondTitle,
             ),
+            modifier = modifier,
         )
     }
 
     @Composable
-    fun Icon(isSelected: Boolean) {
-        Crossfade(targetState = isSelected) {
-            Icon(if (it) filledIcon else outlinedIcon, contentDescription = null)
-        }
+    fun Icon(isSelected: Boolean, modifier: Modifier = Modifier) {
+        Crossfade(
+            targetState = isSelected,
+            modifier = modifier,
+        ) { Icon(if (it) filledIcon else outlinedIcon, contentDescription = null) }
     }
 }
 

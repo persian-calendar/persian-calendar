@@ -33,13 +33,17 @@ import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.utils.startAthan
 
 @Composable
-fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
+fun PrayerSelectDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     val alarms = rememberSaveable {
         context.preferences.getString(PREF_ATHAN_ALARM, null).orEmpty()
             .splitFilterNotEmpty(",").mapNotNull(PrayTime::fromName).toMutableStateList()
     }
     AppDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.athan_alarm)) },
         confirmButton = {
@@ -79,8 +83,12 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun PrayerSelectPreviewDialog(onDismissRequest: () -> Unit) {
+fun PrayerSelectPreviewDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     AppDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.preview)) },
         dismissButton = {

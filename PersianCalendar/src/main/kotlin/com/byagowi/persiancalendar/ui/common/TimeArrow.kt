@@ -26,6 +26,7 @@ fun SharedTransitionScope.TimeArrow(
     onLongClick: () -> Unit,
     onLongClickLabel: String,
     isPrevious: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     Icon(
@@ -35,7 +36,7 @@ fun SharedTransitionScope.TimeArrow(
             if (isPrevious) R.string.previous_x else R.string.next_x,
             stringResource(R.string.day),
         ),
-        modifier = Modifier
+        modifier = modifier
             .sharedElement(
                 sharedContentState = rememberSharedContentState(
                     if (isPrevious) SHARED_CONTENT_PREVIOUS_ARROW else SHARED_CONTENT_NEXT_ARROW,

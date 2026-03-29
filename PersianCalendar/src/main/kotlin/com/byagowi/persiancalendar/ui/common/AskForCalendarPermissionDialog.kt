@@ -25,7 +25,10 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
-fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
+fun AskForCalendarPermissionDialog(
+    modifier: Modifier = Modifier,
+    setGranted: (Boolean) -> Unit,
+) {
     val context = LocalContext.current
 
     if (ActivityCompat.checkSelfPermission(
@@ -50,6 +53,7 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
 
     var showDialog by rememberSaveable { mutableStateOf(true) }
     if (showDialog) AppDialog(
+        modifier = modifier,
         title = { Text(stringResource(R.string.calendar_access)) },
         confirmButton = {
             TextButton(

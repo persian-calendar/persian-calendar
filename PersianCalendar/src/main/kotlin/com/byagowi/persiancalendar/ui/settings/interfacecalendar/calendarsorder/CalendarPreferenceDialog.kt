@@ -56,7 +56,10 @@ import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 
 @Composable
-fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
+fun CalendarPreferenceDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val view = LocalView.current
     val context = LocalContext.current
     val moveUp = stringResource(R.string.move_up)
@@ -101,6 +104,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         var dragStarted by remember { mutableStateOf(false) }
         fun onSettle(fromIndex: Int, toIndex: Int): Unit =

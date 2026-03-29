@@ -105,8 +105,11 @@ import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
-    AppDialog(onDismissRequest = onDismissRequest) {
+fun ColorSchemeDemoDialog(modifier: Modifier = Modifier, onDismissRequest: () -> Unit) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+    ) {
         listOf(
             "primary" to MaterialTheme.colorScheme.primary,
             "onPrimary" to MaterialTheme.colorScheme.onPrimary,
@@ -137,7 +140,7 @@ fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
             "outline" to MaterialTheme.colorScheme.outline,
             "outlineVariant" to MaterialTheme.colorScheme.outlineVariant,
             "scrim" to MaterialTheme.colorScheme.scrim,
-        ).map { (title, color) ->
+        ).forEach { (title, color) ->
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.contentColorFor(color),
@@ -148,8 +151,14 @@ fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun TypographyDemoDialog(onDismissRequest: () -> Unit) {
-    AppDialog(onDismissRequest = onDismissRequest) {
+fun TypographyDemoDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
+    AppDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+    ) {
         listOf(
             "DisplayLarge" to MaterialTheme.typography.displayLarge,
             "DisplayMedium" to MaterialTheme.typography.displayMedium,
@@ -166,7 +175,7 @@ fun TypographyDemoDialog(onDismissRequest: () -> Unit) {
             "LabelLarge" to MaterialTheme.typography.labelLarge,
             "LabelMedium" to MaterialTheme.typography.labelMedium,
             "LabelSmall" to MaterialTheme.typography.labelSmall,
-        ).map { (title, style) ->
+        ).forEach { (title, style) ->
             Text(
                 buildAnnotatedString {
                     withStyle(style.toSpanStyle()) {
@@ -185,18 +194,24 @@ fun TypographyDemoDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
+fun ShapesDemoDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     fun f(cornerSize: CornerSize): String {
         return cornerSize.toString().replace("CornerSize", "").replace("size = ", "")
     }
-    AppDialog(onDismissRequest = onDismissRequest) {
+    AppDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+    ) {
         listOf(
             "extraLarge" to MaterialTheme.shapes.extraLarge,
             "large" to MaterialTheme.shapes.large,
             "medium" to MaterialTheme.shapes.medium,
             "small" to MaterialTheme.shapes.small,
             "extraSmall" to MaterialTheme.shapes.extraSmall,
-        ).map { (title, shape) ->
+        ).forEach { (title, shape) ->
             Surface(
                 color = MaterialTheme.colorScheme.onSurface,
                 shape = shape,
@@ -222,7 +237,10 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
+fun DynamicColorsDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val dynamicColors = remember {
         listOf(
             android.R.color.system_accent1_0, android.R.color.system_accent1_10,
@@ -266,7 +284,10 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
         "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000",
     )
     val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
-    AppDialog(onDismissRequest = onDismissRequest) {
+    AppDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+    ) {
         Column {
             Row {
                 cols.forEach {
@@ -291,8 +312,14 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
 
 // Debug only dialog to check validity of dynamic icons generation
 @Composable
-fun IconsDemoDialog(onDismissRequest: () -> Unit) {
-    AppDialog(onDismissRequest = onDismissRequest) {
+fun IconsDemoDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+    ) {
         FlowRow {
             val fontFile = resolveFontFile()
             val isBoldFont = isBoldFont
@@ -313,10 +340,14 @@ fun IconsDemoDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun ScheduleAlarm(onDismissRequest: () -> Unit) {
+fun ScheduleAlarm(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     var seconds by rememberSaveable { mutableStateOf("5") }
     AppDialog(
+        modifier = modifier,
         title = { Text("Enter seconds to schedule alarm") },
         confirmButton = {
             TextButton(
@@ -346,7 +377,10 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun ConverterDialog(onDismissRequest: () -> Unit) {
+fun ConverterDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val today = remember { Jdn.today() } // take this from App.kt's today
     val lazyListState = rememberLazyListState(pagesCount / 2)
     val textStyle = LocalTextStyle.current
@@ -355,6 +389,7 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
     val otherCalendars = calendars - sourceCalendar
     var destinationCalendar by rememberSaveable(sourceCalendar) { mutableStateOf(otherCalendars[0]) }
     AppDialogWithLazyColumn(
+        modifier = modifier,
         lazyListState = lazyListState,
         onDismissRequest = onDismissRequest,
         title = {
@@ -496,8 +531,14 @@ fun ConverterDialog(onDismissRequest: () -> Unit) {
 private const val pagesCount = 20000
 
 @Composable
-fun FontWeightsDialog(onDismissRequest: () -> Unit) {
-    AppDialog(onDismissRequest = onDismissRequest) {
+fun FontWeightsDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+    ) {
         val text by remember { mutableStateOf(TextFieldState("Sample text متن نمونه")) }
         var weight by remember { mutableFloatStateOf(400f) }
         TextField(
@@ -585,7 +626,10 @@ fun createEasterEggClickHandler(callback: () -> Unit): () -> Unit {
 }
 
 @Composable
-fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
+fun PeriodicTableDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     var showRawData by rememberSaveable { mutableStateOf(false) }
     if (showRawData) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -622,6 +666,7 @@ fun PeriodicTableDialog(onDismissRequest: () -> Unit) {
         neutralButton = null,
         confirmButton = null,
         dismissButton = null,
+        modifier = modifier,
     ) {
         val textMeasurer = rememberTextMeasurer()
         val textStyle = LocalTextStyle.current

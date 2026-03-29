@@ -127,12 +127,13 @@ fun SharedTransitionScope.CalendarsOverview(
     shownCalendars: ImmutableList<Calendar>,
     isExpanded: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
     val language = language
     val isToday = today == jdn
     Column(
-        Modifier.semantics {
+        modifier.semantics {
             if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
                 resources,
                 jdn,

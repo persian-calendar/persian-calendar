@@ -30,6 +30,7 @@ fun Level(
     isStopped: Boolean,
     angleToShow1: MutableFloatState,
     angleToShow2: MutableFloatState,
+    modifier: Modifier = Modifier,
     setShowTwoAngles: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
@@ -71,7 +72,7 @@ fun Level(
             orientationProvider.startListening()
         }
     }
-    BoxWithConstraints {
+    BoxWithConstraints(modifier = modifier) {
         val width = this.maxWidth
         val height = this.maxHeight
         LaunchedEffect(width, height) {

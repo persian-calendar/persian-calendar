@@ -133,7 +133,6 @@ android {
             "SelectableText",
             "IconLocation",
             "DuplicateStrings",
-            "ComposeModifierMissing",
         )
     }
 }

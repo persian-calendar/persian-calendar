@@ -48,7 +48,7 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, Vie
         setOwners()
         val composeView = ComposeView(this)
         composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        composeView.setContent { SystemTheme { DreamContent(::finish) } }
+        composeView.setContent { SystemTheme { DreamContent(finish = ::finish) } }
         setContentView(composeView)
     }
 

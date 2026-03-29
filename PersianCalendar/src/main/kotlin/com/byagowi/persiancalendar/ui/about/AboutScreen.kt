@@ -115,8 +115,10 @@ fun SharedTransitionScope.AboutScreen(
     openNavigationRail: () -> Unit,
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(

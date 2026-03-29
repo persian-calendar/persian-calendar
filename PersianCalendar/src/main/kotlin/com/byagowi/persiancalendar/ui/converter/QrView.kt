@@ -35,7 +35,11 @@ import com.byagowi.persiancalendar.ui.utils.toPngByteArray
 import io.github.persiancalendar.qr.qr
 
 @Composable
-fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
+fun QrView(
+    text: String,
+    modifier: Modifier = Modifier,
+    onShareActionChange: (() -> Unit) -> Unit,
+) {
     val qr = remember(text) { qr(text) }
     val paint = remember { Paint() }
     val contentColor by rememberUpdatedState(LocalContentColor.current)
@@ -103,7 +107,7 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
         canvas.translate(-d, 0f)
     }
     Canvas(
-        Modifier
+        modifier
             .aspectRatio(1f)
             .clickable { isRounded = !isRounded },
     ) { drawQr(drawContext.canvas, size = this.size.width) }
@@ -111,7 +115,7 @@ fun QrView(text: String, setShareAction: (() -> Unit) -> Unit) {
     val context = LocalContext.current
     val surfaceColor by rememberUpdatedState(MaterialTheme.colorScheme.surface)
     LaunchedEffect(Unit) {
-        setShareAction {
+        onShareActionChange {
             val size = 1280f
             val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
                 val canvas = Canvas(this)

@@ -85,6 +85,7 @@ fun SharedTransitionScope.ScheduleScreen(
     navigateToHolidaysSettings: (String?) -> Unit,
     today: Jdn,
     now: Long,
+    modifier: Modifier = Modifier,
 ) {
     var baseJdn by remember { mutableStateOf(initiallySelectedDay) }
     val listState = rememberLazyListState(ITEMS_COUNT / 2, 0)
@@ -115,6 +116,7 @@ fun SharedTransitionScope.ScheduleScreen(
     }
 
     Scaffold(
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(

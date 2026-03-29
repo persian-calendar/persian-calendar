@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -28,6 +29,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.utils.preferences
 
+@SuppressLint("ComposeModifierMissing")
 @Composable
 fun ColumnScope.NotificationSettings() {
     val context = LocalContext.current

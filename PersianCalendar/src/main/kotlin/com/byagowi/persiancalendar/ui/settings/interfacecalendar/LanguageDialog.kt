@@ -32,7 +32,10 @@ import com.byagowi.persiancalendar.utils.saveLanguage
 import java.util.TimeZone
 
 @Composable
-fun LanguageDialog(onDismissRequest: () -> Unit) {
+fun LanguageDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val currentLanguage = language
     val context = LocalContext.current
     AppDialogWithLazyColumn(
@@ -41,6 +44,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
+        modifier = modifier,
     ) {
         val languages = Language.entries.let { languages ->
             if (TimeZone.getDefault().id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID))

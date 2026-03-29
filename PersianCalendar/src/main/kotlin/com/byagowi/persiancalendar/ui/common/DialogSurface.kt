@@ -7,11 +7,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 
 @Composable
-fun DialogSurface(content: @Composable () -> Unit) {
+fun DialogSurface(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
     SetupDialogBlur()
     val containerColor = AlertDialogDefaults.containerColor
     Surface(
@@ -20,6 +24,7 @@ fun DialogSurface(content: @Composable () -> Unit) {
         contentColor = contentColorFor(containerColor),
         tonalElevation = AlertDialogDefaults.TonalElevation,
         content = content,
+        modifier = modifier,
     )
 }
 

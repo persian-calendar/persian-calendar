@@ -35,9 +35,16 @@ import java.util.Date
 
 @Composable
 fun SharedTransitionScope.Times(
-    isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean,
+    isExpanded: Boolean,
+    prayTimes: PrayTimes,
+    now: Long,
+    isToday: Boolean,
+    modifier: Modifier = Modifier,
 ) {
-    AnimatedContent(isExpanded) { isExpandedState ->
+    AnimatedContent(
+        targetState = isExpanded,
+        modifier = modifier,
+    ) { isExpandedState ->
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,

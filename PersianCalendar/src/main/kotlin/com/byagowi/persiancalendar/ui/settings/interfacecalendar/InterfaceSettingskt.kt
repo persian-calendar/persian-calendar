@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
@@ -31,6 +32,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.preferences
 
+@SuppressLint("ComposeModifierMissing")
 @Composable
 fun ColumnScope.InterfaceSettings(destination: String? = null) {
     val context = LocalContext.current
@@ -50,13 +52,13 @@ fun ColumnScope.InterfaceSettings(destination: String? = null) {
                 title = stringResource(R.string.select_skin),
                 summary = themeDisplayName,
                 defaultOpen = destination == PREF_THEME,
-            ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
+            ) { onDismissRequest -> ThemeDialog(onDismissRequest = onDismissRequest) }
         }
     }
     SettingsClickable(
         title = stringResource(R.string.language),
         summary = language.nativeName,
-    ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
+    ) { onDismissRequest -> LanguageDialog(onDismissRequest = onDismissRequest) }
     AnimatedVisibility(language.isPersian) {
         SettingsSwitch(
             key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,

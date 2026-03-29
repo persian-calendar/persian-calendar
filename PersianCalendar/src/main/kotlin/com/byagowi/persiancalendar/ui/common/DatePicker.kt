@@ -25,17 +25,21 @@ fun DatePicker(
     today: Jdn,
     calendar: Calendar,
     pendingConfirms: SnapshotStateList<() -> Unit>,
-    jdn: Jdn,
-    setJdn: (Jdn) -> Unit,
+    value: Jdn,
+    modifier: Modifier = Modifier,
+    onValueChange: (Jdn) -> Unit,
 ) {
-    Crossfade(targetState = calendar) { calendarState ->
+    Crossfade(
+        modifier = modifier,
+        targetState = calendar,
+    ) { calendarState ->
         Row(modifier = Modifier.fillMaxWidth()) {
             DatePickerContent(
                 today = today,
                 calendar = calendarState,
                 pendingConfirms = pendingConfirms,
-                jdn = jdn,
-                setJdn = setJdn,
+                value = value,
+                onValueChange = onValueChange,
             )
         }
     }
@@ -46,11 +50,12 @@ private fun RowScope.DatePickerContent(
     today: Jdn,
     calendar: Calendar,
     pendingConfirms: SnapshotStateList<() -> Unit>,
-    jdn: Jdn,
-    setJdn: (Jdn) -> Unit,
+    value: Jdn,
+    modifier: Modifier = Modifier,
+    onValueChange: (Jdn) -> Unit,
 ) {
     val yearsLimit = 5000 // let's just don't care about accuracy of distant time
-    val date = remember(jdn.value, calendar) { jdn on calendar }
+    val date = remember(value.value, calendar) { value on calendar }
     val daysFormat = remember(calendar, date.year, date.month) {
         val monthStart = Jdn(calendar, date.year, date.month, 1);
         { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDay.title }
@@ -69,7 +74,7 @@ private fun RowScope.DatePickerContent(
     val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
     val view = LocalView.current
     NumberPicker(
-        modifier = Modifier.weight(1f),
+        modifier = modifier.weight(1f),
         label = daysFormat,
         range = 1..monthsLength,
         value = date.dayOfMonth,
@@ -78,7 +83,7 @@ private fun RowScope.DatePickerContent(
         onNextLabel = stringResource(R.string.next_x, stringResource(R.string.day)),
         pendingConfirms = pendingConfirms,
     ) {
-        setJdn(Jdn(calendar, date.year, date.month, it))
+        onValueChange(Jdn(calendar, date.year, date.month, it))
         view.performHapticFeedbackVirtualKey()
     }
     Spacer(Modifier.width(8.dp))
@@ -93,7 +98,7 @@ private fun RowScope.DatePickerContent(
         pendingConfirms = pendingConfirms,
     ) { month ->
         val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
-        setJdn(Jdn(calendar, date.year, month, day))
+        onValueChange(Jdn(calendar, date.year, month, day))
         view.performHapticFeedbackVirtualKey()
     }
     Spacer(Modifier.width(8.dp))
@@ -108,7 +113,7 @@ private fun RowScope.DatePickerContent(
     ) { year ->
         val month = date.month.coerceIn(1, calendar.getYearMonths(year))
         val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(year, month))
-        setJdn(Jdn(calendar, year, month, day))
+        onValueChange(Jdn(calendar, year, month, day))
         view.performHapticFeedbackVirtualKey()
     }
 }

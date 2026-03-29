@@ -73,8 +73,12 @@ import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun SharedTransitionScope.LicensesScreen(navigateUp: () -> Unit) {
+fun SharedTransitionScope.LicensesScreen(
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit,
+) {
     Scaffold(
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(

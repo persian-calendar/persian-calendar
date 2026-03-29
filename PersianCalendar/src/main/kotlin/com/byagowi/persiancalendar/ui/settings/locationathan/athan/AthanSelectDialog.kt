@@ -47,7 +47,10 @@ import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import java.io.File
 
 @Composable
-fun AthanSelectDialog(onDismissRequest: () -> Unit) {
+fun AthanSelectDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
 
     fun commonDialogCallback(uri: Uri?, action: (Uri) -> (Pair<String, Uri>?)) {
@@ -95,6 +98,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         title = { Text(stringResource(R.string.custom_athan)) },
+        modifier = modifier,
     ) {
         val resources = LocalResources.current
         remember<List<Pair<Int, () -> Unit>>> {

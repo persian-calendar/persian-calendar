@@ -80,7 +80,11 @@ private const val yearPages = 5000
 private enum class HeaderAction { DialogIcon, Reset, Confirm }
 
 @Composable
-fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
+fun MoonInScorpioDialog(
+    now: GregorianCalendar,
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val today = Jdn(now.toCivilDate())
     val currentYear = (today on mainCalendar).year
     val types = listOf(
@@ -98,6 +102,7 @@ fun MoonInScorpioDialog(now: GregorianCalendar, onDismissRequest: () -> Unit) {
     }
     val coroutineScope = rememberCoroutineScope()
     AppDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

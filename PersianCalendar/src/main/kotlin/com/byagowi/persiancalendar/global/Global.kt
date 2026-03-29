@@ -68,6 +68,7 @@ import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_CUSTOM_IMAGE_NAME
+import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -653,7 +654,11 @@ fun updateStoredPreference(context: Context) {
             ",",
         ).map(Calendar::valueOf)
         enabledCalendars_.value =
-            (listOf(mainCalendar) + otherCalendars).distinct().toImmutableList()
+            (listOf(mainCalendar) + otherCalendars).distinct().let {
+                val timesDismissed = preferences.getBoolean(PREF_DISMISSED_TIMES, false)
+                val notSetExplicitly = PREF_OTHER_CALENDARS_KEY !in preferences
+                if (language.isUserAbleToReadPersian && timesDismissed && notSetExplicitly && coordinates == null) (it - Calendar.ISLAMIC) else it
+            }.toImmutableList()
         secondaryCalendarEnabled_.value = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE,
         )

@@ -137,7 +137,11 @@ private fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<D
 }
 
 @Composable
-fun HoroscopeDialog(timeInMillis: Long = System.currentTimeMillis(), onDismissRequest: () -> Unit) {
+fun HoroscopeDialog(
+    modifier: Modifier = Modifier,
+    timeInMillis: Long = System.currentTimeMillis(),
+    onDismissRequest: () -> Unit,
+) {
     val time = Time.fromMillisecondsSince1970(timeInMillis)
     AppDialog(onDismissRequest = onDismissRequest) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
@@ -289,8 +293,15 @@ private fun EasternHoroscopePattern(
 // See for example: https://w.wiki/E9uz
 // See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
-fun YearHoroscopeDialog(initialPersianYear: Int, onDismissRequest: () -> Unit) {
-    AppDialog(onDismissRequest = onDismissRequest) {
+fun YearHoroscopeDialog(
+    initialPersianYear: Int,
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+    ) {
         val state = rememberPagerState(yearPages / 2) { yearPages }
         val animationProgress = remember { Animatable(0f) }
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }

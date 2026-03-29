@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +14,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,10 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.hideFromAccessibility
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -50,11 +44,14 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
-fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () -> Unit) {
+fun HolidaysTypesDialog(
+    modifier: Modifier = Modifier,
+    destinationItem: String? = null,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     val enabledTypes = rememberSaveable {
         EventsRepository.getEnabledTypes(context.preferences, language).toMutableStateList()
@@ -76,6 +73,7 @@ fun HolidaysTypesDialog(destinationItem: String? = null, onDismissRequest: () ->
                 },
             ) { Text(stringResource(R.string.accept)) }
         },
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
     ) {
         CompositionLocalProvider(

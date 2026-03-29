@@ -79,7 +79,10 @@ import java.io.File
 import kotlin.random.Random
 
 @Composable
-fun ThemeDialog(onDismissRequest: () -> Unit) {
+fun ThemeDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     var showMore by rememberSaveable { mutableStateOf(false) }
     val themesToCheck = run {
@@ -99,6 +102,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 TextButton(onClick = { showMore = true }) { Text(stringResource(R.string.more)) }
             }
         },
+        modifier = modifier,
     ) {
         val invisible = Modifier
             .alpha(0f)

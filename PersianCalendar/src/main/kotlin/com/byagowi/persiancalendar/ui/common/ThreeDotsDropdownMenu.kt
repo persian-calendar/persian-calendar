@@ -25,10 +25,11 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
 @Composable
 fun SharedTransitionScope.ThreeDotsDropdownMenu(
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.(onDismissRequest: () -> Unit) -> Unit,
 ) {
     Box(
-        Modifier.sharedElement(
+        modifier.sharedElement(
             rememberSharedContentState(key = SHARED_CONTENT_KEY_THREE_DOTS_MENU),
             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,

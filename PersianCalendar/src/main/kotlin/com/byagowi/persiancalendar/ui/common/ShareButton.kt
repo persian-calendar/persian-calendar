@@ -12,11 +12,14 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_SHARE_BUTTON
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
 @Composable
-fun SharedTransitionScope.ShareActionButton(action: () -> Unit) {
+fun SharedTransitionScope.ShareActionButton(
+    modifier: Modifier = Modifier,
+    action: () -> Unit,
+) {
     AppIconButton(
         icon = Icons.Default.Share,
         title = stringResource(R.string.share),
-        modifier = Modifier.sharedElement(
+        modifier = modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_SHARE_BUTTON),
             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,

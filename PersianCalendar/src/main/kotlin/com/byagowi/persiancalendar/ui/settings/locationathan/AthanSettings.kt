@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -82,6 +83,7 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 import kotlinx.collections.immutable.toImmutableList
 
+@SuppressLint("ComposeModifierMissing")
 @Composable
 fun ColumnScope.AthanSettings(destination: String?) {
     val context = LocalContext.current
@@ -121,9 +123,9 @@ fun ColumnScope.AthanSettings(destination: String?) {
     }
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(
-            stringResource(R.string.athan_gap),
-            stringResource(R.string.athan_gap_summary),
-        ) { onDismissRequest -> AthanGapDialog(onDismissRequest) }
+            title = stringResource(R.string.athan_gap),
+            summary = stringResource(R.string.athan_gap_summary),
+        ) { onDismissRequest -> AthanGapDialog(onDismissRequest = onDismissRequest) }
     }
 
     @Composable
@@ -138,7 +140,7 @@ fun ColumnScope.AthanSettings(destination: String?) {
         }
         if (result) return true
         val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission(),
+            contract = ActivityResultContracts.RequestPermission(),
         ) { isGranted ->
             if (!isGranted) {
                 Toast.makeText(
@@ -165,25 +167,26 @@ fun ColumnScope.AthanSettings(destination: String?) {
 
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(
-            stringResource(R.string.athan_alarm),
-            stringResource(R.string.athan_alarm_summary),
+            title = stringResource(R.string.athan_alarm),
+            summary = stringResource(R.string.athan_alarm_summary),
             defaultOpen = destination == PREF_ATHAN_ALARM,
         ) { onDismissRequest ->
             if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
-                PrayerSelectDialog(onDismissRequest)
+                PrayerSelectDialog(onDismissRequest = onDismissRequest)
             }
         }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(
-            stringResource(R.string.custom_athan),
-            athanSoundName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.default_athan),
-        ) { onDismissRequest -> AthanSelectDialog(onDismissRequest) }
+            title = stringResource(R.string.custom_athan),
+            summary = athanSoundName?.takeIf { it.isNotBlank() }
+                ?: stringResource(R.string.default_athan),
+        ) { onDismissRequest -> AthanSelectDialog(onDismissRequest = onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
             if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
-                PrayerSelectPreviewDialog(onDismissRequest)
+                PrayerSelectPreviewDialog(onDismissRequest = onDismissRequest)
             }
         }
     }
@@ -224,8 +227,9 @@ fun ColumnScope.AthanSettings(destination: String?) {
     }
     AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
         SettingsClickable(
-            stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary),
-        ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }
+            title = stringResource(R.string.athan_volume),
+            summary = stringResource(R.string.athan_volume_summary),
+        ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest = onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
@@ -243,7 +247,10 @@ fun ColumnScope.AthanSettings(destination: String?) {
         var midnightSummary by remember(resources) {
             mutableStateOf(getMidnightMethodPreferenceSummary(context, resources))
         }
-        SettingsClickable(stringResource(R.string.midnight), midnightSummary) { onDismissRequest ->
+        SettingsClickable(
+            title = stringResource(R.string.midnight),
+            summary = midnightSummary,
+        ) { onDismissRequest ->
             AppDialog(
                 title = { Text(stringResource(R.string.midnight)) },
                 onDismissRequest = onDismissRequest,

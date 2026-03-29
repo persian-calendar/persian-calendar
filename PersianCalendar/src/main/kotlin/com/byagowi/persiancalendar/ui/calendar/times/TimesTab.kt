@@ -79,7 +79,7 @@ fun SharedTransitionScope.TimesTab(
     val prayTimes = coordinates.calculatePrayTimes(selectedDay.toGregorianCalendar())
 
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .clickable(
                 onClickLabel = stringResource(R.string.more),
@@ -88,7 +88,13 @@ fun SharedTransitionScope.TimesTab(
             .then(modifier),
     ) {
         val isToday = selectedDay == today
-        AstronomicalOverview(selectedDay, prayTimes, now, isToday, navigateToAstronomy)
+        AstronomicalOverview(
+            selectedDay = selectedDay,
+            prayTimes = prayTimes,
+            now = now,
+            isToday = isToday,
+            navigateToAstronomy = navigateToAstronomy,
+        )
         Spacer(Modifier.height(4.dp))
         Times(isExpanded, prayTimes, now, isToday)
         Spacer(Modifier.height(4.dp))
@@ -154,11 +160,12 @@ private fun SharedTransitionScope.AstronomicalOverview(
     prayTimes: PrayTimes,
     now: Long,
     isToday: Boolean,
+    modifier: Modifier = Modifier,
     navigateToAstronomy: (Jdn) -> Unit,
 ) {
     Crossfade(
         targetState = isToday,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(100.dp),
     ) { state ->

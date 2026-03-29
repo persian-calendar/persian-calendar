@@ -43,6 +43,7 @@ import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
@@ -56,6 +57,7 @@ import com.byagowi.persiancalendar.utils.monthName
 fun SharedTransitionScope.MonthScreen(
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
+    modifier: Modifier = Modifier,
 ) {
     val initialItem = ITEMS_COUNT / 2
     val state = rememberLazyListState(initialItem, 0)
@@ -69,10 +71,10 @@ fun SharedTransitionScope.MonthScreen(
     val focusedDate = focusedJdn on mainCalendar
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     Scaffold(
-        modifier = Modifier.detectSwipe {
+        modifier = modifier.detectSwipe {
             { isUp ->
                 if (!isLandscape && isUp) when (preferredSwipeDownAction) {
-//                    SwipeDownAction.MonthView -> navigateUp()
+                    SwipeDownAction.MonthView -> navigateUp()
                     else -> {}
                 }
             }

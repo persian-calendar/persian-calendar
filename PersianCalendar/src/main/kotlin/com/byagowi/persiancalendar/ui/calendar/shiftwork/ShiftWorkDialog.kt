@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -79,8 +80,15 @@ import com.byagowi.persiancalendar.utils.putJdn
 import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
-fun ShiftWorkDialog(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
-    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(onDismissRequest = onDismissRequest) {
+fun ShiftWorkDialog(
+    selectedJdn: Jdn,
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
+    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+    ) {
         DialogSurface {
             Column {
                 Spacer(Modifier.height(16.dp))
@@ -97,6 +105,7 @@ fun ShiftWorkDialog(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
     }
 }
 
+@SuppressLint("ComposeModifierMissing")
 @Composable
 @VisibleForTesting
 fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () -> Unit) {

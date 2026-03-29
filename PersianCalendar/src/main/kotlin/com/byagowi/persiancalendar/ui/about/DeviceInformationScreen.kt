@@ -106,9 +106,12 @@ import java.util.Locale
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun SharedTransitionScope.DeviceInformationScreen(navigateUp: () -> Unit) {
+fun SharedTransitionScope.DeviceInformationScreen(
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit,
+) {
     val scrollBehavior = exitUntilCollapsedScrollBehavior()
-    Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+    Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
         val primaryColor = MaterialTheme.colorScheme.primary
         val activity = LocalActivity.current
@@ -486,7 +489,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
         activity.window?.windowManager?.isCrossWindowBlurEnabled.toString(),
     ),
 ) else emptyList()) + (runCatching {
-    // Quick Kung-fu to create a gl context, https://stackoverflow.com/a/27092070
+    // Quick kung fu to create a gl context, https://stackoverflow.com/a/27092070
     val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
     val versions = IntArray(2)
     EGL14.eglInitialize(display, versions, 0, versions, 1)

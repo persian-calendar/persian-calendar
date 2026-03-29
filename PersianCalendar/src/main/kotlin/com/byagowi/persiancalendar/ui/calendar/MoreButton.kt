@@ -22,8 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MoreButton(title: String, action: () -> Unit) {
+fun MoreButton(
+    title: String,
+    modifier: Modifier = Modifier,
+    action: () -> Unit,
+) {
     @OptIn(ExperimentalMaterial3Api::class) TooltipBox(
+        modifier = modifier,
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(title) } },
         state = rememberTooltipState(),

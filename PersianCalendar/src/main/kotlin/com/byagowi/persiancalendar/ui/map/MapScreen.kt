@@ -111,6 +111,7 @@ fun SharedTransitionScope.MapScreen(
     fromSettings: Boolean,
     initialTime: Long,
     today: Jdn,
+    modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
     val mapDraw = remember(resources) { MapDraw(resources) }
@@ -173,7 +174,7 @@ fun SharedTransitionScope.MapScreen(
 
     val context = LocalContext.current
     var formattedTime by remember { mutableStateOf("") }
-    Box {
+    Box(modifier = modifier) {
         Column {
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
             Spacer(Modifier.height((16 + menuHeight + 16).dp))
@@ -451,8 +452,10 @@ private fun SharedTransitionScope.TimeArrow(
     mapType: MapType,
     timeInMillis: MutableLongState,
     isPrevious: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     TimeArrow(
+        modifier = modifier,
         onClick = {
             timeInMillis.longValue += run {
                 val amount = if (isPrevious) -1 else 1

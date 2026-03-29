@@ -124,6 +124,7 @@ fun SharedTransitionScope.CompassScreen(
     noBackStackAction: (() -> Unit)?,
     today: Jdn,
     now: Long,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
@@ -291,6 +292,7 @@ fun SharedTransitionScope.CompassScreen(
                 },
             )
         },
+        modifier = modifier,
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface {

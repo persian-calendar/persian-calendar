@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import androidx.compose.animation.AnimatedVisibility
@@ -105,6 +106,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
 
+@SuppressLint("ComposeModifierMissing")
 @Composable
 fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?) {
     val context = LocalContext.current
@@ -113,10 +115,11 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
     ) {
         var shownOnce by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
-            stringResource(R.string.events), stringResource(R.string.events_summary),
+            title = stringResource(R.string.events),
+            summary = stringResource(R.string.events_summary),
             defaultOpen = destination == PREF_HOLIDAY_TYPES && destinationItem != PREF_SHOW_DEVICE_CALENDAR_EVENTS,
         ) { onDismissRequest ->
-            HolidaysTypesDialog(destinationItem.takeIf { !shownOnce }) {
+            HolidaysTypesDialog(destinationItem = destinationItem.takeIf { !shownOnce }) {
                 shownOnce = true
                 onDismissRequest()
             }
@@ -153,9 +156,9 @@ fun ColumnScope.CalendarSettings(destination: String?, destinationItem: String?)
         if (showPermissionDialog) AskForCalendarPermissionDialog { showPermissionDialog = false }
     }
     SettingsClickable(
-        stringResource(R.string.calendars_priority),
-        stringResource(R.string.calendars_priority_summary),
-    ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
+        title = stringResource(R.string.calendars_priority),
+        summary = stringResource(R.string.calendars_priority_summary),
+    ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest = onDismissRequest) }
     WeekOfYearSetting()
     run {
         val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled

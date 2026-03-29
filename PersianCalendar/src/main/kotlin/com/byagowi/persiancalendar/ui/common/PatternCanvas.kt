@@ -8,6 +8,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +33,10 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 @Composable
-fun PatternCanvas(patternDrawable: PatternDrawable) {
+fun PatternCanvas(
+    patternDrawable: PatternDrawable,
+    modifier: Modifier = Modifier,
+) {
     val direction = remember { listOf(1, -1).random() }
     val infiniteTransition = rememberInfiniteTransition()
     val animationSpec = infiniteRepeatable<Float>(
@@ -41,7 +45,7 @@ fun PatternCanvas(patternDrawable: PatternDrawable) {
     val rotation by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 360f, animationSpec = animationSpec,
     )
-    androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(modifier = modifier.fillMaxSize()) {
         drawIntoCanvas { patternDrawable.draw(it, rotation * direction) }
     }
 }

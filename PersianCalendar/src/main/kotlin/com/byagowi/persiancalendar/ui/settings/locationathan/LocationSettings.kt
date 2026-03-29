@@ -22,19 +22,25 @@ fun ColumnScope.LocationSettings(navigateToMap: (() -> Unit)? = null) {
     SettingsClickable(
         title = stringResource(R.string.gps_location),
         summary = stringResource(R.string.gps_location_help),
-    ) { onDismissRequest -> GPSLocationDialog(onDismissRequest) }
+    ) { onDismissRequest -> GPSLocationDialog(onDismissRequest = onDismissRequest) }
     SettingsClickable(
         title = stringResource(R.string.location),
         summary = stringResource(R.string.location_help),
-    ) { onDismissRequest -> LocationDialog(onDismissRequest) }
+    ) { onDismissRequest -> LocationDialog(onDismissRequest = onDismissRequest) }
 
-    SettingsClickable(stringResource(R.string.coordinates), cityName) { onDismissRequest ->
-        CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
+    SettingsClickable(
+        title = stringResource(R.string.coordinates),
+        summary = cityName,
+    ) { onDismissRequest ->
+        CoordinatesDialog(
+            navigateToMap = navigateToMap,
+            onDismissRequest = onDismissRequest,
+        )
     }
     AnimatedVisibility(coordinates != null) {
         val context = LocalContext.current
         SettingsClickable(
-            when {
+            title = when {
                 language.isPersianOrDari -> "عدم نمایش اوقات"
                 else -> "Don't display times"
             },

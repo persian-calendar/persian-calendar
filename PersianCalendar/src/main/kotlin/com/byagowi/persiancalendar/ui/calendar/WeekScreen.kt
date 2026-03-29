@@ -171,6 +171,7 @@ fun SharedTransitionScope.WeekScreen(
     navigateToHolidaysSettings: (String?) -> Unit,
     today: Jdn,
     now: Long,
+    modifier: Modifier = Modifier,
 ) {
     var selectedDay by rememberSaveable { mutableStateOf(initiallySelectedDay) }
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
@@ -233,7 +234,11 @@ fun SharedTransitionScope.WeekScreen(
         }
     }
 
-    AnimatedContent(isWeekView, transitionSpec = noTransitionSpec) { isWeekViewState ->
+    AnimatedContent(
+        isWeekView,
+        transitionSpec = noTransitionSpec,
+        modifier = modifier,
+    ) { isWeekViewState ->
         Scaffold(
             containerColor = Color.Transparent,
             snackbarHost = { SnackbarHost(snackbarHostState) },

@@ -48,11 +48,13 @@ fun DatePickerDialog(
     initialJdn: Jdn,
     onDismissRequest: () -> Unit,
     today: Jdn,
+    modifier: Modifier = Modifier,
     onSuccess: (jdn: Jdn) -> Unit,
 ) {
     var jdn by rememberSaveable { mutableStateOf(initialJdn) }
     val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     AppDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Row {

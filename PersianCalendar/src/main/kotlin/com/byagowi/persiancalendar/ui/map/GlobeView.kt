@@ -46,7 +46,11 @@ import kotlinx.coroutines.launch
 import kotlin.math.PI
 
 @Composable
-fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
+fun GlobeView(
+    bitmap: Bitmap,
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val renderer = remember {
         GLRenderer(onSurfaceCreated = { it.loadTexture(bitmap) }).also {
             it.fragmentShader = globeFragmentShader
@@ -85,7 +89,7 @@ fun GlobeView(bitmap: Bitmap, onDismissRequest: () -> Unit) {
             bitmap.let {}
             if (renderer.isSurfaceCreated) it.queueEvent { renderer.loadTexture(bitmap) }
         },
-        modifier = Modifier
+        modifier = modifier
             .pointerInput(Unit) {
                 var lastPointerId: PointerId? = null
                 val tracker = VelocityTracker()

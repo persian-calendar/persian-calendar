@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @Composable
 fun SharedTransitionScope.ScreenSurface(
+    modifier: Modifier = Modifier,
     shape: CornerBasedShape = materialCornerExtraLargeTop(),
     // Remove when https://issuetracker.google.com/issues/376709945 is resolved
     // Actually this can be simplified into a simple Box inside a Surface when that resolved
@@ -41,6 +42,7 @@ fun SharedTransitionScope.ScreenSurface(
     content: @Composable () -> Unit,
 ) {
     Layout(
+        modifier = modifier,
         content = {
             // Parent
             run {

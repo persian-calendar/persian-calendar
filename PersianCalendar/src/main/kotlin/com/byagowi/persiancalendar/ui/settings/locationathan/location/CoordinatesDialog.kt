@@ -46,6 +46,7 @@ import kotlin.math.abs
 
 @Composable
 fun CoordinatesDialog(
+    modifier: Modifier = Modifier,
     navigateToMap: (() -> Unit)? = null,
     inputCoordinates: Coordinates? = null,
     notifyChange: (Coordinates) -> Unit = {},
@@ -119,6 +120,7 @@ fun CoordinatesDialog(
             ) { Text(stringResource(R.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         fields.zip(state.withIndex()) { (stringId), (i, fieldState) ->
             val uiDirection = LocalLayoutDirection.current

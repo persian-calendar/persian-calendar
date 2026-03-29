@@ -92,7 +92,9 @@ fun LazyListScope.settingsSection(
     subtitle: @Composable () -> String? = { null },
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    if (disableStickyHeader) item { SettingsSectionLayout(title, subtitle) } else stickyHeader {
+    if (disableStickyHeader) item {
+        SettingsSectionLayout(title = title, subtitle = subtitle)
+    } else stickyHeader {
         Box(
             if (canScrollBackward) Modifier.background(
                 Brush.verticalGradient(
@@ -102,16 +104,20 @@ fun LazyListScope.settingsSection(
                     1f to Color.Transparent,
                 ),
             ) else Modifier,
-        ) { SettingsSectionLayout(title, subtitle) }
+        ) { SettingsSectionLayout(title = title, subtitle = subtitle) }
     }
     item { Column { content() } }
 }
 
 @SuppressLint("ComposableLambdaParameterNaming")
 @Composable
-fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> String? = { null }) {
+fun SettingsSectionLayout(
+    @StringRes title: Int,
+    modifier: Modifier = Modifier,
+    subtitle: @Composable () -> String? = { null },
+) {
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -148,13 +154,14 @@ fun SettingsSectionLayout(@StringRes title: Int, subtitle: @Composable () -> Str
 @Composable
 fun SettingsClickable(
     title: String,
+    modifier: Modifier = Modifier,
     summary: String? = null,
     defaultOpen: Boolean = false,
     dialog: @Composable (onDismissRequest: () -> Unit) -> Unit,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(defaultOpen) }
     SettingsLayout(
-        modifier = Modifier
+        modifier = modifier
             .clickable { showDialog = true }
             .highlightItem(defaultOpen, showDialog),
         title = title,
@@ -171,6 +178,7 @@ fun SettingsColor(
     key: String,
     isBackgroundPick: Boolean,
     title: String,
+    modifier: Modifier = Modifier,
     summary: String? = null,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
@@ -185,7 +193,7 @@ fun SettingsColor(
     SettingsLayout(
         title = title,
         summary = summary,
-        modifier = Modifier
+        modifier = modifier
             .clickable { showDialog = true }
             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
             .clearAndSetSemantics {},
@@ -219,10 +227,12 @@ fun SettingsSingleSelect(
     persistedValue: String,
     dialogTitleResId: Int,
     title: String,
+    modifier: Modifier = Modifier,
     summaryResId: Int? = null,
 ) {
     val context = LocalContext.current
     SettingsClickable(
+        modifier = modifier,
         title = title,
         summary = summaryResId?.let { stringResource(it) } ?: entries[
             entryValues.indexOf(
@@ -275,10 +285,12 @@ fun SettingsMultiSelect(
     persistedSet: ImmutableSet<String>,
     dialogTitleResId: Int,
     title: String,
+    modifier: Modifier = Modifier,
     summary: String? = null,
 ) {
     val context = LocalContext.current
     SettingsClickable(
+        modifier = modifier,
         title = title,
         summary = summary ?: persistedSet.map(entryValues::indexOf).sorted()
             .joinToString(spacedComma) { entries[it] },
@@ -335,6 +347,7 @@ fun SettingsSwitch(
     key: String,
     value: Boolean,
     title: String,
+    modifier: Modifier = Modifier,
     summary: String? = null,
     extraWidget: (@Composable () -> Unit)? = null,
     onBeforeToggle: (Boolean) -> Boolean = { it },
@@ -345,7 +358,7 @@ fun SettingsSwitch(
         title = title,
         summary = summary,
         extraWidget = extraWidget,
-        modifier = Modifier.toggleable(value, role = Role.Switch) { newValue ->
+        modifier = modifier.toggleable(value, role = Role.Switch) { newValue ->
             hapticFeedback.performLongPress()
             val finalValue = onBeforeToggle(newValue)
             if (value != finalValue) context.preferences.edit { putBoolean(key, finalValue) }
@@ -354,8 +367,12 @@ fun SettingsSwitch(
 }
 
 @Composable
-fun SettingsHelp(title: String) {
+fun SettingsHelp(
+    title: String,
+    modifier: Modifier = Modifier,
+) {
     SettingsLayout(
+        modifier = modifier,
         title = title,
         summary = null,
         widget = {
@@ -425,12 +442,13 @@ fun SettingsSlider(
     title: String,
     value: Float,
     defaultValue: Float,
+    modifier: Modifier = Modifier,
     visibleScale: Float = 100f,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     onValueChange: (Float) -> Unit,
 ) {
     Column(
-        Modifier
+        modifier
             .padding(top = 16.dp, start = 24.dp, end = 24.dp)
             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
             .clearAndSetSemantics {},

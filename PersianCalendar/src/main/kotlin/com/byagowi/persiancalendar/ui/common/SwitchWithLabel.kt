@@ -21,13 +21,14 @@ import com.byagowi.persiancalendar.ui.utils.performLongPress
 fun SwitchWithLabel(
     label: String,
     checked: Boolean,
+    modifier: Modifier = Modifier,
     useUncheckedBorderColorForChecked: Boolean = false,
     labelBeforeSwitch: Boolean = false,
     onValueChange: (Boolean) -> Unit,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     Row(
-        Modifier.toggleable(
+        modifier.toggleable(
             value = checked,
             indication = ripple(bounded = false),
             interactionSource = null,

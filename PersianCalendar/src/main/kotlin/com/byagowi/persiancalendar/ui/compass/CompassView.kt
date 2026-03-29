@@ -60,6 +60,7 @@ fun Compass(
     qiblaHeading: EarthPosition.EarthHeading?,
     time: GregorianCalendar,
     angle: FloatState,
+    modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
     val compassView = remember { CompassView(resources) }
@@ -83,7 +84,7 @@ fun Compass(
     compassView.setFont(resolveAndroidCustomTypeface())
     compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
     compassView.setTime(time)
-    BoxWithConstraints(Modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
+    BoxWithConstraints(modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
         val width = this.maxWidth
         val height = this.maxHeight
         with(LocalDensity.current) { compassView.updateSize(width.toPx() / 2f, height.toPx() / 2f) }

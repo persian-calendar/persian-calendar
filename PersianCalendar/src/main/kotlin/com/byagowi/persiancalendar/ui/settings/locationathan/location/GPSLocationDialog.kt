@@ -92,7 +92,10 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
 }
 
 @Composable
-fun GPSLocationDialog(onDismissRequest: () -> Unit) {
+fun GPSLocationDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     val resources = LocalResources.current
     var isGranted by remember { mutableStateOf<Boolean?>(null) }
@@ -125,25 +128,23 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                 }
             }.onFailure(logException)
         }
-        if (showPhoneSettingsDialog) {
-            return AppDialog(
-                onDismissRequest = onDismissRequest,
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            onDismissRequest()
-                            runCatching {
-                                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }.onFailure(logException)
-                        },
-                    ) { Text(stringResource(R.string.accept)) }
-                },
-            ) {
-                Text(
-                    stringResource(R.string.gps_internet_description),
-                    modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
-                )
-            }
+        if (showPhoneSettingsDialog) return AppDialog(
+            onDismissRequest = onDismissRequest,
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDismissRequest()
+                        runCatching {
+                            context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                        }.onFailure(logException)
+                    },
+                ) { Text(stringResource(R.string.accept)) }
+            },
+        ) {
+            Text(
+                stringResource(R.string.gps_internet_description),
+                modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
+            )
         }
     }
 
@@ -206,6 +207,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     }
 
     AppDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         dismissButton = coordinates?.run {
             {

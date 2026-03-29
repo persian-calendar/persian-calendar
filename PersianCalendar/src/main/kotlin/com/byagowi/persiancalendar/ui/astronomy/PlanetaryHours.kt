@@ -144,11 +144,15 @@ fun getDaySplits(
 @Composable
 fun PlanetaryHoursDialog(
     coordinates: Coordinates,
+    modifier: Modifier = Modifier,
     now: Long = System.currentTimeMillis(),
     isToday: Boolean = true,
     onDismissRequest: () -> Unit,
 ) {
-    AppDialog(onDismissRequest = onDismissRequest) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+    ) {
         Text(
             formatDate(
                 Jdn(

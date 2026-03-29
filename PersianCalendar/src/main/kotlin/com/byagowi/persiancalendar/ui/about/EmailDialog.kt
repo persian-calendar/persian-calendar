@@ -36,7 +36,10 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun EmailDialog(onDismissRequest: () -> Unit) {
+fun EmailDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     var firstPass by rememberSaveable {
         mutableStateOf(eventsRepository.iranOthers || language.isUserAbleToReadPersian)
     }
@@ -57,6 +60,7 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         title = { Text(stringResource(R.string.about_email_sum)) },
+        modifier = modifier,
     ) {
         TextField(
             value = message,
@@ -76,11 +80,16 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun NoteOnAppointments(onDismissRequest: () -> Unit, nextStep: (() -> Unit)? = null) {
+fun NoteOnAppointments(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    nextStep: (() -> Unit)? = null,
+) {
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
     ) {
         AppDialog(
+            modifier = modifier,
             confirmButton = { TextButton(onClick = onDismissRequest) { Text("متوجه شدم") } },
             neutralButton = { if (nextStep != null) TextButton(onClick = nextStep) { Text("سایر امکانات") } },
             onDismissRequest = onDismissRequest,
@@ -114,16 +123,19 @@ fun NoteOnAppointments(onDismissRequest: () -> Unit, nextStep: (() -> Unit)? = n
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(all = 16.dp),
             )
-            EnableInDeviceCalendar(onDismissRequest)
+            EnableInDeviceCalendar(onDismissRequest = onDismissRequest)
         }
     }
 }
 
 @Composable
-fun ColumnScope.EnableInDeviceCalendar(onDismissRequest: () -> Unit) {
+fun ColumnScope.EnableInDeviceCalendar(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val uriHandler = LocalUriHandler.current
     FilledTonalButton(
-        modifier = Modifier
+        modifier = modifier
             .align(Alignment.CenterHorizontally)
             .fillMaxWidth(.7f),
         onClick = {

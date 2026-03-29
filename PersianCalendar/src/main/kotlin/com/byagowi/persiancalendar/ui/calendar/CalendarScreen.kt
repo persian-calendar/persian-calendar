@@ -251,6 +251,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToWeek: (Jdn) -> Unit,
     today: Jdn,
     now: Long,
+    modifier: Modifier = Modifier,
 ) {
     var selectedDay by rememberSaveable { mutableStateOf(today) }
     var isHighlighted by rememberSaveable { mutableStateOf(false) }
@@ -332,7 +333,7 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     Scaffold(
-        modifier = Modifier.onKeyEvent { keyEvent ->
+        modifier = modifier.onKeyEvent { keyEvent ->
             if (!isYearView && keyEvent.type == KeyEventType.KeyDown) {
                 when (keyEvent.key) {
                     Key.W -> {
@@ -537,7 +538,7 @@ fun SharedTransitionScope.CalendarScreen(
                             )
                         }
                         ScreenSurface(
-                            materialCornerExtraLargeNoBottomEnd(),
+                            shape = materialCornerExtraLargeNoBottomEnd(),
                             drawBehindSurface = false,
                         ) {
                             Details(

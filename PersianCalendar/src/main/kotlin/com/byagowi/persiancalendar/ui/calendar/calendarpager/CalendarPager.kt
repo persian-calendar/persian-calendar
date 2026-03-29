@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -34,6 +35,7 @@ fun CalendarPager(
     today: Jdn,
     suggestedPagerSize: DpSize,
     navigateToWeek: (Jdn) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val daysTable = daysTable(
@@ -56,7 +58,11 @@ fun CalendarPager(
     )
 
     val context = LocalContext.current
-    HorizontalPager(state = calendarPagerState, verticalAlignment = Alignment.Top) { page ->
+    HorizontalPager(
+        state = calendarPagerState,
+        verticalAlignment = Alignment.Top,
+        modifier = modifier,
+    ) { page ->
         val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
         val monthStartJdn = Jdn(monthStartDate)
         val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {

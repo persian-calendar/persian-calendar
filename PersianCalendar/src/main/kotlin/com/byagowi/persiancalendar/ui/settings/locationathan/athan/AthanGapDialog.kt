@@ -26,7 +26,10 @@ import com.byagowi.persiancalendar.utils.preferences
 import kotlin.math.roundToInt
 
 @Composable
-fun AthanGapDialog(onDismissRequest: () -> Unit) {
+fun AthanGapDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val context = LocalContext.current
     var minutes by rememberSaveable {
         mutableStateOf(
@@ -37,6 +40,7 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
         )
     }
     AppDialog(
+        modifier = modifier,
         title = { Text(stringResource(R.string.athan_gap_summary)) },
         onDismissRequest = onDismissRequest,
         confirmButton = {

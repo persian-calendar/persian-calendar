@@ -35,16 +35,21 @@ fun SharedTransitionScope.NavigationNavigateUpIcon(navigateUp: () -> Unit) =
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SharedTransitionScope.NavigationMenuArrow(fraction: Float, action: () -> Unit) {
+fun SharedTransitionScope.NavigationMenuArrow(
+    fraction: Float,
+    modifier: Modifier = Modifier,
+    action: () -> Unit,
+) {
     val title =
         stringResource(if (fraction == 0f) R.string.open_navigation_rail else R.string.navigate_up)
     TooltipBox(
+        modifier = modifier,
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = { PlainTooltip { Text(title) } },
         state = rememberTooltipState(),
     ) {
         IconButton(onClick = dropUnlessStarted(block = action)) {
-            val modifier = Modifier
+            val iconModifier = Modifier
                 .semantics { this.contentDescription = title }
                 .sharedElement(
                     sharedContentState = rememberSharedContentState(
@@ -55,9 +60,9 @@ fun SharedTransitionScope.NavigationMenuArrow(fraction: Float, action: () -> Uni
                     boundsTransform = appBoundsTransform,
                 )
             when (fraction) {
-                0f -> Icon(imageVector = Icons.Default.Menu, null, modifier)
-                1f -> Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, null, modifier)
-                else -> DrawerArrowDrawable(fraction = fraction, modifier = modifier)
+                0f -> Icon(imageVector = Icons.Default.Menu, null, iconModifier)
+                1f -> Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, null, iconModifier)
+                else -> DrawerArrowDrawable(fraction = fraction, modifier = iconModifier)
             }
         }
     }
