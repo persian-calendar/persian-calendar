@@ -456,6 +456,7 @@ private fun QrCode(
     fun Qr() = Crossfade(targetState = input) { text ->
         QrView(text, onShareActionChange = onShareActionChange)
     }
+
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         Column(modifier = Modifier.weight(1f)) {

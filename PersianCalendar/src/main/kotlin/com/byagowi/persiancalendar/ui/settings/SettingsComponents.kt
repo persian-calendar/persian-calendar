@@ -394,9 +394,8 @@ fun SettingsLayout(
     widget: (@Composable () -> Unit)? = null,
 ) {
     Box(
-        Modifier
+        modifier
             .fillMaxWidth()
-            .then(modifier)
             .padding(horizontal = 8.dp),
     ) {
         val endPadding =

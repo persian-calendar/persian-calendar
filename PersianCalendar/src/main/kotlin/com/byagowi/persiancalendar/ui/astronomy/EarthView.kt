@@ -171,7 +171,7 @@ fun EarthView(
             }
         }
     }
-    Canvas(modifier = pointerModifier.then(modifier)) {
+    Canvas(modifier = modifier.then(pointerModifier)) {
         val radius = this.center.x
         val unit = radius / 140
         run {

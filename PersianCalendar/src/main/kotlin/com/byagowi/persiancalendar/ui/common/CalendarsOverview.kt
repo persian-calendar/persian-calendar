@@ -544,7 +544,8 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier.clip(shape = MaterialTheme.shapes.small)
+                    Modifier
+                        .clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )

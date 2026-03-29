@@ -861,7 +861,6 @@ private fun SharedTransitionScope.Details(
                 Pair(stringResource(R.string.times)) @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
-                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                         navigateToAstronomy = navigateToAstronomy,

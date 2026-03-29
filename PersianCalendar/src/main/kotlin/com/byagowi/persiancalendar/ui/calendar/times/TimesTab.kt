@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -85,7 +86,7 @@ fun SharedTransitionScope.TimesTab(
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
             )
-            .then(modifier),
+            .padding(top = 4.dp, bottom = 8.dp),
     ) {
         val isToday = selectedDay == today
         AstronomicalOverview(

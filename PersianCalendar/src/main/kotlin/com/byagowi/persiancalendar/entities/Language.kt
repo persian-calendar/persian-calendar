@@ -232,6 +232,7 @@ enum class Language(val code: String, val nativeName: String) {
             prefersPersianCalendar -> persistentListOf(
                 Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
             )
+
             else -> persistentListOf(Calendar.GREGORIAN)
         }
 

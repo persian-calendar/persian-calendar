@@ -143,7 +143,10 @@ fun HoroscopeDialog(
     onDismissRequest: () -> Unit,
 ) {
     val time = Time.fromMillisecondsSince1970(timeInMillis)
-    AppDialog(onDismissRequest = onDismissRequest) {
+    AppDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+    ) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }

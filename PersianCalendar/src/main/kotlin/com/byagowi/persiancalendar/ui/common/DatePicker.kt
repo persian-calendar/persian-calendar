@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
@@ -33,20 +32,18 @@ fun DatePicker(
         modifier = modifier,
         targetState = calendar,
     ) { calendarState ->
-        Row(modifier = Modifier.fillMaxWidth()) {
-            DatePickerContent(
-                today = today,
-                calendar = calendarState,
-                pendingConfirms = pendingConfirms,
-                value = value,
-                onValueChange = onValueChange,
-            )
-        }
+        DatePickerContent(
+            today = today,
+            calendar = calendarState,
+            pendingConfirms = pendingConfirms,
+            value = value,
+            onValueChange = onValueChange,
+        )
     }
 }
 
 @Composable
-private fun RowScope.DatePickerContent(
+private fun DatePickerContent(
     today: Jdn,
     calendar: Calendar,
     pendingConfirms: SnapshotStateList<() -> Unit>,
@@ -54,66 +51,68 @@ private fun RowScope.DatePickerContent(
     modifier: Modifier = Modifier,
     onValueChange: (Jdn) -> Unit,
 ) {
-    val yearsLimit = 5000 // let's just don't care about accuracy of distant time
-    val date = remember(value.value, calendar) { value on calendar }
-    val daysFormat = remember(calendar, date.year, date.month) {
-        val monthStart = Jdn(calendar, date.year, date.month, 1);
-        { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDay.title }
-    }
-    val monthsLength = remember(calendar, date.year, date.month) {
-        calendar.getMonthLength(date.year, date.month)
-    }
-    val yearMonths = remember(calendar, date.year) {
-        calendar.getYearMonths(date.year)
-    }
-    val months = yearAwareMonthsNames(date)
-    val monthsFormat = remember(numeral, months) {
-        { item: Int -> numeral.format(item) + " / " + months[item - 1] }
-    }
-    val todayYear = remember(calendar, today) { (today on calendar).year }
-    val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
-    val view = LocalView.current
-    NumberPicker(
-        modifier = modifier.weight(1f),
-        label = daysFormat,
-        range = 1..monthsLength,
-        value = date.dayOfMonth,
-        onClickLabel = stringResource(R.string.select_day),
-        onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.day)),
-        onNextLabel = stringResource(R.string.next_x, stringResource(R.string.day)),
-        pendingConfirms = pendingConfirms,
-    ) {
-        onValueChange(Jdn(calendar, date.year, date.month, it))
-        view.performHapticFeedbackVirtualKey()
-    }
-    Spacer(Modifier.width(8.dp))
-    NumberPicker(
-        modifier = Modifier.weight(1f),
-        label = monthsFormat,
-        range = 1..yearMonths,
-        value = date.month,
-        onClickLabel = stringResource(R.string.select_month),
-        onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.month)),
-        onNextLabel = stringResource(R.string.next_x, stringResource(R.string.month)),
-        pendingConfirms = pendingConfirms,
-    ) { month ->
-        val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
-        onValueChange(Jdn(calendar, date.year, month, day))
-        view.performHapticFeedbackVirtualKey()
-    }
-    Spacer(Modifier.width(8.dp))
-    NumberPicker(
-        modifier = Modifier.weight(1f),
-        range = startYear..startYear + yearsLimit,
-        value = date.year,
-        onClickLabel = stringResource(R.string.select_year),
-        onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.year)),
-        onNextLabel = stringResource(R.string.next_x, stringResource(R.string.year)),
-        pendingConfirms = pendingConfirms,
-    ) { year ->
-        val month = date.month.coerceIn(1, calendar.getYearMonths(year))
-        val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(year, month))
-        onValueChange(Jdn(calendar, year, month, day))
-        view.performHapticFeedbackVirtualKey()
+    Row(modifier = modifier.fillMaxWidth()) {
+        val yearsLimit = 5000 // let's just don't care about accuracy of distant time
+        val date = remember(value.value, calendar) { value on calendar }
+        val daysFormat = remember(calendar, date.year, date.month) {
+            val monthStart = Jdn(calendar, date.year, date.month, 1);
+            { item: Int -> numeral.format(item) + " / " + (monthStart + item - 1).weekDay.title }
+        }
+        val monthsLength = remember(calendar, date.year, date.month) {
+            calendar.getMonthLength(date.year, date.month)
+        }
+        val yearMonths = remember(calendar, date.year) {
+            calendar.getYearMonths(date.year)
+        }
+        val months = yearAwareMonthsNames(date)
+        val monthsFormat = remember(numeral, months) {
+            { item: Int -> numeral.format(item) + " / " + months[item - 1] }
+        }
+        val todayYear = remember(calendar, today) { (today on calendar).year }
+        val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
+        val view = LocalView.current
+        NumberPicker(
+            modifier = Modifier.weight(1f),
+            label = daysFormat,
+            range = 1..monthsLength,
+            value = date.dayOfMonth,
+            onClickLabel = stringResource(R.string.select_day),
+            onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.day)),
+            onNextLabel = stringResource(R.string.next_x, stringResource(R.string.day)),
+            pendingConfirms = pendingConfirms,
+        ) {
+            onValueChange(Jdn(calendar, date.year, date.month, it))
+            view.performHapticFeedbackVirtualKey()
+        }
+        Spacer(Modifier.width(8.dp))
+        NumberPicker(
+            modifier = Modifier.weight(1f),
+            label = monthsFormat,
+            range = 1..yearMonths,
+            value = date.month,
+            onClickLabel = stringResource(R.string.select_month),
+            onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.month)),
+            onNextLabel = stringResource(R.string.next_x, stringResource(R.string.month)),
+            pendingConfirms = pendingConfirms,
+        ) { month ->
+            val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
+            onValueChange(Jdn(calendar, date.year, month, day))
+            view.performHapticFeedbackVirtualKey()
+        }
+        Spacer(Modifier.width(8.dp))
+        NumberPicker(
+            modifier = Modifier.weight(1f),
+            range = startYear..startYear + yearsLimit,
+            value = date.year,
+            onClickLabel = stringResource(R.string.select_year),
+            onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.year)),
+            onNextLabel = stringResource(R.string.next_x, stringResource(R.string.year)),
+            pendingConfirms = pendingConfirms,
+        ) { year ->
+            val month = date.month.coerceIn(1, calendar.getYearMonths(year))
+            val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(year, month))
+            onValueChange(Jdn(calendar, year, month, day))
+            view.performHapticFeedbackVirtualKey()
+        }
     }
 }

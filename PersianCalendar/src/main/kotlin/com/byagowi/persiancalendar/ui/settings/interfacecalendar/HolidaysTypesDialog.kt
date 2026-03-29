@@ -202,7 +202,10 @@ fun CountryEvents(
 //            )
 //            Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
 //        }
-        listOf(holidaysTitle to holidaysKey, nonHolidaysTitle to nonHolidaysKey).map { (title, key) ->
+        listOf(
+            holidaysTitle to holidaysKey,
+            nonHolidaysTitle to nonHolidaysKey,
+        ).map { (title, key) ->
             buildAnnotatedString {
                 append(title)
                 if (sourceLink.isNotEmpty()) {
