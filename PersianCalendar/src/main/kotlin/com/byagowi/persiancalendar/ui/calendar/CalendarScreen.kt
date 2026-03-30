@@ -206,6 +206,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
@@ -873,13 +874,13 @@ private fun SharedTransitionScope.Details(
             )
             onHasContentChange(buttons.isNotEmpty())
 
-            if (buttons.isNotEmpty()) SingleChoiceSegmentedButtonRow(
-                Modifier.align(Alignment.CenterHorizontally),
+            if (buttons.isNotEmpty()) CompositionLocalProvider(
+                LocalMinimumInteractiveComponentSize provides 0.dp,
             ) {
-                buttons.forEachIndexed { index, (text, _) ->
-                    CompositionLocalProvider(
-                        LocalMinimumInteractiveComponentSize provides 0.dp,
-                    ) {
+                SingleChoiceSegmentedButtonRow(
+                    Modifier.align(Alignment.CenterHorizontally),
+                ) {
+                    buttons.forEachIndexed { index, (text, _) ->
                         SegmentedButton(
                             onClick = {
                                 selectedButton = if (selectedButton == index) -1 else index
@@ -895,7 +896,7 @@ private fun SharedTransitionScope.Details(
                             selected = selectedButton == index,
                             icon = {},
                             shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
-                            label = { Text(text, modifier = Modifier.alpha(.65f)) },
+                            label = { Text(text, modifier = Modifier.alpha(AppBlendAlpha)) },
                         )
                     }
                 }
