@@ -622,7 +622,7 @@ fun DaysView(
         ),
     ) {
         val events = (startingDay..<startingDay + days).toList().map { jdn ->
-            readEvents(jdn, now, deviceEvents)
+            readEventsWithEquinox(jdn, now, deviceEvents)
         }
         val eventsWithTime = events.map { dayEvents ->
             addDivisions(

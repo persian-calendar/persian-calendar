@@ -90,7 +90,6 @@ import kotlinx.coroutines.launch
 fun SharedTransitionScope.MonthScreen(
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
-    now: Long,
     today: Jdn,
     refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
@@ -225,7 +224,7 @@ fun SharedTransitionScope.MonthScreen(
                         val resources = LocalResources.current
                         val deviceEvents = remember(index) { context.readWeekDeviceEvents(weekJdn) }
                         val events = (0..<7).map { index ->
-                            readEvents(weekJdn + index, now, deviceEvents)
+                            readEvents(weekJdn + index, deviceEvents)
                         }.toImmutableList()
                         EventsColumn(
                             cellWidth = cellWidth,

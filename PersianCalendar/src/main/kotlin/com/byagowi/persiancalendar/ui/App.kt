@@ -212,7 +212,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     MonthScreen(
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.day,
-                        now = now,
                         today = today,
                         refreshCalendar = refreshCalendar,
                         commandBringDay = commandBringDay,
@@ -227,7 +226,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateUp = navigateUp,
                         initiallySelectedDay = it.day,
                         today = today,
-                        now = now,
                     )
                 }
                 entry<Screen.Week> {

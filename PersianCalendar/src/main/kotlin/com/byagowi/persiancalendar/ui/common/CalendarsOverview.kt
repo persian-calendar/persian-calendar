@@ -176,16 +176,6 @@ fun SharedTransitionScope.CalendarsOverview(
         Spacer(Modifier.height(4.dp))
 
         val date = jdn on selectedCalendar
-        val equinox = remember(selectedCalendar, jdn, resources) {
-            if (date !is PersianDate) return@remember null
-            if ((date.month == 12 && date.dayOfMonth >= 20) || (date.month == 1 && date.dayOfMonth == 1)) equinoxTitle(
-                date,
-                jdn,
-                resources,
-            ).first else null
-        }
-
-        AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
 
         AnimatedVisibility(!isToday) {
             AutoSizedBodyText(
@@ -443,21 +433,6 @@ private fun AutoSizedBodyText(
             )
         }
     }
-}
-
-fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String, Long> {
-    val gregorianYear = jdn.toCivilDate().year
-    val timestamp = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
-    val equinoxYear = when (mainCalendar) {
-        Calendar.SHAMSI -> date.year + if (date.month == 12) 1 else 0
-        else -> gregorianYear
-    }
-    val calendar = Date(timestamp).toGregorianCalendar()
-    return resources.getString(
-        R.string.spring_equinox,
-        numeral.format(equinoxYear),
-        calendar.formatDateAndTime(withWeekDay = true),
-    ) to timestamp
 }
 
 @Composable

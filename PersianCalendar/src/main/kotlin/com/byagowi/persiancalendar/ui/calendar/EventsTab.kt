@@ -93,22 +93,25 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
-import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.calendar
+import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
+import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -575,21 +578,35 @@ private fun EquinoxCountDownContent(
 @Composable
 fun readEvents(
     jdn: Jdn,
+    deviceEvents: DeviceCalendarEventsStore,
+): ImmutableList<CalendarEvent<*>> =
+    sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language).toImmutableList()
+
+@Composable
+fun readEventsWithEquinox(
+    jdn: Jdn,
     now: Long,
     deviceEvents: DeviceCalendarEventsStore,
 ): ImmutableList<CalendarEvent<*>> {
-    val resources = LocalResources.current
-    val eventsRepository = eventsRepository
-    val language = language
     val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
-
-    val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled
-    if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
+    return (if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
+        val resources = LocalResources.current
         val date = jdn.toPersianDate()
         val nextPersianYearDate = PersianDate(date.year + 1, 1, 1)
-        if (jdn + 1 == Jdn(nextPersianYearDate)) {
-            val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
-            val title = rawTitle.split(spacedColon).mapIndexed { i, x ->
+        val nextYearJdn = Jdn(nextPersianYearDate)
+        if ((jdn - nextYearJdn) in -2..<0) {
+            val gregorianYear = (nextYearJdn - 1).toCivilDate().year
+            val equinoxTime = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
+            val title = resources.getString(
+                R.string.spring_equinox,
+                numeral.format(
+                    when (mainCalendar) {
+                        Calendar.SHAMSI -> date.year + if (date.month == 12) 1 else 0
+                        else -> gregorianYear
+                    },
+                ),
+                Date(equinoxTime).toGregorianCalendar().formatDateAndTime(withWeekDay = true),
+            ).split(spacedColon).mapIndexed { i, x ->
                 if (i == 0 && isAstronomicalExtraFeaturesEnabled) {
                     val yearString = stringResource(R.string.year)
                     val zodiac = ChineseZodiac.fromPersianCalendar(nextPersianYearDate)
@@ -600,10 +617,9 @@ fun readEvents(
             }.joinToString("\n")
             val remainedTime = equinoxTime - now
             val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, null, remainedTime)
-            return (listOf(event) + events).toImmutableList()
-        }
-    }
-    return events.toImmutableList()
+            listOf(event) + events
+        } else events
+    } else events).toImmutableList()
 }
 
 fun sortEvents(events: List<CalendarEvent<*>>, language: Language): List<CalendarEvent<*>> {

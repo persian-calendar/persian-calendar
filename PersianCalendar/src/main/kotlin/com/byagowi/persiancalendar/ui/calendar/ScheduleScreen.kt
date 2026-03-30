@@ -84,7 +84,6 @@ fun SharedTransitionScope.ScheduleScreen(
     navigateUp: () -> Unit,
     navigateToHolidaysSettings: (String?) -> Unit,
     today: Jdn,
-    now: Long,
     modifier: Modifier = Modifier,
 ) {
     var baseJdn by remember { mutableStateOf(initiallySelectedDay) }
@@ -210,7 +209,7 @@ fun SharedTransitionScope.ScheduleScreen(
                     if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge
                 Box {
-                    val eventsCache = eventsCache(refreshToken, now)
+                    val eventsCache = eventsCache(refreshToken)
                     LazyColumn(
                         state = listState,
                         contentPadding = WindowInsets.displayCutout.only(
@@ -325,16 +324,13 @@ private const val ITEMS_COUNT = 365 * 2
 private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT / 2
 
 @Composable
-private fun eventsCache(
-    refreshToken: Int,
-    now: Long,
-): @Composable (Jdn) -> ImmutableList<CalendarEvent<*>> {
+private fun eventsCache(refreshToken: Int): @Composable (Jdn) -> ImmutableList<CalendarEvent<*>> {
     val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
     val context = LocalContext.current
     return { jdn ->
         if (jdn.value in emptyDays) persistentListOf() else {
             val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
-            val events = readEvents(jdn, now, deviceEvents)
+            val events = readEvents(jdn, deviceEvents)
             if (events.isEmpty()) emptyDays += jdn.value
             events
         }
