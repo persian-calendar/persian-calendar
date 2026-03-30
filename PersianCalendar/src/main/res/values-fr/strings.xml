@@ -134,7 +134,7 @@
     <string name="select_year">Sélectionnez l’année</string>
     <string name="year">Année</string>
     <string name="select_type_date">Sélectionnez le type de date</string>
-    <string name="spring_equinox">Période de l’année de l’équinoxe de printemps %1$s : %2$s</string>
+    <string name="spring_equinox">Période de l’année de l’équinoxe de printemps %1$s</string>
     <string name="midnight">Minuit</string>
     <string name="sunset">Coucher du soleil</string>
     <string name="sunrise">Lever du soleil</string>

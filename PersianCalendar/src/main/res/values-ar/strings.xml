@@ -75,7 +75,7 @@
     <string name="maghrib">أذان المغرب</string>
     <string name="isha">أذان العشاء</string>
     <string name="midnight">منتصف الليل</string>
-    <string name="spring_equinox">اعتدال ربيعي %1$s: %2$s</string>
+    <string name="spring_equinox">اعتدال ربيعي %1$s</string>
     <!--Date Converter-->
     <string name="select_type_date">إختيار نوع التاريخ</string>
     <string name="year">السنة</string>

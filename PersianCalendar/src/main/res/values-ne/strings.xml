@@ -18,7 +18,7 @@
     <string name="code">ne</string>
     <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन।</string>
     <string name="moon_in_scorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
-    <string name="spring_equinox">वर्षको वसन्त रितु समय %1$s: %2$s</string>
+    <string name="spring_equinox">वर्षको वसन्त रितु समय %1$s</string>
     <string name="compass">कम्पास</string>
     <string name="settings">सेटिंग</string>
     <string name="about">बारे</string>

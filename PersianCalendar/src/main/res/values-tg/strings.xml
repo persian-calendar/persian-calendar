@@ -278,7 +278,7 @@
     <string name="october">Октябр</string>
     <string name="november">Ноябр</string>
     <string name="december">Декабр</string>
-    <string name="spring_equinox">Вақти баробаршавии баҳори соли %1$s: %2$s</string>
+    <string name="spring_equinox">Вақти баробаршавии баҳори соли %1$s</string>
     <string name="pref_interface">Зоҳир</string>
     <string name="events_summary">рӯйдодҳо барои нишон додан</string>
     <string name="ask_user_to_set_location">Ҷойгоҳро дар танзимот ҷойгир кунед, то ин ҷойро дуруст бинед</string>

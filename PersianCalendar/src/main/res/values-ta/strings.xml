@@ -307,7 +307,7 @@
     <string name="maghrib">மாலை வழிபாடு</string>
     <string name="isha">இரவு வழிபாடு</string>
     <string name="midnight">யாமம்</string>
-    <string name="spring_equinox">ஆண்டின் வசந்த சம இராப்பகல் நாள் நேரம் %1$s: %2$s</string>
+    <string name="spring_equinox">ஆண்டின் வசந்த சம இராப்பகல் நாள் நேரம் %1$s</string>
     <string name="select_type_date">தேதி வகையைத் தேர்ந்தெடு</string>
     <string name="year">ஆண்டு</string>
     <string name="select_year">ஆண்டைத் தேர்ந்தெடு</string>

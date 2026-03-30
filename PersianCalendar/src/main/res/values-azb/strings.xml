@@ -176,7 +176,7 @@
     <string name="south">گۆنئی</string>
     <string name="west">باتی</string>
     <string name="qibla">قیبله</string>
-    <string name="spring_equinox">یئنی ایلین تحویل لحظه‌سی %1$s: %2$s</string>
+    <string name="spring_equinox">یئنی ایلین تحویل لحظه‌سی %1$s</string>
     <string name="shift_work_settings">ایشلمه شیفت‌ین تنظیمی</string>
     <string name="ask_user_to_set_location">شرعی اوقات‌ین گؤستریش‌ینه موقعیت‌یزی تنظیم ائدین</string>
     <string name="remove">سیل</string>

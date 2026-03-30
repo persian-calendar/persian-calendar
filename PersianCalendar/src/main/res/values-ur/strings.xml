@@ -168,7 +168,7 @@
     <string name="south">جنوب</string>
     <string name="west">غرب</string>
     <string name="qibla">قبله</string>
-    <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
+    <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s است.</string>

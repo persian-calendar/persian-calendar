@@ -250,7 +250,7 @@
     <string name="select_year">Yıl Seç</string>
     <string name="year">Yıl</string>
     <string name="select_type_date">Tarih Türünü Seç</string>
-    <string name="spring_equinox">Yılın İlkbahar Gündönümü Zamanı (Ekinoks) %1$s: %2$s</string>
+    <string name="spring_equinox">Yılın İlkbahar Gündönümü Zamanı (Ekinoks) %1$s</string>
     <string name="midnight">Gece Yarısı</string>
     <string name="isha">Yatsı Ezanı</string>
     <string name="maghrib">Akşam Ezanı</string>

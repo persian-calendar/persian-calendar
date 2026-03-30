@@ -56,7 +56,7 @@
     <string name="times">时间</string>
     <string name="imsak">封斋</string>
     <string name="fajr">晨礼</string>
-    <string name="spring_equinox">%1$s 年春分时间：%2$s</string>
+    <string name="spring_equinox">%1$s 年春分时间</string>
     <string name="select_type_date">选择日期类型</string>
     <string name="year">年</string>
     <string name="select_year">选择年份</string>

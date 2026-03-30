@@ -59,7 +59,7 @@
     <string name="sunrise">Alba</string>
     <string name="sunset">Tramonto</string>
     <string name="midnight">Mezzanotte</string>
-    <string name="spring_equinox">Orario dell’equinozio di primavera di quest’anno %1$s: %2$s</string>
+    <string name="spring_equinox">Orario dell’equinozio di primavera di quest’anno %1$s</string>
     <string name="select_type_date">Impostate il tipo di data</string>
     <string name="year">Anno</string>
     <string name="day">Giorno</string>

@@ -594,7 +594,7 @@ fun readEventsWithEquinox(
         val date = jdn.toPersianDate()
         val nextPersianYearDate = PersianDate(date.year + 1, 1, 1)
         val nextYearJdn = Jdn(nextPersianYearDate)
-        if ((jdn - nextYearJdn) in -2..<0) {
+        if ((jdn - nextYearJdn) in -1..<0) {
             val gregorianYear = (nextYearJdn - 1).toCivilDate().year
             val equinoxTime = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
             val title = resources.getString(
@@ -605,16 +605,15 @@ fun readEventsWithEquinox(
                         else -> gregorianYear
                     },
                 ),
-                Date(equinoxTime).toGregorianCalendar().formatDateAndTime(withWeekDay = true),
-            ).split(spacedColon).mapIndexed { i, x ->
-                if (i == 0 && isAstronomicalExtraFeaturesEnabled) {
+            ).let {
+                if (isAstronomicalExtraFeaturesEnabled) {
                     val yearString = stringResource(R.string.year)
                     val zodiac = ChineseZodiac.fromPersianCalendar(nextPersianYearDate)
                     val title = zodiac.format(resources, withEmoji = false, isPersian = true)
                     val symbol = zodiac.resolveEmoji(true)
-                    language.inParentheses.format(x, "$yearString $title $symbol")
-                } else x
-            }.joinToString("\n")
+                    language.inParentheses.format(it, "$yearString $title $symbol")
+                } else it
+            } + "\n" + Date(equinoxTime).toGregorianCalendar().formatDateAndTime(withWeekDay = true)
             val remainedTime = equinoxTime - now
             val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, null, remainedTime)
             listOf(event) + events

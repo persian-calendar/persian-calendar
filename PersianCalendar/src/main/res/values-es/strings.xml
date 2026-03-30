@@ -76,7 +76,7 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="midnight">Medianoche</string>
-    <string name="spring_equinox">Momento del equinoccio de primavera del año %1$s: %2$s</string>
+    <string name="spring_equinox">Momento del equinoccio de primavera del año %1$s</string>
     <!--Date Converter-->
     <string name="select_type_date">Elegir la forma de fecha</string>
     <string name="year">Año</string>

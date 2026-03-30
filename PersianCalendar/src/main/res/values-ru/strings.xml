@@ -68,7 +68,7 @@
     <string name="asr">Аср</string>
     <string name="sunset">Закат</string>
     <string name="maghrib">Магриб</string>
-    <string name="spring_equinox">Время весеннего равноденствия %1$s: %2$s</string>
+    <string name="spring_equinox">Время весеннего равноденствия %1$s</string>
     <string name="select_type_date">Выберите тип даты</string>
     <string name="year">Год</string>
     <string name="select_year">Выберите год</string>

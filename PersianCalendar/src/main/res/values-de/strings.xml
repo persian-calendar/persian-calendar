@@ -179,7 +179,7 @@
     <string name="month">Monat</string>
     <string name="select_year">Jahr auswählen</string>
     <string name="select_month">Monat auswählen</string>
-    <string name="spring_equinox">Frühlings-Tagundnachtgleiche des Jahres %1$s: %2$s</string>
+    <string name="spring_equinox">Frühlings-Tagundnachtgleiche des Jahres %1$s</string>
     <string name="day">Tag</string>
     <string name="incorrect_date">Der eingegebene Tag ist nicht gültig.</string>
     <string name="midnight">Mitternacht</string>

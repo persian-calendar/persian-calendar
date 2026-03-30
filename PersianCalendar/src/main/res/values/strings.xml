@@ -79,7 +79,7 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="midnight">Midnight</string>
-    <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
+    <string name="spring_equinox">Spring equinox time of year %1$s</string>
     <!--Date Converter-->
     <string name="select_type_date">Select date type</string>
     <string name="year">Year</string>
