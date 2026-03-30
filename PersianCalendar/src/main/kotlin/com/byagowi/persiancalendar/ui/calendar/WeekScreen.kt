@@ -621,8 +621,8 @@ fun DaysView(
             onRelease = { if (interaction == Interaction.Zoom) interaction = null },
         ),
     ) {
-        val events = (startingDay..<startingDay + days).toList().map { jdn ->
-            readEventsWithEquinox(jdn, now, deviceEvents)
+        val events = (0..<days).map { index ->
+            readEventsWithEquinox(startingDay + index, now, deviceEvents)
         }
         val eventsWithTime = events.map { dayEvents ->
             addDivisions(
