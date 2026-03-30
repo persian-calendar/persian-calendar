@@ -7,7 +7,6 @@ enum class SwipeUpAction(@get:StringRes val titleId: Int) {
     WeekView(R.string.week_view), Schedule(R.string.schedule), None(R.string.empty),
 }
 
-enum class SwipeDownAction(@get:StringRes val titleId: Int, val hidden: Boolean = false) {
-    YearView(R.string.year_view), MonthView(R.string.month_view),
-    None(R.string.empty),
+enum class SwipeDownAction(@get:StringRes val titleId: Int) {
+    YearView(R.string.year_view), MonthView(R.string.month_view), None(R.string.empty),
 }

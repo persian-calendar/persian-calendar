@@ -1527,7 +1527,7 @@ private fun SharedTransitionScope.Menu(
         }
 
         swipeDownActions.forEach { (item, action) ->
-            if (item != SwipeDownAction.None && !item.hidden) ActionItem(
+            if (item != SwipeDownAction.None) ActionItem(
                 item = item,
                 action = action,
                 prefKey = PREF_SWIPE_DOWN_ACTION,
