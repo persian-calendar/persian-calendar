@@ -817,6 +817,7 @@ private fun SharedTransitionScope.Details(
                     // if (enabledCalendars.size == 1 || isShowDeviceCalendarEvents || !(language.isIranExclusive || language.isAfghanistanExclusive) || !today.isYearSupportedOnApp) -1 else 0,
                 )
             }
+            var removeThirdTab by remember { mutableStateOf(false) }
             val buttons = listOfNotNull(
                 Pair(stringResource(R.string.calendar)) @Composable {
                     CalendarsTab(
@@ -887,7 +888,20 @@ private fun SharedTransitionScope.Details(
                         now = now,
                         today = today,
                     )
-                }.takeIf { coordinates != null },
+//                    else EncourageActionLayout(
+//                        modifier = Modifier.padding(vertical = 8.dp),
+//                        header = stringResource(R.string.ask_user_to_set_location),
+//                        discardAction = {
+//                            context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
+//                            removeThirdTab = true
+//                        },
+//                        acceptAction = navigateToSettingsLocationTab,
+//                        hideOnAccept = false,
+//                    )
+                }.takeIf {
+                    coordinates != null
+//                    !removeThirdTab && enableTimesTab()
+                },
             )
             onHasContentChange(buttons.isNotEmpty())
 
