@@ -89,7 +89,6 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
@@ -239,10 +238,8 @@ private fun DayEventContent(
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
                     launcher.viewEvent(event, context)
-                } else if (hasTooltip) {
-                    coroutineScope.launch {
-                        if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
-                    }
+                } else if (hasTooltip) coroutineScope.launch {
+                    if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
                 }
             }
             .focusable(true)

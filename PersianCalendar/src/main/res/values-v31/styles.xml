@@ -32,7 +32,8 @@
     <color name="widget_foreground">@android:color/system_neutral1_900</color>
     <color name="widget_background">@android:color/system_accent2_50</color>
 
-    <dimen name="widget_background_radius">@android:dimen/system_app_widget_background_radius</dimen>
+    <dimen name="widget_background_radius">
+        @android:dimen/system_app_widget_background_radius</dimen>
 
     <style name="WidgetTextStyle" />
 </resources>

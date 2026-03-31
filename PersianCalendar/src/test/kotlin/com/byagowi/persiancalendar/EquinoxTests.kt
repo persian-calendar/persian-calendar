@@ -84,7 +84,8 @@ class EquinoxTests {
         "2003, 3, 21, 4, 30, 26",
         /* should be 29:45 */
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1381.pdf
-        "2002, 3, 20, 22, 46, 0", /* should be 2 */
+        "2002, 3, 20, 22, 46, 0",
+        /* should be 2 */
         // https://calendar.ut.ac.ir/تحويل-سال-هاي-گذشته
         "2001, 3, 20, 17, 0, 53", /* should be 20 */
         "2000, 3, 20, 11, 5, 15", /* should be 14 */

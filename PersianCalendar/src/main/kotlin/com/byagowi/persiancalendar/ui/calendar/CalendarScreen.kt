@@ -494,33 +494,30 @@ fun SharedTransitionScope.CalendarScreen(
                     ).togetherWith(slideOutOfContainer(direction))
                 },
             ) { isYearViewState ->
-                if (isYearViewState && yearViewLazyListState != null && yearViewScale != null) {
-                    Box(Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f))) {
-                        YearView(
-                            selectedDay = selectedDay,
-                            selectedMonthOffset = selectedMonthOffset,
-                            closeYearView = { isYearView = false },
-                            lazyListState = yearViewLazyListState,
-                            scale = yearViewScale,
-                            maxWidth = maxWidth,
-                            yearViewCalendar = yearViewCalendar,
-                            onYearViewCalendarChange = { yearViewCalendar = it },
-                            maxHeight = maxHeight,
-                            bottomPadding = bottomPaddingWithMinimum,
-                            today = today,
-                        ) { calendar, monthsDistance ->
-                            if (mainCalendar == calendar) coroutineScope.launch {
-                                calendarPagerState.scrollToPage(
-                                    clampPageNumber(applyOffset(-monthsDistance)),
-                                )
-                            } else {
-                                val date = calendar.getMonthStartFromMonthsDistance(
-                                    baseJdn = today,
-                                    monthsDistance = monthsDistance,
-                                )
-                                bringDay(Jdn(date), true, true)
-                            }
-                        }
+                if (isYearViewState && yearViewLazyListState != null && yearViewScale != null) YearView(
+                    selectedDay = selectedDay,
+                    selectedMonthOffset = selectedMonthOffset,
+                    closeYearView = { isYearView = false },
+                    lazyListState = yearViewLazyListState,
+                    scale = yearViewScale,
+                    maxWidth = maxWidth,
+                    yearViewCalendar = yearViewCalendar,
+                    onYearViewCalendarChange = { yearViewCalendar = it },
+                    maxHeight = maxHeight,
+                    bottomPadding = bottomPaddingWithMinimum,
+                    today = today,
+                    modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),
+                ) { calendar, monthsDistance ->
+                    if (mainCalendar == calendar) coroutineScope.launch {
+                        calendarPagerState.scrollToPage(
+                            clampPageNumber(applyOffset(-monthsDistance)),
+                        )
+                    } else {
+                        val date = calendar.getMonthStartFromMonthsDistance(
+                            baseJdn = today,
+                            monthsDistance = monthsDistance,
+                        )
+                        bringDay(Jdn(date), true, true)
                     }
                 }
 

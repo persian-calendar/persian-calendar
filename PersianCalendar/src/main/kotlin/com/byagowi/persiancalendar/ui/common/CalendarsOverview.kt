@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.content.ClipData
-import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
@@ -81,7 +80,6 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
@@ -98,7 +96,6 @@ import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isOldEra
@@ -107,17 +104,14 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
 import com.byagowi.persiancalendar.utils.searchMoonAgeTime
-import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
-import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
-import java.util.Date
 
 @Composable
 fun SharedTransitionScope.CalendarsOverview(
