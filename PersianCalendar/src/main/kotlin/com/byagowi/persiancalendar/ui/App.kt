@@ -91,6 +91,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
@@ -195,6 +196,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             backStack += Screen.Settings(
                                 tab = SettingsTab.LocationAthan,
                                 settings = PREF_ATHAN_ALARM,
+                            )
+                        },
+                        navigateToCalendarsPrioritySettings = {
+                            backStack += Screen.Settings(
+                                tab = SettingsTab.InterfaceCalendar,
+                                settings = PREF_MAIN_CALENDAR_KEY,
                             )
                         },
                         navigateToSchedule = { day -> backStack += Screen.Schedule(day) },

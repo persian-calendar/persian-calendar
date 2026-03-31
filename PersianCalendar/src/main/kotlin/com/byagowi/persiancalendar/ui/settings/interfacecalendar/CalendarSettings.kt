@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
@@ -160,10 +161,13 @@ fun CalendarSettings(
                 showPermissionDialog = false
             }
         }
-        SettingsClickable(
-            title = stringResource(R.string.calendars_priority),
-            summary = stringResource(R.string.calendars_priority_summary),
-        ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest = onDismissRequest) }
+        Box(Modifier.highlightItem(destination == PREF_MAIN_CALENDAR_KEY)) {
+            SettingsClickable(
+                title = stringResource(R.string.calendars_priority),
+                summary = stringResource(R.string.calendars_priority_summary),
+                defaultOpen = destination == PREF_MAIN_CALENDAR_KEY,
+            ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest = onDismissRequest) }
+        }
         WeekOfYearSetting()
         run {
             val isAstronomicalExtraFeaturesEnabled = isAstronomicalExtraFeaturesEnabled

@@ -67,6 +67,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
@@ -75,6 +76,7 @@ import androidx.compose.material.icons.twotone.SwipeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
@@ -248,6 +250,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
+    navigateToCalendarsPrioritySettings: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToWeek: (Jdn) -> Unit,
     today: Jdn,
@@ -551,6 +554,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 bottomPadding = bottomPaddingWithMinimum,
                                 today = today,
                                 now = now,
+                                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                                 addEvent = addEvent,
                                 snackbarHostState = snackbarHostState,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
@@ -626,6 +630,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                                 now = now,
+                                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                                 fabPlaceholderHeight = fabPlaceholderHeight,
                                 refreshCalendar = refreshCalendar,
                                 refreshToken = refreshToken,
@@ -691,6 +696,7 @@ private fun SharedTransitionScope.Details(
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
     refreshCalendar: () -> Unit,
     refreshToken: Int,
+    navigateToCalendarsPrioritySettings: () -> Unit,
     navigateToHolidaysSettings: (item: String?) -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
@@ -804,7 +810,8 @@ private fun SharedTransitionScope.Details(
 
             var selectedButton by rememberSaveable {
                 mutableIntStateOf(
-                    if (enabledCalendars.size == 1 || isShowDeviceCalendarEvents || !(language.isIranExclusive || language.isAfghanistanExclusive) || !today.isYearSupportedOnApp) -1 else 0,
+                    -1,
+                    // if (enabledCalendars.size == 1 || isShowDeviceCalendarEvents || !(language.isIranExclusive || language.isAfghanistanExclusive) || !today.isYearSupportedOnApp) -1 else 0,
                 )
             }
             val buttons = listOfNotNull(
@@ -813,6 +820,7 @@ private fun SharedTransitionScope.Details(
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
+                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                     )
                 }.takeIf { enabledCalendars.size > 1 },
                 Pair(if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) @Composable {
@@ -960,48 +968,50 @@ private fun SharedTransitionScope.Details(
 private fun SharedTransitionScope.CalendarsTab(
     selectedDay: Jdn,
     today: Jdn,
-    modifier: Modifier = Modifier,
+    navigateToCalendarsPrioritySettings: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        modifier
-            .clickable(
-                onClickLabel = stringResource(R.string.more),
-                onClick = { isExpanded = !isExpanded },
+    Box(modifier = modifier) {
+        Column(
+            Modifier
+                .clickable(
+                    onClickLabel = stringResource(R.string.more),
+                    onClick = { isExpanded = !isExpanded },
+                )
+                .padding(vertical = 12.dp),
+        ) {
+            CalendarsOverview(
+                jdn = selectedDay,
+                today = today,
+                selectedCalendar = mainCalendar,
+                shownCalendars = enabledCalendars,
+                isExpanded = isExpanded,
+                navigateToAstronomy = navigateToAstronomy,
             )
-            .padding(top = 4.dp, bottom = 8.dp),
-    ) {
-        CalendarsOverview(
-            jdn = selectedDay,
-            today = today,
-            selectedCalendar = mainCalendar,
-            shownCalendars = enabledCalendars,
-            isExpanded = isExpanded,
-            navigateToAstronomy = navigateToAstronomy,
-        )
 
-        if (false) {
-            val context = LocalContext.current
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                    context, Manifest.permission.POST_NOTIFICATIONS,
-                ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
-            ) {
-                val launcher = rememberLauncherForActivityResult(
-                    ActivityResultContracts.RequestPermission(),
-                ) { isGranted ->
-                    context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+            if (false) {
+                val context = LocalContext.current
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                        context, Manifest.permission.POST_NOTIFICATIONS,
+                    ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
+                ) {
+                    val launcher = rememberLauncherForActivityResult(
+                        ActivityResultContracts.RequestPermission(),
+                    ) { isGranted ->
+                        context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+                    }
+                    EncourageActionLayout(
+                        header = stringResource(R.string.enable_notification),
+                        acceptButton = stringResource(R.string.yes),
+                        discardAction = {
+                            context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                        },
+                    ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
                 }
-                EncourageActionLayout(
-                    header = stringResource(R.string.enable_notification),
-                    acceptButton = stringResource(R.string.yes),
-                    discardAction = {
-                        context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
-                    },
-                ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
             }
-        }
 //        else if (showEncourageToExemptFromBatteryOptimizations()) {
 //            fun ignore() {
 //                val preferences = context.preferences
@@ -1032,6 +1042,19 @@ private fun SharedTransitionScope.CalendarsTab(
 //                ) else requestExemption()
 //            }
 //        }
+        }
+        IconButton(
+            onClick = navigateToCalendarsPrioritySettings,
+            modifier = Modifier
+                .alpha(.5f)
+                .padding(end = 12.dp)
+                .align(Alignment.TopEnd),
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = stringResource(R.string.calendars_priority),
+            )
+        }
     }
 }
 
