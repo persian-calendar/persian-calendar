@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.calendar.TabEditButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -79,71 +80,78 @@ fun SharedTransitionScope.TimesTab(
 
     val prayTimes = coordinates.calculatePrayTimes(selectedDay.toGregorianCalendar())
 
-    Column(
-        modifier
-            .fillMaxWidth()
-            .clickable(
-                onClickLabel = stringResource(R.string.more),
-                onClick = { isExpanded = !isExpanded },
-            )
-            .padding(top = 4.dp, bottom = 8.dp),
-    ) {
-        val isToday = selectedDay == today
-        AstronomicalOverview(
-            selectedDay = selectedDay,
-            prayTimes = prayTimes,
-            now = now,
-            isToday = isToday,
-            navigateToAstronomy = navigateToAstronomy,
-        )
-        Spacer(Modifier.height(4.dp))
-        Times(isExpanded, prayTimes, now, isToday)
-        Spacer(Modifier.height(4.dp))
-        Row(
-            Modifier.align(Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (cityName != null) Text(
-                text = cityName.orEmpty(),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.combinedClickable(
-                    indication = null,
-                    interactionSource = null,
+    Box(modifier) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .clickable(
                     onClickLabel = stringResource(R.string.more),
                     onClick = { isExpanded = !isExpanded },
-                    onLongClickLabel = if (language.isPersianOrDari) "تنظیم مکان" else {
-                        stringResource(R.string.location)
-                    },
-                    onLongClick = { navigateToSettingsLocationTab() },
-                ),
-            )
-            ExpandArrow(
-                modifier = Modifier.size(with(LocalDensity.current) { 20.sp.toDp() }),
-                isExpanded = isExpanded,
-                tint = animateColor(MaterialTheme.colorScheme.primary).value,
-            )
-        }
-        if (calculationMethod != language.preferredCalculationMethod) Text(
-            calculationMethod.title(LocalResources.current),
-            style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .alpha(AppBlendAlpha)
-                .combinedClickable(
-                    indication = null,
-                    interactionSource = null,
-                    onClickLabel = stringResource(R.string.more),
-                    onClick = { isExpanded = !isExpanded },
-                    onLongClickLabel = stringResource(R.string.settings),
-                    onLongClick = { navigateToSettingsLocationTab() },
                 )
-                .align(Alignment.CenterHorizontally),
-        )
+                .padding(vertical = 12.dp),
+        ) {
+            val isToday = selectedDay == today
+            AstronomicalOverview(
+                selectedDay = selectedDay,
+                prayTimes = prayTimes,
+                now = now,
+                isToday = isToday,
+                navigateToAstronomy = navigateToAstronomy,
+            )
+            Spacer(Modifier.height(4.dp))
+            Times(isExpanded, prayTimes, now, isToday)
+            Spacer(Modifier.height(4.dp))
+            Row(
+                Modifier.align(Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (cityName != null) Text(
+                    text = cityName.orEmpty(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.combinedClickable(
+                        indication = null,
+                        interactionSource = null,
+                        onClickLabel = stringResource(R.string.more),
+                        onClick = { isExpanded = !isExpanded },
+                        onLongClickLabel = if (language.isPersianOrDari) "تنظیم مکان" else {
+                            stringResource(R.string.location)
+                        },
+                        onLongClick = { navigateToSettingsLocationTab() },
+                    ),
+                )
+                ExpandArrow(
+                    modifier = Modifier.size(with(LocalDensity.current) { 20.sp.toDp() }),
+                    isExpanded = isExpanded,
+                    tint = animateColor(MaterialTheme.colorScheme.primary).value,
+                )
+            }
+            if (calculationMethod != language.preferredCalculationMethod) Text(
+                calculationMethod.title(LocalResources.current),
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .alpha(AppBlendAlpha)
+                    .combinedClickable(
+                        indication = null,
+                        interactionSource = null,
+                        onClickLabel = stringResource(R.string.more),
+                        onClick = { isExpanded = !isExpanded },
+                        onLongClickLabel = stringResource(R.string.settings),
+                        onLongClick = { navigateToSettingsLocationTab() },
+                    )
+                    .align(Alignment.CenterHorizontally),
+            )
 //        if (showEnableAthanForPersianUsers()) EncourageActionLayout(
 //            header = "مایلید برنامه اذان پخش کند؟",
 //            discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
 //            acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
 //        )
+        }
+
+        TabEditButton(
+            action = navigateToSettingsLocationTab,
+            contentDescription = stringResource(R.string.settings),
+        )
     }
 }
 

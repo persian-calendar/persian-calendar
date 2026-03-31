@@ -38,6 +38,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -147,7 +148,9 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
+import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
@@ -824,28 +827,33 @@ private fun SharedTransitionScope.Details(
                     )
                 }.takeIf { enabledCalendars.size > 1 },
                 Pair(if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) @Composable {
-                    Row(
-                        verticalAlignment = if (appointments.isEmpty()) Alignment.CenterVertically else Alignment.Top,
-                        modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
-                    ) {
-                        AnimatedContent(
-                            targetState = appointments.isEmpty(),
-                            transitionSpec = {
-                                (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
-                            },
-                            modifier = Modifier.weight(1f),
-                        ) { appointmentsIsEmpty ->
-                            if (appointmentsIsEmpty) Text(
+                    AnimatedContent(
+                        targetState = appointments.isEmpty(),
+                        transitionSpec = {
+                            (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
+                        },
+                    ) { appointmentsIsEmpty ->
+                        if (appointmentsIsEmpty) Box {
+                            Text(
                                 text = if (language.isPersianOrDari) {
                                     "مناسبتی برای این روز یافت نشد"
                                 } else stringResource(R.string.no_event),
                                 textAlign = TextAlign.Center,
-                            ) else DayEvents(
-                                events = appointments,
-                                navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                refreshCalendar = refreshCalendar,
+                                modifier = Modifier
+                                    .padding(vertical = 12.dp)
+                                    .fillMaxWidth(),
                             )
-                        }
+                            if (remember { PREF_HOLIDAY_TYPES !in context.preferences }) TabEditButton(
+                                action = { navigateToHolidaysSettings(null) },
+                                contentDescription = stringResource(R.string.settings),
+                            )
+                        } else DayEvents(
+                            events = appointments,
+                            navigateToHolidaysSettings = navigateToHolidaysSettings,
+                            refreshCalendar = refreshCalendar,
+                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
+                        )
+                    }
 //                        if (when {
 //                                eventsRepository.iranOthers -> true
 //                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
@@ -866,7 +874,6 @@ private fun SharedTransitionScope.Details(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-                    }
                 }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
                 Pair(stringResource(R.string.times)) @Composable {
                     val coordinates = coordinates
@@ -1043,18 +1050,11 @@ private fun SharedTransitionScope.CalendarsTab(
 //            }
 //        }
         }
-        IconButton(
-            onClick = navigateToCalendarsPrioritySettings,
-            modifier = Modifier
-                .alpha(.5f)
-                .padding(end = 12.dp)
-                .align(Alignment.TopEnd),
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = stringResource(R.string.calendars_priority),
-            )
-        }
+        val context = LocalContext.current
+        if (remember { PREF_MAIN_CALENDAR_KEY !in context.preferences }) TabEditButton(
+            action = navigateToCalendarsPrioritySettings,
+            contentDescription = stringResource(R.string.calendars_priority),
+        )
     }
 }
 
@@ -1692,4 +1692,24 @@ fun addEvent(
     }
 
     return { addEventData = it }
+}
+
+@Composable
+fun BoxScope.TabEditButton(
+    action: () -> Unit,
+    contentDescription: String,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = action,
+        modifier = modifier
+            .alpha(.5f)
+            .padding(end = 12.dp)
+            .align(Alignment.TopEnd),
+    ) {
+        Icon(
+            imageVector = Icons.Default.Edit,
+            contentDescription = contentDescription,
+        )
+    }
 }
