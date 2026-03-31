@@ -1069,12 +1069,7 @@ fun DaysView(
                             indication = null,
                             interactionSource = null,
                             onClickLabel = stringResource(R.string.add_event),
-                        ) {
-                            if (days == 1 && isAddEventBoxEnabled && !isShowDeviceCalendarEvents && !isTalkBackEnabled) {
-                                offset = Offset.Zero
-                                onAddEventBoxEnabledChange(false)
-                            } else addAction()
-                        }
+                        ) { addAction() }
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
