@@ -150,7 +150,6 @@ import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
-import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
@@ -817,7 +816,6 @@ private fun SharedTransitionScope.Details(
                     // if (enabledCalendars.size == 1 || isShowDeviceCalendarEvents || !(language.isIranExclusive || language.isAfghanistanExclusive) || !today.isYearSupportedOnApp) -1 else 0,
                 )
             }
-            var removeThirdTab by remember { mutableStateOf(false) }
             val buttons = listOfNotNull(
                 Pair(stringResource(R.string.calendar)) @Composable {
                     CalendarsTab(
@@ -995,45 +993,44 @@ private fun SharedTransitionScope.CalendarsTab(
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
-
-    Box(modifier = modifier) {
-        Column(
-            Modifier
-                .clickable(
-                    onClickLabel = stringResource(R.string.more),
-                    onClick = { isExpanded = !isExpanded },
-                )
-                .padding(vertical = 12.dp),
-        ) {
-            CalendarsOverview(
-                jdn = selectedDay,
-                today = today,
-                selectedCalendar = mainCalendar,
-                shownCalendars = enabledCalendars,
-                isExpanded = isExpanded,
-                navigateToAstronomy = navigateToAstronomy,
+    Column(
+        modifier
+            .clickable(
+                onClickLabel = stringResource(R.string.more),
+                onClick = { isExpanded = !isExpanded },
             )
+            .padding(bottom = 12.dp),
+    ) {
+        CalendarsOverview(
+            jdn = selectedDay,
+            today = today,
+            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+            selectedCalendar = mainCalendar,
+            shownCalendars = enabledCalendars,
+            isExpanded = isExpanded,
+            navigateToAstronomy = navigateToAstronomy,
+        )
 
-            if (false) {
-                val context = LocalContext.current
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                        context, Manifest.permission.POST_NOTIFICATIONS,
-                    ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
-                ) {
-                    val launcher = rememberLauncherForActivityResult(
-                        ActivityResultContracts.RequestPermission(),
-                    ) { isGranted ->
-                        context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
-                    }
-                    EncourageActionLayout(
-                        header = stringResource(R.string.enable_notification),
-                        acceptButton = stringResource(R.string.yes),
-                        discardAction = {
-                            context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
-                        },
-                    ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+        if (false) {
+            val context = LocalContext.current
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                    context, Manifest.permission.POST_NOTIFICATIONS,
+                ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences && language.isUserAbleToReadPersian && today.isYearSupportedOnApp
+            ) {
+                val launcher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.RequestPermission(),
+                ) { isGranted ->
+                    context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
                 }
+                EncourageActionLayout(
+                    header = stringResource(R.string.enable_notification),
+                    acceptButton = stringResource(R.string.yes),
+                    discardAction = {
+                        context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                    },
+                ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
             }
+        }
 //        else if (showEncourageToExemptFromBatteryOptimizations()) {
 //            fun ignore() {
 //                val preferences = context.preferences
@@ -1064,13 +1061,6 @@ private fun SharedTransitionScope.CalendarsTab(
 //                ) else requestExemption()
 //            }
 //        }
-        }
-        val context = LocalContext.current
-        TabEditButton(
-            action = navigateToCalendarsPrioritySettings,
-            contentDescription = stringResource(R.string.calendars_priority),
-            visible = isExpanded || remember { PREF_MAIN_CALENDAR_KEY !in context.preferences },
-        )
     }
 }
 
@@ -1720,7 +1710,8 @@ fun BoxScope.TabEditButton(
     Row(
         modifier = modifier
             .padding(end = 12.dp)
-            .align(Alignment.TopEnd),
+            .align(Alignment.TopEnd)
+            .height(48.dp),
     ) {
         AnimatedVisibility(visible = visible) {
             IconButton(onClick = action, modifier = Modifier.alpha(.5f)) {

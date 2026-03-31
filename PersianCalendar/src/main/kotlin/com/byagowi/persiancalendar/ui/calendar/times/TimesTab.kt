@@ -151,6 +151,7 @@ fun SharedTransitionScope.TimesTab(
         TabEditButton(
             action = navigateToSettingsLocationTab,
             contentDescription = stringResource(R.string.settings),
+            visible = isExpanded,
         )
     }
 }

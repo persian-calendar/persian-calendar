@@ -120,6 +120,7 @@ import kotlin.time.Duration.Companion.minutes
 fun SharedTransitionScope.ConverterScreen(
     openNavigationRail: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
+    navigateToCalendarsPrioritySettings: () -> Unit,
     noBackStackAction: (() -> Unit)?,
     today: Jdn,
     modifier: Modifier = Modifier,
@@ -205,6 +206,7 @@ fun SharedTransitionScope.ConverterScreen(
                             Column(Modifier.padding(horizontal = 24.dp)) {
                                 ConverterAndDistance(
                                     navigateToAstronomy = navigateToAstronomy,
+                                    navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                                     sharedTransitionScope = this@ConverterScreen,
                                     pendingConfirms = pendingConfirms,
                                     screenMode = screenMode,
@@ -488,6 +490,7 @@ private fun QrCode(
 @Composable
 private fun ColumnScope.ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,
+    navigateToCalendarsPrioritySettings: () -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     pendingConfirms: SnapshotStateList<() -> Unit>,
     screenMode: ConverterScreenMode,
@@ -606,7 +609,7 @@ private fun ColumnScope.ConverterAndDistance(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraLarge)
                     .clickable { isExpanded = !isExpanded }
-                    .padding(top = 12.dp, bottom = 12.dp),
+                    .padding(bottom = 12.dp),
             ) {
                 sharedTransitionScope.apply {
                     CalendarsOverview(
@@ -615,6 +618,7 @@ private fun ColumnScope.ConverterAndDistance(
                         selectedCalendar = calendar,
                         shownCalendars = (calendarsList - calendar).toImmutableList(),
                         isExpanded = isExpanded,
+                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                         navigateToAstronomy = navigateToAstronomy,
                     )
                 }
@@ -651,7 +655,7 @@ private fun ColumnScope.ConverterAndDistance(
                     disabledContentColor = animateColor(cardColors.disabledContentColor).value,
                 ),
             ) {
-                Spacer(Modifier.height(20.dp))
+                Spacer(Modifier.height(8.dp))
                 Box(Modifier.fillMaxWidth()) {
                     sharedTransitionScope.apply {
                         CalendarsOverview(
@@ -660,6 +664,7 @@ private fun ColumnScope.ConverterAndDistance(
                             selectedCalendar = calendar,
                             shownCalendars = (calendarsList - calendar).toImmutableList(),
                             isExpanded = isExpanded,
+                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                             navigateToAstronomy = navigateToAstronomy,
                         )
                     }

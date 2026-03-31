@@ -25,7 +25,7 @@ class ConverterScreenTest {
     fun converterScreenSmokeTest() {
         composeTestRule.setContent {
             NavigationMock {
-                ConverterScreen({}, {}, null, today)
+                ConverterScreen({}, {}, {}, null, today)
             }
         }
     }
@@ -35,7 +35,7 @@ class ConverterScreenTest {
         composeTestRule.setContent {
             val screenMode = ConverterScreenMode.CONVERTER
             NavigationMock {
-                ConverterScreen({}, {}, null, today, initialScreenMode = screenMode)
+                ConverterScreen({}, {}, {}, null, today, initialScreenMode = screenMode)
             }
         }
     }
@@ -45,7 +45,7 @@ class ConverterScreenTest {
         composeTestRule.setContent {
             val screenMode = ConverterScreenMode.DISTANCE
             NavigationMock {
-                ConverterScreen({}, {}, null, today, initialScreenMode = screenMode)
+                ConverterScreen({}, {}, {}, null, today, initialScreenMode = screenMode)
             }
         }
     }
@@ -55,7 +55,7 @@ class ConverterScreenTest {
         composeTestRule.setContent {
             val screenMode = ConverterScreenMode.CALCULATOR
             NavigationMock {
-                ConverterScreen({}, {}, null, today, initialScreenMode = screenMode)
+                ConverterScreen({}, {}, {}, null, today, initialScreenMode = screenMode)
             }
         }
     }
@@ -65,7 +65,7 @@ class ConverterScreenTest {
         composeTestRule.setContent {
             val screenMode = ConverterScreenMode.QR_CODE
             NavigationMock {
-                ConverterScreen({}, {}, null, today, initialScreenMode = screenMode)
+                ConverterScreen({}, {}, {}, null, today, initialScreenMode = screenMode)
             }
         }
     }
@@ -75,7 +75,7 @@ class ConverterScreenTest {
         composeTestRule.setContent {
             val screenMode = ConverterScreenMode.TIME_ZONES
             NavigationMock {
-                ConverterScreen({}, {}, null, today, initialScreenMode = screenMode)
+                ConverterScreen({}, {}, {}, null, today, initialScreenMode = screenMode)
             }
         }
     }
@@ -87,7 +87,7 @@ class ConverterScreenTest {
         restorationTester.setContent {
             NavigationMock {
                 val screenMode = ConverterScreenMode.TIME_ZONES
-                ConverterScreen({}, {}, null, today, initialScreenMode = screenMode)
+                ConverterScreen({}, {}, {}, null, today, initialScreenMode = screenMode)
             }
         }
 

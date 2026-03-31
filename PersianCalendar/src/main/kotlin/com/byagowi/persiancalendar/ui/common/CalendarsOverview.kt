@@ -50,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
@@ -67,6 +68,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
@@ -87,6 +89,7 @@ import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.calendar.TabEditButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
@@ -103,6 +106,7 @@ import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.searchMoonAgeTime
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
@@ -118,6 +122,7 @@ fun SharedTransitionScope.CalendarsOverview(
     jdn: Jdn,
     today: Jdn,
     selectedCalendar: Calendar,
+    navigateToCalendarsPrioritySettings: () -> Unit,
     shownCalendars: ImmutableList<Calendar>,
     isExpanded: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
@@ -139,32 +144,40 @@ fun SharedTransitionScope.CalendarsOverview(
             )
         },
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 24.dp),
-        ) {
-            AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
-                MoonView(
-                    jdn = jdn,
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .semantics { this.hideFromAccessibility() }
-                        .clickable { navigateToAstronomy(jdn) }
-                        .size(20.dp)
-                        .sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                            boundsTransform = appBoundsTransform,
-                        ),
-                )
+        Box(Modifier.fillMaxWidth()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp),
+            ) {
+                AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
+                    MoonView(
+                        jdn = jdn,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .semantics { this.hideFromAccessibility() }
+                            .clickable { navigateToAstronomy(jdn) }
+                            .size(20.dp)
+                            .sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                                boundsTransform = appBoundsTransform,
+                            ),
+                    )
+                }
+                AnimatedContent(
+                    if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
+                        jdn.weekDay.title,
+                        stringResource(R.string.iran_time),
+                    ) else jdn.weekDay.title,
+                    transitionSpec = appCrossfadeSpec,
+                ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
             }
-            AnimatedContent(
-                if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
-                    jdn.weekDay.title,
-                    stringResource(R.string.iran_time),
-                ) else jdn.weekDay.title,
-                transitionSpec = appCrossfadeSpec,
-            ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
+            val context = LocalContext.current
+            TabEditButton(
+                action = navigateToCalendarsPrioritySettings,
+                contentDescription = stringResource(R.string.calendars_priority),
+                visible = isExpanded && remember { PREF_MAIN_CALENDAR_KEY !in context.preferences },
+            )
         }
         CalendarsFlow(shownCalendars, jdn, isExpanded, numeral)
         Spacer(Modifier.height(4.dp))

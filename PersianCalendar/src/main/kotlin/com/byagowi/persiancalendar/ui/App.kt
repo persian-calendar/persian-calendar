@@ -176,6 +176,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 settingsItem = item,
             )
         }
+        val navigateToCalendarsPrioritySettings = {
+            backStack += Screen.Settings(
+                tab = SettingsTab.InterfaceCalendar,
+                settings = PREF_MAIN_CALENDAR_KEY,
+            )
+        }
 
         NavDisplay(
             backStack = backStack,
@@ -198,12 +204,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 settings = PREF_ATHAN_ALARM,
                             )
                         },
-                        navigateToCalendarsPrioritySettings = {
-                            backStack += Screen.Settings(
-                                tab = SettingsTab.InterfaceCalendar,
-                                settings = PREF_MAIN_CALENDAR_KEY,
-                            )
-                        },
+                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                         navigateToSchedule = { day -> backStack += Screen.Schedule(day) },
                         navigateToWeek = { day -> backStack += Screen.Week(day) },
                         navigateToMonthView = { day -> backStack += Screen.Month(day) },
@@ -251,6 +252,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     ConverterScreen(
                         openNavigationRail = openNavigationRail,
                         navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
+                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                         noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
                         today = today,
                     )
