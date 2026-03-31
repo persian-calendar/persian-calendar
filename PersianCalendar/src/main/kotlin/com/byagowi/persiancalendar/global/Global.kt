@@ -95,6 +95,7 @@ import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
+import com.byagowi.persiancalendar.PREF_SHOW_HISTORICAL_CALENDARS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
@@ -414,7 +415,10 @@ private val eventsRepository_ = mutableStateOf(EventsRepository.empty())
 val eventsRepository by eventsRepository_
 
 private val secondaryCalendarEnabled_ = mutableStateOf(false)
-private val secondaryCalendarEnabled by secondaryCalendarEnabled_
+val secondaryCalendarEnabled by secondaryCalendarEnabled_
+
+private val showHistoricalCalendars_ = mutableStateOf(false)
+val showHistoricalCalendars by showHistoricalCalendars_
 
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
@@ -531,6 +535,7 @@ fun updateStoredPreference(context: Context) {
         val key = preferences.getString(PREF_SYSTEM_LIGHT_THEME, null)
         Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
     } ?: Theme.LIGHT
+    showHistoricalCalendars_.value = preferences.getBoolean(PREF_SHOW_HISTORICAL_CALENDARS, false)
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isCyberpunk_.value = preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)

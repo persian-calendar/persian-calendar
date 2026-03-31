@@ -43,4 +43,5 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 // endregion
 
 fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
-    formatAsSeleucidDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn)
+    formatAsSeleucidDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn) // +
+// persianDelimiter + numeral.format(jdn.toPersianDate().year + 1180) + " هخامنشی"

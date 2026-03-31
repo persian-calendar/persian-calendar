@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.showHistoricalCalendars
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.weekStart
@@ -115,6 +116,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -268,7 +270,7 @@ fun SharedTransitionScope.CalendarsOverview(
 
         if (language.isPersian) {
             val enableExtra =
-                (eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled) && (isExpanded || Calendar.ISLAMIC !in enabledCalendars)
+                showHistoricalCalendars || ((eventsRepository.iranAncient || isAstronomicalExtraFeaturesEnabled) && (isExpanded || Calendar.ISLAMIC !in enabledCalendars))
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
@@ -317,7 +319,7 @@ fun SharedTransitionScope.CalendarsOverview(
         val progresses = remember(jdn, selectedCalendar, weekStart) {
             val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)
-            listOf(
+            persistentListOf(
                 Triple(R.string.week, jdn.weekDay - weekStart + 1, 7),
                 Triple(R.string.month, date.dayOfMonth, monthLength),
                 Triple(R.string.season, passedDaysInSeason, totalSeasonDays),
@@ -526,8 +528,7 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier
-                        .clip(shape = MaterialTheme.shapes.small)
+                    Modifier.clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )
