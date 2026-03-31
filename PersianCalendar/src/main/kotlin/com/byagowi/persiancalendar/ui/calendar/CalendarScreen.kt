@@ -342,6 +342,11 @@ fun SharedTransitionScope.CalendarScreen(
                         true
                     }
 
+                    Key.M -> {
+                        navigateToMonthView(selectedDay)
+                        true
+                    }
+
                     Key.Y -> {
                         isYearView = true
                         true
@@ -815,8 +820,7 @@ private fun SharedTransitionScope.Details(
                 }.takeIf { enabledCalendars.size > 1 },
                 Pair(if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) @Composable {
                     Row(
-                        verticalAlignment =
-                            if (appointments.isEmpty()) Alignment.CenterVertically else Alignment.Top,
+                        verticalAlignment = if (appointments.isEmpty()) Alignment.CenterVertically else Alignment.Top,
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
                     ) {
                         AnimatedContent(
