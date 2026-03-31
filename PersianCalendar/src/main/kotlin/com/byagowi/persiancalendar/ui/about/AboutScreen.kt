@@ -303,6 +303,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
 @Composable
 private fun HelpItems() {
     val sections = remember {
+        val faq = (faq as? String?) ?: "" // weird but happens…
         faq.split(Regex("^={4}$", RegexOption.MULTILINE)).map { it.trim().lines() }.map { lines ->
             val title = lines.first()
             val body = lines.drop(1).joinToString("\n").trim()
