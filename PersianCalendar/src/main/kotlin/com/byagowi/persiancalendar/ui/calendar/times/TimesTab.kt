@@ -181,9 +181,12 @@ private fun SharedTransitionScope.AstronomicalOverview(
     ) { state ->
         val sunViewColors = appSunViewColors()
         val typeface = resolveAndroidCustomTypeface()
-        if (state) {
-            SunView(prayTimes, sunViewColors, now, typeface)
-        } else Box(Modifier.fillMaxSize()) {
+        if (state) SunView(
+            prayTimes = prayTimes,
+            sunViewColors = sunViewColors,
+            now = now,
+            typeface = typeface,
+        ) else Box(Modifier.fillMaxSize()) {
             MoonView(
                 jdn = selectedDay,
                 modifier = Modifier
