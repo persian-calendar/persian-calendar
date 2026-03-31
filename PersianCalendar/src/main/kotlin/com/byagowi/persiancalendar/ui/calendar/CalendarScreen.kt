@@ -840,18 +840,19 @@ private fun SharedTransitionScope.Details(
                                 } else stringResource(R.string.no_event),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
-                                    .padding(vertical = 12.dp)
+                                    .padding(vertical = 12.dp, horizontal = 24.dp)
                                     .fillMaxWidth(),
                             )
-                            if (remember { PREF_HOLIDAY_TYPES !in context.preferences }) TabEditButton(
+                            TabEditButton(
                                 action = { navigateToHolidaysSettings(null) },
                                 contentDescription = stringResource(R.string.settings),
+                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
                             )
                         } else DayEvents(
                             events = appointments,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
                             refreshCalendar = refreshCalendar,
-                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
+                            modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp),
                         )
                     }
 //                        if (when {
@@ -1051,9 +1052,10 @@ private fun SharedTransitionScope.CalendarsTab(
 //        }
         }
         val context = LocalContext.current
-        if (remember { PREF_MAIN_CALENDAR_KEY !in context.preferences }) TabEditButton(
+        TabEditButton(
             action = navigateToCalendarsPrioritySettings,
             contentDescription = stringResource(R.string.calendars_priority),
+            visible = isExpanded || remember { PREF_MAIN_CALENDAR_KEY !in context.preferences },
         )
     }
 }
@@ -1699,17 +1701,20 @@ fun BoxScope.TabEditButton(
     action: () -> Unit,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    visible: Boolean = true,
 ) {
-    IconButton(
-        onClick = action,
+    Row(
         modifier = modifier
-            .alpha(.5f)
             .padding(end = 12.dp)
             .align(Alignment.TopEnd),
     ) {
-        Icon(
-            imageVector = Icons.Default.Edit,
-            contentDescription = contentDescription,
-        )
+        AnimatedVisibility(visible = visible) {
+            IconButton(onClick = action, modifier = Modifier.alpha(.5f)) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = contentDescription,
+                )
+            }
+        }
     }
 }
