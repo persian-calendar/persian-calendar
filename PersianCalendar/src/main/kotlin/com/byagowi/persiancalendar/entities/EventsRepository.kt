@@ -65,9 +65,8 @@ data class EventsRepository(
 
     init {
         // It is vital to configure calendar before loading of the events
-        IslamicDate.useUmmAlQura =
-            if (iranHolidays || iranOthers) false
-            else afghanistanHolidays || language.mightPreferUmmAlquraIslamicCalendar
+        IslamicDate.useUmmAlQura = if (iranHolidays || iranOthers) false
+        else afghanistanHolidays || language.mightPreferUmmAlquraIslamicCalendar
     }
 
     @VisibleForTesting
@@ -98,8 +97,11 @@ data class EventsRepository(
             persianCalendarEvents.getEvents(jdn.toPersianDate(), irregularCalendarEventsStore),
             islamicCalendarEvents.getEvents(jdn.toIslamicDate(), irregularCalendarEventsStore),
             nepaliCalendarEvents.getEvents(jdn.toNepaliDate(), irregularCalendarEventsStore),
-            gregorianCalendarEvents
-                .getEvents(jdn.toCivilDate(), irregularCalendarEventsStore, deviceEvents),
+            gregorianCalendarEvents.getEvents(
+                jdn.toCivilDate(),
+                irregularCalendarEventsStore,
+                deviceEvents,
+            ),
         ).flatten().filterEvents(jdn)
     }
 
@@ -116,11 +118,11 @@ data class EventsRepository(
 
     fun getEnabledEvents(jdn: Jdn): List<CalendarEvent<*>> {
         return (listOf(
-            persianCalendarEvents.getAllEvents(),
-            islamicCalendarEvents.getAllEvents(),
-            nepaliCalendarEvents.getAllEvents(),
-            gregorianCalendarEvents.getAllEvents(),
-        ).flatten() + listOf(
+            persianCalendarEvents,
+            islamicCalendarEvents,
+            nepaliCalendarEvents,
+            gregorianCalendarEvents,
+        ).flatMap { it.getAllEvents() } + listOf(
             jdn.toPersianDate(),
             jdn.toCivilDate(),
             jdn.toIslamicDate(),
