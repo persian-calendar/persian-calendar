@@ -51,8 +51,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarEnabled
 import com.byagowi.persiancalendar.global.showHistoricalCalendars
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -194,7 +196,9 @@ fun CalendarPreferenceDialog(
         ) {
             val context = LocalContext.current
             SwitchWithLabel(
-                label = stringResource(R.string.show_secondary_calendar),
+                label = stringResource(R.string.show_secondary_calendar) + (secondaryCalendar?.let {
+                    spacedColon + stringResource(it.title)
+                } ?: ""),
                 checked = secondaryCalendarEnabled,
             ) { context.preferences.edit { putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, it) } }
         }

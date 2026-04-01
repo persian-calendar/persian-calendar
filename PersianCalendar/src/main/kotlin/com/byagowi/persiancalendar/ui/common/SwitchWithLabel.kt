@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -37,7 +38,7 @@ fun SwitchWithLabel(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (labelBeforeSwitch) {
-            Text(label)
+            Crossfade(targetState = label) { Text(it) }
             Spacer(Modifier.width(8.dp))
         }
         Switch(
@@ -48,7 +49,7 @@ fun SwitchWithLabel(
         )
         if (!labelBeforeSwitch) {
             Spacer(Modifier.width(8.dp))
-            Text(label)
+            Crossfade(targetState = label) { Text(it) }
         }
     }
 }
