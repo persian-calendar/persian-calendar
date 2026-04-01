@@ -94,25 +94,27 @@ data class EventsRepository(
     )
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
-        if (!jdn.isYearSupportedOnAppAndNextYear || !Jdn.today().isYearSupportedOnApp) return deviceEvents.getEvents(
-            date = jdn.toCivilDate(),
-            IrregularCalendarEventsStore(empty()),
-            deviceEvents,
-        )
         return listOf(
             persianCalendarEvents.getEvents(jdn.toPersianDate(), irregularCalendarEventsStore),
             islamicCalendarEvents.getEvents(jdn.toIslamicDate(), irregularCalendarEventsStore),
             nepaliCalendarEvents.getEvents(jdn.toNepaliDate(), irregularCalendarEventsStore),
             gregorianCalendarEvents
                 .getEvents(jdn.toCivilDate(), irregularCalendarEventsStore, deviceEvents),
-        ).flatten().filterEvents()
+        ).flatten().filterEvents(jdn)
     }
 
-    fun List<CalendarEvent<*>>.filterEvents(): List<CalendarEvent<*>> =
-        this.filter { it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC }
+    fun List<CalendarEvent<*>>.filterEvents(jdn: Jdn): List<CalendarEvent<*>> {
+        val supported = jdn.isYearSupportedOnAppAndNextYear && Jdn.today().isYearSupportedOnApp
+        return this.filter {
+            when {
+                !supported && (it.source == EventSource.Afghanistan || it.source == EventSource.Iran) -> false
+                it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC -> true
+                else -> false
+            }
+        }
+    }
 
     fun getEnabledEvents(jdn: Jdn): List<CalendarEvent<*>> {
-        if (!jdn.isYearSupportedOnApp) return emptyList()
         return (listOf(
             persianCalendarEvents.getAllEvents(),
             islamicCalendarEvents.getAllEvents(),
@@ -130,7 +132,7 @@ data class EventsRepository(
             val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendar)
                 .filter { event -> event.date.month < it.month }
             thisYear + nextYear
-        }).filterEvents()
+        }).filterEvents(jdn)
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
