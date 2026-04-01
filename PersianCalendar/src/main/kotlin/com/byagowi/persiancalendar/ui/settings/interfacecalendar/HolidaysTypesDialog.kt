@@ -96,6 +96,12 @@ fun HolidaysTypesDialog(
                         nonHolidaysKey = EventsRepository.iranOthersKey,
                         destinationItem = destinationItem,
                     )
+                    if (!language.isAfghanistanExclusive) ItemCheckBox(
+                        AnnotatedString(stringResource(R.string.iran_ancient)),
+                        enabledTypes,
+                        EventsRepository.iranAncientKey,
+                        destinationItem = destinationItem,
+                    )
                 }
 
                 @Composable
@@ -112,25 +118,25 @@ fun HolidaysTypesDialog(
                     )
                 }
 
+                @Composable
+                fun International() {
+                    ItemCheckBox(
+                        AnnotatedString(stringResource(R.string.international)),
+                        enabledTypes,
+                        EventsRepository.internationalKey,
+                        destinationItem = destinationItem,
+                    )
+                }
+
                 if (language.isIranExclusive) {
                     Iran()
+                    International()
                     Afghanistan()
                 } else {
                     Afghanistan()
+                    International()
                     Iran()
                 }
-                if (!language.isAfghanistanExclusive) ItemCheckBox(
-                    AnnotatedString(stringResource(R.string.iran_ancient)),
-                    enabledTypes,
-                    EventsRepository.iranAncientKey,
-                    destinationItem = destinationItem,
-                )
-                ItemCheckBox(
-                    AnnotatedString(stringResource(R.string.international)),
-                    enabledTypes,
-                    EventsRepository.internationalKey,
-                    destinationItem = destinationItem,
-                )
             } else {
                 CountryEvents(
                     calendarCenterName = stringResource(R.string.nepal),
