@@ -76,7 +76,6 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
@@ -528,7 +527,8 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier.clip(shape = MaterialTheme.shapes.small)
+                    Modifier
+                        .clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )
