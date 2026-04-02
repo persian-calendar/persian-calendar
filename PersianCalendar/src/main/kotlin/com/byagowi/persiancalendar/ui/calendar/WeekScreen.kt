@@ -724,9 +724,10 @@ fun DaysView(
                         } else Spacer(Modifier.height(12.dp))
                     }
                 }
-            } else if (maxDayAllDayEvents != 0) EventsColumn(
+            } else if (maxDayAllDayEvents != 0) EventsRow(
                 cellWidth = cellWidth,
                 events = eventsWithoutTime,
+                horizontalPadding = pagerArrowSizeAndPadding.dp,
                 defaultWidthReduction = defaultWidthReduction,
                 launcher = launcher,
                 snackbarHostState = snackbarHostState,
@@ -1214,12 +1215,13 @@ fun DaysView(
 }
 
 @Composable
-fun EventsColumn(
+fun EventsRow(
     cellWidth: Dp,
     events: ImmutableList<ImmutableList<CalendarEvent<*>>>,
     defaultWidthReduction: Dp,
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     snackbarHostState: SnackbarHostState,
+    horizontalPadding: Dp,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.(i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
 ) {
@@ -1230,66 +1232,72 @@ fun EventsColumn(
         indication = null,
     ) { isExpanded = !isExpanded }
     val maxEventsCount = events.maxOf { it.size }
-    Row(
-        verticalAlignment = Alignment.Bottom,
-        modifier = modifier.then(if (maxEventsCount > 3) clickToExpandModifier else Modifier),
-    ) {
-        Box(
-            Modifier
-                .width(pagerArrowSizeAndPadding.dp)
-                .padding(bottom = 2.dp),
-            contentAlignment = Alignment.BottomCenter,
-        ) { if (maxEventsCount > 3) ExpandArrow(isExpanded = isExpanded) }
+    Box {
         Row(
-            Modifier
-                .animateContentSize(appContentSizeAnimationSpec)
-                .padding(end = pagerArrowSizeAndPadding.dp),
+            verticalAlignment = Alignment.Bottom,
+            modifier = modifier.then(if (maxEventsCount > 3) clickToExpandModifier else Modifier),
         ) {
-            events.forEachIndexed { i, dayEvents ->
-                val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
-                    lineHeight = 24.sp,
-                    textDirection = TextDirection.Content,
-                )
-                val context = LocalContext.current
-                val coroutineScope = rememberCoroutineScope()
-                Column(Modifier.weight(1f)) {
-                    content(i) {
-                        dayEvents.forEachIndexed { i, event ->
-                            if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
-                                val color = eventColor(event)
-                                Text(
-                                    " " + event.title,
+            Row(
+                Modifier
+                    .animateContentSize(appContentSizeAnimationSpec)
+                    .padding(end = horizontalPadding),
+            ) {
+                events.forEachIndexed { i, dayEvents ->
+                    val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
+                        lineHeight = 24.sp,
+                        textDirection = TextDirection.Content,
+                    )
+                    val context = LocalContext.current
+                    val coroutineScope = rememberCoroutineScope()
+                    Column(
+                        Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        content(i) {
+                            dayEvents.forEachIndexed { i, event ->
+                                if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                                    val color = eventColor(event)
+                                    Text(
+                                        " " + event.title,
+                                        maxLines = 1,
+                                        style = headerTextStyle,
+                                        color = eventTextColor(color),
+                                        modifier = Modifier
+                                            .requiredWidth(cellWidth - defaultWidthReduction)
+                                            .padding(
+                                                top = if (i == 0) 2.dp else 0.dp,
+                                                bottom = 2.dp,
+                                            )
+                                            .clip(MaterialTheme.shapes.small)
+                                            .background(eventColor(event))
+                                            .clickable {
+                                                if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                    launcher.viewEvent(event, context)
+                                                } else coroutineScope.launch {
+                                                    snackbarHostState.showSnackbar(event.title)
+                                                }
+                                            },
+                                    )
+                                }
+                                if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
+                                    " +" + numeral.format(dayEvents.size - 3),
+                                    modifier = Modifier.padding(bottom = 4.dp),
                                     maxLines = 1,
                                     style = headerTextStyle,
-                                    color = eventTextColor(color),
-                                    modifier = Modifier
-                                        .requiredWidth(cellWidth - defaultWidthReduction)
-                                        .padding(
-                                            top = if (i == 0) 2.dp else 0.dp,
-                                            bottom = 2.dp,
-                                        )
-                                        .clip(MaterialTheme.shapes.small)
-                                        .background(eventColor(event))
-                                        .clickable {
-                                            if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                launcher.viewEvent(event, context)
-                                            } else coroutineScope.launch {
-                                                snackbarHostState.showSnackbar(event.title)
-                                            }
-                                        },
                                 )
                             }
-                            if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
-                                " +" + numeral.format(dayEvents.size - 3),
-                                modifier = Modifier.padding(bottom = 4.dp),
-                                maxLines = 1,
-                                style = headerTextStyle,
-                            )
                         }
                     }
                 }
             }
         }
+        Box(
+            Modifier
+                .width(pagerArrowSizeAndPadding.dp)
+                .padding(bottom = 2.dp)
+                .align(Alignment.BottomStart),
+            contentAlignment = Alignment.BottomCenter,
+        ) { if (maxEventsCount > 3) ExpandArrow(isExpanded = isExpanded) }
     }
 }
 

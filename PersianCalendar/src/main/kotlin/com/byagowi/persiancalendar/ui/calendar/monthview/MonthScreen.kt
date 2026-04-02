@@ -62,7 +62,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
-import com.byagowi.persiancalendar.ui.calendar.EventsColumn
+import com.byagowi.persiancalendar.ui.calendar.EventsRow
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.ViewEventContract
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -190,7 +190,7 @@ fun SharedTransitionScope.MonthScreen(
                 val daysStyle = LocalTextStyle.current.copy(
                     fontSize = with(density) { daysTextSize.toSp() },
                 )
-                Row(Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
+                Row {
                     repeat(7) { column ->
                         Box(
                             contentAlignment = Alignment.Center,
@@ -226,9 +226,10 @@ fun SharedTransitionScope.MonthScreen(
                         val events = (0..<7).map { index ->
                             readEvents(weekJdn + index, deviceEvents)
                         }.toImmutableList()
-                        EventsColumn(
-                            cellWidth = cellWidth,
+                        EventsRow(
+                            cellWidth = width / 7,
                             events = events,
+                            horizontalPadding = 0.dp,
                             defaultWidthReduction = defaultWidthReduction,
                             launcher = launcher,
                             snackbarHostState = snackbarHostState,
