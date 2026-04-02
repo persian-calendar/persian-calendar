@@ -696,9 +696,10 @@ fun DaysView(
                             scrollState.canScrollBackward || scrollState.canScrollForward
                         val displayedEvents =
                             (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
+                        val dayEvents = displayedEvents.let { if (isExpanded) it else it.take(3) }
+                            .toImmutableList()
                         DayEvents(
-                            events = displayedEvents.let { if (isExpanded) it else it.take(3) }
-                                .toImmutableList(),
+                            events = dayEvents,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
                             refreshCalendar = refreshCalendar,
                             modifier = Modifier
@@ -706,6 +707,9 @@ fun DaysView(
                                 .animateContentSize(appContentSizeAnimationSpec)
                                 .padding(horizontal = 24.dp),
                         )
+                        AnimatedVisibility(dayEvents.isNotEmpty()) {
+                            Box(Modifier.height(12.dp))
+                        }
                         val appointments =
                             eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
                         if (displayedEvents.size > 3) {

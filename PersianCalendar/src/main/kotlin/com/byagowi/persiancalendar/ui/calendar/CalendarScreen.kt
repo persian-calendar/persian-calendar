@@ -776,37 +776,42 @@ private fun SharedTransitionScope.Details(
             numeral = numeral,
             fabPlaceholderHeight = fabPlaceholderHeight,
         ) { appointments, onHasContentChange ->
-            val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-            AnimatedVisibility(visible = shiftWorkTitle != null) {
-                AnimatedContent(
-                    targetState = shiftWorkTitle.orEmpty(),
-                    transitionSpec = appCrossfadeSpec,
-                ) { state ->
-                    SelectionContainer {
-                        Text(
-                            state,
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+            Column {
+                val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+                AnimatedVisibility(visible = shiftWorkTitle != null) {
+                    AnimatedContent(
+                        targetState = shiftWorkTitle.orEmpty(),
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state ->
+                        SelectionContainer {
+                            Text(
+                                state,
+                                style = MaterialTheme.typography.titleLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 }
-            }
-            val shiftWorkInDaysDistance =
-                shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
-            AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
-                AnimatedContent(
-                    targetState = shiftWorkInDaysDistance.orEmpty(),
-                    transitionSpec = appCrossfadeSpec,
-                ) { state ->
-                    SelectionContainer {
-                        Text(
-                            state,
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                val shiftWorkInDaysDistance =
+                    shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
+                AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
+                    AnimatedContent(
+                        targetState = shiftWorkInDaysDistance.orEmpty(),
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state ->
+                        SelectionContainer {
+                            Text(
+                                state,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
+                }
+                AnimatedVisibility(visible = shiftWorkTitle != null) {
+                    Spacer(Modifier.height(12.dp))
                 }
             }
 
