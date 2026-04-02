@@ -1281,13 +1281,8 @@ fun EventsRow(
                         content(i) {
                             dayEvents.forEachIndexed { i, event ->
                                 if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) {
-                                    val color = eventColor(event)
-                                    Text(
-                                        " " + event.title,
-                                        maxLines = 1,
-                                        style = itemsTextStyle,
-                                        color = eventTextColor(color),
-                                        modifier = Modifier
+                                    Box(
+                                        Modifier
                                             .requiredSize(
                                                 width = cellWidth - defaultWidthReduction,
                                                 height = itemHeight,
@@ -1305,7 +1300,15 @@ fun EventsRow(
                                                     snackbarHostState.showSnackbar(event.title)
                                                 }
                                             },
-                                    )
+                                        contentAlignment = Alignment.CenterStart,
+                                    ) {
+                                        Text(
+                                            " " + event.title,
+                                            maxLines = 1,
+                                            style = itemsTextStyle,
+                                            color = eventTextColor(eventColor(event)),
+                                        )
+                                    }
                                 }
                                 if (i == defaultItems - 1 && dayEvents.size > defaultItems && !isExpanded) Text(
                                     " +" + numeral.format(dayEvents.size - defaultItems),
