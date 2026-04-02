@@ -26,7 +26,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -50,8 +49,10 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -78,7 +79,6 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.monthName
@@ -170,9 +170,8 @@ fun SharedTransitionScope.MonthScreen(
             val bottomPadding = paddingValues.calculateBottomPadding()
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
             val (width, suggestedHeight) = pagerSize
-            val cellWidth = (width - (pagerArrowSizeAndPadding * 2).dp) / 7
+            val cellWidth = (width - (pagerArrowSizeAndPadding * 2).dp) / 10
             val cellHeight = suggestedHeight / 7
-            val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
             val density = LocalDensity.current
             val diameter = min(cellWidth, cellHeight)
 
@@ -181,20 +180,14 @@ fun SharedTransitionScope.MonthScreen(
                 val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
                     refreshCalendar()
                 }
-                val fontFile = resolveFontFile()
-                val daysTextSize = diameter * when {
-                    mainCalendarNumeral.isTamil -> 16
-                    mainCalendarNumeral.isArabicIndicVariants && fontFile == null -> 25
-                    else -> 18
-                } / 40
-                val daysStyle = LocalTextStyle.current.copy(
-                    fontSize = with(density) { daysTextSize.toSp() },
-                )
+                val daysStyle = MaterialTheme.typography.titleLarge
                 Row {
                     repeat(7) { column ->
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = cellsSizeModifier.weight(1f),
+                            modifier = Modifier
+                                .size(diameter)
+                                .weight(1f),
                         ) {
                             val weekDay = weekStart + column
                             val description = stringResource(
@@ -203,7 +196,7 @@ fun SharedTransitionScope.MonthScreen(
                             )
                             Text(
                                 weekDay.shortTitle,
-                                fontSize = with(density) { (diameter * .5f).toSp() },
+                                fontSize = with(density) { (diameter * .6f).toSp() },
                                 modifier = Modifier
                                     .alpha(AppBlendAlpha)
                                     .semantics { this.contentDescription = description },
@@ -232,6 +225,12 @@ fun SharedTransitionScope.MonthScreen(
                             horizontalPadding = 0.dp,
                             defaultWidthReduction = defaultWidthReduction,
                             launcher = launcher,
+                            itemsTextStyle = MaterialTheme.typography.labelSmall.copy(
+                                textDirection = TextDirection.Content,
+                            ),
+                            itemHeight = with(density) { 20.sp.toDp() },
+                            defaultItems = 7,
+                            shape = MaterialTheme.shapes.extraSmall,
                             snackbarHostState = snackbarHostState,
                         ) { column, content ->
                             val jdn = weekJdn + column
@@ -253,7 +252,8 @@ fun SharedTransitionScope.MonthScreen(
                             val isToday = jdn == today
                             Box(
                                 contentAlignment = Alignment.Center,
-                                modifier = cellsSizeModifier
+                                modifier = Modifier
+                                    .size(diameter)
                                     .aspectRatio(1f)
                                     .then(alphaModifier)
                                     .then(

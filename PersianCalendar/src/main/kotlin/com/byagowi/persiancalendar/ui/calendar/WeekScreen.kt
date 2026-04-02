@@ -39,7 +39,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -88,6 +87,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
@@ -99,6 +99,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -730,6 +731,12 @@ fun DaysView(
                 horizontalPadding = pagerArrowSizeAndPadding.dp,
                 defaultWidthReduction = defaultWidthReduction,
                 launcher = launcher,
+                itemsTextStyle = MaterialTheme.typography.bodySmall.copy(
+                    textDirection = TextDirection.Content,
+                ),
+                itemHeight = with(density) { 24.sp.toDp() },
+                defaultItems = 3,
+                shape = MaterialTheme.shapes.small,
                 snackbarHostState = snackbarHostState,
             ) { dayIndex, content ->
                 if (!hasWeekPager) {
@@ -1222,6 +1229,10 @@ fun EventsRow(
     launcher: ManagedActivityResultLauncher<Long, Void?>,
     snackbarHostState: SnackbarHostState,
     horizontalPadding: Dp,
+    itemsTextStyle: TextStyle,
+    defaultItems: Int,
+    itemHeight: Dp,
+    shape: Shape,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.(i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
 ) {
@@ -1235,40 +1246,41 @@ fun EventsRow(
     Box {
         Row(
             verticalAlignment = Alignment.Bottom,
-            modifier = modifier.then(if (maxEventsCount > 3) clickToExpandModifier else Modifier),
+            modifier = modifier.then(
+                if (maxEventsCount > defaultItems) clickToExpandModifier else Modifier,
+            ),
         ) {
             Row(
                 Modifier
                     .animateContentSize(appContentSizeAnimationSpec)
-                    .padding(end = horizontalPadding),
+                    .padding(horizontal = horizontalPadding),
             ) {
                 events.forEachIndexed { i, dayEvents ->
-                    val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
-                        lineHeight = 24.sp,
-                        textDirection = TextDirection.Content,
-                    )
                     val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
                     Column(
-                        Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         content(i) {
                             dayEvents.forEachIndexed { i, event ->
-                                if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                                if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) {
                                     val color = eventColor(event)
                                     Text(
                                         " " + event.title,
                                         maxLines = 1,
-                                        style = headerTextStyle,
+                                        style = itemsTextStyle,
                                         color = eventTextColor(color),
                                         modifier = Modifier
-                                            .requiredWidth(cellWidth - defaultWidthReduction)
+                                            .requiredSize(
+                                                width = cellWidth - defaultWidthReduction,
+                                                height = itemHeight,
+                                            )
                                             .padding(
                                                 top = if (i == 0) 2.dp else 0.dp,
                                                 bottom = 2.dp,
                                             )
-                                            .clip(MaterialTheme.shapes.small)
+                                            .clip(shape)
                                             .background(eventColor(event))
                                             .clickable {
                                                 if (event is CalendarEvent.DeviceCalendarEvent) {
@@ -1279,11 +1291,11 @@ fun EventsRow(
                                             },
                                     )
                                 }
-                                if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
-                                    " +" + numeral.format(dayEvents.size - 3),
+                                if (i == defaultItems - 1 && dayEvents.size > defaultItems && !isExpanded) Text(
+                                    " +" + numeral.format(dayEvents.size - defaultItems),
                                     modifier = Modifier.padding(bottom = 4.dp),
                                     maxLines = 1,
-                                    style = headerTextStyle,
+                                    style = itemsTextStyle,
                                 )
                             }
                         }
@@ -1297,7 +1309,7 @@ fun EventsRow(
                 .padding(bottom = 2.dp)
                 .align(Alignment.BottomStart),
             contentAlignment = Alignment.BottomCenter,
-        ) { if (maxEventsCount > 3) ExpandArrow(isExpanded = isExpanded) }
+        ) { if (maxEventsCount > defaultItems) ExpandArrow(isExpanded = isExpanded) }
     }
 }
 
