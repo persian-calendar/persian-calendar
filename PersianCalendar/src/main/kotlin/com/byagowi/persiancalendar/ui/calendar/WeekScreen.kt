@@ -2,7 +2,9 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
@@ -91,6 +93,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -236,6 +240,11 @@ fun SharedTransitionScope.WeekScreen(
         }
     }
 
+    var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
+    val windowHeightPx = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        LocalActivity.current?.windowManager?.currentWindowMetrics?.bounds?.height()
+    } else null
+
     AnimatedContent(
         isWeekView,
         transitionSpec = noTransitionSpec,
@@ -248,7 +257,11 @@ fun SharedTransitionScope.WeekScreen(
                 AppFloatingActionButton(
                     onClick = addAction,
                     modifier = Modifier
-                        .renderInSharedTransitionScopeOverlay()
+                        .onGloballyPositioned {
+                            if (windowHeightPx != null) fabPlaceholderHeight = with(density) {
+                                (windowHeightPx - it.positionInWindow().y).toDp()
+                            } + 4.dp
+                        }
                         .padding(end = 8.dp),
                 ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
             },
@@ -445,7 +458,7 @@ fun SharedTransitionScope.WeekScreen(
                                         boundsTransform = appBoundsTransform,
                                     ) else Modifier,
                                     scrollableModifier = swipeDownOnScrollableModifier,
-                                    bottomPadding = bottomPadding,
+                                    bottomPadding = fabPlaceholderHeight ?: 0.dp,
                                     onAddActionChange = {
                                         if (weekPagerState.currentPage == page) addAction = it
                                     },
@@ -507,7 +520,7 @@ fun SharedTransitionScope.WeekScreen(
                             }
 
                             DaysView(
-                                bottomPadding = bottomPadding,
+                                bottomPadding = fabPlaceholderHeight ?: 0.dp,
                                 onAddActionChange = {
                                     if (dayPagerState.currentPage == page) addAction = it
                                 },
@@ -605,7 +618,6 @@ fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
-    fabPlaceholderHeight: Dp? = null,
     content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>, (Boolean) -> Unit) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -721,8 +733,8 @@ fun DaysView(
                             if (content != null) {
                                 content(appointments) { hasContent = it }
                             } else Spacer(Modifier.height(8.dp))
-                            if (isExpanded && fabPlaceholderHeight != null && headerHasFilled) {
-                                Spacer(Modifier.height(fabPlaceholderHeight))
+                            if (isExpanded && headerHasFilled) {
+                                Spacer(Modifier.height(bottomPadding))
                             }
                         } else if (content != null) {
                             content(appointments) { hasContent = it }
@@ -948,8 +960,8 @@ fun DaysView(
                 }
 
                 // Already available events boxes
-                eventsWithTime.mapIndexed { i, it ->
-                    it.map { (event, column, columnsCount) ->
+                eventsWithTime.forEachIndexed { i, it ->
+                    it.forEach { (event, column, columnsCount) ->
                         val start = hoursFractionOfDay(event.start)
                         val end = hoursFractionOfDay(event.end)
                         val color = eventColor(event)

@@ -740,7 +740,7 @@ private fun SharedTransitionScope.Details(
             scrollState.animateScrollTo(initialScroll)
         }
         DaysView(
-            bottomPadding = bottomPadding,
+            bottomPadding = fabPlaceholderHeight ?: 0.dp,
             onAddActionChange = onAddActionChange,
             startingDay = selectedDay,
             selectedDay = selectedDay,
@@ -774,7 +774,6 @@ private fun SharedTransitionScope.Details(
                 }
             },
             numeral = numeral,
-            fabPlaceholderHeight = fabPlaceholderHeight,
         ) { appointments, onHasContentChange ->
             Column {
                 val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
