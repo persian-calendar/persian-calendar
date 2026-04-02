@@ -940,14 +940,12 @@ private fun SharedTransitionScope.Details(
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
             ) {
-                val (_, content) = run {
-                    buttons.getOrNull(it)
-                } ?: return@AnimatedContent Spacer(
+                val button = buttons.getOrNull(it)
+                if (button == null) Spacer(
                     Modifier
                         .fillMaxWidth()
-                        .height(8.dp),
-                )
-                Box(Modifier.padding(top = 4.dp)) { content() }
+                        .height(12.dp),
+                ) else Box(Modifier.padding(top = 4.dp)) { button.second() }
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
