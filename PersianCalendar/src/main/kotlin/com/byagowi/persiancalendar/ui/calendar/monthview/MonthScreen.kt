@@ -306,11 +306,11 @@ fun SharedTransitionScope.MonthScreen(
                     }
                 }
             }
-            Box(
+            ScreenSurface(
                 Modifier
                     .align(Alignment.BottomCenter)
                     .height(0.dp),
-            ) { ScreenSurface { Box(Modifier.fillMaxWidth()) } }
+            ) { Box(Modifier.fillMaxWidth()) }
         }
     }
 }
