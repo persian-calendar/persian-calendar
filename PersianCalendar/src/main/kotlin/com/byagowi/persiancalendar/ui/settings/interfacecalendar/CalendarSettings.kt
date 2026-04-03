@@ -432,8 +432,8 @@ private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, 
                     CalendarContract.Calendars.VISIBLE, // 4
                 ),
                 null, null, null,
-            )?.use {
-                generateSequence { if (it.moveToNext()) it else null }.filter {
+            )?.use { cursor ->
+                generateSequence { if (cursor.moveToNext()) cursor else null }.filter {
                     it.getString(4) == "1"
                 }.map {
                     CalendarsEntry(

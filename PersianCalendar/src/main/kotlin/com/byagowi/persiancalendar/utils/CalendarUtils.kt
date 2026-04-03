@@ -215,8 +215,8 @@ private fun readDeviceEvents(
             CalendarContract.Instances.BEGIN + " ASC LIMIT ${
                 limit * if (searchTerm != null) 3 else 1
             }",
-        )?.use {
-            generateSequence { if (it.moveToNext()) it else null }.filter {
+        )?.use { cursor ->
+            generateSequence { if (cursor.moveToNext()) cursor else null }.filter {
                 it.getString(5) == "1" && // is visible
                         it.getLong(9) !in eventCalendarsIdsToExclude && run {
                     boundaryRegex == null || boundaryRegex.containsMatchIn(
