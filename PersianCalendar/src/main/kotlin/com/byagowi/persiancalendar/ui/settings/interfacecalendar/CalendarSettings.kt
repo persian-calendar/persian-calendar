@@ -442,7 +442,7 @@ private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, 
                         it.getString(2),
                         it.getIntOrNull(3)?.let(::Color),
                     )
-                }.toList().groupBy { it.accountName }
+                }.groupBy { it.accountName }
             }
         }.onFailure(logException).onFailure(onFailure).getOrNull() ?: emptyMap()
     }
