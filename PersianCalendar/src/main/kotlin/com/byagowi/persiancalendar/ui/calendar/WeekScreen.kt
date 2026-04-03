@@ -1313,7 +1313,9 @@ fun EventsRow(
                                 }
                                 if (i == defaultItems - 1 && dayEvents.size > defaultItems && !isExpanded) Text(
                                     " +" + numeral.format(dayEvents.size - defaultItems),
-                                    modifier = Modifier.padding(bottom = 4.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 4.dp),
                                     maxLines = 1,
                                     style = itemsTextStyle,
                                 )
