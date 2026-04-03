@@ -72,7 +72,6 @@ import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -115,7 +114,7 @@ fun CalendarSettings(
     Column(modifier = modifier) {
         val context = LocalContext.current
         AnimatedVisibility(
-            (language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars) && remember { Jdn.today() }.isYearSupportedOnApp,
+            visible = language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars,
         ) {
             var shownOnce by rememberSaveable { mutableStateOf(false) }
             SettingsClickable(
