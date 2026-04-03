@@ -72,6 +72,7 @@ import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -87,6 +88,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.ui.about.EnableInDeviceCalendar
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -113,9 +115,12 @@ fun CalendarSettings(
 ) {
     Column(modifier = modifier) {
         val context = LocalContext.current
-        AnimatedVisibility(
-            visible = language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars,
-        ) {
+        val userNeedsAppointments =
+            language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars
+        AnimatedVisibility(userNeedsAppointments && remember { !Jdn.today().isYearSupportedOnApp }) {
+            EnableInDeviceCalendar {}
+        }
+        AnimatedVisibility(userNeedsAppointments) {
             var shownOnce by rememberSaveable { mutableStateOf(false) }
             SettingsClickable(
                 title = if (language.isPersianOrDari) "مناسبت‌ها" else stringResource(R.string.events),

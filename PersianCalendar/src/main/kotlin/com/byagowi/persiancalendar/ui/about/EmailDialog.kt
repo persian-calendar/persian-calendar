@@ -38,13 +38,6 @@ fun EmailDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
 ) {
-    var firstPass by rememberSaveable {
-        mutableStateOf(
-            false,
-//            eventsRepository.iranOthers || language.isUserAbleToReadPersian
-        )
-    }
-    if (firstPass) return NoteOnAppointments(onDismissRequest) { firstPass = false }
     var message by rememberSaveable { mutableStateOf("") }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -81,55 +74,6 @@ fun EmailDialog(
 }
 
 @Composable
-fun NoteOnAppointments(
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-    nextStep: (() -> Unit)? = null,
-) {
-    CompositionLocalProvider(
-        LocalLayoutDirection provides LayoutDirection.Rtl,
-    ) {
-        AppDialog(
-            modifier = modifier,
-            confirmButton = { TextButton(onClick = onDismissRequest) { Text("متوجه شدم") } },
-            neutralButton = { if (nextStep != null) TextButton(onClick = nextStep) { Text("سایر امکانات") } },
-            onDismissRequest = onDismissRequest,
-        ) {
-            Text(
-                """هدف اصلی توسعهٔ این برنامه نمایش صحیح تعطیلی‌های رسمی بوده است. به دلیل محدودیت‌هایی از جمله در حجم، آفلاین‌بودن، نیاز به روزآمدسازی سالانه، اختلاف در منابع و احتمال عدم تطابق با رویدادها در زمان رخ‌دادن آن‌ها در این برناهه همواره اولویت نمایش نمایش صحیح تعطیلی‌های رسمی به دلیل اهمیت آن‌ها در برنامه‌ریزی کارها در زندگی بوده است. در نسخه‌های سال‌ها پیش این برنامه مناسبت‌های غیرتعطیل قرار نداده شده بود که بعدها توسط سایر توسعه‌دهندگان به پروژه اضافه شده‌اند که به همین دلیل کامل نبوده و بصورت پیش‌فرض غیرفعال است. فعال‌سازی هر بخشی از مناسبت‌ها به جز تعطیلات رسمی به عهده و علاقهٔ کاربر است.
-
-اگر مناسبت‌های غیرتعطیل این برنامه را ناقص یا اشتباه یافته‌اید پیشنهاد می‌شود از منابع آنلاین زیر به مناسبت‌های بیشتر دسترسی یابید.
-""".trim(),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(all = 16.dp),
-            )
-            val urlHandler = LocalUriHandler.current
-            persistentListOf(
-                "باحساب" to "https://www.bahesab.ir/time/",
-                "دانشگاه تهران" to "https://calendar.ut.ac.ir/",
-                "تایم.آی‌آر" to "https://www.time.ir/",
-            ).forEach { (title, url) ->
-                FilledTonalButton(
-                    onClick = {
-                        urlHandler.openUri(url)
-                        onDismissRequest()
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(.7f),
-                ) { Text(title) }
-            }
-            Text(
-                "همچنین می‌توان در تقویم دستگاه مناسبت‌های کشورهای مختلف را فعال کرد که در این برنامه نیز نمایش داده می‌شود که راهنمای آن با زدن دکمهٔ زیر قابل مشاهده است.",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(all = 16.dp),
-            )
-            EnableInDeviceCalendar(onDismissRequest = onDismissRequest)
-        }
-    }
-}
-
-@Composable
 fun ColumnScope.EnableInDeviceCalendar(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
@@ -145,7 +89,7 @@ fun ColumnScope.EnableInDeviceCalendar(
         },
     ) {
         Text(
-            "فعال‌سازی مناسبت‌ها در تقویم دستگاه",
+            "راهنمای فعال‌سازی مناسبت‌ها از تقویم دستگاه",
             maxLines = 1,
             autoSize = TextAutoSize.StepBased(9.sp, LocalTextStyle.current.fontSize),
             textAlign = TextAlign.Center,
