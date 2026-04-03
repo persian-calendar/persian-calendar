@@ -257,6 +257,7 @@ fun SharedTransitionScope.WeekScreen(
                 AppFloatingActionButton(
                     onClick = addAction,
                     modifier = Modifier
+                        .renderInSharedTransitionScopeOverlay()
                         .onGloballyPositioned {
                             if (windowHeightPx != null) fabPlaceholderHeight = with(density) {
                                 (windowHeightPx - it.positionInWindow().y).toDp()
