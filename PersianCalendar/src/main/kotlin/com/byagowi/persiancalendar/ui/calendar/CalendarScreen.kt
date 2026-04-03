@@ -775,8 +775,8 @@ private fun SharedTransitionScope.Details(
             },
             numeral = numeral,
         ) { appointments, onHasContentChange ->
+            val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
             Column {
-                val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
                 AnimatedVisibility(visible = shiftWorkTitle != null) {
                     AnimatedContent(
                         targetState = shiftWorkTitle.orEmpty(),
@@ -905,7 +905,7 @@ private fun SharedTransitionScope.Details(
 //                    !removeThirdTab && enableTimesTab()
                 },
             )
-            onHasContentChange(buttons.isNotEmpty())
+            onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
             if (buttons.isNotEmpty()) CompositionLocalProvider(
                 LocalMinimumInteractiveComponentSize provides 0.dp,
