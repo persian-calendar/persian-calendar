@@ -299,21 +299,11 @@ fun SharedTransitionScope.CalendarScreen(
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
     var isYearView by rememberSaveable { mutableStateOf(false) }
     val backButtonFraction = remember { mutableFloatStateOf(if (isYearView) 1f else 0f) }
-    LaunchedEffect(isYearView) {
-        animate(
-            initialValue = backButtonFraction.floatValue,
-            targetValue = if (isYearView) 1f else 0f,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = Spring.StiffnessLow,
-            ),
-        ) { value, _ -> backButtonFraction.floatValue = value }
-    }
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
-    LaunchedEffect(isAddEventBoxEnabled) {
+    LaunchedEffect(isYearView, isAddEventBoxEnabled) {
         animate(
             initialValue = backButtonFraction.floatValue,
-            targetValue = if (isAddEventBoxEnabled) 1f else 0f,
+            targetValue = if (isYearView || isAddEventBoxEnabled) 1f else 0f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
@@ -475,9 +465,6 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }
         val bottomPadding = paddingValues.calculateBottomPadding()
-        val bottomPaddingWithMinimum = bottomPadding
-            // For screens without navigation bar, at least make sure it has some bottom padding
-            .coerceAtLeast(24.dp)
         BoxWithConstraints(
             Modifier
                 .padding(top = paddingValues.calculateTopPadding())
@@ -509,7 +496,9 @@ fun SharedTransitionScope.CalendarScreen(
                     yearViewCalendar = yearViewCalendar,
                     onYearViewCalendarChange = { yearViewCalendar = it },
                     maxHeight = maxHeight,
-                    bottomPadding = bottomPaddingWithMinimum,
+                    bottomPadding = bottomPadding
+                        // For screens without navigation bar, at least make sure it has some bottom padding
+                        .coerceAtLeast(24.dp),
                     today = today,
                     modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),
                 ) { calendar, monthsDistance ->
@@ -553,7 +542,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 selectedDay = selectedDay,
                                 onAddActionChange = { addAction = it },
                                 bringDay = bringDay,
-                                bottomPadding = bottomPaddingWithMinimum,
                                 today = today,
                                 now = now,
                                 navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
@@ -625,7 +613,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 bringDay = bringDay,
                                 onAddActionChange = { addAction = it },
                                 selectedDay = selectedDay,
-                                bottomPadding = bottomPaddingWithMinimum,
                                 today = today,
                                 addEvent = addEvent,
                                 snackbarHostState = snackbarHostState,
@@ -688,7 +675,6 @@ private fun SharedTransitionScope.Details(
     selectedDay: Jdn,
     onAddActionChange: (() -> Unit) -> Unit,
     bringDay: BringDay,
-    bottomPadding: Dp,
     today: Jdn,
     now: Long,
     addEvent: (AddEventData) -> Unit,
