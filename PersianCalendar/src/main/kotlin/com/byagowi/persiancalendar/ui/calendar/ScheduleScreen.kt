@@ -217,17 +217,16 @@ fun SharedTransitionScope.ScheduleScreen(
                 ) {
                     items(ITEMS_COUNT) { index ->
                         val jdn = indexToJdn(baseJdn, index)
-                        if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(
-                            Modifier.padding(
+                        if (index == 0 || index == ITEMS_COUNT - 1) return@items MoreButton(
+                            title = stringResource(R.string.more),
+                            modifier = Modifier.padding(
                                 top = if (index == 0) 20.dp else 16.dp,
                                 bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
                                 start = 24.dp,
                             ),
                         ) {
-                            MoreButton(stringResource(R.string.more)) {
-                                baseJdn = jdn
-                                coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
-                            }
+                            baseJdn = jdn
+                            coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
                         }
                         val events = eventsCache(jdn)
                         Column {

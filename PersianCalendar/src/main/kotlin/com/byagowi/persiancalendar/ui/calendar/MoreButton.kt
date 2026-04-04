@@ -27,25 +27,26 @@ fun MoreButton(
     modifier: Modifier = Modifier,
     action: () -> Unit,
 ) {
-    @OptIn(ExperimentalMaterial3Api::class) TooltipBox(
-        modifier = modifier,
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        tooltip = { PlainTooltip { Text(title) } },
-        state = rememberTooltipState(),
-    ) {
-        Box(
-            Modifier
-                .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable { action() }
-                .padding(horizontal = 12.dp, vertical = 1.dp),
+    Box(modifier) {
+        @OptIn(ExperimentalMaterial3Api::class) TooltipBox(
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+            tooltip = { PlainTooltip { Text(title) } },
+            state = rememberTooltipState(),
         ) {
-            Icon(
-                Icons.Default.MoreHoriz,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp),
-                contentDescription = title,
-            )
+            Box(
+                Modifier
+                    .clip(MaterialTheme.shapes.large)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .clickable { action() }
+                    .padding(horizontal = 12.dp, vertical = 1.dp),
+            ) {
+                Icon(
+                    Icons.Default.MoreHoriz,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = title,
+                )
+            }
         }
     }
 }
