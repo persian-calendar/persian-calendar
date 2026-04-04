@@ -17,10 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -36,8 +34,6 @@ import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListSubHeader
-import androidx.wear.compose.material3.LocalContentColor
-import androidx.wear.compose.material3.LocalTextStyle
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.ScreenStage
 import androidx.wear.compose.material3.Text
@@ -129,7 +125,7 @@ fun EventView(it: Entry, modifier: Modifier = Modifier) {
                         is EntryType.Holiday if type.source == EventSource.Iran -> "عمومی رسمی، "
                         else -> ""
                     } + it.title,
-//                    maxLines = if (state) Int.MAX_VALUE else 1,
+                    maxLines = if (state) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -81,7 +81,7 @@ fun <T : Any> rememberSwipeDismissableSceneStrategy(
  *   under.
  */
 class SwipeDismissableSceneStrategyState(
-    internal val swipeToDismissBoxState: SwipeToDismissBoxState?
+    internal val swipeToDismissBoxState: SwipeToDismissBoxState?,
 )
 
 /**
