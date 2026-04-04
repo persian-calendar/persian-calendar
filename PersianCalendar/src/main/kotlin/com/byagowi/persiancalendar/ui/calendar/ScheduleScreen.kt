@@ -203,118 +203,116 @@ fun SharedTransitionScope.ScheduleScreen(
             )
         },
     ) { paddingValues ->
-        Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            ScreenSurface {
-                val circleTextStyle =
-                    if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
-                    else MaterialTheme.typography.titleLarge
-                Box {
-                    val eventsCache = eventsCache(refreshToken)
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = WindowInsets.displayCutout.only(
-                            sides = WindowInsetsSides.Horizontal,
-                        ).asPaddingValues(),
-                    ) {
-                        items(ITEMS_COUNT) { index ->
-                            val jdn = indexToJdn(baseJdn, index)
-                            if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(
-                                Modifier.padding(
-                                    top = if (index == 0) 20.dp else 16.dp,
-                                    bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
-                                    start = 24.dp,
-                                ),
-                            ) {
-                                MoreButton(stringResource(R.string.more)) {
-                                    baseJdn = jdn
-                                    coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
-                                }
+        ScreenSurface(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            val circleTextStyle =
+                if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
+                else MaterialTheme.typography.titleLarge
+            Box {
+                val eventsCache = eventsCache(refreshToken)
+                LazyColumn(
+                    state = listState,
+                    contentPadding = WindowInsets.displayCutout.only(
+                        sides = WindowInsetsSides.Horizontal,
+                    ).asPaddingValues(),
+                ) {
+                    items(ITEMS_COUNT) { index ->
+                        val jdn = indexToJdn(baseJdn, index)
+                        if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(
+                            Modifier.padding(
+                                top = if (index == 0) 20.dp else 16.dp,
+                                bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
+                                start = 24.dp,
+                            ),
+                        ) {
+                            MoreButton(stringResource(R.string.more)) {
+                                baseJdn = jdn
+                                coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
                             }
-                            val events = eventsCache(jdn)
-                            Column {
-                                val date = jdn on mainCalendar
-                                if (events.isNotEmpty()) Row(
-                                    Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
-                                ) {
-                                    Box(
-                                        Modifier
-                                            .padding(top = 4.dp)
-                                            .clickable(
-                                                interactionSource = null,
-                                                indication = ripple(bounded = false),
-                                            ) {
-                                                commandBringDay(jdn)
-                                                navigateUp()
-                                            }
-                                            .size(32.dp)
-                                            .background(
-                                                when {
-                                                    jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
-                                                        alpha = .6f,
-                                                    )
+                        }
+                        val events = eventsCache(jdn)
+                        Column {
+                            val date = jdn on mainCalendar
+                            if (events.isNotEmpty()) Row(
+                                Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
+                            ) {
+                                Box(
+                                    Modifier
+                                        .padding(top = 4.dp)
+                                        .clickable(
+                                            interactionSource = null,
+                                            indication = ripple(bounded = false),
+                                        ) {
+                                            commandBringDay(jdn)
+                                            navigateUp()
+                                        }
+                                        .size(32.dp)
+                                        .background(
+                                            when {
+                                                jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
+                                                    alpha = .6f,
+                                                )
 
-                                                    jdn > today -> MaterialTheme.colorScheme.primaryContainer
-                                                    else -> MaterialTheme.colorScheme.primary
-                                                },
-                                                CircleShape,
-                                            ),
-                                        contentAlignment = Alignment.Center,
-                                    ) {
-                                        Text(
-                                            text = numeral.format(date.dayOfMonth),
-                                            style = circleTextStyle,
-                                            color = when {
-                                                jdn < today -> MaterialTheme.colorScheme.onPrimaryContainer
-                                                jdn > today -> MaterialTheme.colorScheme.onPrimaryContainer
-                                                else -> MaterialTheme.colorScheme.onPrimary
+                                                jdn > today -> MaterialTheme.colorScheme.primaryContainer
+                                                else -> MaterialTheme.colorScheme.primary
                                             },
-                                            modifier = Modifier.semantics {
-                                                if (isTalkBackEnabled) this.contentDescription =
-                                                    formatDate(date, forceNonNumerical = true)
-                                            },
-                                        )
-                                    }
-                                    DayEvents(
-                                        events = events,
-                                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                        refreshCalendar = refreshCalendar,
-                                        modifier = Modifier.padding(top = 4.dp, start = 4.dp),
-                                    )
-                                }
-                                if (mainCalendar.getMonthLength(
-                                        date.year,
-                                        date.month,
-                                    ) == date.dayOfMonth
+                                            CircleShape,
+                                        ),
+                                    contentAlignment = Alignment.Center,
                                 ) {
-                                    val nextMonth = mainCalendar.getMonthStartFromMonthsDistance(
-                                        jdn, 1,
-                                    )
                                     Text(
-                                        if (nextMonth.month == 1) language.my.format(
-                                            nextMonth.monthName,
-                                            numeral.format(nextMonth.year),
-                                        ) else nextMonth.monthName,
-                                        fontSize = 24.sp,
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 24.dp, end = 24.dp, top = 24.dp,
-                                            )
-                                            .clickable(
-                                                interactionSource = null,
-                                                indication = ripple(bounded = false),
-                                            ) {
-                                                // This used to bring year view directly but now
-                                                // only brings the day on the calendar
-                                                commandBringDay(Jdn(nextMonth))
-                                                navigateUp()
-                                            },
+                                        text = numeral.format(date.dayOfMonth),
+                                        style = circleTextStyle,
+                                        color = when {
+                                            jdn < today -> MaterialTheme.colorScheme.onPrimaryContainer
+                                            jdn > today -> MaterialTheme.colorScheme.onPrimaryContainer
+                                            else -> MaterialTheme.colorScheme.onPrimary
+                                        },
+                                        modifier = Modifier.semantics {
+                                            if (isTalkBackEnabled) this.contentDescription =
+                                                formatDate(date, forceNonNumerical = true)
+                                        },
                                     )
                                 }
+                                DayEvents(
+                                    events = events,
+                                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                    refreshCalendar = refreshCalendar,
+                                    modifier = Modifier.padding(top = 4.dp, start = 4.dp),
+                                )
+                            }
+                            if (mainCalendar.getMonthLength(
+                                    date.year,
+                                    date.month,
+                                ) == date.dayOfMonth
+                            ) {
+                                val nextMonth = mainCalendar.getMonthStartFromMonthsDistance(
+                                    jdn, 1,
+                                )
+                                Text(
+                                    if (nextMonth.month == 1) language.my.format(
+                                        nextMonth.monthName,
+                                        numeral.format(nextMonth.year),
+                                    ) else nextMonth.monthName,
+                                    fontSize = 24.sp,
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 24.dp, end = 24.dp, top = 24.dp,
+                                        )
+                                        .clickable(
+                                            interactionSource = null,
+                                            indication = ripple(bounded = false),
+                                        ) {
+                                            // This used to bring year view directly but now
+                                            // only brings the day on the calendar
+                                            commandBringDay(Jdn(nextMonth))
+                                            navigateUp()
+                                        },
+                                )
                             }
                         }
                     }
-                    ScrollShadow(listState)
                 }
+                ScrollShadow(listState)
             }
         }
     }

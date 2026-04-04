@@ -294,87 +294,85 @@ fun SharedTransitionScope.CompassScreen(
         },
         modifier = modifier,
     ) { paddingValues ->
-        Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            ScreenSurface {
-                Column {
-                    Box(Modifier.weight(1f, fill = false)) {
-                        Box(
-                            Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
+        ScreenSurface(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            Column {
+                Box(Modifier.weight(1f, fill = false)) {
+                    Box(
+                        Modifier.sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                            boundsTransform = appBoundsTransform,
+                        ),
+                    ) {
+                        Compass(
+                            declination = declination.value,
+                            qiblaHeading = qiblaHeading,
+                            time = time,
+                            angle = angle,
+                        )
+                    }
+                    Column {
+                        AnimatedVisibility(
+                            visible = isSliderShown,
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically(),
                         ) {
-                            Compass(
-                                declination = declination.value,
-                                qiblaHeading = qiblaHeading,
-                                time = time,
-                                angle = angle,
+                            Slider(
+                                valueRange = 0f..24f,
+                                value = sliderValue,
+                                onValueChange = {
+                                    isTimeShiftAnimate = false
+                                    timeShift = if (it == 24f) 0f else it
+                                },
+                                colors = appSliderColor(),
+                                modifier = Modifier.padding(horizontal = 16.dp),
                             )
                         }
-                        Column {
-                            AnimatedVisibility(
-                                visible = isSliderShown,
-                                enter = fadeIn() + expandVertically(),
-                                exit = fadeOut() + shrinkVertically(),
-                            ) {
-                                Slider(
-                                    valueRange = 0f..24f,
-                                    value = sliderValue,
-                                    onValueChange = {
-                                        isTimeShiftAnimate = false
-                                        timeShift = if (it == 24f) 0f else it
-                                    },
-                                    colors = appSliderColor(),
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                )
-                            }
-                        }
-                        SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
-                    AppBottomAppBar(overlay = { Angle(angle, declination.value) }) {
-                        AppIconButton(
-                            icon = ImageVector.vectorResource(R.drawable.ic_level),
-                            title = stringResource(R.string.level),
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
+                    SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
+                }
+                AppBottomAppBar(overlay = { Angle(angle, declination.value) }) {
+                    AppIconButton(
+                        icon = ImageVector.vectorResource(R.drawable.ic_level),
+                        title = stringResource(R.string.level),
+                        modifier = Modifier.sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                            boundsTransform = appBoundsTransform,
+                        ),
+                        onClick = navigateToLevel,
+                    )
+                    AppIconButton(
+                        icon = Icons.Default.Map,
+                        title = stringResource(R.string.map),
+                        modifier = Modifier.sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                            boundsTransform = appBoundsTransform,
+                        ),
+                        onClick = navigateToMap,
+                    )
+                    Spacer(Modifier.weight(1f))
+                    AppIconButton(
+                        icon = Icons.Default.Info,
+                        title = stringResource(R.string.help),
+                    ) {
+                        showSnackbarMessage(
+                            resources.getString(
+                                if (sensorNotFound) R.string.compass_not_found
+                                else R.string.calibrate_compass_summary,
                             ),
-                            onClick = navigateToLevel,
+                            SnackbarDuration.Long,
                         )
-                        AppIconButton(
-                            icon = Icons.Default.Map,
-                            title = stringResource(R.string.map),
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
-                            onClick = navigateToMap,
-                        )
-                        Spacer(Modifier.weight(1f))
-                        AppIconButton(
-                            icon = Icons.Default.Info,
-                            title = stringResource(R.string.help),
-                        ) {
-                            showSnackbarMessage(
-                                resources.getString(
-                                    if (sensorNotFound) R.string.compass_not_found
-                                    else R.string.calibrate_compass_summary,
-                                ),
-                                SnackbarDuration.Long,
-                            )
-                        }
-                        Spacer(Modifier.width(4.dp))
-                        Box(
-                            Modifier.sharedElement(
-                                rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
-                        ) { StopButton(isStopped) { isStopped = it } }
                     }
+                    Spacer(Modifier.width(4.dp))
+                    Box(
+                        Modifier.sharedElement(
+                            rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                            animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                            boundsTransform = appBoundsTransform,
+                        ),
+                    ) { StopButton(isStopped) { isStopped = it } }
                 }
             }
         }

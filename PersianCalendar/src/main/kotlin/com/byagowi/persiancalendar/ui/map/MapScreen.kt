@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -60,6 +61,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -175,11 +177,12 @@ fun SharedTransitionScope.MapScreen(
     val context = LocalContext.current
     var formattedTime by remember { mutableStateOf("") }
     Box(modifier = modifier) {
-        Column {
-            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
-            Spacer(Modifier.height((16 + menuHeight + 16).dp))
-            ScreenSurface { Box(Modifier.fillMaxSize()) }
-        }
+        ScreenSurface(
+            modifier = Modifier.padding(
+                top = WindowInsets.systemBars.asPaddingValues(LocalDensity.current)
+                    .calculateTopPadding() + (16 + menuHeight + 16).dp,
+            ),
+        ) { Box(Modifier.fillMaxSize()) }
         val mapString = stringResource(R.string.map)
         val scale = rememberSaveable { mutableFloatStateOf(1f) }
         val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
@@ -346,8 +349,7 @@ fun SharedTransitionScope.MapScreen(
                 ) {
                     if (showGlobeView) return@MenuItem
                     if (markedCoordinates == null) showGpsDialog = true else {
-                        directPathDestination =
-                            directPathDestination.takeIf { !isDirectPathMode }
+                        directPathDestination = directPathDestination.takeIf { !isDirectPathMode }
                         isDirectPathMode = !isDirectPathMode
                     }
                 }

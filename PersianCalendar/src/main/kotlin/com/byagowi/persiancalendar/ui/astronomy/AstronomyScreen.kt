@@ -325,7 +325,7 @@ fun SharedTransitionScope.AstronomyScreen(
             )
         },
     ) { paddingValues ->
-        Box(
+        ScreenSurface(
             Modifier
                 .padding(top = paddingValues.calculateTopPadding())
                 .appTransformable(
@@ -337,118 +337,116 @@ fun SharedTransitionScope.AstronomyScreen(
                     disablePan = !isScaled,
                 ),
         ) {
-            ScreenSurface {
-                val bottomPadding = paddingValues.calculateBottomPadding()
-                if (isLandscape) BoxWithConstraints(
-                    Modifier
-                        .fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
-                ) {
+            val bottomPadding = paddingValues.calculateBottomPadding()
+            if (isLandscape) BoxWithConstraints(
+                Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
+            ) {
+                val maxHeight = this.maxHeight
+                val maxWidth = this.maxWidth
+                Row(Modifier.fillMaxWidth()) {
+                    Column(
+                        Modifier
+                            .width((maxWidth / 2).coerceAtMost(480.dp))
+                            .fillMaxHeight()
+                            .padding(
+                                top = 24.dp,
+                                start = 24.dp,
+                                bottom = bottomPadding + 16.dp,
+                            ),
+                    ) {
+                        Header(
+                            modifier = Modifier,
+                            astronomyState = astronomyState,
+                            jdn = jdn,
+                            mode = mode,
+                            isTropical = isTropical,
+                            timeInMillis = timeInMillis,
+                        )
+                        Spacer(Modifier.weight(1f))
+                        SliderBar(timeInMillis, resetButtonAction) {
+                            isDatePickerDialogShown = true
+                        }
+                    }
+                    SolarDisplay(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
+                            .height(maxHeight - bottomPadding),
+                        timeInMillis = timeInMillis,
+                        astronomyState = astronomyState,
+                        mode = mode,
+                        onModeChange = { mode = it },
+                        isTropical = isTropical,
+                        navigateToMap = navigateToMap,
+                        scale = scale,
+                        isScaled = isScaled,
+                        offsetX = offsetX,
+                        offsetY = offsetY,
+                    )
+                }
+            } else Column {
+                BoxWithConstraints(Modifier.weight(1f, fill = false)) {
                     val maxHeight = this.maxHeight
                     val maxWidth = this.maxWidth
-                    Row(Modifier.fillMaxWidth()) {
-                        Column(
-                            Modifier
-                                .width((maxWidth / 2).coerceAtMost(480.dp))
-                                .fillMaxHeight()
-                                .padding(
-                                    top = 24.dp,
-                                    start = 24.dp,
-                                    bottom = bottomPadding + 16.dp,
-                                ),
-                        ) {
+                    var needsScroll by remember { mutableStateOf(false) }
+                    // Puts content in middle of available space after the measured header
+                    Layout(
+                        modifier = if (needsScroll) Modifier.verticalScroll(rememberScrollState()) else Modifier,
+                        content = {
                             Header(
-                                modifier = Modifier,
+                                modifier = Modifier.padding(
+                                    start = 24.dp,
+                                    end = 24.dp,
+                                    top = 24.dp,
+                                ),
                                 astronomyState = astronomyState,
                                 jdn = jdn,
                                 mode = mode,
                                 isTropical = isTropical,
                                 timeInMillis = timeInMillis,
                             )
-                            Spacer(Modifier.weight(1f))
-                            SliderBar(timeInMillis, resetButtonAction) {
-                                isDatePickerDialogShown = true
-                            }
-                        }
-                        SolarDisplay(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
-                                .height(maxHeight - bottomPadding),
-                            timeInMillis = timeInMillis,
-                            astronomyState = astronomyState,
-                            mode = mode,
-                            onModeChange = { mode = it },
-                            isTropical = isTropical,
-                            navigateToMap = navigateToMap,
-                            scale = scale,
-                            isScaled = isScaled,
-                            offsetX = offsetX,
-                            offsetY = offsetY,
-                        )
-                    }
-                } else Column {
-                    BoxWithConstraints(Modifier.weight(1f, fill = false)) {
-                        val maxHeight = this.maxHeight
-                        val maxWidth = this.maxWidth
-                        var needsScroll by remember { mutableStateOf(false) }
-                        // Puts content in middle of available space after the measured header
-                        Layout(
-                            modifier = if (needsScroll) Modifier.verticalScroll(rememberScrollState()) else Modifier,
-                            content = {
-                                Header(
-                                    modifier = Modifier.padding(
-                                        start = 24.dp,
-                                        end = 24.dp,
-                                        top = 24.dp,
-                                    ),
-                                    astronomyState = astronomyState,
-                                    jdn = jdn,
-                                    mode = mode,
-                                    isTropical = isTropical,
-                                    timeInMillis = timeInMillis,
-                                )
-                                SolarDisplay(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(maxWidth - (56 * 2 + 8).dp),
-                                    timeInMillis = timeInMillis,
-                                    astronomyState = astronomyState,
-                                    mode = mode,
-                                    onModeChange = { mode = it },
-                                    isTropical = isTropical,
-                                    navigateToMap = navigateToMap,
-                                    scale = scale,
-                                    isScaled = isScaled,
-                                    offsetX = offsetX,
-                                    offsetY = offsetY,
-                                )
-                            },
-                        ) { (header, content), constraints ->
-                            val placeableHeader = header.measure(constraints)
-                            val placeableContent = content.measure(constraints)
-                            layout(
-                                width = constraints.maxWidth,
-                                height = max(
-                                    placeableHeader.height + placeableContent.height,
-                                    maxHeight.roundToPx(),
-                                ),
-                            ) {
-                                // Put the header at top
-                                placeableHeader.placeRelative(0, 0)
+                            SolarDisplay(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(maxWidth - (56 * 2 + 8).dp),
+                                timeInMillis = timeInMillis,
+                                astronomyState = astronomyState,
+                                mode = mode,
+                                onModeChange = { mode = it },
+                                isTropical = isTropical,
+                                navigateToMap = navigateToMap,
+                                scale = scale,
+                                isScaled = isScaled,
+                                offsetX = offsetX,
+                                offsetY = offsetY,
+                            )
+                        },
+                    ) { (header, content), constraints ->
+                        val placeableHeader = header.measure(constraints)
+                        val placeableContent = content.measure(constraints)
+                        layout(
+                            width = constraints.maxWidth,
+                            height = max(
+                                placeableHeader.height + placeableContent.height,
+                                maxHeight.roundToPx(),
+                            ),
+                        ) {
+                            // Put the header at top
+                            placeableHeader.placeRelative(0, 0)
 
-                                val availableHeight = maxHeight.roundToPx() - placeableHeader.height
-                                val space = availableHeight / 2 - placeableContent.height / 2
-                                needsScroll = space <= 0
-                                placeableContent.placeRelative(
-                                    0, placeableHeader.height + space.coerceAtLeast(0),
-                                )
-                            }
+                            val availableHeight = maxHeight.roundToPx() - placeableHeader.height
+                            val space = availableHeight / 2 - placeableContent.height / 2
+                            needsScroll = space <= 0
+                            placeableContent.placeRelative(
+                                0, placeableHeader.height + space.coerceAtLeast(0),
+                            )
                         }
                     }
-                    SliderBar(timeInMillis, resetButtonAction) { isDatePickerDialogShown = true }
-                    Spacer(Modifier.height(16.dp + bottomPadding))
                 }
+                SliderBar(timeInMillis, resetButtonAction) { isDatePickerDialogShown = true }
+                Spacer(Modifier.height(16.dp + bottomPadding))
             }
         }
     }

@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +40,7 @@ fun SharedTransitionScope.ScreenSurface(
     disableSharedContent: Boolean = false,
     mayNeedDragHandleToDivide: Boolean = false,
     drawBehindSurface: Boolean = true,
-    content: @Composable () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     Layout(
         modifier = modifier,
@@ -89,7 +90,7 @@ fun SharedTransitionScope.ScreenSurface(
                 )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape),
             ) {
                 val onSurface by animateColor(MaterialTheme.colorScheme.onSurface)
-                CompositionLocalProvider(LocalContentColor provides onSurface, content)
+                CompositionLocalProvider(LocalContentColor provides onSurface) { content() }
             }
         },
     ) { (parent, content), constraints ->

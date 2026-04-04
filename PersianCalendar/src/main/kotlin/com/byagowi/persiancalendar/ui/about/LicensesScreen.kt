@@ -89,20 +89,18 @@ fun SharedTransitionScope.LicensesScreen(
         },
     ) { paddingValues ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-                ScreenSurface {
-                    Licenses()
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .windowInsetsPadding(
-                                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
-                            )
-                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                            .clearAndSetSemantics {},
-                        contentAlignment = Alignment.CenterEnd,
-                    ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
-                }
+            ScreenSurface(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+                Licenses()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .windowInsetsPadding(
+                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+                        )
+                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        .clearAndSetSemantics {},
+                    contentAlignment = Alignment.CenterEnd,
+                ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
             }
         }
     }
@@ -166,14 +164,11 @@ private fun Sidebar(modifier: Modifier = Modifier) {
 @Composable
 private fun BoxScope.Licenses() {
     val sections = remember {
-        credits
-            .split(Regex("^-{4}$", RegexOption.MULTILINE))
-            .map {
+        credits.split(Regex("^-{4}$", RegexOption.MULTILINE)).map {
                 val lines = it.trim().lines()
                 val parts = lines.first().split(" - ")
                 Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
-            }
-            .toImmutableList()
+            }.toImmutableList()
     }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     val listState = rememberLazyListState()
