@@ -181,8 +181,8 @@ fun SharedTransitionScope.ConverterScreen(
             val scrollState = rememberScrollState()
             Column(
                 Modifier
-                    .verticalScroll(scrollState)
                     .fillMaxSize()
+                    .verticalScroll(scrollState)
                     .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
             ) {
                 Spacer(Modifier.height(24.dp))
