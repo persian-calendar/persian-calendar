@@ -5,7 +5,6 @@ import android.media.AudioFormat
 import android.media.AudioTrack
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -41,11 +40,12 @@ fun DreamContent(
             dp = with(density) { 1.dp.toPx() },
         )
     }
-    Box(
+    PatternCanvas(
+        patternDrawable,
         modifier
             .clickable(indication = null, interactionSource = null, onClick = finish)
             .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
-    ) { PatternCanvas(patternDrawable) }
+    )
     val brownNoise by remember { lazy { brownNoise() } }
     if (dreamNoise) {
         val lifecycleOwner by rememberLifecycleOwner().lifecycle.currentStateAsState()
