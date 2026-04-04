@@ -12,12 +12,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -175,7 +180,11 @@ fun SharedTransitionScope.MonthScreen(
             val density = LocalDensity.current
             val diameter = min(cellWidth, cellHeight)
 
-            Column(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            Column(
+                modifier = Modifier
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
+            ) {
                 val defaultWidthReduction = 2.dp
                 val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
                     refreshCalendar()
