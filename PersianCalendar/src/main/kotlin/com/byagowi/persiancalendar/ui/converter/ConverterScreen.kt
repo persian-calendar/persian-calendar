@@ -178,73 +178,72 @@ fun SharedTransitionScope.ConverterScreen(
         },
     ) { paddingValues ->
         ScreenSurface(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            Box(
+            val scrollState = rememberScrollState()
+            Column(
                 Modifier
+                    .verticalScroll(scrollState)
                     .fillMaxSize()
                     .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
             ) {
-                val scrollState = rememberScrollState()
-                Column(Modifier.verticalScroll(scrollState)) {
-                    Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
 
-                    AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
-                        TimeZones(
+                AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
+                    TimeZones(
+                        pendingConfirms = pendingConfirms,
+                        onShareActionChange = { shareAction = it },
+                        onResetActionChange = { resetAction = it },
+                        onResetButtonVisibilityChange = { resetButtonVisibility = it },
+                    )
+                }
+
+                AnimatedVisibility(
+                    when (screenMode) {
+                        ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
+                        else -> false
+                    },
+                ) {
+                    Column(Modifier.padding(horizontal = 24.dp)) {
+                        ConverterAndDistance(
+                            navigateToAstronomy = navigateToAstronomy,
+                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                            sharedTransitionScope = this@ConverterScreen,
                             pendingConfirms = pendingConfirms,
+                            screenMode = screenMode,
+                            onShareActionChange = { shareAction = it },
+                            onResetActionChange = { resetAction = it },
+                            onResetButtonVisibilityChange = { resetButtonVisibility = it },
+                            today = today,
+                        )
+                    }
+                }
+
+                AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        Calculator(
                             onShareActionChange = { shareAction = it },
                             onResetActionChange = { resetAction = it },
                             onResetButtonVisibilityChange = { resetButtonVisibility = it },
                         )
                     }
-
-                    AnimatedVisibility(
-                        when (screenMode) {
-                            ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
-                            else -> false
-                        },
-                    ) {
-                        Column(Modifier.padding(horizontal = 24.dp)) {
-                            ConverterAndDistance(
-                                navigateToAstronomy = navigateToAstronomy,
-                                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                                sharedTransitionScope = this@ConverterScreen,
-                                pendingConfirms = pendingConfirms,
-                                screenMode = screenMode,
-                                onShareActionChange = { shareAction = it },
-                                onResetActionChange = { resetAction = it },
-                                onResetButtonVisibilityChange = { resetButtonVisibility = it },
-                                today = today,
-                            )
-                        }
-                    }
-
-                    AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            Calculator(
-                                onShareActionChange = { shareAction = it },
-                                onResetActionChange = { resetAction = it },
-                                onResetButtonVisibilityChange = { resetButtonVisibility = it },
-                            )
-                        }
-                    }
-
-                    AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            QrCode(
-                                onShareActionChange = { shareAction = it },
-                                onResetActionChange = { resetAction = it },
-                                onResetButtonVisibilityChange = { resetButtonVisibility = it },
-                            )
-                        }
-                    }
-
-                    Spacer(
-                        Modifier.height(
-                            paddingValues.calculateBottomPadding().coerceAtLeast(24.dp),
-                        ),
-                    )
                 }
-                ScrollShadow(scrollState)
+
+                AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        QrCode(
+                            onShareActionChange = { shareAction = it },
+                            onResetActionChange = { resetAction = it },
+                            onResetButtonVisibilityChange = { resetButtonVisibility = it },
+                        )
+                    }
+                }
+
+                Spacer(
+                    Modifier.height(
+                        paddingValues.calculateBottomPadding().coerceAtLeast(24.dp),
+                    ),
+                )
             }
+            ScrollShadow(scrollState)
         }
     }
 }

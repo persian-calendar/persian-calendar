@@ -140,45 +140,43 @@ fun SharedTransitionScope.LevelScreen(
             ),
             disableSharedContent = everWentFullscreen,
         ) {
-            Box {
-                Crossfade(targetState = cmInchFlip) { cmInchFlip ->
-                    RulerView(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .then(
-                                if (isFullscreen) Modifier.safeDrawingPadding()
-                                else Modifier.padding(top = topCornersRoundness),
-                            ),
-                        cmInchFlip = cmInchFlip,
-                        isFullscreen = isFullscreen,
-                    )
-                }
-                AppBottomAppBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    hideContainer = isFullscreen,
-                    overlay = { Angles(showTwoAngles, angleToShow1, angleToShow2) },
-                ) {
-                    Crossfade(isFullscreen) {
-                        if (!it) AppIconButton(
-                            icon = Icons.Default.Explore,
-                            title = stringResource(R.string.compass),
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                boundsTransform = appBoundsTransform,
-                            ),
-                            onClick = navigateToCompass,
-                        )
-                    }
-                    Spacer(Modifier.weight(1f))
-                    Box(
-                        Modifier.sharedElement(
-                            rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+            Crossfade(targetState = cmInchFlip) { cmInchFlip ->
+                RulerView(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .then(
+                            if (isFullscreen) Modifier.safeDrawingPadding()
+                            else Modifier.padding(top = topCornersRoundness),
+                        ),
+                    cmInchFlip = cmInchFlip,
+                    isFullscreen = isFullscreen,
+                )
+            }
+            AppBottomAppBar(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                hideContainer = isFullscreen,
+                overlay = { Angles(showTwoAngles, angleToShow1, angleToShow2) },
+            ) {
+                Crossfade(isFullscreen) {
+                    if (!it) AppIconButton(
+                        icon = Icons.Default.Explore,
+                        title = stringResource(R.string.compass),
+                        modifier = Modifier.sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         ),
-                    ) { StopButton(isStopped) { isStopped = it } }
+                        onClick = navigateToCompass,
+                    )
                 }
+                Spacer(Modifier.weight(1f))
+                Box(
+                    Modifier.sharedElement(
+                        rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                        boundsTransform = appBoundsTransform,
+                    ),
+                ) { StopButton(isStopped) { isStopped = it } }
             }
         }
     }

@@ -145,50 +145,48 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 }
             },
         )
-        ScreenSurface {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                Box {
-                    val listState = rememberLazyListState()
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = WindowInsets.safeDrawing.only(
-                            sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
-                        ).asPaddingValues(),
-                    ) {
-                        item {
-                            Box(
-                                Modifier
-                                    .padding(top = 16.dp)
-                                    .semantics(mergeDescendants = true) { hideFromAccessibility() }
-                                    .clearAndSetSemantics {},
-                            ) { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
-                        }
-                        itemsIndexed(items) { i, item ->
-                            if (i > 0) HorizontalDivider(
-                                Modifier.padding(horizontal = 20.dp),
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
-                            )
-                            Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
-                                Text(item.title, fontWeight = FontWeight.Bold)
-                                Row {
-                                    SelectionContainer {
-                                        when (val content = item.content) {
-                                            is AnnotatedString -> Text(content)
-                                            else -> Text(content.toString())
-                                        }
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            ScreenSurface {
+                val listState = rememberLazyListState()
+                LazyColumn(
+                    state = listState,
+                    contentPadding = WindowInsets.safeDrawing.only(
+                        sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+                    ).asPaddingValues(),
+                ) {
+                    item {
+                        Box(
+                            Modifier
+                                .padding(top = 16.dp)
+                                .semantics(mergeDescendants = true) { hideFromAccessibility() }
+                                .clearAndSetSemantics {},
+                        ) { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
+                    }
+                    itemsIndexed(items) { i, item ->
+                        if (i > 0) HorizontalDivider(
+                            Modifier.padding(horizontal = 20.dp),
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
+                        )
+                        Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
+                            Text(item.title, fontWeight = FontWeight.Bold)
+                            Row {
+                                SelectionContainer {
+                                    when (val content = item.content) {
+                                        is AnnotatedString -> Text(content)
+                                        else -> Text(content.toString())
                                     }
-                                    Spacer(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .fillMaxWidth(),
-                                    )
-                                    Text(item.version)
                                 }
+                                Spacer(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxWidth(),
+                                )
+                                Text(item.version)
                             }
                         }
                     }
-                    ScrollShadow(listState)
                 }
+                ScrollShadow(listState)
             }
         }
     }
