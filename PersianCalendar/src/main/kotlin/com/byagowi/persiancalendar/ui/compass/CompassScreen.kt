@@ -275,17 +275,15 @@ fun SharedTransitionScope.CompassScreen(
                                 } else null
                             }
                         }
-                        if (BuildConfig.DEVELOPMENT) {
-                            AppDropdownMenuItem({ Text("Do a rotation") }) {
-                                closeMenu()
-                                coroutineScope.launch {
-                                    val (from, to) = listOf(0f to 360f, 360f to 0f).random()
-                                    animate(
-                                        initialValue = from,
-                                        targetValue = to,
-                                        animationSpec = tween(10_000),
-                                    ) { value, _ -> angle.floatValue = value }
-                                }
+                        if (BuildConfig.DEVELOPMENT) AppDropdownMenuItem({ Text("Do a rotation") }) {
+                            closeMenu()
+                            coroutineScope.launch {
+                                val (from, to) = listOf(0f to 360f, 360f to 0f).random()
+                                animate(
+                                    initialValue = from,
+                                    targetValue = to,
+                                    animationSpec = tween(10_000),
+                                ) { value, _ -> angle.floatValue = value }
                             }
                         }
                     }
