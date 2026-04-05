@@ -914,11 +914,31 @@ private fun SharedTransitionScope.Details(
             ).toMap().toPersistentMap()
             onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
+            val swipeModifier = Modifier
+                .detectHorizontalSwipe {
+                    { isLeft ->
+                        selectedButton = selectedButton?.let {
+                            buttons.keys.toList().getOrNull(
+                                (it.ordinal + if (isLeft xor isRtl) -1 else 1).mod(buttons.size),
+                            )
+                        }
+                    }
+                }
+                .detectSwipe {
+                    { isUp: Boolean ->
+                        when {
+                            isUp -> swipeUpActions[preferredSwipeUpAction]
+                            !isUp -> swipeDownActions[preferredSwipeDownAction]
+                            else -> null
+                        }?.invoke()
+                    }
+                }
+
             if (buttons.isNotEmpty()) CompositionLocalProvider(
                 LocalMinimumInteractiveComponentSize provides 0.dp,
             ) {
                 SingleChoiceSegmentedButtonRow(
-                    Modifier.align(Alignment.CenterHorizontally),
+                    swipeModifier.align(Alignment.CenterHorizontally),
                 ) {
                     val defaultColors = SegmentedButtonDefaults.colors()
                     val colors = defaultColors.copy(
@@ -959,6 +979,7 @@ private fun SharedTransitionScope.Details(
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
+                modifier = swipeModifier,
             ) {
                 val content = buttons[it]
                 if (content != null) content() else Spacer(
