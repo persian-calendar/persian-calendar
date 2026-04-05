@@ -6,6 +6,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 
 const val LOG_TAG = "PersianCalendar"
 
+const val LAST_CHOSEN_BUTTON_KEY = "LastChosenTab"
 const val EXPANDED_TIME_STATE_KEY = "ExpandedTimeState"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"

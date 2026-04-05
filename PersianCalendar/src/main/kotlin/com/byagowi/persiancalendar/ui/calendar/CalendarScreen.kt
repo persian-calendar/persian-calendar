@@ -101,7 +101,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -145,6 +144,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.LAST_CHOSEN_BUTTON_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
@@ -234,6 +234,7 @@ import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
@@ -800,14 +801,20 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
-            var selectedButton by rememberSaveable {
-                mutableIntStateOf(
-                    -1,
-                    // if (enabledCalendars.size == 1 || isShowDeviceCalendarEvents || !(language.isIranExclusive || language.isAfghanistanExclusive) || !today.isYearSupportedOnApp) -1 else 0,
-                )
+            var selectedButton by remember {
+                val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, -1)
+                mutableStateOf(Button.entries.getOrNull(lastChosenIndex))
             }
+
+            @Composable
+            fun Button.title() = when (this) {
+                Button.Calendar -> stringResource(R.string.calendar)
+                Button.Appointment -> if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)
+                Button.Times -> stringResource(R.string.times)
+            }
+
             val buttons = listOfNotNull(
-                Pair(stringResource(R.string.calendar)) @Composable {
+                Pair(Button.Calendar) @Composable {
                     CalendarsTab(
                         selectedDay = selectedDay,
                         today = today,
@@ -815,7 +822,7 @@ private fun SharedTransitionScope.Details(
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                     )
                 }.takeIf { enabledCalendars.size > 1 },
-                Pair(if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)) @Composable {
+                Pair(Button.Appointment) @Composable {
                     AnimatedContent(
                         targetState = appointments.isEmpty(),
                         transitionSpec = {
@@ -865,7 +872,7 @@ private fun SharedTransitionScope.Details(
 //                            )
 //                        }
                 }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
-                Pair(stringResource(R.string.times)) @Composable {
+                Pair(Button.Times) @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
@@ -890,7 +897,7 @@ private fun SharedTransitionScope.Details(
                     coordinates != null
 //                    !removeThirdTab && enableTimesTab()
                 },
-            )
+            ).toMap().toPersistentMap()
             onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
             if (buttons.isNotEmpty()) CompositionLocalProvider(
@@ -899,10 +906,13 @@ private fun SharedTransitionScope.Details(
                 SingleChoiceSegmentedButtonRow(
                     Modifier.align(Alignment.CenterHorizontally),
                 ) {
-                    buttons.forEachIndexed { index, (text, _) ->
+                    buttons.entries.forEachIndexed { index, (button, _) ->
                         SegmentedButton(
                             onClick = {
-                                selectedButton = if (selectedButton == index) -1 else index
+                                selectedButton = if (selectedButton == button) null else button
+                                context.preferences.edit {
+                                    putInt(LAST_CHOSEN_BUTTON_KEY, selectedButton?.ordinal ?: -1)
+                                }
                             },
                             contentPadding = PaddingValues.Zero,
                             colors = SegmentedButtonDefaults.colors().copy(
@@ -912,10 +922,15 @@ private fun SharedTransitionScope.Details(
                                 1.dp,
                                 MaterialTheme.colorScheme.outlineVariant,
                             ),
-                            selected = selectedButton == index,
+                            selected = selectedButton == button,
                             icon = {},
                             shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
-                            label = { Text(text, modifier = Modifier.alpha(AppBlendAlpha)) },
+                            label = {
+                                Text(
+                                    button.title(),
+                                    modifier = Modifier.alpha(AppBlendAlpha),
+                                )
+                            },
                         )
                     }
                 }
@@ -926,12 +941,12 @@ private fun SharedTransitionScope.Details(
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
             ) {
-                val button = buttons.getOrNull(it)
-                if (button == null) Spacer(
+                val content = buttons[it]
+                if (content == null) Spacer(
                     Modifier
                         .fillMaxWidth()
                         .height(12.dp),
-                ) else Box(Modifier.padding(top = 4.dp)) { button.second() }
+                ) else Box(Modifier.padding(top = 4.dp)) { content() }
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
@@ -971,6 +986,8 @@ private fun SharedTransitionScope.Details(
         }
     }
 }
+
+private enum class Button { Calendar, Appointment, Times }
 
 @Composable
 private fun SharedTransitionScope.CalendarsTab(

@@ -13,6 +13,7 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
+import com.byagowi.persiancalendar.LAST_CHOSEN_BUTTON_KEY
 import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_JDN
 import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -62,6 +63,7 @@ abstract class BaseActivity : ComponentActivity(),
         if (this !is MainActivity && !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
         ++preferencesUpdateToken_.intValue
         when (key) {
+            LAST_CHOSEN_BUTTON_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_CALCULATOR_INPUT -> return // nothing needs to be updated
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             EXPANDED_TIME_STATE_KEY -> return // nothing needs to be updated
