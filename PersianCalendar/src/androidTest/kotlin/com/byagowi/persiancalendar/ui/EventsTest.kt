@@ -32,7 +32,7 @@ class EventsTest {
 
     @Test
     fun testAncientIranEventsRepository() {
-        val repository = EventsRepository(setOf(EventsRepository.iranAncientKey), Language.FA)
+        val repository = EventsRepository(setOf(EventsRepository.IRAN_ANCIENT_KEY), Language.FA)
         assertEquals(IslamicDate.useUmmAlQura, false)
 
         assertEquals(

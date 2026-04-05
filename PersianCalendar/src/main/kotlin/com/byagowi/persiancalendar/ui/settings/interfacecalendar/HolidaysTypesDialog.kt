@@ -88,20 +88,20 @@ fun HolidaysTypesDialog(
                         calendarCenterName = stringResource(R.string.iran_official_events),
                         sourceLink = EventSource.Iran.link,
                         holidaysTitle = stringResource(R.string.iran_holidays) + run {
-                            if (!language.isAfghanistanExclusive && EventsRepository.iranHolidaysKey in enabledTypes) {
+                            if (!language.isAfghanistanExclusive && EventsRepository.IRAN_HOLIDAYS_KEY in enabledTypes) {
                                 spacedComma + if (language.isArabicScript) "پیش‌فرض برنامه" else "app's default"
                             } else ""
                         },
                         nonHolidaysTitle = stringResource(R.string.iran_others),
                         enabledTypes = enabledTypes,
-                        holidaysKey = EventsRepository.iranHolidaysKey,
-                        nonHolidaysKey = EventsRepository.iranOthersKey,
+                        holidaysKey = EventsRepository.IRAN_HOLIDAYS_KEY,
+                        nonHolidaysKey = EventsRepository.IRAN_OTHERS_KEY,
                         destinationItem = destinationItem,
                     )
                     if (!language.isAfghanistanExclusive) ItemCheckBox(
                         AnnotatedString(stringResource(R.string.iran_ancient)),
                         enabledTypes,
-                        EventsRepository.iranAncientKey,
+                        EventsRepository.IRAN_ANCIENT_KEY,
                         destinationItem = destinationItem,
                     )
                 }
@@ -114,8 +114,8 @@ fun HolidaysTypesDialog(
                         holidaysTitle = stringResource(R.string.afghanistan_holidays),
                         nonHolidaysTitle = stringResource(R.string.afghanistan_others),
                         enabledTypes = enabledTypes,
-                        holidaysKey = EventsRepository.afghanistanHolidaysKey,
-                        nonHolidaysKey = EventsRepository.afghanistanOthersKey,
+                        holidaysKey = EventsRepository.AFGHANISTAN_HOLIDAYS_KEY,
+                        nonHolidaysKey = EventsRepository.AFGHANISTAN_OTHERS_KEY,
                         destinationItem = destinationItem,
                     )
                 }
@@ -125,7 +125,7 @@ fun HolidaysTypesDialog(
                     ItemCheckBox(
                         AnnotatedString(stringResource(R.string.international)),
                         enabledTypes,
-                        EventsRepository.internationalKey,
+                        EventsRepository.INTERNATIONAL_KEY,
                         destinationItem = destinationItem,
                     )
                 }
@@ -146,8 +146,8 @@ fun HolidaysTypesDialog(
                     holidaysTitle = stringResource(R.string.holiday),
                     nonHolidaysTitle = stringResource(R.string.other_holidays),
                     enabledTypes = enabledTypes,
-                    holidaysKey = EventsRepository.nepalHolidaysKey,
-                    nonHolidaysKey = EventsRepository.nepalOthersKey,
+                    holidaysKey = EventsRepository.NEPAL_HOLIDAYS_KEY,
+                    nonHolidaysKey = EventsRepository.NEPAL_OTHERS_KEY,
                     destinationItem = destinationItem,
                 )
             }

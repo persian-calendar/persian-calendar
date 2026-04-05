@@ -30,22 +30,23 @@ data class EventsRepository(
         enabledTypes: Set<String> = getEnabledTypes(preferences, language),
     ) : this(enabledTypes, language)
 
-    val afghanistanHolidays = afghanistanHolidaysKey in enabledTypes
-    val afghanistanOthers = afghanistanOthersKey in enabledTypes
-    val iranHolidays = iranHolidaysKey in enabledTypes
-    val iranAncient = iranAncientKey in enabledTypes
-    val iranOthers = iranOthersKey in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
-    val nepalHolidays = nepalHolidaysKey in enabledTypes
-    val nepalOthers = nepalOthersKey in enabledTypes
-    val international = internationalKey in enabledTypes
-    val isEmpty get() = enabledTypes.isEmpty()
-    val onlyIranHolidaysIsEnabled get() = enabledTypes.size == 1 && iranHolidays
-    val onlyAfghanistanHolidaysIsEnabled get() = enabledTypes.size == 1 && afghanistanHolidays
+    val afghanistanHolidays = AFGHANISTAN_HOLIDAYS_KEY in enabledTypes
+    val afghanistanOthers = AFGHANISTAN_OTHERS_KEY in enabledTypes
+    val iranHolidays = IRAN_HOLIDAYS_KEY in enabledTypes
+    val iranAncient = IRAN_ANCIENT_KEY in enabledTypes
+    val iranOthers = IRAN_OTHERS_KEY in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
+    val nepalHolidays = NEPAL_HOLIDAYS_KEY in enabledTypes
+    val nepalOthers = NEPAL_OTHERS_KEY in enabledTypes
+    val international = INTERNATIONAL_KEY in enabledTypes
+    val isEmpty = enabledTypes.isEmpty()
+    val onlyIranHolidaysIsEnabled = enabledTypes.size == 1 && iranHolidays
+    val onlyAfghanistanHolidaysIsEnabled = enabledTypes.size == 1 && afghanistanHolidays
 
     private fun skipEvent(record: CalendarRecord, calendar: Calendar): Boolean {
         return when (record.source) {
             EventSource.Iran if record.isHoliday && iranHolidays -> false
             EventSource.Iran if iranOthers -> false
+            EventSource.Iran if iranHolidays && "روز مادر" in record.title -> false
             EventSource.Afghanistan if record.isHoliday && afghanistanHolidays -> false
             EventSource.Afghanistan if afghanistanOthers -> false
             EventSource.Nepal if record.isHoliday && nepalHolidays -> false
@@ -105,6 +106,7 @@ data class EventsRepository(
         return this.filter {
             when {
                 !supported && (it.source == EventSource.Afghanistan || it.source == EventSource.Iran) -> false
+                "روز مادر" in it.title -> true
                 !it.isHoliday && timeZone != IRAN_TIMEZONE_ID && it.source == EventSource.Iran && it.date.calendar == Calendar.ISLAMIC -> false
                 it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC -> true
                 else -> false
@@ -176,17 +178,17 @@ data class EventsRepository(
     }
 
     companion object {
-        const val iranHolidaysKey = "iran_holidays"
-        const val iranOthersKey = "iran_others"
-        const val afghanistanHolidaysKey = "afghanistan_holidays"
-        const val afghanistanOthersKey = "afghanistan_others"
-        const val nepalHolidaysKey = "nepal_holidays"
-        const val nepalOthersKey = "nepal_others"
-        const val iranAncientKey = "iran_ancient"
-        const val internationalKey = "international"
-        val iranDefault = setOf(iranHolidaysKey)
-        val afghanistanDefault = setOf(afghanistanHolidaysKey)
-        val nepalDefault = setOf(nepalHolidaysKey)
+        const val IRAN_HOLIDAYS_KEY = "iran_holidays"
+        const val IRAN_OTHERS_KEY = "iran_others"
+        const val AFGHANISTAN_HOLIDAYS_KEY = "afghanistan_holidays"
+        const val AFGHANISTAN_OTHERS_KEY = "afghanistan_others"
+        const val NEPAL_HOLIDAYS_KEY = "nepal_holidays"
+        const val NEPAL_OTHERS_KEY = "nepal_others"
+        const val IRAN_ANCIENT_KEY = "iran_ancient"
+        const val INTERNATIONAL_KEY = "international"
+        val iranDefault = setOf(IRAN_HOLIDAYS_KEY)
+        val afghanistanDefault = setOf(AFGHANISTAN_HOLIDAYS_KEY)
+        val nepalDefault = setOf(NEPAL_HOLIDAYS_KEY)
 
         fun getEnabledTypes(preferences: SharedPreferences, language: Language): Set<String> {
             return preferences.getStringSet(PREF_HOLIDAY_TYPES, null)
@@ -195,11 +197,11 @@ data class EventsRepository(
 
         fun keyFromDetails(source: EventSource?, isHoliday: Boolean): String? {
             return if (source == null) null else when (source) {
-                EventSource.AncientIran -> iranAncientKey
-                EventSource.International -> internationalKey
-                EventSource.Iran -> if (isHoliday) iranHolidaysKey else iranOthersKey
-                EventSource.Nepal -> if (isHoliday) nepalHolidaysKey else nepalOthersKey
-                EventSource.Afghanistan -> if (isHoliday) afghanistanHolidaysKey else afghanistanOthersKey
+                EventSource.AncientIran -> IRAN_ANCIENT_KEY
+                EventSource.International -> INTERNATIONAL_KEY
+                EventSource.Iran -> if (isHoliday) IRAN_HOLIDAYS_KEY else IRAN_OTHERS_KEY
+                EventSource.Nepal -> if (isHoliday) NEPAL_HOLIDAYS_KEY else NEPAL_OTHERS_KEY
+                EventSource.Afghanistan -> if (isHoliday) AFGHANISTAN_HOLIDAYS_KEY else AFGHANISTAN_OTHERS_KEY
             }
         }
 
