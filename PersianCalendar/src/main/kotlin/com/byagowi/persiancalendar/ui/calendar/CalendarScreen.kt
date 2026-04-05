@@ -541,7 +541,7 @@ fun SharedTransitionScope.CalendarScreen(
                 )
 
                 @Composable
-                fun CalendarPager() = CalendarPager(
+                fun CalendarPager(pagerModifier: Modifier) = CalendarPager(
                     selectedDay = selectedDay,
                     isHighlighted = isHighlighted,
                     refreshToken = refreshToken,
@@ -555,12 +555,13 @@ fun SharedTransitionScope.CalendarScreen(
                     addEvent = addEvent,
                     suggestedPagerSize = pagerSize,
                     navigateToWeek = navigateToWeek,
+                    modifier = pagerModifier,
                 )
 
                 if (!isYearViewState) {
                     if (isLandscape) Row {
-                        Box(
-                            Modifier
+                        CalendarPager(
+                            pagerModifier = Modifier
                                 .size(pagerSize)
                                 .detectSwipe {
                                     { isUp: Boolean ->
@@ -571,7 +572,7 @@ fun SharedTransitionScope.CalendarScreen(
                                         }?.invoke()
                                     }
                                 },
-                        ) { CalendarPager() }
+                        )
                         ScreenSurface(
                             shape = materialCornerExtraLargeNoBottomEnd(),
                             drawBehindSurface = false,
@@ -590,8 +591,8 @@ fun SharedTransitionScope.CalendarScreen(
                         var calendarHeight by remember {
                             mutableStateOf(pagerSize.height / 7 * 6)
                         }
-                        Box(
-                            Modifier
+                        CalendarPager(
+                            pagerModifier = Modifier
                                 .detectSwipe {
                                     { isUp: Boolean ->
                                         when {
@@ -605,7 +606,7 @@ fun SharedTransitionScope.CalendarScreen(
                                     calendarHeight = with(density) { it.height.toDp() }
                                 }
                                 .animateContentSize(appContentSizeAnimationSpec),
-                        ) { CalendarPager() }
+                        )
 
                         val detailsMinHeight = maxHeight - calendarHeight
                         ScreenSurface(
