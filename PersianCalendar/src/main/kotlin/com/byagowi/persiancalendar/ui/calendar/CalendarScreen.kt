@@ -148,7 +148,6 @@ import com.byagowi.persiancalendar.LAST_CHOSEN_BUTTON_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
-import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
@@ -852,11 +851,11 @@ private fun SharedTransitionScope.Details(
                                     .padding(vertical = 12.dp, horizontal = 24.dp)
                                     .fillMaxWidth(),
                             )
-                            TabEditButton(
-                                action = { navigateToHolidaysSettings(null) },
-                                contentDescription = stringResource(R.string.settings),
-                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
-                            )
+//                            TabEditButton(
+//                                action = { navigateToHolidaysSettings(null) },
+//                                contentDescription = stringResource(R.string.settings),
+//                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
+//                            )
                         } else DayEvents(
                             events = appointments,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
