@@ -207,6 +207,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -919,6 +920,13 @@ private fun SharedTransitionScope.Details(
                 SingleChoiceSegmentedButtonRow(
                     Modifier.align(Alignment.CenterHorizontally),
                 ) {
+                    val defaultColors = SegmentedButtonDefaults.colors()
+                    val colors = defaultColors.copy(
+                        inactiveContainerColor = animateColor(MaterialTheme.colorScheme.surfaceContainer).value,
+                        inactiveContentColor = animateColor(defaultColors.inactiveContentColor).value,
+                        activeContainerColor = animateColor(defaultColors.activeContainerColor).value,
+                        activeContentColor = animateColor(defaultColors.activeContentColor).value,
+                    )
                     buttons.entries.forEachIndexed { index, (button, _) ->
                         SegmentedButton(
                             onClick = {
@@ -928,12 +936,10 @@ private fun SharedTransitionScope.Details(
                                 }
                             },
                             contentPadding = PaddingValues.Zero,
-                            colors = SegmentedButtonDefaults.colors().copy(
-                                inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            ),
+                            colors = colors,
                             border = BorderStroke(
                                 1.dp,
-                                MaterialTheme.colorScheme.outlineVariant,
+                                animateColor(MaterialTheme.colorScheme.outlineVariant).value,
                             ),
                             selected = selectedButton == button,
                             icon = {},
