@@ -516,6 +516,47 @@ fun SharedTransitionScope.CalendarScreen(
                     }
                 }
 
+                @Composable
+                fun Details(detailsModifier: Modifier) = Details(
+                    selectedDay = selectedDay,
+                    onAddActionChange = { addAction = it },
+                    bringDay = bringDay,
+                    today = today,
+                    now = now,
+                    navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                    addEvent = addEvent,
+                    snackbarHostState = snackbarHostState,
+                    isAddEventBoxEnabled = isAddEventBoxEnabled,
+                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
+                    fabPlaceholderHeight = fabPlaceholderHeight,
+                    refreshCalendar = refreshCalendar,
+                    refreshToken = refreshToken,
+                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                    navigateToAstronomy = navigateToAstronomy,
+                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                    swipeUpActions = swipeUpActions,
+                    swipeDownActions = swipeDownActions,
+                    modifier = detailsModifier,
+                )
+
+                @Composable
+                fun CalendarPager() = CalendarPager(
+                    selectedDay = selectedDay,
+                    isHighlighted = isHighlighted,
+                    refreshToken = refreshToken,
+                    changeSelectedDay = { day: Jdn ->
+                        isHighlighted = true
+                        selectedDay = day
+                    },
+                    today = today,
+                    calendarPagerState = calendarPagerState,
+                    yearViewCalendar = yearViewCalendar,
+                    addEvent = addEvent,
+                    suggestedPagerSize = pagerSize,
+                    navigateToWeek = navigateToWeek,
+                )
+
                 if (!isYearViewState) {
                     if (isLandscape) Row {
                         Box(
@@ -530,48 +571,13 @@ fun SharedTransitionScope.CalendarScreen(
                                         }?.invoke()
                                     }
                                 },
-                        ) {
-                            CalendarPager(
-                                selectedDay = selectedDay,
-                                isHighlighted = isHighlighted,
-                                refreshToken = refreshToken,
-                                changeSelectedDay = { day: Jdn ->
-                                    isHighlighted = true
-                                    selectedDay = day
-                                },
-                                today = today,
-                                calendarPagerState = calendarPagerState,
-                                yearViewCalendar = yearViewCalendar,
-                                addEvent = addEvent,
-                                suggestedPagerSize = pagerSize,
-                                navigateToWeek = navigateToWeek,
-                            )
-                        }
+                        ) { CalendarPager() }
                         ScreenSurface(
                             shape = materialCornerExtraLargeNoBottomEnd(),
                             drawBehindSurface = false,
                         ) {
                             Details(
-                                selectedDay = selectedDay,
-                                onAddActionChange = { addAction = it },
-                                bringDay = bringDay,
-                                today = today,
-                                now = now,
-                                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                                addEvent = addEvent,
-                                snackbarHostState = snackbarHostState,
-                                isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
-                                fabPlaceholderHeight = fabPlaceholderHeight,
-                                refreshCalendar = refreshCalendar,
-                                refreshToken = refreshToken,
-                                navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                navigateToAstronomy = navigateToAstronomy,
-                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                swipeUpActions = swipeUpActions,
-                                swipeDownActions = swipeDownActions,
-                                modifier = Modifier
+                                Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
                                         WindowInsets.displayCutout.only(
@@ -599,52 +605,13 @@ fun SharedTransitionScope.CalendarScreen(
                                     calendarHeight = with(density) { it.height.toDp() }
                                 }
                                 .animateContentSize(appContentSizeAnimationSpec),
-                        ) {
-                            CalendarPager(
-                                selectedDay = selectedDay,
-                                isHighlighted = isHighlighted,
-                                refreshToken = refreshToken,
-                                changeSelectedDay = { day: Jdn ->
-                                    isHighlighted = true
-                                    selectedDay = day
-                                },
-                                today = today,
-                                calendarPagerState = calendarPagerState,
-                                yearViewCalendar = yearViewCalendar,
-                                addEvent = addEvent,
-                                suggestedPagerSize = pagerSize,
-                                navigateToWeek = navigateToWeek,
-                            )
-                        }
+                        ) { CalendarPager() }
 
                         val detailsMinHeight = maxHeight - calendarHeight
                         ScreenSurface(
                             workaroundClipBug = true,
                             mayNeedDragHandleToDivide = true,
-                        ) {
-                            Details(
-                                bringDay = bringDay,
-                                onAddActionChange = { addAction = it },
-                                selectedDay = selectedDay,
-                                today = today,
-                                addEvent = addEvent,
-                                snackbarHostState = snackbarHostState,
-                                isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
-                                now = now,
-                                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                                fabPlaceholderHeight = fabPlaceholderHeight,
-                                refreshCalendar = refreshCalendar,
-                                refreshToken = refreshToken,
-                                navigateToAstronomy = navigateToAstronomy,
-                                swipeUpActions = swipeUpActions,
-                                swipeDownActions = swipeDownActions,
-                                navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                            )
-                        }
+                        ) { Details(Modifier.defaultMinSize(minHeight = detailsMinHeight)) }
                     }
                 }
             }
