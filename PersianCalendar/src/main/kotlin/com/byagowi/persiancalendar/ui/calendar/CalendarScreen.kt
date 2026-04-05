@@ -555,24 +555,20 @@ fun SharedTransitionScope.CalendarScreen(
                     addEvent = addEvent,
                     suggestedPagerSize = pagerSize,
                     navigateToWeek = navigateToWeek,
-                    modifier = pagerModifier,
+                    modifier = pagerModifier.detectSwipe {
+                        { isUp: Boolean ->
+                            when {
+                                isUp -> swipeUpActions[preferredSwipeUpAction]
+                                !isUp -> swipeDownActions[preferredSwipeDownAction]
+                                else -> null
+                            }?.invoke()
+                        }
+                    },
                 )
 
                 if (!isYearViewState) {
                     if (isLandscape) Row {
-                        CalendarPager(
-                            pagerModifier = Modifier
-                                .size(pagerSize)
-                                .detectSwipe {
-                                    { isUp: Boolean ->
-                                        when {
-                                            isUp -> swipeUpActions[preferredSwipeUpAction]
-                                            !isUp -> swipeDownActions[preferredSwipeDownAction]
-                                            else -> null
-                                        }?.invoke()
-                                    }
-                                },
-                        )
+                        CalendarPager(pagerModifier = Modifier.size(pagerSize))
                         ScreenSurface(
                             shape = materialCornerExtraLargeNoBottomEnd(),
                             drawBehindSurface = false,
@@ -593,15 +589,6 @@ fun SharedTransitionScope.CalendarScreen(
                         }
                         CalendarPager(
                             pagerModifier = Modifier
-                                .detectSwipe {
-                                    { isUp: Boolean ->
-                                        when {
-                                            isUp -> swipeUpActions[preferredSwipeUpAction]
-                                            !isUp -> swipeDownActions[preferredSwipeDownAction]
-                                            else -> null
-                                        }?.invoke()
-                                    }
-                                }
                                 .onSizeChanged {
                                     calendarHeight = with(density) { it.height.toDp() }
                                 }
