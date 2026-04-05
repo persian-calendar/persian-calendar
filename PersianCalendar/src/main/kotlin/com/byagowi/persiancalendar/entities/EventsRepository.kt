@@ -74,24 +74,16 @@ data class EventsRepository(
     @VisibleForTesting
     val irregularCalendarEventsStore = IrregularCalendarEventsStore(this)
     private val persianCalendarEvents = PersianCalendarEventsStore(
-        persianEvents.mapNotNull {
-            createEvent(it, Calendar.SHAMSI)
-        },
+        persianEvents.mapNotNull { createEvent(it, Calendar.SHAMSI) },
     )
     private val islamicCalendarEvents = IslamicCalendarEventsStore(
-        islamicEvents.mapNotNull {
-            createEvent(it, Calendar.ISLAMIC)
-        },
+        islamicEvents.mapNotNull { createEvent(it, Calendar.ISLAMIC) },
     )
     private val gregorianCalendarEvents = GregorianCalendarEventsStore(
-        gregorianEvents.mapNotNull {
-            createEvent(it, Calendar.GREGORIAN)
-        },
+        gregorianEvents.mapNotNull { createEvent(it, Calendar.GREGORIAN) },
     )
     private val nepaliCalendarEvents = NepaliCalendarEventsStore(
-        nepaliEvents.mapNotNull {
-            createEvent(it, Calendar.NEPALI)
-        },
+        nepaliEvents.mapNotNull { createEvent(it, Calendar.NEPALI) },
     )
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
