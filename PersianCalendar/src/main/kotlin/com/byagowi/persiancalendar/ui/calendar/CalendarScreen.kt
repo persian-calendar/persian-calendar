@@ -886,7 +886,7 @@ private fun SharedTransitionScope.Details(
                     { isLeft ->
                         selectedButton = selectedButton?.let {
                             buttons.keys.toList().getOrNull(
-                                (it.ordinal + if (isLeft xor isRtl) -1 else 1).mod(buttons.size),
+                                (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(buttons.size),
                             )
                         }
                     }
@@ -933,7 +933,7 @@ private fun SharedTransitionScope.Details(
                             shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
                             label = {
                                 Text(
-                                    button.title(),
+                                    text = button.title(),
                                     modifier = Modifier.alpha(AppBlendAlpha),
                                 )
                             },
