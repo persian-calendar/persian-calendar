@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
 import android.content.SharedPreferences
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventSource
@@ -18,6 +19,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.jetbrains.annotations.VisibleForTesting
+import java.util.TimeZone
 
 data class EventsRepository(
     private val enabledTypes: Set<String> = emptySet(),
@@ -107,9 +109,11 @@ data class EventsRepository(
 
     fun List<CalendarEvent<*>>.filterEvents(jdn: Jdn): List<CalendarEvent<*>> {
         val supported = jdn.isYearSupportedOnAppAndNextYear && Jdn.today().isYearSupportedOnApp
+        val timeZone = TimeZone.getDefault().id
         return this.filter {
             when {
                 !supported && (it.source == EventSource.Afghanistan || it.source == EventSource.Iran) -> false
+                !it.isHoliday && timeZone != IRAN_TIMEZONE_ID && it.source == EventSource.Iran && it.date.calendar == Calendar.ISLAMIC -> false
                 it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC -> true
                 else -> false
             }

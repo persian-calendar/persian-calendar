@@ -36,32 +36,26 @@ import kotlin.math.roundToLong
 enum class Language(val code: String, val nativeName: String) {
     // The following order is used for language change dialog also
     // Official languages
-    FA("fa", "فارسی"),
-    FA_AF("fa-AF", "دری"),
-    PS("ps", "پښتو"),
+    FA("fa", "فارسی"), FA_AF("fa-AF", "دری"), PS("ps", "پښتو"),
 
     // Rest, sorted by their language code
-    AR("ar", "العربية"),
-    AZB("azb", "تۆرکجه"),
-    CKB("ckb", "کوردی"),
-    DE("de", "Deutsch"),
-    EN_IR("en", "English (Iran)"),
-    EN_US("en-US", "English"),
-    ES("es", "Español"),
-    FR("fr", "Français"),
-    GLK("glk", "گيلکي"),
-    IT("it", "Italiano"),
-    JA("ja", "日本語"),
-    KMR("kmr", "Kurdî"),
-    NE("ne", "नेपाली"),
-    OTA("ota", "عثمانى"),
-    PT("pt", "Português"),
-    RU("ru", "Русский"),
-    TA("ta", "தமிழ்"),
-    TG("tg", "Тоҷикӣ"),
-    TR("tr", "Türkçe"),
-    UR("ur", "اردو"),
-    ZH_CN("zh-CN", "中文");
+    AR("ar", "العربية"), AZB("azb", "تۆرکجه"), CKB("ckb", "کوردی"), DE("de", "Deutsch"), EN_IR(
+        "en",
+        "English (Iran)",
+    ),
+    EN_US("en-US", "English"), ES("es", "Español"), FR("fr", "Français"), GLK(
+        "glk",
+        "گيلکي",
+    ),
+    IT("it", "Italiano"), JA("ja", "日本語"), KMR("kmr", "Kurdî"), NE("ne", "नेपाली"), OTA(
+        "ota",
+        "عثمانى",
+    ),
+    PT("pt", "Português"), RU("ru", "Русский"), TA("ta", "தமிழ்"), TG("tg", "Тоҷикӣ"), TR(
+        "tr",
+        "Türkçe",
+    ),
+    UR("ur", "اردو"), ZH_CN("zh-CN", "中文");
 
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
@@ -223,7 +217,10 @@ enum class Language(val code: String, val nativeName: String) {
 
     val defaultCalendars: ImmutableList<Calendar>
         get() = when {
-            this == FA -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            this == FA -> if (userTimeZoneId == IRAN_TIMEZONE_ID) {
+                persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            } else persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
+
             this == EN_IR -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
             this == TR -> persistentListOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
             this == AR || this == OTA -> persistentListOf(Calendar.ISLAMIC, Calendar.GREGORIAN)
@@ -290,22 +287,21 @@ enum class Language(val code: String, val nativeName: String) {
     fun getGregorianMonths(
         resources: Resources,
         alternativeGregorianMonths: Boolean,
-    ): ImmutableList<String> =
-        when (this) {
-            FA -> {
-                if (alternativeGregorianMonths) gregorianCalendarMonthsInPersianEnglishPronunciation
-                else gregorianCalendarMonthsInPersian
-            }
-
-            FA_AF -> gregorianCalendarMonthsInDari
-
-            AR -> {
-                if (alternativeGregorianMonths) easternGregorianCalendarMonths
-                else gregorianCalendarMonths.map(resources::getString).toImmutableList()
-            }
-
-            else -> gregorianCalendarMonths.map(resources::getString).toImmutableList()
+    ): ImmutableList<String> = when (this) {
+        FA -> {
+            if (alternativeGregorianMonths) gregorianCalendarMonthsInPersianEnglishPronunciation
+            else gregorianCalendarMonthsInPersian
         }
+
+        FA_AF -> gregorianCalendarMonthsInDari
+
+        AR -> {
+            if (alternativeGregorianMonths) easternGregorianCalendarMonths
+            else gregorianCalendarMonths.map(resources::getString).toImmutableList()
+        }
+
+        else -> gregorianCalendarMonths.map(resources::getString).toImmutableList()
+    }
 
     fun getNepaliMonths(): ImmutableList<String> = when (this) {
         NE -> nepaliMonths
