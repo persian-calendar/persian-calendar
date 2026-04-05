@@ -176,7 +176,7 @@ fun SharedTransitionScope.CalendarsOverview(
             val context = LocalContext.current
             TabEditButton(
                 action = navigateToCalendarsPrioritySettings,
-                contentDescription = stringResource(R.string.calendars_priority),
+                title = stringResource(R.string.calendars_priority),
                 visible = isExpanded && remember { PREF_MAIN_CALENDAR_KEY !in context.preferences },
             )
         }

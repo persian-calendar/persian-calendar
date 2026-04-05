@@ -81,6 +81,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -92,7 +93,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -809,7 +814,7 @@ private fun SharedTransitionScope.Details(
                             )
 //                            TabEditButton(
 //                                action = { navigateToHolidaysSettings(null) },
-//                                contentDescription = stringResource(R.string.settings),
+//                                title = stringResource(R.string.settings),
 //                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
 //                            )
                         } else DayEvents(
@@ -1702,10 +1707,11 @@ fun addEvent(
     return { addEventData = it }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BoxScope.TabEditButton(
     action: () -> Unit,
-    contentDescription: String,
+    title: String,
     modifier: Modifier = Modifier,
     visible: Boolean = true,
 ) {
@@ -1716,11 +1722,19 @@ fun BoxScope.TabEditButton(
             .height(48.dp),
     ) {
         AnimatedVisibility(visible = visible) {
-            IconButton(onClick = action, modifier = Modifier.alpha(.5f)) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = contentDescription,
-                )
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                    TooltipAnchorPosition.Above,
+                ),
+                tooltip = { PlainTooltip { Text(title) } },
+                state = rememberTooltipState(),
+            ) {
+                IconButton(onClick = action, modifier = Modifier.alpha(.5f)) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = title,
+                    )
+                }
             }
         }
     }
