@@ -59,9 +59,9 @@ data class EventsRepository(
     }
 
     // Don't mark holidays as holiday if holiday isn't enabled explicitly
-    private fun determineIsHoliday(record: CalendarRecord) = when {
-        record.source == EventSource.Iran && !iranHolidays -> false
-        record.source == EventSource.Afghanistan && !afghanistanHolidays -> false
+    private fun determineIsHoliday(record: CalendarRecord) = when (record.source) {
+        EventSource.Iran if !iranHolidays -> false
+        EventSource.Afghanistan if !afghanistanHolidays -> false
         else -> record.isHoliday
     }
 
