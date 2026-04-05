@@ -740,7 +740,7 @@ private fun SharedTransitionScope.Details(
                 }
             },
             numeral = numeral,
-        ) { appointments, onHasContentChange ->
+        ) { appointments, headerScrollState, onHasContentChange ->
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
             Column {
                 AnimatedVisibility(visible = shiftWorkTitle != null) {
@@ -892,10 +892,12 @@ private fun SharedTransitionScope.Details(
                     }
                 }
                 .detectSwipe {
+                    val wasAtTop = headerScrollState.value == 0
+                    val wasAtEnd = headerScrollState.value == headerScrollState.maxValue
                     { isUp: Boolean ->
                         when {
-                            isUp -> swipeUpActions[preferredSwipeUpAction]
-                            !isUp -> swipeDownActions[preferredSwipeDownAction]
+                            isUp && wasAtEnd -> swipeUpActions[preferredSwipeUpAction]
+                            !isUp && wasAtTop -> swipeDownActions[preferredSwipeDownAction]
                             else -> null
                         }?.invoke()
                     }

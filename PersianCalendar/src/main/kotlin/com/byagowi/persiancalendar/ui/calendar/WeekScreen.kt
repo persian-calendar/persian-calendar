@@ -619,7 +619,7 @@ fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
-    content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>, (Boolean) -> Unit) -> Unit)? = null,
+    content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>, ScrollState, (Boolean) -> Unit) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -692,10 +692,10 @@ fun DaysView(
                 Box(
                     modifier = if (eventsWithoutTime[0].size > 3) clickToExpandModifier else Modifier,
                 ) {
-                    val scrollState = rememberScrollState()
+                    val headerScrollState = rememberScrollState()
                     Column(
                         Modifier
-                            .verticalScroll(scrollState)
+                            .verticalScroll(headerScrollState)
                             .fillMaxWidth()
                             .then(
                                 if (isAddEventBoxEnabled) Modifier.clickable(
@@ -705,8 +705,7 @@ fun DaysView(
                             ),
                     ) {
                         Spacer(Modifier.height(12.dp))
-                        val headerHasFilled =
-                            scrollState.canScrollBackward || scrollState.canScrollForward
+                        val headerHasFilled = headerScrollState.maxValue != 0
                         val displayedEvents =
                             (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
                         val dayEvents = displayedEvents.let { if (isExpanded) it else it.take(3) }
@@ -732,13 +731,13 @@ fun DaysView(
                                 modifier = Modifier.align(Alignment.CenterHorizontally),
                             )
                             if (content != null) {
-                                content(appointments) { hasContent = it }
+                                content(appointments, headerScrollState) { hasContent = it }
                             } else Spacer(Modifier.height(8.dp))
                             if (isExpanded && headerHasFilled) {
                                 Spacer(Modifier.height(bottomPadding))
                             }
                         } else if (content != null) {
-                            content(appointments) { hasContent = it }
+                            content(appointments, headerScrollState) { hasContent = it }
                         } else Spacer(Modifier.height(12.dp))
                     }
                 }
