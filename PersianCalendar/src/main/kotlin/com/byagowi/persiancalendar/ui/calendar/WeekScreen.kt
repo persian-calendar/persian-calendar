@@ -721,7 +721,7 @@ fun DaysView(
                                 .padding(horizontal = 24.dp),
                         )
                         AnimatedVisibility(dayEvents.isNotEmpty()) {
-                            Box(Modifier.height(12.dp))
+                            Box(Modifier.height(8.dp))
                         }
                         val appointments =
                             eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
