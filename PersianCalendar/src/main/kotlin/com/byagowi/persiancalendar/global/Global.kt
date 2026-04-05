@@ -655,11 +655,13 @@ fun updateStoredPreference(context: Context) {
             ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }).splitFilterNotEmpty(
             ",",
         ).map(Calendar::valueOf)
-        enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct().let {
-            val timesDismissed = preferences.getBoolean(PREF_DISMISSED_TIMES, false)
-            val notSetExplicitly = PREF_OTHER_CALENDARS_KEY !in preferences
-            if (language.isUserAbleToReadPersian && timesDismissed && notSetExplicitly && coordinates == null) (it - Calendar.ISLAMIC) else it
-        }.toImmutableList()
+        enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct()
+//            .let {
+//                val timesDismissed = preferences.getBoolean(PREF_DISMISSED_TIMES, false)
+//                val notSetExplicitly = PREF_OTHER_CALENDARS_KEY !in preferences
+//                if (language.isUserAbleToReadPersian && timesDismissed && notSetExplicitly && coordinates == null) (it - Calendar.ISLAMIC) else it
+//            }
+            .toImmutableList()
         secondaryCalendarEnabled_.value = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE,
         )
