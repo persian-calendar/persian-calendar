@@ -816,6 +816,7 @@ private fun SharedTransitionScope.Details(
             val buttons = listOfNotNull(
                 Pair(Button.Calendar) @Composable {
                     CalendarsTab(
+                        modifier = Modifier.padding(top = 4.dp),
                         selectedDay = selectedDay,
                         today = today,
                         navigateToAstronomy = navigateToAstronomy,
@@ -875,6 +876,7 @@ private fun SharedTransitionScope.Details(
                 Pair(Button.Times) @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
+                        modifier = Modifier.padding(top = 4.dp),
                         navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                         navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                         navigateToAstronomy = navigateToAstronomy,
@@ -942,11 +944,11 @@ private fun SharedTransitionScope.Details(
                 },
             ) {
                 val content = buttons[it]
-                if (content == null) Spacer(
+                if (content != null) content() else Spacer(
                     Modifier
                         .fillMaxWidth()
                         .height(12.dp),
-                ) else Box(Modifier.padding(top = 4.dp)) { content() }
+                )
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
