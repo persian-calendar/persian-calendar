@@ -527,7 +527,7 @@ fun SharedTransitionScope.CalendarScreen(
                     addEvent = addEvent,
                     snackbarHostState = snackbarHostState,
                     isAddEventBoxEnabled = isAddEventBoxEnabled,
-                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = true },
+                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                     fabPlaceholderHeight = fabPlaceholderHeight,
                     refreshCalendar = refreshCalendar,
                     refreshToken = refreshToken,
