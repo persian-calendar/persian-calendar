@@ -41,8 +41,8 @@
     <string name="version">نسخه %1$s</string>
     <string name="athan">اذان</string>
     <string name="imsak">امساک</string>
-    <string name="fajr">صبح</string>
-    <string name="dhuhr">ظهر</string>
+    <string name="fajr">اذان صبح</string>
+    <string name="dhuhr">اذان ظهر</string>
     <string name="asr">مازدیګر</string>
     <string name="maghrib">ماښام</string>
     <string name="isha">ماسختن</string>

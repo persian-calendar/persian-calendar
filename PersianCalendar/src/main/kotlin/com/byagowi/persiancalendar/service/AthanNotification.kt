@@ -103,12 +103,12 @@ class AthanNotification : Service() {
             if (!language.isPersianOrDari) return@let it
             val athanGap =
                 (preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0).roundToInt()
-            if (athanGap <= 0) return@let "اذان $it"
+            if (athanGap <= 0) return@let it
             resources.getQuantityString(
                 R.plurals.minutes,
                 abs(athanGap),
                 numeral.format(abs(athanGap)),
-            ) + " پیش از اذان " + it
+            ) + " پیش از " + it
         }
         val title =
             if (cityName == null) prayTimeName

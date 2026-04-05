@@ -48,10 +48,10 @@
     <string name="close">بند کریں</string>
     <string name="open">کھولیں</string>
     <string name="imsak">امساک</string>
-    <string name="fajr">فجر</string>
-    <string name="dhuhr">ظہر</string>
+    <string name="fajr">اذان فجر</string>
+    <string name="dhuhr">اذان ظہر</string>
     <string name="asr">عصر</string>
-    <string name="maghrib">مغرب</string>
+    <string name="maghrib">اذان مغرب</string>
     <string name="isha">عشا</string>
     <string name="sunrise">طلوع</string>
     <string name="sunset">غروب</string>
