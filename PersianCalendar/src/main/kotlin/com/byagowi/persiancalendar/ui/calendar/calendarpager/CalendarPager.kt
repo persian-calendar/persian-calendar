@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -57,26 +58,28 @@ fun CalendarPager(
         secondaryCalendar = yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar,
     )
 
-    val context = LocalContext.current
-    HorizontalPager(
-        state = calendarPagerState,
-        verticalAlignment = Alignment.Top,
-        modifier = modifier,
-    ) { page ->
-        val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
-        val monthStartJdn = Jdn(monthStartDate)
-        val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
-            if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
-            else EventsStore.empty()
+    Box(modifier) {
+        val context = LocalContext.current
+        HorizontalPager(
+            state = calendarPagerState,
+            verticalAlignment = Alignment.Top,
+        ) { page ->
+            val monthStartDate =
+                mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
+            val monthStartJdn = Jdn(monthStartDate)
+            val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
+                if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
+                else EventsStore.empty()
+            }
+            daysTable(
+                monthStartDate,
+                monthStartJdn,
+                monthDeviceEvents,
+                null,
+                isHighlighted,
+                selectedDay,
+            )
         }
-        daysTable(
-            monthStartDate,
-            monthStartJdn,
-            monthDeviceEvents,
-            null,
-            isHighlighted,
-            selectedDay,
-        )
     }
 }
 
