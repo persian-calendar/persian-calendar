@@ -518,7 +518,19 @@ fun SharedTransitionScope.CalendarScreen(
 
                 if (!isYearViewState) {
                     if (isLandscape) Row {
-                        Box(Modifier.size(pagerSize)) {
+                        Box(
+                            Modifier
+                                .size(pagerSize)
+                                .detectSwipe {
+                                    { isUp: Boolean ->
+                                        when {
+                                            isUp -> swipeUpActions[preferredSwipeUpAction]
+                                            !isUp -> swipeDownActions[preferredSwipeDownAction]
+                                            else -> null
+                                        }?.invoke()
+                                    }
+                                },
+                        ) {
                             CalendarPager(
                                 selectedDay = selectedDay,
                                 isHighlighted = isHighlighted,
@@ -1539,7 +1551,7 @@ private fun SharedTransitionScope.Menu(
             AppDropdownMenuItem(
                 text = { Text(stringResource(title)) },
                 trailingIcon = icon@{
-                    if (isLandscape || isTalkBackEnabled) return@icon
+                    if (isTalkBackEnabled) return@icon
                     Box(
                         Modifier.clickable(null, ripple(bounded = false)) {
                             context.preferences.edit { putString(prefKey, valueToStoreOnClick()) }
