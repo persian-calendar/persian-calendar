@@ -9,7 +9,6 @@ import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Typeface
-import androidx.annotation.ColorInt
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -82,7 +81,6 @@ fun Compass(
     }
     compassView.qiblaHeading = qiblaHeading
     compassView.setFont(resolveAndroidCustomTypeface())
-    compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
     compassView.setTime(time)
     BoxWithConstraints(modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
         val width = this.maxWidth
@@ -182,20 +180,10 @@ private class CompassView(private val resources: Resources) {
         it.alpha = 120
         it.textAlign = Paint.Align.CENTER
     }
-    private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.strokeWidth = 5 * dp
-        it.style = Paint.Style.STROKE
-        it.textAlign = Paint.Align.CENTER
-    }
 
     fun setFont(typeface: Typeface?) {
         textPaint.typeface = typeface
-        textStrokePaint.typeface = typeface
         planetsPaint.typeface = typeface
-    }
-
-    fun setSurfaceColor(@ColorInt color: Int) {
-        textStrokePaint.color = color
     }
 
     fun updateSize(cx: Float, cy: Float) {
@@ -219,7 +207,6 @@ private class CompassView(private val resources: Resources) {
         planetsPaint.textSize = textSize
         textPaint.textSize = textSize
         textSecondPaint.textSize = textSize
-        textStrokePaint.textSize = textSize
         northArrowPaint.alpha = ((100 * cbrt(scale)).roundToInt()).coerceIn(0, 255)
         qiblaPaint.strokeWidth = strokeWidth
         moonPaint.strokeWidth = strokeWidth
@@ -348,14 +335,11 @@ private class CompassView(private val resources: Resources) {
         if (!isShowQibla) return
         val qiblaHeading = qiblaHeading ?: return
         withRotation(fixForTrueNorth(qiblaHeading.heading), cx, cy) {
-            drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
-            val textCenter = cy - radius / 2
-            withRotation(90f, cx, textCenter) {
-                val distance = qiblaHeading.km
-                drawText(distance, cx, textCenter + 4 * dp, textStrokePaint)
-                drawText(distance, cx, textCenter + 4 * dp, textPaint)
-            }
+//            val textCenter = cy - radius / 2
+//            withRotation(90f, cx, textCenter) {
+//                drawText(qiblaHeading.km, cx, textCenter + 4 * dp, textPaint)
+//            }
         }
     }
 }
