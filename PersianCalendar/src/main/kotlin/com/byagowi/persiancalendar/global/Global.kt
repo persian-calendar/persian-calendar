@@ -226,8 +226,7 @@ val athanVibration by athanVibration_
 private val ascendingAthan_ = mutableStateOf(DEFAULT_ASCENDING_ATHAN_VOLUME)
 val ascendingAthan by ascendingAthan_
 
-private val calculationMethod_ =
-    mutableStateOf(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
+private val calculationMethod_ = mutableStateOf(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
 val calculationMethod by calculationMethod_
 
 private val athanSoundName_ = mutableStateOf<String?>(null)
@@ -281,16 +280,14 @@ private val englishGregorianPersianMonths_ =
     mutableStateOf(DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS)
 val englishGregorianPersianMonths by englishGregorianPersianMonths_
 
-private val easternGregorianArabicMonths_ =
-    mutableStateOf(DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS)
+private val easternGregorianArabicMonths_ = mutableStateOf(DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS)
 val easternGregorianArabicMonths by easternGregorianArabicMonths_
 
 private val alternativePersianMonthsInAzeri_ =
     mutableStateOf(DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS)
 val alternativePersianMonthsInAzeri by alternativePersianMonthsInAzeri_
 
-private val englishWeekDaysInIranEnglish_ =
-    mutableStateOf(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
+private val englishWeekDaysInIranEnglish_ = mutableStateOf(DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH)
 val englishWeekDaysInIranEnglish by englishWeekDaysInIranEnglish_
 
 private val iso8601DateFormat_ = mutableStateOf(DEFAULT_ISO8601_DATE_FORMAT)
@@ -658,12 +655,11 @@ fun updateStoredPreference(context: Context) {
             ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }).splitFilterNotEmpty(
             ",",
         ).map(Calendar::valueOf)
-        enabledCalendars_.value =
-            (listOf(mainCalendar) + otherCalendars).distinct().let {
-                val timesDismissed = preferences.getBoolean(PREF_DISMISSED_TIMES, false)
-                val notSetExplicitly = PREF_OTHER_CALENDARS_KEY !in preferences
-                if (language.isUserAbleToReadPersian && timesDismissed && notSetExplicitly && coordinates == null) (it - Calendar.ISLAMIC) else it
-            }.toImmutableList()
+        enabledCalendars_.value = (listOf(mainCalendar) + otherCalendars).distinct().let {
+            val timesDismissed = preferences.getBoolean(PREF_DISMISSED_TIMES, false)
+            val notSetExplicitly = PREF_OTHER_CALENDARS_KEY !in preferences
+            if (language.isUserAbleToReadPersian && timesDismissed && notSetExplicitly && coordinates == null) (it - Calendar.ISLAMIC) else it
+        }.toImmutableList()
         secondaryCalendarEnabled_.value = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE,
         )
