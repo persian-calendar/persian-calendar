@@ -112,7 +112,7 @@ fun SharedTransitionScope.MonthScreen(
     val focusedJdn by remember {
         derivedStateOf {
             if (state.firstVisibleItemIndex == initialItem) monthStart
-            else (weekStartJdn + 3 + (state.firstVisibleItemIndex - initialItem) * 7)
+            else weekStartJdn + 3 + (state.firstVisibleItemIndex - initialItem - 1 + if (state.firstVisibleItemScrollOffset == 0) -1 else 0) * 7
         }
     }
     val focusedDate = focusedJdn on mainCalendar
