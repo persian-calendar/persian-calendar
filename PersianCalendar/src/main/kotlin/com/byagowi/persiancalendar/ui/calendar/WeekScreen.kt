@@ -1278,35 +1278,33 @@ fun EventsRow(
                     Box(modifier = Modifier.weight(1f)) {
                         content(i) {
                             dayEvents.forEachIndexed { i, event ->
-                                if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) {
-                                    Box(
-                                        Modifier
-                                            .requiredHeight(height = itemHeight)
-                                            .fillMaxSize()
-                                            .padding(
-                                                top = if (i == 0) 2.dp else 0.dp,
-                                                bottom = 2.dp,
-                                                start = defaultWidthReduction / 2,
-                                                end = defaultWidthReduction / 2,
-                                            )
-                                            .clip(shape)
-                                            .background(eventColor(event))
-                                            .clickable {
-                                                if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                    launcher.viewEvent(event, context)
-                                                } else coroutineScope.launch {
-                                                    snackbarHostState.showSnackbar(event.title)
-                                                }
-                                            },
-                                        contentAlignment = Alignment.CenterStart,
-                                    ) {
-                                        Text(
-                                            " " + event.title,
-                                            maxLines = 1,
-                                            style = itemsTextStyle,
-                                            color = eventTextColor(eventColor(event)),
+                                if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) Box(
+                                    Modifier
+                                        .requiredHeight(height = itemHeight)
+                                        .fillMaxSize()
+                                        .padding(
+                                            top = if (i == 0) 2.dp else 0.dp,
+                                            bottom = 2.dp,
+                                            start = defaultWidthReduction / 2,
+                                            end = defaultWidthReduction / 2,
                                         )
-                                    }
+                                        .clip(shape)
+                                        .background(eventColor(event))
+                                        .clickable {
+                                            if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                launcher.viewEvent(event, context)
+                                            } else coroutineScope.launch {
+                                                snackbarHostState.showSnackbar(event.title)
+                                            }
+                                        },
+                                    contentAlignment = Alignment.CenterStart,
+                                ) {
+                                    Text(
+                                        " " + event.title,
+                                        maxLines = 1,
+                                        style = itemsTextStyle,
+                                        color = eventTextColor(eventColor(event)),
+                                    )
                                 }
                                 if (i == defaultItems - 1 && dayEvents.size > defaultItems && !isExpanded) Text(
                                     " +" + numeral.format(dayEvents.size - defaultItems),
