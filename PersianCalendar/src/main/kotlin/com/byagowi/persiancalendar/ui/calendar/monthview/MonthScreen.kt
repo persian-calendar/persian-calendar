@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.aspectRatio
@@ -62,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
@@ -190,8 +192,10 @@ fun SharedTransitionScope.MonthScreen(
                 val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
                     refreshCalendar()
                 }
-                val daysStyle = MaterialTheme.typography.titleLarge
+                val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
+                val weekOfYearWeight = .625f
                 Row {
+                    if (isShowWeekOfYearEnabled) Spacer(Modifier.weight(weekOfYearWeight))
                     repeat(7) { column ->
                         Box(
                             contentAlignment = Alignment.Center,
@@ -243,17 +247,38 @@ fun SharedTransitionScope.MonthScreen(
                             defaultItems = 7,
                             shape = MaterialTheme.shapes.extraSmall,
                             snackbarHostState = snackbarHostState,
+                            header = {
+                                if (isShowWeekOfYearEnabled) {
+                                    val dayDate = weekJdn on mainCalendar
+                                    val monthStartDate =
+                                        mainCalendar.createDate(dayDate.year, dayDate.month, 1)
+                                    val startOfYearJdn =
+                                        Jdn(mainCalendar, monthStartDate.year, 1, 1)
+                                    val formattedWeekNumber = numeral.format(
+                                        weekJdn.getWeekOfYear(startOfYearJdn, weekStart)
+                                    )
+                                    val description =
+                                        stringResource(R.string.nth_week_of_year, formattedWeekNumber)
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(top = 6.dp)
+                                            .alpha(AppBlendAlpha)
+                                            .semantics { this.contentDescription = description }
+                                            .weight(weekOfYearWeight),
+                                        contentAlignment = Alignment.TopCenter,
+                                    ) {
+                                        Text(
+                                            text = formattedWeekNumber,
+                                            style = MaterialTheme.typography.titleSmall,
+                                        )
+                                    }
+                                }
+                            },
                         ) { column, content ->
                             val jdn = weekJdn + column
                             val dayDate = jdn on mainCalendar
                             val isHoliday =
                                 events[column].any { it.isHoliday } || jdn.weekDay in weekEnds
-                            //                            val monthStartDate =
-//                                mainCalendar.createDate(dayDate.year, dayDate.month, 1)
-//                            val monthStartJdn = Jdn(monthStartDate)
-//                            val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
-//                            val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
-//                            val weekNumber = monthStartWeekOfYear
                             val isToday = jdn == today
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -283,8 +308,8 @@ fun SharedTransitionScope.MonthScreen(
                                         .clip(CircleShape)
                                         .background(
                                             when {
-                                                isHoliday && initiallySelectedDay == jdn && today != jdn -> holidaysColor
-                                                initiallySelectedDay == jdn && today != jdn -> indicatorFillColor
+                                                isHoliday && initiallySelectedDay == jdn && !isToday -> holidaysColor
+                                                initiallySelectedDay == jdn && !isToday -> indicatorFillColor
                                                 isHoliday -> holidaysFillColor
                                                 else -> Color.Transparent
                                             },
@@ -293,11 +318,11 @@ fun SharedTransitionScope.MonthScreen(
                                     Text(
                                         mainCalendarNumeral.format(dayDate.dayOfMonth),
                                         color = when {
-                                            initiallySelectedDay == jdn && today != jdn -> MaterialTheme.colorScheme.background
+                                            initiallySelectedDay == jdn && !isToday -> MaterialTheme.colorScheme.background
                                             isHoliday -> holidaysColor
                                             else -> LocalContentColor.current
                                         },
-                                        style = daysStyle,
+                                        style = MaterialTheme.typography.titleLarge,
                                         modifier = Modifier.semantics {
                                             if (isTalkBackEnabled) {
                                                 this.contentDescription = getA11yDaySummary(

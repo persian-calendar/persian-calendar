@@ -1250,6 +1250,7 @@ fun EventsRow(
     itemHeight: Dp,
     shape: Shape,
     modifier: Modifier = Modifier,
+    header: @Composable () -> Unit = {},
     content: @Composable ColumnScope.(i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -1271,6 +1272,7 @@ fun EventsRow(
                     .animateContentSize(appContentSizeAnimationSpec)
                     .padding(horizontal = horizontalPadding),
             ) {
+                header()
                 events.forEachIndexed { i, dayEvents ->
                     val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
