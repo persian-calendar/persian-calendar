@@ -235,7 +235,6 @@ fun SharedTransitionScope.MonthScreen(
                             readEvents(weekJdn + index, deviceEvents)
                         }.toImmutableList()
                         EventsRow(
-                            cellWidth = width / 7,
                             events = events,
                             horizontalPadding = 0.dp,
                             defaultWidthReduction = defaultWidthReduction,

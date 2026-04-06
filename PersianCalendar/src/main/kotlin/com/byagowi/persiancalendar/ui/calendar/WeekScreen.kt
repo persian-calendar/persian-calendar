@@ -743,7 +743,6 @@ fun DaysView(
                     }
                 }
             } else if (maxDayAllDayEvents != 0) EventsRow(
-                cellWidth = cellWidth,
                 events = eventsWithoutTime,
                 horizontalPadding = pagerArrowSizeAndPadding.dp,
                 defaultWidthReduction = defaultWidthReduction,
@@ -1240,7 +1239,6 @@ fun DaysView(
 
 @Composable
 fun EventsRow(
-    cellWidth: Dp,
     events: ImmutableList<ImmutableList<CalendarEvent<*>>>,
     defaultWidthReduction: Dp,
     launcher: ManagedActivityResultLauncher<Long, Void?>,
@@ -1252,7 +1250,7 @@ fun EventsRow(
     shape: Shape,
     modifier: Modifier = Modifier,
     header: @Composable () -> Unit = {},
-    content: @Composable ColumnScope.(i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    content: @Composable (i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val clickToExpandModifier = Modifier.clickable(
@@ -1277,10 +1275,7 @@ fun EventsRow(
                 events.forEachIndexed { i, dayEvents ->
                     val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
+                    Box(modifier = Modifier.weight(1f)) {
                         content(i) {
                             dayEvents.forEachIndexed { i, event ->
                                 if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) {
