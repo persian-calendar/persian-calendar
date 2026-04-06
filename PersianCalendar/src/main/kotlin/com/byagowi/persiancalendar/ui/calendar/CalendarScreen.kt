@@ -48,7 +48,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -474,7 +473,7 @@ fun SharedTransitionScope.CalendarScreen(
         BoxWithConstraints(
             Modifier
                 .padding(top = paddingValues.calculateTopPadding())
-                .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start)),
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
         ) {
             val maxWidth = this.maxWidth
             val maxHeight = this.maxHeight
@@ -582,7 +581,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
-                                        WindowInsets.displayCutout.only(
+                                        WindowInsets.safeDrawing.only(
                                             WindowInsetsSides.End,
                                         ),
                                     ),

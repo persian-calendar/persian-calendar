@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -95,7 +94,7 @@ fun SharedTransitionScope.LicensesScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .windowInsetsPadding(
-                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal),
                         )
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
@@ -165,10 +164,10 @@ private fun Sidebar(modifier: Modifier = Modifier) {
 private fun BoxScope.Licenses() {
     val sections = remember {
         credits.split(Regex("^-{4}$", RegexOption.MULTILINE)).map {
-                val lines = it.trim().lines()
-                val parts = lines.first().split(" - ")
-                Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
-            }.toImmutableList()
+            val lines = it.trim().lines()
+            val parts = lines.first().split(" - ")
+            Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
+        }.toImmutableList()
     }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     val listState = rememberLazyListState()
