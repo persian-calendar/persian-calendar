@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -219,6 +220,7 @@ fun SharedTransitionScope.MonthScreen(
                 val todayOutlineColor by animateColor(monthColors.todayOutline)
                 val holidaysColor by animateColor(monthColors.holidays)
                 val baseJdn = monthStart - (monthStart.weekDay - weekStart)
+                val itemHeight = with(density) { 20.sp.toDp() }
                 LazyColumn(state = state) {
                     items(ITEMS_COUNT) { index ->
                         val weekJdn = indexToJdn(baseJdn, index)
@@ -237,7 +239,7 @@ fun SharedTransitionScope.MonthScreen(
                             itemsTextStyle = MaterialTheme.typography.labelSmall.copy(
                                 textDirection = TextDirection.Content,
                             ),
-                            itemHeight = with(density) { 20.sp.toDp() },
+                            itemHeight = itemHeight,
                             defaultItems = 7,
                             shape = MaterialTheme.shapes.extraSmall,
                             snackbarHostState = snackbarHostState,
@@ -246,71 +248,78 @@ fun SharedTransitionScope.MonthScreen(
                             val dayDate = jdn on mainCalendar
                             val isHoliday =
                                 events[column].any { it.isHoliday } || jdn.weekDay in weekEnds
-                            val alphaModifier = Modifier.alpha(
-                                animateFloatAsState(
-                                    if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
-                                    else outOfMonthAlpha,
-                                ).value,
-                            )
-//                            val monthStartDate =
+                            //                            val monthStartDate =
 //                                mainCalendar.createDate(dayDate.year, dayDate.month, 1)
 //                            val monthStartJdn = Jdn(monthStartDate)
 //                            val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
 //                            val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
 //                            val weekNumber = monthStartWeekOfYear
                             val isToday = jdn == today
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(diameter)
-                                    .aspectRatio(1f)
-                                    .then(alphaModifier)
-                                    .then(
-                                        if (isToday) Modifier.border(
-                                            width = todayCircleWidth,
-                                            color = todayOutlineColor,
-                                            shape = CircleShape,
-                                        ) else Modifier,
-                                    )
-                                    .clip(CircleShape)
-                                    .background(
-                                        when {
-                                            isHoliday && initiallySelectedDay == jdn && today != jdn -> holidaysColor
-                                            initiallySelectedDay == jdn && today != jdn -> indicatorFillColor
-                                            isHoliday -> holidaysFillColor
-                                            else -> Color.Transparent
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.clickable {
+                                    commandBringDay(jdn)
+                                    navigateUp()
+                                },
+                            ) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .size(diameter)
+                                        .aspectRatio(1f)
+                                        .alpha(
+                                            animateFloatAsState(
+                                                if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year) 1f
+                                                else outOfMonthAlpha,
+                                            ).value,
+                                        )
+                                        .then(
+                                            if (isToday) Modifier.border(
+                                                width = todayCircleWidth,
+                                                color = todayOutlineColor,
+                                                shape = CircleShape,
+                                            ) else Modifier,
+                                        )
+                                        .clip(CircleShape)
+                                        .background(
+                                            when {
+                                                isHoliday && initiallySelectedDay == jdn && today != jdn -> holidaysColor
+                                                initiallySelectedDay == jdn && today != jdn -> indicatorFillColor
+                                                isHoliday -> holidaysFillColor
+                                                else -> Color.Transparent
+                                            },
+                                        ),
+                                ) {
+                                    Text(
+                                        mainCalendarNumeral.format(dayDate.dayOfMonth),
+                                        color = when {
+                                            initiallySelectedDay == jdn && today != jdn -> MaterialTheme.colorScheme.background
+                                            isHoliday -> holidaysColor
+                                            else -> LocalContentColor.current
+                                        },
+                                        style = daysStyle,
+                                        modifier = Modifier.semantics {
+                                            if (isTalkBackEnabled) {
+                                                this.contentDescription = getA11yDaySummary(
+                                                    resources = resources,
+                                                    jdn = jdn,
+                                                    isToday = isToday,
+                                                    deviceCalendarEvents = EventsStore.empty(),
+                                                    withZodiac = isToday,
+                                                    withOtherCalendars = false,
+                                                    withTitle = true,
+                                                    withWeekOfYear = false,
+                                                )
+                                            }
                                         },
                                     )
-                                    .clickable {
-                                        commandBringDay(jdn)
-                                        navigateUp()
-                                    },
-                            ) {
-                                Text(
-                                    mainCalendarNumeral.format(dayDate.dayOfMonth),
-                                    color = when {
-                                        initiallySelectedDay == jdn && today != jdn -> MaterialTheme.colorScheme.background
-                                        isHoliday -> holidaysColor
-                                        else -> LocalContentColor.current
-                                    },
-                                    style = daysStyle,
-                                    modifier = Modifier.semantics {
-                                        if (isTalkBackEnabled) {
-                                            this.contentDescription = getA11yDaySummary(
-                                                resources = resources,
-                                                jdn = jdn,
-                                                isToday = isToday,
-                                                deviceCalendarEvents = EventsStore.empty(),
-                                                withZodiac = isToday,
-                                                withOtherCalendars = false,
-                                                withTitle = true,
-                                                withWeekOfYear = false,
-                                            )
-                                        }
-                                    },
-                                )
+                                }
+                                Column(
+                                    Modifier
+                                        .defaultMinSize(minHeight = 2.dp + itemHeight * 3)
+                                        .fillMaxWidth(),
+                                ) { content() }
                             }
-                            Column(alphaModifier) { content() }
                         }
                     }
                 }
