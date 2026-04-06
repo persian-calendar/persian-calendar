@@ -284,10 +284,13 @@ fun SharedTransitionScope.MonthScreen(
                             val isToday = jdn == today
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.clickable {
-                                    commandBringDay(jdn)
-                                    navigateUp()
-                                },
+                                modifier = Modifier
+                                    .defaultMinSize(minHeight = 2.dp + itemHeight * 3 + diameter)
+                                    .fillMaxSize()
+                                    .clickable {
+                                        commandBringDay(jdn)
+                                        navigateUp()
+                                    },
                             ) {
                                 Box(
                                     contentAlignment = Alignment.Center,
@@ -341,11 +344,7 @@ fun SharedTransitionScope.MonthScreen(
                                         },
                                     )
                                 }
-                                Column(
-                                    Modifier
-                                        .defaultMinSize(minHeight = 2.dp + itemHeight * 3)
-                                        .fillMaxWidth(),
-                                ) { content() }
+                                content()
                             }
                         }
                     }
