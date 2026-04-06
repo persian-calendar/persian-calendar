@@ -720,24 +720,22 @@ fun DaysView(
                                 .animateContentSize(appContentSizeAnimationSpec)
                                 .padding(horizontal = 24.dp),
                         )
-                        AnimatedVisibility(dayEvents.isNotEmpty()) {
-                            Box(Modifier.height(8.dp))
-                        }
                         val appointments =
                             eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
                         if (displayedEvents.size > 3) {
-                            Spacer(Modifier.height(4.dp))
                             ExpandArrow(
                                 isExpanded = isExpanded,
                                 modifier = Modifier.align(Alignment.CenterHorizontally),
                             )
+                            Spacer(Modifier.height(4.dp))
                             if (content != null) {
                                 content(appointments, headerScrollState) { hasContent = it }
-                            } else Spacer(Modifier.height(8.dp))
-                            if (isExpanded && headerHasFilled) {
-                                Spacer(Modifier.height(bottomPadding))
                             }
+                            Spacer(Modifier.height(if (isExpanded && headerHasFilled) bottomPadding else 0.dp))
                         } else if (content != null) {
+                            AnimatedVisibility(dayEvents.isNotEmpty()) {
+                                Spacer(Modifier.height(8.dp))
+                            }
                             content(appointments, headerScrollState) { hasContent = it }
                         } else Spacer(Modifier.height(12.dp))
                     }
@@ -755,22 +753,24 @@ fun DaysView(
                 shape = MaterialTheme.shapes.small,
                 snackbarHostState = snackbarHostState,
             ) { dayIndex, content ->
-                if (!hasWeekPager) {
-                    val weekDay = weekStart + dayIndex
-                    val weekDayTitle = weekDay.title
-                    val isLandscape =
-                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                    Text(
-                        text = if (isLandscape) weekDayTitle else weekDay.shortTitle,
-                        maxLines = 1,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier
-                            .width(cellWidth)
-                            .semantics { this.contentDescription = weekDayTitle },
-                    )
+                Column {
+                    if (!hasWeekPager) {
+                        val weekDay = weekStart + dayIndex
+                        val weekDayTitle = weekDay.title
+                        val isLandscape =
+                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                        Text(
+                            text = if (isLandscape) weekDayTitle else weekDay.shortTitle,
+                            maxLines = 1,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier
+                                .width(cellWidth)
+                                .semantics { this.contentDescription = weekDayTitle },
+                        )
+                    }
+                    content()
                 }
-                content()
             }
         }
 
@@ -1250,7 +1250,7 @@ fun EventsRow(
     shape: Shape,
     modifier: Modifier = Modifier,
     header: @Composable () -> Unit = {},
-    content: @Composable (i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    content: @Composable ColumnScope.(i: Int, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val clickToExpandModifier = Modifier.clickable(
@@ -1275,7 +1275,7 @@ fun EventsRow(
                 events.forEachIndexed { i, dayEvents ->
                     val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
-                    Box(modifier = Modifier.weight(1f)) {
+                    Column(modifier = Modifier.weight(1f)) {
                         content(i) {
                             dayEvents.forEachIndexed { i, event ->
                                 if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) Box(

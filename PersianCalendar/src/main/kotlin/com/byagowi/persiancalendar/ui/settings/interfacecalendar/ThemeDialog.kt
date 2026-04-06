@@ -132,7 +132,7 @@ fun ThemeDialog(
                     }
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             ) {
-                Box(Modifier.height(SettingsItemHeight.dp))
+                Spacer(Modifier.height(SettingsItemHeight.dp))
                 RadioButton(selected = entry == userSetTheme, onClick = null)
                 Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Column(Modifier.padding(end = 16.dp)) {
