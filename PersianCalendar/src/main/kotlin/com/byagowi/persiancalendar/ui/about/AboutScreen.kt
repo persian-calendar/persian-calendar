@@ -144,7 +144,7 @@ fun SharedTransitionScope.AboutScreen(
         ) {
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
-                Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
+                Header(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) })
                 val headerPx = with(LocalDensity.current) { headerSize.toPx() }
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 ScreenSurface(
@@ -159,7 +159,7 @@ fun SharedTransitionScope.AboutScreen(
 private val headerSize = 250.dp
 
 @Composable
-private fun Header() {
+private fun Header(modifier: Modifier = Modifier) {
     var showPeriodicTableDialog by rememberSaveable { mutableStateOf(false) }
     if (showPeriodicTableDialog) PeriodicTableDialog { showPeriodicTableDialog = false }
     val clickHandler = createEasterEggClickHandler { showPeriodicTableDialog = true }
@@ -175,7 +175,7 @@ private fun Header() {
 
     val interactionSource = remember { MutableInteractionSource() }
     Row(
-        Modifier
+        modifier
             .height(headerSize)
             .fillMaxWidth()
             .indication(interactionSource = interactionSource, indication = ripple()),
