@@ -255,10 +255,12 @@ fun SharedTransitionScope.MonthScreen(
                                     val startOfYearJdn =
                                         Jdn(mainCalendar, monthStartDate.year, 1, 1)
                                     val formattedWeekNumber = numeral.format(
-                                        weekJdn.getWeekOfYear(startOfYearJdn, weekStart)
+                                        weekJdn.getWeekOfYear(startOfYearJdn, weekStart),
                                     )
-                                    val description =
-                                        stringResource(R.string.nth_week_of_year, formattedWeekNumber)
+                                    val description = stringResource(
+                                        R.string.nth_week_of_year,
+                                        formattedWeekNumber,
+                                    )
                                     Box(
                                         modifier = Modifier
                                             .padding(top = 6.dp)

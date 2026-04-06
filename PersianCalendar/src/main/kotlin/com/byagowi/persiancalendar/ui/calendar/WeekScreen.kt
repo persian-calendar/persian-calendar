@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -1285,13 +1286,13 @@ fun EventsRow(
                                 if (isExpanded || i < (defaultItems - 1) || (i == (defaultItems - 1) && dayEvents.size == defaultItems)) {
                                     Box(
                                         Modifier
-                                            .requiredSize(
-                                                width = cellWidth - defaultWidthReduction,
-                                                height = itemHeight,
-                                            )
+                                            .requiredHeight(height = itemHeight)
+                                            .fillMaxSize()
                                             .padding(
                                                 top = if (i == 0) 2.dp else 0.dp,
                                                 bottom = 2.dp,
+                                                start = defaultWidthReduction / 2,
+                                                end = defaultWidthReduction / 2,
                                             )
                                             .clip(shape)
                                             .background(eventColor(event))
