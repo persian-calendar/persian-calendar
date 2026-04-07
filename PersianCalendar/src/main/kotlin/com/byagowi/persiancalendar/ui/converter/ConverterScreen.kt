@@ -202,19 +202,17 @@ fun SharedTransitionScope.ConverterScreen(
                         else -> false
                     },
                 ) {
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        ConverterAndDistance(
-                            navigateToAstronomy = navigateToAstronomy,
-                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                            sharedTransitionScope = this@ConverterScreen,
-                            pendingConfirms = pendingConfirms,
-                            screenMode = screenMode,
-                            onShareActionChange = { shareAction = it },
-                            onResetActionChange = { resetAction = it },
-                            onResetButtonVisibilityChange = { resetButtonVisibility = it },
-                            today = today,
-                        )
-                    }
+                    ConverterAndDistance(
+                        navigateToAstronomy = navigateToAstronomy,
+                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                        sharedTransitionScope = this@ConverterScreen,
+                        pendingConfirms = pendingConfirms,
+                        screenMode = screenMode,
+                        onShareActionChange = { shareAction = it },
+                        onResetActionChange = { resetAction = it },
+                        onResetButtonVisibilityChange = { resetButtonVisibility = it },
+                        today = today,
+                    )
                 }
 
                 AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
@@ -477,7 +475,7 @@ private fun QrCode(
 }
 
 @Composable
-private fun ColumnScope.ConverterAndDistance(
+private fun ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToCalendarsPrioritySettings: () -> Unit,
     sharedTransitionScope: SharedTransitionScope,
@@ -487,6 +485,7 @@ private fun ColumnScope.ConverterAndDistance(
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
     today: Jdn,
+    modifier: Modifier = Modifier,
 ) {
     var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
     var selectedDate by rememberSaveable { mutableStateOf(today) }
@@ -592,8 +591,37 @@ private fun ColumnScope.ConverterAndDistance(
     }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    if (isLandscape) Row {
-        Column(Modifier.weight(1f)) {
+    Column(modifier.padding(horizontal = 24.dp)) {
+        if (isLandscape) Row {
+            Column(Modifier.weight(1f)) {
+                CalendarPicker(
+                    value = calendar,
+                    items = calendarsList,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                ) { calendar = it }
+                DatePicker(
+                    today = today,
+                    calendar = calendar,
+                    value = selectedDate,
+                    pendingConfirms = pendingConfirms,
+                    onValueChange = { selectedDate = it },
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+            Column(Modifier.weight(1f)) {
+                AnimatedVisibility(
+                    visible = screenMode == ConverterScreenMode.CONVERTER,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .clickable { isExpanded = !isExpanded }
+                        .padding(bottom = 12.dp),
+                ) { CalendarsOverview() }
+                AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
+                    DaysDistanceSecondPart()
+                }
+            }
+        } else {
             CalendarPicker(
                 value = calendar,
                 items = calendarsList,
@@ -607,69 +635,42 @@ private fun ColumnScope.ConverterAndDistance(
                 pendingConfirms = pendingConfirms,
                 onValueChange = { selectedDate = it },
             )
-        }
-        Spacer(Modifier.width(8.dp))
-        Column(Modifier.weight(1f)) {
-            AnimatedVisibility(
-                visible = screenMode == ConverterScreenMode.CONVERTER,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.extraLarge)
-                    .clickable { isExpanded = !isExpanded }
-                    .padding(bottom = 12.dp),
-            ) { CalendarsOverview() }
+            AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
+                val cardColors = CardDefaults.cardColors()
+                Card(
+                    shape = MaterialTheme.shapes.extraLarge,
+                    elevation = CardDefaults.cardElevation(if (isGradient) 8.dp else 0.dp),
+                    onClick = { isExpanded = !isExpanded },
+                    modifier = Modifier.padding(top = 16.dp),
+                    colors = cardColors.copy(
+                        containerColor = animateColor(cardColors.containerColor).value,
+                        contentColor = animateColor(cardColors.contentColor).value,
+                        disabledContainerColor = animateColor(cardColors.disabledContainerColor).value,
+                        disabledContentColor = animateColor(cardColors.disabledContentColor).value,
+                    ),
+                ) { CalendarsOverview(Modifier.padding(top = 8.dp, bottom = 12.dp)) }
+            }
             AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart()
             }
         }
-    } else {
-        CalendarPicker(
-            value = calendar,
-            items = calendarsList,
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-        ) { calendar = it }
-        DatePicker(
-            today = today,
-            calendar = calendar,
-            value = selectedDate,
-            pendingConfirms = pendingConfirms,
-            onValueChange = { selectedDate = it },
-        )
-        AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
-            val cardColors = CardDefaults.cardColors()
-            Card(
-                shape = MaterialTheme.shapes.extraLarge,
-                elevation = CardDefaults.cardElevation(if (isGradient) 8.dp else 0.dp),
-                onClick = { isExpanded = !isExpanded },
-                modifier = Modifier.padding(top = 16.dp),
-                colors = cardColors.copy(
-                    containerColor = animateColor(cardColors.containerColor).value,
-                    contentColor = animateColor(cardColors.contentColor).value,
-                    disabledContainerColor = animateColor(cardColors.disabledContainerColor).value,
-                    disabledContentColor = animateColor(cardColors.disabledContentColor).value,
-                ),
-            ) { CalendarsOverview(Modifier.padding(top = 8.dp, bottom = 12.dp)) }
-        }
-        AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
-            DaysDistanceSecondPart()
-        }
-    }
 
-    AnimatedVisibility(
-        isAstronomicalExtraFeaturesEnabled && screenMode == ConverterScreenMode.DISTANCE && !(secondSelectedDate == selectedDate && selectedDate == today),
-    ) {
-        val isPersian = calendar == Calendar.SHAMSI
-        val zodiacs = listOf(selectedDate, secondSelectedDate).map {
-            if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                ChineseZodiac.fromPersianCalendar(it.toPersianDate())
-            } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
+        AnimatedVisibility(
+            isAstronomicalExtraFeaturesEnabled && screenMode == ConverterScreenMode.DISTANCE && !(secondSelectedDate == selectedDate && selectedDate == today),
+        ) {
+            val isPersian = calendar == Calendar.SHAMSI
+            val zodiacs = listOf(selectedDate, secondSelectedDate).map {
+                if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    ChineseZodiac.fromPersianCalendar(it.toPersianDate())
+                } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
+            }
+            val resources = LocalResources.current
+            TextWithSlideAnimation(
+                zodiacs.joinToString(spacedComma) {
+                    it.format(resources, true, isPersian)
+                } + spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1]),
+            )
         }
-        val resources = LocalResources.current
-        TextWithSlideAnimation(
-            zodiacs.joinToString(spacedComma) {
-                it.format(resources, true, isPersian)
-            } + spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1]),
-        )
     }
 }
 
