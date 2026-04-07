@@ -530,9 +530,9 @@ private fun NavigationRailSeasonsPager(now: Long) {
         Image(
             ImageBitmap.imageResource(season.imageId),
             contentScale = ContentScale.FillWidth,
-            contentDescription = """${stringResource(R.string.season)}$spacedColon${
+            contentDescription = "${stringResource(R.string.season)}$spacedColon${
                 stringResource(season.nameStringId)
-            }""",
+            }",
             colorFilter = imageFilter,
             modifier = Modifier
                 .fillMaxWidth()

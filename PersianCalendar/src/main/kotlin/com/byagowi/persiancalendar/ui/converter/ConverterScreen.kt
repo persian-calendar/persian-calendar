@@ -187,51 +187,69 @@ fun SharedTransitionScope.ConverterScreen(
             ) {
                 Spacer(Modifier.height(24.dp))
 
-                AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
-                    TimeZones(
-                        pendingConfirms = pendingConfirms,
-                        onShareActionChange = { shareAction = it },
-                        onResetActionChange = { resetAction = it },
-                        onResetButtonVisibilityChange = { resetButtonVisibility = it },
-                    )
-                }
-
-                AnimatedVisibility(
-                    when (screenMode) {
-                        ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
-                        else -> false
-                    },
-                ) {
-                    ConverterAndDistance(
-                        navigateToAstronomy = navigateToAstronomy,
-                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                        sharedTransitionScope = this@ConverterScreen,
-                        pendingConfirms = pendingConfirms,
-                        screenMode = screenMode,
-                        onShareActionChange = { shareAction = it },
-                        onResetActionChange = { resetAction = it },
-                        onResetButtonVisibilityChange = { resetButtonVisibility = it },
-                        today = today,
-                    )
-                }
-
-                AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Calculator(
-                            onShareActionChange = { shareAction = it },
-                            onResetActionChange = { resetAction = it },
-                            onResetButtonVisibilityChange = { resetButtonVisibility = it },
+                run {
+                    val isTimeZones = screenMode == ConverterScreenMode.TIME_ZONES
+                    AnimatedVisibility(visible = isTimeZones) {
+                        TimeZones(
+                            pendingConfirms = pendingConfirms,
+                            onShareActionChange = { if (isTimeZones) shareAction = it },
+                            onResetActionChange = { if (isTimeZones) resetAction = it },
+                            onResetButtonVisibilityChange = {
+                                if (isTimeZones) resetButtonVisibility = it
+                            },
                         )
                     }
                 }
 
-                AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        QrCode(
-                            onShareActionChange = { shareAction = it },
-                            onResetActionChange = { resetAction = it },
-                            onResetButtonVisibilityChange = { resetButtonVisibility = it },
+                run {
+                    val isConverterOrDistance = when (screenMode) {
+                        ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
+                        else -> false
+                    }
+                    AnimatedVisibility(visible = isConverterOrDistance) {
+                        ConverterAndDistance(
+                            navigateToAstronomy = navigateToAstronomy,
+                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                            sharedTransitionScope = this@ConverterScreen,
+                            pendingConfirms = pendingConfirms,
+                            screenMode = screenMode,
+                            onShareActionChange = { if (isConverterOrDistance) shareAction = it },
+                            onResetActionChange = { if (isConverterOrDistance) resetAction = it },
+                            onResetButtonVisibilityChange = {
+                                if (isConverterOrDistance) resetButtonVisibility = it
+                            },
+                            today = today,
                         )
+                    }
+                }
+
+                run {
+                    val isCalculator = screenMode == ConverterScreenMode.CALCULATOR
+                    AnimatedVisibility(visible = isCalculator) {
+                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                            Calculator(
+                                onShareActionChange = { if (isCalculator) shareAction = it },
+                                onResetActionChange = { if (isCalculator) resetAction = it },
+                                onResetButtonVisibilityChange = {
+                                    if (isCalculator) resetButtonVisibility = it
+                                },
+                            )
+                        }
+                    }
+                }
+
+                run {
+                    val isQrCode = screenMode == ConverterScreenMode.QR_CODE
+                    AnimatedVisibility(visible = isQrCode) {
+                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                            QrCode(
+                                onShareActionChange = { if (isQrCode) shareAction = it },
+                                onResetActionChange = { if (isQrCode) resetAction = it },
+                                onResetButtonVisibilityChange = {
+                                    if (isQrCode) resetButtonVisibility = it
+                                },
+                            )
+                        }
                     }
                 }
 
