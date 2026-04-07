@@ -317,8 +317,7 @@ private fun TimeZones(
                 modifier = Modifier.weight(1f),
             )
         }
-        Spacer(Modifier.height(4.dp))
-        TextWithSlideAnimation(difference)
+        TextWithSlideAnimation(difference, modifier = Modifier.padding(top = 4.dp))
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TimeZoneClock(
             timeZone = firstTimeZone,
@@ -327,9 +326,7 @@ private fun TimeZones(
             zones = zones,
             pendingConfirms = pendingConfirms,
         )
-        Spacer(Modifier.height(4.dp))
-        TextWithSlideAnimation(difference)
-        Spacer(Modifier.height(4.dp))
+        TextWithSlideAnimation(difference, modifier = Modifier.padding(vertical = 4.dp))
         TimeZoneClock(
             timeZone = secondTimeZone,
             onTimeZoneChange = { secondTimeZone = it },
@@ -682,8 +679,14 @@ private fun ColumnScope.ConverterAndDistance(
 }
 
 @Composable
-private fun TextWithSlideAnimation(text: String) {
-    Box(Modifier.height(calendarPickerHeight() + 16.dp), contentAlignment = Alignment.Center) {
+private fun TextWithSlideAnimation(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier.height(calendarPickerHeight() + 16.dp),
+        contentAlignment = Alignment.Center,
+    ) {
         AnimatedContent(
             targetState = text,
             transitionSpec = {
