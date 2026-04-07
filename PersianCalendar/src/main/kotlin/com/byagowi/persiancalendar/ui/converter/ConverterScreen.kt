@@ -579,10 +579,27 @@ private fun ColumnScope.ConverterAndDistance(
         }
     }
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendarsList = enabledCalendarsWithDefault
     if (calendar !in calendarsList) calendar = mainCalendar
     var isExpanded by rememberSaveable { mutableStateOf(true) }
+
+    @Composable
+    fun CalendarsOverview(calendarsOverviewModifier: Modifier = Modifier) {
+        sharedTransitionScope.apply {
+            CalendarsOverview(
+                modifier = calendarsOverviewModifier,
+                jdn = selectedDate,
+                today = today,
+                selectedCalendar = calendar,
+                shownCalendars = (calendarsList - calendar).toImmutableList(),
+                isExpanded = isExpanded,
+                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                navigateToAstronomy = navigateToAstronomy,
+            )
+        }
+    }
+
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarPicker(
@@ -607,19 +624,7 @@ private fun ColumnScope.ConverterAndDistance(
                     .clip(MaterialTheme.shapes.extraLarge)
                     .clickable { isExpanded = !isExpanded }
                     .padding(bottom = 12.dp),
-            ) {
-                sharedTransitionScope.apply {
-                    CalendarsOverview(
-                        jdn = selectedDate,
-                        today = today,
-                        selectedCalendar = calendar,
-                        shownCalendars = (calendarsList - calendar).toImmutableList(),
-                        isExpanded = isExpanded,
-                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                        navigateToAstronomy = navigateToAstronomy,
-                    )
-                }
-            }
+            ) { CalendarsOverview() }
             AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart()
             }
@@ -651,23 +656,7 @@ private fun ColumnScope.ConverterAndDistance(
                     disabledContainerColor = animateColor(cardColors.disabledContainerColor).value,
                     disabledContentColor = animateColor(cardColors.disabledContentColor).value,
                 ),
-            ) {
-                Spacer(Modifier.height(8.dp))
-                Box(Modifier.fillMaxWidth()) {
-                    sharedTransitionScope.apply {
-                        CalendarsOverview(
-                            jdn = selectedDate,
-                            today = today,
-                            selectedCalendar = calendar,
-                            shownCalendars = (calendarsList - calendar).toImmutableList(),
-                            isExpanded = isExpanded,
-                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                            navigateToAstronomy = navigateToAstronomy,
-                        )
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
-            }
+            ) { CalendarsOverview(Modifier.padding(top = 8.dp, bottom = 12.dp)) }
         }
         AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
             DaysDistanceSecondPart()
