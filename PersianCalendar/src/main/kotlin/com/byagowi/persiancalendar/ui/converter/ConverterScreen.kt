@@ -297,43 +297,38 @@ private fun TimeZones(
         val distance = secondTimeZone.rawOffset.milliseconds - firstTimeZone.rawOffset.milliseconds
         Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
     }
+
+    @Composable
+    fun FirstTimeZoneClock(timeZoneModifier: Modifier = Modifier) = TimeZoneClock(
+        timeZone = firstTimeZone,
+        onTimeZoneChange = { firstTimeZone = it },
+        clock = clock,
+        zones = zones,
+        pendingConfirms = pendingConfirms,
+        modifier = timeZoneModifier,
+    )
+
+    @Composable
+    fun SecondTimeZoneClock(timeZoneModifier: Modifier = Modifier) = TimeZoneClock(
+        timeZone = secondTimeZone,
+        onTimeZoneChange = { secondTimeZone = it },
+        clock = clock,
+        zones = zones,
+        pendingConfirms = pendingConfirms,
+        modifier = timeZoneModifier,
+    )
+
     if (isLandscape) Column {
         Row(Modifier.padding(horizontal = 24.dp)) {
-            TimeZoneClock(
-                timeZone = firstTimeZone,
-                onTimeZoneChange = { firstTimeZone = it },
-                clock = clock,
-                zones = zones,
-                pendingConfirms = pendingConfirms,
-                modifier = Modifier.weight(1f),
-            )
+            FirstTimeZoneClock(timeZoneModifier = Modifier.weight(1f))
             Spacer(Modifier.width(8.dp))
-            TimeZoneClock(
-                timeZone = secondTimeZone,
-                onTimeZoneChange = { secondTimeZone = it },
-                clock = clock,
-                zones = zones,
-                pendingConfirms = pendingConfirms,
-                modifier = Modifier.weight(1f),
-            )
+            SecondTimeZoneClock(timeZoneModifier = Modifier.weight(1f))
         }
         TextWithSlideAnimation(difference, modifier = Modifier.padding(top = 4.dp))
     } else Column(Modifier.padding(horizontal = 24.dp)) {
-        TimeZoneClock(
-            timeZone = firstTimeZone,
-            onTimeZoneChange = { firstTimeZone = it },
-            clock = clock,
-            zones = zones,
-            pendingConfirms = pendingConfirms,
-        )
+        FirstTimeZoneClock()
         TextWithSlideAnimation(difference, modifier = Modifier.padding(vertical = 4.dp))
-        TimeZoneClock(
-            timeZone = secondTimeZone,
-            onTimeZoneChange = { secondTimeZone = it },
-            clock = clock,
-            zones = zones,
-            pendingConfirms = pendingConfirms,
-        )
+        SecondTimeZoneClock()
     }
 }
 
