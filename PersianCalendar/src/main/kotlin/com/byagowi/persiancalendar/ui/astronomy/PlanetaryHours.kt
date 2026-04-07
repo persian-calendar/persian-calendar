@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.TextAutoSize
@@ -69,9 +68,7 @@ private val chaldeanOrder = listOf(
 // فلک ثالث آنِ ناهیدست - زهره کز نور او جهان شیدست
 // فلک ثانی آنِ تیر آمد - آن عُطارد که وی دبیر آمد
 // فلک اوّل آنِ ماه آمد - که اثیر اندر آن پناه آمد
-val geocentricPlanetsList = chaldeanOrder
-    .asReversed()
-    .map { it.body }
+val geocentricPlanetsList = chaldeanOrder.asReversed().map { it.body }
     // Already drawn
     .filter { it != Body.Moon && it != Body.Sun }
 
@@ -156,8 +153,7 @@ fun PlanetaryHoursDialog(
         Text(
             formatDate(
                 Jdn(
-                    GregorianCalendar().also { it.timeInMillis = now }
-                        .toCivilDate(),
+                    GregorianCalendar().also { it.timeInMillis = now }.toCivilDate(),
                 ) on mainCalendar,
             ) + cityName?.let { spacedComma + it }.orEmpty(),
             textAlign = TextAlign.Center,
@@ -181,26 +177,32 @@ fun PlanetaryHoursDialog(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 AutoSizedText(
-                    row.from.toFormattedString() + " - " + row.to.toFormattedString(),
-                    2f,
+                    text = row.from.toFormattedString() + " - " + row.to.toFormattedString(),
+                    modifier = Modifier.weight(2f),
                 )
                 Icon(
-                    if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
-                    null,
+                    imageVector = if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
+                    contentDescription = null,
                 )
                 AutoSizedText(
-                    stringResource(row.planet.body.titleStringId) + " " + row.planet.body.symbol,
-                    1f,
+                    text = stringResource(row.planet.body.titleStringId) + " " + row.planet.body.symbol,
+                    modifier = Modifier.weight(1f),
                 )
-                AutoSizedText(if (language.isArabicScript) row.planet.fa else row.planet.en, 1f)
+                AutoSizedText(
+                    text = if (language.isArabicScript) row.planet.fa else row.planet.en,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RowScope.AutoSizedText(text: String, weight: Float) {
-    Box(Modifier.weight(weight), contentAlignment = Alignment.Center) {
+private fun AutoSizedText(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier, contentAlignment = Alignment.Center) {
         SelectionContainer {
             Text(
                 text = text,
