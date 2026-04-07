@@ -190,20 +190,15 @@ fun GPSLocationDialog(
         }
     }
 
-    coordinates?.also { coord ->
-        LaunchedEffect(coord) {
-            // Don't set elevation/altitude even from GPS, See #1011
-            val coordinates = Coordinates(coord.latitude, coord.longitude, .0)
-            context.preferences.saveLocation(coordinates, "", "")
-            val address = geocode(context, coordinates.latitude, coordinates.longitude)
-            countryCode = address?.countryCode
-            cityName = address?.friendlyName
-            context.preferences.saveLocation(
-                coordinates,
-                cityName.orEmpty(),
-                countryCode.orEmpty(),
-            )
-        }
+    LaunchedEffect(coordinates) {
+        // Remove elevation/altitude even from GPS, see #1011
+        val coordinates = coordinates?.copy(elevation = .0) ?: return@LaunchedEffect
+        context.preferences.saveLocation(coordinates, "", "")
+        // Save it once before and once after geocode, just in case
+        val address = geocode(context, coordinates.latitude, coordinates.longitude)
+        countryCode = address?.countryCode
+        cityName = address?.friendlyName
+        context.preferences.saveLocation(coordinates, cityName.orEmpty(), countryCode.orEmpty())
     }
 
     AppDialog(
