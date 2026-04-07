@@ -338,6 +338,32 @@ fun SharedTransitionScope.AstronomyScreen(
                 ),
         ) {
             val bottomPadding = paddingValues.calculateBottomPadding()
+
+            @Composable
+            fun Header(headerModifier: Modifier = Modifier) = Header(
+                modifier = headerModifier,
+                astronomyState = astronomyState,
+                jdn = jdn,
+                mode = mode,
+                isTropical = isTropical,
+                timeInMillis = timeInMillis,
+            )
+
+            @Composable
+            fun SolarDisplay(solarDisplayModifier: Modifier = Modifier) = SolarDisplay(
+                modifier = solarDisplayModifier,
+                timeInMillis = timeInMillis,
+                astronomyState = astronomyState,
+                mode = mode,
+                onModeChange = { mode = it },
+                isTropical = isTropical,
+                navigateToMap = navigateToMap,
+                scale = scale,
+                isScaled = isScaled,
+                offsetX = offsetX,
+                offsetY = offsetY,
+            )
+
             if (isLandscape) BoxWithConstraints(
                 Modifier
                     .fillMaxSize()
@@ -356,34 +382,17 @@ fun SharedTransitionScope.AstronomyScreen(
                                 bottom = bottomPadding + 16.dp,
                             ),
                     ) {
-                        Header(
-                            modifier = Modifier,
-                            astronomyState = astronomyState,
-                            jdn = jdn,
-                            mode = mode,
-                            isTropical = isTropical,
-                            timeInMillis = timeInMillis,
-                        )
+                        Header()
                         Spacer(Modifier.weight(1f))
                         SliderBar(timeInMillis, resetButtonAction) {
                             isDatePickerDialogShown = true
                         }
                     }
                     SolarDisplay(
-                        modifier = Modifier
+                        solarDisplayModifier = Modifier
                             .weight(1f)
                             .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
                             .height(maxHeight - bottomPadding),
-                        timeInMillis = timeInMillis,
-                        astronomyState = astronomyState,
-                        mode = mode,
-                        onModeChange = { mode = it },
-                        isTropical = isTropical,
-                        navigateToMap = navigateToMap,
-                        scale = scale,
-                        isScaled = isScaled,
-                        offsetX = offsetX,
-                        offsetY = offsetY,
                     )
                 }
             } else Column {
@@ -396,31 +405,16 @@ fun SharedTransitionScope.AstronomyScreen(
                         modifier = if (needsScroll) Modifier.verticalScroll(rememberScrollState()) else Modifier,
                         content = {
                             Header(
-                                modifier = Modifier.padding(
+                                headerModifier = Modifier.padding(
                                     start = 24.dp,
                                     end = 24.dp,
                                     top = 24.dp,
                                 ),
-                                astronomyState = astronomyState,
-                                jdn = jdn,
-                                mode = mode,
-                                isTropical = isTropical,
-                                timeInMillis = timeInMillis,
                             )
                             SolarDisplay(
-                                modifier = Modifier
+                                solarDisplayModifier = Modifier
                                     .fillMaxWidth()
                                     .height(maxWidth - (56 * 2 + 8).dp),
-                                timeInMillis = timeInMillis,
-                                astronomyState = astronomyState,
-                                mode = mode,
-                                onModeChange = { mode = it },
-                                isTropical = isTropical,
-                                navigateToMap = navigateToMap,
-                                scale = scale,
-                                isScaled = isScaled,
-                                offsetX = offsetX,
-                                offsetY = offsetY,
                             )
                         },
                     ) { (header, content), constraints ->
