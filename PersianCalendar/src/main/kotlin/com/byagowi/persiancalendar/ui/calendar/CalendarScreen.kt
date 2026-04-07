@@ -520,57 +520,57 @@ fun SharedTransitionScope.CalendarScreen(
                     }
                 }
 
-                @Composable
-                fun Details(detailsModifier: Modifier) = Details(
-                    selectedDay = selectedDay,
-                    onAddActionChange = { addAction = it },
-                    bringDay = bringDay,
-                    today = today,
-                    now = now,
-                    navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                    addEvent = addEvent,
-                    snackbarHostState = snackbarHostState,
-                    isAddEventBoxEnabled = isAddEventBoxEnabled,
-                    onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
-                    fabPlaceholderHeight = fabPlaceholderHeight,
-                    refreshCalendar = refreshCalendar,
-                    refreshToken = refreshToken,
-                    navigateToHolidaysSettings = navigateToHolidaysSettings,
-                    navigateToAstronomy = navigateToAstronomy,
-                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                    swipeUpActions = swipeUpActions,
-                    swipeDownActions = swipeDownActions,
-                    modifier = detailsModifier,
-                )
-
-                @Composable
-                fun CalendarPager(pagerModifier: Modifier) = CalendarPager(
-                    selectedDay = selectedDay,
-                    isHighlighted = isHighlighted,
-                    refreshToken = refreshToken,
-                    changeSelectedDay = { day: Jdn ->
-                        isHighlighted = true
-                        selectedDay = day
-                    },
-                    today = today,
-                    calendarPagerState = calendarPagerState,
-                    yearViewCalendar = yearViewCalendar,
-                    addEvent = addEvent,
-                    suggestedPagerSize = pagerSize,
-                    navigateToWeek = navigateToWeek,
-                    modifier = pagerModifier.detectSwipe {
-                        { isUp: Boolean ->
-                            when {
-                                isUp -> swipeUpActions[preferredSwipeUpAction]
-                                !isUp -> swipeDownActions[preferredSwipeDownAction]
-                                else -> null
-                            }?.invoke()
-                        }
-                    },
-                )
-
                 if (!isYearViewState) {
+                    @Composable
+                    fun Details(detailsModifier: Modifier) = Details(
+                        selectedDay = selectedDay,
+                        onAddActionChange = { addAction = it },
+                        bringDay = bringDay,
+                        today = today,
+                        now = now,
+                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                        addEvent = addEvent,
+                        snackbarHostState = snackbarHostState,
+                        isAddEventBoxEnabled = isAddEventBoxEnabled,
+                        onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
+                        fabPlaceholderHeight = fabPlaceholderHeight,
+                        refreshCalendar = refreshCalendar,
+                        refreshToken = refreshToken,
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
+                        navigateToAstronomy = navigateToAstronomy,
+                        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                        swipeUpActions = swipeUpActions,
+                        swipeDownActions = swipeDownActions,
+                        modifier = detailsModifier,
+                    )
+
+                    @Composable
+                    fun CalendarPager(pagerModifier: Modifier) = CalendarPager(
+                        selectedDay = selectedDay,
+                        isHighlighted = isHighlighted,
+                        refreshToken = refreshToken,
+                        changeSelectedDay = { day: Jdn ->
+                            isHighlighted = true
+                            selectedDay = day
+                        },
+                        today = today,
+                        calendarPagerState = calendarPagerState,
+                        yearViewCalendar = yearViewCalendar,
+                        addEvent = addEvent,
+                        suggestedPagerSize = pagerSize,
+                        navigateToWeek = navigateToWeek,
+                        modifier = pagerModifier.detectSwipe {
+                            { isUp: Boolean ->
+                                when {
+                                    isUp -> swipeUpActions[preferredSwipeUpAction]
+                                    !isUp -> swipeDownActions[preferredSwipeDownAction]
+                                    else -> null
+                                }?.invoke()
+                            }
+                        },
+                    )
+
                     if (isLandscape) Row {
                         CalendarPager(pagerModifier = Modifier.size(pagerSize))
                         ScreenSurface(
@@ -578,7 +578,7 @@ fun SharedTransitionScope.CalendarScreen(
                             drawBehindSurface = false,
                         ) {
                             Details(
-                                Modifier
+                                detailsModifier = Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
                                         WindowInsets.safeDrawing.only(
@@ -588,9 +588,7 @@ fun SharedTransitionScope.CalendarScreen(
                             )
                         }
                     } else Column(Modifier.clip(materialCornerExtraLargeTop())) {
-                        var calendarHeight by remember {
-                            mutableStateOf(pagerSize.height / 7 * 6)
-                        }
+                        var calendarHeight by remember { mutableStateOf(pagerSize.height / 7 * 6) }
                         CalendarPager(
                             pagerModifier = Modifier
                                 .onSizeChanged {
@@ -598,19 +596,17 @@ fun SharedTransitionScope.CalendarScreen(
                                 }
                                 .animateContentSize(appContentSizeAnimationSpec),
                         )
-
                         val detailsMinHeight = maxHeight - calendarHeight
                         ScreenSurface(
                             workaroundClipBug = true,
                             mayNeedDragHandleToDivide = true,
-                        ) { Details(Modifier.defaultMinSize(minHeight = detailsMinHeight)) }
+                        ) { Details(detailsModifier = Modifier.defaultMinSize(minHeight = detailsMinHeight)) }
                     }
                 }
             }
         }
     }
 
-    val eventsRepository = eventsRepository
     LaunchedEffect(today, eventsRepository) {
         if (mainCalendar == Calendar.SHAMSI && eventsRepository.iranOthers && !today.isYearSupportedOnApp && language.isIranExclusive) {
             val preferences = context.preferences
