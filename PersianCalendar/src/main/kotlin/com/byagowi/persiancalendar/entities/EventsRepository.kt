@@ -46,7 +46,7 @@ data class EventsRepository(
         return when (record.source) {
             EventSource.Iran if record.isHoliday && iranHolidays -> false
             EventSource.Iran if iranOthers -> false
-            EventSource.Iran if iranHolidays && "روز مادر" in record.title -> false
+            EventSource.Iran if iranHolidays && "روز مادر " in record.title -> false
             EventSource.Afghanistan if record.isHoliday && afghanistanHolidays -> false
             EventSource.Afghanistan if afghanistanOthers -> false
             EventSource.Nepal if record.isHoliday && nepalHolidays -> false
