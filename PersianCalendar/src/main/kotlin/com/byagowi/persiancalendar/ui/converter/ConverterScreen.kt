@@ -208,7 +208,6 @@ fun SharedTransitionScope.ConverterScreen(
                         ConverterAndDistance(
                             navigateToAstronomy = navigateToAstronomy,
                             navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                            sharedTransitionScope = this@ConverterScreen,
                             pendingConfirms = pendingConfirms,
                             screenMode = screenMode,
                             onShareActionChange = { if (isConverterOrDistance) shareAction = it },
@@ -486,10 +485,9 @@ private fun QrCode(
 }
 
 @Composable
-private fun ConverterAndDistance(
+private fun SharedTransitionScope.ConverterAndDistance(
     navigateToAstronomy: (Jdn) -> Unit,
     navigateToCalendarsPrioritySettings: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
     pendingConfirms: SnapshotStateList<() -> Unit>,
     screenMode: ConverterScreenMode,
     onShareActionChange: (() -> Unit) -> Unit,
@@ -586,20 +584,16 @@ private fun ConverterAndDistance(
     var isExpanded by rememberSaveable { mutableStateOf(true) }
 
     @Composable
-    fun CalendarsOverview(calendarsOverviewModifier: Modifier = Modifier) {
-        sharedTransitionScope.apply {
-            CalendarsOverview(
-                modifier = calendarsOverviewModifier,
-                jdn = selectedDate,
-                today = today,
-                selectedCalendar = calendar,
-                shownCalendars = (calendarsList - calendar).toImmutableList(),
-                isExpanded = isExpanded,
-                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                navigateToAstronomy = navigateToAstronomy,
-            )
-        }
-    }
+    fun CalendarsOverview(calendarsOverviewModifier: Modifier = Modifier) = CalendarsOverview(
+        modifier = calendarsOverviewModifier,
+        jdn = selectedDate,
+        today = today,
+        selectedCalendar = calendar,
+        shownCalendars = (calendarsList - calendar).toImmutableList(),
+        isExpanded = isExpanded,
+        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+        navigateToAstronomy = navigateToAstronomy,
+    )
 
     Column(modifier.padding(horizontal = 24.dp)) {
         if (isLandscape()) Row {
