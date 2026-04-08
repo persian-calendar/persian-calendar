@@ -69,22 +69,14 @@ fun EmailDialog(
 }
 
 @Composable
-fun ColumnScope.EnableInDeviceCalendar(
-    modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit,
-) {
+fun EnableInDeviceCalendar(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
     FilledTonalButton(
-        modifier = modifier
-            .align(Alignment.CenterHorizontally)
-            .fillMaxWidth(.7f),
-        onClick = {
-            uriHandler.openUri("https://support.google.com/calendar/answer/13748345?hl=fa")
-            onDismissRequest()
-        },
+        modifier = modifier.fillMaxWidth(.7f),
+        onClick = { uriHandler.openUri("https://support.google.com/calendar/answer/13748345?hl=fa") },
     ) {
         Text(
-            "راهنمای فعال‌سازی مناسبت‌ها از تقویم دستگاه",
+            text = "راهنمای فعال‌سازی مناسبت‌ها از تقویم دستگاه",
             maxLines = 1,
             autoSize = TextAutoSize.StepBased(9.sp, LocalTextStyle.current.fontSize),
             textAlign = TextAlign.Center,

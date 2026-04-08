@@ -118,7 +118,7 @@ fun CalendarSettings(
         val userNeedsAppointments =
             language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars
         AnimatedVisibility(userNeedsAppointments && remember { !Jdn.today().isYearSupportedOnApp }) {
-            EnableInDeviceCalendar {}
+            EnableInDeviceCalendar(Modifier.align(Alignment.CenterHorizontally))
         }
         AnimatedVisibility(userNeedsAppointments) {
             var shownOnce by rememberSaveable { mutableStateOf(false) }
