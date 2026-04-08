@@ -943,7 +943,7 @@ private fun SharedTransitionScope.Details(
                 if (content != null) content() else Spacer(
                     Modifier
                         .fillMaxWidth()
-                        .height((if (buttons.isEmpty()) 4 else 12).dp),
+                        .height((if (buttons.isEmpty()) 4 else 10).dp),
                 )
             }
 
