@@ -23,10 +23,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.captionBar
+import androidx.compose.foundation.layout.cutoutPath
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.mandatorySystemGestures
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeGestures
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.systemGestures
+import androidx.compose.foundation.layout.tappableElement
+import androidx.compose.foundation.layout.waterfall
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -56,6 +69,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toSvg
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -115,8 +129,29 @@ fun SharedTransitionScope.DeviceInformationScreen(
         val context = LocalContext.current
         val primaryColor = MaterialTheme.colorScheme.primary
         val activity = LocalActivity.current
+        val insets = listOf(
+            "ime" to WindowInsets.ime,
+            "safeDrawing" to WindowInsets.safeDrawing,
+            "displayCutout" to WindowInsets.displayCutout,
+            "captionBar" to WindowInsets.captionBar,
+            "waterfall" to WindowInsets.waterfall,
+            "safeContent" to WindowInsets.safeContent,
+            "safeGestures" to WindowInsets.safeGestures,
+            "mandatorySystemGestures" to WindowInsets.mandatorySystemGestures,
+            "navigationBars" to WindowInsets.navigationBars,
+            "statusBars" to WindowInsets.statusBars,
+            "systemBars" to WindowInsets.systemBars,
+            "systemGestures" to WindowInsets.systemGestures,
+            "tappableElement" to WindowInsets.tappableElement,
+        ).joinToString("\n") { it.first + ": " + it.second } + run {
+            "\ncutoutPath: " + WindowInsets.cutoutPath?.toSvg(false)
+        }
         val items = remember(primaryColor) {
-            createItemsList(activity ?: return@remember emptyList(), primaryColor).toImmutableList()
+            createItemsList(
+                activity ?: return@remember emptyList(),
+                primaryColor,
+                insets
+            ).toImmutableList()
         }
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
@@ -337,7 +372,7 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
 
 private data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
-private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
+private fun createItemsList(activity: Activity, primaryColor: Color, insets: String) = listOf(
     Item("CPU Instructions Sets", Build.SUPPORTED_ABIS.joinToString(", ")),
     Item(
         "Android Version",
@@ -422,6 +457,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             ).joinToString("\n") { (key, value) -> "$key: $value" }
         } else "None",
     ),
+    Item("Insets", insets),
     Item(
         "Display Rounded Corners",
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
