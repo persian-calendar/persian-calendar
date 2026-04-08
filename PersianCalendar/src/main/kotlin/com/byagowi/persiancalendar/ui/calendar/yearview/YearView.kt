@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.yearview
 
-import android.content.res.Configuration
 import androidx.compose.animation.core.animate
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -42,7 +41,6 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -75,6 +73,7 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
@@ -102,7 +101,7 @@ fun YearView(
     val calendar = yearViewCalendar ?: mainCalendar
     val todayDate = today on calendar
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = isLandscape()
 
     val horizontalDivisions = if (isLandscape) 4 else 3
 

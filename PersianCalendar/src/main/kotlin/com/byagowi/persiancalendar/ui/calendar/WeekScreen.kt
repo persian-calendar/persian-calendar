@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -96,7 +95,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -152,6 +150,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -233,7 +232,7 @@ fun SharedTransitionScope.WeekScreen(
 
     var addAction by remember { mutableStateOf({}) }
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = isLandscape()
     fun onSwipeDown(isUp: Boolean) {
         if (!isLandscape && !isUp) when (preferredSwipeUpAction) {
             SwipeUpAction.WeekView -> navigateUp()
@@ -757,10 +756,8 @@ fun DaysView(
                     if (!hasWeekPager) {
                         val weekDay = weekStart + dayIndex
                         val weekDayTitle = weekDay.title
-                        val isLandscape =
-                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                         Text(
-                            text = if (isLandscape) weekDayTitle else weekDay.shortTitle,
+                            text = if (isLandscape()) weekDayTitle else weekDay.shortTitle,
                             maxLines = 1,
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.bodySmall,

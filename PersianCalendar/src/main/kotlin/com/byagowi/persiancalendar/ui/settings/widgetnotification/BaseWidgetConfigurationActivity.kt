@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.content.res.Configuration
 import android.widget.FrameLayout
 import android.widget.RemoteViews
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -31,6 +29,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
@@ -73,10 +72,8 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
         val size = AppWidgetManager.getInstance(this)?.getWidgetSize(
             LocalResources.current, appWidgetId,
         ) ?: DpSize(100.dp, 100.dp)
-        val isLandscape =
-            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         Box(
-            if (isLandscape) {
+            if (isLandscape()) {
                 Modifier
                     .padding(end = 16.dp)
                     .fillMaxHeight()

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.converter
 
-import android.content.res.Configuration
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.compose.animation.AnimatedContent
@@ -59,7 +58,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -98,6 +96,7 @@ import com.byagowi.persiancalendar.ui.common.calendarPickerHeight
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -307,7 +306,6 @@ private fun TimeZones(
         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
             .toImmutableList()
     }
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val difference = run {
         val distance = secondTimeZone.rawOffset.milliseconds - firstTimeZone.rawOffset.milliseconds
         Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
@@ -333,7 +331,7 @@ private fun TimeZones(
         modifier = timeZoneModifier,
     )
 
-    if (isLandscape) Column {
+    if (isLandscape()) Column {
         Row(Modifier.padding(horizontal = 24.dp)) {
             FirstTimeZoneClock(timeZoneModifier = Modifier.weight(1f))
             Spacer(Modifier.width(8.dp))
@@ -381,8 +379,7 @@ private fun Calculator(
         focusedContainerColor = animateColor(defaultTextFieldColors.focusedContainerColor).value,
         unfocusedContainerColor = animateColor(defaultTextFieldColors.unfocusedContainerColor).value,
     )
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
+    if (isLandscape()) Row(Modifier.padding(horizontal = 24.dp)) {
         TextField(
             value = input,
             onValueChange = { input = it },
@@ -461,8 +458,7 @@ private fun QrCode(
         QrView(text, onShareActionChange = onShareActionChange)
     }
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
+    if (isLandscape()) Row(Modifier.padding(horizontal = 24.dp)) {
         Column(modifier = Modifier.weight(1f)) {
             TextField(
                 value = input,
@@ -605,9 +601,8 @@ private fun ConverterAndDistance(
         }
     }
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     Column(modifier.padding(horizontal = 24.dp)) {
-        if (isLandscape) Row {
+        if (isLandscape()) Row {
             Column(Modifier.weight(1f)) {
                 CalendarPicker(
                     value = calendar,

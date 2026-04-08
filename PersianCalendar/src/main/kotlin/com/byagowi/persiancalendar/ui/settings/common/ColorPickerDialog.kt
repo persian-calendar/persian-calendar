@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -45,7 +44,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -59,6 +57,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isLight
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -79,7 +78,7 @@ fun ColorPickerDialog(
             restore = { Animatable(Color(it)) },
         ),
     ) { Animatable(initialColor) }
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = isLandscape()
     AppDialog(
         title = { if (!isLandscape) Text(title) },
         confirmButton = {

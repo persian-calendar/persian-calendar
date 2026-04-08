@@ -20,6 +20,7 @@ import androidx.compose.runtime.annotation.RememberInComposition
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
@@ -121,7 +122,7 @@ fun getFileName(context: Context, uri: Uri): String? {
 
 /**
  * Similar to [androidx.compose.foundation.isSystemInDarkTheme] implementation but
- * for non-composable contexts, in composable context, use the compose one.
+ * for non-composable contexts, in composable context, use the aforementioned Compose one.
  */
 @RememberInComposition
 fun isSystemInDarkTheme(configuration: Configuration): Boolean =
@@ -168,8 +169,7 @@ fun HapticFeedback.performLongPress() {
 fun <T> ChangesHapticFeedback(sampleMillis: Long? = null, block: () -> T) {
     val hapticFeedback = LocalHapticFeedback.current
     LaunchedEffect(key1 = Unit) {
-        snapshotFlow(block)
-            .drop(1)
+        snapshotFlow(block).drop(1)
             .let { if (sampleMillis == null) it else it.sample(sampleMillis) }
             .collect { hapticFeedback.performLongPress() }
     }
@@ -179,3 +179,6 @@ fun <T> ChangesHapticFeedback(sampleMillis: Long? = null, block: () -> T) {
 // where it makes more sense
 val enabledCalendarsWithDefault: ImmutableList<Calendar>
     get() = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+
+@Composable
+fun isLandscape() = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

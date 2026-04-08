@@ -1,13 +1,11 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -16,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastRoundToInt
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 
 @Composable
 fun RulerView(
@@ -25,7 +24,7 @@ fun RulerView(
 ) {
     // xdpi/ydpi doesn't swap on screen rotation so a logic like this is needed though it isn't
     // obvious to me yet whether this is a correct one.
-    val dpi = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    val dpi = if (isLandscape()) {
         LocalResources.current.displayMetrics.xdpi
     } else LocalResources.current.displayMetrics.ydpi
     val textMeasurer = rememberTextMeasurer()

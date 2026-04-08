@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.content.res.Configuration
 import android.graphics.Paint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -81,7 +80,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -126,6 +124,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
@@ -182,7 +181,6 @@ fun SharedTransitionScope.AstronomyScreen(
     val astronomyState = AstronomyState(timeInMillis.longValue)
     val coroutineScope = rememberCoroutineScope()
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val scale = rememberSaveable { mutableFloatStateOf(.25f) }
     val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
     val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
@@ -364,7 +362,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 offsetY = offsetY,
             )
 
-            if (isLandscape) BoxWithConstraints(
+            if (isLandscape()) BoxWithConstraints(
                 Modifier
                     .fillMaxSize()
                     .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),

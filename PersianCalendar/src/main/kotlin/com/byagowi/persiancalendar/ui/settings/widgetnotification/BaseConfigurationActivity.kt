@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,7 +32,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,6 +40,7 @@ import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 
 // This is used in various widgets screens, screensaver and wallpaper settings screens
 // Please test the different usages when modifying
@@ -58,9 +57,7 @@ abstract class BaseConfigurationActivity(
             SystemTheme {
                 @Composable
                 fun Linear(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-                    val isLandscape =
-                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                    if (isLandscape) Row(modifier) { content() } else Column(modifier) { content() }
+                    if (isLandscape()) Row(modifier) { content() } else Column(modifier) { content() }
                 }
 
                 val topBarHeight = WindowInsets.safeDrawing.only(sides = WindowInsetsSides.Vertical)

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,6 +30,7 @@ import com.byagowi.persiancalendar.ui.theme.nextTimeColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -55,7 +54,7 @@ fun SharedTransitionScope.Times(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.spacedBy(4.dp),
-            maxItemsInEachRow = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) Int.MAX_VALUE else 3,
+            maxItemsInEachRow = if (isLandscape()) Int.MAX_VALUE else 3,
         ) {
             val isJafari = calculationMethod.isJafari
             val times = PrayTime.allTimes(isJafari)

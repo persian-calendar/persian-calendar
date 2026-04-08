@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.content.res.Configuration
 import androidx.collection.mutableLongSetOf
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
@@ -39,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -65,6 +63,7 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.logException
@@ -104,7 +103,7 @@ fun SharedTransitionScope.ScheduleScreen(
     val language = language
 
     val preferredSwipeUpAction = preferredSwipeUpAction
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = isLandscape()
     val swipeDownModifier = Modifier.detectSwipe {
         { isUp ->
             if (!isLandscape && !isUp) when (preferredSwipeUpAction) {

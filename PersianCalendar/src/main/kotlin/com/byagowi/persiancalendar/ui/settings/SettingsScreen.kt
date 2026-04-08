@@ -5,7 +5,6 @@ import android.app.WallpaperManager
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
@@ -69,7 +68,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -121,6 +119,7 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetSettings
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
@@ -194,24 +193,20 @@ fun SharedTransitionScope.SettingsScreen(
                 containerColor = Color.Transparent,
                 divider = {},
                 indicator = {
-                    val isLandscape =
-                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                     TabRowDefaults.PrimaryIndicator(
                         Modifier.tabIndicatorOffset(pagerState.currentPage),
-                        width = if (isLandscape) 92.dp else 64.dp,
+                        width = if (isLandscape()) 92.dp else 64.dp,
                         color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
                     )
                 },
             ) {
                 SettingsTab.entries.forEachIndexed { index, tab ->
-                    val isLandscape =
-                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                     val tabModifier = Modifier.clip(MaterialTheme.shapes.large)
                     val isSelected = pagerState.currentPage == index
                     fun onClick() {
                         coroutineScope.launch { pagerState.animateScrollToPage(index) }
                     }
-                    if (isLandscape) Tab(
+                    if (isLandscape()) Tab(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 tab.Icon(isSelected)
