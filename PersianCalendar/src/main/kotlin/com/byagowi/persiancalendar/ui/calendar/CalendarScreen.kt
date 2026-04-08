@@ -895,7 +895,7 @@ private fun SharedTransitionScope.Details(
                 LocalMinimumInteractiveComponentSize provides 0.dp,
             ) {
                 SingleChoiceSegmentedButtonRow(
-                    swipeModifier.align(Alignment.CenterHorizontally),
+                    modifier = swipeModifier.align(Alignment.CenterHorizontally),
                 ) {
                     val defaultColors = SegmentedButtonDefaults.colors()
                     val colors = defaultColors.copy(
@@ -906,6 +906,7 @@ private fun SharedTransitionScope.Details(
                     )
                     buttons.entries.forEachIndexed { index, (button, _) ->
                         SegmentedButton(
+                            modifier = Modifier.defaultMinSize(minHeight = 32.dp),
                             onClick = {
                                 selectedButton = if (selectedButton == button) null else button
                                 context.preferences.edit {
@@ -915,8 +916,8 @@ private fun SharedTransitionScope.Details(
                             contentPadding = PaddingValues.Zero,
                             colors = colors,
                             border = BorderStroke(
-                                1.dp,
-                                animateColor(MaterialTheme.colorScheme.outlineVariant).value,
+                                width = 1.dp,
+                                color = animateColor(MaterialTheme.colorScheme.outlineVariant).value,
                             ),
                             selected = selectedButton == button,
                             icon = {},
