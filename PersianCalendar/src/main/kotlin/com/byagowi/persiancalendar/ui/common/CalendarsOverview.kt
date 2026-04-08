@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
@@ -177,7 +178,9 @@ fun SharedTransitionScope.CalendarsOverview(
             TabEditButton(
                 action = navigateToCalendarsPrioritySettings,
                 title = stringResource(R.string.calendars_priority),
-                visible = isExpanded && remember { PREF_MAIN_CALENDAR_KEY !in context.preferences },
+                visible = isExpanded && remember {
+                    PREF_MAIN_CALENDAR_KEY !in context.preferences && PREF_CALENDARS_PRIORITY_OPENED_ONCE !in context.preferences
+                },
             )
         }
         CalendarsFlow(shownCalendars, jdn, isExpanded, numeral)
@@ -527,8 +530,7 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier
-                        .clip(shape = MaterialTheme.shapes.small)
+                    Modifier.clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )

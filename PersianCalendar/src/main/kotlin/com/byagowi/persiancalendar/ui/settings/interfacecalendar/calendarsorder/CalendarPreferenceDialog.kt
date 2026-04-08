@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
@@ -81,6 +83,9 @@ fun CalendarPreferenceDialog(
         orderedCalendars.toMutableStateList()
     }
 
+    LaunchedEffect(Unit) {
+        context.preferences.edit { putBoolean(PREF_CALENDARS_PRIORITY_OPENED_ONCE, true) }
+    }
     val coroutineScope = rememberCoroutineScope()
     var showMore by rememberSaveable { mutableStateOf(false) }
     var isInRotation by rememberSaveable { mutableStateOf(false) }
