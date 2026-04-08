@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -133,10 +134,12 @@ fun HolidaysTypesDialog(
                 if (language.isIranExclusive) {
                     Iran()
                     International()
+                    HorizontalDivider()
                     Afghanistan()
                 } else {
                     Afghanistan()
                     International()
+                    HorizontalDivider()
                     Iran()
                 }
             } else {
