@@ -769,7 +769,7 @@ private fun SharedTransitionScope.Details(
             }
 
             var selectedButton by remember {
-                val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, -1)
+                val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
                 mutableStateOf(Button.entries.getOrNull(lastChosenIndex))
             }
 
