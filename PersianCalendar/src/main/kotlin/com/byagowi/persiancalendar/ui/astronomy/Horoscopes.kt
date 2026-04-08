@@ -558,7 +558,7 @@ private fun AscendantZodiac(
             val bodies = bodiesZodiac[zodiac] ?: emptyList()
             bodies.forEach { (body, longitude) ->
                 appendLine()
-                appendAngle(resources.getString(body.titleStringId), longitude)
+                appendAngle(stringResource(body.titleStringId), longitude)
             }
             if (zodiac == meanApogeeZodiac) {
                 appendLine()
