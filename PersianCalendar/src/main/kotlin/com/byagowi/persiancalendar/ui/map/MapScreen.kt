@@ -436,7 +436,9 @@ fun SharedTransitionScope.MapScreen(
                                 onLongClickLabel = stringResource(R.string.today),
                             )
                             .sharedElement(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
+                                sharedContentState = rememberSharedContentState(
+                                    key = SHARED_CONTENT_KEY_TIME_BAR,
+                                ),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),

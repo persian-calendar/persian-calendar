@@ -297,7 +297,9 @@ fun SharedTransitionScope.CompassScreen(
                 Box(Modifier.weight(1f, fill = false)) {
                     Box(
                         Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                            sharedContentState = rememberSharedContentState(
+                                key = SHARED_CONTENT_KEY_COMPASS,
+                            ),
                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         ),
@@ -334,7 +336,9 @@ fun SharedTransitionScope.CompassScreen(
                         icon = ImageVector.vectorResource(R.drawable.ic_level),
                         title = stringResource(R.string.level),
                         modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                            sharedContentState = rememberSharedContentState(
+                                key = SHARED_CONTENT_KEY_LEVEL,
+                            ),
                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         ),
@@ -344,7 +348,9 @@ fun SharedTransitionScope.CompassScreen(
                         icon = Icons.Default.Map,
                         title = stringResource(R.string.map),
                         modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                            sharedContentState = rememberSharedContentState(
+                                key = SHARED_CONTENT_KEY_MAP,
+                            ),
                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         ),
@@ -366,7 +372,9 @@ fun SharedTransitionScope.CompassScreen(
                     Spacer(Modifier.width(4.dp))
                     Box(
                         Modifier.sharedElement(
-                            rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                            sharedContentState = rememberSharedContentState(
+                                key = SHARED_CONTENT_KEY_STOP,
+                            ),
                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         ),

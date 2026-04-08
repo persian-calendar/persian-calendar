@@ -30,7 +30,9 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
 ) {
     Box(
         modifier.sharedElement(
-            rememberSharedContentState(key = SHARED_CONTENT_KEY_THREE_DOTS_MENU),
+            sharedContentState = rememberSharedContentState(
+                key = SHARED_CONTENT_KEY_THREE_DOTS_MENU,
+            ),
             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,
         ),

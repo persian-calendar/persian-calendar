@@ -39,7 +39,8 @@ fun SharedTransitionScope.TimeArrow(
         modifier = modifier
             .sharedElement(
                 sharedContentState = rememberSharedContentState(
-                    if (isPrevious) SHARED_CONTENT_PREVIOUS_ARROW else SHARED_CONTENT_NEXT_ARROW,
+                    key = if (isPrevious) SHARED_CONTENT_PREVIOUS_ARROW
+                    else SHARED_CONTENT_NEXT_ARROW,
                 ),
                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                 boundsTransform = appBoundsTransform,

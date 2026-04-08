@@ -160,7 +160,9 @@ fun SharedTransitionScope.CalendarsOverview(
                             .clickable { navigateToAstronomy(jdn) }
                             .size(20.dp)
                             .sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                                sharedContentState = rememberSharedContentState(
+                                    key = SHARED_CONTENT_KEY_MOON,
+                                ),
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 boundsTransform = appBoundsTransform,
                             ),

@@ -338,7 +338,9 @@ fun SharedTransitionScope.WeekScreen(
                                 }
                             },
                             modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_ICON),
+                                sharedContentState = rememberSharedContentState(
+                                    key = SHARED_CONTENT_KEY_DAYS_SCREEN_ICON,
+                                ),
                                 animatedVisibilityScope = this@AnimatedContent,
                                 boundsTransform = appBoundsTransform,
                             ),
@@ -454,7 +456,9 @@ fun SharedTransitionScope.WeekScreen(
                             ) {
                                 DaysView(
                                     modifier = if (weekPagerState.currentPage == page) Modifier.sharedBounds(
-                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
+                                        sharedContentState = rememberSharedContentState(
+                                            key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT,
+                                        ),
                                         animatedVisibilityScope = this@AnimatedContent,
                                         boundsTransform = appBoundsTransform,
                                     ) else Modifier,
@@ -490,7 +494,9 @@ fun SharedTransitionScope.WeekScreen(
                     if (!isWeekViewState) ScreenSurface(mayNeedDragHandleToDivide = !isLandscape) {
                         HorizontalPager(
                             modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
+                                sharedContentState = rememberSharedContentState(
+                                    key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT,
+                                ),
                                 animatedVisibilityScope = this@AnimatedContent,
                                 boundsTransform = appBoundsTransform,
                             ),

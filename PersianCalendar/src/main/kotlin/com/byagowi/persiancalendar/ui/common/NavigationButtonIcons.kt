@@ -53,7 +53,7 @@ fun SharedTransitionScope.NavigationMenuArrow(
                 .semantics { this.contentDescription = title }
                 .sharedElement(
                     sharedContentState = rememberSharedContentState(
-                        if (fraction == 0f) SHARED_CONTENT_KEY_MENU_ICON
+                        key = if (fraction == 0f) SHARED_CONTENT_KEY_MENU_ICON
                         else SHARED_CONTENT_KEY_ARROW_ICON,
                     ),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,

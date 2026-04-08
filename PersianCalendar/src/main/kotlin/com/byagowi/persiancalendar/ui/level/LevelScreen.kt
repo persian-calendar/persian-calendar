@@ -162,7 +162,9 @@ fun SharedTransitionScope.LevelScreen(
                         icon = Icons.Default.Explore,
                         title = stringResource(R.string.compass),
                         modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                            sharedContentState = rememberSharedContentState(
+                                key = SHARED_CONTENT_KEY_COMPASS,
+                            ),
                             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                             boundsTransform = appBoundsTransform,
                         ),
@@ -172,7 +174,9 @@ fun SharedTransitionScope.LevelScreen(
                 Spacer(Modifier.weight(1f))
                 Box(
                     Modifier.sharedElement(
-                        rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                        sharedContentState = rememberSharedContentState(
+                            key = SHARED_CONTENT_KEY_STOP,
+                        ),
                         animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                         boundsTransform = appBoundsTransform,
                     ),
@@ -185,7 +189,7 @@ fun SharedTransitionScope.LevelScreen(
         modifier = Modifier
             .padding(horizontal = 52.dp, vertical = 58.dp)
             .sharedBounds(
-                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                 boundsTransform = appBoundsTransform,
             ),

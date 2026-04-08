@@ -194,7 +194,9 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .align(Alignment.Center)
                     .semantics { this.hideFromAccessibility() }
                     .sharedBounds(
-                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                        sharedContentState = rememberSharedContentState(
+                            key = SHARED_CONTENT_KEY_MOON,
+                        ),
                         animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                         boundsTransform = appBoundsTransform,
                     )

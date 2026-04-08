@@ -59,7 +59,9 @@ fun SharedTransitionScope.ScreenSurface(
                 val density = LocalDensity.current
                 Canvas(
                     modifier = if (disableSharedContent) Modifier else Modifier.sharedElement(
-                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                        sharedContentState = rememberSharedContentState(
+                            key = SHARED_CONTENT_KEY_CARD,
+                        ),
                         animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                         boundsTransform = appBoundsTransform,
                     ),
@@ -84,7 +86,9 @@ fun SharedTransitionScope.ScreenSurface(
             // Content
             Box(
                 (if (disableSharedContent) Modifier else Modifier.sharedBounds(
-                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
+                    sharedContentState = rememberSharedContentState(
+                        key = SHARED_CONTENT_KEY_CARD_CONTENT,
+                    ),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape),

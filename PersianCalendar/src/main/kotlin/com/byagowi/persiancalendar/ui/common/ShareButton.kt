@@ -20,7 +20,9 @@ fun SharedTransitionScope.ShareActionButton(
         icon = Icons.Default.Share,
         title = stringResource(R.string.share),
         modifier = modifier.sharedElement(
-            rememberSharedContentState(SHARED_CONTENT_KEY_SHARE_BUTTON),
+            sharedContentState = rememberSharedContentState(
+                key = SHARED_CONTENT_KEY_SHARE_BUTTON,
+            ),
             animatedVisibilityScope = LocalNavAnimatedContentScope.current,
             boundsTransform = appBoundsTransform,
         ),

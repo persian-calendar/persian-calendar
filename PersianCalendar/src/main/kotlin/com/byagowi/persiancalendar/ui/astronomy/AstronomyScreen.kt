@@ -510,7 +510,9 @@ private fun SharedTransitionScope.SliderBar(
                     onLongClickLabel = stringResource(R.string.today),
                 )
                 .sharedElement(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
+                    sharedContentState = rememberSharedContentState(
+                        key = SHARED_CONTENT_KEY_TIME_BAR,
+                    ),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
@@ -626,7 +628,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 .size(56.dp)
                 .align(Alignment.CenterEnd)
                 .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                    sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                     boundsTransform = appBoundsTransform,
                 ),
