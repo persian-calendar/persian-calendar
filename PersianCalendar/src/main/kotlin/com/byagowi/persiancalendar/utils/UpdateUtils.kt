@@ -1619,9 +1619,7 @@ private fun updateNotification(
     }
 
     val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
-        if (isLargeDayNumberOnNotification) listOf(
-            PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB,
-        ) else timesToShow(clock, prayTimes)
+        timesToShow(clock, prayTimes)
     } else null
 
     val nextPrayTime =
@@ -1662,9 +1660,6 @@ private fun updateNotification(
 private val notificationTimesViewsIds = listOf(
     R.id.head1 to R.id.time1, R.id.head2 to R.id.time2, R.id.head3 to R.id.time3,
     R.id.head4 to R.id.time4, R.id.head5 to R.id.time5,
-)
-private val notificationTimesColumnsIds = listOf(
-    R.id.column1, R.id.column2, R.id.column3, R.id.column4, R.id.column5,
 )
 
 private data class NotificationData(
@@ -1830,11 +1825,6 @@ private data class NotificationData(
                                     it.setAlpha(timeViewId, alpha)
                                 }
                             }
-                            val lastColumnsVisibility =
-                                if (isLargeDayNumberOnNotification) View.GONE else View.VISIBLE
-                            it.setViewVisibility(R.id.column4, lastColumnsVisibility)
-                            it.setViewVisibility(R.id.column5, lastColumnsVisibility)
-
                             it.setTextViewTextOrHideIfEmpty(
                                 R.id.city,
                                 cityName.takeIf { OWGHAT_LOCATION_KEY in whatToShowOnWidgets }
