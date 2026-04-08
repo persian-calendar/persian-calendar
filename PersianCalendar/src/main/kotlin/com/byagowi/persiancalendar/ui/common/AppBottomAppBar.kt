@@ -34,8 +34,8 @@ fun AppBottomAppBar(
 ) {
     val surfaceContainer by animateColor(MaterialTheme.colorScheme.surfaceContainer)
     val offsetFraction by animateFloatAsState(
-        if (hideContainer) 100f else 0f,
-        spring(stiffness = Spring.StiffnessMediumLow),
+        targetValue = if (hideContainer) 100f else 0f,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     )
     BottomAppBar(
         modifier = modifier.drawBehind {

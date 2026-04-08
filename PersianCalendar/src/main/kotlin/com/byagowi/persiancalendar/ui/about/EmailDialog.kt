@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

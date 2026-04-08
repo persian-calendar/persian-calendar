@@ -36,7 +36,7 @@ class ShiftWorkDialogTest {
         val restorationTester = StateRestorationTester(composeTestRule)
 
         restorationTester.setContent {
-            Column { ShiftWorkDialogContent(today) {} }
+            ShiftWorkDialogContent(today) {}
             rememberSaveable {
                 mutableStateListOf(ShiftWorkRecord("d", 12))
             }.let {}

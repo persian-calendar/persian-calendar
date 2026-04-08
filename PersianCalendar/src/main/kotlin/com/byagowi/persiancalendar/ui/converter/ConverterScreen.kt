@@ -13,7 +13,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -436,7 +435,7 @@ private fun QrCode(
     onResetButtonVisibilityChange(input.isNotEmpty())
 
     @Composable
-    fun ColumnScope.SampleInputButton() {
+    fun SampleInputButton(modifier: Modifier = Modifier) {
         var clickCount by remember { mutableIntStateOf(1) }
         OutlinedButton(
             onClick = {
@@ -453,9 +452,7 @@ private fun QrCode(
                         |END:VEVENT""".trimMargin()
                 }
             },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 16.dp),
+            modifier = modifier.padding(top = 16.dp),
         ) { Text(stringResource(R.string.sample_inputs)) }
     }
 
@@ -474,7 +471,7 @@ private fun QrCode(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
-            SampleInputButton()
+            SampleInputButton(Modifier.align(Alignment.CenterHorizontally))
         }
         Spacer(Modifier.width(24.dp))
         Box(Modifier.weight(1f)) { Qr() }
@@ -488,7 +485,7 @@ private fun QrCode(
         Spacer(Modifier.height(24.dp))
         Qr()
         Spacer(Modifier.height(8.dp))
-        SampleInputButton()
+        SampleInputButton(Modifier.align(Alignment.CenterHorizontally))
     }
 }
 

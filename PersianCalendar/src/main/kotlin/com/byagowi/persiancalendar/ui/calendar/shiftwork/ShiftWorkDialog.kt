@@ -1,11 +1,9 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -90,25 +88,26 @@ fun ShiftWorkDialog(
         modifier = modifier,
     ) {
         DialogSurface {
-            Column {
-                Spacer(Modifier.height(16.dp))
-                CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyMedium,
-                ) {
-                    ShiftWorkDialogContent(
-                        selectedJdn = selectedJdn,
-                        onDismissRequest = onDismissRequest,
-                    )
-                }
+            CompositionLocalProvider(
+                LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+            ) {
+                ShiftWorkDialogContent(
+                    selectedJdn = selectedJdn,
+                    onDismissRequest = onDismissRequest,
+                    modifier = Modifier.padding(top = 16.dp),
+                )
             }
         }
     }
 }
 
-@SuppressLint("ComposeModifierMissing")
 @Composable
 @VisibleForTesting
-fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () -> Unit) {
+fun ShiftWorkDialogContent(
+    selectedJdn: Jdn,
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
     val shiftWorks = rememberSaveable {
         val items = shiftWorkSettings.records.takeIf { it.isNotEmpty() } ?: listOf(
             ShiftWorkRecord(shiftWorkKeyToString("d"), 1),
@@ -122,191 +121,195 @@ fun ColumnScope.ShiftWorkDialogContent(selectedJdn: Jdn, onDismissRequest: () ->
     var recurs by rememberSaveable { mutableStateOf(shiftWorkSettings.recurs) }
 
     val context = LocalContext.current
-    Text(
-        stringResource(
-            if (isFirstSetup) R.string.shift_work_starting_date
-            else R.string.shift_work_starting_date_edit,
-            formatDate(startingDate on mainCalendar),
-        ),
-        modifier = Modifier.padding(horizontal = 24.dp),
-    )
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .toggleable(recurs, role = Role.Checkbox) { recurs = it }
-            .padding(horizontal = SettingsHorizontalPaddingItem.dp)
-            .height(SettingsItemHeight.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Checkbox(checked = recurs, onCheckedChange = null)
-        Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-        Text(stringResource(R.string.recurs))
-    }
-    TextButton(
-        onClick = {
-            startingDate = selectedJdn
-            isFirstSetup = true
-            shiftWorks.clear()
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-    ) { Text(stringResource(R.string.shift_work_reset_button)) }
-
-    val lazyListState = rememberLazyListState()
-    var selectedTypeDropdownIndex by remember { mutableIntStateOf(-1) }
-    var selectedLengthDropdownIndex by remember { mutableIntStateOf(-1) }
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    Box(
-        Modifier
-            .weight(weight = 1f, fill = false)
-            .fillMaxWidth(),
-    ) {
-        LazyColumn(state = lazyListState) {
-            item {
-                @Suppress("SimplifiableCallChain") val summary =
-                    shiftWorks.filter { it.length != 0 }.map {
-                        pluralStringResource(
-                            R.plurals.shift_work_record_title,
-                            it.length,
-                            numeral.format(it.length),
-                            shiftWorkKeyToString(it.type),
-                        )
-                    }.joinToString(spacedComma)
-                Column {
-                    AnimatedVisibility(summary.isNotEmpty()) {
-                        AnimatedContent(summary, transitionSpec = appCrossfadeSpec) { state ->
-                            Text(
-                                state,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                            )
-                        }
-                    }
-                }
-            }
-            itemsIndexed(shiftWorks) { position, (type, length) ->
-                Row(
-                    modifier = Modifier
-                        .height(48.dp)
-                        .fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Spacer(Modifier.width(16.dp))
-                    Text(text = numeral.format(position + 1) + spacedColon)
-                    Box(Modifier.weight(70f)) {
-                        TextField(
-                            value = shiftWorkKeyToString(type),
-                            onValueChange = { value ->
-                                selectedTypeDropdownIndex = -1
-                                // Don't allow inserting '=' or ',' as they have special meaning
-                                val type = value.replace(Regex("[=,]"), "")
-                                shiftWorks[position] = shiftWorks[position].copy(type = type)
-                            },
-                            trailingIcon = {
-                                IconButton(onClick = { selectedTypeDropdownIndex = position }) {
-                                    ExpandArrow(
-                                        isExpanded = selectedTypeDropdownIndex == position,
-                                        contentDescription = stringResource(R.string.more_options),
-                                    )
-                                }
-                            },
-                        )
-                        val durationString = stringResource(R.string.shift_work_days_head)
-                        AppDropdownMenu(
-                            expanded = selectedTypeDropdownIndex == position,
-                            onDismissRequest = { selectedTypeDropdownIndex = -1 },
-                            minWidth = 40.dp,
-                            modifier = Modifier.semantics {
-                                this.contentDescription = durationString
-                            },
-                        ) {
-                            (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach { label ->
-                                AppDropdownMenuItem({ Text(label) }) {
-                                    selectedTypeDropdownIndex = -1
-                                    shiftWorks[position] = shiftWorks[position].copy(type = label)
-                                }
-                            }
-                        }
-                    }
-                    Spacer(Modifier.width(4.dp))
-                    Box(Modifier.weight(30f)) {
-                        TextField(
-                            value = numeral.format(length),
-                            readOnly = true,
-                            onValueChange = { text ->
-                                selectedTypeDropdownIndex = -1
-                                val length = text.toIntOrNull() ?: 0
-                                shiftWorks[position] = shiftWorks[position].copy(length = length)
-                            },
-                            modifier = Modifier
-                                .onFocusChanged {
-                                    if (it.hasFocus) selectedLengthDropdownIndex = position
-                                    else if (selectedLengthDropdownIndex == position) {
-                                        selectedLengthDropdownIndex = -1
-                                    }
-                                }
-                                .focusRequester(focusRequester),
-                        )
-                        AppDropdownMenu(
-                            expanded = selectedLengthDropdownIndex == position,
-                            onDismissRequest = {
-                                focusManager.clearFocus()
-                                selectedLengthDropdownIndex = -1
-                            },
-                            minWidth = 40.dp,
-                        ) {
-                            repeat(14 + 1) { length ->
-                                AppDropdownMenuItem({ Text(numeral.format(length)) }) {
-                                    focusManager.clearFocus()
-                                    selectedLengthDropdownIndex = -1
-                                    shiftWorks[position] =
-                                        shiftWorks[position].copy(length = length)
-                                }
-                            }
-                        }
-                    }
-                    IconButton(onClick = { shiftWorks.removeAt(position) }) {
-                        Icon(
-                            imageVector = Icons.Default.RemoveCircleOutline,
-                            contentDescription = stringResource(R.string.remove),
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                    Spacer(Modifier.width(12.dp))
-                }
-            }
+    Column(modifier) {
+        Text(
+            stringResource(
+                if (isFirstSetup) R.string.shift_work_starting_date
+                else R.string.shift_work_starting_date_edit,
+                formatDate(startingDate on mainCalendar),
+            ),
+            modifier = Modifier.padding(horizontal = 24.dp),
+        )
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .toggleable(recurs, role = Role.Checkbox) { recurs = it }
+                .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                .height(SettingsItemHeight.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Checkbox(checked = recurs, onCheckedChange = null)
+            Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
+            Text(stringResource(R.string.recurs))
         }
-        ScrollShadow(lazyListState)
-    }
-
-    Spacer(Modifier.height(8.dp))
-    Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
-        TextButton(
-            onClick = { shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1) },
-        ) { Text(stringResource(R.string.add)) }
-        Spacer(Modifier.weight(1f))
-        TextButton(onClick = onDismissRequest) {
-            Text(stringResource(R.string.cancel))
-        }
-        Spacer(Modifier.width(8.dp))
         TextButton(
             onClick = {
-                context.preferences.edit {
-                    val result = shiftWorks.filter { it.length != 0 }.joinToString(",") {
-                        "${it.type.replace("=", "").replace(",", "")}=${it.length}"
-                    }
-                    if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
-                    else putJdn(PREF_SHIFT_WORK_STARTING_JDN, startingDate)
-                    putString(PREF_SHIFT_WORK_SETTING, result)
-                    putBoolean(PREF_SHIFT_WORK_RECURS, recurs)
-                }
-                onDismissRequest()
+                startingDate = selectedJdn
+                isFirstSetup = true
+                shiftWorks.clear()
             },
-        ) { Text(stringResource(R.string.accept)) }
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        ) { Text(stringResource(R.string.shift_work_reset_button)) }
+
+        val lazyListState = rememberLazyListState()
+        var selectedTypeDropdownIndex by remember { mutableIntStateOf(-1) }
+        var selectedLengthDropdownIndex by remember { mutableIntStateOf(-1) }
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        Box(
+            Modifier
+                .weight(weight = 1f, fill = false)
+                .fillMaxWidth(),
+        ) {
+            LazyColumn(state = lazyListState) {
+                item {
+                    @Suppress("SimplifiableCallChain") val summary =
+                        shiftWorks.filter { it.length != 0 }.map {
+                            pluralStringResource(
+                                R.plurals.shift_work_record_title,
+                                it.length,
+                                numeral.format(it.length),
+                                shiftWorkKeyToString(it.type),
+                            )
+                        }.joinToString(spacedComma)
+                    Column {
+                        AnimatedVisibility(summary.isNotEmpty()) {
+                            AnimatedContent(summary, transitionSpec = appCrossfadeSpec) { state ->
+                                Text(
+                                    state,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                )
+                            }
+                        }
+                    }
+                }
+                itemsIndexed(shiftWorks) { position, (type, length) ->
+                    Row(
+                        modifier = Modifier
+                            .height(48.dp)
+                            .fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Spacer(Modifier.width(16.dp))
+                        Text(text = numeral.format(position + 1) + spacedColon)
+                        Box(Modifier.weight(70f)) {
+                            TextField(
+                                value = shiftWorkKeyToString(type),
+                                onValueChange = { value ->
+                                    selectedTypeDropdownIndex = -1
+                                    // Don't allow inserting '=' or ',' as they have special meaning
+                                    val type = value.replace(Regex("[=,]"), "")
+                                    shiftWorks[position] = shiftWorks[position].copy(type = type)
+                                },
+                                trailingIcon = {
+                                    IconButton(onClick = { selectedTypeDropdownIndex = position }) {
+                                        ExpandArrow(
+                                            isExpanded = selectedTypeDropdownIndex == position,
+                                            contentDescription = stringResource(R.string.more_options),
+                                        )
+                                    }
+                                },
+                            )
+                            val durationString = stringResource(R.string.shift_work_days_head)
+                            AppDropdownMenu(
+                                expanded = selectedTypeDropdownIndex == position,
+                                onDismissRequest = { selectedTypeDropdownIndex = -1 },
+                                minWidth = 40.dp,
+                                modifier = Modifier.semantics {
+                                    this.contentDescription = durationString
+                                },
+                            ) {
+                                (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach { label ->
+                                    AppDropdownMenuItem({ Text(label) }) {
+                                        selectedTypeDropdownIndex = -1
+                                        shiftWorks[position] =
+                                            shiftWorks[position].copy(type = label)
+                                    }
+                                }
+                            }
+                        }
+                        Spacer(Modifier.width(4.dp))
+                        Box(Modifier.weight(30f)) {
+                            TextField(
+                                value = numeral.format(length),
+                                readOnly = true,
+                                onValueChange = { text ->
+                                    selectedTypeDropdownIndex = -1
+                                    val length = text.toIntOrNull() ?: 0
+                                    shiftWorks[position] =
+                                        shiftWorks[position].copy(length = length)
+                                },
+                                modifier = Modifier
+                                    .onFocusChanged {
+                                        if (it.hasFocus) selectedLengthDropdownIndex = position
+                                        else if (selectedLengthDropdownIndex == position) {
+                                            selectedLengthDropdownIndex = -1
+                                        }
+                                    }
+                                    .focusRequester(focusRequester),
+                            )
+                            AppDropdownMenu(
+                                expanded = selectedLengthDropdownIndex == position,
+                                onDismissRequest = {
+                                    focusManager.clearFocus()
+                                    selectedLengthDropdownIndex = -1
+                                },
+                                minWidth = 40.dp,
+                            ) {
+                                repeat(14 + 1) { length ->
+                                    AppDropdownMenuItem({ Text(numeral.format(length)) }) {
+                                        focusManager.clearFocus()
+                                        selectedLengthDropdownIndex = -1
+                                        shiftWorks[position] =
+                                            shiftWorks[position].copy(length = length)
+                                    }
+                                }
+                            }
+                        }
+                        IconButton(onClick = { shiftWorks.removeAt(position) }) {
+                            Icon(
+                                imageVector = Icons.Default.RemoveCircleOutline,
+                                contentDescription = stringResource(R.string.remove),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                        Spacer(Modifier.width(12.dp))
+                    }
+                }
+            }
+            ScrollShadow(lazyListState)
+        }
+
+        Spacer(Modifier.height(8.dp))
+        Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
+            TextButton(
+                onClick = { shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1) },
+            ) { Text(stringResource(R.string.add)) }
+            Spacer(Modifier.weight(1f))
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.cancel))
+            }
+            Spacer(Modifier.width(8.dp))
+            TextButton(
+                onClick = {
+                    context.preferences.edit {
+                        val result = shiftWorks.filter { it.length != 0 }.joinToString(",") {
+                            "${it.type.replace("=", "").replace(",", "")}=${it.length}"
+                        }
+                        if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
+                        else putJdn(PREF_SHIFT_WORK_STARTING_JDN, startingDate)
+                        putString(PREF_SHIFT_WORK_SETTING, result)
+                        putBoolean(PREF_SHIFT_WORK_RECURS, recurs)
+                    }
+                    onDismissRequest()
+                },
+            ) { Text(stringResource(R.string.accept)) }
+        }
     }
 }
 

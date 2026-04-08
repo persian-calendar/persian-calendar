@@ -68,7 +68,6 @@ import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_CUSTOM_IMAGE_NAME
-import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
