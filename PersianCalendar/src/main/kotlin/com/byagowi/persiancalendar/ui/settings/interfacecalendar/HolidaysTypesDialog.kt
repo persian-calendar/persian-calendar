@@ -217,6 +217,14 @@ fun CountryEvents(
         ).map { (title, key) ->
             buildAnnotatedString {
                 append(title)
+                if (!language.isArabicScript) {
+                    if (sourceLink == EventSource.Afghanistan.link) {
+                        append(spacedComma)
+                        append("Tehran University")
+                    }
+                    append(spacedComma)
+                    append(calendarCenterName)
+                }
                 if (sourceLink.isNotEmpty()) {
                     append(spacedComma)
                     withLink(
