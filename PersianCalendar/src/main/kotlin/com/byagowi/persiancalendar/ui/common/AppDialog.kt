@@ -30,12 +30,12 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
 @Composable
 fun BaseAppDialog(
-    title: (@Composable () -> Unit)?,
     onDismissRequest: () -> Unit,
-    neutralButton: (@Composable () -> Unit)?,
-    confirmButton: (@Composable () -> Unit)?,
-    dismissButton: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
+    title: (@Composable () -> Unit)? = null,
+    neutralButton: (@Composable () -> Unit)? = null,
+    confirmButton: (@Composable () -> Unit)? = null,
+    dismissButton: (@Composable () -> Unit)? = null,
     properties: DialogProperties = DialogProperties(),
     content: @Composable BoxScope.() -> Unit,
 ) {

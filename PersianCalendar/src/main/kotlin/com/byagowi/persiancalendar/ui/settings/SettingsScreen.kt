@@ -13,6 +13,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.cutoutPath
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -42,6 +44,7 @@ import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Widgets
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -58,6 +61,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,16 +71,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
@@ -104,10 +113,12 @@ import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
+import com.byagowi.persiancalendar.ui.common.appTransformable
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.CalendarSettings
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.AthanSettings
@@ -139,6 +150,7 @@ fun SharedTransitionScope.SettingsScreen(
     modifier: Modifier = Modifier,
 ) {
 //    var isAtTop by remember { mutableStateOf(true) }
+    val cutoutPath = WindowInsets.cutoutPath
     Scaffold(
         modifier = modifier,
         containerColor = Color.Transparent,
@@ -170,6 +182,7 @@ fun SharedTransitionScope.SettingsScreen(
                                         closeMenu(); showAddWidgetDialog = true
                                     },
                                     closeMenu = closeMenu,
+                                    cutoutPath = cutoutPath,
                                 )
                             }
                         }
@@ -358,7 +371,11 @@ enum class SettingsTab(
 }
 
 @Composable
-private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
+private fun MenuItems(
+    openAddWidgetDialog: () -> Unit,
+    closeMenu: () -> Unit,
+    cutoutPath: Path?,
+) {
     val context = LocalContext.current
     val resources = LocalResources.current
     AppDropdownMenuItem(
@@ -462,6 +479,11 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         AppDropdownMenuItem({ Text("Font Weights") }) { showDialog = true }
         if (showDialog) FontWeightsDialog { showDialog = false }
     }
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        AppDropdownMenuItem({ Text("Cutout") }) { showDialog = true }
+        if (showDialog) CutoutDialog(cutoutPath) { showDialog = false }
+    }
     AppDropdownMenuCheckableItem(
         text = { Text("Cyberpunk") },
         isChecked = isCyberpunk,
@@ -526,5 +548,47 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
                 ),
             )
         }.onFailure(logException).getOrNull().debugAssertNotNull
+    }
+}
+
+@Composable
+private fun CutoutDialog(
+    cutoutPath: Path?,
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+) {
+    val containerSize = LocalWindowInfo.current.containerSize.toSize()
+    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        DialogSurface {
+            val scale = rememberSaveable { mutableFloatStateOf(1f) }
+            val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
+            val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
+            val colorScheme = MaterialTheme.colorScheme
+            Canvas(
+                Modifier
+                    .fillMaxSize()
+                    .appTransformable(
+                        scale = scale,
+                        offsetX = offsetX,
+                        offsetY = offsetY,
+                        disableHorizontalLimit = true,
+                        disableVerticalLimit = true,
+                        scaleRange = .75f..2f,
+                    )
+                    .graphicsLayer {
+                        this.scaleX = scale.floatValue
+                        this.scaleY = scale.floatValue
+                        this.translationX = offsetX.floatValue
+                        this.translationY = offsetY.floatValue
+                    },
+            ) {
+                drawRect(colorScheme.primaryContainer, size = containerSize)
+                cutoutPath?.let { drawPath(it, colorScheme.surface) }
+            }
+        }
     }
 }
