@@ -481,7 +481,7 @@ private fun MenuItems(
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem({ Text("Cutout") }) { showDialog = true }
+        AppDropdownMenuItem({ Text("WindowInsets.cutoutPath") }) { showDialog = true }
         if (showDialog) CutoutDialog(cutoutPath) { showDialog = false }
     }
     AppDropdownMenuCheckableItem(
@@ -564,7 +564,7 @@ private fun CutoutDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         DialogSurface {
-            val scale = rememberSaveable { mutableFloatStateOf(1f) }
+            val scale = rememberSaveable { mutableFloatStateOf(.75f) }
             val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
             val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
             val colorScheme = MaterialTheme.colorScheme
@@ -586,7 +586,7 @@ private fun CutoutDialog(
                         this.translationY = offsetY.floatValue
                     },
             ) {
-                drawRect(colorScheme.primaryContainer, size = containerSize)
+                drawRect(colorScheme.primary, size = containerSize)
                 cutoutPath?.let { drawPath(it, colorScheme.surface) }
             }
         }

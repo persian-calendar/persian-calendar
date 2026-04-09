@@ -130,22 +130,24 @@ fun SharedTransitionScope.DeviceInformationScreen(
         val primaryColor = MaterialTheme.colorScheme.primary
         val activity = LocalActivity.current
         val insets = listOf(
-            "ime" to WindowInsets.ime,
-            "safeDrawing" to WindowInsets.safeDrawing,
-            "displayCutout" to WindowInsets.displayCutout,
             "captionBar" to WindowInsets.captionBar,
-            "waterfall" to WindowInsets.waterfall,
-            "safeContent" to WindowInsets.safeContent,
-            "safeGestures" to WindowInsets.safeGestures,
+            "displayCutout" to WindowInsets.displayCutout,
+            "ime" to WindowInsets.ime,
             "mandatorySystemGestures" to WindowInsets.mandatorySystemGestures,
             "navigationBars" to WindowInsets.navigationBars,
             "statusBars" to WindowInsets.statusBars,
             "systemBars" to WindowInsets.systemBars,
             "systemGestures" to WindowInsets.systemGestures,
             "tappableElement" to WindowInsets.tappableElement,
-        ).joinToString("\n") { it.first + ": " + it.second } + run {
-            "\ncutoutPath: " + WindowInsets.cutoutPath?.toSvg(false)
-        }
+            "waterfall" to WindowInsets.waterfall,
+            "safeDrawing" to WindowInsets.safeDrawing,
+            "safeGestures" to WindowInsets.safeGestures,
+            "safeContent" to WindowInsets.safeContent,
+        ).joinToString("\n") {
+            if (it.second.toString().startsWith(it.first)) "${it.second}" else {
+                "${it.first}: ${it.second}"
+            }
+        } + "\ncutoutPath: " + WindowInsets.cutoutPath?.toSvg(false)
         val items = remember(primaryColor) {
             createItemsList(
                 activity ?: return@remember emptyList(),
