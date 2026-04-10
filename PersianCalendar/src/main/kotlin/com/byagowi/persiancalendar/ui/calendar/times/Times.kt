@@ -78,13 +78,15 @@ fun SharedTransitionScope.Times(
                     val textColor by animateColor(
                         if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current,
                     )
-                    Text(
-                        buildString {
-                            if (anyAthanEnabled && language.isPersian && prayTime.isAthan) append("اذان ")
+                    AnimatedContent(
+                        targetState = buildString {
+                            if ((anyAthanEnabled || isExpanded) && language.isPersian && prayTime.isAthan) {
+                                append("اذان ")
+                            }
                             append(stringResource(prayTime.stringRes))
                         },
-                        color = textColor,
-                    )
+                        transitionSpec = appCrossfadeSpec,
+                    ) { text -> Text(text, color = textColor) }
                     AnimatedContent(
                         targetState = prayTimes[prayTime].toFormattedString(),
                         transitionSpec = appCrossfadeSpec,
