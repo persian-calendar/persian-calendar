@@ -257,7 +257,7 @@ private fun DayEventContent(
             SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                 Text(
                     text = title,
-                    maxLines = if (event.source != null) 1 else Int.MAX_VALUE,
+                    maxLines = if (event.source == EventSource.Iran) 1 else Int.MAX_VALUE,
                     overflow = TextOverflow.Ellipsis,
                     color = contentColor,
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -296,7 +296,7 @@ private fun DayEventContent(
                         event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                         event.source == EventSource.International -> stringResource(R.string.international)
                         event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
-                        event.source == EventSource.Iran -> (if (event.isHoliday) "${event.title} از " else "") + """تقویم رسمی
+                        event.source == EventSource.Iran -> event.title + """ از تقویم رسمی
 تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
 
                         else -> ""
