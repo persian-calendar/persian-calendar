@@ -25,6 +25,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -1407,7 +1408,11 @@ fun create4x2RemoteViews(
             val timeClock = prayTimes[prayTime]
             remoteViews.setTextViewText(
                 textHolderViewId,
-                context.getString(prayTime.stringRes) + "\n" + timeClock.toFormattedString(printAmPm = false),
+                buildString {
+                    if (language.isPersianOrDari && prayTime.isAthan) append("اذان ")
+                    appendLine(context.getString(prayTime.stringRes))
+                    append(timeClock.toFormattedString(printAmPm = false))
+                },
             )
             remoteViews.setupForegroundTextColors(textHolderViewId)
             Triple(textHolderViewId, prayTime.stringRes, timeClock)
