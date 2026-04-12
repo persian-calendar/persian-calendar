@@ -76,6 +76,7 @@ private fun MutableList<Entry>.eventsOfCalendar(
         if (when (it.source) {
                 EventSource.Iran -> it.isHoliday || iranNonHolidaysKey in enabledEvents
                 EventSource.International -> internationalKey in enabledEvents
+                EventSource.AncientIran -> ancientIranKey in enabledEvents
                 else -> false
             }
         ) add(
@@ -90,6 +91,7 @@ private fun MutableList<Entry>.eventsOfCalendar(
 
 const val iranNonHolidaysKey = "iranNonHolidays"
 const val internationalKey = "international"
+const val ancientIranKey = "ancientIran"
 
 fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry> {
     val jdn = civilDate.toJdn()

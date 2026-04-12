@@ -32,6 +32,7 @@ import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.Jdn
+import com.byagowi.persiancalendar.ancientIranKey
 import com.byagowi.persiancalendar.complicationHideWeekDay
 import com.byagowi.persiancalendar.complicationMonthNumber
 import com.byagowi.persiancalendar.complicationWeekdayInitial
@@ -107,6 +108,7 @@ fun SettingsScreen(
                     }
                 }
                 item { EventsSwitch(iranNonHolidaysKey, "غیرتعطیل رسمی\nدانشگاه تهران") }
+                item { EventsSwitch(ancientIranKey, "ایران باستان") }
                 item { EventsSwitch(internationalKey, "بین‌المللی") }
             }
             item {
@@ -119,7 +121,7 @@ fun SettingsScreen(
                 }
             }
             item {
-                ComplicationSwitch(complicationHideWeekDay) { checked ->
+                ComplicationSwitch(complicationHideWeekDay) { _ ->
                     Text("عدم نمایش روز هفته")
                 }
             }
