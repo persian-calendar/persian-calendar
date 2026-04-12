@@ -61,6 +61,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHelp
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
@@ -72,6 +73,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectD
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectPreviewDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
+import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.title
@@ -218,9 +220,9 @@ fun AthanSettings(
                 },
             )
         }
-        AnimatedVisibility(isLocationSet && notificationAthan && language.isPersianOrDari) {
-            SettingsHelp(stringResource(R.string.notification_athan_help))
-        }
+        AnimatedVisibility(
+            preferencesUpdateToken.let { getEnabledAlarms(context).isNotEmpty() } && isLocationSet && notificationAthan && language.isPersianOrDari,
+        ) { SettingsHelp(stringResource(R.string.notification_athan_help)) }
         AnimatedVisibility(isLocationSet && !notificationAthan) {
             SettingsSwitch(
                 key = PREF_ASCENDING_ATHAN_VOLUME,
