@@ -129,17 +129,6 @@ fun eventColor(event: CalendarEvent<*>): Color {
     }
 }
 
-@Composable
-fun viewEvent(refreshCalendar: () -> Unit): (CalendarEvent.DeviceCalendarEvent) -> Unit {
-    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
-    val context = LocalContext.current
-    return { event ->
-        launcher.runCatching { launcher.launch(event.id) }.onFailure {
-            showUnsupportedActionToast(context)
-        }.onFailure(logException)
-    }
-}
-
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
 fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
 
@@ -625,14 +614,5 @@ fun sortEvents(events: List<CalendarEvent<*>>, language: Language): List<Calenda
             it !is CalendarEvent.DeviceCalendarEvent -> if (priority) 2L else 3L
             else -> it.start.timeInMillis
         }
-    }
-}
-
-class ViewEventContract : ActivityResultContract<Long, Void?>() {
-    override fun parseResult(resultCode: Int, intent: Intent?) = null
-    override fun createIntent(context: Context, input: Long): Intent {
-        return Intent(Intent.ACTION_VIEW).setData(
-            ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input),
-        )
     }
 }

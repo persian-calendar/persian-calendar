@@ -3,10 +3,23 @@ package com.byagowi.persiancalendar.utils
 import android.Manifest
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.provider.CalendarContract
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.PluralsRes
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -40,12 +53,16 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.yearAwareMonthsNames
+import com.byagowi.persiancalendar.ui.calendar.AddEventData
+import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
+import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
+import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -463,4 +480,63 @@ fun otherCalendarFormat(
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String): String? {
     return enabledCalendars.drop(1).takeIf { it.isNotEmpty() }
         ?.joinToString(separator) { formatDate(jdn on it) }
+}
+
+private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
+    override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
+    override fun createIntent(context: Context, input: AddEventData) = input.asIntent()
+}
+
+@Composable
+fun addEvent(
+    refreshCalendar: () -> Unit,
+    snackbarHostState: SnackbarHostState,
+): (AddEventData) -> Unit {
+    val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
+        refreshCalendar()
+    }
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    var addEventData by remember { mutableStateOf<AddEventData?>(null) }
+
+    addEventData?.let { data ->
+        AskForCalendarPermissionDialog { isGranted ->
+            refreshCalendar()
+            if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
+                if (language.isPersianOrDari) coroutineScope.launch {
+                    if (snackbarHostState.showSnackbar(
+                            "جهت افزودن رویداد نیاز است از نصب و فعال بودن تقویم گوگل اطمینان حاصل کنید",
+                            duration = SnackbarDuration.Long,
+                            actionLabel = "نصب",
+                            withDismissAction = true,
+                        ) == SnackbarResult.ActionPerformed
+                    ) context.bringMarketPage("com.google.android.calendar")
+                } else showUnsupportedActionToast(context)
+            }
+            addEventData = null
+        }
+    }
+
+    return { addEventData = it }
+}
+
+private class ViewEventContract : ActivityResultContract<Long, Void?>() {
+    override fun parseResult(resultCode: Int, intent: Intent?) = null
+    override fun createIntent(context: Context, input: Long): Intent {
+        return Intent(Intent.ACTION_VIEW).setData(
+            ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input),
+        )
+    }
+}
+
+@Composable
+fun viewEvent(refreshCalendar: () -> Unit): (CalendarEvent.DeviceCalendarEvent) -> Unit {
+    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
+    val context = LocalContext.current
+    return { event ->
+        launcher.runCatching { launcher.launch(event.id) }.onFailure {
+            showUnsupportedActionToast(context)
+        }.onFailure(logException)
+    }
 }

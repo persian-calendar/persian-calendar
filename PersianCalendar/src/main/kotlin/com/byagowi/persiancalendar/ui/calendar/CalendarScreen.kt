@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
 import android.app.AlarmManager
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -221,6 +222,7 @@ import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.utils.addEvent
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.createSearchRegex
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -235,6 +237,7 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
@@ -1667,45 +1670,6 @@ data class AddEventData(
             )
         }
     }
-}
-
-private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
-    override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-    override fun createIntent(context: Context, input: AddEventData) = input.asIntent()
-}
-
-@Composable
-fun addEvent(
-    refreshCalendar: () -> Unit,
-    snackbarHostState: SnackbarHostState,
-): (AddEventData) -> Unit {
-    val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
-        refreshCalendar()
-    }
-
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    var addEventData by remember { mutableStateOf<AddEventData?>(null) }
-
-    addEventData?.let { data ->
-        AskForCalendarPermissionDialog { isGranted ->
-            refreshCalendar()
-            if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
-                if (language.isPersianOrDari) coroutineScope.launch {
-                    if (snackbarHostState.showSnackbar(
-                            "جهت افزودن رویداد نیاز است از نصب و فعال بودن تقویم گوگل اطمینان حاصل کنید",
-                            duration = SnackbarDuration.Long,
-                            actionLabel = "نصب",
-                            withDismissAction = true,
-                        ) == SnackbarResult.ActionPerformed
-                    ) context.bringMarketPage("com.google.android.calendar")
-                } else showUnsupportedActionToast(context)
-            }
-            addEventData = null
-        }
-    }
-
-    return { addEventData = it }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

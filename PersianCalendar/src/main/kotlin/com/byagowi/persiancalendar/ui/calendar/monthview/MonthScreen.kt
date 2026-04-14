@@ -76,7 +76,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPa
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
 import com.byagowi.persiancalendar.ui.calendar.readEvents
-import com.byagowi.persiancalendar.ui.calendar.viewEvent
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -89,6 +88,7 @@ import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
+import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
