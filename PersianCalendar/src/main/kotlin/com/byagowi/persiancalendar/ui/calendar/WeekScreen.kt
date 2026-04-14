@@ -710,12 +710,15 @@ fun DaysView(
                                 ) { onAddEventBoxEnabledChange(false) } else Modifier,
                             ),
                     ) {
-                        Spacer(Modifier.height(12.dp))
                         val headerHasFilled = headerScrollState.maxValue != 0
                         val displayedEvents =
                             (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
                         val dayEvents = displayedEvents.let { if (isExpanded) it else it.take(3) }
                             .toImmutableList()
+                        Spacer(Modifier.height(10.dp))
+                        AnimatedVisibility(dayEvents.isNotEmpty()) {
+                            Spacer(Modifier.height(8.dp))
+                        }
                         DayEvents(
                             events = dayEvents,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
@@ -728,6 +731,7 @@ fun DaysView(
                         val appointments =
                             eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
                         if (displayedEvents.size > 3) {
+                            Spacer(Modifier.height(4.dp))
                             ExpandArrow(
                                 isExpanded = isExpanded,
                                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -739,7 +743,7 @@ fun DaysView(
                             Spacer(Modifier.height(if (isExpanded && headerHasFilled) bottomPadding else 0.dp))
                         } else if (content != null) {
                             AnimatedVisibility(dayEvents.isNotEmpty()) {
-                                Spacer(Modifier.height(8.dp))
+                                Spacer(Modifier.height(6.dp))
                             }
                             content(appointments, headerScrollState) { hasContent = it }
                         } else Spacer(Modifier.height(12.dp))

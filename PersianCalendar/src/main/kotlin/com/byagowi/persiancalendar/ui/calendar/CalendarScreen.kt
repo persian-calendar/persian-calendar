@@ -815,7 +815,12 @@ private fun SharedTransitionScope.Details(
                             events = appointments,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
                             refreshCalendar = refreshCalendar,
-                            modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp),
+                            modifier = Modifier.padding(
+                                top = 6.dp,
+                                bottom = 8.dp,
+                                start = 24.dp,
+                                end = 24.dp,
+                            ),
                         )
                     }
 //                        if (when {
@@ -905,7 +910,7 @@ private fun SharedTransitionScope.Details(
                     )
                     buttons.entries.forEachIndexed { index, (button, _) ->
                         SegmentedButton(
-                            modifier = Modifier.defaultMinSize(minHeight = 32.dp),
+                            modifier = Modifier.defaultMinSize(minHeight = 38.dp),
                             onClick = {
                                 selectedButton = if (selectedButton == button) null else button
                                 context.preferences.edit {
@@ -942,7 +947,7 @@ private fun SharedTransitionScope.Details(
                 if (content != null) content() else Spacer(
                     Modifier
                         .fillMaxWidth()
-                        .height((if (buttons.isEmpty()) 4 else 10).dp),
+                        .height(10.dp),
                 )
             }
 

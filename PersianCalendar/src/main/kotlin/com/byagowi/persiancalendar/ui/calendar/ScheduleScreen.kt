@@ -234,7 +234,6 @@ fun SharedTransitionScope.ScheduleScreen(
                         ) {
                             Box(
                                 Modifier
-                                    .padding(top = 4.dp)
                                     .clickable(
                                         interactionSource = null,
                                         indication = ripple(bounded = false),
@@ -242,7 +241,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         commandBringDay(jdn)
                                         navigateUp()
                                     }
-                                    .size(32.dp)
+                                    .size(40.dp)
                                     .background(
                                         when {
                                             jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
@@ -274,7 +273,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                 events = events,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 refreshCalendar = refreshCalendar,
-                                modifier = Modifier.padding(top = 4.dp, start = 4.dp),
+                                modifier = Modifier.padding(start = 8.dp),
                             )
                         }
                         if (mainCalendar.getMonthLength(

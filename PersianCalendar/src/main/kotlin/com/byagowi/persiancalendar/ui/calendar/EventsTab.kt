@@ -127,10 +127,8 @@ fun eventColor(event: CalendarEvent<*>): Color {
 
         event.isHoliday || event is CalendarEvent.EquinoxCalendarEvent -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.surfaceVariant
-    }.copy(alpha = eventsAlpha)
+    }
 }
-
-private const val eventsAlpha = .85f
 
 fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
     event: CalendarEvent.DeviceCalendarEvent, context: Context,
@@ -141,8 +139,7 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
 }
 
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
-fun eventTextColor(color: Color): Color =
-    (if (color.isLight) Color.Black else Color.White).copy(eventsAlpha)
+fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
 
 private val String.directionality
     get() = this.firstNotNullOfOrNull {
@@ -170,7 +167,7 @@ fun DayEvents(
     val language = language
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         events.forEach { event ->
             val backgroundColor by animateColor(eventColor(event))
             AnimatedContent(
@@ -232,8 +229,7 @@ private fun DayEventContent(
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(vertical = 2.dp)
-            .clip(MaterialTheme.shapes.small)
+            .clip(MaterialTheme.shapes.medium)
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
@@ -248,9 +244,9 @@ private fun DayEventContent(
                     R.string.holiday_reason, event.title,
                 ) else event.oneLinerTitleWithTime
             }
-            .padding(all = 4.dp),
+            .padding(all = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val contentColor by animateColor(eventTextColor(backgroundColor))
         Column(modifier = Modifier.weight(1f, fill = false)) {
