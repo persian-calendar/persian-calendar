@@ -152,7 +152,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
             createItemsList(
                 activity ?: return@remember emptyList(),
                 primaryColor,
-                insets
+                insets,
             ).toImmutableList()
         }
         LargeTopAppBar(

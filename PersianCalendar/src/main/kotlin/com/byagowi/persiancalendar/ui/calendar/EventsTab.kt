@@ -1,11 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.content.ContentUris
-import android.content.Context
-import android.content.Intent
-import android.provider.CalendarContract
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -54,7 +48,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
@@ -101,7 +94,6 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
@@ -205,7 +197,6 @@ private fun DayEventContent(
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
 ) {
-    val context = LocalContext.current
     val resources = LocalResources.current
     val tooltipState = rememberTooltipState(isPersistent = true)
     val hasTooltip = when {

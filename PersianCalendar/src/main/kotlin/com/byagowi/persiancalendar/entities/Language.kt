@@ -222,8 +222,9 @@ enum class Language(val code: String, val nativeName: String) {
             } else persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
 
             this == CKB -> if (userTimeZoneId == IRAN_TIMEZONE_ID) persistentListOf(
-                Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC
+                Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
             ) else persistentListOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
+
             this == EN_IR -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
             this == TR -> persistentListOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
             this == AR || this == OTA -> persistentListOf(Calendar.ISLAMIC, Calendar.GREGORIAN)

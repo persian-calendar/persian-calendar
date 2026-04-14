@@ -2,17 +2,13 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
 import android.app.AlarmManager
-import android.content.ContentUris
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
-import android.provider.CalendarContract
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
@@ -90,7 +86,6 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
@@ -215,17 +210,16 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
-import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.addEvent
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.createSearchRegex
-import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
@@ -236,16 +230,12 @@ import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
-import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.launch
-import java.util.Date
-import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.hours
 
 @Composable
 fun SharedTransitionScope.CalendarScreen(
@@ -945,14 +935,10 @@ private fun SharedTransitionScope.Details(
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
-                modifier = swipeModifier,
+                modifier = swipeModifier.fillMaxWidth(),
             ) {
                 val content = buttons[it]
-                if (content != null) content() else Spacer(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(10.dp),
-                )
+                if (content != null) content() else Spacer(Modifier.height(10.dp))
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
@@ -1621,53 +1607,6 @@ private fun SharedTransitionScope.Menu(
                     closeMenu()
                 }
             }
-        }
-    }
-}
-
-data class AddEventData(
-    val beginTime: Date,
-    val endTime: Date,
-    val allDay: Boolean,
-    val description: String?,
-) {
-    fun asIntent(): Intent {
-        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).also {
-            if (description != null) it.putExtra(
-                CalendarContract.Events.DESCRIPTION, description,
-            )
-        }.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, allDay)
-    }
-
-    companion object {
-        fun fromJdn(jdn: Jdn): AddEventData {
-            val time = jdn.toGregorianCalendar().time
-            return AddEventData(
-                beginTime = time,
-                endTime = time,
-                allDay = true,
-                description = dayTitleSummary(jdn, jdn on mainCalendar),
-            )
-        }
-
-        // Used in widget, turns 5:45 to 6:00-7:00 and 6:05 to 6:30-7:30
-        fun upcoming(): AddEventData {
-            val begin = GregorianCalendar()
-            val wasAtFirstHalf = begin[GregorianCalendar.MINUTE] < 30
-            begin[GregorianCalendar.MINUTE] = 0
-            begin[GregorianCalendar.SECOND] = 0
-            begin[GregorianCalendar.MILLISECOND] = 0
-            begin.timeInMillis += (if (wasAtFirstHalf) .5 else 1.0).hours.inWholeMilliseconds
-            val end = Date(begin.time.time)
-            end.time += 1.hours.inWholeMilliseconds
-            return AddEventData(
-                beginTime = begin.time,
-                endTime = end,
-                allDay = false,
-                description = null,
-            )
         }
     }
 }

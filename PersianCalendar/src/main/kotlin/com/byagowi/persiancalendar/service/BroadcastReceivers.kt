@@ -14,7 +14,7 @@ import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
 import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
 import com.byagowi.persiancalendar.MONTH_RESET_COMMAND
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.ui.calendar.AddEventData
+import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast

@@ -328,7 +328,7 @@ enum class SettingsTab(
         outlinedIcon = Icons.Outlined.LocationOn,
         filledIcon = Icons.Default.LocationOn,
         firstTitle = R.string.location,
-        secondTitle = R.string.times,
+        secondTitle = R.string.athan,
         content = { listState, disableStickyHeader, destination, _, navigateToMap ->
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
@@ -343,7 +343,7 @@ enum class SettingsTab(
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.times,
+                title = R.string.athan,
                 subtitle = {
                     if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
                 },

@@ -20,7 +20,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.ui.calendar.AddEventData
+import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import kotlinx.coroutines.launch
 

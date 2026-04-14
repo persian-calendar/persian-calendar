@@ -149,6 +149,7 @@ import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.addEvent
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -626,7 +627,7 @@ fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
-    content: (@Composable ColumnScope.(ImmutableList<CalendarEvent<*>>, ScrollState, (Boolean) -> Unit) -> Unit)? = null,
+    content: (@Composable ColumnScope.(appointments: ImmutableList<CalendarEvent<*>>, headerScrollState: ScrollState, onHasContentChange: (Boolean) -> Unit) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -1277,9 +1278,8 @@ fun EventsRow(
                     .padding(horizontal = horizontalPadding),
             ) {
                 header()
+                val coroutineScope = rememberCoroutineScope()
                 events.forEachIndexed { i, dayEvents ->
-                    val context = LocalContext.current
-                    val coroutineScope = rememberCoroutineScope()
                     Column(modifier = Modifier.weight(1f)) {
                         content(i) {
                             dayEvents.forEachIndexed { i, event ->

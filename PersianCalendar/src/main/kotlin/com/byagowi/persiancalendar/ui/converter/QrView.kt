@@ -116,12 +116,11 @@ fun QrView(
     val surfaceColor by rememberUpdatedState(MaterialTheme.colorScheme.surface)
     LaunchedEffect(Unit) {
         onShareActionChange {
-            val size = 1280f
-            val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
-                val canvas = Canvas(this)
+            val size = 1280
+            val bitmap = createBitmap(size, size).applyCanvas {
                 drawColor(surfaceColor.toArgb())
-                withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
-                    drawQr(canvas, size)
+                withScale(1 - 64f / size, 1 - 64f / size, size / 2f, size / 2f) {
+                    drawQr(Canvas(this), size.toFloat())
                 }
             }
             context.shareBinaryFile(bitmap.toPngByteArray(), "result.png", "image/png")
