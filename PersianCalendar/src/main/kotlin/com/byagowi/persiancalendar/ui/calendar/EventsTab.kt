@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
@@ -130,12 +129,15 @@ fun eventColor(event: CalendarEvent<*>): Color {
     }
 }
 
-fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
-    event: CalendarEvent.DeviceCalendarEvent, context: Context,
-) {
-    runCatching { this@viewEvent.launch(event.id) }.onFailure {
-        showUnsupportedActionToast(context)
-    }.onFailure(logException)
+@Composable
+fun viewEvent(refreshCalendar: () -> Unit): (CalendarEvent.DeviceCalendarEvent) -> Unit {
+    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
+    val context = LocalContext.current
+    return { event ->
+        launcher.runCatching { launcher.launch(event.id) }.onFailure {
+            showUnsupportedActionToast(context)
+        }.onFailure(logException)
+    }
 }
 
 fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
@@ -161,11 +163,10 @@ private val String.directionality
 fun DayEvents(
     events: ImmutableList<CalendarEvent<*>>,
     navigateToHolidaysSettings: ((String?) -> Unit),
-    refreshCalendar: () -> Unit,
+    viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val language = language
-    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         events.forEach { event ->
@@ -190,7 +191,7 @@ fun DayEvents(
                         backgroundColor = backgroundColor,
                         event = event,
                         title = title,
-                        launcher = launcher,
+                        viewEvent = viewEvent,
                         language = language,
                         numeral = numeral,
                         coroutineScope = coroutineScope,
@@ -209,7 +210,7 @@ private fun DayEventContent(
     event: CalendarEvent<*>,
     title: String,
     language: Language,
-    launcher: ManagedActivityResultLauncher<Long, Void?>,
+    viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     coroutineScope: CoroutineScope,
     navigateToHolidaysSettings: ((item: String?) -> Unit),
     numeral: Numeral,
@@ -233,7 +234,7 @@ private fun DayEventContent(
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
-                    launcher.viewEvent(event, context)
+                    viewEvent(event)
                 } else if (hasTooltip) coroutineScope.launch {
                     if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
                 }
@@ -324,7 +325,7 @@ private fun DayEventContent(
                                             if (event.source == EventSource.Iran) {
                                                 uriHandler.openUri(event.source.link)
                                             } else if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                launcher.viewEvent(event, context)
+                                                viewEvent(event)
                                             }
                                         },
                                     ) {

@@ -207,6 +207,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                 else MaterialTheme.typography.titleLarge
             val eventsCache = eventsCache(refreshToken)
+            val viewEvent = viewEvent(refreshCalendar)
             LazyColumn(
                 state = listState,
                 contentPadding = WindowInsets.safeDrawing.only(
@@ -272,7 +273,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             DayEvents(
                                 events = events,
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                refreshCalendar = refreshCalendar,
+                                viewEvent = viewEvent,
                                 modifier = Modifier.padding(start = 8.dp),
                             )
                         }

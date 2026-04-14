@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.monthview
 
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
@@ -71,13 +70,13 @@ import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.ui.calendar.EventsRow
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
-import com.byagowi.persiancalendar.ui.calendar.ViewEventContract
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.outOfMonthAlpha
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
 import com.byagowi.persiancalendar.ui.calendar.readEvents
+import com.byagowi.persiancalendar.ui.calendar.viewEvent
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -115,6 +114,7 @@ fun SharedTransitionScope.MonthScreen(
         }
     }
     val focusedDate = focusedJdn on mainCalendar
+    val viewEvent = viewEvent(refreshCalendar)
     val isLandscape = isLandscape()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -188,9 +188,6 @@ fun SharedTransitionScope.MonthScreen(
                     .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
             ) {
                 val defaultWidthReduction = 2.dp
-                val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
-                    refreshCalendar()
-                }
                 val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
                 val weekOfYearWeight = .625f
                 Row {
@@ -237,7 +234,7 @@ fun SharedTransitionScope.MonthScreen(
                             events = events,
                             horizontalPadding = 0.dp,
                             defaultWidthReduction = defaultWidthReduction,
-                            launcher = launcher,
+                            viewEvent = viewEvent,
                             itemsTextStyle = MaterialTheme.typography.labelSmall.copy(
                                 textDirection = TextDirection.Content,
                             ),

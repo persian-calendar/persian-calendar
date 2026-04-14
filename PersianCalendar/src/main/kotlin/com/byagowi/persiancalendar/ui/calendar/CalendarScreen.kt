@@ -285,6 +285,7 @@ fun SharedTransitionScope.CalendarScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var addAction by remember { mutableStateOf({}) }
     val addEvent = addEvent(refreshCalendar, snackbarHostState)
+    val viewEvent = viewEvent(refreshCalendar)
     val isLandscape = isLandscape()
 
     val density = LocalDensity.current
@@ -527,13 +528,13 @@ fun SharedTransitionScope.CalendarScreen(
                         bringDay = bringDay,
                         today = today,
                         now = now,
+                        viewEvent = viewEvent,
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                         addEvent = addEvent,
                         snackbarHostState = snackbarHostState,
                         isAddEventBoxEnabled = isAddEventBoxEnabled,
                         onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                         fabPlaceholderHeight = fabPlaceholderHeight,
-                        refreshCalendar = refreshCalendar,
                         refreshToken = refreshToken,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         navigateToAstronomy = navigateToAstronomy,
@@ -645,11 +646,11 @@ private fun SharedTransitionScope.Details(
     today: Jdn,
     now: Long,
     addEvent: (AddEventData) -> Unit,
+    viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     snackbarHostState: SnackbarHostState,
     fabPlaceholderHeight: Dp?,
     isAddEventBoxEnabled: Boolean,
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
-    refreshCalendar: () -> Unit,
     refreshToken: Int,
     navigateToCalendarsPrioritySettings: () -> Unit,
     navigateToHolidaysSettings: (item: String?) -> Unit,
@@ -701,7 +702,7 @@ private fun SharedTransitionScope.Details(
                 // Not needed for one day view
             },
             addEvent = addEvent,
-            refreshCalendar = refreshCalendar,
+            viewEvent = viewEvent,
             days = 1,
             now = now,
             isAddEventBoxEnabled = isAddEventBoxEnabled,
@@ -814,7 +815,7 @@ private fun SharedTransitionScope.Details(
                         } else DayEvents(
                             events = appointments,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
-                            refreshCalendar = refreshCalendar,
+                            viewEvent = viewEvent,
                             modifier = Modifier.padding(
                                 top = 6.dp,
                                 bottom = 8.dp,

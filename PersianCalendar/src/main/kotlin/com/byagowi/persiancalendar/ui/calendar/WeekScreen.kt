@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -202,6 +200,7 @@ fun SharedTransitionScope.WeekScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val addEvent = addEvent(refreshCalendar, snackbarHostState)
+    val viewEvent = viewEvent(refreshCalendar)
     val density = LocalDensity.current
     val hasWeeksPager =
         LocalWindowInfo.current.containerSize.height > with(density) { 600.dp.toPx() }
@@ -472,7 +471,7 @@ fun SharedTransitionScope.WeekScreen(
                                     selectedDay = selectedDay,
                                     onSelectedDayChange = setSelectedDayInWeekPager,
                                     addEvent = addEvent,
-                                    refreshCalendar = refreshCalendar,
+                                    viewEvent = viewEvent,
                                     days = 7,
                                     deviceEvents = weekDeviceEvents,
                                     now = now,
@@ -535,7 +534,7 @@ fun SharedTransitionScope.WeekScreen(
                                 selectedDay = selectedDay,
                                 onSelectedDayChange = { selectedDay = it; isHighlighted = true },
                                 addEvent = addEvent,
-                                refreshCalendar = refreshCalendar,
+                                viewEvent = viewEvent,
                                 days = 1,
                                 now = now,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
@@ -608,7 +607,7 @@ fun DaysView(
     onSelectedDayChange: (Jdn) -> Unit,
     bottomPadding: Dp,
     addEvent: (AddEventData) -> Unit,
-    refreshCalendar: () -> Unit,
+    viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     now: Long,
     days: Int,
     isAddEventBoxEnabled: Boolean,
@@ -669,9 +668,6 @@ fun DaysView(
                 maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || (content != null && hasContent)
             derivedStateOf { needsHeader && scrollState.value <= initialScroll }
         }
-        val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
-            refreshCalendar()
-        }
         val context = LocalContext.current
         val defaultWidthReduction = 2.dp
         val defaultWidthReductionPx = with(density) { defaultWidthReduction.toPx() }
@@ -722,7 +718,7 @@ fun DaysView(
                         DayEvents(
                             events = dayEvents,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
-                            refreshCalendar = refreshCalendar,
+                            viewEvent = viewEvent,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .animateContentSize(appContentSizeAnimationSpec)
@@ -753,7 +749,7 @@ fun DaysView(
                 events = eventsWithoutTime,
                 horizontalPadding = pagerArrowSizeAndPadding.dp,
                 defaultWidthReduction = defaultWidthReduction,
-                launcher = launcher,
+                viewEvent = viewEvent,
                 itemsTextStyle = MaterialTheme.typography.bodySmall.copy(
                     textDirection = TextDirection.Content,
                 ),
@@ -990,7 +986,7 @@ fun DaysView(
                                     with(density) { (cellWidthPx / columnsCount - defaultWidthReductionPx).toDp() },
                                     with(density) { ((end - start) * cellHeightPx).toDp() - heightSizeReduction },
                                 )
-                                .clickable { launcher.viewEvent(event, context) }
+                                .clickable { viewEvent(event) }
                                 .background(color, MaterialTheme.shapes.small)
                                 .padding(all = 4.dp),
                         )
@@ -1248,7 +1244,7 @@ fun DaysView(
 fun EventsRow(
     events: ImmutableList<ImmutableList<CalendarEvent<*>>>,
     defaultWidthReduction: Dp,
-    launcher: ManagedActivityResultLauncher<Long, Void?>,
+    viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     snackbarHostState: SnackbarHostState,
     horizontalPadding: Dp,
     itemsTextStyle: TextStyle,
@@ -1299,7 +1295,7 @@ fun EventsRow(
                                         .background(eventColor(event))
                                         .clickable {
                                             if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                launcher.viewEvent(event, context)
+                                                viewEvent(event)
                                             } else coroutineScope.launch {
                                                 snackbarHostState.showSnackbar(event.title)
                                             }
