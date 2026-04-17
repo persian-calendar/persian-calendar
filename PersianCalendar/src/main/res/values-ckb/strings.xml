@@ -268,14 +268,6 @@
     <string name="method_makkah">زانستگای ئوممەلقورا، مەککە</string>
     <string name="method_karachi">زانستگای زانستە ئیسلامییەکان، کەراچی</string>
     <string name="method_tehran">ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</string>
-    <string name="iran_holidays">پشوودانەکانی ئێران</string>
-    <string name="iran_ancient">بۆنەکانی ئێرانی کەونار</string>
-    <string name="iran_others">بۆنەکانی تری ئێران</string>
-    <string name="international">بۆنە نێونەتەوەیییەکان</string>
-    <string name="afghanistan_holidays">پشوودانەکانی ئەفغانستان</string>
-    <string name="afghanistan_others">بۆنەکانی تری ئەفغانستان</string>
-    <string name="iran_official_events">ناوەندی ڕۆژژمێری زانستگای تاران، ڕەسمی</string>
-    <string name="afghanistan_events">ئەفغانستان</string>
     <string name="other_holidays">دیکە</string>
     <string name="view_source">نیشاندانی سەرچاوە</string>
     <string name="widget_customization_other_calendars">ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</string>

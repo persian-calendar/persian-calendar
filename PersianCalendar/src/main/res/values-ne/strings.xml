@@ -193,9 +193,6 @@
     <string name="shift_work_starting_date_edit">%1$s, पहिले चयन गरिएको, रोजिएको शिफ्ट काम सुरु हुने दिन हो।</string>
     <string name="islamic_calendar">इस्लामिक क्यालेन्डर</string>
     <string name="method_tehran">जियोफिजिक्स संस्थान, तेहरान विश्वविद्यालय</string>
-    <string name="iran_ancient">प्राचीन इरान (फारसीमा)</string>
-    <string name="afghanistan_holidays">अफगानिस्तानमा बिदाहरू</string>
-    <string name="afghanistan_others">अन्य अफगानिस्तान घटनाहरू</string>
     <string name="center_align_widgets_summary">केन्द्र पङ्क्तिबद्ध 4x1 र 2x2 विजेटहरू</string>
     <string name="prefer_linear_date">मितिहरूको संख्यात्मक रूपलाई प्राथमिकता दिनुहोस्</string>
     <string name="select_widgets_background_color">विजेट पृष्ठभूमिका लागि अनुकूलन रङ चयन गर्नुहोस्</string>
@@ -268,11 +265,6 @@
     <string name="shift_work_night">राती</string>
     <string name="method_jafari">शिया इथना-अशरी, लेवा संस्थान, कुम</string>
     <string name="method_isna">उत्तरी अमेरिका को इस्लामिक समाज</string>
-    <string name="iran_holidays">इरानमा बिदाहरू</string>
-    <string name="iran_others">अन्य इरान घटनाहरू</string>
-    <string name="international">अन्तर्राष्ट्रिय घटनाहरू (फारसीमा)</string>
-    <string name="iran_official_events">इरान, आधिकारिक (फारसीमा)</string>
-    <string name="afghanistan_events">अफगानिस्तान (फारसीमा)</string>
     <string name="other_holidays">अरू</string>
     <string name="view_source">स्रोत हेर्नुहोस्</string>
     <string name="widget_customization_other_calendars">1x4 र 2x2 विजेटहरूमा अन्य पात्रोहरू</string>

@@ -8,7 +8,6 @@
     <string name="athan_volume_summary">Definir volume de alarme</string>
     <string name="about_license_title">Licença da Aplicação</string>
     <string name="tuesday_short">T</string>
-    <string name="iran_others">Outros eventos iranianos</string>
     <string name="november">Novembro</string>
     <string name="may">Maio</string>
     <string name="west">Oeste</string>
@@ -162,8 +161,6 @@
     <string name="shift_work_off">Off</string>
     <string name="shamsi_calendar_short">Persa</string>
     <string name="shift_work_morning">Manhã</string>
-    <string name="afghanistan_holidays">Feriados no Afeganistão</string>
-    <string name="iran_holidays">Feriados no Irão</string>
     <string name="saturday">Sábado</string>
     <string name="saturday_short">S</string>
     <string name="nepali_calendar">Calendário Nepalês</string>

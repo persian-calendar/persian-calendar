@@ -274,14 +274,6 @@
     <string name="method_makkah">دانشگاه امّ‌القریٰ، مکه</string>
     <string name="method_karachi">دانشگاه علوم اسلامی، کراچی</string>
     <string name="method_tehran">انجمن ژئوفیزیک، دانشگاه تهران</string>
-    <string name="iran_holidays">تعطیلات رسمی مرکز تقویم دانشگاه تهران</string>
-    <string name="iran_ancient">مناسبت‌های ایران باستان</string>
-    <string name="iran_others">سایر مناسبت‌های دانشگاه تهران</string>
-    <string name="international">مناسبت‌های بین‌المللی و جهانی</string>
-    <string name="afghanistan_holidays">رختصی‌های افغانستان</string>
-    <string name="afghanistan_others">سایر مناسبت‌های افغانستان</string>
-    <string name="iran_official_events">مرکز تقویم دانشگاه تهران</string>
-    <string name="afghanistan_events">افغانستان</string>
     <string name="other_holidays">سایر</string>
     <string name="view_source">مشاهدهٔ منبع</string>
     <string name="widget_customization_other_calendars">دیگر تقویم‌ها در ویجت ماه، ۴×۱ و ۲×۲</string>

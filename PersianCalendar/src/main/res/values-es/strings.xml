@@ -271,14 +271,6 @@
     <string name="method_makkah">Umm Al-Qura University, Makkah</string>
     <string name="method_karachi">University of Islamic Sciences, Karachi</string>
     <string name="method_tehran">Institute of Geophysics, University of Tehran</string>
-    <string name="iran_holidays">Vacaciones en Irán</string>
-    <string name="iran_ancient">Irán antiguo (en persa)</string>
-    <string name="iran_others">Otros eventos de irán</string>
-    <string name="international">Eventos internacionales (en persa)</string>
-    <string name="afghanistan_holidays">Vacaciones en Afganistán</string>
-    <string name="afghanistan_others">Otros eventos de Afghanistan</string>
-    <string name="iran_official_events">Irán, oficial (en persa)</string>
-    <string name="afghanistan_events">Afganistán (en persa)</string>
     <string name="farvardin">Farvardín</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Jordad</string>

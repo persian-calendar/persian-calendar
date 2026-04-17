@@ -166,8 +166,6 @@
     <string name="spaced_or">或</string>
     <string name="islamic_calendar">伊斯兰历</string>
     <string name="theme_black">黑色</string>
-    <string name="iran_official_events">伊朗官方（波斯语）</string>
-    <string name="afghanistan_holidays">阿富汗节假日</string>
     <string name="device_information">设备信息</string>
     <string name="spaced_comma">，</string>
     <string name="spaced_colon">：</string>
@@ -192,13 +190,7 @@
     <string name="map">地图</string>
     <string name="islamic_calendar_short">伊斯兰历</string>
     <string name="gregorian_calendar_short">公历</string>
-    <string name="afghanistan_events">阿富汗（波斯语）</string>
     <string name="other_holidays">其他</string>
-    <string name="international">国际活动（波斯语）</string>
-    <string name="iran_others">其他伊朗国内活动</string>
-    <string name="afghanistan_others">其他阿富汗国内活动</string>
-    <string name="iran_holidays">伊朗节假日</string>
-    <string name="iran_ancient">古伊朗活动（波斯语）</string>
     <string name="view_source">查看来源</string>
     <string name="january">1 月</string>
     <string name="february">2 月</string>

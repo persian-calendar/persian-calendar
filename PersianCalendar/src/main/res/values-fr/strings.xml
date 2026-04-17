@@ -264,14 +264,6 @@
     <string name="method_makkah">Université Oumm al-Qura, La Mecque</string>
     <string name="method_karachi">Université des sciences islamiques, Karachi</string>
     <string name="method_tehran">Institut de géophysique, Université de Téhéran</string>
-    <string name="iran_holidays">Jours fériés en Iran</string>
-    <string name="iran_ancient">Iran ancien (en persan)</string>
-    <string name="iran_others">Autres évènements en Iran</string>
-    <string name="international">Évènements internationaux (en persan)</string>
-    <string name="afghanistan_holidays">Jours fériés en Afghanistan</string>
-    <string name="afghanistan_others">Autres évènements en Afghanistan</string>
-    <string name="iran_official_events">Iran, officiel (en persan)</string>
-    <string name="afghanistan_events">Afghanistan (en persan)</string>
     <string name="other_holidays">Autres</string>
     <string name="view_source">voir la source</string>
     <string name="widget_customization_other_calendars">Autres calendriers sur les gadgets logiciels 1×4 et 2×2</string>

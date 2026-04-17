@@ -243,8 +243,6 @@
     <string name="theme_default">System Standard</string>
     <string name="shift_work_evening">Abend</string>
     <string name="shift_work_night">Nacht</string>
-    <string name="iran_ancient">Alter Iran (auf Persisch)</string>
-    <string name="iran_others">Andere Ereignisse im Iran</string>
     <string name="widget_customization_other_calendars">Andere Kalender auf 1x4 und 2x2 Widgets</string>
     <string name="widget_customization_times_location">Lage der Gebetszeiten auf 2x2 und Benachrichtigung (falls eingestellt)</string>
     <string name="farvardin">Farvardin</string>
@@ -257,14 +255,8 @@
     <string name="tuesday_short">Di</string>
     <string name="method_tehran">Institut für Geophysik, Universität Tehran</string>
     <string name="method_karachi">Universität für Islamische Wissenschaften, Karatschi</string>
-    <string name="iran_holidays">Feiertage in Iran</string>
-    <string name="afghanistan_holidays">Feiertage in Afghanistan</string>
-    <string name="iran_official_events">Iran, offiziell (auf Persisch)</string>
-    <string name="afghanistan_events">Afghanistan (auf Persisch)</string>
     <string name="other_holidays">Andere</string>
     <string name="view_source">Quelle ansehen</string>
-    <string name="international">Internationale Ereignisse (auf Persisch)</string>
-    <string name="afghanistan_others">Andere Ereignisse in Afghanistan</string>
     <string name="saturday">Samstag</string>
     <string name="sunday">Sonntag</string>
     <string name="friday_short">Fr</string>

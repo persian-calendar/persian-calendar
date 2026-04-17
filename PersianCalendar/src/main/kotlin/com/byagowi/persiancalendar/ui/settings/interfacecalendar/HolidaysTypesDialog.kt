@@ -24,6 +24,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -83,16 +85,16 @@ fun HolidaysTypesDialog(
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+            LocalLayoutDirection provides if (language.isNepali) LayoutDirection.Ltr else LayoutDirection.Rtl,
         ) {
             if (!language.showNepaliCalendar) {
                 @Composable
                 fun Iran() {
                     CountryEvents(
-                        calendarCenterName = stringResource(R.string.iran_official_events),
                         sourceLink = EventSource.Iran.link,
                         holidaysTitle = stringResource(R.string.iran_holidays) + run {
                             if (!language.isAfghanistanExclusive && EventsRepository.IRAN_HOLIDAYS_KEY in enabledTypes) {
-                                spacedComma + if (language.isArabicScript) "پیش‌فرض برنامه" else "app's default"
+                                spacedComma + "پیش‌فرض برنامه"
                             } else ""
                         },
                         nonHolidaysTitle = stringResource(R.string.iran_others),
@@ -112,7 +114,6 @@ fun HolidaysTypesDialog(
                 @Composable
                 fun Afghanistan() {
                     CountryEvents(
-                        calendarCenterName = stringResource(R.string.afghanistan_events),
                         sourceLink = EventSource.Afghanistan.link,
                         holidaysTitle = stringResource(R.string.afghanistan_holidays),
                         nonHolidaysTitle = stringResource(R.string.afghanistan_others),
@@ -146,7 +147,6 @@ fun HolidaysTypesDialog(
                 }
             } else {
                 CountryEvents(
-                    calendarCenterName = stringResource(R.string.nepal),
                     sourceLink = EventSource.Nepal.link,
                     holidaysTitle = stringResource(R.string.holiday),
                     nonHolidaysTitle = stringResource(R.string.other_holidays),
@@ -167,7 +167,6 @@ internal fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
 @Composable
 @VisibleForTesting
 fun CountryEvents(
-    calendarCenterName: String,
     sourceLink: String,
     holidaysTitle: String,
     nonHolidaysTitle: String,
@@ -222,14 +221,6 @@ fun CountryEvents(
         ).map { (title, key) ->
             buildAnnotatedString {
                 append(title)
-                if (!language.isArabicScript) {
-                    if (sourceLink == EventSource.Afghanistan.link) {
-                        append(spacedComma)
-                        append("Tehran University")
-                    }
-                    append(spacedComma)
-                    append(calendarCenterName)
-                }
                 if (sourceLink.isNotEmpty()) {
                     append(spacedComma)
                     withLink(

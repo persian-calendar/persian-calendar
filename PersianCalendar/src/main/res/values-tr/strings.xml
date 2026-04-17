@@ -61,14 +61,6 @@
     <string name="widget_customization_other_calendars">1x4 ve 2x2 widget’lardaki diğer takvimler</string>
     <string name="view_source">Kaynağı Görüntüle</string>
     <string name="other_holidays">Diğer</string>
-    <string name="afghanistan_events">Afganistan (Farsça)</string>
-    <string name="iran_official_events">İran, resmi (Farsça)</string>
-    <string name="afghanistan_others">Diğer Afganistan Etkinlikleri</string>
-    <string name="afghanistan_holidays">Afganistan Tatilleri</string>
-    <string name="international">Uluslararası Etkinlikler (Farsça)</string>
-    <string name="iran_others">Diğer İran Etkinlikleri</string>
-    <string name="iran_ancient">Eski İran (Farsça)</string>
-    <string name="iran_holidays">İran Tatilleri</string>
     <string name="method_tehran">Jeofizik Enstitüsü, Tahran Üniversitesi</string>
     <string name="method_karachi">İslami İlimler Üniversitesi, KARAÇİ</string>
     <string name="method_makkah">Ummu’l-Kura Üniversitesi, MEKKE</string>

@@ -93,14 +93,6 @@
     <string name="method_makkah">உம் அல்-குரூரா பல்கலைக்கழகம், மக்கா</string>
     <string name="method_karachi">இசுலாம் அறிவியல் பல்கலைக்கழகம், கராச்சி</string>
     <string name="method_tehran">உலகம் இயற்பியல் நிறுவனம், தெஅரான் பல்கலைக்கழகம்</string>
-    <string name="iran_holidays">ஈரானில் விடுமுறை</string>
-    <string name="iran_ancient">பண்டைய ஈரான்</string>
-    <string name="iran_others">பிற ஈரான் நிகழ்வுகள்</string>
-    <string name="international">பன்னாட்டு நிகழ்வுகள்</string>
-    <string name="afghanistan_holidays">ஆப்கானிச்தானில் விடுமுறை</string>
-    <string name="afghanistan_others">பிற ஆப்கானிச்தான் நிகழ்வுகள்</string>
-    <string name="iran_official_events">ஈரான், அலுவல்சார்</string>
-    <string name="afghanistan_events">ஆப்கானிச்தான்</string>
     <string name="other_holidays">மற்றவர்கள்</string>
     <string name="view_source">மூலத்தைக் காண்க</string>
     <string name="widget_customization_other_calendars">1x4 மற்றும் 2x2 நிரல்பலகைகளில் உள்ள பிற நாட்காட்டிகள்</string>

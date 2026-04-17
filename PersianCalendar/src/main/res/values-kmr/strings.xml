@@ -81,10 +81,6 @@
     <string name="select_day">Bijartina rojê</string>
     <string name="select_month">Bijartina heyvê</string>
     <string name="select_year">Bijartina salê</string>
-    <string name="afghanistan_events">Efxanistan</string>
-    <string name="international">Bûyerên Navneteweyî</string>
-    <string name="iran_others">Bûyerên din yên Îranê</string>
-    <string name="iran_holidays">Betlaneyên Îranê</string>
     <string name="method_tehran">Komela jêofîzîk, Zanîngeha tehranê</string>
     <string name="method_karachi">Zanîngeha Zanistên islamî, Keraçî</string>
     <string name="method_makkah">Zanîngeha Omm-ol-qera, Mekke</string>

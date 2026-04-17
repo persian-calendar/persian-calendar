@@ -263,14 +263,6 @@
     <string name="method_karachi">کراچی ایسلام بیلیم‌یوردو</string>
     <string name="method_tehran">تهران ژئوفیزیک بیلیم‌یوردو</string>
     <!--Events-->
-    <string name="iran_holidays">ایران خصوصی گون‌لری</string>
-    <string name="iran_ancient">ایران تاریخی خصوصی گون‌لری</string>
-    <string name="iran_others">ایران دیگر خصوصی گون‌لری</string>
-    <string name="international">بین‌الخالق خصوصی گون‌لری</string>
-    <string name="afghanistan_holidays">افغانیستان خصوصی گون‌لری</string>
-    <string name="afghanistan_others">افغانیستان دیگر خصوصی گون‌لری</string>
-    <string name="iran_official_events">مرکز تقویم دانشگاه تهران</string>
-    <string name="afghanistan_events">افغانستان</string>
     <string name="other_holidays">سایر</string>
     <string name="view_source">مشاهده منبع</string>
     <!--Widget customizations-->

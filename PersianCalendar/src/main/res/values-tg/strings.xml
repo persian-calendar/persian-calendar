@@ -207,11 +207,6 @@
     <string name="shift_work_off">Хомӯш</string>
     <string name="method_jafari">Дувоздаҳ шиъа, Институти Лава, Қум</string>
     <string name="method_tehran">Донишкадаи геофизик, Донишгоҳи Теҳрон</string>
-    <string name="iran_holidays">Рӯзҳои истироҳат дар Эрон</string>
-    <string name="iran_ancient">Эрони бостонӣ (ба забони форсӣ)</string>
-    <string name="iran_others">Дигар рӯйдодҳаи Эрон</string>
-    <string name="international">Pӯйдодҳаи байналмилалӣ (бо забони форсӣ)</string>
-    <string name="afghanistan_holidays">Рӯзҳои истироҳат дар Афғонистон</string>
     <string name="widget_customization_other_calendars">Тақвимҳои дигар дар виджетҳои 1x4 ва 2x2</string>
     <string name="widget_customization_non_holiday_events">Рӯзҳои истироҳат дар виҷети 2х2 ва огоҳӣ</string>
     <string name="widget_customization_times">Вақтҳои намоз дар виджетҳо ва огоҳӣ (агар таъин шуда бошад)</string>
@@ -270,10 +265,7 @@
     <string name="shift_work_night">Шаб</string>
     <string name="method_makkah">Умм ал-Қуро Инверест, Макка</string>
     <string name="wednesday">Чоршанбе</string>
-    <string name="afghanistan_events">Афғонистон (ба забони форсӣ)</string>
     <string name="view_source">Дидани манбаъ</string>
-    <string name="afghanistan_others">Дигар рӯйдодҳаи Афғонистон</string>
-    <string name="iran_official_events">Эрон, расмӣ (бо забони форсӣ)</string>
     <string name="jumada_al_thani">Ҷимоди-ул-сони</string>
     <string name="october">Октябр</string>
     <string name="november">Ноябр</string>
