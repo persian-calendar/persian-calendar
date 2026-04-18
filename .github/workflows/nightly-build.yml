@@ -1,0 +1,65 @@
+name: Nightly Build
+
+on:
+  workflow_dispatch: # To run the workflow manually if needed
+  schedule:
+    - cron: '22 8 * * *' # one a day
+
+jobs:
+  evaluateChanges:
+    name: Evaluate changes for run or skipping nightly build
+    runs-on: ubuntu-latest
+    outputs:
+      SHOULD_BUILD: ${{ steps.check.outputs.shouldBuild }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check
+        id: check
+        run: |
+          if [[ $(git rev-list --after="24 hours" main) ]]; then
+            echo shouldBuild=true >> $GITHUB_OUTPUT
+          else
+            echo shouldBuild=false >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    name: Generate Nightly Build
+    runs-on: ubuntu-latest
+    needs: evaluateChanges
+    if: ${{ needs.evaluateChanges.outputs.SHOULD_BUILD == 'true' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: temurin
+
+      - name: Build and send apks to telegram
+        run: |
+          ./gradlew assembleNightly
+          apk_path="$(find . -type f -iname *.apk)"
+          curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
+            -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -F "caption=Size: $(ls -l --block-size=K "$apk_path" | awk '{ print $5 }')" \
+            -F parse_mode=HTML \
+            -F document=@"$apk_path"
+          rm "$apk_path"
+
+      - name: Update the runtime dependencies report
+        run: |
+          ./gradlew PersianCalendar:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
+          ./gradlew wear:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > wear/runtime-dependencies-report.txt
+
+      - name: Add and commit the report
+        uses: EndBug/add-and-commit@db73408897f13b2878d08ac8b3f8e51cd492c8f2
+        with:
+          default_author: github_actions
+          message: 'Update the runtime dependencies report'
+          add: PersianCalendar/*.txt wear/*.txt

@@ -1,0 +1,35 @@
+on:
+  workflow_run:
+    workflows: [Android CI]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Unpin failure message
+        run: |
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
+            -d disable_notification=false \
+            -d message_id=3716 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          sleep 1
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinChatMessage \
+            -d message_id=3716 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Notify about the build failure
+        run: |
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
+            -d disable_notification=false \
+            -d message_id=3715 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          sleep 1
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinChatMessage \
+            -d message_id=3715 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
