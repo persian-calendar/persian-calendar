@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.content.IntentCompat
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
@@ -162,15 +161,17 @@ fun AthanSelectDialog(
 }
 
 private class PickRingtoneContract : ActivityResultContract<Unit, Uri?>() {
-    override fun createIntent(context: Context, input: Unit): Intent =
-        Intent(RingtoneManager.ACTION_RINGTONE_PICKER).putExtras(
-            bundleOf(
-                RingtoneManager.EXTRA_RINGTONE_TYPE to RingtoneManager.TYPE_ALL,
-                RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT to true,
-                RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT to true,
-                RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI to Settings.System.DEFAULT_NOTIFICATION_URI,
-            ),
+    override fun createIntent(context: Context, input: Unit): Intent {
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+        intent.putExtra(
+            RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+            Settings.System.DEFAULT_NOTIFICATION_URI,
         )
+        return intent
+    }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
         return if (resultCode == Activity.RESULT_OK) IntentCompat.getParcelableExtra(
