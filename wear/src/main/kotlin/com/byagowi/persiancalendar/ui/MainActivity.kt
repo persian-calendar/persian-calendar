@@ -70,7 +70,7 @@ private fun WearApp() {
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
-                    sceneStrategy = rememberSwipeDismissableSceneStrategy(),
+                    sceneStrategies = listOf(rememberSwipeDismissableSceneStrategy()),
                     entryProvider = entryProvider {
                         entry<Screen.Main> {
                             MainScreen(
