@@ -101,7 +101,7 @@ class MainTileService : TileService() {
                         ) else text(it.title.layoutString)
                     }.forEach(column::addContent)
                     if (todayEntries.size > 4) column.addContent(text("…".layoutString))
-                    val box = LayoutElementBuilders.Box.Builder()
+                    LayoutElementBuilders.Box.Builder()
                         .setWidth(expand())
                         .setHeight(expand())
                         .setModifiers(
@@ -117,8 +117,8 @@ class MainTileService : TileService() {
                                 )
                                 .build(),
                         )
-                    box.addContent(column.build())
-                    box.build()
+                        .addContent(column.build())
+                        .build()
                 },
                 bottomSlot = {
                     val activityComponent =
