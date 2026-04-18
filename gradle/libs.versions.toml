@@ -1,5 +1,5 @@
 [versions]
-agp = "9.0.1"
+agp = "9.1.1"
 android-test = "1.7.0"
 android-test-runner = "1.7.0"
 androidx-activity = "1.13.0"
