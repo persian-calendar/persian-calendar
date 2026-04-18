@@ -1623,7 +1623,9 @@ private fun updateNotification(
     }
 
     val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
-        timesToShow(clock, prayTimes)
+        if (isLargeDayNumberOnNotification) listOf(
+            PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB,
+        ) else timesToShow(clock, prayTimes)
     } else null
 
     val nextPrayTime =
@@ -1817,7 +1819,11 @@ private data class NotificationData(
                                 timesToShow,
                             ) { (headViewId, timeViewId), prayTime ->
                                 it.setTextViewText(
-                                    headViewId, context.getString(prayTime.stringRes),
+                                    headViewId,
+                                    buildString {
+                                        if (language.isPersianOrDari && prayTime.isAthan) append("اذان ")
+                                        append(context.getString(prayTime.stringRes))
+                                    },
                                 )
                                 it.setTextViewText(
                                     timeViewId,
