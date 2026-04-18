@@ -196,7 +196,8 @@ data class EventsRepository(
         }
 
         fun keyFromDetails(source: EventSource?, isHoliday: Boolean): String? {
-            return if (source == null) null else when (source) {
+            return when (source) {
+                null -> null
                 EventSource.AncientIran -> IRAN_ANCIENT_KEY
                 EventSource.International -> INTERNATIONAL_KEY
                 EventSource.Iran -> if (isHoliday) IRAN_HOLIDAYS_KEY else IRAN_OTHERS_KEY
