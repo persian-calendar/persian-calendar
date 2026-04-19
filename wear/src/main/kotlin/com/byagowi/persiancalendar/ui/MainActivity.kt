@@ -78,7 +78,7 @@ private fun WearApp() {
                                 today = today,
                                 preferences = preferences,
                                 navigateToUtilities = { backStack += Screen.Utilities },
-                                navigateToDay = { jdn -> backStack += Screen.Day(jdn) },
+                                navigateToDay = { day -> backStack += Screen.Day(day = day) },
                             )
                         }
                         entry<Screen.Utilities> {
@@ -95,13 +95,13 @@ private fun WearApp() {
                                 today = today,
                                 localeUtils = localeUtils,
                                 preferences = preferences,
-                            ) { jdn -> backStack += Screen.Day(jdn) }
+                            ) { day -> backStack += Screen.Day(day) }
                         }
                         entry<Screen.Day> {
                             DayScreen(
                                 preferences = preferences,
                                 localeUtils = localeUtils,
-                                day = it.jdn,
+                                day = it.day,
                             )
                         }
                         entry<Screen.Globe> { GlobeScreen() }
@@ -133,7 +133,7 @@ private sealed interface Screen : NavKey {
     data object Globe : Screen
 
     @Serializable
-    data class Day(val jdn: Jdn) : Screen
+    data class Day(val day: Jdn) : Screen
 }
 
 @Composable

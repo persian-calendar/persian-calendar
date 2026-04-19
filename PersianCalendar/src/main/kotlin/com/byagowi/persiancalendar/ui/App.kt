@@ -205,13 +205,13 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             )
                         },
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                        navigateToSchedule = { day -> backStack += Screen.Schedule(day) },
-                        navigateToWeek = { day -> backStack += Screen.Week(day) },
-                        navigateToMonthView = { day -> backStack += Screen.Month(day) },
+                        navigateToSchedule = { day -> backStack += Screen.Schedule(day = day) },
+                        navigateToWeek = { day -> backStack += Screen.Week(day = day) },
+                        navigateToMonthView = { day -> backStack += Screen.Month(day = day) },
                         navigateToSettingsLocationTab = {
                             backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
                         },
-                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
+                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day = day) },
                         today = today,
                         now = now,
                     )
@@ -251,7 +251,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entry<Screen.Converter> {
                     ConverterScreen(
                         openNavigationRail = openNavigationRail,
-                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day) },
+                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day = day) },
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                         noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
                         today = today,
