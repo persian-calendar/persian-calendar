@@ -303,7 +303,9 @@ private fun DayEventContent(
                                     FilledTonalButton(
                                         onClick = {
                                             if (event.source == EventSource.Iran) {
-                                                uriHandler.openUri(event.source.link)
+                                                runCatching {
+                                                    uriHandler.openUri(event.source.link)
+                                                }.onFailure(logException)
                                             } else if (event is CalendarEvent.DeviceCalendarEvent) {
                                                 viewEvent(event)
                                             }
