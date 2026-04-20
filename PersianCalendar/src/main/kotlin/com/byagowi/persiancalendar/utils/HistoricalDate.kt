@@ -42,6 +42,14 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 }
 // endregion
 
+// سالنمای راستی
+// با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
+const val zoroastrianismYearOffset = 2359
+private const val madianOffset = 1321
+private const val achaemenidOffset = 1180
+// To get their current year, add the number to current Persian calendar year
+
 fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
     formatAsSeleucidDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn) // +
-// persianDelimiter + numeral.format(jdn.toPersianDate().year + 1180) + " هخامنشی"
+//            persianDelimiter + numeral.format(jdn.toPersianDate().year + achaemenidOffset) + " هخامنشی" +
+//            persianDelimiter + numeral.format(jdn.toPersianDate().year + madianOffset) + " مادی"
