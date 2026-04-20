@@ -18,16 +18,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Grid3x3
@@ -287,8 +287,7 @@ fun SharedTransitionScope.MapScreen(
         DisposableEffect(key1 = bitmap) { onDispose { bitmap.recycle() } }
     }
 
-    Column {
-        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+    Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onSurface,
         ) {
