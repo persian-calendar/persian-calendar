@@ -788,7 +788,7 @@ private fun SharedTransitionScope.Details(
                                 text = stringResource(R.string.no_event),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
-                                    .padding(vertical = 12.dp, horizontal = 24.dp)
+                                    .padding(vertical = 8.dp, horizontal = 24.dp)
                                     .fillMaxWidth(),
                             )
 //                            TabEditButton(

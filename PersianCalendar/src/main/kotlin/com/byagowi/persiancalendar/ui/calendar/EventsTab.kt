@@ -149,7 +149,7 @@ fun DayEvents(
 ) {
     val language = language
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         events.forEach { event ->
             val backgroundColor by animateColor(eventColor(event))
             AnimatedContent(
@@ -210,7 +210,7 @@ private fun DayEventContent(
     Row(
         Modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.medium)
+            .clip(MaterialTheme.shapes.small)
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
@@ -225,7 +225,7 @@ private fun DayEventContent(
                     R.string.holiday_reason, event.title,
                 ) else event.oneLinerTitleWithTime
             }
-            .padding(all = 8.dp),
+            .padding(horizontal = 6.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -421,7 +421,7 @@ private fun DayEventContent(
                 Row(
                     Modifier
                         .padding(start = 8.dp)
-                        .clip(MaterialTheme.shapes.medium)
+                        .clip(MaterialTheme.shapes.small)
                         .then(clickModifier),
                 ) {
                     parts.forEachIndexed { i, part ->

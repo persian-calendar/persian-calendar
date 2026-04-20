@@ -243,7 +243,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         commandBringDay(jdn)
                                         navigateUp()
                                     }
-                                    .size(40.dp)
+                                    .size(32.dp)
                                     .background(
                                         when {
                                             jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
