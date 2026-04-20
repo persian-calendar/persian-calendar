@@ -162,15 +162,15 @@ fun AthanSelectDialog(
 
 private class PickRingtoneContract : ActivityResultContract<Unit, Uri?>() {
     override fun createIntent(context: Context, input: Unit): Intent {
-        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-        intent.putExtra(
-            RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-            Settings.System.DEFAULT_NOTIFICATION_URI,
-        )
-        return intent
+        return Intent(RingtoneManager.ACTION_RINGTONE_PICKER).also {
+            it.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+            it.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+            it.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+            it.putExtra(
+                RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                Settings.System.DEFAULT_NOTIFICATION_URI,
+            )
+        }
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

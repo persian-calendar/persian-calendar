@@ -38,9 +38,10 @@ data class AddEventData(
             if (description != null) it.putExtra(
                 CalendarContract.Events.DESCRIPTION, description,
             )
-        }.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, allDay)
+            it.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
+            it.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
+            it.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, allDay)
+        }
     }
 
     companion object {

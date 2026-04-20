@@ -816,18 +816,19 @@ private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId:
     } ?: 3
 
     // Initiate the list view
-    val adapterIntent = Intent(context, ScheduleWidgetService::class.java)
-    adapterIntent.putExtra(widgetWidthCellKey, widthCells)
-    // Update conditions
-    adapterIntent.putExtra(
-        "updateToken",
-        (System.currentTimeMillis().milliseconds / 1.hours).roundToInt(),
-    )
-    adapterIntent.putExtra("appOpenCount", resumeToken)
-    adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
-    adapterIntent.putExtra("events", eventsRepository.hashCode())
-    adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-    adapterIntent.setData(adapterIntent.toUri(Intent.URI_INTENT_SCHEME).toUri())
+    val adapterIntent = Intent(context, ScheduleWidgetService::class.java).also {
+        it.putExtra(widgetWidthCellKey, widthCells)
+        // Update conditions
+        it.putExtra(
+            "updateToken",
+            (System.currentTimeMillis().milliseconds / 1.hours).roundToInt(),
+        )
+        it.putExtra("appOpenCount", resumeToken)
+        it.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
+        it.putExtra("events", eventsRepository.hashCode())
+        it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        it.setData(it.toUri(Intent.URI_INTENT_SCHEME).toUri())
+    }
     @Suppress("DEPRECATION") remoteViews.setRemoteAdapter(
         R.id.widget_schedule_content,
         adapterIntent,

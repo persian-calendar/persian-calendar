@@ -50,11 +50,11 @@ App Version Code: ${context.packageName} ${BuildConfig.VERSION_CODE} $bucket"""
     val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {
         data = "mailto:$email?subject=${Uri.encode(subject)}&body=${Uri.encode(body)}".toUri()
     }
-    val emailIntent = Intent(Intent.ACTION_SEND).apply {
-        putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-        putExtra(Intent.EXTRA_SUBJECT, subject)
-        putExtra(Intent.EXTRA_TEXT, body)
-        selector = selectorIntent
+    val emailIntent = Intent(Intent.ACTION_SEND).also {
+        it.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+        it.putExtra(Intent.EXTRA_SUBJECT, subject)
+        it.putExtra(Intent.EXTRA_TEXT, body)
+        it.selector = selectorIntent
     }
     runCatching {
         context.startActivity(
