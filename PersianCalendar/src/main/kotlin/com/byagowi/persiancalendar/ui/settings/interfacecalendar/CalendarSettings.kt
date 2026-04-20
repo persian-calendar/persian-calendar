@@ -123,7 +123,7 @@ fun CalendarSettings(
         AnimatedVisibility(userNeedsAppointments) {
             var shownOnce by rememberSaveable { mutableStateOf(false) }
             SettingsClickable(
-                title = if (language.isPersianOrDari) "مناسبت‌ها" else stringResource(R.string.events),
+                title = stringResource(R.string.events),
                 summary = stringResource(R.string.events_summary),
                 defaultOpen = destination == PREF_HOLIDAY_TYPES && destinationItem != PREF_SHOW_DEVICE_CALENDAR_EVENTS,
             ) { onDismissRequest ->

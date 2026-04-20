@@ -766,13 +766,6 @@ private fun SharedTransitionScope.Details(
                 mutableStateOf(Button.entries.getOrNull(lastChosenIndex))
             }
 
-            @Composable
-            fun Button.title() = when (this) {
-                Button.Calendar -> stringResource(R.string.calendar)
-                Button.Appointment -> if (language.isPersianOrDari) "مناسبت" else stringResource(R.string.events)
-                Button.Times -> stringResource(R.string.times)
-            }
-
             val buttons = listOfNotNull(
                 Pair(Button.Calendar) @Composable {
                     CalendarsTab(
@@ -783,7 +776,7 @@ private fun SharedTransitionScope.Details(
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                     )
                 }.takeIf { enabledCalendars.size > 1 },
-                Pair(Button.Appointment) @Composable {
+                Pair(Button.Events) @Composable {
                     AnimatedContent(
                         targetState = appointments.isEmpty(),
                         transitionSpec = {
@@ -792,9 +785,7 @@ private fun SharedTransitionScope.Details(
                     ) { appointmentsIsEmpty ->
                         if (appointmentsIsEmpty) Box {
                             Text(
-                                text = if (language.isPersianOrDari) {
-                                    "مناسبتی برای این روز یافت نشد"
-                                } else stringResource(R.string.no_event),
+                                text = stringResource(R.string.no_event),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .padding(vertical = 12.dp, horizontal = 24.dp)
@@ -922,7 +913,7 @@ private fun SharedTransitionScope.Details(
                             shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
                             label = {
                                 Text(
-                                    text = button.title(),
+                                    text = stringResource(button.title),
                                     modifier = Modifier.alpha(AppBlendAlpha),
                                 )
                             },
@@ -979,7 +970,9 @@ private fun SharedTransitionScope.Details(
     }
 }
 
-private enum class Button { Calendar, Appointment, Times }
+private enum class Button(@get:StringRes val title: Int) {
+    Calendar(R.string.calendar), Events(R.string.events), Times(R.string.times),
+}
 
 @Composable
 private fun SharedTransitionScope.CalendarsTab(
