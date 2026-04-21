@@ -763,11 +763,11 @@ private fun SharedTransitionScope.Details(
 
             var selectedButton by remember {
                 val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
-                mutableStateOf(Button.entries.getOrNull(lastChosenIndex))
+                mutableStateOf(DetailsButton.entries.getOrNull(lastChosenIndex))
             }
 
             val buttons = listOfNotNull(
-                Pair(Button.Calendar) @Composable {
+                Pair(DetailsButton.Calendar) @Composable {
                     CalendarsTab(
                         modifier = Modifier.padding(top = 4.dp),
                         selectedDay = selectedDay,
@@ -776,7 +776,7 @@ private fun SharedTransitionScope.Details(
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                     )
                 }.takeIf { enabledCalendars.size > 1 },
-                Pair(Button.Events) @Composable {
+                Pair(DetailsButton.Events) @Composable {
                     AnimatedContent(
                         targetState = appointments.isEmpty(),
                         transitionSpec = {
@@ -829,7 +829,7 @@ private fun SharedTransitionScope.Details(
 //                            )
 //                        }
                 }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
-                Pair(Button.Times) @Composable {
+                Pair(DetailsButton.Times) @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
                         modifier = Modifier.padding(top = 4.dp),
@@ -969,7 +969,7 @@ private fun SharedTransitionScope.Details(
     }
 }
 
-private enum class Button(@get:StringRes val title: Int) {
+private enum class DetailsButton(@get:StringRes val title: Int) {
     Calendar(R.string.calendar), Events(R.string.events), Times(R.string.times),
 }
 
