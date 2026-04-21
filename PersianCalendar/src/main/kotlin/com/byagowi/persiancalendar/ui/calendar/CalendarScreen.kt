@@ -767,7 +767,7 @@ private fun SharedTransitionScope.Details(
             }
 
             val buttons = listOfNotNull(
-                Pair(DetailsButton.Calendar) @Composable {
+                (DetailsButton.Calendar to @Composable {
                     CalendarsTab(
                         modifier = Modifier.padding(top = 4.dp),
                         selectedDay = selectedDay,
@@ -775,8 +775,8 @@ private fun SharedTransitionScope.Details(
                         navigateToAstronomy = navigateToAstronomy,
                         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                     )
-                }.takeIf { enabledCalendars.size > 1 },
-                Pair(DetailsButton.Events) @Composable {
+                }).takeIf { enabledCalendars.size > 1 },
+                (DetailsButton.Events to @Composable {
                     AnimatedContent(
                         targetState = appointments.isEmpty(),
                         transitionSpec = {
@@ -828,8 +828,8 @@ private fun SharedTransitionScope.Details(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-                }.takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
-                Pair(DetailsButton.Times) @Composable {
+                }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
+                (DetailsButton.Times to @Composable {
                     val coordinates = coordinates
                     if (coordinates != null) TimesTab(
                         modifier = Modifier.padding(top = 4.dp),
@@ -851,7 +851,7 @@ private fun SharedTransitionScope.Details(
 //                        acceptAction = navigateToSettingsLocationTab,
 //                        hideOnAccept = false,
 //                    )
-                }.takeIf {
+                }).takeIf {
                     coordinates != null
 //                    !removeThirdTab && enableTimesTab()
                 },
