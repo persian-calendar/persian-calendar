@@ -895,7 +895,6 @@ private fun SharedTransitionScope.Details(
                     )
                     buttons.entries.forEachIndexed { index, (button, _) ->
                         SegmentedButton(
-                            modifier = Modifier.defaultMinSize(minHeight = 38.dp),
                             onClick = {
                                 selectedButton = if (selectedButton == button) null else button
                                 context.preferences.edit {
