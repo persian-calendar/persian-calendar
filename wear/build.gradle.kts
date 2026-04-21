@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 26
-        targetSdk = 37
+        targetSdk = 36
         versionCode = 53
         versionName = "0.5.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
