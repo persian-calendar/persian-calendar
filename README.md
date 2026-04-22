@@ -8,13 +8,6 @@ A simple, free and open-source Android calendar
 [![Android CI](https://github.com/persian-calendar/persian-calendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/persian-calendar/actions)
 [![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
 
-## Download
-<a href='https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar'><img height=70 alt='Get it on Google Play' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GooglePlay.svg'/></a>
-<a href='https://f-droid.org/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on F-Droid' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/FDroid.svg'/></a>
-<a href='https://github.com/persian-calendar/persian-calendar/releases/'><img height=70 alt='Get it on GitHub' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GitHub.svg'/></a>
-<a href='https://cafebazaar.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Bazaar' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Bazaar.svg'/></a>
-<a href='https://myket.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Myket' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Myket.svg'/></a>
-
 ## License
 
 Copyright (C) 2012-2026  Android Persian Calendar Developers
@@ -44,13 +37,6 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 ### وضعیت توسعه و ترجمه
 [![Android CI](https://github.com/persian-calendar/persian-calendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/persian-calendar/actions)
 [![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
-
-## دریافت برنامه
-<a href='https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar'><img height=70 alt='Get it on Google Play' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GooglePlay.svg'/></a>
-<a href='https://f-droid.org/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on F-Droid' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/FDroid.svg'/></a>
-<a href='https://github.com/persian-calendar/persian-calendar/releases/'><img height=70 alt='Get it on GitHub' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GitHub.svg'/></a>
-<a href='https://cafebazaar.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Bazaar' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Bazaar.svg'/></a>
-<a href='https://myket.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Myket' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Myket.svg'/></a>
 
 ## مجوز شرایط استفاده از کد برنامه
 
