@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <issues format="6" by="lint 9.2.0" type="baseline" client="gradle" dependencies="true" name="AGP (9.2.0)" variant="all" version="9.2.0">
 
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.nepal` appears to be unused"
-        errorLine1="    &lt;string name=&quot;nepal&quot;>Nepal&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="340"
-            column="13"/>
-    </issue>
-
 </issues>

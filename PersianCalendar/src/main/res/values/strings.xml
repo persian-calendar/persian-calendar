@@ -337,7 +337,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="nepali_calendar_short">Nepali</string>
     <string name="show_secondary_calendar">Show secondary calendar</string>
     <string name="season">Season</string>
-    <string name="nepal">Nepal</string>
     <string name="solar_eclipse">Solar eclipse</string>
     <string name="lunar_eclipse">Lunar eclipse</string>
     <string name="summer">Summer</string>
