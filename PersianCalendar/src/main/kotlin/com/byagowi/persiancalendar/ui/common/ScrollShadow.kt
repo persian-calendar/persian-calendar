@@ -43,9 +43,10 @@ private fun BoxScope.ScrollShadowImpl(scrollState: ScrollState, top: Boolean) {
             remember {
                 derivedStateOf {
                     (abs((scrollState.value - (if (top) 0 else scrollState.maxValue))) / 8).toDp()
+                        .coerceAtMost(8.dp)
                 }
             }.value
-        }.coerceAtMost(8.dp),
+        },
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value
     ScrollShadowBar(top, height)
