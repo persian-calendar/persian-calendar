@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsTab
 import org.junit.Rule

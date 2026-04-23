@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.dialogs
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import org.junit.Rule
 import org.junit.Test
