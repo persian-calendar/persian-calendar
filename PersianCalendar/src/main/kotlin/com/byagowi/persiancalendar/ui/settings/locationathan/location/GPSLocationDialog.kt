@@ -56,6 +56,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
+import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
@@ -227,7 +228,7 @@ fun GPSLocationDialog(
         val text = buildAnnotatedString {
             appendLine(
                 "%s$spacedColon$LRM%.4f°%s%s$spacedColon$LRM%.4f°".format(
-                    Locale.getDefault(),
+                    LocalLocale.current.platformLocale,
                     stringResource(R.string.latitude),
                     coord.latitude,
                     "\n",

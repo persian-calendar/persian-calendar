@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -38,7 +40,11 @@ private fun BoxScope.ScrollShadowImpl(scrollState: ScrollState, top: Boolean) {
     // If max value is infinity the page isn't even initialized
     val height = if (scrollState.maxValue == Int.MAX_VALUE) 0.dp else animateDpAsState(
         targetValue = with(LocalDensity.current) {
-            (abs((scrollState.value - (if (top) 0 else scrollState.maxValue))) / 8).toDp()
+            remember {
+                derivedStateOf {
+                    (abs((scrollState.value - (if (top) 0 else scrollState.maxValue))) / 8).toDp()
+                }
+            }.value
         }.coerceAtMost(8.dp),
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value
