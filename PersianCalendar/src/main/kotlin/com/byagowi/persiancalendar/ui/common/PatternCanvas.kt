@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.copy
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.nativePaint
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
@@ -87,10 +88,10 @@ class PatternDrawable(
         draw(canvas.nativeCanvas, rotationDegree)
 
     fun draw(canvas: android.graphics.Canvas, rotationDegree: Float = this.rotationDegree) {
-        canvas.drawPaint(backgroundPaint.asFrameworkPaint())
+        canvas.drawPaint(backgroundPaint.nativePaint)
         canvas.withRotation(
             rotationDegree, centerX, centerY,
-        ) { drawPaint(foregroundPaint.asFrameworkPaint()) }
+        ) { drawPaint(foregroundPaint.nativePaint) }
     }
 }
 
