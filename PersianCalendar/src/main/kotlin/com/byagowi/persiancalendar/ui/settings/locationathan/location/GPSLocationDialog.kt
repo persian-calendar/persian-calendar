@@ -41,6 +41,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -56,7 +57,6 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
-import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
@@ -227,13 +227,12 @@ fun GPSLocationDialog(
         )
         val text = buildAnnotatedString {
             appendLine(
-                "%s$spacedColon$LRM%.4f°%s%s$spacedColon$LRM%.4f°".format(
-                    LocalLocale.current.platformLocale,
+                "%s$spacedColon$LRM%s°%s%s$spacedColon$LRM%s°".format(
                     stringResource(R.string.latitude),
-                    coord.latitude,
+                    numeral.format("%.4f".format(Locale.ENGLISH, coord.latitude)),
                     "\n",
                     stringResource(R.string.longitude),
-                    coord.longitude,
+                    numeral.format("%.4f".format(Locale.ENGLISH, coord.longitude)),
                 ),
             )
             val geoLink = "geo:${coord.latitude},${coord.longitude}"
