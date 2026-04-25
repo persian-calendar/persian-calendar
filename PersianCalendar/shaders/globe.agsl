@@ -29,7 +29,7 @@ vec4 main(float2 fragCoord) {
         float v = 4.4 - r / R * 3.7; // Globe's glow
         // Adds random glowing stars
         float rand = rand(vec2(floor(-u_x * 10.0 + xy.x / 3.0), floor(u_y * 10.0 + xy.y / 3.0)));
-        if (rand > 0.997) v = abs(sin(u_time + (1.0 - rand) / 0.003 * 2.0 * PI));
+        if (rand > 0.997) v = max(v, abs(sin(u_time + (1.0 - rand) / 0.003 * 2.0 * PI)));
         return vec4(v, v, v, 1.0);
     }
 }
