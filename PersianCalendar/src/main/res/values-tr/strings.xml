@@ -62,12 +62,12 @@
     <string name="view_source">Kaynağı Görüntüle</string>
     <string name="other_holidays">Diğer</string>
     <string name="method_tehran">Jeofizik Enstitüsü, Tahran Üniversitesi</string>
-    <string name="method_karachi">İslami İlimler Üniversitesi, KARAÇİ</string>
-    <string name="method_makkah">Ummu’l-Kura Üniversitesi, MEKKE</string>
+    <string name="method_karachi">İslami İlimler Üniversitesi, Karaçi</string>
+    <string name="method_makkah">Ummu’l-Kura Üniversitesi, Mekke</string>
     <string name="method_egypt">Mısır Genel Araştırma Kurumu</string>
     <string name="method_isna">Kuzey Amerika İslam Cemiyeti</string>
     <string name="method_mwl">Dünya Müslüman Birliği</string>
-    <string name="method_jafari">Şia İsna Aşera, Leva Enstitüsü, KUM</string>
+    <string name="method_jafari">Şia İsna Aşera, Leva Enstitüsü, Kum</string>
     <string name="shift_work_night">Gece</string>
     <string name="shift_work_evening">Akşam</string>
     <string name="shift_work_off">Kapalı</string>
@@ -396,4 +396,5 @@
     <string name="pref_ui">Kullanıcı arayüzü</string>
     <string name="week">Hafta</string>
     <string name="bold_text">Kalın metin</string>
+    <string name="widget_text_size">Metin boyutu</string>
 </resources>
