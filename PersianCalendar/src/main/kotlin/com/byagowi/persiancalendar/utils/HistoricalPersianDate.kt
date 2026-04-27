@@ -58,7 +58,7 @@ fun jalaliName(persianYear: Int?, dayOfYear: Int): String {
     return when (val month = (dayOfYear - 1) / 30) {
         12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ جلالی"
         else -> numeral.format(dayOfMonth + 1) + " " + jalaliMonthNames[month] + " جلالی"
-    } + (if (persianYear != null) " " + numeral.format(persianYear - 457) else "")
+    } + (if (persianYear != null) " " + numeral.format(persianYear + jalaliOffset) else "")
 }
 // endregion
 

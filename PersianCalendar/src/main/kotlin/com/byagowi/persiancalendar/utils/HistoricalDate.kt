@@ -47,6 +47,7 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 const val zoroastrianismYearOffset = 2359
 private const val madianOffset = 1321
 private const val achaemenidOffset = 1180
+const val jalaliOffset = -457
 // To get their current year, add the number to current Persian calendar year
 
 fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
