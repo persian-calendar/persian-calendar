@@ -1,3 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="code">uk</string>
+    <string name="app_name">Перський календар</string>
+    <string name="widget_name">Перський календар</string>
+    <string name="widget_mini_name">Перський календар (міні)</string>
+    <string name="widget_age_name">Перський календар (вік)</string>
+    <string name="close">Закрити</string>
+    <string name="open">Відкрити</string>
+    <string name="accept">ОК</string>
+    <string name="add">Додати</string>
+    <string name="help">Допомога</string>
+    <string name="more">Більше</string>
+    <string name="cancel">Відмінити</string>
+    <string name="continue_button">Продовжити</string>
+    <string name="calendar">Календар</string>
+    <string name="date_converter">Конвертер дат</string>
+    <string name="converter">Конвертер</string>
+    <string name="compass">Компас</string>
+    <string name="settings">Налаштування</string>
+    <string name="about">Опис</string>
+    <string name="exit">Вихід</string>
 </resources>
