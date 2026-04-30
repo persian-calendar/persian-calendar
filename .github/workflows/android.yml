@@ -41,28 +41,28 @@ jobs:
           ./gradlew lintReportDebug --stacktrace
 
       - name: Upload APK
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: PersianCalendar
           path: PersianCalendar/build/outputs/apk/**/*.apk
 
       - name: Upload JVM test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jvm-test-results
           path: "*/build/test-results/**/*.xml"
 
       - name: Upload lint reports
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lint-reports
           path: "*/build/reports/lint-*.html"
 
       - name: Archive reports for failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: reports
           path: "*/build/reports"
@@ -102,7 +102,7 @@ jobs:
 
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: instrumentation-test-results ${{ matrix.api-level }}
           path: ./**/build/reports/androidTests/connected/**
