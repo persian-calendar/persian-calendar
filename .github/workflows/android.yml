@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - uses: gradle/actions/wrapper-validation@v5
+      - uses: gradle/actions/wrapper-validation@v6
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -26,7 +26,7 @@ jobs:
           distribution: temurin
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Run spotless check
         run: |
@@ -84,7 +84,7 @@ jobs:
           java-version: 21
           distribution: temurin
 
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
 
       # https://github.blog/changelog/2024-04-02-github-actions-hardware-accelerated-android-virtualization-now-available/
       - name: Enable KVM group perms
