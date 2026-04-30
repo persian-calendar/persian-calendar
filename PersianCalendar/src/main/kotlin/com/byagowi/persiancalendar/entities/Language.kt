@@ -217,7 +217,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val defaultCalendars: ImmutableList<Calendar>
         get() = when {
-            this == FA -> if (userTimeZoneId == IRAN_TIMEZONE_ID) {
+            this == FA -> if (userTimeZoneId == IRAN_TIMEZONE_ID || userTimeZoneId == AFGHANISTAN_TIMEZONE_ID) {
                 persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
             } else persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
 

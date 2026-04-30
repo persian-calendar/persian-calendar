@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsRepository
@@ -134,16 +134,16 @@ fun HolidaysTypesDialog(
                     )
                 }
 
-                if (language.isIranExclusive || language.isUserAbleToReadPersian || TimeZone.getDefault().id == IRAN_TIMEZONE_ID) {
-                    Iran()
+                if (language.isAfghanistanExclusive || TimeZone.getDefault().id == AFGHANISTAN_TIMEZONE_ID) {
+                    Afghanistan()
                     International()
                     HorizontalDivider()
-                    Afghanistan()
+                    Iran()
                 } else {
-                    Afghanistan()
+                    Iran()
                     International()
                     HorizontalDivider()
-                    Iran()
+                    Afghanistan()
                 }
             } else {
                 CountryEvents(
