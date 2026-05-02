@@ -281,7 +281,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="dey">Dey</string>
     <string name="bahman">Bahman</string>
     <string name="esfand">Esfand</string>
-    <!--Islamic Calendar months-->
+    <!--Hijri Calendar months-->
     <string name="muharram">Muharram</string>
     <string name="safar">Safar</string>
     <string name="rabi_alawwal">Rabi’ al-awwal</string>
