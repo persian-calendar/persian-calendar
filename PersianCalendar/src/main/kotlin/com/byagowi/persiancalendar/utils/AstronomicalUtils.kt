@@ -118,7 +118,7 @@ fun generateYearName(
                 isPersian = language.isPersianOrDari,
                 withOldEraName = withOldEraName,
             ),
-            resources.getString(R.string.shamsi_calendar_short),
+            resources.getString(R.string.persian_calendar_short),
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val date = ChineseCalendar(

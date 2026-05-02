@@ -258,11 +258,11 @@
     <string name="theme_modern">Moderno</string>
     <string name="theme_aqua">Blue</string>
     <string name="theme_black">Negro</string>
-    <string name="shamsi_calendar">Calendario persa</string>
-    <string name="islamic_calendar">Calendario islámico</string>
+    <string name="persian_calendar">Calendario persa</string>
+    <string name="hijri_calendar">Calendario islámico</string>
     <string name="gregorian_calendar">Calendario gregoriano</string>
-    <string name="shamsi_calendar_short">Persa</string>
-    <string name="islamic_calendar_short">Islámico</string>
+    <string name="persian_calendar_short">Persa</string>
+    <string name="hijri_calendar_short">Islámico</string>
     <string name="gregorian_calendar_short">Gregoriano</string>
     <string name="method_jafari">Shia Ithna-Ashari, Leva Institute, Qum</string>
     <string name="method_mwl">Liga del Mundo Islámico</string>

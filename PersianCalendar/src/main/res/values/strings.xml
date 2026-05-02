@@ -241,11 +241,11 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="theme_aqua">Aqua</string>
     <string name="theme_black">Black</string>
     <!--Calendars-->
-    <string name="shamsi_calendar">Persian Calendar</string>
-    <string name="islamic_calendar">Islamic Calendar</string>
+    <string name="persian_calendar">Persian Calendar</string>
+    <string name="hijri_calendar">Hijri Calendar</string>
     <string name="gregorian_calendar">Gregorian Calendar</string>
-    <string name="shamsi_calendar_short">Persian</string>
-    <string name="islamic_calendar_short">Islamic</string>
+    <string name="persian_calendar_short">Persian</string>
+    <string name="hijri_calendar_short">Islamic</string>
     <string name="gregorian_calendar_short">Gregorian</string>
     <!--Shift Work-->
     <string name="shift_work_morning">Morning</string>

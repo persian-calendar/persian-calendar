@@ -89,11 +89,11 @@
     <string name="method_mwl">Yekîtiya cîhaniya islamê, Erebistana soûdî</string>
     <string name="method_jafari">Şîeyên 12 îmamî, encumena LEWA Qom</string>
     <string name="gregorian_calendar_short">Zayînî</string>
-    <string name="islamic_calendar_short">Heyvî</string>
-    <string name="shamsi_calendar_short">Rojî</string>
+    <string name="hijri_calendar_short">Heyvî</string>
+    <string name="persian_calendar_short">Rojî</string>
     <string name="gregorian_calendar">Zayînî</string>
-    <string name="islamic_calendar">Koçîya Heyvî</string>
-    <string name="shamsi_calendar">Koçîya Rojî</string>
+    <string name="hijri_calendar">Koçîya Heyvî</string>
+    <string name="persian_calendar">Koçîya Rojî</string>
     <string name="theme_black">Reş</string>
     <string name="theme_aqua">Robar</string>
     <string name="theme_modern">Nûjen</string>

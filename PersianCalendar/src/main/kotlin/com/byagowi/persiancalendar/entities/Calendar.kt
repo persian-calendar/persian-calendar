@@ -15,10 +15,10 @@ enum class Calendar(
 ) {
     // So vital, don't ever change names of these
     SHAMSI(
-        R.string.shamsi_calendar, R.string.shamsi_calendar_short, Numeral.PERSIAN,
+        R.string.persian_calendar, R.string.persian_calendar_short, Numeral.PERSIAN,
     ),
     ISLAMIC(
-        R.string.islamic_calendar, R.string.islamic_calendar_short, Numeral.ARABIC_INDIC,
+        R.string.hijri_calendar, R.string.hijri_calendar_short, Numeral.ARABIC_INDIC,
     ),
     GREGORIAN(
         R.string.gregorian_calendar, R.string.gregorian_calendar_short, Numeral.ARABIC,

@@ -155,11 +155,11 @@
     <string name="prefer_linear_date_summary">Usar 2000/1/1 em vez de 1 Janeiro 2000 no widget e notificações</string>
     <string name="preview">Pré-visualização</string>
     <string name="ignore">Ignorar</string>
-    <string name="shamsi_calendar">Calendário Persa</string>
+    <string name="persian_calendar">Calendário Persa</string>
     <string name="gregorian_calendar_short">Gregoriano</string>
-    <string name="islamic_calendar_short">Islâmico</string>
+    <string name="hijri_calendar_short">Islâmico</string>
     <string name="shift_work_off">Off</string>
-    <string name="shamsi_calendar_short">Persa</string>
+    <string name="persian_calendar_short">Persa</string>
     <string name="shift_work_morning">Manhã</string>
     <string name="saturday">Sábado</string>
     <string name="saturday_short">S</string>
@@ -193,7 +193,7 @@
     <string name="jupiter">Júpiter</string>
     <string name="add_widget">Adicionar widget</string>
     <string name="gregorian_calendar">Calendário Gregoriano</string>
-    <string name="islamic_calendar">Calendário Islâmico</string>
+    <string name="hijri_calendar">Calendário Islâmico</string>
     <string name="season">Estação/Época</string>
     <string name="show_secondary_calendar">Mostrar calendário secundário</string>
 </resources>

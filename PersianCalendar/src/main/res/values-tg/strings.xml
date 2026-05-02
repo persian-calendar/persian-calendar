@@ -145,8 +145,8 @@
     <string name="theme_modern">нав</string>
     <string name="theme_aqua">Кабуд</string>
     <string name="theme_black">Сиёҳ</string>
-    <string name="shamsi_calendar">Тақвими форсӣ</string>
-    <string name="islamic_calendar">Тақвими исломӣ</string>
+    <string name="persian_calendar">Тақвими форсӣ</string>
+    <string name="hijri_calendar">Тақвими исломӣ</string>
     <string name="gregorian_calendar">Тақвими Григорӣ</string>
     <string name="gregorian_calendar_short">Григорӣ</string>
     <string name="shift_work_morning">Субҳ</string>
@@ -190,7 +190,7 @@
     <string name="center_align_widgets_summary">Ҳамоҳангсозии виджетҳои 4x1 ва 2x2</string>
     <string name="prefer_linear_date">Шакли рақамии санаҳоро интихоб кунед</string>
     <string name="select_widgets_background_color">Барои заминаи виджетҳо ранги фармоиширо интихоб кунед</string>
-    <string name="shamsi_calendar_short">форсӣ</string>
+    <string name="persian_calendar_short">форсӣ</string>
     <plurals name="days">
         <item quantity="one">%1$s pӯз</item>
         <item quantity="other">%1$s pӯз</item>
@@ -203,7 +203,7 @@
         <item quantity="one">%1$s сол</item>
         <item quantity="other">%1$s сол</item>
     </plurals>
-    <string name="islamic_calendar_short">исломӣ</string>
+    <string name="hijri_calendar_short">исломӣ</string>
     <string name="shift_work_off">Хомӯш</string>
     <string name="method_jafari">Дувоздаҳ шиъа, Институти Лава, Қум</string>
     <string name="method_tehran">Донишкадаи геофизик, Донишгоҳи Теҳрон</string>

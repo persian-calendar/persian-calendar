@@ -164,7 +164,7 @@
     <string name="shift_work_starting_date">当前日历上选择的日期（%1$s）将作为倒班的起始日。</string>
     <string name="spaced_and">和</string>
     <string name="spaced_or">或</string>
-    <string name="islamic_calendar">伊斯兰历</string>
+    <string name="hijri_calendar">伊斯兰历</string>
     <string name="theme_black">黑色</string>
     <string name="device_information">设备信息</string>
     <string name="spaced_comma">，</string>
@@ -173,8 +173,8 @@
     <string name="pm">下午</string>
     <string name="center_align_widgets">微件居中对齐</string>
     <string name="center_align_widgets_summary">让 4×1 和 2×2 的微件居中对齐</string>
-    <string name="shamsi_calendar_short">波斯历</string>
-    <string name="shamsi_calendar">波斯历</string>
+    <string name="persian_calendar_short">波斯历</string>
+    <string name="persian_calendar">波斯历</string>
     <string name="gregorian_calendar">公历（格里历）</string>
     <string name="theme_default">跟随系统</string>
     <string name="theme_light">浅色</string>
@@ -188,7 +188,7 @@
     <string name="month_events">本月活动</string>
     <string name="share">分享</string>
     <string name="map">地图</string>
-    <string name="islamic_calendar_short">伊斯兰历</string>
+    <string name="hijri_calendar_short">伊斯兰历</string>
     <string name="gregorian_calendar_short">公历</string>
     <string name="other_holidays">其他</string>
     <string name="view_source">查看来源</string>

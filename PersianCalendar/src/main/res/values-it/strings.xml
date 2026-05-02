@@ -259,11 +259,11 @@
     <string name="theme_modern">Moderno</string>
     <string name="theme_aqua">Acqua</string>
     <string name="theme_black">Nero</string>
-    <string name="shamsi_calendar">Calendario Persiano</string>
-    <string name="islamic_calendar">Calendario Islamico</string>
+    <string name="persian_calendar">Calendario Persiano</string>
+    <string name="hijri_calendar">Calendario Islamico</string>
     <string name="gregorian_calendar">Calendario Gregoriano</string>
-    <string name="shamsi_calendar_short">Persiano</string>
-    <string name="islamic_calendar_short">Islamico</string>
+    <string name="persian_calendar_short">Persiano</string>
+    <string name="hijri_calendar_short">Islamico</string>
     <string name="gregorian_calendar_short">Gregoriano</string>
     <string name="shift_work_morning">Mattina</string>
     <string name="shift_work_off">Fuori</string>

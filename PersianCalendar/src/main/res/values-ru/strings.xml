@@ -145,10 +145,10 @@
     <string name="theme_aqua">Аква</string>
     <string name="theme_black">Черный</string>
     <string name="gregorian_calendar">Григорианский календарь</string>
-    <string name="shamsi_calendar">Персидский календарь</string>
-    <string name="shamsi_calendar_short">Персидский</string>
-    <string name="islamic_calendar">Исламский календарь</string>
-    <string name="islamic_calendar_short">Исламский</string>
+    <string name="persian_calendar">Персидский календарь</string>
+    <string name="persian_calendar_short">Персидский</string>
+    <string name="hijri_calendar">Исламский календарь</string>
+    <string name="hijri_calendar_short">Исламский</string>
     <string name="gregorian_calendar_short">Григорианский</string>
     <string name="shift_work_morning">Утро</string>
     <string name="method_isna">Исламское общество Северной Америки</string>

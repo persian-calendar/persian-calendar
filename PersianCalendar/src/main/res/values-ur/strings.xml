@@ -232,11 +232,11 @@
     <string name="theme_modern">مدرن</string>
     <string name="theme_aqua">آبی</string>
     <string name="theme_black">کالا</string>
-    <string name="shamsi_calendar">ہجری شمسی</string>
-    <string name="islamic_calendar">ہجری قمری</string>
+    <string name="persian_calendar">ہجری شمسی</string>
+    <string name="hijri_calendar">ہجری قمری</string>
     <string name="gregorian_calendar">عیسوی</string>
-    <string name="shamsi_calendar_short">شمسی</string>
-    <string name="islamic_calendar_short">قمری</string>
+    <string name="persian_calendar_short">شمسی</string>
+    <string name="hijri_calendar_short">قمری</string>
     <string name="gregorian_calendar_short">عیسوی</string>
     <string name="shift_work_morning">روزکاری</string>
     <string name="shift_work_off">استراحت</string>

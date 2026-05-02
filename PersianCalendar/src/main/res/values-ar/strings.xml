@@ -231,11 +231,11 @@
     <string name="theme_aqua">أزرق</string>
     <string name="theme_black">أَسود</string>
     <!--Calendars-->
-    <string name="shamsi_calendar">التقويم الفارسي</string>
-    <string name="islamic_calendar">التقويم الهجري</string>
+    <string name="persian_calendar">التقويم الفارسي</string>
+    <string name="hijri_calendar">التقويم الهجري</string>
     <string name="gregorian_calendar">التقويم الميلادي</string>
-    <string name="shamsi_calendar_short">فارسي</string>
-    <string name="islamic_calendar_short">هجري</string>
+    <string name="persian_calendar_short">فارسي</string>
+    <string name="hijri_calendar_short">هجري</string>
     <string name="gregorian_calendar_short">ميلادي</string>
     <!--Shift Work-->
     <string name="shift_work_morning">نهار</string>

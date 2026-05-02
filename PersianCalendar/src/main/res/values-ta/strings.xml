@@ -76,11 +76,11 @@
     <string name="theme_modern">புதுமை</string>
     <string name="theme_aqua">நீர்</string>
     <string name="theme_black">கருப்பு</string>
-    <string name="shamsi_calendar">பாரசீக நேரம்</string>
-    <string name="islamic_calendar">இசுலாம் நேரம்</string>
+    <string name="persian_calendar">பாரசீக நேரம்</string>
+    <string name="hijri_calendar">இசுலாம் நேரம்</string>
     <string name="gregorian_calendar">கிரிகோரி நேரம்</string>
-    <string name="shamsi_calendar_short">பாரசீகம்</string>
-    <string name="islamic_calendar_short">இசுலாம்</string>
+    <string name="persian_calendar_short">பாரசீகம்</string>
+    <string name="hijri_calendar_short">இசுலாம்</string>
     <string name="gregorian_calendar_short">கிரிகோரி</string>
     <string name="shift_work_morning">காலை</string>
     <string name="shift_work_off">அணை</string>

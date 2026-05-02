@@ -242,11 +242,11 @@
     <string name="theme_modern">سيويليزه</string>
     <string name="theme_aqua">رۊدبار</string>
     <string name="theme_black">سیاه</string>
-    <string name="shamsi_calendar">هجري-يه شمسي</string>
-    <string name="islamic_calendar">هجري-يه قمري</string>
+    <string name="persian_calendar">هجري-يه شمسي</string>
+    <string name="hijri_calendar">هجري-يه قمري</string>
     <string name="gregorian_calendar">میلادي</string>
-    <string name="shamsi_calendar_short">شمسي</string>
-    <string name="islamic_calendar_short">قمري</string>
+    <string name="persian_calendar_short">شمسي</string>
+    <string name="hijri_calendar_short">قمري</string>
     <string name="gregorian_calendar_short">میلادي</string>
     <string name="shift_work_morning">رۊزکاري</string>
     <string name="shift_work_off">ايستراحت</string>
