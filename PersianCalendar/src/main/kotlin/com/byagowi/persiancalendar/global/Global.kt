@@ -29,9 +29,9 @@ import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
+import com.byagowi.persiancalendar.DEFAULT_HIJRI_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
-import com.byagowi.persiancalendar.DEFAULT_HIJRI_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.DEFAULT_LARGE_ICON_ON_NOTIFICATION
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_NUMERAL
@@ -75,8 +75,8 @@ import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
-import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_HIJRI_OFFSET
+import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_LATITUDE
