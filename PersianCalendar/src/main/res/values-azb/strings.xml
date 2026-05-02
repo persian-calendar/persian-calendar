@@ -153,8 +153,8 @@
     <string name="moon_in_scorpio">عقربه‌دکی آی گون‌لری</string>
     <string name="astronomy">آسترونومیا</string>
     <string name="astronomical_info_summary">آسترونومیا ایطلاعات‌ین گؤسترمک</string>
-    <string name="islamic_offset">ایسلامی تقویم‌ین تنظیم ائتمک</string>
-    <string name="islamic_offset_summary">تقویم‌ین ایصلاحینا قاییت‌ماق</string>
+    <string name="hijri_offset">ایسلامی تقویم‌ین تنظیم ائتمک</string>
+    <string name="hijri_offset_summary">تقویم‌ین ایصلاحینا قاییت‌ماق</string>
     <string name="pref_widget">ویجت</string>
     <string name="pref_notification">اعلان</string>
     <string name="pref_interface">آرا اۆز</string>

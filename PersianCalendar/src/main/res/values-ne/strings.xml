@@ -81,7 +81,7 @@
     <string name="week_start">हप्ताको सुरुवात</string>
     <string name="ask_user_to_set_location">यो ठाउँ सही रूपमा हेर्नको लागि सेटिङहरूमा स्थान सेट गर्नुहोस्</string>
     <string name="notify_date_lock_screen">लक स्क्रिनमा सूचना देखाउनुहोस्</string>
-    <string name="islamic_offset_summary">संख्या थपेर इस्लामिक क्यालेन्डर समायोजन गर्नुहोस्</string>
+    <string name="hijri_offset_summary">संख्या थपेर इस्लामिक क्यालेन्डर समायोजन गर्नुहोस्</string>
     <string name="custom_notification_is_set">अनुकूलन सूचना भर्खरै सेट गरिएको छ</string>
     <string name="select_widgets_text_color">विजेट पाठहरूको लागि अनुकूलन रङ चयन गर्नुहोस्</string>
     <string name="gps_location_help">यदि यो सम्भव छ भने अन्य विकल्पहरू आवश्यक पर्दैन</string>
@@ -130,7 +130,7 @@
     <string name="week_start_summary">हप्ताको सुरुवात दिन चयन गर्नुहोस्</string>
     <string name="week_ends">सप्ताहन्त</string>
     <string name="week_ends_summary">सप्ताहन्त दिनहरू चयन गर्नुहोस्</string>
-    <string name="islamic_offset">इस्लामिक अफसेट</string>
+    <string name="hijri_offset">इस्लामिक अफसेट</string>
     <string name="clock_in_24">24 घण्टामा घडी</string>
     <string name="showing_clock_in_24">24 घण्टामा घडी देखाउनुहोस्</string>
     <string name="widget_text_color">विजेट पाठ रङ</string>

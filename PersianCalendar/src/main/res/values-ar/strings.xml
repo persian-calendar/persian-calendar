@@ -119,8 +119,8 @@
     <string name="week_start_summary">إختيار اليوم الذي يبدأ به الأسبوع</string>
     <string name="week_ends">عطلة نهاية الأسبوع</string>
     <string name="week_ends_summary">إختيار أيام عطلة نهاية الأسبوع</string>
-    <string name="islamic_offset">تعديل التاريخ الهجري</string>
-    <string name="islamic_offset_summary">تصحيح التاريخ الهجري يدوياً</string>
+    <string name="hijri_offset">تعديل التاريخ الهجري</string>
+    <string name="hijri_offset_summary">تصحيح التاريخ الهجري يدوياً</string>
     <string name="clock_in_24">نظام 24 ساعة</string>
     <string name="showing_clock_in_24">إستخدام نظام 24 ساعة</string>
     <!--Widget and Notification Settings-->

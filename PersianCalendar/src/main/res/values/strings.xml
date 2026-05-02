@@ -123,8 +123,8 @@
     <string name="week_start_summary">Select week start day</string>
     <string name="week_ends">Weekends</string>
     <string name="week_ends_summary">Select weekends days</string>
-    <string name="islamic_offset">Islamic offset</string>
-    <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
+    <string name="hijri_offset">Hijri offset</string>
+    <string name="hijri_offset_summary">Adjust Hijri calendar by adding a number</string>
     <string name="clock_in_24">Clock in 24 hour</string>
     <string name="showing_clock_in_24">Show the clock in 24 hour</string>
     <!--Widget and Notification Settings-->
@@ -245,7 +245,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="hijri_calendar">Hijri Calendar</string>
     <string name="gregorian_calendar">Gregorian Calendar</string>
     <string name="persian_calendar_short">Persian</string>
-    <string name="hijri_calendar_short">Islamic</string>
+    <string name="hijri_calendar_short">Hijri</string>
     <string name="gregorian_calendar_short">Gregorian</string>
     <!--Shift Work-->
     <string name="shift_work_morning">Morning</string>

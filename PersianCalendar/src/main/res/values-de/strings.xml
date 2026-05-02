@@ -80,7 +80,7 @@
     <string name="astronomy">Astronomie</string>
     <string name="astronomical_info_summary">Zusätzliche Informationen wie Sternbild, alte Jahresnamen und Mond im Skorpion anzeigen</string>
     <string name="week_start">Wochenbeginn</string>
-    <string name="islamic_offset">Islamischer Offset</string>
+    <string name="hijri_offset">Islamischer Offset</string>
     <string name="showing_clock_on_widget">Uhr auf dem Widget anzeigen</string>
     <string name="location">Standort</string>
     <string name="notify_date_lock_screen_summary">Nur wenn eine Sicherheitsmethode für den Sperrbildschirm festgelegt ist.</string>
@@ -97,7 +97,7 @@
     <string name="east">Ost</string>
     <string name="notify_date_lock_screen">Benachrichtigung auf dem Sperrbildschirm anzeigen</string>
     <string name="sagittarius">Schütze</string>
-    <string name="islamic_offset_summary">Anpassung des islamischen Kalenders durch Hinzufügen einer Zahl</string>
+    <string name="hijri_offset_summary">Anpassung des islamischen Kalenders durch Hinzufügen einer Zahl</string>
     <string name="widget_age_name">Persischer Kalender (Alter)</string>
     <string name="animal_year_name_rooster">Hahn</string>
     <string name="capricorn">Steinbock</string>

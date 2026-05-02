@@ -248,9 +248,9 @@ fun CalendarSettings(
                 },
                 entryValues = remember { (-2..2).map { it.toString() }.toImmutableList() },
                 persistedValue = islamicCalendarOffset.toString(),
-                dialogTitleResId = R.string.islamic_offset,
-                title = stringResource(R.string.islamic_offset),
-                summaryResId = R.string.islamic_offset_summary,
+                dialogTitleResId = R.string.hijri_offset,
+                title = stringResource(R.string.hijri_offset),
+                summaryResId = R.string.hijri_offset_summary,
             )
         }
         val weekDays = remember(weekStart) { WeekDay.entries.map { it + weekStart.ordinal } }

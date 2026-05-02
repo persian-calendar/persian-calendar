@@ -175,7 +175,7 @@
     <string name="aquarius">Далв</string>
     <string name="leo">Асад</string>
     <string name="week_start">Оғози ҳафта</string>
-    <string name="islamic_offset_summary">Тақвими исломиро бо илова кардани рақам танзим кунед</string>
+    <string name="hijri_offset_summary">Тақвими исломиро бо илова кардани рақам танзим кунед</string>
     <string name="widget_text_color">Ранги матни виджет</string>
     <string name="location">Макон</string>
     <string name="latitude">Арз</string>
@@ -274,7 +274,7 @@
     <string name="pref_interface">Зоҳир</string>
     <string name="events_summary">рӯйдодҳо барои нишон додан</string>
     <string name="ask_user_to_set_location">Ҷойгоҳро дар танзимот ҷойгир кунед, то ин ҷойро дуруст бинед</string>
-    <string name="islamic_offset">Танзими тақвими исломӣ</string>
+    <string name="hijri_offset">Танзими тақвими исломӣ</string>
     <string name="customize_widget_summary">Дар виджетҳо ва огоҳиҳо чӣ нишон дода шавад</string>
     <string name="notify_date">Огоҳиро фаъол созед</string>
     <string name="enable_notify">Эълони доимӣ барои санаҳо</string>

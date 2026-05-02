@@ -174,8 +174,8 @@
     <string name="astronomical_info_summary">Mostra informazioni aggiuntive come la costellazione, i nomi antichi degli anni e la luna in Scorpione</string>
     <string name="week_ends">Weekends</string>
     <string name="week_ends_summary">Seleziona i giorni del weekends</string>
-    <string name="islamic_offset">Offset islamico</string>
-    <string name="islamic_offset_summary">Regola il calendario islamico aggiungendo un numero</string>
+    <string name="hijri_offset">Offset islamico</string>
+    <string name="hijri_offset_summary">Regola il calendario islamico aggiungendo un numero</string>
     <string name="clock_in_24">Orologio in 24 ore</string>
     <string name="showing_clock_in_24">Mostra l’orologio in 24 ore</string>
     <string name="widget_text_color">Colore del testo del widget</string>

@@ -145,8 +145,8 @@
     <string name="moon_in_scorpio">قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
-    <string name="islamic_offset">تنظیم تقویم اسلامی</string>
-    <string name="islamic_offset_summary">بازگشت برای اصلاح تقویم</string>
+    <string name="hijri_offset">تنظیم تقویم اسلامی</string>
+    <string name="hijri_offset_summary">بازگشت برای اصلاح تقویم</string>
     <string name="pref_widget">ویجت</string>
     <string name="pref_notification">اعلان</string>
     <string name="pref_interface">رابط</string>

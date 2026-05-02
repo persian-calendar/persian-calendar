@@ -120,8 +120,8 @@
     <string name="week_start_summary">Elegir día del inicio de semana</string>
     <string name="week_ends">Fin de semanas</string>
     <string name="week_ends_summary">Elegir días del finde</string>
-    <string name="islamic_offset">Ajustar el calendario musulmán</string>
-    <string name="islamic_offset_summary">Ajustar el calendario islámico agregando un número</string>
+    <string name="hijri_offset">Ajustar el calendario musulmán</string>
+    <string name="hijri_offset_summary">Ajustar el calendario islámico agregando un número</string>
     <string name="clock_in_24">Reloj de 24 horas</string>
     <string name="showing_clock_in_24">Mostrar el reloj de 24 horas</string>
     <!--Widget and Notification Settings-->

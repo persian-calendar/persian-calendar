@@ -337,8 +337,8 @@
     <string name="week_start_summary">வாரத் தொடக்க நாளைத் தேர்ந்தெடு</string>
     <string name="week_ends">வார இறுதி நாள்கள்</string>
     <string name="week_ends_summary">வார இறுதி நாட்களைத் தேர்ந்தெடு</string>
-    <string name="islamic_offset">இசுலாம் எதிரீடு</string>
-    <string name="islamic_offset_summary">ஒரு எண்ணைச் சேர்ப்பதன் மூலம் இசுலாம் நாட்காட்டியைச் சரிசெய்</string>
+    <string name="hijri_offset">இசுலாம் எதிரீடு</string>
+    <string name="hijri_offset_summary">ஒரு எண்ணைச் சேர்ப்பதன் மூலம் இசுலாம் நாட்காட்டியைச் சரிசெய்</string>
     <string name="clock_in_24">24 மணி காட்டி</string>
     <string name="showing_clock_in_24">24 மணி நேர வடிவில் மணிகாட்டியைக் காட்டு</string>
     <string name="widget_text_color">நிரல்பலகை உரை நிறம்</string>
