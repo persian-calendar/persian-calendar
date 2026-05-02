@@ -31,7 +31,7 @@ import com.byagowi.persiancalendar.DEFAULT_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
-import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_HIJRI_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.DEFAULT_LARGE_ICON_ON_NOTIFICATION
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_NUMERAL
@@ -76,7 +76,7 @@ import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_HIJRI_OFFSET
 import com.byagowi.persiancalendar.PREF_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_LATITUDE
@@ -241,8 +241,8 @@ private val asrMethod_ = mutableStateOf(AsrMethod.Standard)
 val asrMethod by asrMethod_
 
 // Just to use in the settings
-private val islamicCalendarOffset_ = mutableIntStateOf(DEFAULT_ISLAMIC_OFFSET)
-val islamicCalendarOffset by islamicCalendarOffset_
+private val hijriCalendarOffset_ = mutableIntStateOf(DEFAULT_HIJRI_OFFSET)
+val hijriCalendarOffset by hijriCalendarOffset_
 
 private val language_ = mutableStateOf(Language.FA)
 val language by language_
@@ -437,8 +437,8 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 
 private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
     return if (preferences.isIslamicOffsetExpired) 0
-    else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET.toString())
-        ?.toIntOrNull() ?: DEFAULT_ISLAMIC_OFFSET
+    else preferences.getString(PREF_HIJRI_OFFSET, DEFAULT_HIJRI_OFFSET.toString())
+        ?.toIntOrNull() ?: DEFAULT_HIJRI_OFFSET
 }
 
 // For better or worse it needs the year to function correctly
@@ -603,7 +603,7 @@ fun updateStoredPreference(context: Context) {
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority,
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
-    islamicCalendarOffset_.intValue = getIslamicCalendarOffset(preferences)
+    hijriCalendarOffset_.intValue = getIslamicCalendarOffset(preferences)
     midnightMethod_.value =
         preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
             ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }

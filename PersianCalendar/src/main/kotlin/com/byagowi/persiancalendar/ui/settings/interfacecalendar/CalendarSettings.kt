@@ -57,13 +57,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.database.getIntOrNull
-import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_HIJRI_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_HIJRI_OFFSET
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
@@ -82,7 +82,7 @@ import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
-import com.byagowi.persiancalendar.global.islamicCalendarOffset
+import com.byagowi.persiancalendar.global.hijriCalendarOffset
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
@@ -236,18 +236,18 @@ fun CalendarSettings(
         AnimatedVisibility(Calendar.ISLAMIC in enabledCalendars) {
             LaunchedEffect(Unit) {
                 val preferences = context.preferences
-                if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
-                    putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET.toString())
+                if (PREF_HIJRI_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
+                    putString(PREF_HIJRI_OFFSET, DEFAULT_HIJRI_OFFSET.toString())
                 }
             }
             SettingsSingleSelect(
-                key = PREF_ISLAMIC_OFFSET,
+                key = PREF_HIJRI_OFFSET,
                 // One is formatted with locale's numerals and the other used for keys isn't
                 entries = remember(numeral) {
                     (-2..2).map { numeral.format(it) }.toImmutableList()
                 },
                 entryValues = remember { (-2..2).map { it.toString() }.toImmutableList() },
-                persistedValue = islamicCalendarOffset.toString(),
+                persistedValue = hijriCalendarOffset.toString(),
                 dialogTitleResId = R.string.hijri_offset,
                 title = stringResource(R.string.hijri_offset),
                 summaryResId = R.string.hijri_offset_summary,
