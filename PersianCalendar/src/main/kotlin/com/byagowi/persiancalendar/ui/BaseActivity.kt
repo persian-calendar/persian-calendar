@@ -23,8 +23,8 @@ import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
+import com.byagowi.persiancalendar.PREF_HIJRI_OFFSET
+import com.byagowi.persiancalendar.PREF_HIJRI_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
@@ -69,8 +69,8 @@ abstract class BaseActivity : ComponentActivity(),
             EXPANDED_TIME_STATE_KEY -> return // nothing needs to be updated
             LAST_PLAYED_ATHAN_JDN, LAST_PLAYED_ATHAN_KEY -> return // nothing needs to be updated
             PREF_PRAY_TIME_METHOD -> this.preferences.edit { remove(PREF_MIDNIGHT_METHOD) }
-            PREF_ISLAMIC_OFFSET -> this.preferences.edit {
-                putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today())
+            PREF_HIJRI_OFFSET -> this.preferences.edit {
+                putJdn(PREF_HIJRI_OFFSET_SET_DATE, Jdn.today())
             }
         }
 

@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
+import com.byagowi.persiancalendar.PREF_HIJRI_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_LONGITUDE
@@ -44,7 +44,7 @@ fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
 
 // Ignore offset if it isn't set in less than month ago
 val SharedPreferences.isIslamicOffsetExpired
-    get() = getJdnOrNull(PREF_ISLAMIC_OFFSET_SET_DATE)?.let { Jdn.today() - it > 30 } != false
+    get() = getJdnOrNull(PREF_HIJRI_OFFSET_SET_DATE)?.let { Jdn.today() - it > 30 } != false
 
 val SharedPreferences.athanVolume: Int get() = getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 
