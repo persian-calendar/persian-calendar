@@ -108,49 +108,43 @@ fun MainScreen(
 }
 
 @Composable
-fun EventView(it: Entry, modifier: Modifier = Modifier) {
+fun EventView(entry: Entry, modifier: Modifier = Modifier) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
-    val isHoliday = it.type is EntryType.Holiday
-    EventButton(
-        onClick = { isExpanded = !isExpanded },
-        isHoliday = isHoliday,
-        modifier = modifier
-            .padding(horizontal = 8.dp)
-            .fillMaxWidth(),
-    ) {
-        Column {
-            AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
-                Text(
-                    when (val type = it.type) {
-                        is EntryType.Holiday if type.source == EventSource.Iran -> "عمومی رسمی، "
-                        else -> ""
-                    } + it.title,
-                    maxLines = if (state) Int.MAX_VALUE else 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxWidth(),
-                )
-            }
-            when (val type = it.type) {
-                is EntryType.Holiday if type.source == EventSource.Iran -> "تعطیلی به مناسبت"
-                is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
-                is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
-                else -> null
-            }?.let { Text(it, Modifier.alpha(.65f)) }
-        }
+    val isHoliday = entry.type is EntryType.Holiday
+    val onClick = { isExpanded = !isExpanded }
+    val modifier = modifier
+        .padding(horizontal = 8.dp)
+        .fillMaxWidth()
+    if (isHoliday) Button(onClick = onClick, modifier = modifier) {
+        EventViewContent(isExpanded, entry)
+    } else FilledTonalButton(onClick = onClick, modifier = modifier) {
+        EventViewContent(isExpanded, entry)
     }
 }
 
 @Composable
-private fun EventButton(
-    onClick: () -> Unit,
-    isHoliday: Boolean,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    if (isHoliday) Button(onClick, modifier) { content() }
-    else FilledTonalButton(onClick, modifier) { content() }
+private fun EventViewContent(isExpanded: Boolean, entry: Entry) {
+    Column {
+        AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
+            Text(
+                when (val type = entry.type) {
+                    is EntryType.Holiday if type.source == EventSource.Iran -> "عمومی رسمی، "
+                    else -> ""
+                } + entry.title,
+                maxLines = if (state) Int.MAX_VALUE else 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxWidth(),
+            )
+        }
+        when (val type = entry.type) {
+            is EntryType.Holiday if type.source == EventSource.Iran -> "تعطیلی به مناسبت"
+            is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
+            is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
+            else -> null
+        }?.let { Text(it, Modifier.alpha(.65f)) }
+    }
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)

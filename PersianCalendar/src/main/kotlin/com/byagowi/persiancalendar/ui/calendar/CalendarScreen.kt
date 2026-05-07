@@ -1299,6 +1299,8 @@ private fun SharedTransitionScope.Toolbar(
                     ),
                 verticalArrangement = Arrangement.Center,
             ) {
+                val resources = LocalResources.current
+                val density = LocalDensity.current
                 if (isYearView) AppModesDropDown(
                     value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
@@ -1306,8 +1308,8 @@ private fun SharedTransitionScope.Toolbar(
                     small = subtitle.isNotEmpty(),
                     modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),
                 ) {
-                    stringResource(
-                        if (language.isArabicScript && LocalDensity.current.fontScale == 1f) {
+                    resources.getString(
+                        if (language.isArabicScript && density.fontScale == 1f) {
                             it.title
                         } else it.shortTitle,
                     )

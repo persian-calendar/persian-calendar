@@ -43,7 +43,7 @@ fun <T> AppModesDropDown(
     items: ImmutableList<T>,
     modifier: Modifier = Modifier,
     small: Boolean = false,
-    label: @Composable (T) -> String,
+    label: (T) -> String,
 ) {
     var showMenu by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback = LocalHapticFeedback.current

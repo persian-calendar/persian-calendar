@@ -135,11 +135,12 @@ fun SharedTransitionScope.ConverterScreen(
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
+                    val resources = LocalResources.current
                     AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
                         items = remember { ConverterScreenMode.entries.toImmutableList() },
-                    ) { stringResource(it.title) }
+                    ) { resources.getString(it.title) }
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
