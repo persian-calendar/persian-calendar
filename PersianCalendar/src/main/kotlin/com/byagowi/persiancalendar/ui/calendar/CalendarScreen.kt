@@ -531,7 +531,12 @@ fun SharedTransitionScope.CalendarScreen(
                     @Composable
                     fun Details(detailsModifier: Modifier) = Details(
                         selectedButton = selectedButton,
-                        onSelectedButtonChange = { selectedButton = it },
+                        onSelectedButtonChange = {
+                            selectedButton = it
+                            context.preferences.edit {
+                                putInt(LAST_CHOSEN_BUTTON_KEY, selectedButton?.ordinal ?: -1)
+                            }
+                        },
                         selectedDay = selectedDay,
                         onAddActionChange = { addAction = it },
                         bringDay = bringDay,
@@ -955,9 +960,6 @@ private fun SharedTransitionScope.Details(
                                         null
                                     } else button,
                                 )
-                                context.preferences.edit {
-                                    putInt(LAST_CHOSEN_BUTTON_KEY, selectedButton?.ordinal ?: -1)
-                                }
                             },
                             contentPadding = PaddingValues.Zero,
                             colors = colors,
