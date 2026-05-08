@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -64,6 +65,7 @@ fun CalendarPicker(
     betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
 ) {
+    val resources = LocalResources.current
     if (items.size >= 2) SegmentedButtonItemsPicker(
         value = value,
         items = items,
@@ -72,7 +74,7 @@ fun CalendarPicker(
         modifier = modifier,
         onValueChange = onValueChange,
     ) {
-        stringResource(
+        resources.getString(
             if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
                 it.shortTitle
             } else it.title,
@@ -88,7 +90,7 @@ private fun <T> SegmentedButtonItemsPicker(
     backgroundColor: Color,
     height: Dp,
     modifier: Modifier = Modifier,
-    content: @Composable (T) -> String,
+    label: (T) -> String,
 ) {
     BoxWithConstraints(modifier = modifier) {
         val isGradient = isGradient
@@ -217,7 +219,7 @@ private fun <T> SegmentedButtonItemsPicker(
                             .weight(1f),
                     ) {
                         Text(
-                            text = content(item),
+                            text = label(item),
                             maxLines = 1,
                             softWrap = false,
                             autoSize = TextAutoSize.StepBased(
