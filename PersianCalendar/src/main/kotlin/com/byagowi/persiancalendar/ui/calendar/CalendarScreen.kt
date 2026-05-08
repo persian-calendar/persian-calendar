@@ -231,6 +231,7 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.viewEvent
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
@@ -686,6 +687,98 @@ private fun SharedTransitionScope.Details(
             onAddEventBoxEnabledChange(false)
             scrollState.animateScrollTo(initialScroll)
         }
+
+        val buttons = listOfNotNull(
+            (DetailsButton.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
+                CalendarsTab(
+                    modifier = Modifier.padding(top = 4.dp),
+                    selectedDay = selectedDay,
+                    today = today,
+                    navigateToAstronomy = navigateToAstronomy,
+                    navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                )
+            }).takeIf { enabledCalendars.size > 1 },
+            (DetailsButton.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
+                AnimatedContent(
+                    targetState = appointments.isEmpty(),
+                    transitionSpec = {
+                        (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
+                    },
+                ) { appointmentsIsEmpty ->
+                    if (appointmentsIsEmpty) Box {
+                        Text(
+                            text = stringResource(R.string.no_event),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(vertical = 8.dp, horizontal = 24.dp)
+                                .fillMaxWidth(),
+                        )
+//                            TabEditButton(
+//                                action = { navigateToHolidaysSettings(null) },
+//                                title = stringResource(R.string.settings),
+//                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
+//                            )
+                    } else DayEvents(
+                        events = appointments,
+                        navigateToHolidaysSettings = navigateToHolidaysSettings,
+                        viewEvent = viewEvent,
+                        modifier = Modifier.padding(
+                            top = 6.dp,
+                            bottom = 8.dp,
+                            start = 24.dp,
+                            end = 24.dp,
+                        ),
+                    )
+                }
+//                        if (when {
+//                                eventsRepository.iranOthers -> true
+//                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
+//                                else -> false
+//                            } && !isTalkBackEnabled
+//                        ) {
+//                            var showDialog by rememberSaveable { mutableStateOf(false) }
+//                            if (showDialog) NoteOnAppointments(
+//                                onDismissRequest = { showDialog = false },
+//                            )
+//                            Icon(
+//                                imageVector = Icons.AutoMirrored.Default.Help,
+//                                contentDescription = null,
+//                                modifier = Modifier
+//                                    .size(36.dp)
+//                                    .padding(start = 8.dp)
+//                                    .clickable { showDialog = true },
+//                                tint = MaterialTheme.colorScheme.primary,
+//                            )
+//                        }
+            }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
+            (DetailsButton.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
+                val coordinates = coordinates
+                if (coordinates != null) TimesTab(
+                    modifier = Modifier.padding(top = 4.dp),
+                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                    navigateToAstronomy = navigateToAstronomy,
+                    coordinates = coordinates,
+                    selectedDay = selectedDay,
+                    now = now,
+                    today = today,
+                )
+//                    else EncourageActionLayout(
+//                        modifier = Modifier.padding(vertical = 8.dp),
+//                        header = stringResource(R.string.ask_user_to_set_location),
+//                        discardAction = {
+//                            context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
+//                            removeThirdTab = true
+//                        },
+//                        acceptAction = navigateToSettingsLocationTab,
+//                        hideOnAccept = false,
+//                    )
+            }).takeIf {
+                coordinates != null
+//                    !removeThirdTab && enableTimesTab()
+            },
+        ).toMap().toPersistentMap()
+
         DaysView(
             bottomPadding = fabPlaceholderHeight ?: 0.dp,
             onAddActionChange = onAddActionChange,
@@ -709,7 +802,7 @@ private fun SharedTransitionScope.Details(
             scale = scale,
             initialScroll = initialScroll,
             cellHeight = cellHeight,
-            showTimeTable = isShowDeviceCalendarEvents,
+            showTimeTable = isShowDeviceCalendarEvents || buttons.isEmpty(),
             scrollableModifier = Modifier.detectSwipe {
                 val wasAtTop = scrollState.value == 0
                 val wasAtEnd = scrollState.value == scrollState.maxValue
@@ -769,96 +862,6 @@ private fun SharedTransitionScope.Details(
                 })
             }
 
-            val buttons = listOfNotNull(
-                (DetailsButton.Calendar to @Composable {
-                    CalendarsTab(
-                        modifier = Modifier.padding(top = 4.dp),
-                        selectedDay = selectedDay,
-                        today = today,
-                        navigateToAstronomy = navigateToAstronomy,
-                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                    )
-                }).takeIf { enabledCalendars.size > 1 },
-                (DetailsButton.Events to @Composable {
-                    AnimatedContent(
-                        targetState = appointments.isEmpty(),
-                        transitionSpec = {
-                            (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
-                        },
-                    ) { appointmentsIsEmpty ->
-                        if (appointmentsIsEmpty) Box {
-                            Text(
-                                text = stringResource(R.string.no_event),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(vertical = 8.dp, horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                            )
-//                            TabEditButton(
-//                                action = { navigateToHolidaysSettings(null) },
-//                                title = stringResource(R.string.settings),
-//                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
-//                            )
-                        } else DayEvents(
-                            events = appointments,
-                            navigateToHolidaysSettings = navigateToHolidaysSettings,
-                            viewEvent = viewEvent,
-                            modifier = Modifier.padding(
-                                top = 6.dp,
-                                bottom = 8.dp,
-                                start = 24.dp,
-                                end = 24.dp,
-                            ),
-                        )
-                    }
-//                        if (when {
-//                                eventsRepository.iranOthers -> true
-//                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
-//                                else -> false
-//                            } && !isTalkBackEnabled
-//                        ) {
-//                            var showDialog by rememberSaveable { mutableStateOf(false) }
-//                            if (showDialog) NoteOnAppointments(
-//                                onDismissRequest = { showDialog = false },
-//                            )
-//                            Icon(
-//                                imageVector = Icons.AutoMirrored.Default.Help,
-//                                contentDescription = null,
-//                                modifier = Modifier
-//                                    .size(36.dp)
-//                                    .padding(start = 8.dp)
-//                                    .clickable { showDialog = true },
-//                                tint = MaterialTheme.colorScheme.primary,
-//                            )
-//                        }
-                }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
-                (DetailsButton.Times to @Composable {
-                    val coordinates = coordinates
-                    if (coordinates != null) TimesTab(
-                        modifier = Modifier.padding(top = 4.dp),
-                        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                        navigateToAstronomy = navigateToAstronomy,
-                        coordinates = coordinates,
-                        selectedDay = selectedDay,
-                        now = now,
-                        today = today,
-                    )
-//                    else EncourageActionLayout(
-//                        modifier = Modifier.padding(vertical = 8.dp),
-//                        header = stringResource(R.string.ask_user_to_set_location),
-//                        discardAction = {
-//                            context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
-//                            removeThirdTab = true
-//                        },
-//                        acceptAction = navigateToSettingsLocationTab,
-//                        hideOnAccept = false,
-//                    )
-                }).takeIf {
-                    coordinates != null
-//                    !removeThirdTab && enableTimesTab()
-                },
-            ).toMap().toPersistentMap()
             onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
             val swipeModifier = Modifier
@@ -934,7 +937,7 @@ private fun SharedTransitionScope.Details(
                 modifier = swipeModifier.fillMaxWidth(),
             ) {
                 val content = buttons[it]
-                if (content != null) content() else Spacer(Modifier.height(10.dp))
+                if (content != null) content(appointments) else Spacer(Modifier.height(10.dp))
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
