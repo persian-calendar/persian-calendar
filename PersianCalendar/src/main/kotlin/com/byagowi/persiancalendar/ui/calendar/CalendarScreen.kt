@@ -77,6 +77,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -86,6 +87,8 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
@@ -779,7 +782,56 @@ private fun SharedTransitionScope.Details(
             },
         ).toMap().toPersistentMap()
 
-        DaysView(
+        var selectedButton by remember {
+            val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
+            mutableStateOf(
+                DetailsButton.entries.getOrNull(lastChosenIndex) ?: run {
+                    if (isShowDeviceCalendarEvents) null else DetailsButton.entries.first()
+                },
+            )
+        }
+
+        val horizontalSwipeModifier = Modifier.detectHorizontalSwipe {
+            { isLeft ->
+                selectedButton = selectedButton?.let {
+                    buttons.keys.toList().getOrNull(
+                        (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(buttons.size),
+                    )
+                }
+            }
+        }
+
+        if (!isShowDeviceCalendarEvents) Column(modifier = horizontalSwipeModifier) {
+            PrimaryTabRow(
+                selectedTabIndex = buttons.keys.indexOf(selectedButton).coerceAtLeast(0),
+                divider = {},
+                containerColor = Color.Transparent,
+                indicator = {
+                    val offset = buttons.keys.indexOf(selectedButton).coerceAtLeast(0)
+                    val tabIndicatorColor by animateColor(MaterialTheme.colorScheme.primary)
+                    TabRowDefaults.PrimaryIndicator(
+                        modifier = Modifier.tabIndicatorOffset(selectedTabIndex = offset),
+                        color = tabIndicatorColor,
+                    )
+                },
+            ) {
+                buttons.entries.forEach { (button, _) ->
+                    Tab(
+                        text = { Text(stringResource(button.title)) },
+                        modifier = Modifier.clip(MaterialTheme.shapes.large),
+                        selected = selectedButton == button,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurface,
+                        onClick = { selectedButton = button },
+                    )
+                }
+            }
+
+            buttons[selectedButton]?.invoke(
+                readEventsWithEquinox(
+                    selectedDay, now, EventsStore(emptyList()),
+                ),
+            )
+        } else DaysView(
             bottomPadding = fabPlaceholderHeight ?: 0.dp,
             onAddActionChange = onAddActionChange,
             startingDay = selectedDay,
@@ -855,42 +907,27 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
-            var selectedButton by remember {
-                val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
-                mutableStateOf(DetailsButton.entries.getOrNull(lastChosenIndex) ?: run {
-                    if (isShowDeviceCalendarEvents) null else DetailsButton.entries.first()
-                })
-            }
-
             onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
-            val swipeModifier = Modifier
-                .detectHorizontalSwipe {
-                    { isLeft ->
-                        selectedButton = selectedButton?.let {
-                            buttons.keys.toList().getOrNull(
-                                (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(buttons.size),
-                            )
-                        }
-                    }
+            val verticalSwipeModifier = Modifier.detectSwipe {
+                val wasAtTop = headerScrollState.value == 0
+                val wasAtEnd = headerScrollState.value == headerScrollState.maxValue
+                { isUp: Boolean ->
+                    when {
+                        isUp && wasAtEnd -> swipeUpActions[preferredSwipeUpAction]
+                        !isUp && wasAtTop -> swipeDownActions[preferredSwipeDownAction]
+                        else -> null
+                    }?.invoke()
                 }
-                .detectSwipe {
-                    val wasAtTop = headerScrollState.value == 0
-                    val wasAtEnd = headerScrollState.value == headerScrollState.maxValue
-                    { isUp: Boolean ->
-                        when {
-                            isUp && wasAtEnd -> swipeUpActions[preferredSwipeUpAction]
-                            !isUp && wasAtTop -> swipeDownActions[preferredSwipeDownAction]
-                            else -> null
-                        }?.invoke()
-                    }
-                }
+            }
 
             if (buttons.isNotEmpty()) CompositionLocalProvider(
                 LocalMinimumInteractiveComponentSize provides 0.dp,
             ) {
                 SingleChoiceSegmentedButtonRow(
-                    modifier = swipeModifier.align(Alignment.CenterHorizontally),
+                    modifier = verticalSwipeModifier
+                        .then(horizontalSwipeModifier)
+                        .align(Alignment.CenterHorizontally),
                 ) {
                     val defaultColors = SegmentedButtonDefaults.colors()
                     val colors = defaultColors.copy(
@@ -934,7 +971,7 @@ private fun SharedTransitionScope.Details(
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
-                modifier = swipeModifier.fillMaxWidth(),
+                modifier = verticalSwipeModifier.fillMaxWidth(),
             ) {
                 val content = buttons[it]
                 if (content != null) content(appointments) else Spacer(Modifier.height(10.dp))
