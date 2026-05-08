@@ -106,6 +106,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -330,6 +331,15 @@ fun SharedTransitionScope.CalendarScreen(
         )
     }
 
+    var selectedButton by remember {
+        val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
+        mutableStateOf(
+            DetailsButton.entries.getOrNull(lastChosenIndex) ?: run {
+                if (isShowDeviceCalendarEvents) null else DetailsButton.entries.first()
+            },
+        )
+    }
+
     Scaffold(
         modifier = modifier.onKeyEvent { keyEvent ->
             if (!isYearView && keyEvent.type == KeyEventType.KeyDown) {
@@ -435,7 +445,7 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = !isYearView,
+                visible = !isYearView && (selectedButton == DetailsButton.Events || isShowDeviceCalendarEvents),
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -520,6 +530,8 @@ fun SharedTransitionScope.CalendarScreen(
                 if (!isYearViewState) {
                     @Composable
                     fun Details(detailsModifier: Modifier) = Details(
+                        selectedButton = selectedButton,
+                        onSelectedButtonChange = { selectedButton = it },
                         selectedDay = selectedDay,
                         onAddActionChange = { addAction = it },
                         bringDay = bringDay,
@@ -656,6 +668,8 @@ private fun SharedTransitionScope.Details(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
     swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
+    selectedButton: DetailsButton?,
+    onSelectedButtonChange: (DetailsButton?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -753,7 +767,7 @@ private fun SharedTransitionScope.Details(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-            }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnApp },
+            }).takeIf { (!eventsRepository.isEmpty && today.isYearSupportedOnApp) || !isShowDeviceCalendarEvents },
             (DetailsButton.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
                 val coordinates = coordinates
                 if (coordinates != null) TimesTab(
@@ -782,27 +796,22 @@ private fun SharedTransitionScope.Details(
             },
         ).toMap().toPersistentMap()
 
-        var selectedButton by remember {
-            val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
-            mutableStateOf(
-                DetailsButton.entries.getOrNull(lastChosenIndex) ?: run {
-                    if (isShowDeviceCalendarEvents) null else DetailsButton.entries.first()
-                },
-            )
-        }
+        val selectedButton by rememberUpdatedState(selectedButton)
 
         val horizontalSwipeModifier = Modifier.detectHorizontalSwipe {
             { isLeft ->
-                selectedButton = selectedButton?.let {
-                    buttons.keys.toList().getOrNull(
-                        (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(buttons.size),
-                    )
-                }
+                onSelectedButtonChange(
+                    selectedButton?.let {
+                        buttons.keys.toList().getOrNull(
+                            (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(buttons.size),
+                        )
+                    },
+                )
             }
         }
 
         if (!isShowDeviceCalendarEvents) Column(modifier = horizontalSwipeModifier) {
-            PrimaryTabRow(
+            if (buttons.size > 1) PrimaryTabRow(
                 selectedTabIndex = buttons.keys.indexOf(selectedButton).coerceAtLeast(0),
                 divider = {},
                 containerColor = Color.Transparent,
@@ -821,13 +830,13 @@ private fun SharedTransitionScope.Details(
                         modifier = Modifier.clip(MaterialTheme.shapes.large),
                         selected = selectedButton == button,
                         unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                        onClick = { selectedButton = button },
+                        onClick = { onSelectedButtonChange(button) },
                     )
                 }
             }
 
             if (selectedButton == DetailsButton.Events) { Spacer(Modifier.height(8.dp)) }
-            buttons[selectedButton]?.invoke(
+            (buttons[selectedButton] ?: buttons.entries.firstOrNull()?.value)?.invoke(
                 readEventsWithEquinox(
                     selectedDay, now, EventsStore(emptyList()),
                 ),
@@ -941,9 +950,11 @@ private fun SharedTransitionScope.Details(
                         SegmentedButton(
                             modifier = Modifier.defaultMinSize(minHeight = 38.dp),
                             onClick = {
-                                selectedButton = if (selectedButton == button && isShowDeviceCalendarEvents) {
-                                    null
-                                } else button
+                                onSelectedButtonChange(
+                                    if (selectedButton == button && isShowDeviceCalendarEvents) {
+                                        null
+                                    } else button,
+                                )
                                 context.preferences.edit {
                                     putInt(LAST_CHOSEN_BUTTON_KEY, selectedButton?.ordinal ?: -1)
                                 }
