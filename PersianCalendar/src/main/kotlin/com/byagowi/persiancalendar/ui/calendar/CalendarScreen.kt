@@ -972,7 +972,9 @@ private fun SharedTransitionScope.Details(
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
-                modifier = verticalSwipeModifier.fillMaxWidth(),
+                modifier = verticalSwipeModifier
+                    .then(horizontalSwipeModifier)
+                    .fillMaxWidth(),
             ) {
                 val content = buttons[it]
                 if (content != null) content(appointments) else Spacer(Modifier.height(10.dp))
