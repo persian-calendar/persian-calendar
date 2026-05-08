@@ -815,7 +815,17 @@ private fun SharedTransitionScope.Details(
             }
         }
 
-        if (!isShowDeviceCalendarEvents) Column(modifier = horizontalSwipeModifier) {
+        if (!isShowDeviceCalendarEvents) Column(
+            modifier = horizontalSwipeModifier.detectSwipe {
+                { isUp: Boolean ->
+                    when {
+                        isUp -> swipeUpActions[preferredSwipeUpAction]
+                        !isUp -> swipeDownActions[preferredSwipeDownAction]
+                        else -> null
+                    }?.invoke()
+                }
+            },
+        ) {
             if (buttons.size > 1) PrimaryTabRow(
                 selectedTabIndex = buttons.keys.indexOf(selectedButton).coerceAtLeast(0),
                 divider = {},
