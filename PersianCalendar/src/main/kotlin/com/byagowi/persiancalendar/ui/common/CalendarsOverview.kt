@@ -257,7 +257,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         AnimatedVisibility(
-            isExpanded && isAstronomicalExtraFeaturesEnabled && !persianDate.isOldEra,
+            ((isExpanded && isAstronomicalExtraFeaturesEnabled) || showHistoricalCalendars) && !persianDate.isOldEra,
         ) {
             val zodiacString =
                 if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
@@ -533,8 +533,7 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier
-                        .clip(shape = MaterialTheme.shapes.small)
+                    Modifier.clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )

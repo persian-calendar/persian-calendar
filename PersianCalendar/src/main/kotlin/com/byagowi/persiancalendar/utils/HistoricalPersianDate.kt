@@ -6,6 +6,7 @@
 package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.PersianDate
@@ -69,7 +70,9 @@ fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
     val dayOfYear = persianDayOfYear(persianDate, jdn)
     val persianYear = persianDate.year
     val jalali = jalaliName(persianYear, dayOfYear)
-    return jalali + persianDelimiter + fasliDayName(dayOfYear) + " " + numeral.format(persianYear + zoroastrianismYearOffset) + " زرتشتیان"
+    return jalali + persianDelimiter + fasliDayName(dayOfYear) + (if (BuildConfig.DEVELOPMENT) {
+        " " + numeral.format(persianYear + zoroastrianismYearOffset) + " زرتشتیان"
+    } else "")
 }
 
 fun jalaliDayOfYear(date: PersianDate): String {

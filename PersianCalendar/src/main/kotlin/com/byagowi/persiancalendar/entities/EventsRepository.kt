@@ -101,7 +101,8 @@ data class EventsRepository(
     }
 
     fun List<CalendarEvent<*>>.filterEvents(jdn: Jdn): List<CalendarEvent<*>> {
-        val supported = jdn.isYearSupportedOnAppAndNextYear && Jdn.today().isYearSupportedOnApp
+        val supported =
+            jdn.isYearSupportedOnAppAndNextYear && Jdn.today().isYearSupportedOnAppAndNextYear
         val timeZone = TimeZone.getDefault().id
         return this.filter {
             when {

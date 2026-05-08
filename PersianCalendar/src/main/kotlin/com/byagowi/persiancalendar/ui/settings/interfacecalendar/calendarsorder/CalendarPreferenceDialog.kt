@@ -44,6 +44,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
@@ -208,7 +209,7 @@ fun CalendarPreferenceDialog(
             ) { context.preferences.edit { putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, it) } }
         }
         AnimatedVisibility(
-            visible = showMore && language.isPersian,
+            visible = showMore && language.isPersian && BuildConfig.DEVELOPMENT,
             modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
         ) {
             val context = LocalContext.current

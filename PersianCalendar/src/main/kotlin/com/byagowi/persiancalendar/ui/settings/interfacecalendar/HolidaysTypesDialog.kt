@@ -178,7 +178,7 @@ fun CountryEvents(
 //    // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
 //    hideTheFirstRowFromAccessibility: Boolean = true,
 ) {
-    if (!remember { Jdn.today() }.isYearSupportedOnApp) return
+    if (!remember { Jdn.today() }.isYearSupportedOnAppAndNextYear) return
     Column(modifier) {
 //        Row(
 //            Modifier
