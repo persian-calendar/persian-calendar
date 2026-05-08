@@ -826,6 +826,7 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
+            if (selectedButton == DetailsButton.Events) { Spacer(Modifier.height(8.dp)) }
             buttons[selectedButton]?.invoke(
                 readEventsWithEquinox(
                     selectedDay, now, EventsStore(emptyList()),
