@@ -709,6 +709,7 @@ private fun SharedTransitionScope.Details(
             scale = scale,
             initialScroll = initialScroll,
             cellHeight = cellHeight,
+            showTimeTable = isShowDeviceCalendarEvents,
             scrollableModifier = Modifier.detectSwipe {
                 val wasAtTop = scrollState.value == 0
                 val wasAtEnd = scrollState.value == scrollState.maxValue
@@ -763,7 +764,9 @@ private fun SharedTransitionScope.Details(
 
             var selectedButton by remember {
                 val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
-                mutableStateOf(DetailsButton.entries.getOrNull(lastChosenIndex))
+                mutableStateOf(DetailsButton.entries.getOrNull(lastChosenIndex) ?: run {
+                    if (isShowDeviceCalendarEvents) null else DetailsButton.entries.first()
+                })
             }
 
             val buttons = listOfNotNull(
@@ -897,7 +900,9 @@ private fun SharedTransitionScope.Details(
                         SegmentedButton(
                             modifier = Modifier.defaultMinSize(minHeight = 38.dp),
                             onClick = {
-                                selectedButton = if (selectedButton == button) null else button
+                                selectedButton = if (selectedButton == button && isShowDeviceCalendarEvents) {
+                                    null
+                                } else button
                                 context.preferences.edit {
                                     putInt(LAST_CHOSEN_BUTTON_KEY, selectedButton?.ordinal ?: -1)
                                 }
