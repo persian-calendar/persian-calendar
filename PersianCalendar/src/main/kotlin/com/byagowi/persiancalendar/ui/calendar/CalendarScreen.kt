@@ -850,12 +850,16 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
-            if (selectedButton == DetailsButton.Events) { Spacer(Modifier.height(8.dp)) }
+            if (selectedButton == DetailsButton.Events) Spacer(Modifier.height(8.dp))
             (buttons[selectedButton] ?: buttons.entries.firstOrNull()?.value)?.invoke(
                 readEventsWithEquinox(
                     selectedDay, now, EventsStore(emptyList()),
                 ),
             )
+            if (selectedButton == DetailsButton.Events) {
+                val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+                ShiftWorkView(shiftWorkTitle, today, selectedDay)
+            }
         } else DaysView(
             bottomPadding = fabPlaceholderHeight ?: 0.dp,
             onAddActionChange = onAddActionChange,
@@ -894,43 +898,7 @@ private fun SharedTransitionScope.Details(
             numeral = numeral,
         ) { appointments, headerScrollState, onHasContentChange ->
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-            Column {
-                AnimatedVisibility(visible = shiftWorkTitle != null) {
-                    AnimatedContent(
-                        targetState = shiftWorkTitle.orEmpty(),
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state ->
-                        SelectionContainer {
-                            Text(
-                                state,
-                                style = MaterialTheme.typography.titleLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
-                }
-                val shiftWorkInDaysDistance =
-                    shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
-                AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
-                    AnimatedContent(
-                        targetState = shiftWorkInDaysDistance.orEmpty(),
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state ->
-                        SelectionContainer {
-                            Text(
-                                state,
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
-                }
-                AnimatedVisibility(visible = shiftWorkTitle != null) {
-                    Spacer(Modifier.height(12.dp))
-                }
-            }
+            ShiftWorkView(shiftWorkTitle, today, selectedDay)
 
             onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
@@ -1037,6 +1005,47 @@ private fun SharedTransitionScope.Details(
                     Spacer(Modifier.height(8.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun ShiftWorkView(shiftWorkTitle: String?, today: Jdn, selectedDay: Jdn) {
+    Column {
+        AnimatedVisibility(visible = shiftWorkTitle != null) {
+            AnimatedContent(
+                targetState = shiftWorkTitle.orEmpty(),
+                transitionSpec = appCrossfadeSpec,
+            ) { state ->
+                SelectionContainer {
+                    Text(
+                        state,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+        }
+        val shiftWorkInDaysDistance =
+            shiftWorkSettings.getShiftWorksInDaysDistance(today, selectedDay)
+        AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
+            AnimatedContent(
+                targetState = shiftWorkInDaysDistance.orEmpty(),
+                transitionSpec = appCrossfadeSpec,
+            ) { state ->
+                SelectionContainer {
+                    Text(
+                        state,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+        }
+        AnimatedVisibility(visible = shiftWorkTitle != null) {
+            Spacer(Modifier.height(12.dp))
         }
     }
 }
