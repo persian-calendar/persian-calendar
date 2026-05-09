@@ -14,6 +14,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
@@ -22,11 +23,13 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
@@ -814,6 +817,15 @@ private fun SharedTransitionScope.Details(
             }
         }
 
+        @Composable
+        fun tabTransitionSpec(): AnimatedContentTransitionScope<DetailsButton?>.() -> ContentTransform =
+            {
+                val forward = (this.initialState?.ordinal ?: 0) > (this.targetState?.ordinal ?: 0)
+                (fadeIn() + expandHorizontally(expandFrom = if (forward) Alignment.Start else Alignment.End)).togetherWith(
+                    fadeOut() + shrinkHorizontally(shrinkTowards = if (forward) Alignment.Start else Alignment.End),
+                )
+            }
+
         if (!isShowDeviceCalendarEvents) Column(
             modifier = horizontalSwipeModifier.detectSwipe {
                 { isUp: Boolean ->
@@ -849,15 +861,22 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
-            if (selectedButton == DetailsButton.Events) Spacer(Modifier.height(8.dp))
-            (buttons[selectedButton] ?: buttons.entries.firstOrNull()?.value)?.invoke(
-                readEventsWithEquinox(
-                    selectedDay, now, EventsStore(emptyList()),
-                ),
-            )
-            if (selectedButton == DetailsButton.Events) {
-                val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-                ShiftWorkView(shiftWorkTitle, today, selectedDay)
+            AnimatedContent(
+                targetState = selectedButton,
+                transitionSpec = tabTransitionSpec(),
+            ) { selectedButton ->
+                Column {
+                    if (selectedButton == DetailsButton.Events) {
+                        Spacer(Modifier.height(8.dp))
+                        val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+                        ShiftWorkView(shiftWorkTitle, today, selectedDay)
+                    }
+                    (buttons[selectedButton] ?: buttons.entries.firstOrNull()?.value)?.invoke(
+                        readEventsWithEquinox(
+                            selectedDay, now, EventsStore(emptyList()),
+                        ),
+                    )
+                }
             }
         } else DaysView(
             bottomPadding = fabPlaceholderHeight ?: 0.dp,
@@ -959,9 +978,7 @@ private fun SharedTransitionScope.Details(
             }
             AnimatedContent(
                 targetState = selectedButton,
-                transitionSpec = {
-                    (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
-                },
+                transitionSpec = tabTransitionSpec(),
                 modifier = verticalSwipeModifier
                     .then(horizontalSwipeModifier)
                     .fillMaxWidth(),
