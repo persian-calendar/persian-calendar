@@ -709,6 +709,7 @@ private fun SharedTransitionScope.Details(
             onAddEventBoxEnabledChange(false)
             scrollState.animateScrollTo(initialScroll)
         }
+        var removeThirdTab by remember { mutableStateOf(false) }
 
         val buttons = listOfNotNull(
             (DetailsButton.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
@@ -784,21 +785,19 @@ private fun SharedTransitionScope.Details(
                     selectedDay = selectedDay,
                     now = now,
                     today = today,
-                )
-//                    else EncourageActionLayout(
-//                        modifier = Modifier.padding(vertical = 8.dp),
-//                        header = stringResource(R.string.ask_user_to_set_location),
-//                        discardAction = {
-//                            context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
-//                            removeThirdTab = true
-//                        },
-//                        acceptAction = navigateToSettingsLocationTab,
-//                        hideOnAccept = false,
-//                    )
-            }).takeIf {
-                coordinates != null
-//                    !removeThirdTab && enableTimesTab()
-            },
+                ) else Column {
+                    EncourageActionLayout(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        header = stringResource(R.string.ask_user_to_set_location),
+                        discardAction = {
+                            context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
+                            removeThirdTab = true
+                        },
+                        acceptAction = navigateToSettingsLocationTab,
+                        hideOnAccept = false,
+                    )
+                }
+            }).takeIf { !removeThirdTab && enableTimesTab() },
         ).toMap().toPersistentMap()
 
         val selectedButton by rememberUpdatedState(selectedButton)
