@@ -698,9 +698,11 @@ fun updateStoredPreference(context: Context) {
 
     isAstronomicalExtraFeaturesEnabled_.value =
         preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, DEFAULT_ASTRONOMICAL_FEATURES)
-    showMoonInScorpio_.value = isAstronomicalExtraFeaturesEnabled_.value && run {
-        preferences.getBoolean(PREF_SHOW_MOON_IN_SCORPIO, DEFAULT_SHOW_MOON_IN_SCORPIO)
-    }
+    showMoonInScorpio_.value = isAstronomicalExtraFeaturesEnabled_.value && preferences.getBoolean(
+        PREF_SHOW_MOON_IN_SCORPIO,
+        // It's true for the older users but the moment user enables astronomical features it disables this
+        true,
+    )
     numericalDatePreferred_.value =
         preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, DEFAULT_NUMERICAL_DATE_PREFERRED)
     showQibla_.value = preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
