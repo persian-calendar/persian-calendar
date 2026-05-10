@@ -26,26 +26,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see https://www.gnu.org/licenses/.
 </details>
 
-<details open>
-  <summary>فارسی</summary>
-
-<div dir="rtl">
-
-## تقویم فارسی اندروید
-تقویم ساده، رایگان و آزاد اندروید
-
-### وضعیت توسعه و ترجمه
-[![Android CI](https://github.com/persian-calendar/persian-calendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/persian-calendar/actions)
-[![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
-
-## مجوز شرایط استفاده از کد برنامه
-
-در بالا شرایط استفاده از برنامه به شکل رسمی آمده، دلیل استفاده از این مجوز این بوده که برای سورس برنامه از کدهایی که دارای این شرایط بوده‌اند استفاده‌شده که ما را ملزم به استفاده از این شرایط برای سورس برنامه کرده است پس توقع می‌رود شما هم در استفاده از سورس برنامه چنین کنید، شرایط استفاده از کد به طور ساده شده در اینجا
-https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
-توضیح داده شده است، خلاصه‌اش تقریباً اینگونه است که لازم است به همان شکلی که سورس برنامه را به همراه برنامه دریافت کرده‌اید، سورس برنامهٔ تغییر داده شده خود را حداقل در هر انتشار در جایی عمومی قرار دهید، پیوند آن را هم به صورت عمومی قرار دهید و ارجاع مناسب به سورس اصلی دهید. همانطور که اشاره شد از آنجایی که از سورس دیگرانی با همین مجوز در این برنامه استفاده شده است در اختیار ما نیست که به شکل دیگری استفاده از این سورس را مجاز کنیم. با تشکر
-</div>
-</details>
-
 ## Build
 
 1. In Android Studio, File > New > Project from Version Control.
