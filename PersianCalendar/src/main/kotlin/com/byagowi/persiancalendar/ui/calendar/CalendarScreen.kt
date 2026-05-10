@@ -63,6 +63,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -865,7 +866,7 @@ private fun SharedTransitionScope.Details(
                 targetState = selectedButton,
                 transitionSpec = tabTransitionSpec(),
             ) { selectedButton ->
-                Column {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
                     if (selectedButton == DetailsButton.Events) {
                         Spacer(Modifier.height(8.dp))
                         val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
