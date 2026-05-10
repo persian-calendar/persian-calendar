@@ -18,12 +18,14 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -90,6 +92,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -109,6 +112,7 @@ import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import kotlinx.collections.immutable.toImmutableList
+import kotlin.math.min
 
 @Composable
 fun SharedTransitionScope.AboutScreen(
@@ -137,18 +141,22 @@ fun SharedTransitionScope.AboutScreen(
             )
         },
     ) { paddingValues ->
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding())
                 .clip(materialCornerExtraLargeTop()),
         ) {
+            val maxHeight = this.maxHeight
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Header(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) })
                 val headerPx = with(LocalDensity.current) { headerSize.toPx() }
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 ScreenSurface(
-                    disableSharedContent = remember { derivedStateOf { scrollState.value > headerPx } }.value,
+                    modifier = Modifier.defaultMinSize(minHeight = maxHeight),
+                    disableSharedContent = remember {
+                        derivedStateOf { scrollState.value > headerPx }
+                    }.value,
                 ) { AboutScreenContent(navigateToLicenses, bottomPadding) }
             }
             ScrollShadow(scrollState, skipTop = true)
@@ -282,7 +290,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Bug report
-        if (remember { Jdn.today() }.isYearSupportedOnApp) {
+        if (false && remember { Jdn.today() }.isYearSupportedOnApp) {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = Icons.Default.Email,
@@ -294,7 +302,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Developers
-        Developers()
+//        Developers()
 
         Spacer(Modifier.height(bottomPadding))
     }
