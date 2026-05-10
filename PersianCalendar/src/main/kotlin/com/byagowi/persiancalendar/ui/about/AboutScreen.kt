@@ -91,8 +91,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -112,7 +112,6 @@ import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import kotlinx.collections.immutable.toImmutableList
-import kotlin.math.min
 
 @Composable
 fun SharedTransitionScope.AboutScreen(
@@ -153,7 +152,9 @@ fun SharedTransitionScope.AboutScreen(
                 val headerPx = with(LocalDensity.current) { headerSize.toPx() }
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 ScreenSurface(
-                    modifier = Modifier.defaultMinSize(minHeight = maxHeight),
+                    modifier = Modifier.defaultMinSize(
+                        minHeight = (maxHeight - headerSize).coerceAtLeast(0.dp),
+                    ),
                     disableSharedContent = remember {
                         derivedStateOf { scrollState.value > headerPx }
                     }.value,
