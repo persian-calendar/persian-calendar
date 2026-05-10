@@ -870,6 +870,9 @@ private fun SharedTransitionScope.Details(
                     if (selectedButton == DetailsTab.Events) {
                         Spacer(Modifier.height(8.dp))
                         val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+                        AnimatedVisibility(visible = shiftWorkTitle != null) {
+                            Spacer(Modifier.height(4.dp))
+                        }
                         ShiftWorkView(shiftWorkTitle, today, selectedDay)
                     }
                     (tabs[selectedButton] ?: tabs.entries.firstOrNull()?.value)?.invoke(
@@ -918,6 +921,9 @@ private fun SharedTransitionScope.Details(
         ) { appointments, headerScrollState, onHasContentChange ->
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
             ShiftWorkView(shiftWorkTitle, today, selectedDay)
+            AnimatedVisibility(visible = shiftWorkTitle != null) {
+                Spacer(Modifier.height(12.dp))
+            }
 
             onHasContentChange(tabs.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
@@ -1036,7 +1042,7 @@ private fun ShiftWorkView(shiftWorkTitle: String?, today: Jdn, selectedDay: Jdn)
             ) { state ->
                 SelectionContainer {
                     Text(
-                        state,
+                        text = state,
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -1053,16 +1059,13 @@ private fun ShiftWorkView(shiftWorkTitle: String?, today: Jdn, selectedDay: Jdn)
             ) { state ->
                 SelectionContainer {
                     Text(
-                        state,
+                        text = state,
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
-        }
-        AnimatedVisibility(visible = shiftWorkTitle != null) {
-            Spacer(Modifier.height(12.dp))
         }
     }
 }
