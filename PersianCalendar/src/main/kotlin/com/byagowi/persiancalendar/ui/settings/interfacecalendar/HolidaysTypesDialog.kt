@@ -33,7 +33,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -129,9 +128,9 @@ fun HolidaysTypesDialog(
                 @Composable
                 fun International() {
                     ItemCheckBox(
-                        AnnotatedString(stringResource(R.string.international)),
-                        enabledTypes,
-                        EventsRepository.INTERNATIONAL_KEY,
+                        label = stringResource(R.string.international),
+                        enabledTypes = enabledTypes,
+                        key = EventsRepository.INTERNATIONAL_KEY,
                         destinationItem = destinationItem,
                     )
                 }
@@ -155,9 +154,9 @@ fun HolidaysTypesDialog(
                         )
                     }
                     if (!language.isAfghanistanExclusive) ItemCheckBox(
-                        AnnotatedString("مناسبت‌های ایران باستان"),
-                        enabledTypes,
-                        EventsRepository.IRAN_ANCIENT_KEY,
+                        label = "مناسبت‌های ایران باستان",
+                        enabledTypes = enabledTypes,
+                        key = EventsRepository.IRAN_ANCIENT_KEY,
                         destinationItem = destinationItem,
                     )
                     International()
@@ -204,8 +203,7 @@ fun CountryEvents(
                 .fillMaxWidth()
                 .then(
                     if (hideTheFirstRowFromAccessibility) {
-                        Modifier
-                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        Modifier.semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                             .clearAndSetSemantics {}
                     } else Modifier,
                 )
@@ -254,15 +252,20 @@ fun CountryEvents(
         listOf(
             holidaysTitle to holidaysKey,
             nonHolidaysTitle to nonHolidaysKey,
-        ).map { (title, key) ->
-            AnnotatedString(title) to key
-        }.forEach { (title, key) -> ItemCheckBox(title, enabledTypes, key, destinationItem) }
+        ).forEach { (title, key) ->
+            ItemCheckBox(
+                label = title,
+                enabledTypes = enabledTypes,
+                key = key,
+                destinationItem = destinationItem,
+            )
+        }
     }
 }
 
 @Composable
 private fun ItemCheckBox(
-    label: AnnotatedString,
+    label: String,
     enabledTypes: SnapshotStateList<String>,
     key: String,
     destinationItem: String?,
