@@ -11,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -64,6 +65,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
@@ -178,86 +180,96 @@ fun SharedTransitionScope.ConverterScreen(
     ) { paddingValues ->
         ScreenSurface(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val scrollState = rememberScrollState()
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
-            ) {
-                Spacer(Modifier.height(24.dp))
+            BoxWithConstraints {
+                val maxHeight = this.maxHeight
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
+                ) {
+                    val topPadding = 24.dp
+                    Spacer(Modifier.height(topPadding))
 
-                run {
-                    val isTimeZones = screenMode == ConverterScreenMode.TIME_ZONES
-                    AnimatedVisibility(visible = isTimeZones) {
-                        TimeZones(
-                            pendingConfirms = pendingConfirms,
-                            onShareActionChange = { if (isTimeZones) shareAction = it },
-                            onResetActionChange = { if (isTimeZones) resetAction = it },
-                            onResetButtonVisibilityChange = {
-                                if (isTimeZones) resetButtonVisibility = it
-                            },
-                        )
-                    }
-                }
-
-                run {
-                    val isConverterOrDistance = when (screenMode) {
-                        ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
-                        else -> false
-                    }
-                    AnimatedVisibility(visible = isConverterOrDistance) {
-                        ConverterAndDistance(
-                            navigateToAstronomy = navigateToAstronomy,
-                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                            pendingConfirms = pendingConfirms,
-                            screenMode = screenMode,
-                            onShareActionChange = { if (isConverterOrDistance) shareAction = it },
-                            onResetActionChange = { if (isConverterOrDistance) resetAction = it },
-                            onResetButtonVisibilityChange = {
-                                if (isConverterOrDistance) resetButtonVisibility = it
-                            },
-                            today = today,
-                        )
-                    }
-                }
-
-                run {
-                    val isCalculator = screenMode == ConverterScreenMode.CALCULATOR
-                    AnimatedVisibility(visible = isCalculator) {
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            Calculator(
-                                onShareActionChange = { if (isCalculator) shareAction = it },
-                                onResetActionChange = { if (isCalculator) resetAction = it },
+                    run {
+                        val isTimeZones = screenMode == ConverterScreenMode.TIME_ZONES
+                        AnimatedVisibility(visible = isTimeZones) {
+                            TimeZones(
+                                pendingConfirms = pendingConfirms,
+                                onShareActionChange = { if (isTimeZones) shareAction = it },
+                                onResetActionChange = { if (isTimeZones) resetAction = it },
                                 onResetButtonVisibilityChange = {
-                                    if (isCalculator) resetButtonVisibility = it
+                                    if (isTimeZones) resetButtonVisibility = it
                                 },
                             )
                         }
                     }
-                }
 
-                run {
-                    val isQrCode = screenMode == ConverterScreenMode.QR_CODE
-                    AnimatedVisibility(visible = isQrCode) {
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            QrCode(
-                                onShareActionChange = { if (isQrCode) shareAction = it },
-                                onResetActionChange = { if (isQrCode) resetAction = it },
-                                onResetButtonVisibilityChange = {
-                                    if (isQrCode) resetButtonVisibility = it
+                    run {
+                        val isConverterOrDistance = when (screenMode) {
+                            ConverterScreenMode.CONVERTER, ConverterScreenMode.DISTANCE -> true
+                            else -> false
+                        }
+                        AnimatedVisibility(visible = isConverterOrDistance) {
+                            ConverterAndDistance(
+                                navigateToAstronomy = navigateToAstronomy,
+                                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                                pendingConfirms = pendingConfirms,
+                                screenMode = screenMode,
+                                onShareActionChange = {
+                                    if (isConverterOrDistance) shareAction = it
                                 },
+                                onResetActionChange = {
+                                    if (isConverterOrDistance) resetAction = it
+                                },
+                                onResetButtonVisibilityChange = {
+                                    if (isConverterOrDistance) resetButtonVisibility = it
+                                },
+                                today = today,
                             )
                         }
                     }
-                }
 
-                Spacer(
-                    Modifier.height(
-                        paddingValues.calculateBottomPadding().coerceAtLeast(24.dp),
-                    ),
-                )
+                    run {
+                        val isCalculator = screenMode == ConverterScreenMode.CALCULATOR
+                        AnimatedVisibility(visible = isCalculator) {
+                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                Calculator(
+                                    onShareActionChange = { if (isCalculator) shareAction = it },
+                                    onResetActionChange = { if (isCalculator) resetAction = it },
+                                    onResetButtonVisibilityChange = {
+                                        if (isCalculator) resetButtonVisibility = it
+                                    },
+                                )
+                            }
+                        }
+                    }
+
+                    val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(24.dp)
+                    run {
+                        val isQrCode = screenMode == ConverterScreenMode.QR_CODE
+                        AnimatedVisibility(visible = isQrCode) {
+                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                QrCode(
+                                    onShareActionChange = { if (isQrCode) shareAction = it },
+                                    onResetActionChange = { if (isQrCode) resetAction = it },
+                                    onResetButtonVisibilityChange = {
+                                        if (isQrCode) resetButtonVisibility = it
+                                    },
+                                    maxHorizontalHeight = maxHeight - bottomPadding - topPadding,
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(
+                        Modifier.height(
+                            paddingValues.calculateBottomPadding().coerceAtLeast(24.dp),
+                        ),
+                    )
+                }
+                ScrollShadow(scrollState)
             }
-            ScrollShadow(scrollState)
         }
     }
 }
@@ -426,6 +438,7 @@ private fun QrCode(
     onShareActionChange: (() -> Unit) -> Unit,
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
+    maxHorizontalHeight: Dp,
 ) {
     var input by rememberSaveable { mutableStateOf("https://example.com") }
     LaunchedEffect(key1 = Unit) { onResetActionChange { input = "" } }
@@ -470,7 +483,12 @@ private fun QrCode(
             SampleInputButton(Modifier.align(Alignment.CenterHorizontally))
         }
         Spacer(Modifier.width(24.dp))
-        Box(Modifier.weight(1f)) { Qr() }
+        Box(
+            Modifier
+                .weight(1f)
+                .height(maxHorizontalHeight),
+            contentAlignment = Alignment.TopCenter,
+        ) { Qr() }
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TextField(
             value = input,
