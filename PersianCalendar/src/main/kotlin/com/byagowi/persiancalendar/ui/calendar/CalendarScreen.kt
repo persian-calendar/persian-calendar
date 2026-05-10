@@ -14,7 +14,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
@@ -818,15 +817,6 @@ private fun SharedTransitionScope.Details(
             }
         }
 
-        @Composable
-        fun tabTransitionSpec(): AnimatedContentTransitionScope<DetailsTab?>.() -> ContentTransform =
-            {
-                val forward = (this.initialState?.ordinal ?: 0) > (this.targetState?.ordinal ?: 0)
-                (fadeIn() + expandHorizontally(expandFrom = if (forward) Alignment.Start else Alignment.End)).togetherWith(
-                    fadeOut() + shrinkHorizontally(shrinkTowards = if (forward) Alignment.Start else Alignment.End),
-                )
-            }
-
         if (!isShowDeviceCalendarEvents) Column(
             modifier = horizontalSwipeModifier.detectSwipe {
                 { isUp: Boolean ->
@@ -864,7 +854,13 @@ private fun SharedTransitionScope.Details(
 
             AnimatedContent(
                 targetState = selectedTab,
-                transitionSpec = tabTransitionSpec(),
+                transitionSpec = {
+                    val forward =
+                        (this.initialState?.ordinal ?: 0) > (this.targetState?.ordinal ?: 0)
+                    (fadeIn() + expandHorizontally(expandFrom = if (forward) Alignment.Start else Alignment.End)).togetherWith(
+                        fadeOut() + shrinkHorizontally(shrinkTowards = if (forward) Alignment.Start else Alignment.End),
+                    )
+                },
             ) { selectedButton ->
                 Column(Modifier.verticalScroll(rememberScrollState())) {
                     if (selectedButton == DetailsTab.Events) {
@@ -985,7 +981,9 @@ private fun SharedTransitionScope.Details(
             }
             AnimatedContent(
                 targetState = selectedTab,
-                transitionSpec = tabTransitionSpec(),
+                transitionSpec = {
+                    (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
+                },
                 modifier = verticalSwipeModifier
                     .then(horizontalSwipeModifier)
                     .fillMaxWidth(),
