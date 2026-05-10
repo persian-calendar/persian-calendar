@@ -291,7 +291,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Bug report
-        if (false && remember { Jdn.today() }.isYearSupportedOnApp) {
+        if (remember { Jdn.today() }.isYearSupportedOnApp) {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = Icons.Default.Email,
@@ -303,7 +303,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Developers
-//        Developers()
+        Developers()
 
         Spacer(Modifier.height(bottomPadding))
     }
