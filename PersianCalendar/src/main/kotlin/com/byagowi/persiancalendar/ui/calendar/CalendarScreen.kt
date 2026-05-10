@@ -150,7 +150,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.LAST_CHOSEN_BUTTON_KEY
+import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
@@ -335,11 +335,11 @@ fun SharedTransitionScope.CalendarScreen(
         )
     }
 
-    var selectedButton by remember {
-        val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_BUTTON_KEY, 0)
+    var selectedTab by remember {
+        val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
         mutableStateOf(
-            DetailsButton.entries.getOrNull(lastChosenIndex) ?: run {
-                if (isShowDeviceCalendarEvents) null else DetailsButton.entries.first()
+            DetailsTab.entries.getOrNull(lastChosenIndex) ?: run {
+                if (isShowDeviceCalendarEvents) null else DetailsTab.entries.first()
             },
         )
     }
@@ -449,7 +449,7 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = !isYearView && (selectedButton == DetailsButton.Events || isShowDeviceCalendarEvents),
+                visible = !isYearView && (selectedTab == DetailsTab.Events || isShowDeviceCalendarEvents),
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -534,11 +534,11 @@ fun SharedTransitionScope.CalendarScreen(
                 if (!isYearViewState) {
                     @Composable
                     fun Details(detailsModifier: Modifier) = Details(
-                        selectedButton = selectedButton,
-                        onSelectedButtonChange = {
-                            selectedButton = it
+                        selectedTab = selectedTab,
+                        onSelectedTabChange = {
+                            selectedTab = it
                             context.preferences.edit {
-                                putInt(LAST_CHOSEN_BUTTON_KEY, selectedButton?.ordinal ?: -1)
+                                putInt(LAST_CHOSEN_TAB_KEY, selectedTab?.ordinal ?: -1)
                             }
                         },
                         selectedDay = selectedDay,
@@ -677,8 +677,8 @@ private fun SharedTransitionScope.Details(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
     swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
-    selectedButton: DetailsButton?,
-    onSelectedButtonChange: (DetailsButton?) -> Unit,
+    selectedTab: DetailsTab?,
+    onSelectedTabChange: (DetailsTab?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -715,8 +715,8 @@ private fun SharedTransitionScope.Details(
         }
         var removeThirdTab by remember { mutableStateOf(false) }
 
-        val buttons = listOfNotNull(
-            (DetailsButton.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
+        val tabs = listOfNotNull(
+            (DetailsTab.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
                 CalendarsTab(
                     modifier = Modifier.padding(top = 4.dp),
                     selectedDay = selectedDay,
@@ -725,7 +725,7 @@ private fun SharedTransitionScope.Details(
                     navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                 )
             }).takeIf { enabledCalendars.size > 1 },
-            (DetailsButton.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
+            (DetailsTab.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
                 AnimatedContent(
                     targetState = appointments.isEmpty(),
                     transitionSpec = {
@@ -778,7 +778,7 @@ private fun SharedTransitionScope.Details(
 //                            )
 //                        }
             }).takeIf { (!eventsRepository.isEmpty && today.isYearSupportedOnApp) || !isShowDeviceCalendarEvents },
-            (DetailsButton.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
+            (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
                 val coordinates = coordinates
                 if (coordinates != null) TimesTab(
                     modifier = Modifier.padding(top = 4.dp),
@@ -804,14 +804,14 @@ private fun SharedTransitionScope.Details(
             }).takeIf { !removeThirdTab && enableTimesTab() },
         ).toMap().toPersistentMap()
 
-        val selectedButton by rememberUpdatedState(selectedButton)
+        val selectedTab by rememberUpdatedState(selectedTab)
 
         val horizontalSwipeModifier = Modifier.detectHorizontalSwipe {
             { isLeft ->
-                onSelectedButtonChange(
-                    selectedButton?.let {
-                        buttons.keys.toList().getOrNull(
-                            (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(buttons.size),
+                onSelectedTabChange(
+                    selectedTab?.let {
+                        tabs.keys.toList().getOrNull(
+                            (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(tabs.size),
                         )
                     },
                 )
@@ -819,7 +819,7 @@ private fun SharedTransitionScope.Details(
         }
 
         @Composable
-        fun tabTransitionSpec(): AnimatedContentTransitionScope<DetailsButton?>.() -> ContentTransform =
+        fun tabTransitionSpec(): AnimatedContentTransitionScope<DetailsTab?>.() -> ContentTransform =
             {
                 val forward = (this.initialState?.ordinal ?: 0) > (this.targetState?.ordinal ?: 0)
                 (fadeIn() + expandHorizontally(expandFrom = if (forward) Alignment.Start else Alignment.End)).togetherWith(
@@ -838,12 +838,12 @@ private fun SharedTransitionScope.Details(
                 }
             },
         ) {
-            if (buttons.size > 1) PrimaryTabRow(
-                selectedTabIndex = buttons.keys.indexOf(selectedButton).coerceAtLeast(0),
+            if (tabs.size > 1) PrimaryTabRow(
+                selectedTabIndex = tabs.keys.indexOf(selectedTab).coerceAtLeast(0),
                 divider = {},
                 containerColor = Color.Transparent,
                 indicator = {
-                    val offset = buttons.keys.indexOf(selectedButton).coerceAtLeast(0)
+                    val offset = tabs.keys.indexOf(selectedTab).coerceAtLeast(0)
                     val tabIndicatorColor by animateColor(MaterialTheme.colorScheme.primary)
                     TabRowDefaults.PrimaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(selectedTabIndex = offset),
@@ -851,28 +851,28 @@ private fun SharedTransitionScope.Details(
                     )
                 },
             ) {
-                buttons.entries.forEach { (button, _) ->
+                tabs.entries.forEach { (button, _) ->
                     Tab(
                         text = { Text(stringResource(button.title)) },
                         modifier = Modifier.clip(MaterialTheme.shapes.large),
-                        selected = selectedButton == button,
+                        selected = selectedTab == button,
                         unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                        onClick = { onSelectedButtonChange(button) },
+                        onClick = { onSelectedTabChange(button) },
                     )
                 }
             }
 
             AnimatedContent(
-                targetState = selectedButton,
+                targetState = selectedTab,
                 transitionSpec = tabTransitionSpec(),
             ) { selectedButton ->
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    if (selectedButton == DetailsButton.Events) {
+                    if (selectedButton == DetailsTab.Events) {
                         Spacer(Modifier.height(8.dp))
                         val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
                         ShiftWorkView(shiftWorkTitle, today, selectedDay)
                     }
-                    (buttons[selectedButton] ?: buttons.entries.firstOrNull()?.value)?.invoke(
+                    (tabs[selectedButton] ?: tabs.entries.firstOrNull()?.value)?.invoke(
                         readEventsWithEquinox(
                             selectedDay, now, EventsStore(emptyList()),
                         ),
@@ -902,7 +902,7 @@ private fun SharedTransitionScope.Details(
             scale = scale,
             initialScroll = initialScroll,
             cellHeight = cellHeight,
-            showTimeTable = isShowDeviceCalendarEvents || buttons.isEmpty(),
+            showTimeTable = isShowDeviceCalendarEvents || tabs.isEmpty(),
             scrollableModifier = Modifier.detectSwipe {
                 val wasAtTop = scrollState.value == 0
                 val wasAtEnd = scrollState.value == scrollState.maxValue
@@ -919,7 +919,7 @@ private fun SharedTransitionScope.Details(
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
             ShiftWorkView(shiftWorkTitle, today, selectedDay)
 
-            onHasContentChange(buttons.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
+            onHasContentChange(tabs.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
             val verticalSwipeModifier = Modifier.detectSwipe {
                 val wasAtTop = headerScrollState.value == 0
@@ -933,7 +933,7 @@ private fun SharedTransitionScope.Details(
                 }
             }
 
-            if (buttons.isNotEmpty()) CompositionLocalProvider(
+            if (tabs.isNotEmpty()) CompositionLocalProvider(
                 LocalMinimumInteractiveComponentSize provides 0.dp,
             ) {
                 SingleChoiceSegmentedButtonRow(
@@ -948,12 +948,12 @@ private fun SharedTransitionScope.Details(
                         activeContainerColor = animateColor(defaultColors.activeContainerColor).value,
                         activeContentColor = animateColor(defaultColors.activeContentColor).value,
                     )
-                    buttons.entries.forEachIndexed { index, (button, _) ->
+                    tabs.entries.forEachIndexed { index, (button, _) ->
                         SegmentedButton(
                             modifier = Modifier.defaultMinSize(minHeight = 38.dp),
                             onClick = {
-                                onSelectedButtonChange(
-                                    if (selectedButton == button && isShowDeviceCalendarEvents) {
+                                onSelectedTabChange(
+                                    if (selectedTab == button && isShowDeviceCalendarEvents) {
                                         null
                                     } else button,
                                 )
@@ -964,9 +964,9 @@ private fun SharedTransitionScope.Details(
                                 width = 1.dp,
                                 color = animateColor(MaterialTheme.colorScheme.outlineVariant).value,
                             ),
-                            selected = selectedButton == button,
+                            selected = selectedTab == button,
                             icon = {},
-                            shape = SegmentedButtonDefaults.itemShape(index, buttons.size),
+                            shape = SegmentedButtonDefaults.itemShape(index, tabs.size),
                             label = {
                                 Text(
                                     text = stringResource(button.title),
@@ -978,13 +978,13 @@ private fun SharedTransitionScope.Details(
                 }
             }
             AnimatedContent(
-                targetState = selectedButton,
+                targetState = selectedTab,
                 transitionSpec = tabTransitionSpec(),
                 modifier = verticalSwipeModifier
                     .then(horizontalSwipeModifier)
                     .fillMaxWidth(),
             ) {
-                val content = buttons[it]
+                val content = tabs[it]
                 if (content != null) content(appointments) else Spacer(Modifier.height(10.dp))
             }
 
@@ -1067,7 +1067,7 @@ private fun ShiftWorkView(shiftWorkTitle: String?, today: Jdn, selectedDay: Jdn)
     }
 }
 
-private enum class DetailsButton(@get:StringRes val title: Int) {
+private enum class DetailsTab(@get:StringRes val title: Int) {
     Calendar(R.string.calendar), Events(R.string.events), Times(R.string.times),
 }
 
