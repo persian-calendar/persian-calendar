@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -27,6 +29,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -92,22 +98,17 @@ fun HolidaysTypesDialog(
                 fun Iran() {
                     CountryEvents(
                         sourceLink = EventSource.Iran.link,
-                        holidaysTitle = stringResource(R.string.iran_holidays) + run {
+                        holidaysTitle = "تعطیلات رسمی تنظیم‌شدهٔ مرکز تقویم دانشگاه تهران" + run {
                             if (!language.isAfghanistanExclusive && EventsRepository.IRAN_HOLIDAYS_KEY in enabledTypes) {
                                 spacedComma + "پیش‌فرض برنامه"
                             } else ""
                         },
-                        nonHolidaysTitle = stringResource(R.string.iran_others),
+                        nonHolidaysTitle = "مناسبت‌های تقویم رسمی تنظیم‌شدهٔ دانشگاه تهران",
                         enabledTypes = enabledTypes,
                         holidaysKey = EventsRepository.IRAN_HOLIDAYS_KEY,
                         nonHolidaysKey = EventsRepository.IRAN_OTHERS_KEY,
                         destinationItem = destinationItem,
-                    )
-                    if (!language.isAfghanistanExclusive) ItemCheckBox(
-                        AnnotatedString(stringResource(R.string.iran_ancient)),
-                        enabledTypes,
-                        EventsRepository.IRAN_ANCIENT_KEY,
-                        destinationItem = destinationItem,
+                        title = "مناسبت‌های رسمی تنظیم‌شدهٔ مرکز تقویم دانشگاه تهران",
                     )
                 }
 
@@ -115,12 +116,13 @@ fun HolidaysTypesDialog(
                 fun Afghanistan() {
                     CountryEvents(
                         sourceLink = EventSource.Afghanistan.link,
-                        holidaysTitle = stringResource(R.string.afghanistan_holidays),
-                        nonHolidaysTitle = stringResource(R.string.afghanistan_others),
+                        holidaysTitle = "رخصتی‌های افغانستان",
+                        nonHolidaysTitle = "سایر مناسبت‌های افغانستان",
                         enabledTypes = enabledTypes,
                         holidaysKey = EventsRepository.AFGHANISTAN_HOLIDAYS_KEY,
                         nonHolidaysKey = EventsRepository.AFGHANISTAN_OTHERS_KEY,
                         destinationItem = destinationItem,
+                        title = "افغانستان",
                     )
                 }
 
@@ -137,13 +139,28 @@ fun HolidaysTypesDialog(
                 if (language.isAfghanistanExclusive || TimeZone.getDefault().id == AFGHANISTAN_TIMEZONE_ID) {
                     Afghanistan()
                     International()
-                    HorizontalDivider()
                     Iran()
                 } else {
                     Iran()
-                    International()
-                    HorizontalDivider()
                     Afghanistan()
+                    Box(
+                        Modifier.defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        Text(
+                            stringResource(R.string.other_holidays),
+                            modifier = Modifier
+                                .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                                .semantics { this.hideFromAccessibility() },
+                        )
+                    }
+                    if (!language.isAfghanistanExclusive) ItemCheckBox(
+                        AnnotatedString("مناسبت‌های ایران باستان"),
+                        enabledTypes,
+                        EventsRepository.IRAN_ANCIENT_KEY,
+                        destinationItem = destinationItem,
+                    )
+                    International()
                 }
             } else {
                 CountryEvents(
@@ -154,6 +171,7 @@ fun HolidaysTypesDialog(
                     holidaysKey = EventsRepository.NEPAL_HOLIDAYS_KEY,
                     nonHolidaysKey = EventsRepository.NEPAL_OTHERS_KEY,
                     destinationItem = destinationItem,
+                    title = "नेपाल",
                 )
             }
         }
@@ -174,54 +192,50 @@ fun CountryEvents(
     holidaysKey: String,
     nonHolidaysKey: String,
     destinationItem: String?,
+    title: String,
     modifier: Modifier = Modifier,
-//    // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
-//    hideTheFirstRowFromAccessibility: Boolean = true,
+    // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
+    hideTheFirstRowFromAccessibility: Boolean = true,
 ) {
     if (!remember { Jdn.today() }.isYearSupportedOnAppAndNextYear) return
     Column(modifier) {
-//        Row(
-//            Modifier
-//                .fillMaxWidth()
-//                .then(
-//                    if (hideTheFirstRowFromAccessibility) {
-//                        Modifier
-//                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-//                            .clearAndSetSemantics {}
-//                    } else Modifier,
-//                )
-//                .clickable {
-//                    if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-//                        enabledTypes -= holidaysKey
-//                        enabledTypes -= nonHolidaysKey
-//                    } else {
-//                        if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
-//                        if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
-//                    }
-//                }
-//                .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
-//            verticalAlignment = Alignment.CenterVertically,
-//        ) {
-//            TriStateCheckbox(
-//                state = when {
-//                    holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
-//
-//                    holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
-//
-//                    else -> ToggleableState.Off
-//                },
-//                onClick = null,
-//                modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
-//            )
-//            Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
-//        }
-        listOf(
-            holidaysTitle to holidaysKey,
-            nonHolidaysTitle to nonHolidaysKey,
-        ).map { (title, key) ->
-            buildAnnotatedString {
-                append(title)
-                if (sourceLink.isNotEmpty()) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .then(
+                    if (hideTheFirstRowFromAccessibility) {
+                        Modifier
+                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                            .clearAndSetSemantics {}
+                    } else Modifier,
+                )
+                .clickable {
+                    if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
+                        enabledTypes -= holidaysKey
+                        enabledTypes -= nonHolidaysKey
+                    } else {
+                        if (holidaysKey !in enabledTypes) enabledTypes += holidaysKey
+                        if (nonHolidaysKey !in enabledTypes) enabledTypes += nonHolidaysKey
+                    }
+                }
+                .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TriStateCheckbox(
+                state = when {
+                    holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
+
+                    holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
+
+                    else -> ToggleableState.Off
+                },
+                onClick = null,
+                modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
+            )
+            Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
+            Text(
+                buildAnnotatedString {
+                    append(title)
                     append(spacedComma)
                     withLink(
                         link = LinkAnnotation.Url(
@@ -234,8 +248,14 @@ fun CountryEvents(
                             ),
                         ),
                     ) { append(stringResource(R.string.view_source)) }
-                }
-            } to key
+                },
+            )
+        }
+        listOf(
+            holidaysTitle to holidaysKey,
+            nonHolidaysTitle to nonHolidaysKey,
+        ).map { (title, key) ->
+            AnnotatedString(title) to key
         }.forEach { (title, key) -> ItemCheckBox(title, enabledTypes, key, destinationItem) }
     }
 }
@@ -261,6 +281,7 @@ private fun ItemCheckBox(
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        Spacer(Modifier.width(HolidaysSettingsItemHeight.dp))
         Checkbox(key in enabledTypes, onCheckedChange = null)
         Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
         Crossfade(targetState = label) { Text(it) }
