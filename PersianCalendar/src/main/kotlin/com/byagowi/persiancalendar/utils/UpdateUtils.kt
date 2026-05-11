@@ -639,8 +639,6 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
             250,
         )
     } else EventsStore.empty()
-    val weekStart = weekStart
-    val weekEnds = weekEnds
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
@@ -1497,7 +1495,6 @@ fun createWeekViewRemoteViews(
     } else {
         0xFFE51C23.toInt()
     }
-    val weekEnds = weekEnds
 
     remoteViews.setTextViewTextSizeSp(R.id.textDate, 14 * scale)
 

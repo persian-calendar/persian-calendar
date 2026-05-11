@@ -398,8 +398,6 @@ fun SharedTransitionScope.WeekScreen(
                         val wasAtTop = scrollState.value == 0
                         { isUp: Boolean -> if (wasAtTop) onSwipeDown(isUp) }
                     }
-                    val weekStart = weekStart
-
                     HorizontalPager(
                         state = weekPagerState,
                         verticalAlignment = Alignment.Top,

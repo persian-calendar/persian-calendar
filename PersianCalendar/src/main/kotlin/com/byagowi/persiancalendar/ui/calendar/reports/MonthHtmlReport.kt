@@ -82,7 +82,6 @@ sup { font-size: x-small; position: absolute }
 
 private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     val events = createMonthEventsList(context, date)
-    val weekEnds = weekEnds
     fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(
@@ -96,7 +95,6 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         small { +" ($title)" }
     }
     table("calendar") {
-        val weekStart = weekStart
         tr {
             if (isShowWeekOfYearEnabled) th {}
             repeat(7) { th { +(weekStart + it).title } }
