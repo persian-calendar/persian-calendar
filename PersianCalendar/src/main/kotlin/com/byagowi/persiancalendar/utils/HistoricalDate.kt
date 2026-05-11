@@ -47,20 +47,16 @@ enum class PersianDateEpoch(private val offset: Int, private val title: String) 
     // سالنمای راستی
     // با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
     Zoroastrianism(
-        offset = 2359,
-        title = "زرتشتیان",
+        offset = 2359, title = "زرتشتیان",
     ),
     Madian(
-        offset = 1321,
-        title = "مادی",
+        offset = 1321, title = "مادی",
     ),
     Achaemenid(
-        offset = 1180,
-        title = "هخامنشی",
+        offset = 1180, title = "هخامنشی",
     ),
     Jalali(
-        offset = -457,
-        title = "جلالی",
+        offset = -457, title = "جلالی",
     );
 
     private fun formatYear(year: Int) = numeral.format(year + offset)
