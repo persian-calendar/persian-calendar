@@ -59,7 +59,7 @@ fun jalaliName(persianYear: Int?, dayOfYear: Int): String {
     return when (val month = (dayOfYear - 1) / 30) {
         12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ"
         else -> numeral.format(dayOfMonth + 1) + " " + jalaliMonthNames[month]
-    } + " " + PersianDateEpochs.Jalali.format(persianYear)
+    } + " " + PersianDateEpoch.Jalali.format(persianYear)
 }
 // endregion
 
@@ -71,7 +71,7 @@ fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
     val persianYear = persianDate.year
     val jalali = jalaliName(persianYear, dayOfYear)
     return jalali + persianDelimiter + fasliDayName(dayOfYear) + (if (BuildConfig.DEVELOPMENT) {
-        " " + PersianDateEpochs.Zoroastrianism.format(persianDate)
+        " " + PersianDateEpoch.Zoroastrianism.format(persianDate)
     } else "")
 }
 

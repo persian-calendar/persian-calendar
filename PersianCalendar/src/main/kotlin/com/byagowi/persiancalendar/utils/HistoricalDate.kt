@@ -43,7 +43,7 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 }
 // endregion
 
-enum class PersianDateEpochs(private val offset: Int, private val title: String) {
+enum class PersianDateEpoch(private val offset: Int, private val title: String) {
     // سالنمای راستی
     // با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
     Zoroastrianism(
