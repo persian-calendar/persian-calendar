@@ -781,11 +781,7 @@ private fun Details(
         val context = LocalContext.current
         val dayDeviceEvents = remember(
             refreshToken, isShowDeviceCalendarEvents, selectedDay,
-        ) {
-            if (isShowDeviceCalendarEvents) {
-                context.readDayDeviceEvents(selectedDay)
-            } else EventsStore.empty()
-        }
+        ) { context.readDayDeviceEvents(selectedDay) }
         val scale = remember {
             mutableFloatStateOf(
                 (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),

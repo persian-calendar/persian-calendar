@@ -140,7 +140,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 resources,
                 jdn,
                 isToday,
-                EventsStore.empty(),
+                deviceCalendarEvents = EventsStore.empty(),
                 withZodiac = true,
                 withOtherCalendars = true,
                 withTitle = true,

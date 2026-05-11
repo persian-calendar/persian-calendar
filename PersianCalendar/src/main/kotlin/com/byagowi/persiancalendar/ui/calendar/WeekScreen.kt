@@ -120,7 +120,6 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTEN
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
@@ -435,11 +434,7 @@ fun SharedTransitionScope.WeekScreen(
                                 refreshToken,
                                 isShowDeviceCalendarEvents,
                                 pageWeekStart,
-                            ) {
-                                if (isShowDeviceCalendarEvents) {
-                                    context.readWeekDeviceEvents(pageWeekStart)
-                                } else EventsStore.empty()
-                            }
+                            ) { context.readWeekDeviceEvents(pageWeekStart) }
 
                             if (hasWeeksPager) daysTable(
                                 monthStartDate,
@@ -520,11 +515,7 @@ fun SharedTransitionScope.WeekScreen(
                             val context = LocalContext.current
                             val dayDeviceEvents = remember(
                                 refreshToken, isShowDeviceCalendarEvents, pageDay,
-                            ) {
-                                if (isShowDeviceCalendarEvents) {
-                                    context.readDayDeviceEvents(pageDay)
-                                } else EventsStore.empty()
-                            }
+                            ) { context.readDayDeviceEvents(pageDay) }
 
                             DaysView(
                                 bottomPadding = fabPlaceholderHeight ?: 0.dp,

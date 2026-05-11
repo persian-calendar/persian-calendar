@@ -55,11 +55,9 @@ import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isBoldFont
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -184,9 +182,7 @@ fun YearView(
                                 (today on calendar).year + yearOffset, 1, 1,
                             ),
                         )
-                        if (isShowDeviceCalendarEvents) {
-                            context.readYearDeviceEvents(yearStartJdn)
-                        } else EventsStore.empty()
+                        context.readYearDeviceEvents(yearStartJdn)
                     }
                     FlowRow(
                         horizontalArrangement = Arrangement.SpaceAround,

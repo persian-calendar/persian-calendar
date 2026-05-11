@@ -101,7 +101,6 @@ import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isWidgetClock
@@ -632,13 +631,11 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         ((bottomSpace / daysRowsCount - 14) / 14).toInt()
     } ?: 3
 
-    val deviceEvents = if (isShowDeviceCalendarEvents) {
-        context.readDaysDeviceEvents(
-            monthStartJdn - startingWeekDay,
-            (daysRowsCount * 7).days,
-            250,
-        )
-    } else EventsStore.empty()
+    val deviceEvents = context.readDaysDeviceEvents(
+        jdn = monthStartJdn - startingWeekDay,
+        duration = (daysRowsCount * 7).days,
+        limit = 250,
+    )
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
@@ -886,9 +883,7 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
     val baseDate = mainCalendar.getMonthStartFromMonthsDistance(today, 0)
-    val monthDeviceEvents: DeviceCalendarEventsStore =
-        if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
-        else EventsStore.empty()
+    val monthDeviceEvents = context.readMonthDeviceEvents(Jdn(baseDate))
     val isRtl =
         language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
@@ -1502,9 +1497,7 @@ fun createWeekViewRemoteViews(
         remoteViews.setTextViewTextSizeSp(weekDayNameViewId, 14 * scale)
         remoteViews.setTextViewTextSizeSp(weekDayNumberViewId, 14 * scale)
         val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day, 0)
-        val deviceEvents =
-            if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
-            else EventsStore.empty()
+        val deviceEvents = context.readMonthDeviceEvents(Jdn(baseDate))
         val events = eventsRepository.getEvents(day, deviceEvents)
         val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
 

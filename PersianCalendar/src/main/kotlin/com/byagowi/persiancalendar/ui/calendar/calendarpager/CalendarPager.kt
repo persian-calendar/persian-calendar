@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -68,8 +67,7 @@ fun CalendarPager(
                 mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
             val monthStartJdn = Jdn(monthStartDate)
             val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
-                if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
-                else EventsStore.empty()
+                context.readMonthDeviceEvents(monthStartJdn)
             }
             daysTable(
                 monthStartDate,

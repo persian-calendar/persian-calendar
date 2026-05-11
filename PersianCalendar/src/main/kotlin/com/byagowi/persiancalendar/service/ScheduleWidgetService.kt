@@ -12,14 +12,12 @@ import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.nothingScheduledString
@@ -74,9 +72,7 @@ private class EventsViewFactory(
     private val enabledAlarms = getEnabledAlarms(context)
     private val items = run {
         val today = Jdn.today()
-        val deviceEvents = if (isShowDeviceCalendarEvents) {
-            context.readTwoWeekDeviceEvents(today)
-        } else EventsStore.empty()
+        val deviceEvents = context.readTwoWeekDeviceEvents(today)
         val days = (today..<today + 14).toList()
         val dates = days.map { it on mainCalendar }
         val secondaryDates = secondaryCalendar?.let { calendar -> days.map { it on calendar } }
