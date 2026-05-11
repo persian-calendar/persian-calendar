@@ -5,6 +5,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayTablePositions
+import com.byagowi.persiancalendar.utils.PersianDateEpochs
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.formatAsSeleucidDate
@@ -153,6 +154,23 @@ class CalendarTests {
             assertEquals(
                 "۱۵ دی ۸۲۹ جلالی",
                 jalaliName(persianDate.year, persianDayOfYear(persianDate, jdn)),
+            )
+        }
+        run {
+            // سالنمای راستی
+            // با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
+            val date = PersianDate(1400, 6, 24)
+            assertEquals(
+                "۳۷۵۹ زرتشتیان",
+                PersianDateEpochs.Zoroastrianism.format(date),
+            )
+            assertEquals(
+                "۳۷۵۹ زرتشتیان",
+                PersianDateEpochs.Zoroastrianism.format(date.year),
+            )
+            assertEquals(
+                " زرتشتیان",
+                PersianDateEpochs.Zoroastrianism.format(null),
             )
         }
         run {

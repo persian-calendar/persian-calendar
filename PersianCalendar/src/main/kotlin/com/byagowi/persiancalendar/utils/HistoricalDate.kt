@@ -59,7 +59,7 @@ enum class PersianDateEpochs(private val offset: Int, private val title: String)
         title = "هخامنشی",
     ),
     Jalali(
-        offset = -4570,
+        offset = -457,
         title = "جلالی",
     );
 
