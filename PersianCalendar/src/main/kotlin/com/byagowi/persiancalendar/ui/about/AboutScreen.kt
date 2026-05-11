@@ -59,6 +59,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -73,6 +74,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RenderEffect
@@ -108,6 +110,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -290,8 +293,17 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             }
         }
 
+        var showMore by rememberSaveable { mutableStateOf(false) }
+        AnimatedVisibility(!showMore) {
+            TextButton(
+                modifier = Modifier
+                    .alpha(AppBlendAlpha)
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                onClick = { showMore = true },
+            ) { Text(stringResource(R.string.more)) }
+        }
         // Bug report
-        if (remember { Jdn.today() }.isYearSupportedOnApp) {
+        AnimatedVisibility(showMore && remember { Jdn.today() }.isYearSupportedOnApp) {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = Icons.Default.Email,
@@ -302,9 +314,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             if (showDialog) EmailDialog { showDialog = false }
         }
 
-        // Developers
-        Developers()
-
+        AnimatedVisibility(showMore) { Developers() }
         Spacer(Modifier.height(bottomPadding))
     }
 }
@@ -403,64 +413,66 @@ private fun AboutScreenButton(
 }
 
 @Composable
-private fun Developers() {
-    val resources = LocalResources.current
-    val developersBeforeShuffle = remember {
-        listOf(
-            R.string.about_developers_list to Icons.Default.Android,
-            R.string.about_designers_list to Icons.Default.Palette,
-            R.string.about_translators_list to Icons.Default.Translate,
-            R.string.about_contributors_list to Icons.Default.Android,
-        ).flatMap { (listId: Int, icon: ImageVector) ->
-            resources.getString(listId).trim().split("\n").map {
-                val (username, displayName) = it.split(": ")
-                Triple(username, displayName, icon)
+private fun Developers(modifier: Modifier = Modifier) {
+    Column(modifier) {
+        val resources = LocalResources.current
+        val developersBeforeShuffle = remember {
+            listOf(
+                R.string.about_developers_list to Icons.Default.Android,
+                R.string.about_designers_list to Icons.Default.Palette,
+                R.string.about_translators_list to Icons.Default.Translate,
+                R.string.about_contributors_list to Icons.Default.Android,
+            ).flatMap { (listId: Int, icon: ImageVector) ->
+                resources.getString(listId).trim().split("\n").map {
+                    val (username, displayName) = it.split(": ")
+                    Triple(username, displayName, icon)
+                }
             }
         }
-    }
-    var refreshToken by remember { mutableIntStateOf(0) }
-    val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
+        var refreshToken by remember { mutableIntStateOf(0) }
+        val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
 
-    Text(
-        stringResource(R.string.about_developers),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier
-            .padding(start = 24.dp, end = 12.dp, top = 12.dp)
-            .then(
-                if (isTalkBackEnabled) Modifier else Modifier.clickable(
-                    interactionSource = null,
-                    indication = ripple(bounded = false),
-                ) { ++refreshToken },
-            ),
-    )
-    CompositionLocalProvider(
-        LocalLayoutDirection provides LayoutDirection.Ltr,
-        LocalMinimumInteractiveComponentSize provides 0.dp,
-    ) {
-        FlowRow(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+        Text(
+            stringResource(R.string.about_developers),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .padding(start = 24.dp, end = 12.dp, top = 12.dp)
+                .then(
+                    if (isTalkBackEnabled) Modifier else Modifier.clickable(
+                        interactionSource = null,
+                        indication = ripple(bounded = false),
+                    ) { ++refreshToken },
+                ),
+        )
+        CompositionLocalProvider(
+            LocalLayoutDirection provides LayoutDirection.Ltr,
+            LocalMinimumInteractiveComponentSize provides 0.dp,
         ) {
-            val uriHandler = LocalUriHandler.current
-            developers.forEach { (username, displayName, icon) ->
-                ElevatedFilterChip(
-                    modifier = Modifier.padding(all = 4.dp),
-                    onClick = click@{
-                        if (username in listOf("ImanSoltanian", "SeyedHamed")) return@click
-                        uriHandler.openUri("https://github.com/$username")
-                    },
-                    label = { Text(displayName) },
-                    selected = true,
-                    colors = FilterChipDefaults.elevatedFilterChipColors(),
-                    leadingIcon = {
-                        Icon(
-                            icon,
-                            contentDescription = displayName,
-                            Modifier.size(AssistChipDefaults.IconSize),
-                        )
-                    },
-                )
+            FlowRow(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
+                val uriHandler = LocalUriHandler.current
+                developers.forEach { (username, displayName, icon) ->
+                    ElevatedFilterChip(
+                        modifier = Modifier.padding(all = 4.dp),
+                        onClick = click@{
+                            if (username in listOf("ImanSoltanian", "SeyedHamed")) return@click
+                            uriHandler.openUri("https://github.com/$username")
+                        },
+                        label = { Text(displayName) },
+                        selected = true,
+                        colors = FilterChipDefaults.elevatedFilterChipColors(),
+                        leadingIcon = {
+                            Icon(
+                                icon,
+                                contentDescription = displayName,
+                                Modifier.size(AssistChipDefaults.IconSize),
+                            )
+                        },
+                    )
+                }
             }
         }
     }
