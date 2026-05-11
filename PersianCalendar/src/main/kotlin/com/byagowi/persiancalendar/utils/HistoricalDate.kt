@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
+import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.calendar.util.julianFromJdn
 
 // region Seleucid
@@ -42,13 +43,30 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 }
 // endregion
 
-// سالنمای راستی
-// با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
-const val zoroastrianismYearOffset = 2359
-private const val madianOffset = 1321
-private const val achaemenidOffset = 1180
-const val jalaliOffset = -457
-// To get their current year, add the number to current Persian calendar year
+enum class PersianDateEpochs(private val offset: Int, private val title: String) {
+    // سالنمای راستی
+    // با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
+    Zoroastrianism(
+        offset = 2359,
+        title = "زرتشتیان",
+    ),
+    Madian(
+        offset = 1321,
+        title = "مادی",
+    ),
+    Achaemenid(
+        offset = 1180,
+        title = "هخامنشی",
+    ),
+    Jalali(
+        offset = -4570,
+        title = "جلالی",
+    );
+
+    private fun formatYear(year: Int) = numeral.format(year + offset)
+    fun format(date: PersianDate) = formatYear(date.year) + " " + title
+    fun format(year: Int?) = (if (year == null) "" else formatYear(year)) + " " + title
+}
 
 fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
     formatAsSeleucidDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn) // +
