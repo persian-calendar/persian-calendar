@@ -423,8 +423,8 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }).takeIf { !removeThirdTab && enableTimesTab() },
     ).toMap().toImmutableMap()
-    val isButtonsMode =
-        isShowDeviceCalendarEvents || tabs.isEmpty() || LocalResources.current.getBoolean(R.bool.is_tablet)
+    val isTablet = LocalResources.current.getBoolean(R.bool.is_tablet)
+    val isButtonsMode = isShowDeviceCalendarEvents || tabs.isEmpty() || isTablet
     var selectedTab by remember {
         val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
         mutableStateOf(
@@ -625,6 +625,7 @@ fun SharedTransitionScope.CalendarScreen(
                     @Composable
                     fun Details(detailsModifier: Modifier) = Details(
                         selectedTab = selectedTab,
+                        isTablet = isTablet,
                         onSelectedTabChange = {
                             selectedTab = it
                             context.preferences.edit {
@@ -758,6 +759,7 @@ private fun Details(
     isAddEventBoxEnabled: Boolean,
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
     refreshToken: Int,
+    isTablet: Boolean,
     tabs: ImmutableMap<DetailsTab, @Composable (ImmutableList<CalendarEvent<*>>) -> Unit>,
     navigateToHolidaysSettings: (item: String?) -> Unit,
     swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
@@ -784,7 +786,7 @@ private fun Details(
         ) { context.readDayDeviceEvents(selectedDay) }
         val scale = remember {
             mutableFloatStateOf(
-                (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),
+                if (isTablet) .75f else (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),
             )
         }
         val cellHeight = (defaultCellHeight * scale.floatValue).dp
