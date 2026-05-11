@@ -241,7 +241,7 @@ import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.days
 
@@ -334,13 +334,102 @@ fun SharedTransitionScope.CalendarScreen(
         )
     }
 
+    var removeThirdTab by remember { mutableStateOf(false) }
+    val tabs = listOfNotNull(
+        (DetailsTab.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
+            CalendarsTab(
+                modifier = Modifier.padding(top = 4.dp),
+                selectedDay = selectedDay,
+                today = today,
+                navigateToAstronomy = navigateToAstronomy,
+                navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+            )
+        }).takeIf { enabledCalendars.size > 1 },
+        (DetailsTab.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
+            AnimatedContent(
+                targetState = appointments.isEmpty(),
+                transitionSpec = {
+                    (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
+                },
+            ) { appointmentsIsEmpty ->
+                if (appointmentsIsEmpty) Box {
+                    Text(
+                        text = stringResource(R.string.no_event),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 24.dp)
+                            .fillMaxWidth(),
+                    )
+//                            TabEditButton(
+//                                action = { navigateToHolidaysSettings(null) },
+//                                title = stringResource(R.string.settings),
+//                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
+//                            )
+                } else DayEvents(
+                    events = appointments,
+                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                    viewEvent = viewEvent,
+                    modifier = Modifier.padding(
+                        top = 6.dp,
+                        bottom = 8.dp,
+                        start = 24.dp,
+                        end = 24.dp,
+                    ),
+                )
+            }
+//                        if (when {
+//                                eventsRepository.iranOthers -> true
+//                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
+//                                else -> false
+//                            } && !isTalkBackEnabled
+//                        ) {
+//                            var showDialog by rememberSaveable { mutableStateOf(false) }
+//                            if (showDialog) NoteOnAppointments(
+//                                onDismissRequest = { showDialog = false },
+//                            )
+//                            Icon(
+//                                imageVector = Icons.AutoMirrored.Default.Help,
+//                                contentDescription = null,
+//                                modifier = Modifier
+//                                    .size(36.dp)
+//                                    .padding(start = 8.dp)
+//                                    .clickable { showDialog = true },
+//                                tint = MaterialTheme.colorScheme.primary,
+//                            )
+//                        }
+        }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnAppAndNextYear },
+        (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
+            val coordinates = coordinates
+            if (coordinates != null) TimesTab(
+                modifier = Modifier.padding(top = 4.dp),
+                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                navigateToAstronomy = navigateToAstronomy,
+                coordinates = coordinates,
+                selectedDay = selectedDay,
+                now = now,
+                today = today,
+            ) else Column {
+                EncourageActionLayout(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    header = stringResource(R.string.ask_user_to_set_location),
+                    discardAction = {
+                        context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
+                        removeThirdTab = true
+                    },
+                    acceptAction = navigateToSettingsLocationTab,
+                    hideOnAccept = false,
+                )
+            }
+        }).takeIf { !removeThirdTab && enableTimesTab() },
+    ).toMap().toImmutableMap()
     val isButtonsMode =
-        isShowDeviceCalendarEvents || LocalResources.current.getBoolean(R.bool.is_tablet)
+        isShowDeviceCalendarEvents || tabs.isEmpty() || LocalResources.current.getBoolean(R.bool.is_tablet)
     var selectedTab by remember {
         val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
         mutableStateOf(
             DetailsTab.entries.getOrNull(lastChosenIndex) ?: run {
-                if (isButtonsMode) null else DetailsTab.entries.first()
+                if (isButtonsMode) null else tabs.keys.firstOrNull()
             },
         )
     }
@@ -548,7 +637,6 @@ fun SharedTransitionScope.CalendarScreen(
                         today = today,
                         now = now,
                         viewEvent = viewEvent,
-                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
                         addEvent = addEvent,
                         snackbarHostState = snackbarHostState,
                         isAddEventBoxEnabled = isAddEventBoxEnabled,
@@ -556,13 +644,11 @@ fun SharedTransitionScope.CalendarScreen(
                         fabPlaceholderHeight = fabPlaceholderHeight,
                         refreshToken = refreshToken,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        navigateToAstronomy = navigateToAstronomy,
-                        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
                         modifier = detailsModifier,
                         isButtonsMode = isButtonsMode,
+                        tabs = tabs,
                     )
 
                     @Composable
@@ -659,7 +745,7 @@ private fun enableTimesTab(): Boolean {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SharedTransitionScope.Details(
+private fun Details(
     selectedDay: Jdn,
     onAddActionChange: (() -> Unit) -> Unit,
     bringDay: BringDay,
@@ -672,11 +758,8 @@ private fun SharedTransitionScope.Details(
     isAddEventBoxEnabled: Boolean,
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
     refreshToken: Int,
-    navigateToCalendarsPrioritySettings: () -> Unit,
+    tabs: ImmutableMap<DetailsTab, @Composable (ImmutableList<CalendarEvent<*>>) -> Unit>,
     navigateToHolidaysSettings: (item: String?) -> Unit,
-    navigateToAstronomy: (Jdn) -> Unit,
-    navigateToSettingsLocationTab: () -> Unit,
-    navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     swipeUpActions: ImmutableMap<SwipeUpAction, () -> Unit>,
     swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
     selectedTab: DetailsTab?,
@@ -716,96 +799,6 @@ private fun SharedTransitionScope.Details(
             onAddEventBoxEnabledChange(false)
             scrollState.animateScrollTo(initialScroll)
         }
-        var removeThirdTab by remember { mutableStateOf(false) }
-
-        val tabs = listOfNotNull(
-            (DetailsTab.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
-                CalendarsTab(
-                    modifier = Modifier.padding(top = 4.dp),
-                    selectedDay = selectedDay,
-                    today = today,
-                    navigateToAstronomy = navigateToAstronomy,
-                    navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                )
-            }).takeIf { enabledCalendars.size > 1 },
-            (DetailsTab.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
-                AnimatedContent(
-                    targetState = appointments.isEmpty(),
-                    transitionSpec = {
-                        (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
-                    },
-                ) { appointmentsIsEmpty ->
-                    if (appointmentsIsEmpty) Box {
-                        Text(
-                            text = stringResource(R.string.no_event),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(vertical = 8.dp, horizontal = 24.dp)
-                                .fillMaxWidth(),
-                        )
-//                            TabEditButton(
-//                                action = { navigateToHolidaysSettings(null) },
-//                                title = stringResource(R.string.settings),
-//                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
-//                            )
-                    } else DayEvents(
-                        events = appointments,
-                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        viewEvent = viewEvent,
-                        modifier = Modifier.padding(
-                            top = 6.dp,
-                            bottom = 8.dp,
-                            start = 24.dp,
-                            end = 24.dp,
-                        ),
-                    )
-                }
-//                        if (when {
-//                                eventsRepository.iranOthers -> true
-//                                eventsRepository.iranHolidays && appointments.isNotEmpty() -> true
-//                                else -> false
-//                            } && !isTalkBackEnabled
-//                        ) {
-//                            var showDialog by rememberSaveable { mutableStateOf(false) }
-//                            if (showDialog) NoteOnAppointments(
-//                                onDismissRequest = { showDialog = false },
-//                            )
-//                            Icon(
-//                                imageVector = Icons.AutoMirrored.Default.Help,
-//                                contentDescription = null,
-//                                modifier = Modifier
-//                                    .size(36.dp)
-//                                    .padding(start = 8.dp)
-//                                    .clickable { showDialog = true },
-//                                tint = MaterialTheme.colorScheme.primary,
-//                            )
-//                        }
-            }).takeIf { (!eventsRepository.isEmpty && today.isYearSupportedOnApp) || !isButtonsMode },
-            (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
-                val coordinates = coordinates
-                if (coordinates != null) TimesTab(
-                    modifier = Modifier.padding(top = 4.dp),
-                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                    navigateToAstronomy = navigateToAstronomy,
-                    coordinates = coordinates,
-                    selectedDay = selectedDay,
-                    now = now,
-                    today = today,
-                ) else Column {
-                    EncourageActionLayout(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        header = stringResource(R.string.ask_user_to_set_location),
-                        discardAction = {
-                            context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
-                            removeThirdTab = true
-                        },
-                        acceptAction = navigateToSettingsLocationTab,
-                        hideOnAccept = false,
-                    )
-                }
-            }).takeIf { !removeThirdTab && enableTimesTab() },
-        ).toMap().toPersistentMap()
 
         val selectedTab by rememberUpdatedState(selectedTab)
 
