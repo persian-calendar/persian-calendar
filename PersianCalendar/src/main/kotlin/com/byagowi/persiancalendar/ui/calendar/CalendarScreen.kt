@@ -334,11 +334,13 @@ fun SharedTransitionScope.CalendarScreen(
         )
     }
 
+    val isButtonsMode =
+        isShowDeviceCalendarEvents || LocalResources.current.getBoolean(R.bool.is_tablet)
     var selectedTab by remember {
         val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
         mutableStateOf(
             DetailsTab.entries.getOrNull(lastChosenIndex) ?: run {
-                if (isShowDeviceCalendarEvents) null else DetailsTab.entries.first()
+                if (isButtonsMode) null else DetailsTab.entries.first()
             },
         )
     }
@@ -448,7 +450,7 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = !isYearView && (selectedTab == DetailsTab.Events || isShowDeviceCalendarEvents),
+                visible = !isYearView && (selectedTab == DetailsTab.Events || isButtonsMode),
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -560,6 +562,7 @@ fun SharedTransitionScope.CalendarScreen(
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
                         modifier = detailsModifier,
+                        isButtonsMode = isButtonsMode,
                     )
 
                     @Composable
@@ -678,6 +681,7 @@ private fun SharedTransitionScope.Details(
     swipeDownActions: ImmutableMap<SwipeDownAction, () -> Unit>,
     selectedTab: DetailsTab?,
     onSelectedTabChange: (DetailsTab?) -> Unit,
+    isButtonsMode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -776,7 +780,7 @@ private fun SharedTransitionScope.Details(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-            }).takeIf { (!eventsRepository.isEmpty && today.isYearSupportedOnApp) || !isShowDeviceCalendarEvents },
+            }).takeIf { (!eventsRepository.isEmpty && today.isYearSupportedOnApp) || !isButtonsMode },
             (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
                 val coordinates = coordinates
                 if (coordinates != null) TimesTab(
@@ -817,7 +821,7 @@ private fun SharedTransitionScope.Details(
             }
         }
 
-        if (!isShowDeviceCalendarEvents) Column(
+        if (!isButtonsMode) Column(
             modifier = horizontalSwipeModifier.detectSwipe {
                 { isUp: Boolean ->
                     when {
@@ -901,7 +905,6 @@ private fun SharedTransitionScope.Details(
             scale = scale,
             initialScroll = initialScroll,
             cellHeight = cellHeight,
-            showTimeTable = isShowDeviceCalendarEvents || tabs.isEmpty(),
             scrollableModifier = Modifier.detectSwipe {
                 val wasAtTop = scrollState.value == 0
                 val wasAtEnd = scrollState.value == scrollState.maxValue
@@ -954,11 +957,7 @@ private fun SharedTransitionScope.Details(
                         SegmentedButton(
                             modifier = Modifier.defaultMinSize(minHeight = 38.dp),
                             onClick = {
-                                onSelectedTabChange(
-                                    if (selectedTab == button && isShowDeviceCalendarEvents) {
-                                        null
-                                    } else button,
-                                )
+                                onSelectedTabChange(if (selectedTab == button) null else button)
                             },
                             contentPadding = PaddingValues.Zero,
                             colors = colors,

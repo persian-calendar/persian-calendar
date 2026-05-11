@@ -627,7 +627,6 @@ fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
-    showTimeTable: Boolean = true,
     content: (@Composable ColumnScope.(appointments: ImmutableList<CalendarEvent<*>>, headerScrollState: ScrollState, onHasContentChange: (Boolean) -> Unit) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -782,7 +781,7 @@ fun DaysView(
         }
 
         // Time cells, table and indicators
-        if (showTimeTable) Box {
+        Box {
             Box(
                 Modifier
                     .windowInsetsPadding(
