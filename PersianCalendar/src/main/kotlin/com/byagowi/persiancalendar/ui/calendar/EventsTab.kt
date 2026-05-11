@@ -147,7 +147,6 @@ fun DayEvents(
     viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val language = language
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         events.forEach { event ->

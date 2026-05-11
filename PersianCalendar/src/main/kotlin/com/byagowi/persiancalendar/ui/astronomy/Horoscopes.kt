@@ -149,7 +149,6 @@ fun HoroscopeDialog(
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }
-            val language = language
 
             @Composable
             fun format(body: Body, longitude: Double, distance: Double): String {

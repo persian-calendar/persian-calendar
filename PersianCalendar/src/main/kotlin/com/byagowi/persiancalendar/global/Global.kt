@@ -454,7 +454,6 @@ fun yearAwareMonthsNames(date: AbstractDate): ImmutableList<String> {
 
 fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
-    val language = language
     persianMonths_.value = language.getPersianMonths(
         resources,
         alternativeMonthsInAzeri = alternativePersianMonthsInAzeri,

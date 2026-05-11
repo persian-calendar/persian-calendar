@@ -591,7 +591,6 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
     val mainCalendar = mainCalendar
     val secondaryCalendar = secondaryCalendar
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
-    val numeral = numeral
     remoteViews.setTextViewText(
         R.id.month_name,
         if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
@@ -1341,7 +1340,6 @@ fun create4x2RemoteViews(
     val scale = preferences.getWidgetTextScale(widgetId)
     val weekDayName = jdn.weekDay.title
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
-    val isWidgetClock = isWidgetClock
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2,
     )

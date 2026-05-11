@@ -69,7 +69,6 @@ fun DistrictsDialog(
     modifier: Modifier = Modifier,
 ) {
     val districts = remember {
-        val language = language
         (districtsStore[province] ?: emptyList()).flatMap { county ->
             val countyDetails = county.split(";")
             countyDetails.drop(1).map { it.split(":") to countyDetails[0] }

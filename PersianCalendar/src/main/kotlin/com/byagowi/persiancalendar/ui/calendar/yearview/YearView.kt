@@ -153,7 +153,6 @@ fun YearView(
             horizontalDivisions.toFloat(),
         )
     }
-    val language = language
     val selectedDayMonth = calendar.getMonthStartFromMonthsDistance(
         baseJdn = selectedDay,
         monthsDistance = 0,

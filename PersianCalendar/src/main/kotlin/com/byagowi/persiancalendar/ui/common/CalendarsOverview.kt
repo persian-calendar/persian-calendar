@@ -132,7 +132,6 @@ fun SharedTransitionScope.CalendarsOverview(
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
-    val language = language
     val isToday = today == jdn
     Column(
         modifier.semantics {

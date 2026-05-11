@@ -20,7 +20,6 @@ fun createStatusIcon(
     color: Int = Color.WHITE,
     addShadow: Boolean = false,
 ): Bitmap {
-    val numeral = numeral
     val text = numeral.format(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = when {
