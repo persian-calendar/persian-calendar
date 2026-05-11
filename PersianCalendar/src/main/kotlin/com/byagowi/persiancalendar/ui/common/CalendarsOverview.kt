@@ -257,7 +257,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         AnimatedVisibility(
-            ((isExpanded && isAstronomicalExtraFeaturesEnabled) || showHistoricalCalendars) && !persianDate.isOldEra,
+            ((isExpanded && (Calendar.ISLAMIC !in enabledCalendars || isAstronomicalExtraFeaturesEnabled)) || showHistoricalCalendars) && !persianDate.isOldEra,
         ) {
             val zodiacString =
                 if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
