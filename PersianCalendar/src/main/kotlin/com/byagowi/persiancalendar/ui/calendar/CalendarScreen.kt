@@ -870,7 +870,9 @@ private fun Details(
                     }
                     (tabs[selectedButton] ?: tabs.entries.firstOrNull()?.value)?.invoke(
                         readEventsWithEquinox(
-                            selectedDay, now, EventsStore(emptyList()),
+                            jdn = selectedDay,
+                            now = now,
+                            deviceEvents = EventsStore.empty(),
                         ),
                     )
                 }
