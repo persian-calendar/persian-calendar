@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.R
@@ -279,7 +280,7 @@ fun SharedTransitionScope.CalendarsOverview(
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
-            AnimatedVisibility(enableExtra || persianDate.isOldEra) {
+            AnimatedVisibility(enableExtra && BuildConfig.DEVELOPMENT) {
                 AutoSizedBodyText(alternativeEpochs(persianDate))
             }
             AnimatedVisibility(enableExtra) {
