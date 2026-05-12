@@ -70,9 +70,7 @@ fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
     val dayOfYear = persianDayOfYear(persianDate, jdn)
     val persianYear = persianDate.year
     val jalali = jalaliName(persianYear, dayOfYear)
-    return jalali + persianDelimiter + fasliDayName(dayOfYear) + (if (BuildConfig.DEVELOPMENT) {
-        " " + PersianDateEpoch.Zoroastrianism.format(persianDate)
-    } else "")
+    return jalali + persianDelimiter + fasliDayName(dayOfYear)
 }
 
 fun jalaliDayOfYear(date: PersianDate): String {

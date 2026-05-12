@@ -64,6 +64,15 @@ enum class PersianDateEpoch(private val offset: Int, private val title: String) 
     fun format(year: Int?) = (if (year == null) "" else formatYear(year) + " ") + title
 }
 
+fun alternativeEpochs(persianDate: PersianDate): String {
+    return PersianDateEpoch.entries.filter {
+        // Already displayed separately
+        it != PersianDateEpoch.Jalali
+    }.joinToString(persianDelimiter) {
+        it.format(persianDate)
+    }
+}
+
 fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
     formatAsSeleucidDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn) // +
 //            persianDelimiter + numeral.format(jdn.toPersianDate().year + achaemenidOffset) + " هخامنشی" +

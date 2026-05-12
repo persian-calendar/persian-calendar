@@ -98,6 +98,7 @@ import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
+import com.byagowi.persiancalendar.utils.alternativeEpochs
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
 import com.byagowi.persiancalendar.utils.formatDate
@@ -277,6 +278,9 @@ fun SharedTransitionScope.CalendarsOverview(
                 showHistoricalCalendars || eventsRepository.iranAncient || ((Calendar.ISLAMIC !in enabledCalendars || isAstronomicalExtraFeaturesEnabled) && isExpanded)
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
+            }
+            AnimatedVisibility(enableExtra || persianDate.isOldEra) {
+                AutoSizedBodyText(alternativeEpochs(persianDate))
             }
             AnimatedVisibility(enableExtra) {
                 AutoSizedBodyText(formatAsSeleucidAndYazdegerdDate(jdn))
