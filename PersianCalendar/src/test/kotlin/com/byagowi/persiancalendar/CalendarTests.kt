@@ -169,7 +169,7 @@ class CalendarTests {
                 PersianDateEpoch.Zoroastrianism.format(date.year),
             )
             assertEquals(
-                " زرتشتیان",
+                "زرتشتیان",
                 PersianDateEpoch.Zoroastrianism.format(null),
             )
         }

@@ -61,7 +61,7 @@ enum class PersianDateEpoch(private val offset: Int, private val title: String) 
 
     private fun formatYear(year: Int) = numeral.format(year + offset)
     fun format(date: PersianDate) = formatYear(date.year) + " " + title
-    fun format(year: Int?) = (if (year == null) "" else formatYear(year)) + " " + title
+    fun format(year: Int?) = (if (year == null) "" else formatYear(year) + " ") + title
 }
 
 fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
