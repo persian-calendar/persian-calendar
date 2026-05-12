@@ -687,55 +687,59 @@ fun DaysView(
                     modifier = if (eventsWithoutTime[0].size > 3) clickToExpandModifier else Modifier,
                 ) {
                     val headerScrollState = rememberScrollState()
-                    Column(
-                        Modifier
-                            .verticalScroll(headerScrollState)
-                            .fillMaxWidth()
-                            .then(
-                                if (isAddEventBoxEnabled) Modifier.clickable(
-                                    indication = null,
-                                    interactionSource = null,
-                                ) { onAddEventBoxEnabledChange(false) } else Modifier,
-                            ),
-                    ) {
-                        val headerHasFilled = headerScrollState.maxValue != 0
-                        val displayedEvents =
-                            (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
-                        val dayEvents = displayedEvents.let { if (isExpanded) it else it.take(3) }
-                            .toImmutableList()
-                        Spacer(Modifier.height(10.dp))
-                        AnimatedVisibility(dayEvents.isNotEmpty()) {
-                            Spacer(Modifier.height(8.dp))
-                        }
-                        DayEvents(
-                            events = dayEvents,
-                            navigateToHolidaysSettings = navigateToHolidaysSettings,
-                            viewEvent = viewEvent,
-                            modifier = Modifier
+                    Box {
+                        Column(
+                            Modifier
+                                .verticalScroll(headerScrollState)
                                 .fillMaxWidth()
-                                .animateContentSize(appContentSizeAnimationSpec)
-                                .padding(horizontal = 24.dp),
-                        )
-                        val appointments =
-                            eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
-                        if (displayedEvents.size > 3) {
-                            Spacer(Modifier.height(4.dp))
-                            ExpandArrow(
-                                isExpanded = isExpanded,
-                                modifier = Modifier.align(Alignment.CenterHorizontally),
-                            )
-                            Spacer(Modifier.height(4.dp))
-                            if (content != null) {
-                                content(appointments, headerScrollState) { hasContent = it }
-                            }
-                            Spacer(Modifier.height(if (isExpanded && headerHasFilled) bottomPadding else 0.dp))
-                        } else if (content != null) {
+                                .then(
+                                    if (isAddEventBoxEnabled) Modifier.clickable(
+                                        indication = null,
+                                        interactionSource = null,
+                                    ) { onAddEventBoxEnabledChange(false) } else Modifier,
+                                ),
+                        ) {
+                            val headerHasFilled = headerScrollState.maxValue != 0
+                            val displayedEvents =
+                                (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
+                            val dayEvents =
+                                displayedEvents.let { if (isExpanded) it else it.take(3) }
+                                    .toImmutableList()
+                            Spacer(Modifier.height(10.dp))
                             AnimatedVisibility(dayEvents.isNotEmpty()) {
-                                Spacer(Modifier.height(6.dp))
+                                Spacer(Modifier.height(8.dp))
                             }
-                            content(appointments, headerScrollState) { hasContent = it }
-                        } else Spacer(Modifier.height(12.dp))
+                            DayEvents(
+                                events = dayEvents,
+                                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                viewEvent = viewEvent,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize(appContentSizeAnimationSpec)
+                                    .padding(horizontal = 24.dp),
+                            )
+                            val appointments =
+                                eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
+                            if (displayedEvents.size > 3) {
+                                Spacer(Modifier.height(4.dp))
+                                ExpandArrow(
+                                    isExpanded = isExpanded,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                                )
+                                Spacer(Modifier.height(4.dp))
+                                if (content != null) {
+                                    content(appointments, headerScrollState) { hasContent = it }
+                                }
+                                Spacer(Modifier.height(if (isExpanded && headerHasFilled) bottomPadding else 0.dp))
+                            } else if (content != null) {
+                                AnimatedVisibility(dayEvents.isNotEmpty()) {
+                                    Spacer(Modifier.height(6.dp))
+                                }
+                                content(appointments, headerScrollState) { hasContent = it }
+                            } else Spacer(Modifier.height(12.dp))
+                        }
                     }
+                    ScrollShadow(headerScrollState)
                 }
             } else if (maxDayAllDayEvents != 0) EventsRow(
                 events = eventsWithoutTime,

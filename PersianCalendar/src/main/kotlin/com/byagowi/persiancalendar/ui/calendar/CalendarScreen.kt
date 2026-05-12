@@ -786,7 +786,10 @@ private fun Details(
         ) { context.readDayDeviceEvents(selectedDay) }
         val scale = remember {
             mutableFloatStateOf(
-                if (isTablet) .75f else (maxHeight.value / (25f * defaultCellHeight)).coerceIn(.5f, 1.5f),
+                if (isTablet) .75f else (maxHeight.value / (25f * defaultCellHeight)).coerceIn(
+                    .5f,
+                    1.5f,
+                ),
             )
         }
         val cellHeight = (defaultCellHeight * scale.floatValue).dp
@@ -857,23 +860,27 @@ private fun Details(
                     )
                 },
             ) { selectedButton ->
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    if (selectedButton == DetailsTab.Events) {
-                        Spacer(Modifier.height(8.dp))
-                        val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-                        AnimatedVisibility(visible = shiftWorkTitle != null) {
-                            Spacer(Modifier.height(4.dp))
+                Box {
+                    val scrollState = rememberScrollState()
+                    Column(Modifier.verticalScroll(scrollState)) {
+                        if (selectedButton == DetailsTab.Events) {
+                            Spacer(Modifier.height(8.dp))
+                            val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
+                            AnimatedVisibility(visible = shiftWorkTitle != null) {
+                                Spacer(Modifier.height(4.dp))
+                            }
+                            ShiftWorkView(shiftWorkTitle, today, selectedDay)
                         }
-                        ShiftWorkView(shiftWorkTitle, today, selectedDay)
+                        (tabs[selectedButton] ?: tabs.entries.firstOrNull()?.value)?.invoke(
+                            readEventsWithEquinox(
+                                jdn = selectedDay,
+                                now = now,
+                                // Tabs are disabled when device events are enabled so empty is enough here
+                                deviceEvents = EventsStore.empty(),
+                            ),
+                        )
                     }
-                    (tabs[selectedButton] ?: tabs.entries.firstOrNull()?.value)?.invoke(
-                        readEventsWithEquinox(
-                            jdn = selectedDay,
-                            now = now,
-                            // Tabs are disabled when device events are enabled so empty is enough here
-                            deviceEvents = EventsStore.empty(),
-                        ),
-                    )
+                    ScrollShadow(scrollState)
                 }
             }
         } else DaysView(
