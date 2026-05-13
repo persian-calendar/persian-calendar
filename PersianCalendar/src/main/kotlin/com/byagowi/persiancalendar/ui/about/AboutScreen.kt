@@ -293,7 +293,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             }
         }
 
-        var showMore by rememberSaveable { mutableStateOf(false) }
+        var showMore by remember { mutableStateOf(false) }
         AnimatedVisibility(!showMore) {
             TextButton(
                 modifier = Modifier
