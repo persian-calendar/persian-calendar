@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
 import android.content.SharedPreferences
+import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.generated.CalendarRecord
@@ -191,8 +192,11 @@ data class EventsRepository(
         val nepalDefault = setOf(NEPAL_HOLIDAYS_KEY)
 
         fun getEnabledTypes(preferences: SharedPreferences, language: Language): Set<String> {
-            return preferences.getStringSet(PREF_HOLIDAY_TYPES, null)
-                ?: if (language.isIranExclusive) iranDefault else emptySet()
+            return preferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: when {
+                language.isIranExclusive && TimeZone.getDefault().id == IRAN_TIMEZONE_ID -> iranDefault
+                language.isAfghanistanExclusive && TimeZone.getDefault().id == AFGHANISTAN_TIMEZONE_ID -> afghanistanDefault
+                else -> emptySet()
+            }
         }
 
         fun keyFromDetails(source: EventSource?, isHoliday: Boolean): String? {

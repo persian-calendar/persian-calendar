@@ -430,7 +430,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     debugLog("Utils: configureCalendarsAndLoadEvents is called")
     val preferences = context.preferences
     IslamicDate.islamicOffset = getIslamicCalendarOffset(preferences)
-    eventsRepository_.value = if (Jdn.today().isYearSupportedOnApp) {
+    eventsRepository_.value = if (Jdn.today().isYearSupportedOnAppAndNextYear) {
         EventsRepository(preferences, language)
     } else EventsRepository.empty()
 }
