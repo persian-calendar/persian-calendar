@@ -262,21 +262,9 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal),
         ),
     ) {
-        // Licenses
-        Text(
-            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
-        )
-        AboutScreenButton(
-            icon = Icons.Default.Folder,
-            action = { navigateToLicenses() },
-            title = R.string.about_license_title,
-            summary = R.string.about_license_sum,
-        )
-
         // Help
         if (language.isUserAbleToReadPersian) {
-            Row(modifier = Modifier.padding(top = 16.dp, start = 20.dp)) {
+            Row(modifier = Modifier.padding(top = 24.dp, start = 20.dp)) {
                 Icon(
                     modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
                     imageVector = Icons.AutoMirrored.Default.Help,
@@ -291,7 +279,19 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 HelpItems()
             }
-        }
+        } else Spacer(Modifier.height(20.dp))
+
+        // Licenses
+        Text(
+            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+        )
+        AboutScreenButton(
+            icon = Icons.Default.Folder,
+            action = { navigateToLicenses() },
+            title = R.string.about_license_title,
+            summary = R.string.about_license_sum,
+        )
 
         var showMore by remember { mutableStateOf(false) }
         AnimatedVisibility(!showMore) {
