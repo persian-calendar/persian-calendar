@@ -141,6 +141,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -1217,18 +1218,23 @@ fun DaysView(
                         // This is an ugly hack as the lack of proper autosize here, for now
                         !numeral.isArabicIndicVariants
                     }
-                    Text(
-                        text = clockCache[y * 15] + when {
+                    AnimatedContent(
+                        targetState = clockCache[y * 15] + when {
                             !compact -> "\n"
                             days == 7 -> " "
                             else -> " $EN_DASH "
                         } + clockCache[(y + dy) * 15],
-                        color = contentColor,
-                        style = if (days == 7 && compact) MaterialTheme.typography.bodySmall
-                        else LocalTextStyle.current,
-                        textAlign = TextAlign.Center,
-                        overflow = TextOverflow.Visible,
-                    )
+                        transitionSpec = appCrossfadeSpec,
+                    ) {
+                        Text(
+                            text = it,
+                            color = contentColor,
+                            style = if (days == 7 && compact) MaterialTheme.typography.bodySmall
+                            else LocalTextStyle.current,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow.Visible,
+                        )
+                    }
                 }
             }
             ScrollShadow(scrollState)
