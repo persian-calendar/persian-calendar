@@ -32,6 +32,7 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -771,12 +772,22 @@ private fun Details(
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     BoxWithConstraints(
-        modifier.detectHorizontalSwipe(selectedDay) {
-            { isLeft ->
-                val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
-                bringDay(newJdn, true, false)
+        modifier
+            .detectHorizontalSwipe(selectedDay) {
+                { isLeft ->
+                    val newJdn = selectedDay + if (isLeft xor isRtl) -1 else 1
+                    bringDay(newJdn, true, false)
+                }
             }
-        },
+            .detectSwipe {
+                { isUp: Boolean ->
+                    when {
+                        isUp -> swipeUpActions[preferredSwipeUpAction]
+                        !isUp -> swipeDownActions[preferredSwipeDownAction]
+                        else -> null
+                    }?.invoke()
+                }
+            },
     ) {
         val detailsWidth = this.maxWidth
 
@@ -815,17 +826,21 @@ private fun Details(
             }
         }
 
-        if (!isButtonsMode) Column(
-            modifier = horizontalSwipeModifier.detectSwipe {
+        fun Modifier.verticalSwipeModifier(scrollState: ScrollState): Modifier {
+            return this.detectSwipe {
+                val wasAtTop = scrollState.value == 0
+                val wasAtEnd = scrollState.value == scrollState.maxValue
                 { isUp: Boolean ->
                     when {
-                        isUp -> swipeUpActions[preferredSwipeUpAction]
-                        !isUp -> swipeDownActions[preferredSwipeDownAction]
+                        isUp && wasAtEnd -> swipeUpActions[preferredSwipeUpAction]
+                        !isUp && wasAtTop -> swipeDownActions[preferredSwipeDownAction]
                         else -> null
                     }?.invoke()
                 }
-            },
-        ) {
+            }
+        }
+
+        if (!isButtonsMode) Column(modifier = horizontalSwipeModifier) {
             if (tabs.size > 1) PrimaryTabRow(
                 selectedTabIndex = tabs.keys.indexOf(selectedTab).coerceAtLeast(0),
                 divider = {},
@@ -862,7 +877,11 @@ private fun Details(
             ) { selectedButton ->
                 Box {
                     val scrollState = rememberScrollState()
-                    Column(Modifier.verticalScroll(scrollState)) {
+                    Column(
+                        Modifier
+                            .verticalScroll(scrollState)
+                            .verticalSwipeModifier(scrollState),
+                    ) {
                         if (selectedButton == DetailsTab.Events) {
                             Spacer(Modifier.height(8.dp))
                             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
@@ -927,23 +946,12 @@ private fun Details(
 
             onHasContentChange(tabs.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
-            val verticalSwipeModifier = Modifier.detectSwipe {
-                val wasAtTop = headerScrollState.value == 0
-                val wasAtEnd = headerScrollState.value == headerScrollState.maxValue
-                { isUp: Boolean ->
-                    when {
-                        isUp && wasAtEnd -> swipeUpActions[preferredSwipeUpAction]
-                        !isUp && wasAtTop -> swipeDownActions[preferredSwipeDownAction]
-                        else -> null
-                    }?.invoke()
-                }
-            }
-
             if (tabs.isNotEmpty()) CompositionLocalProvider(
                 LocalMinimumInteractiveComponentSize provides 0.dp,
             ) {
                 SingleChoiceSegmentedButtonRow(
-                    modifier = verticalSwipeModifier
+                    modifier = Modifier
+                        .verticalSwipeModifier(headerScrollState)
                         .then(horizontalSwipeModifier)
                         .align(Alignment.CenterHorizontally),
                 ) {
@@ -984,7 +992,8 @@ private fun Details(
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
                 },
-                modifier = verticalSwipeModifier
+                modifier = Modifier
+                    .verticalSwipeModifier(headerScrollState)
                     .then(horizontalSwipeModifier)
                     .fillMaxWidth(),
             ) {
