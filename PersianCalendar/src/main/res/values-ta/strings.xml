@@ -38,7 +38,6 @@
     <string name="next_x">அடுத்த %1$s</string>
     <string name="week_days_name_column">நாள்கள் அட்டவணையில் %1$s நெடுவரிசை</string>
     <string name="equivalent_to">சமமான</string>
-    <string name="holiday_reason">%1$s காரணமாக விடுமுறை</string>
     <string name="nth_week_of_year">ஆண்டின் %1$s வது வாரம்</string>
     <string name="shift_work_settings">மாற்று வேலை அமைப்புகள்</string>
     <string name="remove">அகற்று</string>

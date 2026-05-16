@@ -198,8 +198,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!-- Used in accessibility -->
     <string name="equivalent_to">Equivalent to</string>
     <!-- Used in accessibility -->
-    <string name="holiday_reason">Holiday because of %1$s</string>
-    <!-- Used in accessibility -->
     <string name="nth_week_of_year">%1$s week of year</string>
     <!-- Search for Shift Work in web to get some more information about it -->
     <string name="shift_work_settings">Shift work settings</string>

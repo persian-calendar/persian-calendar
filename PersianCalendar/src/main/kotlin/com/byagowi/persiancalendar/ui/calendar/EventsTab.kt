@@ -220,9 +220,7 @@ private fun DayEventContent(
             }
             .focusable(true)
             .semantics {
-                this.contentDescription = if (event.isHoliday) resources.getString(
-                    R.string.holiday_reason, event.title,
-                ) else event.oneLinerTitleWithTime
+                this.contentDescription = event.oneLinerTitleWithTime
             }
             .padding(horizontal = 6.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,

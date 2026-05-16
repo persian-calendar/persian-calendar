@@ -224,7 +224,6 @@
     <string name="previous_x">अघिल्लो %1$s</string>
     <string name="next_x">अर्को %1$s</string>
     <string name="week_days_name_column">%1$s दिन तालिकामा स्तम्भ</string>
-    <string name="holiday_reason">छुट्टी को कारण %1$s</string>
     <string name="nth_week_of_year">%1$s वर्षको हप्ता</string>
     <string name="shift_work_settings">काम सेटिङहरू सिफ्ट गर्नुहोस्</string>
     <string name="remove">हटाउनुहोस्</string>

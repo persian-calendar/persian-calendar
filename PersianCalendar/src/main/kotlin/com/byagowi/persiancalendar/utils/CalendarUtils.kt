@@ -100,9 +100,7 @@ fun getA11yDaySummary(
         insertRLM = false,
         addIsHoliday = false,
     )
-    if (holidays.isNotEmpty()) {
-        appendLine().appendLine().appendLine(resources.getString(R.string.holiday_reason, holidays))
-    }
+    if (holidays.isNotEmpty()) appendLine().appendLine().appendLine(holidays)
 
     val nonHolidays = getEventsTitle(
         events,

@@ -1580,9 +1580,7 @@ private fun setEventsInWidget(
         addIsHoliday = isHighTextContrastEnabled,
     )
     remoteViews.setTextViewTextOrHideIfEmpty(holidaysId, holidays)
-    if (isTalkBackEnabled) remoteViews.setContentDescription(
-        holidaysId, resources.getString(R.string.holiday_reason, holidays),
-    )
+    if (isTalkBackEnabled) remoteViews.setContentDescription(holidaysId, holidays)
 
     val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
         events,

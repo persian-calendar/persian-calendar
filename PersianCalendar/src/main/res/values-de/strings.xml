@@ -194,7 +194,6 @@
     <string name="am">Uhr</string>
     <string name="holiday">Feiertag</string>
     <string name="about_developers">Entwickler (zufällige Reihenfolge)</string>
-    <string name="holiday_reason">Feiertag wegen %1$s</string>
     <string name="pm">Uhr</string>
     <string name="previous_x">Vorherige %1$s</string>
     <string name="licenses">Lizenz</string>
