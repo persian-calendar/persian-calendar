@@ -144,7 +144,8 @@ data class EventsRepository(
 
         val holiday = determineIsHoliday(record)
         val title = when {
-            record.isHoliday && (record.source == EventSource.Iran || (record.source == EventSource.Afghanistan && language.isPersianOrDari)) -> "تعطیلی رسمی به مناسبت "
+            record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
+            record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
             (record.source == EventSource.Iran || (record.source == EventSource.Afghanistan && language.isPersianOrDari)) -> "مناسبت از تقویم، "
             else -> ""
         } + record.title
