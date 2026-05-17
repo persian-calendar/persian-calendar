@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -29,11 +30,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RichTooltip
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -85,6 +90,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
+import com.byagowi.persiancalendar.ui.icons.WikipediaIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
@@ -275,6 +281,7 @@ private fun DayEventContent(
 
                         else -> ""
                     }
+                    val uriHandler = LocalUriHandler.current
                     RichTooltip(
                         modifier = Modifier.clickable(
                             onClickLabel = stringResource(R.string.close),
@@ -283,7 +290,7 @@ private fun DayEventContent(
                         ) { coroutineScope.launch { tooltipState.dismiss() } },
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
-                        action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) ({
+                        action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent || event.wikipedia != null) ({
                             CompositionLocalProvider(
                                 LocalLayoutDirection provides originalLayoutDirection,
                             ) {
@@ -294,29 +301,51 @@ private fun DayEventContent(
                                         .fillMaxWidth(),
                                     contentAlignment = Alignment.Center,
                                 ) {
-                                    // It won't use the theme level defined uri handler but, it's ok
-                                    // since it's a PDF
-                                    val uriHandler = LocalUriHandler.current
-                                    FilledTonalButton(
-                                        onClick = {
-                                            if (event.source == EventSource.Iran) {
-                                                runCatching {
-                                                    uriHandler.openUri(event.source.link)
-                                                }.onFailure(logException)
-                                            } else if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                viewEvent(event)
+                                    val count = run {
+                                        (if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) 1 else 0)
+                                    } + run { if (event.wikipedia == null) 0 else 1 }
+                                    Row {
+                                        if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) FilledTonalButton(
+                                            onClick = {
+                                                when {
+                                                    event.source == EventSource.Iran -> {
+                                                        uriHandler.openUri(event.source.link)
+                                                    }
+
+                                                    event is CalendarEvent.DeviceCalendarEvent -> {
+                                                        viewEvent(event)
+                                                    }
+                                                }
+                                            },
+                                            shape = SegmentedButtonDefaults.itemShape(0, count),
+                                        ) {
+                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                Text(stringResource(R.string.view_source))
+                                                Icon(
+                                                    imageVector = when {
+                                                        event is CalendarEvent.DeviceCalendarEvent -> {
+                                                            Icons.AutoMirrored.Default.OpenInNew
+                                                        }
+
+                                                        else -> Icons.Default.OpenInBrowser
+                                                    },
+                                                    contentDescription = null,
+                                                    modifier = Modifier.padding(start = 8.dp),
+                                                )
                                             }
-                                        },
-                                    ) {
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text(stringResource(R.string.view_source))
+                                        }
+                                        if (count == 2) Spacer(Modifier.width(2.dp))
+                                        if (event.wikipedia != null) FilledTonalButton(
+                                            onClick = { uriHandler.openUri(event.wikipedia) },
+                                            shape = SegmentedButtonDefaults.itemShape(
+                                                count - 1,
+                                                count,
+                                            ),
+                                        ) {
                                             Icon(
-                                                imageVector = if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                    Icons.AutoMirrored.Default.OpenInNew
-                                                } else Icons.Default.OpenInBrowser,
-                                                contentDescription = null,
-                                                tint = LocalContentColor.current,
-                                                modifier = Modifier.padding(start = 8.dp),
+                                                imageVector = WikipediaIcon,
+                                                modifier = Modifier.size(24.dp),
+                                                contentDescription = "Wikipedia",
                                             )
                                         }
                                     }
@@ -421,20 +450,30 @@ private fun DayEventContent(
                         .clip(MaterialTheme.shapes.small)
                         .then(clickModifier),
                 ) {
-                    parts.forEachIndexed { i, part ->
-                        Text(
+                    val wikipedia = event.wikipedia
+                    val partsCount = parts.size + if (wikipedia != null) 1 else 0
+                    repeat(partsCount) { i ->
+                        val partModifier = Modifier
+                            .padding(start = if (i != 0) 2.dp else 0.dp)
+                            .clip(MaterialTheme.shapes.extraSmall)
+                            .heightIn(min = 20.dp)
+                            .background(animateColor(chipBackgroundColor).value)
+                            .padding(
+                                start = if (i == 0) 8.dp else 4.dp,
+                                end = if (i == partsCount - 1) 8.dp else 4.dp,
+                            )
+                        val part = parts.getOrNull(i)
+                        val color by animateColor(chipTextColor)
+                        if (part != null) Text(
                             text = part,
-                            color = animateColor(chipTextColor).value,
+                            color = color,
                             style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .padding(start = if (i != 0) 2.dp else 0.dp)
-                                .clip(MaterialTheme.shapes.extraSmall)
-                                .heightIn(min = 20.dp)
-                                .background(animateColor(chipBackgroundColor).value)
-                                .padding(
-                                    start = if (i == 0) 8.dp else 4.dp,
-                                    end = if (i == parts.size - 1) 8.dp else 4.dp,
-                                ),
+                            modifier = partModifier,
+                        ) else Icon(
+                            imageVector = WikipediaIcon,
+                            contentDescription = null,
+                            tint = color,
+                            modifier = partModifier.size(16.dp),
                         )
                     }
                 }
@@ -588,7 +627,8 @@ fun readEventsWithEquinox(
                 } else it
             } + "\n" + Date(equinoxTime).toGregorianCalendar().formatDateAndTime(withWeekDay = true)
             val remainedTime = equinoxTime - now
-            val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, null, remainedTime)
+            val event =
+                CalendarEvent.EquinoxCalendarEvent(title, false, date, null, "", remainedTime)
             listOf(event) + events
         } else events
     } else events).toImmutableList()

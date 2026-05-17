@@ -142,32 +142,40 @@ data class EventsRepository(
     ): T? {
         if (skipEvent(record, calendar)) return null
 
-        val holiday = determineIsHoliday(record)
+        val isHoliday = determineIsHoliday(record)
         val title = when {
             record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
             record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
-            (record.source == EventSource.Iran || (record.source == EventSource.Afghanistan && language.isPersianOrDari)) -> "مناسبت از تقویم، "
+            (record.source == EventSource.Iran || (record.source == EventSource.Afghanistan && language.isPersianOrDari)) -> "مناسبتی از تقویم، "
             else -> ""
         } + record.title
         return (when (calendar) {
             Calendar.SHAMSI -> {
                 val date = PersianDate(everyYear, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.PersianCalendarEvent(
+                    title, isHoliday, date, record.source, record.wikipedia,
+                )
             }
 
             Calendar.GREGORIAN -> {
                 val date = CivilDate(everyYear, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.GregorianCalendarEvent(
+                    title, isHoliday, date, record.source, record.wikipedia,
+                )
             }
 
             Calendar.ISLAMIC -> {
                 val date = IslamicDate(everyYear, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.IslamicCalendarEvent(
+                    title, isHoliday, date, record.source, record.wikipedia,
+                )
             }
 
             Calendar.NEPALI -> {
                 val date = NepaliDate(everyYear, record.month, record.day)
-                CalendarEvent.NepaliCalendarEvent(title, holiday, date, record.source)
+                CalendarEvent.NepaliCalendarEvent(
+                    title, isHoliday, date, record.source, record.wikipedia,
+                )
             }
         } as? T).debugAssertNotNull
     }

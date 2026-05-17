@@ -59,15 +59,26 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             }
         }.mapNotNull { event ->
             val date = getDateInstance(event, year, type) ?: return@mapNotNull null
-            val title =
-                "${event["title"] ?: return@mapNotNull null} (${numeral.format(year)})"
+            val title = "${event["title"] ?: return@mapNotNull null} (${numeral.format(year)})"
             val isHoliday = event["holiday"] == "true"
             val source = EventSource.entries.firstOrNull { it.name == event["type"] }
             when (date) {
-                is PersianDate -> CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source)
-                is IslamicDate -> CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source)
-                is CivilDate -> CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source)
-                is NepaliDate -> CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source)
+                is PersianDate -> {
+                    CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, null)
+                }
+
+                is IslamicDate -> {
+                    CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, null)
+                }
+
+                is CivilDate -> {
+                    CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, null)
+                }
+
+                is NepaliDate -> {
+                    CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, null)
+                }
+
                 else -> null
             }.debugAssertNotNull
         }

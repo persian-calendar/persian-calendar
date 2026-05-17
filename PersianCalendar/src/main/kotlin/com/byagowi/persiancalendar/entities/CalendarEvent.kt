@@ -11,33 +11,40 @@ import java.util.GregorianCalendar
 
 sealed class CalendarEvent<T : AbstractDate>(
     val title: String, val isHoliday: Boolean, val date: T, val source: EventSource?,
+    val wikipedia: String?,
 ) {
     class GregorianCalendarEvent(
         title: String, isHoliday: Boolean, date: CivilDate, source: EventSource?,
-    ) : CalendarEvent<CivilDate>(title, isHoliday, date, source)
+        wikipedia: String?,
+    ) : CalendarEvent<CivilDate>(title, isHoliday, date, source, wikipedia)
 
     class IslamicCalendarEvent(
         title: String, isHoliday: Boolean, date: IslamicDate, source: EventSource?,
-    ) : CalendarEvent<IslamicDate>(title, isHoliday, date, source)
+        wikipedia: String?,
+    ) : CalendarEvent<IslamicDate>(title, isHoliday, date, source, wikipedia)
 
     class PersianCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
-    ) : CalendarEvent<PersianDate>(title, isHoliday, date, source)
+        wikipedia: String?,
+    ) : CalendarEvent<PersianDate>(title, isHoliday, date, source, wikipedia)
 
     class EquinoxCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
+        wikipedia: String?,
         val remainingMillis: Long,
-    ) : CalendarEvent<PersianDate>(title, isHoliday, date, source)
+    ) : CalendarEvent<PersianDate>(title, isHoliday, date, source, wikipedia)
 
     class NepaliCalendarEvent(
         title: String, isHoliday: Boolean, date: NepaliDate, source: EventSource?,
-    ) : CalendarEvent<NepaliDate>(title, isHoliday, date, source)
+        wikipedia: String?,
+    ) : CalendarEvent<NepaliDate>(title, isHoliday, date, source, wikipedia)
 
     class DeviceCalendarEvent(
         date: CivilDate, title: String, isHoliday: Boolean, source: EventSource?,
+        wikipedia: String? = null,
         val id: Long, val description: String, val start: GregorianCalendar,
         val end: GregorianCalendar, val color: String, val time: String?,
-    ) : CalendarEvent<CivilDate>(title, isHoliday, date, source)
+    ) : CalendarEvent<CivilDate>(title, isHoliday, date, source, wikipedia)
 
     val oneLinerTitleWithTime
         get() = when (this) {
