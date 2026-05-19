@@ -25,20 +25,16 @@ import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RichTooltip
-import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -450,8 +446,7 @@ private fun DayEventContent(
                         .clip(MaterialTheme.shapes.small)
                         .then(clickModifier),
                 ) {
-                    val wikipedia = event.wikipedia
-                    val partsCount = parts.size + if (wikipedia != null) 1 else 0
+                    val partsCount = parts.size // + if (event.wikipedia != null) 1 else 0
                     repeat(partsCount) { i ->
                         val partModifier = Modifier
                             .padding(start = if (i != 0) 2.dp else 0.dp)
@@ -469,12 +464,13 @@ private fun DayEventContent(
                             color = color,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = partModifier,
-                        ) else Icon(
-                            imageVector = WikipediaIcon,
-                            contentDescription = null,
-                            tint = color,
-                            modifier = partModifier.size(16.dp),
                         )
+//                        else Icon(
+//                            imageVector = WikipediaIcon,
+//                            contentDescription = null,
+//                            tint = color,
+//                            modifier = partModifier.size(16.dp),
+//                        )
                     }
                 }
             }
