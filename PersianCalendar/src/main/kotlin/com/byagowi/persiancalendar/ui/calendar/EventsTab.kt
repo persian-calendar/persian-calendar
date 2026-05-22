@@ -66,7 +66,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.R.string.settings
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -200,7 +199,6 @@ private fun DayEventContent(
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
 ) {
-    LocalResources.current
     val tooltipState = rememberTooltipState(isPersistent = true)
     val hasTooltip = when {
         language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
@@ -408,7 +406,7 @@ private fun DayEventContent(
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Settings,
-                                            contentDescription = stringResource(id = settings),
+                                            contentDescription = stringResource(R.string.settings),
                                         )
                                     }
                                 }
