@@ -14,7 +14,13 @@ permissions:
 
 jobs:
   enable-automerge:
-    if: github.actor == 'dependabot[bot]' && github.event.pull_request.draft == false
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.user.type == 'Bot' &&
+      startsWith(github.event.pull_request.head.ref, 'dependabot/') &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - name: Approve pull request
