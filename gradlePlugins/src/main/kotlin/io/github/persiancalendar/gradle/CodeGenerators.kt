@@ -137,7 +137,7 @@ abstract class CodeGenerators : DefaultTask() {
     @Serializable
     data class Event(
         val holiday: Boolean, val month: Int, val day: Int, val type: String, val title: String,
-        val wikipedia: String? = null,
+        val metadata: Map<String, String> = emptyMap(),
     )
 
     private fun generateEventsCode(eventsJson: File, builder: FileSpec.Builder) {
@@ -173,7 +173,10 @@ abstract class CodeGenerators : DefaultTask() {
             "isHoliday" to Boolean::class.asClassName(),
             "month" to Int::class.asClassName(),
             "day" to Int::class.asClassName(),
-            "wikipedia" to String::class.asClassName().copy(nullable = true),
+            "metadata" to Map::class.asClassName().parameterizedBy(
+                String::class.asClassName(),
+                String::class.asClassName(),
+            ),
         )
         builder.addType(
             TypeSpec.classBuilder(calendarRecordName)
@@ -218,7 +221,17 @@ abstract class CodeGenerators : DefaultTask() {
                                         add("isHoliday = %L, ", it.holiday)
                                         add("month = %L, ", it.month)
                                         addStatement("day = %L, ", it.day)
-                                        addStatement("wikipedia = %S, ", it.wikipedia)
+                                        add("metadata = ")
+                                        if (it.metadata.isEmpty()) add("emptyMap()") else {
+                                            withIndent {
+                                                addStatement("mapOf(")
+                                                it.metadata.forEach { (k, v) ->
+                                                    addStatement("%S to %S,", k, v)
+                                                }
+                                            }
+                                            add(")")
+                                        }
+                                        addStatement(",")
                                     }
                                     addStatement("),")
                                 }

@@ -64,19 +64,19 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             val source = EventSource.entries.firstOrNull { it.name == event["type"] }
             when (date) {
                 is PersianDate -> {
-                    CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, null)
+                    CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, emptyMap())
                 }
 
                 is IslamicDate -> {
-                    CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, null)
+                    CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, emptyMap())
                 }
 
                 is CivilDate -> {
-                    CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, null)
+                    CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, emptyMap())
                 }
 
                 is NepaliDate -> {
-                    CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, null)
+                    CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, emptyMap())
                 }
 
                 else -> null

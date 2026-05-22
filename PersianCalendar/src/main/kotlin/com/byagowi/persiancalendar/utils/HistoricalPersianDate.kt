@@ -6,7 +6,6 @@
 package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.PersianDate

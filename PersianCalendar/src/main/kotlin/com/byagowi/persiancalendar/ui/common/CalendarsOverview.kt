@@ -78,7 +78,6 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
@@ -258,7 +257,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         AnimatedVisibility(
-            ((isExpanded && ((language.isPersian && Calendar.ISLAMIC !in enabledCalendars) || isAstronomicalExtraFeaturesEnabled)) || showHistoricalCalendars) && !persianDate.isOldEra,
+            ((isExpanded && isAstronomicalExtraFeaturesEnabled) || showHistoricalCalendars) && !persianDate.isOldEra,
         ) {
             val zodiacString =
                 if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
@@ -276,7 +275,7 @@ fun SharedTransitionScope.CalendarsOverview(
 
         if (language.isPersian) {
             val enableExtra =
-                showHistoricalCalendars || eventsRepository.iranAncient || ((Calendar.ISLAMIC !in enabledCalendars || isAstronomicalExtraFeaturesEnabled) && isExpanded)
+                showHistoricalCalendars || eventsRepository.iranAncient || (isAstronomicalExtraFeaturesEnabled && isExpanded)
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }

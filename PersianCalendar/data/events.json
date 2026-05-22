@@ -987,7 +987,7 @@
     { "holiday": false, "month": 7, "day": 24, "type": "Iran", "title": "روز صنعت آسانسور و پله‌برقی" },
     { "holiday": false, "month": 8, "day": 1, "type": "Iran", "title": "روز صنعت ساختمان" },
     { "holiday": false, "month": 8, "day": 8, "type": "Iran", "title": "روز محیط‌بان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/محیطبان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محیطبان" } },
     { "holiday": false, "month": 8, "day": 25, "type": "Iran", "title": "روز صنعت نوشت‌افزار" },
     { "holiday": false, "month": 9, "day": 1, "type": "Iran", "title": "روز صنعت سرب و روی" },
     { "holiday": false, "month": 9, "day": 15, "type": "Iran", "title": "روز حسابدار" },
@@ -1006,163 +1006,163 @@
 
     { "holiday": false, "month": 1, "day": 1, "type": "AncientIran",
       "title": "جشن نوروز، نوروز جمشیدی (جمشید پیشدادی) - ابتدای بهار",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جمشید" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جمشید" } },
 
     { "holiday": false, "month": 1, "day": 6, "type": "AncientIran",
       "title": "نوروز بزرگ (هودرو)، زادروز آشو زرتشت - روییدن مشی و مشیانه",
-      "wikipedia": "https://fa.wikipedia.org/wiki/نوروز_بزرگ" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز_بزرگ" } },
 
     { "holiday": false, "month": 1, "day": 7, "type": "AncientIran",
       "title": "آیین نیایش پیر هریشت از ۷ تا ۱۱ فروردین",
-      "wikipedia": "https://fa.wikipedia.org/wiki/پیر_هریشت" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/پیر_هریشت" } },
 
     { "holiday": false, "month": 1, "day": 13, "type": "AncientIran",
       "title": "سیزده نوروز، سیزده‌بدر",
-      "wikipedia": "https://fa.wikipedia.org/wiki/سیزده‌بدر" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سیزده‌بدر" } },
 
     { "holiday": false, "month": 1, "day": 19, "type": "AncientIran",
       "title": "جشن فرودینگان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن_فروردینگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن_فروردینگان" } },
 
     { "holiday": false, "month": 2, "day": 2, "type": "AncientIran",
       "title": "جشن اردیبهشتگان، پوشیدن لباس سپید به نشانه پاکی",
-      "wikipedia": "https://fa.wikipedia.org/wiki/اردیبهشتگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/اردیبهشتگان" } },
 
     { "holiday": false, "month": 2, "day": 10, "type": "AncientIran",
       "title": "جشن چلمو (چله بهار) - گاهان بار میدیوزرم‌گاه از ۱۰ تا ۱۴ اردیبهشت",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" } },
 
     { "holiday": false, "month": 2, "day": 19, "type": "AncientIran",
       "title": "جشن پنجاه بدر",
-      "wikipedia": "https://fa.wikipedia.org/wiki/پنجاه_بدر" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/پنجاه_بدر" } },
 
     { "holiday": false, "month": 2, "day": 25, "type": "AncientIran",
       "title": "بزرگداشت استاد توس فردوسی بزرگ",
-      "wikipedia": "https://fa.wikipedia.org/wiki/فردوسی" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/فردوسی" } },
 
     { "holiday": false, "month": 3, "day": 4, "type": "AncientIran",
       "title": "جشن خوردادگان، امشاسپند خورداد نگاهبان آبها",
-      "wikipedia": "https://fa.wikipedia.org/wiki/خردادگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خردادگان" } },
 
     { "holiday": false, "month": 3, "day": 24, "type": "AncientIran",
       "title": "آیین نیایش ستی پیر و پیر سبز (چک چک)",
-      "wikipedia": "https://fa.wikipedia.org/wiki/چک‌چک_(اردکان)" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/چک‌چک_(اردکان)" } },
 
     { "holiday": false, "month": 3, "day": 29, "type": "AncientIran",
       "title": "جشن ابتدای تیر ماه، آب پاشونک",
-      "wikipedia": "https://fa.wikipedia.org/wiki/آب‌پاشان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/آب‌پاشان" } },
 
     { "holiday": false, "month": 4, "day": 2, "type": "AncientIran",
       "title": "آیین نیایش پیر نارستانه",
-      "wikipedia": "https://fa.wikipedia.org/wiki/پیر_نارستانه" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/پیر_نارستانه" } },
 
     { "holiday": false, "month": 4, "day": 8, "type": "AncientIran",
       "title": "گاهان‌بار میدیوشهیم‌گاه از ۸ تا ۱۲ تیر",
-      "wikipedia": "https://fa.wikipedia.org/wiki/گاهنبار" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/گاهنبار" } },
 
     { "holiday": false, "month": 4, "day": 10, "type": "AncientIran",
       "title": "جشن تیرگان، آب پاشونک",
-      "wikipedia": "https://fa.wikipedia.org/wiki/تیرگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تیرگان" } },
 
     { "holiday": false, "month": 4, "day": 13, "type": "AncientIran",
       "title": "آیین نیایش پارس بانو از ۱۳ تا ۱۷ تیر",
-      "wikipedia": "https://fa.wikipedia.org/wiki/زیارتگاه_بانو_پارس" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/زیارتگاه_بانو_پارس" } },
 
     { "holiday": false, "month": 5, "day": 3, "type": "AncientIran",
       "title": "جشن امردادگان، امشاسپند امرداد نگاهبان رستنی‌ها",
-      "wikipedia": "https://fa.wikipedia.org/wiki/امردادگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/امردادگان" } },
 
     { "holiday": false, "month": 5, "day": 6, "type": "AncientIran",
       "title": "جشن چلهٔ تابستان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/چله_تموز" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/چله_تموز" } },
 
     { "holiday": false, "month": 5, "day": 12, "type": "AncientIran",
       "title": "آیین نیایش پیر نارکی از ۱۲ تا ۱۶ مرداد",
-      "wikipedia": "https://fa.wikipedia.org/wiki/پیر_نارستانه" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/پیر_نارستانه" } },
 
     { "holiday": false, "month": 5, "day": 30, "type": "AncientIran",
       "title": "جشن شهریورگان، امشاسپند شهریور نگاهبان فلزات",
-      "wikipedia": "https://fa.wikipedia.org/wiki/شهریورگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شهریورگان" } },
 
     { "holiday": false, "month": 6, "day": 3, "type": "AncientIran",
       "title": "جشن خزان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" } },
 
     { "holiday": false, "month": 6, "day": 21, "type": "AncientIran",
       "title": "گاهان‌بار پتیه‌شهیم‌گاه از ۲۱ تا ۲۵ شهریور",
-      "wikipedia": "https://fa.wikipedia.org/wiki/گاهنبار" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/گاهنبار" } },
 
     { "holiday": false, "month": 7, "day": 10, "type": "AncientIran",
       "title": "جشن مهرگان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/مهرگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مهرگان" } },
 
     { "holiday": false, "month": 8, "day": 4, "type": "AncientIran",
       "title": "جشن آبانگان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/آبانگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/آبانگان" } },
 
     { "holiday": false, "month": 8, "day": 7, "type": "AncientIran",
       "title": "روز کوروش بزرگ",
-      "wikipedia": "https://fa.wikipedia.org/wiki/روز_کوروش_بزرگ" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_کوروش_بزرگ" } },
 
     { "holiday": false, "month": 8, "day": 9, "type": "AncientIran",
       "title": "جشن پاییزانه",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" } },
 
     { "holiday": false, "month": 8, "day": 21, "type": "AncientIran",
       "title": "جشن گالشی",
-      "wikipedia": "https://fa.wikipedia.org/wiki/گاه‌شماری_دیلمی" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/گاه‌شماری_دیلمی" } },
 
     { "holiday": false, "month": 9, "day": 3, "type": "AncientIran",
       "title": "جشن آذرگان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/آذرگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/آذرگان" } },
 
     { "holiday": false, "month": 9, "day": 25, "type": "AncientIran",
       "title": "اولین جشن دی‌گان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" } },
 
     { "holiday": false, "month": 9, "day": 30, "type": "AncientIran",
       "title": "جشن شب یلدا",
-      "wikipedia": "https://fa.wikipedia.org/wiki/شب_یلدا" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شب_یلدا" } },
 
     { "holiday": false, "month": 10, "day": 2, "type": "AncientIran",
       "title": "دومین جشن دی‌گان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" } },
 
     { "holiday": false, "month": 10, "day": 8, "type": "AncientIran",
       "title": "جشن سیر و سور",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" } },
 
     { "holiday": false, "month": 10, "day": 9, "type": "AncientIran",
       "title": "سومین جشن دی‌گان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" } },
 
     { "holiday": false, "month": 10, "day": 17, "type": "AncientIran",
       "title": "چهارمین جشن دی‌گان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خرم‌روز" } },
 
     { "holiday": false, "month": 10, "day": 26, "type": "AncientIran",
       "title": "جشن بهمنگان، روز پدر، بهمن (منش نیک) امشاسپند",
-      "wikipedia": "https://fa.wikipedia.org/wiki/بهمنگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بهمنگان" } },
 
     { "holiday": false, "month": 10, "day": 29, "type": "AncientIran",
       "title": "جشن نوسره",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن_نوسره" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن_نوسره" } },
 
     { "holiday": false, "month": 11, "day": 9, "type": "AncientIran",
       "title": "جشن میانهٔ زمستان",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" } },
 
     { "holiday": false, "month": 11, "day": 10, "type": "AncientIran",
       "title": "جشن سده، آتش افروزی به هنگام غروب آفتاب",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن_سده" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن_سده" } },
 
     { "holiday": false, "month": 11, "day": 29, "type": "AncientIran",
       "title": "جشن اسفندگان، روز مادر و روز عشق پاک",
-      "wikipedia": "https://fa.wikipedia.org/wiki/سپندارمذگان" },
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سپندارمذگان" } },
 
     { "holiday": false, "month": 12, "day": 14, "type": "AncientIran",
       "title": "جشن گلدان (اینجه، رسیدگی به امور نباتات)",
-      "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" }
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جشن‌های_ایران_باستان" } }
   ],
 
   "Hijri Calendar": [

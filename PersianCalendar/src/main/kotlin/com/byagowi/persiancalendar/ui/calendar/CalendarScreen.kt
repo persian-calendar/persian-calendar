@@ -863,7 +863,7 @@ private fun Details(
                         onClick = { onSelectedTabChange(button) },
                     )
                 }
-            }
+            } else Spacer(Modifier.height(4.dp))
 
             AnimatedContent(
                 targetState = selectedTab,

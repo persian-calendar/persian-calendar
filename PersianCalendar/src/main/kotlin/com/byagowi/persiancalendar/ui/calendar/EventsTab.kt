@@ -23,10 +23,10 @@ import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -65,6 +66,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.R.string.settings
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -198,7 +200,7 @@ private fun DayEventContent(
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
 ) {
-    val resources = LocalResources.current
+    LocalResources.current
     val tooltipState = rememberTooltipState(isPersistent = true)
     val hasTooltip = when {
         language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
@@ -271,7 +273,7 @@ private fun DayEventContent(
                         event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است"
                         event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                         event.source == EventSource.International -> stringResource(R.string.international)
-                        event.source == EventSource.AncientIran -> "این رویداد با تقویم جلالی تنظیم شده که طول ماه‌هایش با تقویم شمسی کنونی متفاوت است"
+                        event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
                         event.source == EventSource.Iran -> event.title + """ از تقویم رسمی
 تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
 
@@ -286,7 +288,7 @@ private fun DayEventContent(
                         ) { coroutineScope.launch { tooltipState.dismiss() } },
                         maxWidth = 240.dp,
                         tonalElevation = 12.dp,
-                        action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent || event.wikipedia != null) ({
+                        action = if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent || "wikipedia" in event.metadata) ({
                             CompositionLocalProvider(
                                 LocalLayoutDirection provides originalLayoutDirection,
                             ) {
@@ -297,51 +299,61 @@ private fun DayEventContent(
                                         .fillMaxWidth(),
                                     contentAlignment = Alignment.Center,
                                 ) {
-                                    val count = run {
-                                        (if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) 1 else 0)
-                                    } + run { if (event.wikipedia == null) 0 else 1 }
                                     Row {
-                                        if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) FilledTonalButton(
-                                            onClick = {
-                                                when {
-                                                    event.source == EventSource.Iran -> {
-                                                        uriHandler.openUri(event.source.link)
-                                                    }
+                                        val buttons = listOfNotNull(
+                                            if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) @Composable { shape: Shape ->
+                                                FilledTonalButton(
+                                                    onClick = {
+                                                        when {
+                                                            event.source == EventSource.Iran -> {
+                                                                uriHandler.openUri(event.source.link)
+                                                            }
 
-                                                    event is CalendarEvent.DeviceCalendarEvent -> {
-                                                        viewEvent(event)
+                                                            event is CalendarEvent.DeviceCalendarEvent -> {
+                                                                viewEvent(event)
+                                                            }
+                                                        }
+                                                    },
+                                                    shape = shape,
+                                                ) {
+                                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                                        Text(stringResource(R.string.view_source))
+                                                        Icon(
+                                                            imageVector = when {
+                                                                event is CalendarEvent.DeviceCalendarEvent -> {
+                                                                    Icons.AutoMirrored.Default.OpenInNew
+                                                                }
+
+                                                                else -> Icons.Default.OpenInBrowser
+                                                            },
+                                                            contentDescription = null,
+                                                            modifier = Modifier.padding(start = 8.dp),
+                                                        )
+                                                    }
+                                                }
+                                            } else null,
+                                            event.metadata["wikipedia"]?.let { wikipedia ->
+                                                @Composable { shape: Shape ->
+                                                    FilledTonalButton(
+                                                        onClick = { uriHandler.openUri(wikipedia) },
+                                                        shape = shape,
+                                                    ) {
+                                                        Icon(
+                                                            imageVector = WikipediaIcon,
+                                                            modifier = Modifier.size(24.dp),
+                                                            contentDescription = "Wikipedia",
+                                                        )
                                                     }
                                                 }
                                             },
-                                            shape = SegmentedButtonDefaults.itemShape(0, count),
-                                        ) {
-                                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                                Text(stringResource(R.string.view_source))
-                                                Icon(
-                                                    imageVector = when {
-                                                        event is CalendarEvent.DeviceCalendarEvent -> {
-                                                            Icons.AutoMirrored.Default.OpenInNew
-                                                        }
-
-                                                        else -> Icons.Default.OpenInBrowser
-                                                    },
-                                                    contentDescription = null,
-                                                    modifier = Modifier.padding(start = 8.dp),
-                                                )
-                                            }
-                                        }
-                                        if (count == 2) Spacer(Modifier.width(2.dp))
-                                        if (event.wikipedia != null) FilledTonalButton(
-                                            onClick = { uriHandler.openUri(event.wikipedia) },
-                                            shape = SegmentedButtonDefaults.itemShape(
-                                                count - 1,
-                                                count,
-                                            ),
-                                        ) {
-                                            Icon(
-                                                imageVector = WikipediaIcon,
-                                                modifier = Modifier.size(24.dp),
-                                                contentDescription = "Wikipedia",
+                                        )
+                                        buttons.forEachIndexed { i, button ->
+                                            if (i != 0) Spacer(Modifier.width(2.dp))
+                                            button(
+                                                SegmentedButtonDefaults.itemShape(
+                                                    index = i,
+                                                    count = buttons.size,
+                                                ),
                                             )
                                         }
                                     }
@@ -376,20 +388,28 @@ private fun DayEventContent(
                                             .padding(start = 4.dp)
                                             .weight(1f),
                                     )
-                                    OutlineSettingsButton(
+                                    FilledIconButton(
                                         modifier = Modifier.padding(
-                                            top = 8.dp, start = 4.dp, bottom = 8.dp,
+                                            top = 8.dp,
+                                            start = 4.dp,
+                                            bottom = 8.dp,
                                         ),
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                tooltipState.dismiss()
+                                                navigateToHolidaysSettings(
+                                                    EventsRepository.keyFromDetails(
+                                                        event.source,
+                                                        event.isHoliday,
+                                                    ) ?: PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+                                                )
+                                            }
+                                        },
                                     ) {
-                                        coroutineScope.launch {
-                                            tooltipState.dismiss()
-                                            navigateToHolidaysSettings(
-                                                EventsRepository.keyFromDetails(
-                                                    event.source,
-                                                    event.isHoliday,
-                                                ) ?: PREF_SHOW_DEVICE_CALENDAR_EVENTS,
-                                            )
-                                        }
+                                        Icon(
+                                            imageVector = Icons.Default.Settings,
+                                            contentDescription = stringResource(id = settings),
+                                        )
                                     }
                                 }
                             }
@@ -397,7 +417,7 @@ private fun DayEventContent(
                         caretShape = TooltipDefaults.caretShape(),
                     ) {
                         Text(
-                            text,
+                            text = text,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -446,7 +466,7 @@ private fun DayEventContent(
                         .clip(MaterialTheme.shapes.small)
                         .then(clickModifier),
                 ) {
-                    val partsCount = parts.size // + if (event.wikipedia != null) 1 else 0
+                    val partsCount = parts.size // + if ("wikipedia" in event.metadata) 1 else 0
                     repeat(partsCount) { i ->
                         val partModifier = Modifier
                             .padding(start = if (i != 0) 2.dp else 0.dp)
@@ -475,16 +495,6 @@ private fun DayEventContent(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun OutlineSettingsButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    OutlinedIconButton(modifier = modifier, onClick = onClick) {
-        Icon(
-            imageVector = Icons.Default.Settings,
-            contentDescription = stringResource(R.string.settings),
-        )
     }
 }
 
@@ -623,8 +633,14 @@ fun readEventsWithEquinox(
                 } else it
             } + "\n" + Date(equinoxTime).toGregorianCalendar().formatDateAndTime(withWeekDay = true)
             val remainedTime = equinoxTime - now
-            val event =
-                CalendarEvent.EquinoxCalendarEvent(title, false, date, null, "", remainedTime)
+            val event = CalendarEvent.EquinoxCalendarEvent(
+                title = title,
+                isHoliday = false,
+                date = date,
+                source = null,
+                metadata = emptyMap(),
+                remainingMillis = remainedTime,
+            )
             listOf(event) + events
         } else events
     } else events).toImmutableList()
