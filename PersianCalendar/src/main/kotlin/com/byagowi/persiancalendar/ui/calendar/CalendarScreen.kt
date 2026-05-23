@@ -539,7 +539,10 @@ fun SharedTransitionScope.CalendarScreen(
                 lifecycle.isAtLeast(Lifecycle.State.RESUMED)
             }
             AnimatedVisibility(
-                visible = !isYearView && (selectedTab == DetailsTab.Events || isButtonsMode),
+                visible = !isYearView && (selectedTab == DetailsTab.Events || isButtonsMode) && when (selectedTab) {
+                    DetailsTab.Events, null -> true
+                    else -> false
+                },
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
