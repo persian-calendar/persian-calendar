@@ -1,7 +1,7 @@
 {
   "Source": {
     "Afghanistan": "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
-    "Iran": "https://calendar.ut.ac.ir",
+    "Iran": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1405.pdf",
     "AncientIran": "~https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "International": "~https://www.un.org/en/sections/observances/international-days/",
     "Nepal": ""
@@ -14,26 +14,34 @@
     "توجه:",
     "به مناسبت‌هایی که در انتهای صفحه قرار دارند و الگوی تکرارشان متفاوت است توجه ویژه کنید",
     "این داده‌ها از منابع رسمی زیر گردآوری شده‌اند، خود این گردآوردی رسمی و دارای تضمین بی‌نقص یا کامل بودن نیست ولی محتویات آن به منابع زیر بر می‌گردد",
+    "برخی رویدادها جهت نمایش درون برنامه به ویکی‌پدیا پیوند داده شده و به کمک آن‌ها بهبود یافته‌اند.",
+    "----",
     "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
     "افغانستان",
+    "----",
     "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1405.pdf",
     "مرکز تقویم دانشگاه تهران",
+    "----",
     "https://github.com/ilius/starcal/tree/main/plugins",
     "مطابق با استخراج و تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران (مناسبت‌ها از شورای فرهنگ عمومی)",
     "گردآوری، فرمت‌بندی و به روزآوری: سعید رسولی <saeed.gnu@gmail.com>، مولا پهنادایان <mola.mp@gmail.com>",
+    "----",
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "جشن‌های باستانی ایران",
     "Ardalan Razavi",
     "رضا مرادی غیاث‌آبادی (www.ghiasabadi.com)",
     "سعید رسولی <saeed.gnu@gmail.com>",
+    "----",
     "https://www.un.org/en/sections/observances/international-days/"
   ],
   "Persian Calendar": [
     { "holiday": true, "month": 1, "day": 1, "type": "Afghanistan",
-      "title": "جشن نوروز" },
+      "title": "جشن نوروز",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز" } },
 
     { "holiday": true, "month": 1, "day": 2, "type": "Afghanistan",
-      "title": "جشن دهقان" },
+      "title": "جشن دهقان",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز_در_افغانستان" } },
 
     { "holiday": false, "month": 1, "day": 3, "type": "Afghanistan",
       "title": "روز زنگ مکتب" },
@@ -42,22 +50,27 @@
       "title": "روز مطبوعات" },
 
     { "holiday": false, "month": 2, "day": 7, "type": "Afghanistan",
-      "title": "کودتای حزب دموکراتیک خلق افغانستان (سال ۱۳۵۷)" },
+      "title": "کودتای حزب دموکراتیک خلق افغانستان (سال ۱۳۵۷)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/انقلاب_ثور" } },
 
     { "holiday": true, "month": 2, "day": 8, "type": "Afghanistan",
-      "title": "پیروزی جهاد مقدس افغانستان (سال ۱۳۷۱)" },
+      "title": "پیروزی جهاد مقدس افغانستان (سال ۱۳۷۱)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مجاهدین_افغانستان" } },
 
     { "holiday": false, "month": 3, "day": 24, "type": "Afghanistan",
-      "title": "روز مادر" },
+      "title": "روز مادر",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_مادر" } },
 
     { "holiday": true, "month": 5, "day": 28, "type": "Afghanistan",
-      "title": "روز استرداد استقلال کشور (سال ۱۲۹۸ مصادف با ۱۹۱۹ میلادی)" },
+      "title": "روز استرداد استقلال کشور (سال ۱۲۹۸ مصادف با ۱۹۱۹ میلادی)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_استقلال_افغانستان" } },
 
     { "holiday": false, "month": 6, "day": 9, "type": "Afghanistan",
       "title": "روز همبستگی با برادران پشتون و بلوچ" },
 
     { "holiday": true, "month": 6, "day": 18, "type": "Afghanistan",
-      "title": "روز شهادت قهرمان ملی افغانستان (آغاز هفتهٔ شهید)" },
+      "title": "روز شهادت قهرمان ملی افغانستان (آغاز هفتهٔ شهید)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/احمد_شاه_مسعود" } },
 
     { "holiday": false, "month": 7, "day": 16, "type": "Afghanistan",
       "title": "روز هنر" },
@@ -109,31 +122,39 @@
 
 
     { "holiday": true, "month": 1, "day": 1, "type": "Iran",
-      "title": "آغاز نوروز" },
+      "title": "آغاز نوروز",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز" } },
 
     { "holiday": true, "month": 1, "day": 2, "type": "Iran",
-      "title": "عید نوروز" },
+      "title": "عید نوروز",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز" } },
 
     { "holiday": false, "month": 1, "day": 2, "type": "Iran",
-      "title": "هجوم به مدرسهٔ فیضیهٔ قم (۱۳۴۲ ه‍.ش)" },
+      "title": "هجوم مأموران ستم‌شاهی پهلوی به مدرسهٔ فیضیهٔ قم (۱۳۴۲ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مدرسه_فیضیه" } },
 
     { "holiday": false, "month": 1, "day": 2, "type": "Iran",
-      "title": "آغاز عملیات فتح‌المبین (۱۳۶۱ ه‍.ش)" },
+      "title": "آغاز عملیات فتح‌المبین (۱۳۶۱ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عملیات_فتح‌المبین" } },
 
     { "holiday": true, "month": 1, "day": 3, "type": "Iran",
-      "title": "عید نوروز" },
+      "title": "عید نوروز",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز" } },
 
     { "holiday": true, "month": 1, "day": 4, "type": "Iran",
-      "title": "عید نوروز" },
+      "title": "عید نوروز",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نوروز" } },
 
     { "holiday": false, "month": 1, "day": 6, "type": "Iran",
-      "title": "زادروز زرتشت پیامبر" },
+      "title": "زادروز زرتشت پیامبر",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/زادروز_زرتشت" } },
 
     { "holiday": false, "month": 1, "day": 7, "type": "Iran",
       "title": "روز هنرهای نمایشی" },
 
     { "holiday": true, "month": 1, "day": 12, "type": "Iran",
-      "title": "روز جمهوری اسلامی ایران" },
+      "title": "روز جمهوری اسلامی ایران",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_جمهوری_اسلامی" } },
 
     { "holiday": true, "month": 1, "day": 13, "type": "Iran",
       "title": "روز طبیعت" },
@@ -151,55 +172,63 @@
       "title": "روز ملی فناوری هسته‌ای" },
 
     { "holiday": false, "month": 1, "day": 20, "type": "Iran",
-      "title": "شهادت سید مرتضی آوینی" },
-
-    { "holiday": false, "month": 1, "day": 20, "type": "Iran",
-      "title": "روز هنر انقلاب اسلامی" },
+      "title": "روز هنر انقلاب اسلامی ـــ شهادت سید مرتضی آوینی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_مرتضی_آوینی" } },
 
     { "holiday": false, "month": 1, "day": 21, "type": "Iran",
-      "title": "شهادت امیر سپهبد علی صیاد شیرازی (۱۳۷۸ ه‍.ش)" },
+      "title": "شهادت امیر سپهبد علی صیاد شیرازی (۱۳۷۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/علی_صیاد_شیرازی" } },
 
     { "holiday": false, "month": 1, "day": 21, "type": "Iran",
-      "title": "سالروز افتتاح حساب شمارهٔ ۱۰۰ و تأسیس بنیاد مسکن (۱۳۵۸ ه‍.ش)" },
+      "title": "سالروز افتتاح حساب شمارهٔ ۱۰۰ به فرمان حضرت امام خمینی (ره) و تأسیس بنیاد مسکن انقلاب اسلامی (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بنیاد_مسکن_انقلاب_اسلامی" } },
 
     { "holiday": false, "month": 1, "day": 25, "type": "Iran",
-      "title": "روز بزرگداشت عطار نیشابوری" },
+      "title": "روز بزرگداشت عطار نیشابوری",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عطار" } },
 
     { "holiday": false, "month": 1, "day": 29, "type": "Iran",
-      "title": "روز ارتش و نیروی زمینی" },
+      "title": "روز ارتش جمهوری اسلامی و نیروی زمینی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ارتش_جمهوری_اسلامی_ایران" } },
 
     { "holiday": false, "month": 1, "day": 31, "type": "Iran",
       "title": "روز گندم و نان" },
 
     { "holiday": false, "month": 2, "day": 1, "type": "Iran",
-      "title": "روز بزرگداشت سعدی" },
+      "title": "روز بزرگداشت سعدی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_سعدی" } },
 
     { "holiday": false, "month": 2, "day": 1, "type": "Iran",
-      "title": "روز نثر فارسی" },
+      "title": "روز نثر فارسی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_بیهقی" } },
 
     { "holiday": false, "month": 2, "day": 1, "type": "Iran",
       "title": "روز شهدای ورزشکار" },
 
     { "holiday": false, "month": 2, "day": 2, "type": "Iran",
-      "title": "تأسیس سپاه پاسداران (۱۳۵۸ ه‍.ش)" },
+      "title": "تأسیس سپاه پاسداران انقلاب اسلامی (۱۳۵۸ ه‍.ش)" },
 
     { "holiday": false, "month": 2, "day": 2, "type": "Iran",
-      "title": "سالروز اعلام انقلاب فرهنگی (۱۳۵۹ ه‍.ش)" },
+      "title": "سالروز اعلام انقلاب فرهنگی (۱۳۵۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/انقلاب_فرهنگی_ایران" } },
 
     { "holiday": false, "month": 2, "day": 2, "type": "Iran",
       "title": "روز زمین پاک" },
 
     { "holiday": false, "month": 2, "day": 3, "type": "Iran",
-      "title": "روز بزرگداشت شیخ بهایی" },
+      "title": "روز بزرگداشت شیخ بهایی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شیخ_بهایی" } },
 
     { "holiday": false, "month": 2, "day": 3, "type": "Iran",
       "title": "روز معماری" },
 
     { "holiday": false, "month": 2, "day": 3, "type": "Iran",
-      "title": "سالروز شهادت امیر سپهبد قرنی (۱۳۵۸ ه‍.ش)" },
+      "title": "سالروز شهادت امیر سپهبد قرنی (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_محمدولی_قرنی" } },
 
     { "holiday": false, "month": 2, "day": 5, "type": "Iran",
-      "title": "شکست حملهٔ نظامی آمریکا به ایران در طبس (۱۳۵۹ ه‍.ش)" },
+      "title": "شکست حملهٔ نظامی آمریکا به ایران در طبس (۱۳۵۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عملیات_پنجه_عقاب" } },
 
     { "holiday": false, "month": 2, "day": 7, "type": "Iran",
       "title": "روز ایمنی حمل و نقل" },
@@ -208,25 +237,27 @@
       "title": "روز شوراها" },
 
     { "holiday": false, "month": 2, "day": 10, "type": "Iran",
-      "title": "روز ملی خلیج فارس" },
+      "title": "روز ملی خلیج فارس",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ملی_خلیج_فارس" } },
 
     { "holiday": false, "month": 2, "day": 10, "type": "Iran",
-      "title": "آغاز عملیات بیت‌المقدس (۱۳۶۱ ه‍.ش)" },
+      "title": "آغاز عملیات بیت‌المقدس (۱۳۶۱ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عملیات_بیت‌المقدس" } },
 
     { "holiday": false, "month": 2, "day": 12, "type": "Iran",
-      "title": "شهادت استاد مرتضی مطهری (۱۳۵۸ ه‍.ش)" },
-
-    { "holiday": false, "month": 2, "day": 12, "type": "Iran",
-      "title": "روز معلم" },
+      "title": "روز معلم ـــ شهادت استاد مرتضی مطهری (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مرتضی_مطهری" } },
 
     { "holiday": false, "month": 2, "day": 15, "type": "Iran",
-      "title": "روز بزرگداشت شیخ صدوق" },
+      "title": "روز بزرگداشت شیخ صدوق",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شیخ_صدوق" } },
 
     { "holiday": false, "month": 2, "day": 18, "type": "Iran",
       "title": "روز بیماری‌های خاص و صعب‌العلاج" },
 
     { "holiday": false, "month": 2, "day": 19, "type": "Iran",
-      "title": "روز بزرگداشت شیخ کلینی" },
+      "title": "روز بزرگداشت شیخ کلینی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شیخ_کلینی" } },
 
     { "holiday": false, "month": 2, "day": 19, "type": "Iran",
       "title": "روز اسناد ملی و میراث مکتوب" },
@@ -235,22 +266,26 @@
       "title": "روز گل محمدی و گلاب" },
 
     { "holiday": false, "month": 2, "day": 24, "type": "Iran",
-      "title": "لغو امتیاز تنباکو به فتوای آیت‌الله میرزا حسن شیرازی (۱۲۷۰ ه‍.ش)" },
+      "title": "لغو امتیاز تنباکو به فتوای آیت‌الله میرزا حسن شیرازی (۱۲۷۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نهضت_تنباکو" } },
 
     { "holiday": false, "month": 2, "day": 25, "type": "Iran",
-      "title": "روز پاسداشت زبان فارسی و بزرگداشت حکیم ابوالقاسم فردوسی" },
+      "title": "روز پاسداشت زبان فارسی و بزرگداشت حکیم ابوالقاسم فردوسی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/فردوسی" } },
 
     { "holiday": false, "month": 2, "day": 27, "type": "Iran",
       "title": "روز ارتباطات و روابط عمومی" },
 
     { "holiday": false, "month": 2, "day": 28, "type": "Iran",
-      "title": "روز بزرگداشت حکیم عمر خیام" },
+      "title": "روز بزرگداشت حکیم عمر خیام",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خیام" } },
 
     { "holiday": false, "month": 2, "day": 30, "type": "Iran",
       "title": "روز ملی جمعیت" },
 
     { "holiday": false, "month": 2, "day": 30, "type": "Iran",
-      "title": "روز شهدای خدمت" },
+      "title": "روز شهدای خدمت",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سانحه_سقوط_بالگرد_در_ورزقان" } },
 
     { "holiday": false, "month": 2, "day": 31, "type": "Iran",
       "title": "روز اهدای عضو، اهدای زندگی" },
@@ -259,37 +294,49 @@
       "title": "روز بهره‌وری و بهینه‌سازی مصرف" },
 
     { "holiday": false, "month": 3, "day": 1, "type": "Iran",
-      "title": "روز بزرگداشت ملاصدرا (صدرالمتألهین)" },
+      "title": "روز بزرگداشت ملاصدرا (صدرالمتألهین)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/ملاصدرا" } },
 
     { "holiday": false, "month": 3, "day": 3, "type": "Iran",
-      "title": "فتح خرمشهر در عملیات بیت‌المقدس (۱۳۶۱ ه‍.ش) و روز مقاومت، ایثار و پیروزی" },
+      "title": "فتح خرمشهر در عملیات بیت‌المقدس (۱۳۶۱ ه‍.ش) و روز مقاومت، ایثار و پیروزی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/آزادسازی_خرمشهر" } },
 
     { "holiday": false, "month": 3, "day": 4, "type": "Iran",
-      "title": "روز دزفوق، روز مقاومت و پایداری" },
+      "title": "روز دزفول ـــ روز مقاومت و پایداری",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_مقاومت_دزفول" } },
 
     { "holiday": false, "month": 3, "day": 5, "type": "Iran",
       "title": "روز نسیم مهر (روز حمایت از خانواده زندانیان)" },
 
     { "holiday": false, "month": 3, "day": 7, "type": "Iran",
-      "title": "افتتاح اولین دورهٔ مجلس شورای اسلامی (۱۳۵۹ ه‍.ش)" },
+      "title": "افتتاح اولین دورهٔ مجلس شورای اسلامی (۱۳۵۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/انتخابات_مجلس_شورای_اسلامی_(۱۳۵۸–۱۳۵۹)" } },
 
     { "holiday": true, "month": 3, "day": 14, "type": "Iran",
-      "title": "رحلت امام خمینی و انتخاب آیت‌الله خامنه‌ای به رهبری (۱۳۶۸ ه‍.ش)" },
+      "title": "رحلت حضرت امام خمینی (ره) رهبر کبیر انقلاب و بنیان‌گذار جمهوری اسلامی ایران (۱۳۶۸ ه‍.ق)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مرگ_و_تشییع_سید_روح‌الله_خمینی" } },
+
+    { "holiday": true, "month": 3, "day": 14, "type": "Iran",
+      "title": "انتخاب حضرت آیت‌الله امام خامنه‌ای به رهبری (۱۳۶۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/برگزیدن_رهبر_جمهوری_اسلامی_ایران_(۱۳۶۸)" } },
 
     { "holiday": true, "month": 3, "day": 15, "type": "Iran",
-      "title": "قیام ۱۵ خرداد (۱۳۴۲ ه‍.ش)" },
+      "title": "قیام خونین ۱۵ خرداد (۱۳۴۲ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تظاهرات_۱۵_خرداد" } },
 
     { "holiday": false, "month": 3, "day": 15, "type": "Iran",
-      "title": "زندانی شدن امام خمینی (۱۳۴۲ ه‍.ش)" },
+      "title": "زندانی‌شدن حضرت امام خمینی (ره) به دست مأموران ستم شاهی پهلوی (۱۳۴۲ ه‍.ش)" },
 
     { "holiday": false, "month": 3, "day": 20, "type": "Iran",
-      "title": "روز صنایع دستی" },
+      "title": "روز صنایع دستی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_جهانی_صنایع_دستی" } },
 
     { "holiday": false, "month": 3, "day": 20, "type": "Iran",
       "title": "روز ملی فرش" },
 
     { "holiday": false, "month": 3, "day": 20, "type": "Iran",
-      "title": "شهادت آیت‌الله سعیدی (۱۳۴۹ ه‍.ش)" },
+      "title": "شهادت آیت‌الله سعیدی به دست مأموران ستم‌شاهی پهلوی (۱۳۴۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_محمدرضا_سعیدی" } },
 
     { "holiday": false, "month": 3, "day": 23, "type": "Iran",
       "title": "روز شهدای اقتدار و اتحاد ملی ایران" },
@@ -298,31 +345,33 @@
       "title": "شهادت سربازان دلیر اسلام: بخارایی، امانی، صفار هرندی و نیک‌نژاد (۱۳۴۴ ه‍.ش)" },
 
     { "holiday": false, "month": 3, "day": 27, "type": "Iran",
-      "title": "روز جهاد کشاورزی و تشکیل جهاد سازندگی (۱۳۵۸ ه‍.ش)" },
+      "title": "روز جهاد کشاورزی (تشکیل جهاد سازندگی به فرمان حضرت امام خمینی (ره)) (۱۳۵۸ ه‍.ش)" },
 
     { "holiday": false, "month": 3, "day": 29, "type": "Iran",
-      "title": "درگذشت دکتر علی شریعتی (۱۳۵۶ ه‍.ش)" },
+      "title": "درگذشت دکتر علی شریعتی (۱۳۵۶ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/علی_شریعتی" } },
 
     { "holiday": false, "month": 3, "day": 30, "type": "Iran",
-      "title": "شهادت زائران حرم رضوی (عاشورای ۱۳۷۳ ه‍.ش)" },
+      "title": "شهادت زائران حرم رضوی (ع) به دست ایادی آمریکا (عاشورای ۱۳۷۳ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بمب‌گذاری_در_حرم_امام_رضا" } },
 
     { "holiday": false, "month": 3, "day": 31, "type": "Iran",
-      "title": "شهادت دکتر مصطفی چمران (۱۳۶۰ ه‍.ش)" },
+      "title": "شهادت دکتر مصطفی چمران (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مصطفی_چمران" } },
 
     { "holiday": false, "month": 3, "day": 31, "type": "Iran",
       "title": "روز بسیج استادان" },
 
     { "holiday": false, "month": 4, "day": 1, "type": "Iran",
-      "title": "سالروز صدور فرمان امام خمینی مبنی بر تأسیس سازمان تبلیغات اسلامی (۱۳۶۰ ه‍.ش)" },
-
-    { "holiday": false, "month": 4, "day": 1, "type": "Iran",
-      "title": "روز تبلیغ و اطلاع‌رسانی دینی" },
+      "title": "روز تبلیغ و اطلاع‌رسانی دینی ـــ سالروز صدور فرمان حضرت امام خمینی (ره) مبنی بر تأسیس سازمان تبلیغات اسلامی (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سازمان_تبلیغات_اسلامی" } },
 
     { "holiday": false, "month": 4, "day": 1, "type": "Iran",
       "title": "روز اصناف" },
 
     { "holiday": false, "month": 4, "day": 7, "type": "Iran",
-      "title": "شهادت دکتر بهشتی و ۷۲ تن با انفجار در دفتر مرکزی حزب جمهوری اسلامی (۱۳۶۰ ه‍.ش)" },
+      "title": "شهادت مظلومانهٔ آیت‌الله دکتر بهشتی و ۷۲ تن از یاران حضرت امام خمینی (ره) با انفجار بمب به دست منافان در دفتر مرکزی حزب جمهوری اسلامی (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بمب‌گذاری_در_دفتر_مرکزی_حزب_جمهوری_اسلامی" } },
 
     { "holiday": false, "month": 4, "day": 7, "type": "Iran",
       "title": "روز قوهٔ قضائیه" },
@@ -349,13 +398,16 @@
       "title": "یاد روز ورود حضرت امام رضا (ع) به نیشابور و نقل حدیث سلسلةالذهب" },
 
     { "holiday": false, "month": 4, "day": 11, "type": "Iran",
-      "title": "شهادت چهارمین شهید محراب، آیت‌الله صدوقی (۱۳۶۱ ه‍.ش)" },
+      "title": "شهادت چهارمین شهید محراب، آیت‌الله صدوقی به دست منافقان (۱۳۶۱ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمد_صدوقی" } },
 
     { "holiday": false, "month": 4, "day": 12, "type": "Iran",
-      "title": "حملهٔ ناوگان آمریکا به هواپیمای مسافربری ایران (۱۳۶۷ ه‍.ش) و افشای حقوق بشر آمریکایی" },
+      "title": "حملهٔ ددمنشانهٔ ناوگان آمریکای جنایتکار به هواپیمای مسافربری جمهوری اسلامی ایران (۱۳۶۷ ه‍.ش) ـــ افشای حقوق بشر آمریکایی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/پرواز_شماره_۶۵۵_ایران_ایر" } },
 
     { "holiday": false, "month": 4, "day": 12, "type": "Iran",
-      "title": "روز بزرگداشت علامه امینی (۱۳۴۹ ه‍.ش)" },
+      "title": "روز بزرگداشت علامه امینی (۱۳۴۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عبدالحسین_امینی" } },
 
     { "holiday": false, "month": 4, "day": 14, "type": "Iran",
       "title": "روز قلم" },
@@ -370,43 +422,46 @@
       "title": "روز ادبیات کودکان و نوجوانان" },
 
     { "holiday": false, "month": 4, "day": 18, "type": "Iran",
-      "title": "کشف کودتای نوژه (۱۳۵۹ ه‍.ش)" },
+      "title": "کشف توطئهٔ آمریکایی در پایگاه هوایی شهید نوژه (کودتای نافرجام نقاب) (۱۳۵۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/کودتای_نوژه" } },
 
     { "holiday": false, "month": 4, "day": 21, "type": "Iran",
-      "title": "روز عفاف و حجاب" },
-
-    { "holiday": false, "month": 4, "day": 21, "type": "Iran",
-      "title": "حمله به مسجد گوهرشاد (۱۳۱۴ ه‍.ش)" },
+      "title": "حمله به مسجد گوهرشاد و کشتار مردم به دست رضاخان (۱۳۱۴ ه‍.ش) ـــ روز عفاف و حجاب" },
 
     { "holiday": false, "month": 4, "day": 22, "type": "Iran",
-      "title": "روز بزرگداشت خوارزمی" },
+      "title": "روز بزرگداشت خوارزمی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خوارزمی" } },
 
     { "holiday": false, "month": 4, "day": 22, "type": "Iran",
-      "title": "روز فناوری اطلاعات" },
+      "title": "روز فناوری اطلاعات",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ملی_فناوری_اطلاعات" } },
 
     { "holiday": false, "month": 4, "day": 23, "type": "Iran",
-      "title": "روز گفت‌وگو و تعامل سازنده با جهان" },
-
-    { "holiday": false, "month": 4, "day": 23, "type": "Iran",
-      "title": "گشایش نخستین مجلس خبرگان (۱۳۶۲ ه‍.ش)" },
+      "title": "گشایش نخستین مجلس خبرگان رهبری (۱۳۶۲ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/دوره_نخست_مجلس_خبرگان_رهبری" } },
 
     { "holiday": false, "month": 4, "day": 25, "type": "Iran",
       "title": "روز بهزیستی و تأمین اجتماعی" },
 
     { "holiday": false, "month": 4, "day": 26, "type": "Iran",
-      "title": "سالروز تأسیس نهاد شورای نگهبان (۱۳۵۹ ه‍.ش)" },
+      "title": "سالروز تأسیس نهاد شورای نگهبان (۱۳۵۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شورای_نگهبان" } },
 
     { "holiday": false, "month": 4, "day": 27, "type": "Iran",
-      "title": "اعلام پذیرش قطعنامهٔ ۵۹۸ شورای امنیت از سوی ایران (۱۳۶۷ ه‍.ش)" },
+      "title": "اعلام پذیرش قطعنامهٔ ۵۹۸ شورای امنیت از سوی ایران (۱۳۶۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/قطعنامه_۵۹۸_شورای_امنیت" } },
 
     { "holiday": false, "month": 4, "day": 30, "type": "Iran",
-      "title": "روز بزرگداشت آیت‌الله سید ابوالقاسم کاشانی" },
+      "title": "روز بزرگداشت آیت‌الله سید ابوالقاسم کاشانی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_ابوالقاسم_کاشانی" } },
 
     { "holiday": false, "month": 5, "day": 4, "type": "Iran",
-      "title": "روز بزرگداشت شیخ صفی‌الدین اردبیلی" },
+      "title": "روز بزرگداشت شیخ صفی‌الدین اردبیلی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شیخ_صفی‌الدین_اردبیلی" } },
 
     { "holiday": false, "month": 5, "day": 5, "type": "Iran",
-      "title": "سالروز عملیات افتخار‌آفرین مرصاد (۱۳۶۷ ه‍.ش)" },
+      "title": "سالروز عملیات افتخار‌آفرین مرصاد (۱۳۶۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عملیات_مرصاد" } },
 
     { "holiday": false, "month": 5, "day": 5, "type": "Iran",
       "title": "روز اقامهٔ اولین نماز جمعه با حکم حضرت امام خمینی (ره) در سال ۱۳۵۸" },
@@ -418,37 +473,42 @@
       "title": "روز شعر و ادبیات آیینی" },
 
     { "holiday": false, "month": 5, "day": 8, "type": "Iran",
-      "title": "روز بزرگداشت محتشم کاشانی" },
+      "title": "روز بزرگداشت محتشم کاشانی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محتشم_کاشانی" } },
 
     { "holiday": false, "month": 5, "day": 8, "type": "Iran",
-      "title": "روز بزرگداشت شیخ شهاب‌الدین سهروردی (شیخ اشراق)" },
+      "title": "روز بزرگداشت شیخ شهاب‌الدین سهروردی (شیخ اشراق)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شهاب‌الدین_یحیی_سهروردی" } },
 
     { "holiday": false, "month": 5, "day": 8, "type": "Iran",
-      "title": "روز زنجان" },
+      "title": "روز زنجان",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/زنجان" } },
 
     { "holiday": false, "month": 5, "day": 9, "type": "Iran",
       "title": "روز اهدای خون" },
 
     { "holiday": false, "month": 5, "day": 11, "type": "Iran",
-      "title": "شهادت آیت‌الله شیخ فضل‌الله نوری (۱۲۸۸ ه‍.ش)" },
+      "title": "شهادت آیت‌الله شیخ فضل‌الله نوری (۱۲۸۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شیخ_فضل‌الله_نوری" } },
 
     { "holiday": false, "month": 5, "day": 14, "type": "Iran",
-      "title": "صدور فرمان مشروطیت (۱۲۸۵ ه‍.ش)" },
+      "title": "صدور فرمان مشروطیت (۱۲۸۵ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/فرمان_مشروطیت" } },
 
     { "holiday": false, "month": 5, "day": 14, "type": "Iran",
       "title": "روز حقوق بشر اسلامی و کرامت انسانی" },
 
     { "holiday": false, "month": 5, "day": 15, "type": "Iran",
-      "title": "سالروز شهادت امیر سرلشکر خلبان عباس بابایی (۱۳۶۶ ه‍.ش)" },
+      "title": "سالروز شهادت امیر سرلشکر خلبان عباس بابایی (۱۳۶۶ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عباس_بابایی" } },
 
     { "holiday": false, "month": 5, "day": 16, "type": "Iran",
-      "title": "تشکیل جهاد دانشگاهی (۱۳۵۹ ه‍.ش)" },
+      "title": "تشکیل جهاد دانشگاهی (۱۳۵۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جهاد_دانشگاهی" } },
 
     { "holiday": false, "month": 5, "day": 17, "type": "Iran",
-      "title": "سالروز شهادت محمود صارمی" },
-
-    { "holiday": false, "month": 5, "day": 17, "type": "Iran",
-      "title": "روز خبرنگار" },
+      "title": "روز خبرنگار ـــ سالروز شهادت محمود صارمی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمود_صارمی" } },
 
     { "holiday": false, "month": 5, "day": 18, "type": "Iran",
       "title": "روز بزرگداشت شهدای مدافع حرم" },
@@ -460,16 +520,18 @@
       "title": "روز تشکل‌ها و مشارکت‌های اجتماعی" },
 
     { "holiday": false, "month": 5, "day": 23, "type": "Iran",
-      "title": "روز مقاومت اسلامی" },
+      "title": "روز مقاومت اسلامی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جنگ_۲۰۰۶_لبنان" } },
 
     { "holiday": false, "month": 5, "day": 26, "type": "Iran",
       "title": "آغاز بازگشت آزادگان به میهن اسلامی (۱۳۶۹ ه‍.ش)" },
 
     { "holiday": false, "month": 5, "day": 28, "type": "Iran",
-      "title": "سالروز وقایع ۲۸ مرداد (۱۳۳۲ ه‍.ش)" },
+      "title": "کودتای آمریکا برای بازگرداندن شاه (۱۳۳۲ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/کودتای_۲۸_مرداد" } },
 
     { "holiday": false, "month": 5, "day": 28, "type": "Iran",
-      "title": "گشایش مجلس خبرگان برای بررسی نهایی قانون اساسی (۱۳۵۸ ه‍.ش)" },
+      "title": "گشایش مجلس خبرگان برای بررسی نهایی قانون اساسی جمهوری اسلامی ایران (۱۳۵۸ ه‍.ش)" },
 
     { "holiday": false, "month": 5, "day": 30, "type": "Iran",
       "title": "روز بزرگداشت علامهٔ مجلسی" },
@@ -481,10 +543,8 @@
       "title": "روز عسل" },
 
     { "holiday": false, "month": 6, "day": 1, "type": "Iran",
-      "title": "روز بزرگداشت ابوعلی سینا" },
-
-    { "holiday": false, "month": 6, "day": 1, "type": "Iran",
-      "title": "روز پزشک" },
+      "title": "روز پزشک ـــ روز بزرگداشت ابوعلی سینا",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/ابن_سینا" } },
 
     { "holiday": false, "month": 6, "day": 1, "type": "Iran",
       "title": "روز همدان" },
@@ -493,46 +553,44 @@
       "title": "آغاز هفتهٔ دولت" },
 
     { "holiday": false, "month": 6, "day": 2, "type": "Iran",
-      "title": "شهادت سید ‌علی اندرزگو (در روز ۱۹ ماه مبارک رمضان) (۱۳۵۷ ه‍.ش)" },
+      "title": "شهادت سید علی اندرزگو (در روز ۱۹ ماه مبارک رمضان) (۱۳۵۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_علی_اندرزگو" } },
 
     { "holiday": false, "month": 6, "day": 3, "type": "Iran",
-      "title": "اِشغال ایران توسط متفقین (۱۳۲۰ ه‍.ش)" },
+      "title": "اِشغال ایران توسط متفقین و فرار رضاخان (۱۳۲۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/اشغال_ایران_در_جنگ_جهانی_دوم" } },
 
     { "holiday": false, "month": 6, "day": 4, "type": "Iran",
       "title": "روز کارمند" },
 
     { "holiday": false, "month": 6, "day": 5, "type": "Iran",
-      "title": "روز بزرگداشت محمدبن زکریای رازی" },
-
-    { "holiday": false, "month": 6, "day": 5, "type": "Iran",
-      "title": "روز داروسازی" },
+      "title": "روز داروسازی ـــ روز بزرگداشت محمدبن زکریای رازی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/زکریای_رازی" } },
 
     { "holiday": false, "month": 6, "day": 5, "type": "Iran",
       "title": "روز کُشتی" },
 
     { "holiday": false, "month": 6, "day": 8, "type": "Iran",
-      "title": "انفجار دفتر نخست‌وزیری و شهادت رجایی و باهنر (۱۳۶۰ ه‍.ش)" },
+      "title": "انفجار دفتر نخست‌وزیری به دست منافقان و شهادت مظلومانهٔ شهیدان رجایی و باهنر (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/انفجار_در_دفتر_نخست‌وزیری_جمهوری_اسلامی_ایران" } },
 
     { "holiday": false, "month": 6, "day": 8, "type": "Iran",
       "title": "روز مبارزه با تروریسم" },
 
     { "holiday": false, "month": 6, "day": 10, "type": "Iran",
-      "title": "سالروز تصویب قانون عملیات بانکی بدون ربا (۱۳۶۲ ه‍.ش)" },
+      "title": "روز بانکداری اسلامی ـــ سالروز تصویب قانون عملیات بانکی بدون ربا (۱۳۶۲ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بانکداری_اسلامی" } },
 
     { "holiday": false, "month": 6, "day": 10, "type": "Iran",
-      "title": "روز بانکداری اسلامی" },
-
-    { "holiday": false, "month": 6, "day": 10, "type": "Iran",
-      "title": "روز تشکیل قرارگاه پدافند هوایی حضرت خاتم‌الانبیا (ص) (۱۳۷۱ ه‍.ش)" },
+      "title": "روز تشکیل قرارگاه پدافند هوایی حضرت خاتم‌الانبیا (ص) (۱۳۷۱ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/قرارگاه_پدافند_هوایی_خاتم‌الانبیا" } },
 
     { "holiday": false, "month": 6, "day": 11, "type": "Iran",
       "title": "روز صنعت چاپ" },
 
     { "holiday": false, "month": 6, "day": 12, "type": "Iran",
-      "title": "شهادت رئیسعلی دلواری (۱۲۹۴ ه‍.ش)" },
-
-    { "holiday": false, "month": 6, "day": 12, "type": "Iran",
-      "title": "روز مبارزه با استعمار انگلیس" },
+      "title": "شهادت رئیسعلی دلواری (۱۲۹۴ ه‍.ش) ـــ روز مبارزه با استعمار انگلیس",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/رئیسعلی_دلواری" } },
 
     { "holiday": false, "month": 6, "day": 12, "type": "Iran",
       "title": "روز بهوَرز" },
@@ -550,22 +608,23 @@
       "title": "روز مردم‌شناسی" },
 
     { "holiday": false, "month": 6, "day": 13, "type": "Iran",
-      "title": "سالروز زلزله فردوس در سال ۱۳۴۷" },
-
-    { "holiday": false, "month": 6, "day": 13, "type": "Iran",
-      "title": "روز حرکت‌های جهادی و امداد مردمی" },
+      "title": "سالروز زلزله فردوس در سال ۱۳۴۷ ـــ روز حرکت‌های جهادی و امداد مردمی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/زمین‌لرزه_۱۳۴۷_فردوس" } },
 
     { "holiday": false, "month": 6, "day": 14, "type": "Iran",
       "title": "شهادت آیت‌الله قدوسی و سرتیپ وحید دستجردی (۱۳۶۰ ه‍.ش)" },
 
     { "holiday": false, "month": 6, "day": 17, "type": "Iran",
-      "title": "قیام ۱۷ شهریور (۱۳۵۷ ه‍.ش)" },
+      "title": "قیام ۱۷ شهریور و کشتار جمعی از مردم به دست مأموران ستم‌شاهی پهلوی (۱۳۵۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تظاهرات_۱۷_شهریور" } },
 
     { "holiday": false, "month": 6, "day": 19, "type": "Iran",
-      "title": "وفات آیت‌الله سیدمحمود طالقانی اولین امام جمعهٔ تهران (۱۳۵۸ ه‍.ش)" },
+      "title": "وفات آیت‌الله سیدمحمود طالقانی اولین امام جمعهٔ تهران (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_محمود_طالقانی" } },
 
     { "holiday": false, "month": 6, "day": 20, "type": "Iran",
-      "title": "شهادت دومین شهید محراب، آیت‌الله مدنی (۱۳۶۰ ه‍.ش)" },
+      "title": "شهادت دومین شهید محراب، آیت‌الله مدنی به دست منافقان (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/میر_اسدالله_مدنی" } },
 
     { "holiday": false, "month": 6, "day": 21, "type": "Iran",
       "title": "روز سینما" },
@@ -574,28 +633,26 @@
       "title": "روز خرما" },
 
     { "holiday": false, "month": 6, "day": 27, "type": "Iran",
-      "title": "روز شعر و ادب فارسی" },
-
-    { "holiday": false, "month": 6, "day": 27, "type": "Iran",
-      "title": "روز بزرگداشت استاد سید‌ محمد‌حسین شهریار" },
+      "title": "روز شعر و ادب فارسی ـــ روز بزرگداشت استاد سید محمدحسین شهریار",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شهریار_(شاعر)" } },
 
     { "holiday": false, "month": 6, "day": 31, "type": "Iran",
-      "title": "آغاز جنگ تحمیلی (۱۳۵۹ ه‍.ش)" },
-
-    { "holiday": false, "month": 6, "day": 31, "type": "Iran",
-      "title": "آغاز هفتهٔ دفاع مقدس" },
+      "title": "آغاز جنگ تحمیلی (۱۳۵۹ ه‍.ش) ـــ آغاز هفتهٔ دفاع مقدس",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/جنگ_ایران_و_عراق" } },
 
     { "holiday": false, "month": 7, "day": 1, "type": "Iran",
       "title": "روز پرچم" },
 
     { "holiday": false, "month": 7, "day": 2, "type": "Iran",
-      "title": "روز بزرگداشت شهدای منا" },
+      "title": "روز بزرگداشت شهدای منا",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/فاجعه_منا_(۱۳۹۴)" } },
 
     { "holiday": false, "month": 7, "day": 4, "type": "Iran",
       "title": "روز سرباز" },
 
     { "holiday": false, "month": 7, "day": 5, "type": "Iran",
-      "title": "شکست حصر آبادان در عملیات ثامن‌الائمه (ع) (۱۳۶۰ ه‍.ش)" },
+      "title": "شکست حصر آبادان در عملیات ثامن‌الائمه (ع) (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عملیات_ثامن‌الائمه" } },
 
     { "holiday": false, "month": 7, "day": 5, "type": "Iran",
       "title": "روز گردشگری" },
@@ -619,7 +676,7 @@
       "title": "روز نخبگان" },
 
     { "holiday": false, "month": 7, "day": 13, "type": "Iran",
-      "title": "هجرت امام خمینی از عراق به پاریس (۱۳۵۷ ه‍.ش)" },
+      "title": "هجرت حضرت امام خمینی (ره) از عراق به پاریس (۱۳۵۷ ه‍.ش)" },
 
     { "holiday": false, "month": 7, "day": 13, "type": "Iran",
       "title": "روز نیروی انتظامی" },
@@ -630,11 +687,16 @@
     { "holiday": false, "month": 7, "day": 15, "type": "Iran",
       "title": "روز روستا و عشایر" },
 
+    { "holiday": false, "month": 7, "day": 15, "type": "Iran",
+      "title": "طوفان الاقصی ـــ روز جهانی حماسهٔ فلسطین" },
+
     { "holiday": false, "month": 7, "day": 20, "type": "Iran",
-      "title": "روز بزرگداشت حافظ" },
+      "title": "روز بزرگداشت حافظ",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_حافظ" } },
 
     { "holiday": false, "month": 7, "day": 23, "type": "Iran",
-      "title": "شهادت پنجمین شهید محراب، آیت‌الله اشرفی اصفهانی به دست منافقان (۱۳۶۱ ه‍.ش)" },
+      "title": "شهادت پنجمین شهید محراب، آیت‌الله اشرفی اصفهانی به دست منافقان (۱۳۶۱ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عطاءالله_اشرفی_اصفهانی" } },
 
     { "holiday": false, "month": 7, "day": 24, "type": "Iran",
       "title": "روز ملی پارالمپیک" },
@@ -643,7 +705,8 @@
       "title": "روز پیوند اولیا و مربیان" },
 
     { "holiday": false, "month": 7, "day": 24, "type": "Iran",
-      "title": "سالروز واقعهٔ به آتش کشیدن مسجد جامع شهر کرمان (۱۳۵۷ ه‍.ش)" },
+      "title": "سالروز واقعهٔ به آتش کشیدن مسجد جامع شهر کرمان به دست دژخیمان حکومت پهلوی (۱۳۵۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/واقعه_آتش‌سوزی_مسجد_جامع_کرمان" } },
 
     { "holiday": false, "month": 7, "day": 25, "type": "Iran",
       "title": "روز نسل‌کشی کودکان و زنان فلسطینی" },
@@ -655,16 +718,19 @@
       "title": "روز صادرات" },
 
     { "holiday": false, "month": 8, "day": 1, "type": "Iran",
-      "title": "شهادت مظلومانهٔ آیت‌الله حاج سید مصطفی خمینی (۱۳۵۶ ه‍.ش)" },
+      "title": "شهادت مظلومانهٔ آیت‌الله حاج سید مصطفی خمینی (۱۳۵۶ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_مصطفی_خمینی" } },
 
     { "holiday": false, "month": 8, "day": 1, "type": "Iran",
       "title": "روز آمار و برنامه‌ریزی" },
 
     { "holiday": false, "month": 8, "day": 1, "type": "Iran",
-      "title": "روز بزرگداشت ابوالفضل بیهقی" },
+      "title": "روز بزرگداشت ابوالفضل بیهقی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_بیهقی" } },
 
     { "holiday": false, "month": 8, "day": 4, "type": "Iran",
-      "title": "اعتراض امام خمینی علیه پذیرش کاپیتولاسیون (۱۳۴۳ ه‍.ش)" },
+      "title": "اعتراض و افشاگری حضرت امام خمینی (ره) علیه پذیرش کاپیتولاسیون (۱۳۴۳ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/کاپیتولاسیون_در_ایران" } },
 
     { "holiday": false, "month": 8, "day": 5, "type": "Iran",
       "title": "روز زعفران" },
@@ -673,28 +739,30 @@
       "title": "روز انار" },
 
     { "holiday": false, "month": 8, "day": 8, "type": "Iran",
-      "title": "شهادت محمدحسین فهمیده (بسیجی ۱۳ ساله) (۱۳۵۹ ه‍.ش)" },
+      "title": "شهادت محمدحسین فهمیده (بسیجی ۱۳ ساله) (۱۳۵۹ ه‍.ش) ـــ روز نوجوان و بسیج دانش‌آموزی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/حسین_فهمیده" } },
 
     { "holiday": false, "month": 8, "day": 8, "type": "Iran",
-      "title": "روز نوجوان و بسیج دانش‌آموزی" },
-
-    { "holiday": false, "month": 8, "day": 8, "type": "Iran",
-      "title": "روز پدافند غیرعامل" },
+      "title": "روز پدافند غیرعامل",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سازمان_پدافند_غیر_عامل_کشور" } },
 
     { "holiday": false, "month": 8, "day": 10, "type": "Iran",
-      "title": "شهادت اولین شهید محراب، آیت‌الله قاضی طباطبایی (۱۳۵۸ ه‍.ش)" },
+      "title": "شهادت اولین شهید محراب، آیت‌الله قاضی طباطبایی به دست منافقان (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_علی_قاضی" } },
 
     { "holiday": false, "month": 8, "day": 13, "type": "Iran",
-      "title": "تسخیر سفارت آمریکا به دست دانشجویان پیرو خط حضرت امام (۱۳۵۸ ه‍.ش)" },
+      "title": "تسخیر لانهٔ جاسوسی آمریکا به دست دانشجویان پیرو خط حضرت امام (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/گروگان‌گیری_در_سفارت_ایالات_متحده_آمریکا" } },
 
     { "holiday": false, "month": 8, "day": 13, "type": "Iran",
       "title": "روز ملی مبارزه با استکبار جهانی" },
 
     { "holiday": false, "month": 8, "day": 13, "type": "Iran",
-      "title": "روز دانش‌آموز" },
+      "title": "روز دانش‌آموز",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_دانش‌آموز" } },
 
     { "holiday": false, "month": 8, "day": 13, "type": "Iran",
-      "title": "تبعید امام خمینی از ایران به ترکیه (۱۳۴۳ ه‍.ش)" },
+      "title": "تبعید حضرت امام خمینی (ره) از ایران به ترکیه (۱۳۴۳ ه‍.ش)" },
 
     { "holiday": false, "month": 8, "day": 14, "type": "Iran",
       "title": "روز فرهنگ عمومی" },
@@ -712,7 +780,8 @@
       "title": "روز کتاب، کتاب‌خوانی و کتابدار" },
 
     { "holiday": false, "month": 8, "day": 24, "type": "Iran",
-      "title": "روز بزرگداشت آیت‌الله علامه سید محمّدحسین طباطبایی (۱۳۶۰ ه‍.ش)" },
+      "title": "روز بزرگداشت آیت‌الله علامه سید محمّدحسین طباطبایی (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_محمدحسین_طباطبایی" } },
 
     { "holiday": false, "month": 8, "day": 25, "type": "Iran",
       "title": "روز اصفهان" },
@@ -724,7 +793,8 @@
       "title": "روز قهرمان ملی" },
 
     { "holiday": false, "month": 8, "day": 30, "type": "Iran",
-      "title": "روز بزرگداشت ابونصر فارابی" },
+      "title": "روز بزرگداشت ابونصر فارابی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/فارابی" } },
 
     { "holiday": false, "month": 8, "day": 30, "type": "Iran",
       "title": "روز حکمت و فلسفه" },
@@ -733,7 +803,7 @@
       "title": "روز زیتون" },
 
     { "holiday": false, "month": 9, "day": 5, "type": "Iran",
-      "title": "تشکیل بسیج مستضعفان (۱۳۵۸ ه‍.ش)" },
+      "title": "تشکیل بسیج مستضعفان به فرمان حضرت امام خمینی (ره) (۱۳۵۸ ه‍.ش) ـــ تشکیل بسیج مستضعفان (۱۳۵۸ ه‍.ش)" },
 
     { "holiday": false, "month": 9, "day": 5, "type": "Iran",
       "title": "سالروز قیام مردم گرگان (۱۳۵۷ ه‍.ش)" },
@@ -745,19 +815,23 @@
       "title": "روز نوآوری و فناوری ایران‌ساخت" },
 
     { "holiday": false, "month": 9, "day": 9, "type": "Iran",
-      "title": "روز بزرگداشت شیخ مفید" },
+      "title": "روز بزرگداشت شیخ مفید",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شیخ_مفید" } },
 
     { "holiday": false, "month": 9, "day": 9, "type": "Iran",
-      "title": "روز جزایر سه‌گانهٔ خلیج فارس (بوموسی، تنب بزرگ و تنب کوچک)" },
+      "title": "روز جزایر سه‌گانهٔ خلیج فارس (بوموسی، تنب بزرگ و تنب کوچک)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بازپس‌گیری_جزایر_سه‌گانه_ایران_در_خلیج_فارس" } },
 
     { "holiday": false, "month": 9, "day": 10, "type": "Iran",
-      "title": "شهادت آیت‌الله سید حسن مدرس (۱۳۱۶ ه‍.ش) و روز مجلس" },
+      "title": "شهادت آیت‌الله سید حسن مدرس (۱۳۱۶ ه‍.ش) و روز مجلس",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_حسن_مدرس" } },
 
     { "holiday": false, "month": 9, "day": 11, "type": "Iran",
-      "title": "شهادت میرزا‌ کوچک‌خان جنگلی (۱۳۰۰ ه‍.ش)" },
+      "title": "شهادت میرزا کوچک‌خان جنگلی (۱۳۰۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/میرزا_کوچک_خان_جنگلی" } },
 
     { "holiday": false, "month": 9, "day": 12, "type": "Iran",
-      "title": "روز تصویب قانون اساسی (۱۳۵۸ ه‍.ش)" },
+      "title": "تصویب قانون اساسی جمهوری اسلامی ایران (۱۳۵۸ ه‍.ش) ـــ روز قانون اساسی جمهوری اسلامی ایران" },
 
     { "holiday": false, "month": 9, "day": 13, "type": "Iran",
       "title": "روز بیمه" },
@@ -769,19 +843,22 @@
       "title": "معرفی عراق به عنوان مسئول و آغازگر جنگ از سوی سازمان ملل (۱۳۷۰ ه‍.ش)" },
 
     { "holiday": false, "month": 9, "day": 19, "type": "Iran",
-      "title": "تشکیل شورای عالی انقلاب فرهنگی (۱۳۶۳ ه‍.ش)" },
+      "title": "تشکیل شورای عالی انقلاب فرهنگی به فرمان حضرت امام خمینی (ره) (۱۳۶۳ ه‍.ش)" },
 
     { "holiday": false, "month": 9, "day": 20, "type": "Iran",
-      "title": "شهادت سومین شهید محراب، آیت‌الله دستغیب (۱۳۶۰ ه‍.ش)" },
+      "title": "شهادت سومین شهید محراب، آیت‌الله دستغیب به دست منافقان (۱۳۶۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_عبدالحسین_دستغیب" } },
 
     { "holiday": false, "month": 9, "day": 25, "type": "Iran",
       "title": "روز پژوهش" },
 
     { "holiday": false, "month": 9, "day": 26, "type": "Iran",
-      "title": "روز حمل‌و‌نقل و رانندگان" },
+      "title": "روز حمل‌و‌نقل و رانندگان",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ملی_حمل‌ونقل_ایران" } },
 
     { "holiday": false, "month": 9, "day": 27, "type": "Iran",
-      "title": "شهادت آیت‌الله دکتر محمد مفتح (۱۳۵۸ ه‍.ش)" },
+      "title": "شهادت آیت‌الله دکتر محمد مفتح (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمد_مفتح" } },
 
     { "holiday": false, "month": 9, "day": 27, "type": "Iran",
       "title": "روز وحدت حوزه و دانشگاه" },
@@ -790,10 +867,12 @@
       "title": "روز جهان عاری از خشونت و افراطی‌گری" },
 
     { "holiday": false, "month": 9, "day": 29, "type": "Iran",
-      "title": "روز تجلیل از شهید تندگویان" },
+      "title": "روز تجلیل از شهید تندگویان",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمدجواد_تندگویان" } },
 
     { "holiday": false, "month": 9, "day": 30, "type": "Iran",
-      "title": "شب یلدا (چله)" },
+      "title": "شب یلدا (چله)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شب_یلدا" } },
 
     { "holiday": false, "month": 9, "day": 30, "type": "Iran",
       "title": "ترویج فرهنگ میهمانی و پیوند با خویشان" },
@@ -802,85 +881,97 @@
       "title": "روز ثبت احوال" },
 
     { "holiday": false, "month": 10, "day": 4, "type": "Iran",
-      "title": "روز بزرگداشت رودکی" },
+      "title": "روز بزرگداشت رودکی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/رودکی" } },
 
     { "holiday": false, "month": 10, "day": 5, "type": "Iran",
       "title": "روز ایمنی در برابر زلزله و کاهش اثرات بلایای طبیعی" },
 
     { "holiday": false, "month": 10, "day": 7, "type": "Iran",
-      "title": "سالروز تشکیل نهضت سوادآموزی (۱۳۵۸ ه‍.ش)" },
+      "title": "سالروز تشکیل نهضت سوادآموزی به فرمان حضرت امام خمینی (ره) (۱۳۵۸ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سازمان_نهضت_سوادآموزی" } },
 
     { "holiday": false, "month": 10, "day": 7, "type": "Iran",
-      "title": "شهادت آیت‌الله حسین غفاری (۱۳۵۳ ه‍.ش)" },
+      "title": "شهادت آیت‌الله حسین غفاری به دست مأموران ستم‌شاهی پهلوی (۱۳۵۳ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/حسین_غفاری_(روحانی)" } },
 
     { "holiday": false, "month": 10, "day": 8, "type": "Iran",
       "title": "روز صنعت پتروشیمی" },
 
     { "holiday": false, "month": 10, "day": 9, "type": "Iran",
-      "title": "روز میثاق" },
+      "title": "روز بصیرت و میثاق امت با ولایت",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/راهپیمایی_۹_دی" } },
 
     { "holiday": false, "month": 10, "day": 12, "type": "Iran",
-      "title": "روز بزرگداشت علامه مصباح یزدی" },
-
-    { "holiday": false, "month": 10, "day": 12, "type": "Iran",
-      "title": "روز علوم انسانی اسلامی" },
+      "title": "روز علوم انسانی اسلامی ـــ روز بزرگداشت علامه مصباح یزدی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمدتقی_مصباح_یزدی" } },
 
     { "holiday": false, "month": 10, "day": 13, "type": "Iran",
-      "title": "روز جهانی مقاومت" },
+      "title": "روز جهانی مقاومت ـــ شهادت الگوی اخلاص و عمل سردار سپهبد قاسم سلیمانی به دست استکبار جهانی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/ترور_قاسم_سلیمانی" } },
 
     { "holiday": false, "month": 10, "day": 13, "type": "Iran",
-      "title": "ابلاغ پیام امام خمینی به گورباچف رهبر شوروی سابق (۱۳۶۷ ه‍.ش)" },
+      "title": "ابلاغ پیام تاریخی حضرت امام خمینی (ره) به گورباچف رهبر شوروی سابق (۱۳۶۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نامه_سید_روح‌الله_خمینی_به_میخائیل_گورباچف" } },
 
     { "holiday": false, "month": 10, "day": 16, "type": "Iran",
-      "title": "شهادت سیدحسین علم‌الهدی و همرزمان وی در هویزه" },
-
-    { "holiday": false, "month": 10, "day": 16, "type": "Iran",
-      "title": "روز شهدای دانشجو" },
+      "title": "روز شهدای دانشجو ـــ شهادت سیدحسین علم‌الهدی و همرزمان وی در هویزه",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_حسین_علم‌الهدی" } },
 
     { "holiday": false, "month": 10, "day": 17, "type": "Iran",
-      "title": "اجرای طرح کشف حجاب (۱۳۱۴ ه‍.ش)" },
+      "title": "اجرای طرح استعماری حذف حجاب (کشف حجاب) به دست رضاخان (۱۳۱۴ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/کشف_حجاب_در_ایران" } },
 
     { "holiday": false, "month": 10, "day": 17, "type": "Iran",
-      "title": "روز بزرگداشت خواجوی کرمانی" },
+      "title": "روز بزرگداشت خواجوی کرمانی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خواجوی_کرمانی" } },
 
     { "holiday": false, "month": 10, "day": 17, "type": "Iran",
       "title": "روز کرمان" },
 
     { "holiday": false, "month": 10, "day": 19, "type": "Iran",
-      "title": "قیام مردم قم (۱۳۵۶ ه‍.ش)" },
+      "title": "قیام خونین مردم قم (۱۳۵۶ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تظاهرات_۱۹_دی_قم" } },
 
     { "holiday": false, "month": 10, "day": 20, "type": "Iran",
-      "title": "شهادت میرزا تقی‌خان امیرکبیر (۱۲۳۰ ه‍.ش)" },
+      "title": "شهادت میرزا تقی‌خان امیرکبیر (۱۲۳۰ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/امیرکبیر" } },
 
     { "holiday": false, "month": 10, "day": 22, "type": "Iran",
-      "title": "تشکیل شورای انقلاب (۱۳۵۷ ه‍.ش)" },
+      "title": "تشکیل شورای انقلاب به فرمان حضرت امام خمینی (ره) (۱۳۵۷ ه‍.ش)" },
 
     { "holiday": false, "month": 10, "day": 25, "type": "Iran",
       "title": "روز تاریخ‌نگاری انقلاب اسلامی" },
 
     { "holiday": false, "month": 10, "day": 26, "type": "Iran",
-      "title": "خروج شاه (۱۳۵۷ ه‍.ش)" },
+      "title": "فرار شاه معدوم (۱۳۵۷ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/شاه_رفت" } },
 
     { "holiday": false, "month": 10, "day": 27, "type": "Iran",
-      "title": "شهادت نواب صفوی، طهماسبی، برادران واحدی و ذوالقدر (۱۳۳۴ ه‍.ش)" },
+      "title": "شهادت نواب صفوی، طهماسبی، برادران واحدی و ذوالقدر از فدائیان اسلام (۱۳۳۴ ه‍.ش)" },
 
     { "holiday": false, "month": 11, "day": 1, "type": "Iran",
-      "title": "روز بزرگداشت خاقانی شروانی" },
+      "title": "روز بزرگداشت خاقانی شروانی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خاقانی" } },
 
     { "holiday": false, "month": 11, "day": 6, "type": "Iran",
-      "title": "سالروز حماسهٔ مردم آمل" },
+      "title": "سالروز حماسهٔ مردم آمل",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/واقعه_۱۳۶۰_آمل" } },
 
     { "holiday": false, "month": 11, "day": 6, "type": "Iran",
-      "title": "روز بزرگداشت صفی‌الدین اُرمَوی" },
+      "title": "روز بزرگداشت صفی‌الدین اُرمَوی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/صفی‌الدین_ارموی" } },
 
     { "holiday": false, "month": 11, "day": 6, "type": "Iran",
       "title": "روز آواها و نواهای ایرانی" },
 
     { "holiday": false, "month": 11, "day": 12, "type": "Iran",
-      "title": "سالروز بازگشت امام خمینی و آغاز دههٔ فجر" },
+      "title": "سالروز بازگشت حضرت امام خمینی (ره) به ایران و آغاز دههٔ مبارک فجر انقلاب اسلامی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/دهه_فجر" } },
 
     { "holiday": false, "month": 11, "day": 14, "type": "Iran",
-      "title": "روز فناوری فضایی" },
+      "title": "روز فناوری فضایی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ملی_فناوری_فضایی" } },
 
     { "holiday": false, "month": 11, "day": 19, "type": "Iran",
       "title": "روز نیروی هوایی" },
@@ -889,25 +980,28 @@
       "title": "روز چهارمحال و بختیاری" },
 
     { "holiday": false, "month": 11, "day": 21, "type": "Iran",
-      "title": "شکسته شدن حکومت نظامی (۱۳۵۷ ه‍.ش)" },
+      "title": "شکسته‌شدن حکومت‌نظامی به فرمان حضرت امام خمینی (ره) (۱۳۵۷ ه‍.ش)" },
 
     { "holiday": true, "month": 11, "day": 22, "type": "Iran",
-      "title": "پیروزی انقلاب اسلامی (۱۳۵۷ ه‍.ش)" },
+      "title": "پیروزی انقلاب اسلامی ایران و سقوط نظام شاهنشاهی (۱۳۵۷ ه‍.ش)" },
 
     { "holiday": false, "month": 11, "day": 25, "type": "Iran",
-      "title": "مجادله آیات شیطانی (۱۳۶۷ ه‍.ش)" },
+      "title": "صدور حکم تاریخی حضرت امام خمینی (ره) مبنی بر ارتداد سلمان‌رشدی ویسندهٔ خائن کتاب آیات شیطانی (۱۳۶۷ ه‍.ش)" },
 
     { "holiday": false, "month": 11, "day": 29, "type": "Iran",
-      "title": "قیام مردم تبریز به مناسبت چهلمین روز شهادت شهدای قم (۱۳۵۶ ه‍.ش)" },
+      "title": "قیام مردم تبریز به مناسبت چهلمین روز شهادت شهدای قم (۱۳۵۶ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تظاهرات_۲۹_بهمن_تبریز" } },
 
     { "holiday": false, "month": 11, "day": 29, "type": "Iran",
       "title": "روز اقتصاد مقاومتی و کارآفرینی" },
 
     { "holiday": false, "month": 12, "day": 3, "type": "Iran",
-      "title": "کودتای ۳ اسفند ۱۲۹۹ (۱۲۹۹ ه‍.ش)" },
+      "title": "کودتای انگلیسی رضاخان (۱۲۹۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/کودتای_۳_اسفند_۱۲۹۹" } },
 
     { "holiday": false, "month": 12, "day": 5, "type": "Iran",
-      "title": "روز بزرگداشت خواجه نصیرالدین طوسی" },
+      "title": "روز بزرگداشت خواجه نصیرالدین طوسی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/خواجه_نصیرالدین_طوسی" } },
 
     { "holiday": false, "month": 12, "day": 5, "type": "Iran",
       "title": "روز مهندسی" },
@@ -916,7 +1010,8 @@
       "title": "روز امور تربیتی و تربیت اسلامی" },
 
     { "holiday": false, "month": 12, "day": 8, "type": "Iran",
-      "title": "روز بزرگداشت حکیم حاج ملاهادی سبزواری" },
+      "title": "روز بزرگداشت حکیم حاج ملاهادی سبزواری",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/ملا_هادی_سبزواری" } },
 
     { "holiday": false, "month": 12, "day": 8, "type": "Iran",
       "title": "روز حمایت از بیماران نادر" },
@@ -931,40 +1026,47 @@
       "title": "روز ترویج فرهنگ قرض‌الحسنه" },
 
     { "holiday": false, "month": 12, "day": 15, "type": "Iran",
-      "title": "روز درختکاری" },
+      "title": "روز درختکاری",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_درخت‌کاری" } },
 
     { "holiday": false, "month": 12, "day": 15, "type": "Iran",
       "title": "روز آموزش همگانی حفظ محیط زیست" },
 
     { "holiday": false, "month": 12, "day": 18, "type": "Iran",
-      "title": "روز بزرگداشت سید ‌جمال‌الدین اسدآبادی" },
+      "title": "روز بزرگداشت سید جمال‌الدین اسدآبادی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/سید_جمال‌الدین_اسدآبادی" } },
 
     { "holiday": false, "month": 12, "day": 18, "type": "Iran",
       "title": "سالروز تأسیس کانون‌های فرهنگی و هنری مساجد کشور" },
 
     { "holiday": false, "month": 12, "day": 18, "type": "Iran",
-      "title": "روز بوشهر" },
+      "title": "روز بوشهر",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_بوشهر" } },
 
     { "holiday": false, "month": 12, "day": 20, "type": "Iran",
       "title": "روز راهیان نور" },
 
     { "holiday": false, "month": 12, "day": 21, "type": "Iran",
-      "title": "روز بزرگداشت نظامی گنجوی" },
+      "title": "روز بزرگداشت نظامی گنجوی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نظامی_گنجوی" } },
 
     { "holiday": false, "month": 12, "day": 22, "type": "Iran",
-      "title": "سالروز تأسیس بنیاد شهید (۱۳۵۸ ه‍.ش)" },
+      "title": "سالروز صدور فرمان حضرت امام خمینی (ره)، مبنی بر تأسیس بنیاد شهید انقلاب اسلامی (۱۳۵۸ ه‍.ش)" },
 
     { "holiday": false, "month": 12, "day": 22, "type": "Iran",
       "title": "روز بزرگداشت شهدا" },
 
     { "holiday": false, "month": 12, "day": 25, "type": "Iran",
-      "title": "روز بزرگداشت پروین اعتصامی" },
+      "title": "روز بزرگداشت پروین اعتصامی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/پروین_اعتصامی" } },
 
     { "holiday": false, "month": 12, "day": 25, "type": "Iran",
-      "title": "بمباران شیمیایی حلبچه به دست ارتش بعث عراق (۱۳۶۶ ه‍.ش)" },
+      "title": "بمباران شیمیایی حلبچه به دست ارتش بعث عراق (۱۳۶۶ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/حمله_شیمیایی_به_حلبچه" } },
 
     { "holiday": true, "month": 12, "day": 29, "type": "Iran",
-      "title": "روز ملی شدن صنعت نفت ایران (۱۳۲۹ ه‍.ش)" },
+      "title": "روز ملی‌شدن صنعت نفت ایران (۱۳۲۹ ه‍.ش)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/نهضت_ملی‌شدن_صنعت_نفت_ایران" } },
 
 
     { "holiday": false, "month": 1, "day": 30, "type": "Iran", "title": "روز آزمایشگاهیان" },
@@ -1193,6 +1295,8 @@
 
     { "holiday": false, "month": 1, "day": 1, "type": "Iran",
       "title": "آغاز سال هجری قمری" },
+    { "holiday": false, "month": 1, "day": 2, "type": "Iran",
+      "title": "روز امر به معروف و نهی از منکر" },
     { "holiday": true, "month": 1, "day": 9, "type": "Iran",
       "title": "تاسوعای حسینی" },
     { "holiday": true, "month": 1, "day": 10, "type": "Iran",
@@ -1249,6 +1353,8 @@
       "title": "روز تکریم مادران و همسران شهدا" },
     { "holiday": false, "month": 6, "day": 20, "type": "Iran",
       "title": "روز مادر، ولادت حضرت فاطمهٔ زهرا (س) (سال هشتم قبل از هجرت)، روز زن" },
+    { "holiday": false, "month": 6, "day": 20, "type": "Iran",
+      "title": "تولد حضرت امام خمینی (ره) رهبر کبیر انقلاب اسلامی (۱۳۲۰ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 1, "type": "Iran",
       "title": "ولادت حضرت امام محمد باقر (ع) (۵۷ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 3, "type": "Iran",
@@ -1280,7 +1386,9 @@
     { "holiday": false, "month": 8, "day": 11, "type": "Iran",
       "title": "ولادت حضرت علی اکبر (ع) (۳۳ ه‍.ق) و روز جوان" },
     { "holiday": true, "month": 8, "day": 15, "type": "Iran",
-      "title": "ولادت حضرت قائم (عج) (۲۵۵ ه‍.ق) و روز جهانی مستضعفان و روز سربازان گمنام" },
+      "title": "ولادت حضرت قائم (عج) (۲۵۵ ه‍.ق) و روز جهانی مستضعفان" },
+    { "holiday": false, "month": 8, "day": 15, "type": "Iran",
+      "title": "روز سربازان گمنام حضرت امام زمان (عج)" },
     { "holiday": false, "month": 9, "day": 10, "type": "Iran",
       "title": "وفات حضرت خدیجه (س) (۳ سال قبل از هجرت)" },
     { "holiday": false, "month": 9, "day": 15, "type": "Iran",
@@ -1497,7 +1605,7 @@
       "title": "هفتهٔ کتاب‌خوانی (هفتهٔ اخیر ثور)", "holiday": false },
 
     { "calendar": "Persian", "rule": "nth weekday of month", "nth": 2, "weekday": 6, "month": 7, "type": "Iran",
-      "title": "آیین مذهبی قالیشویان اردهال - بزرگداشت امامزاده علی بن محمدباقر (ع) (دومین جمعهٔ مهر)", "holiday": false },
+      "title": "آیین مذهبی قالیشویان اردهال ـــ بزرگداشت امامزاده علی بن محمدباقر (ع) (دومین جمعهٔ مهر)", "holiday": false },
     { "calendar": "Persian", "rule": "single event", "year": 1401, "month": 8, "day": 3, "type": "Iran",
       "title": "خورشیدگرفتگی جزئی قابل مشاهده در ایران", "holiday": false },
     { "calendar": "Hijri", "rule": "end of month", "month": 2, "type": "Iran",

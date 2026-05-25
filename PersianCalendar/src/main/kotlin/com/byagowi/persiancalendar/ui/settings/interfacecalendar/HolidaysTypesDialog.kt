@@ -19,7 +19,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
@@ -47,7 +46,6 @@ import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
@@ -196,7 +194,6 @@ fun CountryEvents(
     // This is only not enabled in UI test, in real deployment the a11y service doesn't see the first row
     hideTheFirstRowFromAccessibility: Boolean = true,
 ) {
-    if (!remember { Jdn.today() }.isYearSupportedOnAppAndNextYear) return
     Column(modifier) {
         Row(
             Modifier

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -272,9 +273,7 @@ private fun DayEventContent(
                         event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                         event.source == EventSource.International -> stringResource(R.string.international)
                         event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
-                        event.source == EventSource.Iran -> event.title + """ از تقویم رسمی
-تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"""
-
+                        event.source == EventSource.Iran -> "«${event.title}» از تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"
                         else -> ""
                     }
                     val uriHandler = LocalUriHandler.current
@@ -338,7 +337,7 @@ private fun DayEventContent(
                                                     ) {
                                                         Icon(
                                                             imageVector = WikipediaIcon,
-                                                            modifier = Modifier.size(24.dp),
+                                                            modifier = Modifier.requiredSize(24.dp),
                                                             contentDescription = "Wikipedia",
                                                         )
                                                     }

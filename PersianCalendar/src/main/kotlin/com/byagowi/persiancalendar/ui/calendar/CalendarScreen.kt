@@ -398,7 +398,7 @@ fun SharedTransitionScope.CalendarScreen(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-        }).takeIf { !eventsRepository.isEmpty && today.isYearSupportedOnAppAndNextYear },
+        }).takeIf { !eventsRepository.isEmpty },
         (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
             val coordinates = coordinates
             if (coordinates != null) TimesTab(

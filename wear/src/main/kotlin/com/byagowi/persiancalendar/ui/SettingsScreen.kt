@@ -43,7 +43,6 @@ import com.byagowi.persiancalendar.iranNonHolidaysKey
 import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import kotlinx.coroutines.launch
-import java.util.TimeZone
 
 @Composable
 fun SettingsScreen(
@@ -97,25 +96,23 @@ fun SettingsScreen(
         }
 
         ScalingLazyColumn(state = scrollState) {
-            if (today.isYearSupportedOnApp && TimeZone.getDefault().id == "Asia/Tehran") {
-                item {
-                    ListSubHeader {
-                        Text(
-                            "نمایش رویدادها",
-                            Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
-                item { EventsSwitch(iranNonHolidaysKey, "غیرتعطیل رسمی\nدانشگاه تهران") }
-                item { EventsSwitch(ancientIranKey, "ایران باستان") }
-                item { EventsSwitch(internationalKey, "بین‌المللی") }
-            }
             item {
                 ListSubHeader {
                     Text(
-                        "پیچیدگی، صفحهٔ ساعت",
-                        Modifier.fillMaxWidth(),
+                        text = "نمایش رویدادها",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+            item { EventsSwitch(iranNonHolidaysKey, "غیرتعطیل رسمی\nدانشگاه تهران") }
+            item { EventsSwitch(ancientIranKey, "ایران باستان") }
+            item { EventsSwitch(internationalKey, "بین‌المللی") }
+            item {
+                ListSubHeader {
+                    Text(
+                        text = "پیچیدگی، صفحهٔ ساعت",
+                        modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                     )
                 }

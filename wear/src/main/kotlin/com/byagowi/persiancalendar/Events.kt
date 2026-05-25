@@ -11,7 +11,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import java.util.TimeZone
 
 sealed interface EntryType {
     object Date : EntryType
@@ -48,10 +47,7 @@ fun generateEntries(
             listOf(
                 Entry(dateTitle, EntryType.Date, jdn),
             ) + events.ifEmpty {
-                val noEntryTitle = if (jdn.isYearSupportedOnApp) "رویدادی یافت نشد" else {
-                    "بدلیل قدیمی‌بودن برنامه رویدادی درون برنامه وجود ندارد، اگر بروزرسانی موجود نیست احتمالاً برنامهٔ دیگری را باید بیازمایید"
-                }
-                listOf(Entry(noEntryTitle, EntryType.NonHoliday(null)))
+                listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday(null)))
             }
         } else emptyList()
     }
@@ -95,7 +91,6 @@ const val ancientIranKey = "ancientIran"
 
 fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry> {
     val jdn = civilDate.toJdn()
-    if (!Jdn(jdn).isYearSupportedOnApp || TimeZone.getDefault().id != "Asia/Tehran") return emptyList()
     val persianDate = PersianDate(jdn)
     val islamicDate = IslamicDate(jdn)
     val events = buildList {

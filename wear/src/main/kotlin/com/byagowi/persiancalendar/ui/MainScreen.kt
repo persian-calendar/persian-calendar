@@ -27,6 +27,7 @@ import androidx.wear.compose.foundation.ScrollInfoProvider
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.EdgeButton
@@ -80,13 +81,13 @@ fun MainScreen(
             withWeekDayName = false,
         )
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-//        var showWarningDialog by rememberSaveable { mutableStateOf(today.isAppOutDated) }
-//        AlertDialog(
-//            showWarningDialog,
-//            { showWarningDialog = false },
-//            title = { Text("برنامه قدیمی است\n\nمناسبتی درون برنامه وجود ندارد") },
-//            edgeButton = { EdgeButton({ showWarningDialog = false }) { Text("متوجه شدم") } },
-//        )
+        var showWarningDialog by rememberSaveable { mutableStateOf(!today.isYearSupportedOnApp) }
+        AlertDialog(
+            visible = showWarningDialog,
+            onDismissRequest = { showWarningDialog = false },
+            title = { Text("اطلاعات درون برنامه ممکن است قدیمی باشد") },
+            edgeButton = { EdgeButton({ showWarningDialog = false }) { Text("متوجه شدم") } },
+        )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
             val entries = generateEntries(
                 localeUtils, today, enabledEvents, days = 14, withYear = true,
@@ -142,6 +143,7 @@ private fun EventViewContent(isExpanded: Boolean, entry: Entry) {
             is EntryType.Holiday if type.source == EventSource.Iran -> "تعطیلی به مناسبت"
             is EntryType.NonHoliday if type.source == EventSource.Iran -> "رسمی، دانشگاه تهران"
             is EntryType.NonHoliday if type.source == EventSource.International -> "بین‌المللی"
+            is EntryType.NonHoliday if type.source == EventSource.AncientIran -> "ایران باستان"
             else -> null
         }?.let { Text(it, Modifier.alpha(.65f)) }
     }

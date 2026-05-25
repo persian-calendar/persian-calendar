@@ -98,16 +98,13 @@ data class EventsRepository(
                 irregularCalendarEventsStore,
                 deviceEvents,
             ),
-        ).flatten().filterEvents(jdn)
+        ).flatten().filterEvents()
     }
 
-    fun List<CalendarEvent<*>>.filterEvents(jdn: Jdn): List<CalendarEvent<*>> {
-        val supported =
-            jdn.isYearSupportedOnAppAndNextYear && Jdn.today().isYearSupportedOnAppAndNextYear
+    fun List<CalendarEvent<*>>.filterEvents(): List<CalendarEvent<*>> {
         val timeZone = TimeZone.getDefault().id
         return this.filter {
             when {
-                !supported && (it.source == EventSource.Afghanistan || it.source == EventSource.Iran) -> false
                 "روز مادر" in it.title -> true
                 !it.isHoliday && timeZone != IRAN_TIMEZONE_ID && it.source == EventSource.Iran && it.date.calendar == Calendar.ISLAMIC -> false
                 it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC -> true
@@ -134,7 +131,7 @@ data class EventsRepository(
             val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendar)
                 .filter { event -> event.date.month < it.month }
             thisYear + nextYear
-        }).filterEvents(jdn)
+        }).filterEvents()
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(

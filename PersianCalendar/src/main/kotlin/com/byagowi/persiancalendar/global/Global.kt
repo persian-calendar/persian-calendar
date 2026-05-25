@@ -119,7 +119,6 @@ import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
@@ -430,9 +429,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     debugLog("Utils: configureCalendarsAndLoadEvents is called")
     val preferences = context.preferences
     IslamicDate.islamicOffset = getIslamicCalendarOffset(preferences)
-    eventsRepository_.value = if (Jdn.today().isYearSupportedOnAppAndNextYear) {
-        EventsRepository(preferences, language)
-    } else EventsRepository.empty()
+    eventsRepository_.value = EventsRepository(preferences, language)
 }
 
 private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
