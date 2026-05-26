@@ -234,6 +234,5 @@ private fun <T> SegmentedButtonItemsPicker(
     }
 }
 
-@Composable
 fun calendarPickerHeight() =
     40.dp // LocalMinimumInteractiveComponentSize.current.coerceAtLeast(48.dp)

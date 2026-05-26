@@ -590,7 +590,6 @@ private fun EquinoxCountDownContent(
     }
 }
 
-@Composable
 fun readEvents(
     jdn: Jdn,
     deviceEvents: DeviceCalendarEventsStore,
