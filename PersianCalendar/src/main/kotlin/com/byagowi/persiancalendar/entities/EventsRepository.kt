@@ -145,7 +145,7 @@ data class EventsRepository(
             record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
             record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
             else -> ""
-        } + record.title.split(" ـــ ")[0]
+        } // + record.title.split(" ـــ ")[0]
         val metadata = record.metadata.toPersistentMap().put(ORIGINAL_TITLE, record.title)
         val source = record.source
         return (when (calendar) {
