@@ -9,6 +9,7 @@ import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Typeface
+import androidx.annotation.ColorInt
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -16,6 +17,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.FloatState
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.dp
@@ -42,6 +45,7 @@ import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.toObserver
@@ -78,6 +82,7 @@ fun Compass(
     }
     compassView.qiblaHeading = qiblaHeading
     compassView.setFont(resolveAndroidCustomTypeface())
+    compassView.setSurfaceColor(animateColor(MaterialTheme.colorScheme.surface).value.toArgb())
     compassView.setTime(time)
     BoxWithConstraints(modifier.detectZoom { zoom = (zoom * it).coerceIn(1f, 2f) }) {
         val width = this.maxWidth
@@ -177,6 +182,11 @@ private class CompassView(private val resources: Resources) {
         it.alpha = 120
         it.textAlign = Paint.Align.CENTER
     }
+    private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.strokeWidth = 5 * dp
+        it.style = Paint.Style.STROKE
+        it.textAlign = Paint.Align.CENTER
+    }
 
     fun setFont(typeface: Typeface?) {
         textPaint.typeface = typeface
@@ -204,10 +214,15 @@ private class CompassView(private val resources: Resources) {
         planetsPaint.textSize = textSize
         textPaint.textSize = textSize
         textSecondPaint.textSize = textSize
+        textStrokePaint.textSize = textSize
         northArrowPaint.alpha = ((100 * cbrt(scale)).roundToInt()).coerceIn(0, 255)
         qiblaPaint.strokeWidth = strokeWidth
         moonPaint.strokeWidth = strokeWidth
         sunPaint.strokeWidth = strokeWidth
+    }
+
+    fun setSurfaceColor(@ColorInt color: Int) {
+        textStrokePaint.color = color
     }
 
     fun draw(canvas: Canvas, angle: Float) {
@@ -332,11 +347,15 @@ private class CompassView(private val resources: Resources) {
         if (!isShowQibla) return
         val qiblaHeading = qiblaHeading ?: return
         withRotation(fixForTrueNorth(qiblaHeading.heading), cx, cy) {
+            drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
-//            val textCenter = cy - radius / 2
-//            withRotation(90f, cx, textCenter) {
-//                drawText(qiblaHeading.km, cx, textCenter + 4 * dp, textPaint)
-//            }
+            val textCenter = cy - radius / 2
+            withRotation(90f, cx, textCenter) {
+                val distance = qiblaHeading.km
+                drawText(distance, cx, textCenter + 4 * dp, textStrokePaint)
+                drawText(distance, cx, textCenter + 4 * dp, textPaint)
+
+            }
         }
     }
 }
