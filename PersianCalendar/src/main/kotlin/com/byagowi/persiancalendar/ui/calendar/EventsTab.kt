@@ -74,6 +74,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.entities.ORIGINAL_TITLE
 import com.byagowi.persiancalendar.entities.everyYear
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -102,6 +103,7 @@ import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -268,14 +270,25 @@ private fun DayEventContent(
                     TooltipAnchorPosition.Above,
                 ),
                 tooltip = {
-                    val text = when {
-                        event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است"
-                        event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
-                        event.source == EventSource.International -> stringResource(R.string.international)
-                        event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
-                        event.source == EventSource.Iran -> "«${event.title}» از تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران"
-                        else -> ""
-                    }
+                    val text = listOfNotNull(
+                        when {
+                            event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است"
+                            event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
+                            event.source == EventSource.International -> stringResource(R.string.international)
+                            event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
+                            event.source == EventSource.Iran -> "این رویداد با نام «${event.metadata[ORIGINAL_TITLE] ?: event.title}» در تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران آمده است."
+                            else -> null
+                        },
+                        when (val wikipediaEntry = event.metadata["wikipedia"]) {
+                            null -> null
+                            else -> "دانشنامهٔ ویکی‌پدیا دارای مدخلی با نام «${
+                                wikipediaEntry.replace(
+                                    "https://fa.wikipedia.org/wiki/",
+                                    "",
+                                ).replace("_", " ")
+                            }» در این رابطه است."
+                        },
+                    ).joinToString("\n")
                     val uriHandler = LocalUriHandler.current
                     RichTooltip(
                         modifier = Modifier.clickable(
@@ -634,7 +647,7 @@ fun readEventsWithEquinox(
                 isHoliday = false,
                 date = date,
                 source = null,
-                metadata = emptyMap(),
+                metadata = persistentMapOf(),
                 remainingMillis = remainedTime,
             )
             listOf(event) + events

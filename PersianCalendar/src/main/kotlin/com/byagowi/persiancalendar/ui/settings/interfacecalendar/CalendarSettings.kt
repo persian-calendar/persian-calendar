@@ -57,8 +57,10 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.database.getIntOrNull
+import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.DEFAULT_HIJRI_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
@@ -105,6 +107,7 @@ import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
+import java.util.TimeZone
 
 @Composable
 fun CalendarSettings(
@@ -116,7 +119,11 @@ fun CalendarSettings(
         val context = LocalContext.current
         val userNeedsAppointments =
             language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars
-        if (userNeedsAppointments) {
+        if (userNeedsAppointments && when (TimeZone.getDefault().id) {
+                AFGHANISTAN_TIMEZONE_ID, IRAN_TIMEZONE_ID -> true
+                else -> false
+            }
+        ) {
             EnableInDeviceCalendar(Modifier.align(Alignment.CenterHorizontally))
         }
         AnimatedVisibility(userNeedsAppointments) {

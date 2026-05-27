@@ -7,6 +7,8 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import java.util.GregorianCalendar
 
 sealed class CalendarEvent<T : AbstractDate>(
@@ -20,28 +22,28 @@ sealed class CalendarEvent<T : AbstractDate>(
 
     class IslamicCalendarEvent(
         title: String, isHoliday: Boolean, date: IslamicDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: ImmutableMap<String, String>,
     ) : CalendarEvent<IslamicDate>(title, isHoliday, date, source, metadata)
 
     class PersianCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: ImmutableMap<String, String>,
     ) : CalendarEvent<PersianDate>(title, isHoliday, date, source, metadata)
 
     class EquinoxCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: ImmutableMap<String, String>,
         val remainingMillis: Long,
     ) : CalendarEvent<PersianDate>(title, isHoliday, date, source, metadata)
 
     class NepaliCalendarEvent(
         title: String, isHoliday: Boolean, date: NepaliDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: ImmutableMap<String, String>,
     ) : CalendarEvent<NepaliDate>(title, isHoliday, date, source, metadata)
 
     class DeviceCalendarEvent(
         date: CivilDate, title: String, isHoliday: Boolean, source: EventSource?,
-        metadata: Map<String, String> = emptyMap(),
+        metadata: ImmutableMap<String, String> = persistentMapOf(),
         val id: Long, val description: String, val start: GregorianCalendar,
         val end: GregorianCalendar, val color: String, val time: String?,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date, source, metadata)

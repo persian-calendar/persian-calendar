@@ -19,6 +19,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.collections.immutable.toPersistentMap
 import org.jetbrains.annotations.VisibleForTesting
 import java.util.TimeZone
 
@@ -144,34 +145,28 @@ data class EventsRepository(
             record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
             record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
             else -> ""
-        } + record.title
+        } + record.title.split(" ـــ ")[0]
+        val metadata = record.metadata.toPersistentMap().put(ORIGINAL_TITLE, record.title)
+        val source = record.source
         return (when (calendar) {
             Calendar.SHAMSI -> {
                 val date = PersianDate(everyYear, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(
-                    title, isHoliday, date, record.source, record.metadata,
-                )
+                CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
             }
 
             Calendar.GREGORIAN -> {
                 val date = CivilDate(everyYear, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(
-                    title, isHoliday, date, record.source, record.metadata,
-                )
+                CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, metadata)
             }
 
             Calendar.ISLAMIC -> {
                 val date = IslamicDate(everyYear, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(
-                    title, isHoliday, date, record.source, record.metadata,
-                )
+                CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, metadata)
             }
 
             Calendar.NEPALI -> {
                 val date = NepaliDate(everyYear, record.month, record.day)
-                CalendarEvent.NepaliCalendarEvent(
-                    title, isHoliday, date, record.source, record.metadata,
-                )
+                CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, metadata)
             }
         } as? T).debugAssertNotNull
     }

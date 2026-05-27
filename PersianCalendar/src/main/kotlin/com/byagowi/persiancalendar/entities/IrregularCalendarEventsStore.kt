@@ -11,6 +11,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.collections.immutable.toPersistentMap
 import org.jetbrains.annotations.VisibleForTesting
 
 class IrregularCalendarEventsStore(private val eventsRepository: EventsRepository) {
@@ -59,24 +60,26 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             }
         }.mapNotNull { event ->
             val date = getDateInstance(event, year, type) ?: return@mapNotNull null
-            val title = "${event["title"] ?: return@mapNotNull null} (${numeral.format(year)})"
+            val originalTitle = event["title"] ?: return@mapNotNull null
+            val title = "$originalTitle (${numeral.format(year)})"
             val isHoliday = event["holiday"] == "true"
             val source = EventSource.entries.firstOrNull { it.name == event["type"] }
+            val metadata = event.toPersistentMap().put(ORIGINAL_TITLE, originalTitle)
             when (date) {
                 is PersianDate -> {
-                    CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, emptyMap())
+                    CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
                 }
 
                 is IslamicDate -> {
-                    CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, emptyMap())
+                    CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, metadata)
                 }
 
                 is CivilDate -> {
-                    CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, emptyMap())
+                    CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, metadata)
                 }
 
                 is NepaliDate -> {
-                    CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, emptyMap())
+                    CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, metadata)
                 }
 
                 else -> null
@@ -84,6 +87,8 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
         }
     }
 }
+
+const val ORIGINAL_TITLE = "originalTitle"
 
 @VisibleForTesting
 fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): AbstractDate? {

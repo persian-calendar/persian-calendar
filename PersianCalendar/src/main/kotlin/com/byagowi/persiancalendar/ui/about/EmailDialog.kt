@@ -75,7 +75,7 @@ fun EnableInDeviceCalendar(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri("https://support.google.com/calendar/answer/13748345?hl=fa") },
     ) {
         Text(
-            text = "راهنمای فعال‌سازی مناسبت‌ها از تقویم دستگاه",
+            text = "راهنمای فعال‌سازی رویدادهای بیشتر از تقویم دستگاه",
             maxLines = 1,
             autoSize = TextAutoSize.StepBased(9.sp, LocalTextStyle.current.fontSize),
             textAlign = TextAlign.Center,
