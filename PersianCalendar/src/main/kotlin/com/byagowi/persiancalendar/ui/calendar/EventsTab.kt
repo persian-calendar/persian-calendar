@@ -152,9 +152,13 @@ fun DayEvents(
     navigateToHolidaysSettings: ((String?) -> Unit),
     viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     modifier: Modifier = Modifier,
+    expanded: Boolean = false,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy((if (expanded) 8 else 4).dp),
+    ) {
         events.forEach { event ->
             val backgroundColor by animateColor(eventColor(event))
             AnimatedContent(
@@ -177,6 +181,7 @@ fun DayEvents(
                         backgroundColor = backgroundColor,
                         event = event,
                         title = title,
+                        expanded = expanded,
                         viewEvent = viewEvent,
                         language = language,
                         numeral = numeral,
@@ -201,6 +206,7 @@ private fun DayEventContent(
     navigateToHolidaysSettings: ((item: String?) -> Unit),
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
+    expanded: Boolean,
 ) {
     val tooltipState = rememberTooltipState(isPersistent = true)
     val hasTooltip = when {
@@ -227,7 +233,10 @@ private fun DayEventContent(
             .semantics {
                 this.contentDescription = event.oneLinerTitleWithTime
             }
-            .padding(horizontal = 6.dp, vertical = 4.dp),
+            .padding(
+                horizontal = (if (expanded) 8 else 6).dp,
+                vertical = (if (expanded) 6 else 4).dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

@@ -370,6 +370,7 @@ fun SharedTransitionScope.CalendarScreen(
                     events = appointments,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     viewEvent = viewEvent,
+                    expanded = !isShowDeviceCalendarEvents,
                     modifier = Modifier.padding(
                         top = 6.dp,
                         bottom = 8.dp,
