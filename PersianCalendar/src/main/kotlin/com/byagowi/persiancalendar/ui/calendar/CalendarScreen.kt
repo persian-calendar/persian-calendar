@@ -336,10 +336,10 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     var removeThirdTab by remember { mutableStateOf(false) }
+    val isTablet = LocalResources.current.getBoolean(R.bool.is_tablet)
     val tabs = listOfNotNull(
         (DetailsTab.Calendar to @Composable { _: ImmutableList<CalendarEvent<*>> ->
             CalendarsTab(
-                modifier = Modifier.padding(top = 4.dp),
                 selectedDay = selectedDay,
                 today = today,
                 navigateToAstronomy = navigateToAstronomy,
@@ -348,7 +348,6 @@ fun SharedTransitionScope.CalendarScreen(
         }).takeIf { enabledCalendars.size > 1 },
         (DetailsTab.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
             AnimatedContent(
-                modifier = Modifier.padding(top = (if (isShowDeviceCalendarEvents) 0 else 8).dp),
                 targetState = appointments.isEmpty(),
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
@@ -371,7 +370,7 @@ fun SharedTransitionScope.CalendarScreen(
                     events = appointments,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     viewEvent = viewEvent,
-                    compact = isShowDeviceCalendarEvents,
+                    compact = isShowDeviceCalendarEvents && !isTablet,
                     modifier = Modifier.padding(
                         top = 6.dp,
                         bottom = 8.dp,
@@ -404,7 +403,6 @@ fun SharedTransitionScope.CalendarScreen(
         (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
             val coordinates = coordinates
             if (coordinates != null) TimesTab(
-                modifier = Modifier.padding(top = 4.dp),
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                 navigateToAstronomy = navigateToAstronomy,
@@ -426,7 +424,6 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }).takeIf { !removeThirdTab && enableTimesTab() },
     ).toMap().toImmutableMap()
-    val isTablet = LocalResources.current.getBoolean(R.bool.is_tablet)
     val isButtonsMode = isShowDeviceCalendarEvents || tabs.isEmpty() || isTablet
     var selectedTab by remember {
         val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
@@ -893,10 +890,11 @@ private fun Details(
                     Column(
                         Modifier
                             .verticalScroll(scrollState)
-                            .verticalSwipeModifier(scrollState),
+                            .verticalSwipeModifier(scrollState)
+                            .then(if (tabs.size > 1) Modifier else horizontalSwipeModifier),
                     ) {
                         if (selectedTab == DetailsTab.Events) {
-                            Spacer(Modifier.height(8.dp))
+                            Spacer(Modifier.height(16.dp))
                             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
                             AnimatedVisibility(visible = shiftWorkTitle != null) {
                                 Spacer(Modifier.height(4.dp))
@@ -1010,8 +1008,10 @@ private fun Details(
                     .then(horizontalSwipeModifier)
                     .fillMaxWidth(),
             ) {
-                val content = tabs[it]
-                if (content != null) content(appointments) else Spacer(Modifier.height(10.dp))
+                Box(Modifier.padding(top = (if (it == DetailsTab.Events) 0 else 6).dp)) {
+                    val content = tabs[it]
+                    if (content != null) content(appointments)
+                }
             }
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
