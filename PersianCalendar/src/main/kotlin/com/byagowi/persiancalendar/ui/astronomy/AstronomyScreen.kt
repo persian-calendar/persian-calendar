@@ -102,7 +102,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -266,7 +265,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     ) { showHoroscopeDialog = false }
                     var showYearHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
                     if (showYearHoroscopeDialog) {
-                        YearHoroscopeDialog(jdn.toPersianDate().year) {
+                        YearHoroscopeDialog(initialPersianYear = jdn.toPersianDate().year) {
                             showYearHoroscopeDialog = false
                         }
                     }
@@ -297,7 +296,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             closeMenu()
                         }
                         AppDropdownMenuItem(
-                            {
+                            text = {
                                 val horoscopeString = stringResource(R.string.horoscope)
                                 val yearString = stringResource(R.string.year)
                                 Text(horoscopeString + spacedComma + yearString)
@@ -312,7 +311,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             showPlanetaryHoursDialog = true
                             closeMenu()
                         }
-                        if (showMoonInScorpio) AppDropdownMenuItem(
+                        AppDropdownMenuItem(
                             text = { Text(stringResource(R.string.moon_in_scorpio)) },
                         ) {
                             showMoonInScorpioDialog = true
@@ -922,14 +921,14 @@ private fun Cell(
             title,
             modifier = Modifier
                 .background(
-                    if (isDynamicGrayscale()) Color(0xcc808080) else color,
-                    MaterialTheme.shapes.small,
+                    color = if (isDynamicGrayscale()) Color(0xCC808080) else color,
+                    shape = MaterialTheme.shapes.small,
                 )
                 .align(alignment = Alignment.CenterVertically)
                 .padding(vertical = 4.dp, horizontal = 8.dp),
             style = MaterialTheme.typography.bodyMedium,
             color = Color.White,
-            fontSize = with(LocalDensity.current) {
+            fontSize = with(receiver = LocalDensity.current) {
                 MaterialTheme.typography.bodyMedium.fontSize.toDp().coerceAtMost(18.dp).toSp()
             },
         )

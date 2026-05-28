@@ -77,7 +77,7 @@ private fun MutableList<Entry>.eventsOfCalendar(
             }
         ) add(
             Entry(
-                it.title,
+                it.title.split(" ـــ ")[0],
                 if (it.isHoliday) EntryType.Holiday(it.source)
                 else EntryType.NonHoliday(it.source),
             ),
