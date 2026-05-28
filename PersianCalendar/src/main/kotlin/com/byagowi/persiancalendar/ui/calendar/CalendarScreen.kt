@@ -22,13 +22,11 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
@@ -61,6 +59,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -845,8 +845,13 @@ private fun Details(
         }
 
         if (!isButtonsMode) Column(modifier = horizontalSwipeModifier) {
+            val pagerState = rememberPagerState(initialPage = selectedTab?.ordinal ?: 0) {
+                tabs.size
+            }
+            val coroutineScope = rememberCoroutineScope()
+            val tabsList = tabs.keys.toList()
             if (tabs.size > 1) PrimaryTabRow(
-                selectedTabIndex = tabs.keys.indexOf(selectedTab).coerceAtLeast(0),
+                selectedTabIndex = pagerState.currentPage,
                 divider = {},
                 containerColor = Color.Transparent,
                 indicator = {
@@ -858,27 +863,31 @@ private fun Details(
                     )
                 },
             ) {
-                tabs.entries.forEach { (button, _) ->
+                tabsList.forEach { tab ->
                     Tab(
-                        text = { Text(stringResource(button.title)) },
+                        text = { Text(stringResource(tab.title)) },
                         modifier = Modifier.clip(MaterialTheme.shapes.large),
-                        selected = selectedTab == button,
+                        selected = pagerState.currentPage == tabsList.indexOf(tab),
                         unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                        onClick = { onSelectedTabChange(button) },
+                        onClick = {
+                            tabsList.getOrNull(pagerState.currentPage)?.let {
+                                onSelectedTabChange(it)
+                            }
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(tabsList.indexOf(tab))
+                            }
+                        },
                     )
                 }
             }
 
-            AnimatedContent(
-                targetState = selectedTab,
-                transitionSpec = {
-                    val forward =
-                        (this.initialState?.ordinal ?: 0) > (this.targetState?.ordinal ?: 0)
-                    (fadeIn() + expandHorizontally(expandFrom = if (forward) Alignment.Start else Alignment.End)).togetherWith(
-                        fadeOut() + shrinkHorizontally(shrinkTowards = if (forward) Alignment.Start else Alignment.End),
-                    )
-                },
-            ) { selectedButton ->
+            LaunchedEffect(pagerState.currentPage) {
+                tabsList.getOrNull(pagerState.currentPage)?.let {
+                    if (selectedTab != it) onSelectedTabChange(it)
+                }
+            }
+            HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
+                val selectedTab = tabsList.getOrNull(index) ?: return@HorizontalPager
                 Box {
                     val scrollState = rememberScrollState()
                     Column(
@@ -886,7 +895,7 @@ private fun Details(
                             .verticalScroll(scrollState)
                             .verticalSwipeModifier(scrollState),
                     ) {
-                        if (selectedButton == DetailsTab.Events) {
+                        if (selectedTab == DetailsTab.Events) {
                             Spacer(Modifier.height(8.dp))
                             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
                             AnimatedVisibility(visible = shiftWorkTitle != null) {
@@ -894,7 +903,7 @@ private fun Details(
                             }
                             ShiftWorkView(shiftWorkTitle, today, selectedDay)
                         }
-                        (tabs[selectedButton] ?: tabs.entries.firstOrNull()?.value)?.invoke(
+                        (tabs[selectedTab] ?: return@Column)(
                             readEventsWithEquinox(
                                 jdn = selectedDay,
                                 now = now,
