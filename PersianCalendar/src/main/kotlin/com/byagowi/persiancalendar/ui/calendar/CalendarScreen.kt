@@ -348,6 +348,7 @@ fun SharedTransitionScope.CalendarScreen(
         }).takeIf { enabledCalendars.size > 1 },
         (DetailsTab.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
             AnimatedContent(
+                modifier = Modifier.padding(top = (if (isShowDeviceCalendarEvents) 0 else 8).dp),
                 targetState = appointments.isEmpty(),
                 transitionSpec = {
                     (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
@@ -866,7 +867,7 @@ private fun Details(
                         onClick = { onSelectedTabChange(button) },
                     )
                 }
-            } else Spacer(Modifier.height(4.dp))
+            }
 
             AnimatedContent(
                 targetState = selectedTab,

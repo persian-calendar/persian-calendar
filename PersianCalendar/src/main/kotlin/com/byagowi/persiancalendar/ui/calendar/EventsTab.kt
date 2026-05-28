@@ -108,6 +108,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
+import kotlin.math.exp
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -217,10 +218,11 @@ private fun DayEventContent(
         event.source == EventSource.Afghanistan -> true
         else -> false
     }
+    val shape = if (expanded) MaterialTheme.shapes.medium else MaterialTheme.shapes.small
     Row(
         Modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.small)
+            .clip(shape)
             .background(backgroundColor)
             .clickable(onClickLabel = stringResource(R.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
@@ -235,7 +237,7 @@ private fun DayEventContent(
             }
             .padding(
                 horizontal = (if (expanded) 8 else 6).dp,
-                vertical = (if (expanded) 6 else 4).dp,
+                vertical = (if (expanded) 8 else 4).dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -482,7 +484,7 @@ private fun DayEventContent(
                 Row(
                     Modifier
                         .padding(start = 8.dp)
-                        .clip(MaterialTheme.shapes.small)
+                        .clip(shape)
                         .then(clickModifier),
                 ) {
                     val partsCount = parts.size // + if ("wikipedia" in event.metadata) 1 else 0
