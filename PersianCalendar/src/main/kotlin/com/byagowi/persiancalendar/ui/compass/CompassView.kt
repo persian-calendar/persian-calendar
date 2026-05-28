@@ -354,7 +354,6 @@ private class CompassView(private val resources: Resources) {
                 val distance = qiblaHeading.km
                 drawText(distance, cx, textCenter + 4 * dp, textStrokePaint)
                 drawText(distance, cx, textCenter + 4 * dp, textPaint)
-
             }
         }
     }
