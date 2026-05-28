@@ -7,6 +7,7 @@ import com.android.tools.lint.detector.api.CURRENT_API
 class CustomIssueRegistry : IssueRegistry() {
     override val issues = listOf(
         DoubleBangDetector.ISSUE,
+        ElvisEmptyStringDetector.ISSUE,
         DebugAssertNotNullSafeCallDetector.ISSUE,
         TryCatchDetector.ISSUE,
         UnsafeCastDetector.ISSUE,

@@ -202,9 +202,9 @@ fun CalendarPreferenceDialog(
         ) {
             val context = LocalContext.current
             SwitchWithLabel(
-                label = stringResource(R.string.show_secondary_calendar) + (secondaryCalendar?.let {
+                label = stringResource(R.string.show_secondary_calendar) + secondaryCalendar?.let {
                     spacedColon + stringResource(it.title)
-                } ?: ""),
+                }.orEmpty(),
                 checked = secondaryCalendarEnabled,
             ) { context.preferences.edit { putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, it) } }
         }

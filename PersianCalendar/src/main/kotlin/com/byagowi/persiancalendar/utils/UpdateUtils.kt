@@ -1785,7 +1785,7 @@ private data class NotificationData(
                     ).also {
                         it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
-                        it.setTextViewTextOrHideIfEmpty(R.id.body, otherCalendarsDates ?: "")
+                        it.setTextViewTextOrHideIfEmpty(R.id.body, otherCalendarsDates.orEmpty())
                     },
                 )
 
@@ -1795,7 +1795,7 @@ private data class NotificationData(
                     ).also {
                         it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
-                        it.setTextViewTextOrHideIfEmpty(R.id.body, otherCalendarsDates ?: "")
+                        it.setTextViewTextOrHideIfEmpty(R.id.body, otherCalendarsDates.orEmpty())
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
                         it.setViewVisibility(

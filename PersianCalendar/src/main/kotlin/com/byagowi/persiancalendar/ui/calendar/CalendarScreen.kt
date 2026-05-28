@@ -1230,7 +1230,7 @@ private fun Search(
                         sides = WindowInsetsSides.Horizontal,
                     ).asPaddingValues(),
                 ) else Modifier,
-                query = searchTerm ?: "",
+                query = searchTerm.orEmpty(),
                 onQueryChange = onSearchTermChange,
                 onSearch = {},
                 expanded = isSearchExpanded,
