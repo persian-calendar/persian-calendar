@@ -108,7 +108,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
-import kotlin.math.exp
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -153,12 +152,12 @@ fun DayEvents(
     navigateToHolidaysSettings: ((String?) -> Unit),
     viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     modifier: Modifier = Modifier,
-    expanded: Boolean = false,
+    compact: Boolean = true,
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy((if (expanded) 8 else 4).dp),
+        verticalArrangement = Arrangement.spacedBy((if (compact) 4 else 8).dp),
     ) {
         events.forEach { event ->
             val backgroundColor by animateColor(eventColor(event))
@@ -182,7 +181,7 @@ fun DayEvents(
                         backgroundColor = backgroundColor,
                         event = event,
                         title = title,
-                        expanded = expanded,
+                        compact = compact,
                         viewEvent = viewEvent,
                         language = language,
                         numeral = numeral,
@@ -207,7 +206,7 @@ private fun DayEventContent(
     navigateToHolidaysSettings: ((item: String?) -> Unit),
     numeral: Numeral,
     originalLayoutDirection: LayoutDirection,
-    expanded: Boolean,
+    compact: Boolean,
 ) {
     val tooltipState = rememberTooltipState(isPersistent = true)
     val hasTooltip = when {
@@ -218,7 +217,7 @@ private fun DayEventContent(
         event.source == EventSource.Afghanistan -> true
         else -> false
     }
-    val shape = if (expanded) MaterialTheme.shapes.medium else MaterialTheme.shapes.small
+    val shape = if (compact) MaterialTheme.shapes.small else MaterialTheme.shapes.medium
     Row(
         Modifier
             .fillMaxWidth()
@@ -236,8 +235,8 @@ private fun DayEventContent(
                 this.contentDescription = event.oneLinerTitleWithTime
             }
             .padding(
-                horizontal = (if (expanded) 8 else 6).dp,
-                vertical = (if (expanded) 8 else 4).dp,
+                horizontal = (if (compact) 6 else 8).dp,
+                vertical = (if (compact) 4 else 8).dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
