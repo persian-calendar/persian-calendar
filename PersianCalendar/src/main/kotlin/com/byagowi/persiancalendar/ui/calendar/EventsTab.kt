@@ -282,7 +282,7 @@ private fun DayEventContent(
                 tooltip = {
                     val text = listOfNotNull(
                         when {
-                            event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است"
+                            event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
                             event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                             event.source == EventSource.International -> stringResource(R.string.international)
                             event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."

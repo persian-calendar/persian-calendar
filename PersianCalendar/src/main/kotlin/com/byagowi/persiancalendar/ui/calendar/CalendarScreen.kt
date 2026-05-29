@@ -400,7 +400,7 @@ fun SharedTransitionScope.CalendarScreen(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-        }).takeIf { !eventsRepository.isEmpty },
+        }).takeIf { !eventsRepository.isEmpty || shiftWorkSettings.records.isNotEmpty() },
         (DetailsTab.Times to @Composable { _: ImmutableList<CalendarEvent<*>> ->
             val coordinates = coordinates
             if (coordinates != null) TimesTab(
@@ -901,6 +901,9 @@ private fun Details(
                                 Spacer(Modifier.height(4.dp))
                             }
                             ShiftWorkView(shiftWorkTitle, today, selectedDay)
+                            AnimatedVisibility(visible = shiftWorkTitle != null) {
+                                Spacer(Modifier.height(4.dp))
+                            }
                         }
                         (tabs[selectedTab] ?: return@Column)(
                             readEventsWithEquinox(
@@ -951,11 +954,6 @@ private fun Details(
             numeral = numeral,
         ) { appointments, headerScrollState, onHasContentChange ->
             val shiftWorkTitle = shiftWorkSettings.workTitle(selectedDay)
-            ShiftWorkView(shiftWorkTitle, today, selectedDay)
-            AnimatedVisibility(visible = shiftWorkTitle != null) {
-                Spacer(Modifier.height(12.dp))
-            }
-
             onHasContentChange(tabs.isNotEmpty() || !shiftWorkTitle.isNullOrEmpty())
 
             if (tabs.isNotEmpty()) CompositionLocalProvider(
@@ -1009,7 +1007,16 @@ private fun Details(
                     .then(horizontalSwipeModifier)
                     .fillMaxWidth(),
             ) {
-                Box(Modifier.padding(top = (if (it == DetailsTab.Events) 0 else 6).dp)) {
+                Column(Modifier.padding(top = (if (it == DetailsTab.Events) 0 else 6).dp)) {
+                    if (it == DetailsTab.Events) {
+                        AnimatedVisibility(visible = shiftWorkTitle != null) {
+                            Spacer(Modifier.height(4.dp))
+                        }
+                        ShiftWorkView(shiftWorkTitle, today, selectedDay)
+                        AnimatedVisibility(visible = shiftWorkTitle != null) {
+                            Spacer(Modifier.height(4.dp))
+                        }
+                    }
                     val content = tabs[it]
                     if (content != null) content(appointments)
                 }
