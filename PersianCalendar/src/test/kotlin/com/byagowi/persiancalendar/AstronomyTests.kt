@@ -25,10 +25,12 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.RAT
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.ROOSTER
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.SNAKE
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.TIGER
+import com.byagowi.persiancalendar.ui.astronomy.Lot
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.alulaBorealis
 import com.byagowi.persiancalendar.ui.astronomy.houses
+import com.byagowi.persiancalendar.ui.astronomy.isDiurnal
 import com.byagowi.persiancalendar.ui.astronomy.meanApogee
 import com.byagowi.persiancalendar.ui.astronomy.meanAscendingNode
 import com.byagowi.persiancalendar.ui.astronomy.nairAlSaif
@@ -99,10 +101,9 @@ class AstronomyTests {
                 message = longitude.toString(),
             )
         }
-        (0..11).map { 20 + it * 30 }
-            .zip(Zodiac.entries + Zodiac.PISCES) { longitude, zodiac ->
-                assertEquals(zodiac, Zodiac.fromTropical(longitude.toDouble()))
-            }
+        (0..11).map { 20 + it * 30 }.zip(Zodiac.entries + Zodiac.PISCES) { longitude, zodiac ->
+            assertEquals(zodiac, Zodiac.fromTropical(longitude.toDouble()))
+        }
     }
 
     @Test
@@ -266,6 +267,33 @@ class AstronomyTests {
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             houses(35.68, 51.42, time)
         }
+    }
+
+    @Test
+    fun `Check lots`() {
+        listOf(
+            // https://upload.wikimedia.org/wikipedia/commons/3/32/یک_تقویم_فارسی_از_سال_۱۲۲۵_شمسی.pdf
+            1225 to mapOf(
+                Lot.Fortune to Zodiac.ARIES,
+                Lot.Sultan to Zodiac.PISCES,
+                Lot.Wheat to Zodiac.SAGITTARIUS,
+                Lot.Grapes to Zodiac.SCORPIO,
+            ),
+        ).flatMap { (year, expected) ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            val houses = houses(tehranCoordinates.latitude, tehranCoordinates.longitude, time)
+            val ascendant = houses[0]
+            val isDiurnal = isDiurnal(houses, time)
+            expected.entries.map { (lot, zodiac) ->
+                {
+                    assertEquals(
+                        expected = zodiac,
+                        actual = Zodiac.fromTropical(lot.calculate(ascendant, isDiurnal, time)),
+                        message = "$year",
+                    )
+                }
+            }
+        }.run(::assertAll)
     }
 
     fun Zodiac.with(degrees: Int, minutes: Int): Double = ordinal * 30 + degrees + minutes / 60.0

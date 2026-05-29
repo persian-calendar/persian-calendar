@@ -526,21 +526,20 @@ private fun AscendantZodiac(
     modifier: Modifier = Modifier,
     progress: Float = 1f,
 ) {
-    val bodiesZodiac = ascendantBodies.map { body ->
-        if (body == Body.Sun && isYearEquinox) {
-            // Sometimes 359.99 put it in an incorrect house so let's just hardcode it
-            return@map body to .0
+    val planetData = ascendantBodies.map { body ->
+        when (body) {
+            // Sometimes 359.99 puts it in an incorrect house so let's just hardcode it
+            Body.Sun if isYearEquinox -> body to .0
+            else -> body to geocentricLongitudeAndDistanceOfBody(body, time).first
         }
-        val (longitude, _) = geocentricLongitudeAndDistanceOfBody(body, time)
-        body to longitude
-    }.sortedBy { (_, longitude) -> longitude }
-        .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
+    }.sortedBy { (_, longitude) -> longitude }.toMap()
+    val bodiesZodiac =
+        planetData.entries.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
-    val resources = LocalResources.current
-    val numFontStyle = SpanStyle() // to be used later, hopefully
     val ascendingNode = meanAscendingNode(time)
-    val extras = listOf(
+    val isDiurnal = isDiurnal(houses, time)
+    val extras = (listOf(
         meanApogee(time) to /*"⚸" + */stringResource(R.string.black_moon),
         // North Node / Dragon's Head (ascending node, Rahu) — Moon crosses going north
         ascendingNode to (if (language.isArabicScript) "رأس" else "Rahu"),
@@ -550,8 +549,11 @@ private fun AscendantZodiac(
         nairAlSaif(time) to (if (language.isArabicScript) "نیرالسیف" else "Hatysa"),
         // Alula Borealis (ν UMa) = الأولى الشمالية "The First Northern [Spring]"
         alulaBorealis(time) to (if (language.isArabicScript) "الأولى الشمالية" else "Alula Borealis"),
-    ).map { (value, title) -> Triple(Zodiac.fromTropical(value), value, title) }
+    ) + run {
+        Lot.entries.map { lot -> lot.calculate(houses[0], isDiurnal, time) to lot.title() }
+    }).map { (longitude, title) -> Triple(Zodiac.fromTropical(longitude), longitude, title) }
 
+    val numFontStyle = SpanStyle() // to be used later, hopefully
     fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
         append(title + NBSP)
         withStyle(numFontStyle) { append(formatAngle(value % 30, abjad)) }
@@ -566,6 +568,7 @@ private fun AscendantZodiac(
             fontSize = 40.sp,
         )
         val text = buildAnnotatedString {
+            val resources = LocalResources.current
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
                 it.shortTitle(resources)
             }
@@ -598,12 +601,64 @@ private fun AscendantZodiac(
             ),
             softWrap = false,
             maxLines = text.split("\n").size,
-            autoSize = TextAutoSize.StepBased(
-                maxFontSize = LocalTextStyle.current.fontSize,
-                minFontSize = 9.sp,
-            ),
+//            autoSize = TextAutoSize.StepBased(
+//                maxFontSize = LocalTextStyle.current.fontSize,
+//                minFontSize = 9.sp,
+//            ),
         )
     }
+}
+
+// Determine day/night sect: Sun is above horizon when between DSC (houses[6]) and ASC (houses[0]
+@VisibleForTesting
+fun isDiurnal(houses: List<Double>, time: Time): Boolean {
+    val sunLon = geocentricLongitudeAndDistanceOfBody(Body.Sun, time).first
+    val ascendant = houses[0]
+    val descendant = houses[6]
+    return (sunLon - descendant).mod(360.0) < (ascendant - descendant).mod(360.0)
+}
+
+// Arabic lots (سهام) — Abu Ma'shar / classical Islamic tradition for year charts
+// https://en.wikipedia.org/wiki/Arabic_parts
+@VisibleForTesting
+enum class Lot(
+    private val arabicTitle: String,
+    private val bodies: Pair<Body, Body>,
+) {
+    // Part of Fortune: day = ASC + ☽ − ☉, night = ASC + ☉ − ☽
+    // Moon (body/material fortune) & Sun (vitality); the two luminaries, the foundational lot.
+    // https://en.wikipedia.org/wiki/Arabic_parts#Calculating_the_Lot_of_Fortune
+    Fortune(arabicTitle = "سهم السعادة", bodies = Body.Moon to Body.Sun),
+
+    // Part of Kings: day = ASC + ☉ − ♃, night = ASC + ♃ − ☉
+    // Sun (kingship) & Jupiter (royal benefic) — both diurnal, both associated with rule and authority.
+    // ⚠️ DRAFT — formula brute-forced from the 1225 manuscript chart; no classical textual source found yet.
+    Sultan(arabicTitle = "سهم السلطان", bodies = Body.Sun to Body.Jupiter),
+
+    // Part of Wheat: day = ASC + ☿ − ♄, night = ASC + ♄ − ☿
+    // Mercury (commerce, grain trade) & Saturn (agriculture, harvest time).
+    // ⚠️ DRAFT — verified against 1225 manuscript result only; no classical textual source found yet.
+    Wheat(arabicTitle = "سهم الحنطة", bodies = Body.Mercury to Body.Saturn),
+
+    // Part of Grapes: day = ASC + ♃ − ♀, night = ASC + ♀ − ♃
+    // Jupiter & Venus (the two benefics, abundance and pleasure).
+    // ⚠️ DRAFT — verified against 1225 manuscript result only; no classical textual source found yet.
+    Grapes(arabicTitle = "سهم العنب", bodies = Body.Jupiter to Body.Venus);
+
+    fun title() = if (language.isArabicScript) arabicTitle else name
+
+    // Arabic lots (سهام): formula is (ASC + x − y).mod(360), reversed for nocturnal charts
+    private fun lot(ascendant: Double, x: Double, y: Double) = (ascendant + x - y).mod(360.0)
+
+    fun calculate(ascendant: Double, isDiurnal: Boolean, time: Time) = lot(
+        ascendant = ascendant,
+        x = geocentricLongitudeAndDistanceOfBody(
+            if (isDiurnal) bodies.first else bodies.second, time,
+        ).first,
+        y = geocentricLongitudeAndDistanceOfBody(
+            if (isDiurnal) bodies.second else bodies.first, time,
+        ).first,
+    )
 }
 
 @VisibleForTesting
@@ -655,7 +710,7 @@ fun meanAscendingNode(time: Time): Double {
             if (prevLon.isNaN()) break
             val fraction = (time.tt - prevTt) / (event.time.tt - prevTt)
             // Normalize delta to [-180, 180] to handle retrograde wraparound near 0°/360°
-            val delta = ((nodeLon - prevLon + 180.0) % 360.0) - 180.0
+            val delta = (nodeLon - prevLon + 180).mod(360.0) - 180
             return (prevLon + fraction * delta).mod(360.0)
         }
         prevLon = nodeLon
