@@ -544,6 +544,8 @@ private fun AscendantZodiac(
         (ascendingNode + 180).mod(360f) to (if (language.isArabicScript) "ذنب" else "Ketu"),
         // Hatysa (ι Orionis Aa) = نير السيف "Bright one of the Sword"
         nairAlSaif(time) to (if (language.isArabicScript) "نیرالسیف" else "Hatysa"),
+        // Alula Borealis (ν UMa) = الأولى الشمالية "The First Northern [Spring]"
+        alulaBorealis(time) to (if (language.isArabicScript) "الأولى الشمالية" else "Alula Borealis"),
     ).map { (value, title) -> Triple(Zodiac.fromTropical(value), value, title) }
 
     fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
@@ -599,6 +601,14 @@ fun nairAlSaif(time: Time): Double {
     // RA = 05h 35m 25.982s → 5.59055h, Dec = −05° 54′ 35.6″ → −5.9099°, distance ≈ 1340 ly
     defineStar(Body.Star1, 5.59055, -5.9099, 1340.0)
     return equatorialToEcliptic(geoVector(Body.Star1, time, Aberration.None)).elon
+}
+
+@VisibleForTesting
+fun alulaBorealis(time: Time): Double {
+    // Nu Ursae Majoris = الأولى الشمالية "The First Northern [Spring]", J2000 ICRS: HIP 55219
+    // RA = 11h 18m 28.737s → 11.3080h, Dec = +33° 05′ 39.51″ → +33.0943°, distance ≈ 399 ly
+    defineStar(Body.Star2, 11.3080, 33.0943, 399.0)
+    return equatorialToEcliptic(geoVector(Body.Star2, time, Aberration.None)).elon
 }
 
 @VisibleForTesting

@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.SNAKE
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.TIGER
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.alulaBorealis
 import com.byagowi.persiancalendar.ui.astronomy.houses
 import com.byagowi.persiancalendar.ui.astronomy.meanApogee
 import com.byagowi.persiancalendar.ui.astronomy.meanAscendingNode
@@ -289,7 +290,7 @@ class AstronomyTests {
             1398 to Zodiac.CANCER.with(24, 31),
             1400 to Zodiac.GEMINI.with(13, 39),
             1401 to Zodiac.TAURUS.with(23, 42),
-//            1402 to Zodiac.TAURUS.with(9, 29),
+            1402 to Zodiac.TAURUS.with(4, 23),
             1403 to Zodiac.ARIES.with(15, 44),
         ).map { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
@@ -304,6 +305,16 @@ class AstronomyTests {
         ).map { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             { assertEquals(expected, nairAlSaif(time), .1, "$year") }
+        }.run(::assertAll)
+    }
+
+    @Test
+    fun `Check alulaBorealis`() {
+        listOf(
+            1402 to Zodiac.VIRGO.with(6, 46),
+        ).map { (year, expected) ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            { assertEquals(expected, alulaBorealis(time), .25, "$year") }
         }.run(::assertAll)
     }
 
