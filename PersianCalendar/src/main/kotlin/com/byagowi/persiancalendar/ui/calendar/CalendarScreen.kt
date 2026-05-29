@@ -344,6 +344,7 @@ fun SharedTransitionScope.CalendarScreen(
                 today = today,
                 navigateToAstronomy = navigateToAstronomy,
                 navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                topPadding = (if (isShowDeviceCalendarEvents) 0 else 8).dp,
             )
         }).takeIf { enabledCalendars.size > 1 },
         (DetailsTab.Events to @Composable { appointments: ImmutableList<CalendarEvent<*>> ->
@@ -1100,6 +1101,7 @@ private fun SharedTransitionScope.CalendarsTab(
     today: Jdn,
     navigateToCalendarsPrioritySettings: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
+    topPadding: Dp,
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -1109,7 +1111,7 @@ private fun SharedTransitionScope.CalendarsTab(
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
             )
-            .padding(bottom = 12.dp),
+            .padding(top = topPadding, bottom = 12.dp),
     ) {
         CalendarsOverview(
             jdn = selectedDay,
