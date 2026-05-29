@@ -276,10 +276,10 @@ fun generateMoonInScorpioEntries(
     val yearEnd = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
     val (rangeStart, rangeEnd) = range
     val inRange = rangeStart..rangeEnd
-    var day = yearStart
-    while (lunarLongitude(day, hourOfDay = 0) in inRange) day -= 1
     var firstComing = markUpcoming
-    return buildList {
+    return sequence {
+        var day = yearStart
+        while (lunarLongitude(day, hourOfDay = 0) in inRange) day -= 1
         while (day <= yearEnd) {
             val startClock = searchLunarLongitude(day, rangeStart)
             if (startClock != null) {
@@ -289,7 +289,7 @@ fun generateMoonInScorpioEntries(
                 while (endClock == null) { endDay += 1; endClock = searchLunarLongitude(endDay, rangeEnd) }
                 val upcoming = firstComing && today <= startDay
                 if (upcoming) firstComing = false
-                add(
+                yield(
                     Entry(
                         startClock = startClock.toFormattedString(),
                         startDate = formatDate(startDay on mainCalendar),
@@ -302,5 +302,5 @@ fun generateMoonInScorpioEntries(
             }
             day += 1
         }
-    }
+    }.toList()
 }
