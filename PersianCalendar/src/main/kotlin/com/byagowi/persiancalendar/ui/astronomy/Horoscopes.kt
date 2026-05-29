@@ -565,7 +565,14 @@ private fun AscendantZodiac(
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
                 it.shortTitle(resources)
             }
-            appendAngle(house, houses[i])
+            appendAngle(
+                title = when (i) {
+                    0 -> (if (language.isArabicScript) "طالع" else "Ascendant") + "\n"
+                    6 -> (if (language.isArabicScript) "غارب" else "Descendant") + "\n"
+                    else -> ""
+                } + house,
+                value = houses[i],
+            )
             val bodies = bodiesZodiac[zodiac] ?: emptyList()
             bodies.forEach { (body, longitude) ->
                 appendLine()
@@ -597,6 +604,7 @@ private fun AscendantZodiac(
 
 @VisibleForTesting
 fun nairAlSaif(time: Time): Double {
+    // https://en.wikipedia.org/wiki/Iota_Orionis
     // Hatysa (ι Orionis Aa) = نير السيف "Bright one of the Sword", J2000 ICRS: HIP 26241
     // RA = 05h 35m 25.982s → 5.59055h, Dec = −05° 54′ 35.6″ → −5.9099°, distance ≈ 1340 ly
     defineStar(Body.Star1, 5.59055, -5.9099, 1340.0)
@@ -605,6 +613,7 @@ fun nairAlSaif(time: Time): Double {
 
 @VisibleForTesting
 fun alulaBorealis(time: Time): Double {
+    // https://en.wikipedia.org/wiki/Nu_Ursae_Majoris
     // Nu Ursae Majoris = الأولى الشمالية "The First Northern [Spring]", J2000 ICRS: HIP 55219
     // RA = 11h 18m 28.737s → 11.3080h, Dec = +33° 05′ 39.51″ → +33.0943°, distance ≈ 399 ly
     defineStar(Body.Star2, 11.3080, 33.0943, 399.0)
