@@ -385,9 +385,17 @@ class AstronomyTests {
             1329 to Zodiac.TAURUS,
             1330 to Zodiac.LEO,
 
+            // 1357 doesn't match
+            // 1379 to Zodiac.GEMINI, but it's cancer
+            1380 to Zodiac.VIRGO, // implied
+            1381 to Zodiac.SCORPIO, // implied
+            1382 to Zodiac.AQUARIUS, // implied
+            1384 to Zodiac.VIRGO, // implied
+
             // 1402 to Zodiac.CANCER, // implied
             // 1403 to Zodiac.LEO, // implied
-            1404 to Zodiac.CANCER,
+            1404 to Zodiac.CANCER, // Eslamieh one matches, Eghbal is way off
+            1405 to Zodiac.LIBRA, // Eslamieh one matches, Eghbal is way off
         ).map { (year, sign) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val ascendant = houses(35.68, 51.42, time)[0]
