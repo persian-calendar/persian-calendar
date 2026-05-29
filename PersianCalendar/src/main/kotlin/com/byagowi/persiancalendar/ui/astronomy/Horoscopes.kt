@@ -534,8 +534,15 @@ private fun AscendantZodiac(
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalResources.current
     val numFontStyle = SpanStyle() // to be used later, hopefully
-    val meanApogee = meanApogee(time)
-    val meanApogeeZodiac = Zodiac.fromTropical(meanApogee)
+    val ascendingNode = meanAscendingNode(time)
+    val extras = listOf(
+        meanApogee(time) to /*"⚸" + */stringResource(R.string.black_moon),
+        // North Node / Dragon's Head (ascending node, Rahu) — Moon crosses going north
+        ascendingNode to (if (language.isArabicScript) "رأس" else "Rahu"),
+        // South Node / Dragon's Tail (descending node, Ketu) — Moon crosses going south
+        (ascendingNode + 180).mod(360f) to (if (language.isArabicScript) "ذنب" else "Ketu"),
+    ).map { (value, title) -> Triple(Zodiac.fromTropical(value), value, title) }
+
     fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
         append(title + NBSP)
         withStyle(numFontStyle) { append(formatAngle(value % 30, abjad)) }
@@ -559,9 +566,9 @@ private fun AscendantZodiac(
                 appendLine()
                 appendAngle(stringResource(body.titleStringId), longitude)
             }
-            if (zodiac == meanApogeeZodiac) {
+            extras.filter { (sign) -> zodiac == sign }.forEach { (_, value, title) ->
                 appendLine()
-                appendAngle(/*"⚸" + */stringResource(R.string.black_moon), meanApogee)
+                appendAngle(title, value)
             }
         }
         Text(
@@ -588,7 +595,14 @@ fun meanApogee(time: Time): Double {
     val t = time.tt / 36525.0
     // https://ftp.space.dtu.dk/pub/DTU10/DTU10_TIDEMODEL/SOFTWARE/test_perth3.f#:~:text=lunar%20perigee
     val meanPerigee = ((-1.249172e-5 * t - 1.032e-2) * t + 4069.0137287) * t + 83.3532465
-    return (meanPerigee + 180) % 360
+    return (meanPerigee + 180).mod(360.0)
+}
+
+@VisibleForTesting
+fun meanAscendingNode(time: Time): Double {
+    val t = time.tt / 36525.0
+    // https://ftp.space.dtu.dk/pub/DTU10/DTU10_TIDEMODEL/SOFTWARE/test_perth3.f#:~:text=ascending%20lunar%20node
+    return (((2.22222e-6 * t + 2.0708e-3) * t - 1934.136261e0) * t + 125.04452e0).mod(360.0)
 }
 
 // True apogee's time is calculatable like this though not related to our usecase
