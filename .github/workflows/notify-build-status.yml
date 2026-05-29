@@ -6,7 +6,7 @@ on:
 
 jobs:
   on-success:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Unpin failure message
@@ -20,7 +20,7 @@ jobs:
             -d message_id=3716 \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
   on-failure:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Notify about the build failure
