@@ -272,41 +272,35 @@ fun generateMoonInScorpioEntries(
     markUpcoming: Boolean,
 ): List<Entry> {
     val today = Jdn.today()
-    val start = Jdn(mainCalendar.createDate(year, 1, 1))
-    val end = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
+    val yearStart = Jdn(mainCalendar.createDate(year, 1, 1))
+    val yearEnd = Jdn(mainCalendar.createDate(year + 1, 1, 1)) - 1
     val (rangeStart, rangeEnd) = range
-    val range = rangeStart..rangeEnd
+    val inRange = rangeStart..rangeEnd
+    var day = yearStart
+    while (lunarLongitude(day, hourOfDay = 0) in inRange) day -= 1
+    var firstComing = markUpcoming
     return buildList {
-        var firstComing = markUpcoming
-        var day = start
-        while (lunarLongitude(day, hourOfDay = 0) in range) day -= 1
-        while (day <= end) {
-            searchLunarLongitude(day, rangeStart)?.let parent@{ startClock ->
-//                while (lunarLongitude(day, hourOfDay = 0) in range) day += 1
+        while (day <= yearEnd) {
+            val startClock = searchLunarLongitude(day, rangeStart)
+            if (startClock != null) {
                 val startDay = day
-                while (true) {
-                    searchLunarLongitude(day, rangeEnd)?.let { endClock ->
-                        val endDay = day
-                        val upcoming = if (firstComing && today <= startDay) {
-                            firstComing = false
-                            true
-                        } else false
-                        add(
-                            Entry(
-                                startClock = startClock.toFormattedString(),
-                                startDate = formatDate(startDay on mainCalendar),
-                                endClock = endClock.toFormattedString(),
-                                endDate = formatDate(endDay on mainCalendar),
-                                upcoming = upcoming,
-                            ),
-                        )
-                        return@parent
-                    }
-                    day += 1
-                }
+                var endDay = day
+                var endClock = searchLunarLongitude(endDay, rangeEnd)
+                while (endClock == null) { endDay += 1; endClock = searchLunarLongitude(endDay, rangeEnd) }
+                val upcoming = firstComing && today <= startDay
+                if (upcoming) firstComing = false
+                add(
+                    Entry(
+                        startClock = startClock.toFormattedString(),
+                        startDate = formatDate(startDay on mainCalendar),
+                        endClock = endClock.toFormattedString(),
+                        endDate = formatDate(endDay on mainCalendar),
+                        upcoming = upcoming,
+                    ),
+                )
+                day = endDay
             }
             day += 1
-//            while (lunarLongitude(day + 1, hourOfDay = 0) !in range) day += 1
         }
     }
 }
