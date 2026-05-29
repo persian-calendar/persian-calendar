@@ -100,6 +100,7 @@ import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.defineStar
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
@@ -541,6 +542,8 @@ private fun AscendantZodiac(
         ascendingNode to (if (language.isArabicScript) "رأس" else "Rahu"),
         // South Node / Dragon's Tail (descending node, Ketu) — Moon crosses going south
         (ascendingNode + 180).mod(360f) to (if (language.isArabicScript) "ذنب" else "Ketu"),
+        // Hatysa (ι Orionis Aa) = نير السيف "Bright one of the Sword"
+        nairAlSaif(time) to (if (language.isArabicScript) "نیرالسیف" else "Hatysa"),
     ).map { (value, title) -> Triple(Zodiac.fromTropical(value), value, title) }
 
     fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
@@ -588,6 +591,14 @@ private fun AscendantZodiac(
             ),
         )
     }
+}
+
+@VisibleForTesting
+fun nairAlSaif(time: Time): Double {
+    // Hatysa (ι Orionis Aa) = نير السيف "Bright one of the Sword", J2000 ICRS: HIP 26241
+    // RA = 05h 35m 25.982s → 5.59055h, Dec = −05° 54′ 35.6″ → −5.9099°, distance ≈ 1340 ly
+    defineStar(Body.Star1, 5.59055, -5.9099, 1340.0)
+    return equatorialToEcliptic(geoVector(Body.Star1, time, Aberration.None)).elon
 }
 
 @VisibleForTesting

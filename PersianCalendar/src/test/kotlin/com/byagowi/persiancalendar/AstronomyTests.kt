@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.houses
 import com.byagowi.persiancalendar.ui.astronomy.meanApogee
 import com.byagowi.persiancalendar.ui.astronomy.meanAscendingNode
+import com.byagowi.persiancalendar.ui.astronomy.nairAlSaif
 import com.byagowi.persiancalendar.ui.astronomy.toAbjad
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
@@ -293,6 +294,16 @@ class AstronomyTests {
         ).map { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             { assertEquals(expected, meanAscendingNode(time), 1.7, "$year") }
+        }.run(::assertAll)
+    }
+
+    @Test
+    fun `Check nairAlSaif`() {
+        listOf(
+            1402 to Zodiac.GEMINI.with(23, 25),
+        ).map { (year, expected) ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            { assertEquals(expected, nairAlSaif(time), .1, "$year") }
         }.run(::assertAll)
     }
 
