@@ -294,7 +294,7 @@ class AstronomyTests {
             1403 to Zodiac.ARIES.with(15, 44),
         ).map { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            { assertEquals(expected, meanAscendingNode(time), 1.7, "$year") }
+            { assertEquals(expected, meanAscendingNode(time), .15, "$year") }
         }.run(::assertAll)
     }
 

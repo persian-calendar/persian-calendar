@@ -630,8 +630,29 @@ fun meanApogee(time: Time): Double {
 
 @VisibleForTesting
 fun meanAscendingNode(time: Time): Double {
-    val t = time.tt / 36525.0
+    // Interpolate the true ascending node between the nearest bracketing Moon node crossings.
+    // At an ascending crossing the Moon's longitude equals the ascending node longitude.
+    // At a descending crossing the ascending node longitude = Moon's longitude − 180°.
+    // Using both crossing kinds halves the interval (~13.6 days) for better accuracy.
+    var prevLon = Double.NaN
+    var prevTt = Double.NaN
+    for (event in moonNodesAfter(time.addDays(-16.0))) {
+        val moonLon = eclipticGeoMoon(event.time).lon
+        val nodeLon = if (event.kind == NodeEventKind.Ascending) moonLon
+        else (moonLon - 180.0).mod(360.0)
+        if (event.time.tt > time.tt) {
+            if (prevLon.isNaN()) break
+            val fraction = (time.tt - prevTt) / (event.time.tt - prevTt)
+            // Normalize delta to [-180, 180] to handle retrograde wraparound near 0°/360°
+            val delta = ((nodeLon - prevLon + 180.0) % 360.0) - 180.0
+            return (prevLon + fraction * delta).mod(360.0)
+        }
+        prevLon = nodeLon
+        prevTt = event.time.tt
+    }
+    // Fallback: polynomial formula for the mean ascending node
     // https://ftp.space.dtu.dk/pub/DTU10/DTU10_TIDEMODEL/SOFTWARE/test_perth3.f#:~:text=ascending%20lunar%20node
+    val t = time.tt / 36525.0
     return (((2.22222e-6 * t + 2.0708e-3) * t - 1934.136261e0) * t + 125.04452e0).mod(360.0)
 }
 
