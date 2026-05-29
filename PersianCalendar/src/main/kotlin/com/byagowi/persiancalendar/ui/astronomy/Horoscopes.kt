@@ -99,12 +99,14 @@ import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.NodeEventKind
 import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.defineStar
+import io.github.cosinekitty.astronomy.Vector
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
+import io.github.cosinekitty.astronomy.moonNodesAfter
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.CivilDate
@@ -116,7 +118,9 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.TimeZone
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     val degrees = value.toInt()
@@ -606,18 +610,25 @@ private fun AscendantZodiac(
 fun nairAlSaif(time: Time): Double {
     // https://en.wikipedia.org/wiki/Iota_Orionis
     // Hatysa (ι Orionis Aa) = نير السيف "Bright one of the Sword", J2000 ICRS: HIP 26241
-    // RA = 05h 35m 25.982s → 5.59055h, Dec = −05° 54′ 35.6″ → −5.9099°, distance ≈ 1340 ly
-    defineStar(Body.Star1, 5.59055, -5.9099, 1340.0)
-    return equatorialToEcliptic(geoVector(Body.Star1, time, Aberration.None)).elon
+    // RA = 05h 35m 25.982s → 5.59055h, Dec = −05° 54′ 35.6″ → −5.9099°
+    return starEclipticLon(5.59055, -5.9099, time)
 }
 
 @VisibleForTesting
 fun alulaBorealis(time: Time): Double {
     // https://en.wikipedia.org/wiki/Nu_Ursae_Majoris
     // Nu Ursae Majoris = الأولى الشمالية "The First Northern [Spring]", J2000 ICRS: HIP 55219
-    // RA = 11h 18m 28.737s → 11.3080h, Dec = +33° 05′ 39.51″ → +33.0943°, distance ≈ 399 ly
-    defineStar(Body.Star2, 11.3080, 33.0943, 399.0)
-    return equatorialToEcliptic(geoVector(Body.Star2, time, Aberration.None)).elon
+    // RA = 11h 18m 28.737s → 11.3080h, Dec = +33° 05′ 39.51″ → +33.0943°
+    return starEclipticLon(11.3080, 33.0943, time)
+}
+
+// Converts J2000 ICRS equatorial coordinates (RA in hours, Dec in degrees) to
+// ecliptic longitude in degrees, without mutating any global state.
+private fun starEclipticLon(raHours: Double, decDeg: Double, time: Time): Double {
+    val ra = raHours * (Math.PI / 12.0)
+    val dec = decDeg * (Math.PI / 180.0)
+    val cosD = cos(dec)
+    return equatorialToEcliptic(Vector(cosD * cos(ra), cosD * sin(ra), sin(dec), time)).elon
 }
 
 @VisibleForTesting
