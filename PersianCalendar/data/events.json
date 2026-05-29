@@ -534,7 +534,8 @@
       "title": "گشایش مجلس خبرگان برای بررسی نهایی قانون اساسی جمهوری اسلامی ایران (۱۳۵۸ ه‍.ش)" },
 
     { "holiday": false, "month": 5, "day": 30, "type": "Iran",
-      "title": "روز بزرگداشت علامهٔ مجلسی" },
+      "title": "روز بزرگداشت علامهٔ مجلسی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمدباقر_مجلسی" } },
 
     { "holiday": false, "month": 5, "day": 31, "type": "Iran",
       "title": "روز صنعت دفاعی" },
@@ -599,7 +600,8 @@
       "title": "روز تعاون" },
 
     { "holiday": false, "month": 6, "day": 13, "type": "Iran",
-      "title": "روز بزرگداشت ابوریحان بیرونی" },
+      "title": "روز بزرگداشت ابوریحان بیرونی",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/ابوریحان_بیرونی" } },
 
     { "holiday": false, "month": 6, "day": 13, "type": "Iran",
       "title": "روز علوم پایه" },
@@ -658,10 +660,7 @@
       "title": "روز گردشگری" },
 
     { "holiday": false, "month": 7, "day": 7, "type": "Iran",
-      "title": "شهادت سرداران اسلام: فلاحی، فکوری، نامجو، کلاهدوز و جهان‌آرا (۱۳۶۰ ه‍.ش)" },
-
-    { "holiday": false, "month": 7, "day": 7, "type": "Iran",
-      "title": "روز بزرگداشت فرماندهان شهید دفاع مقدس" },
+      "title": "روز بزرگداشت فرماندهان شهید دفاع مقدس ـــ شهادت سرداران اسلام: فلاحی، فکوری، نامجو، کلاهدوز و جهان‌آرا (۱۳۶۰ ه‍.ش)" },
 
     { "holiday": false, "month": 7, "day": 7, "type": "Iran",
       "title": "روز آتش‌نشانی و ایمنی" },
@@ -803,7 +802,8 @@
       "title": "روز زیتون" },
 
     { "holiday": false, "month": 9, "day": 5, "type": "Iran",
-      "title": "تشکیل بسیج مستضعفان به فرمان حضرت امام خمینی (ره) (۱۳۵۸ ه‍.ش) ـــ تشکیل بسیج مستضعفان (۱۳۵۸ ه‍.ش)" },
+      "title": "تشکیل بسیج مستضعفان به فرمان حضرت امام خمینی (ره) (۱۳۵۸ ه‍.ش) ـــ تشکیل بسیج مستضعفان",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/بسیج" } },
 
     { "holiday": false, "month": 9, "day": 5, "type": "Iran",
       "title": "سالروز قیام مردم گرگان (۱۳۵۷ ه‍.ش)" },
@@ -1269,11 +1269,14 @@
 
   "Hijri Calendar": [
     { "holiday": true, "month": 1, "day": 10, "type": "Afghanistan",
-      "title": "روز عاشورا" },
+      "title": "روز عاشورا",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/عاشورا" } },
     { "holiday": true, "month": 3, "day": 12, "type": "Afghanistan",
-      "title": "روز میلاد نبی (ص)" },
+      "title": "روز میلاد نبی (ص)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/میلاد_پیامبر" } },
     { "holiday": true, "month": 9, "day": 1, "type": "Afghanistan",
-      "title": "اول ماه مبارک رمضان" },
+      "title": "اول ماه مبارک رمضان",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/رمضان" } },
     { "holiday": false, "month": 9, "day": 15, "type": "Afghanistan",
       "title": "روز حمایت از اطفال آسیب‌پذیر، یتیم و بی‌سرپرست" },
     { "holiday": false, "month": 9, "day": 27, "type": "Afghanistan",
@@ -1360,13 +1363,14 @@
     { "holiday": false, "month": 7, "day": 3, "type": "Iran",
       "title": "شهادت حضرت امام علی النقی الهادی (ع) (۲۵۴ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 10, "type": "Iran",
-      "title": "ولادت حضرت امام محمد تقی (ع) «جوادالائمه» (۱۹۵ ه‍.ق)" },
+      "title": "ولادت حضرت امام محمد تقی (ع) «جوادالائمه» (۱۹۵ ه‍.ق)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/محمد_تقی" } },
     { "holiday": true, "month": 7, "day": 13, "type": "Iran",
-      "title": "ولادت حضرت امام علی (ع) (۲۳ سال قبل از هجرت)" },
+      "title": "ولادت حضرت امام علی (ع) (۲۳ سال قبل از هجرت) ـــ روز پدر",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/علی" } },
     { "holiday": false, "month": 7, "day": 13, "type": "Iran",
-      "title": "روز پدر" },
-    { "holiday": false, "month": 7, "day": 13, "type": "Iran",
-      "title": "آغاز ایام‌البیض (اعتکاف)" },
+      "title": "آغاز ایام‌البیض (اعتکاف)",
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روزهای_سپید" } },
     { "holiday": false, "month": 7, "day": 15, "type": "Iran",
       "title": "ارتحال حضرت زینب (س) (۶۲ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 15, "type": "Iran",
