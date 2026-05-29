@@ -316,7 +316,7 @@
       "title": "رحلت حضرت امام خمینی (ره) رهبر کبیر انقلاب و بنیان‌گذار جمهوری اسلامی ایران (۱۳۶۸ ه‍.ق)",
       "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/مرگ_و_تشییع_سید_روح‌الله_خمینی" } },
 
-    { "holiday": true, "month": 3, "day": 14, "type": "Iran",
+    { "holiday": false, "month": 3, "day": 14, "type": "Iran",
       "title": "انتخاب حضرت آیت‌الله امام خامنه‌ای به رهبری (۱۳۶۸ ه‍.ش)",
       "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/برگزیدن_رهبر_جمهوری_اسلامی_ایران_(۱۳۶۸)" } },
 
