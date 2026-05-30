@@ -129,7 +129,6 @@ private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     return numeral.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
-@VisibleForTesting
 fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
     return when (body) {
         Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
@@ -550,9 +549,9 @@ private fun AscendantZodiac(
         nairAlSaif(time) to (if (language.isArabicScript) "نیرالسیف" else "Hatysa"),
         // Alula Borealis (ν UMa) = الأولى الشمالية "The First Northern [Spring]"
         alulaBorealis(time) to (if (language.isArabicScript) "الأولى الشمالية" else "Alula Borealis"),
-    ) + run {
+    ) /*+ run {
         Lot.entries.map { lot -> lot.calculate(houses[0], isDiurnal, time) to lot.title() }
-    }).map { (longitude, title) -> Triple(Zodiac.fromTropical(longitude), longitude, title) }
+    }*/).map { (longitude, title) -> Triple(Zodiac.fromTropical(longitude), longitude, title) }
 
     val numFontStyle = SpanStyle() // to be used later, hopefully
     fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
@@ -617,56 +616,6 @@ fun isDiurnal(houses: List<Double>, time: Time): Boolean {
     val ascendant = houses[0]
     val descendant = houses[6]
     return (sunLon - descendant).mod(360.0) < (ascendant - descendant).mod(360.0)
-}
-
-// Arabic lots (سهام) — Abu Ma'shar / classical Islamic tradition for year charts
-// https://en.wikipedia.org/wiki/Arabic_parts
-// Comprehensive body-pair reference: https://web.archive.org/web/2024/https://public.websites.umich.edu/~pfa/dreamhouse/attic/lots/lotslist.html
-@VisibleForTesting
-enum class Lot(
-    private val arabicTitle: String,
-    private val bodies: Pair<Body, Body>,
-) {
-    // Part of Fortune: day = ASC + ☽ − ☉, night = ASC + ☉ − ☽
-    // Moon (body/material fortune) & Sun (vitality); the two luminaries, the foundational lot.
-    // https://en.wikipedia.org/wiki/Arabic_parts#Calculating_the_Lot_of_Fortune
-    Fortune(arabicTitle = "سهم السعادة", bodies = Body.Moon to Body.Sun),
-
-    // Part of Kings: day = ASC + ☉ − ♃, night = ASC + ♃ − ☉
-    // Sun (kingship) & Jupiter (royal benefic) — both diurnal, both associated with rule and authority.
-    // Note: classical "Kings" lots (Michigan list) use ☽/♄ or ☽/♂, not ☉/♃. The ☉/♃ pair
-    // appears classically as "Pomegranate" with OPPOSITE day/night (day = ♃ − ☉). This name
-    // and assignment come from the 1225 manuscript and no other confirming source is known yet.
-    // ⚠️ DRAFT — brute-forced from the 1225 manuscript; no classical textual source confirms this.
-    Sultan(arabicTitle = "سهم السلطان", bodies = Body.Sun to Body.Jupiter),
-
-    // Part of Wheat: day = ASC + ☿ − ♄, night = ASC + ♄ − ☿
-    // Mercury (commerce, grain trade) & Saturn (agriculture, harvest time).
-    // The ☿/♄ pair with the same day/night reversal appears in Abu Ma'shar as "Danger, Violence,
-    // Debt" (Michigan lot list, source AL = Albumasar). Different name, same formula structure.
-    // ⚠️ DRAFT — verified against 1225 manuscript result only; no source confirms the wheat name.
-    Wheat(arabicTitle = "سهم الحنطة", bodies = Body.Mercury to Body.Saturn),
-
-    // Part of Grapes: day = ASC + ♃ − ♀, night = ASC + ♀ − ♃
-    // Jupiter & Venus (the two benefics, abundance and pleasure).
-    // The ♃/♀ day formula appears in Abu Ma'shar as "Love" (Michigan lot list, source AL).
-    // ⚠️ DRAFT — verified against 1225 manuscript result only; no source confirms the grape name.
-    Grapes(arabicTitle = "سهم العنب", bodies = Body.Jupiter to Body.Venus);
-
-    fun title() = if (language.isArabicScript) arabicTitle else name
-
-    // Arabic lots (سهام): formula is (ASC + x − y).mod(360), reversed for nocturnal charts
-    private fun lot(ascendant: Double, x: Double, y: Double) = (ascendant + x - y).mod(360.0)
-
-    fun calculate(ascendant: Double, isDiurnal: Boolean, time: Time) = lot(
-        ascendant = ascendant,
-        x = geocentricLongitudeAndDistanceOfBody(
-            if (isDiurnal) bodies.first else bodies.second, time,
-        ).first,
-        y = geocentricLongitudeAndDistanceOfBody(
-            if (isDiurnal) bodies.second else bodies.first, time,
-        ).first,
-    )
 }
 
 @VisibleForTesting
