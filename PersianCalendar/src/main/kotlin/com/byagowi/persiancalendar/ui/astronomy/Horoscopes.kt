@@ -129,7 +129,8 @@ private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     return numeral.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
-internal fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
+@VisibleForTesting
+fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
     return when (body) {
         Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
         Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
