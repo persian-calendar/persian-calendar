@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -75,7 +76,6 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
-import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 fun ShiftWorkDialog(

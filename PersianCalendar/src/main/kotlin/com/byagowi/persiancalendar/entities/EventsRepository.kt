@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
 import android.content.SharedPreferences
+import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -20,7 +21,6 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.toPersistentMap
-import org.jetbrains.annotations.VisibleForTesting
 import java.util.TimeZone
 
 data class EventsRepository(

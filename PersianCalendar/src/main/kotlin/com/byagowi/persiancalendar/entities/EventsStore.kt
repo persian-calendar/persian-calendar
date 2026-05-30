@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.entities
 
+import androidx.annotation.VisibleForTesting
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-import org.jetbrains.annotations.VisibleForTesting
 
 @JvmInline
 value class EventsStore<T : CalendarEvent<out AbstractDate>>

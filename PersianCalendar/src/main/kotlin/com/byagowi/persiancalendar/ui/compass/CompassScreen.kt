@@ -6,6 +6,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
@@ -109,7 +110,6 @@ import com.byagowi.persiancalendar.utils.handleAngleWrappingDegrees
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.toEarthPosition
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.VisibleForTesting
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt

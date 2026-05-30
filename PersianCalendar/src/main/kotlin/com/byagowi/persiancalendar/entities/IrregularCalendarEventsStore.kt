@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
+import androidx.annotation.VisibleForTesting
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
@@ -12,7 +13,6 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.collections.immutable.toPersistentMap
-import org.jetbrains.annotations.VisibleForTesting
 
 class IrregularCalendarEventsStore(private val eventsRepository: EventsRepository) {
     private fun createCache(type: Calendar) =
