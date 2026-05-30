@@ -620,6 +620,7 @@ fun isDiurnal(houses: List<Double>, time: Time): Boolean {
 
 // Arabic lots (سهام) — Abu Ma'shar / classical Islamic tradition for year charts
 // https://en.wikipedia.org/wiki/Arabic_parts
+// Comprehensive body-pair reference: https://web.archive.org/web/2024/https://public.websites.umich.edu/~pfa/dreamhouse/attic/lots/lotslist.html
 @VisibleForTesting
 enum class Lot(
     private val arabicTitle: String,
@@ -632,17 +633,23 @@ enum class Lot(
 
     // Part of Kings: day = ASC + ☉ − ♃, night = ASC + ♃ − ☉
     // Sun (kingship) & Jupiter (royal benefic) — both diurnal, both associated with rule and authority.
-    // ⚠️ DRAFT — formula brute-forced from the 1225 manuscript chart; no classical textual source found yet.
+    // Note: classical "Kings" lots (Michigan list) use ☽/♄ or ☽/♂, not ☉/♃. The ☉/♃ pair
+    // appears classically as "Pomegranate" with OPPOSITE day/night (day = ♃ − ☉). This name
+    // and assignment come from the 1225 manuscript and no other confirming source is known yet.
+    // ⚠️ DRAFT — brute-forced from the 1225 manuscript; no classical textual source confirms this.
     Sultan(arabicTitle = "سهم السلطان", bodies = Body.Sun to Body.Jupiter),
 
     // Part of Wheat: day = ASC + ☿ − ♄, night = ASC + ♄ − ☿
     // Mercury (commerce, grain trade) & Saturn (agriculture, harvest time).
-    // ⚠️ DRAFT — verified against 1225 manuscript result only; no classical textual source found yet.
+    // The ☿/♄ pair with the same day/night reversal appears in Abu Ma'shar as "Danger, Violence,
+    // Debt" (Michigan lot list, source AL = Albumasar). Different name, same formula structure.
+    // ⚠️ DRAFT — verified against 1225 manuscript result only; no source confirms the wheat name.
     Wheat(arabicTitle = "سهم الحنطة", bodies = Body.Mercury to Body.Saturn),
 
     // Part of Grapes: day = ASC + ♃ − ♀, night = ASC + ♀ − ♃
     // Jupiter & Venus (the two benefics, abundance and pleasure).
-    // ⚠️ DRAFT — verified against 1225 manuscript result only; no classical textual source found yet.
+    // The ♃/♀ day formula appears in Abu Ma'shar as "Love" (Michigan lot list, source AL).
+    // ⚠️ DRAFT — verified against 1225 manuscript result only; no source confirms the grape name.
     Grapes(arabicTitle = "سهم العنب", bodies = Body.Jupiter to Body.Venus);
 
     fun title() = if (language.isArabicScript) arabicTitle else name
