@@ -453,9 +453,8 @@ fun otherCalendarFormat(
     val endOfYear = ((Jdn(
         calendar.createDate(yearViewYear + 1, 1, 1),
     ) - 1) on otherCalendar).year
-    return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) {
-        numeral.format(it)
-    }
+    return listOf(startOfYear, endOfYear).distinct()
+        .joinToString(EN_DASH, transform = numeral::format)
 }
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String): String? {
