@@ -3,9 +3,6 @@
     <issue id="ComposeUnstableReceiver">
         <option name="stability-checks" value="true" />
     </issue>
-    <issue id="ComposeMutableParameters">
-        <option name="stability-checks" value="true" />
-    </issue>
     <issue id="ComposeUnstableCollections">
         <option name="stability-checks" value="true" />
     </issue>
