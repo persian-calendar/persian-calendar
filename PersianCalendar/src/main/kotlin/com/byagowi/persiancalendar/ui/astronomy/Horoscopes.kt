@@ -526,19 +526,18 @@ private fun AscendantZodiac(
     modifier: Modifier = Modifier,
     progress: Float = 1f,
 ) {
-    val planetData = ascendantBodies.map { body ->
+    val bodiesZodiac = ascendantBodies.map { body ->
         when (body) {
             // Sometimes 359.99 puts it in an incorrect house so let's just hardcode it
             Body.Sun if isYearEquinox -> body to .0
             else -> body to geocentricLongitudeAndDistanceOfBody(body, time).first
         }
-    }.sortedBy { (_, longitude) -> longitude }.toMap()
-    val bodiesZodiac =
-        planetData.entries.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
+    }.sortedBy { (_, longitude) -> longitude }.groupBy { (_, longitude) ->
+        Zodiac.fromTropical(longitude)
+    }
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val ascendingNode = meanAscendingNode(time)
-    val isDiurnal = isDiurnal(houses, time)
     val extras = (listOf(
         meanApogee(time) to /*"⚸" + */stringResource(R.string.black_moon),
         // North Node / Dragon's Head (ascending node, Rahu) — Moon crosses going north
