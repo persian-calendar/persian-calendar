@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
-import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.widget.FrameLayout
@@ -34,7 +33,6 @@ import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
 
-@SuppressLint("ComposeUnstableReceiver")
 abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
 ) {

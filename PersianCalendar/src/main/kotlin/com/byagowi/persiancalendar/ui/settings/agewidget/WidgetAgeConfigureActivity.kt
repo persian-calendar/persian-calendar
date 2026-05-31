@@ -40,7 +40,6 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 
-@SuppressLint("ComposeUnstableReceiver")
 class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
     override fun onAfterCreate() {

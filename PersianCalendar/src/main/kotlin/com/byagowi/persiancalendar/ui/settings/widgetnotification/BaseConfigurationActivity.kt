@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -44,7 +43,6 @@ import com.byagowi.persiancalendar.ui.utils.isLandscape
 
 // This is used in various widgets screens, screensaver and wallpaper settings screens
 // Please test the different usages when modifying
-@SuppressLint("ComposeUnstableReceiver")
 abstract class BaseConfigurationActivity(
     private val contentNeedsMaxHeight: Boolean = false,
 ) : BaseActivity() {

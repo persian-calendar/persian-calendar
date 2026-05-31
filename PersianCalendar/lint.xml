@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="ComposeUnstableReceiver">
-        <option name="stability-checks" value="true" />
-    </issue>
     <issue id="ComposeUnstableCollections">
         <option name="stability-checks" value="true" />
     </issue>

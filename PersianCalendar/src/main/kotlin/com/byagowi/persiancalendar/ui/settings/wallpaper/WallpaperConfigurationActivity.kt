@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.wallpaper
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.ColumnScope
@@ -17,7 +16,6 @@ import com.byagowi.persiancalendar.global.wallpaperDark
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.BaseConfigurationActivity
 
-@SuppressLint("ComposeUnstableReceiver")
 class WallpaperConfigurationActivity : BaseConfigurationActivity() {
     @Composable
     override fun ColumnScope.Settings() {
