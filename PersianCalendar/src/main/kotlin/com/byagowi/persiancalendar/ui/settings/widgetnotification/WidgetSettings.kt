@@ -46,8 +46,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import java.util.TimeZone
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
@@ -98,9 +96,9 @@ fun WidgetSettings(modifier: Modifier = Modifier) {
         }
         SettingsMultiSelect(
             key = PREF_WHAT_TO_SHOW_WIDGETS,
-            entries = widgetCustomizations.values.map { stringResource(it) }.toImmutableList(),
-            entryValues = remember { widgetCustomizations.keys.toImmutableList() },
-            persistedSet = whatToShowOnWidgets.toImmutableSet(),
+            entries = widgetCustomizations.values.map { stringResource(it) },
+            entryValues = remember { widgetCustomizations.keys.toList() },
+            persistedSet = whatToShowOnWidgets,
             dialogTitleResId = R.string.which_one_to_show,
             title = stringResource(R.string.customize_widget),
             summary = stringResource(R.string.customize_widget_summary),

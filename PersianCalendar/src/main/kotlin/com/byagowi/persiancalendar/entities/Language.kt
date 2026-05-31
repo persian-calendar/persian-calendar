@@ -23,12 +23,6 @@ import com.byagowi.persiancalendar.utils.listOf7Items
 import com.byagowi.persiancalendar.utils.logException
 import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.persiancalendar.praytimes.CalculationMethod
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableList
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.roundToLong
@@ -269,23 +263,20 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    val defaultCalendars: ImmutableList<Calendar>
+    val defaultCalendars: List<Calendar>
         get() = when {
-            this == FA -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
-            this == CKB -> if (userTimeZoneId == IRAN_TIMEZONE_ID) persistentListOf(
+            this == FA -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            this == CKB -> if (userTimeZoneId == IRAN_TIMEZONE_ID) listOf(
                 Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
-            ) else persistentListOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
+            ) else listOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
 
-            this == EN_IR -> persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN)
-            this == TR -> persistentListOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
-            this == AR || this == OTA -> persistentListOf(Calendar.ISLAMIC, Calendar.GREGORIAN)
-            prefersGregorianCalendar -> persistentListOf(Calendar.GREGORIAN)
-            this == NE -> persistentListOf(Calendar.NEPALI, Calendar.GREGORIAN)
-            prefersPersianCalendar -> persistentListOf(
-                Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
-            )
-
-            else -> persistentListOf(Calendar.GREGORIAN)
+            this == EN_IR -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN)
+            this == TR -> listOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
+            this == AR || this == OTA -> listOf(Calendar.ISLAMIC, Calendar.GREGORIAN)
+            prefersGregorianCalendar -> listOf(Calendar.GREGORIAN)
+            this == NE -> listOf(Calendar.NEPALI, Calendar.GREGORIAN)
+            prefersPersianCalendar -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            else -> listOf(Calendar.GREGORIAN)
         }
 
     val defaultWeekStart
@@ -296,53 +287,53 @@ enum class Language(val code: String, val nativeName: String) {
         }
     val defaultWeekStartAsString get() = defaultWeekStart.ordinal.toString()
 
-    val defaultWeekEnds: ImmutableSet<WeekDay>
+    val defaultWeekEnds: Set<WeekDay>
         get() = when {
-            this == FA || isIranExclusive -> persistentSetOf(WeekDay.FRIDAY)
-            isAfghanistanExclusive -> persistentSetOf(WeekDay.FRIDAY)
-            isNepali -> persistentSetOf(WeekDay.SATURDAY)
-            prefersGregorianCalendar -> persistentSetOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
-            else -> persistentSetOf(WeekDay.FRIDAY)
+            this == FA || isIranExclusive -> setOf(WeekDay.FRIDAY)
+            isAfghanistanExclusive -> setOf(WeekDay.FRIDAY)
+            isNepali -> setOf(WeekDay.SATURDAY)
+            prefersGregorianCalendar -> setOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
+            else -> setOf(WeekDay.FRIDAY)
         }
     val defaultWeekEndsAsStringSet get() = defaultWeekEnds.map { it.ordinal.toString() }.toSet()
 
-    val additionalShiftWorkTitles: ImmutableList<String>
+    val additionalShiftWorkTitles: List<String>
         get() = when (this) {
-            FA -> persistentListOf("مرخصی", "صبح/شب", "صبح/عصر", "عصر/شب")
-            else -> persistentListOf()
+            FA -> listOf("مرخصی", "صبح/شب", "صبح/عصر", "عصر/شب")
+            else -> emptyList()
         }
 
     fun getPersianMonths(
         resources: Resources,
         alternativeMonthsInAzeri: Boolean,
         afghanistanHolidaysIsEnable: Boolean,
-    ): ImmutableList<String> = when (this) {
+    ): List<String> = when (this) {
         FA -> persianCalendarMonthsInPersian
         FA_AF -> persianCalendarMonthsInDariOrPersianOldEra
         AZB -> if (alternativeMonthsInAzeri) persianCalendarMonthsInAzeriAlternative
-        else persianCalendarMonths.map(resources::getString).toImmutableList()
+        else persianCalendarMonths.map(resources::getString)
 
         AR -> if (userTimeZoneId == IRAN_TIMEZONE_ID) persianCalendarMonthsInArabicIran
-        else persianCalendarMonths.map(resources::getString).toImmutableList()
+        else persianCalendarMonths.map(resources::getString)
 
         EN_US -> when {
             userTimeZoneId == AFGHANISTAN_TIMEZONE_ID -> persianCalendarMonthsInDariOrPersianOldEraTransliteration
             afghanistanHolidaysIsEnable -> persianCalendarMonthsInDariOrPersianOldEraTransliteration
-            else -> persianCalendarMonths.map(resources::getString).toImmutableList()
+            else -> persianCalendarMonths.map(resources::getString)
         }
 
-        else -> persianCalendarMonths.map(resources::getString).toImmutableList()
+        else -> persianCalendarMonths.map(resources::getString)
     }
 
-    fun getIslamicMonths(resources: Resources): ImmutableList<String> = when (this) {
+    fun getIslamicMonths(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> islamicCalendarMonthsInPersian
-        else -> islamicCalendarMonths.map(resources::getString).toImmutableList()
+        else -> islamicCalendarMonths.map(resources::getString)
     }
 
     fun getGregorianMonths(
         resources: Resources,
         alternativeGregorianMonths: Boolean,
-    ): ImmutableList<String> = when (this) {
+    ): List<String> = when (this) {
         FA -> {
             if (alternativeGregorianMonths) gregorianCalendarMonthsInPersianEnglishPronunciation
             else gregorianCalendarMonthsInPersian
@@ -352,27 +343,27 @@ enum class Language(val code: String, val nativeName: String) {
 
         AR -> {
             if (alternativeGregorianMonths) easternGregorianCalendarMonths
-            else gregorianCalendarMonths.map(resources::getString).toImmutableList()
+            else gregorianCalendarMonths.map(resources::getString)
         }
 
-        else -> gregorianCalendarMonths.map(resources::getString).toImmutableList()
+        else -> gregorianCalendarMonths.map(resources::getString)
     }
 
-    fun getNepaliMonths(): ImmutableList<String> = when (this) {
+    fun getNepaliMonths(): List<String> = when (this) {
         NE -> nepaliMonths
         else -> nepaliMonthsInEnglish
     }
 
-    fun getWeekDays(resources: Resources): ImmutableList<String> = when (this) {
+    fun getWeekDays(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInPersian
         EN_IR -> weekDaysInEnglishIran
-        else -> WeekDay.stringIds.map { resources.getString(it) }.toImmutableList()
+        else -> WeekDay.stringIds.map { resources.getString(it) }
     }
 
-    fun getWeekDaysInitials(resources: Resources): ImmutableList<String> = when (this) {
+    fun getWeekDaysInitials(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInitialsInPersian
         EN_IR -> weekDaysInitialsInEnglishIran
-        else -> WeekDay.shortStringIds.map(resources::getString).toImmutableList()
+        else -> WeekDay.shortStringIds.map(resources::getString)
     }
 
     fun getCountryName(cityItem: CityItem): String = when {
@@ -676,7 +667,7 @@ enum class Language(val code: String, val nativeName: String) {
 
         fun valueOfLanguageCode(languageCode: String) = entries.find { it.code == languageCode }
 
-        private val arabicSortReplacements = persistentMapOf(
+        private val arabicSortReplacements = mapOf(
             'ی' to "ي",
             'ک' to "ك",
             'گ' to "كی",
@@ -789,9 +780,9 @@ enum class Language(val code: String, val nativeName: String) {
             "Kartik", "Mangsir", "Paush", "Mangh", "Falgun", "Chaitra",
         )
 
-        private val irCodeOrder = persistentListOf("zz", "ir", "tr", "af", "iq")
-        private val afCodeOrder = persistentListOf("zz", "af", "ir", "tr", "iq")
-        private val arCodeOrder = persistentListOf("zz", "iq", "tr", "ir", "af")
-        private val trCodeOrder = persistentListOf("zz", "tr", "ir", "iq", "af")
+        private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")
+        private val afCodeOrder = listOf("zz", "af", "ir", "tr", "iq")
+        private val arCodeOrder = listOf("zz", "iq", "tr", "ir", "af")
+        private val trCodeOrder = listOf("zz", "tr", "ir", "iq", "af")
     }
 }

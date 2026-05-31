@@ -15,15 +15,13 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
+import kotlin.collections.emptyList
 
 @Stable
 data class ShiftWorkSettings(
     val recurs: Boolean,
     val startingJdn: Jdn?,
-    val records: ImmutableList<ShiftWorkRecord>,
+    val records: List<ShiftWorkRecord>,
 ) {
     constructor(preferences: SharedPreferences) : this(
         recurs = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true),
@@ -31,8 +29,7 @@ data class ShiftWorkSettings(
         records = (preferences.getString(PREF_SHIFT_WORK_SETTING, null)
             .orEmpty()).splitFilterNotEmpty(",").map { it.splitFilterNotEmpty("=") }
             .filter { it.size == 2 }
-            .map { ShiftWorkRecord(type = it[0], length = it[1].toIntOrNull() ?: 1) }
-            .toImmutableList(),
+            .map { ShiftWorkRecord(type = it[0], length = it[1].toIntOrNull() ?: 1) },
     )
 
     private val totalDays: Int = records.sumOf { it.length }
@@ -76,6 +73,6 @@ data class ShiftWorkSettings(
     }
 
     companion object {
-        val empty = ShiftWorkSettings(true, null, persistentListOf())
+        val empty = ShiftWorkSettings(true, null, emptyList())
     }
 }

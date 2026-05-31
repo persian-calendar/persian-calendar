@@ -8,8 +8,8 @@ class GraphTests {
     @Test
     fun empty() {
         val g = Graph(0)
-        assertEquals(listOf(), g.connectedComponents())
-        assertEquals(listOf(), g.coloring())
+        assertEquals(emptyList(), g.connectedComponents())
+        assertEquals(emptyList(), g.coloring())
     }
 
     @Test

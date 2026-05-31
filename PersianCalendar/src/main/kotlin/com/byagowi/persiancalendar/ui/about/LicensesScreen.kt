@@ -69,7 +69,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SharedTransitionScope.LicensesScreen(
@@ -167,7 +166,7 @@ private fun BoxScope.Licenses() {
             val lines = it.trim().lines()
             val parts = lines.first().split(" - ")
             Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
-        }.toImmutableList()
+        }
     }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     val listState = rememberLazyListState()

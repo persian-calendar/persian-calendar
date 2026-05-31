@@ -70,8 +70,6 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.viewEvent
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -319,11 +317,11 @@ private const val ITEMS_COUNT = 365 * 2
 private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT / 2
 
 @Composable
-private fun eventsCache(refreshToken: Int): @Composable (Jdn) -> ImmutableList<CalendarEvent<*>> {
+private fun eventsCache(refreshToken: Int): @Composable (Jdn) -> List<CalendarEvent<*>> {
     val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
     val context = LocalContext.current
     return { jdn ->
-        if (jdn.value in emptyDays) persistentListOf() else {
+        if (jdn.value in emptyDays) emptyList() else {
             val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
             val events = readEvents(jdn, deviceEvents)
             if (events.isEmpty()) emptyDays += jdn.value

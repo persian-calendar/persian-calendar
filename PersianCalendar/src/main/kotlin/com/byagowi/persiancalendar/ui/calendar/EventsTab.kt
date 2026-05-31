@@ -102,9 +102,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -148,7 +145,7 @@ private val String.directionality
 
 @Composable
 fun DayEvents(
-    events: ImmutableList<CalendarEvent<*>>,
+    events: List<CalendarEvent<*>>,
     navigateToHolidaysSettings: ((String?) -> Unit),
     viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     modifier: Modifier = Modifier,
@@ -616,17 +613,16 @@ private fun EquinoxCountDownContent(
 fun readEvents(
     jdn: Jdn,
     deviceEvents: DeviceCalendarEventsStore,
-): ImmutableList<CalendarEvent<*>> =
-    sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language).toImmutableList()
+): List<CalendarEvent<*>> = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
 
 @Composable
 fun readEventsWithEquinox(
     jdn: Jdn,
     now: Long,
     deviceEvents: DeviceCalendarEventsStore,
-): ImmutableList<CalendarEvent<*>> {
+): List<CalendarEvent<*>> {
     val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
-    return (if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
+    return if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val resources = LocalResources.current
         val date = jdn.toPersianDate()
         val nextPersianYearDate = PersianDate(date.year + 1, 1, 1)
@@ -657,12 +653,12 @@ fun readEventsWithEquinox(
                 isHoliday = false,
                 date = date,
                 source = null,
-                metadata = persistentMapOf(),
+                metadata = emptyMap(),
                 remainingMillis = remainedTime,
             )
             listOf(event) + events
         } else events
-    } else events).toImmutableList()
+    } else events
 }
 
 fun sortEvents(events: List<CalendarEvent<*>>, language: Language): List<CalendarEvent<*>> {

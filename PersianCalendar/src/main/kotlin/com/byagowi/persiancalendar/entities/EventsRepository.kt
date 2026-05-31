@@ -20,7 +20,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.collections.immutable.toPersistentMap
 import java.util.TimeZone
 
 data class EventsRepository(
@@ -146,7 +145,7 @@ data class EventsRepository(
             record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
             else -> ""
         } + record.title.replace(" ـــ ", "، ")
-        val metadata = record.metadata.toPersistentMap().put(ORIGINAL_TITLE, record.title)
+        val metadata = record.metadata + (ORIGINAL_TITLE to record.title)
         val source = record.source
         return (when (calendar) {
             Calendar.SHAMSI -> {

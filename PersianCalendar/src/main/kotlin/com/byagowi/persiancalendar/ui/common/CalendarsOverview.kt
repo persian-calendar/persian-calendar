@@ -117,8 +117,6 @@ import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -127,7 +125,7 @@ fun SharedTransitionScope.CalendarsOverview(
     today: Jdn,
     selectedCalendar: Calendar,
     navigateToCalendarsPrioritySettings: () -> Unit,
-    shownCalendars: ImmutableList<Calendar>,
+    shownCalendars: List<Calendar>,
     isExpanded: Boolean,
     navigateToAstronomy: (Jdn) -> Unit,
     modifier: Modifier = Modifier,
@@ -326,7 +324,7 @@ fun SharedTransitionScope.CalendarsOverview(
         val progresses = remember(jdn, selectedCalendar, weekStart) {
             val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)
-            persistentListOf(
+            listOf(
                 Triple(R.string.week, jdn.weekDay - weekStart + 1, 7),
                 Triple(R.string.month, date.dayOfMonth, monthLength),
                 Triple(R.string.season, passedDaysInSeason, totalSeasonDays),
@@ -453,7 +451,7 @@ private fun AutoSizedBodyText(
 
 @Composable
 private fun CalendarsFlow(
-    calendarsToShow: ImmutableList<Calendar>,
+    calendarsToShow: List<Calendar>,
     jdn: Jdn,
     isExpanded: Boolean,
     numeral: Numeral,

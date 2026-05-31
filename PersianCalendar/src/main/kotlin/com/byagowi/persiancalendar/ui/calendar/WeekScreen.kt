@@ -160,8 +160,6 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.viewEvent
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import kotlin.math.abs
@@ -617,7 +615,7 @@ fun DaysView(
     numeral: Numeral,
     @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
-    content: (@Composable ColumnScope.(appointments: ImmutableList<CalendarEvent<*>>, headerScrollState: ScrollState, onHasContentChange: (Boolean) -> Unit) -> Unit)? = null,
+    content: (@Composable ColumnScope.(appointments: List<CalendarEvent<*>>, headerScrollState: ScrollState, onHasContentChange: (Boolean) -> Unit) -> Unit)? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -651,8 +649,7 @@ fun DaysView(
         val eventsWithoutTime = remember(events) {
             events.map { dayEvents ->
                 dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
-                    .toImmutableList()
-            }.toImmutableList()
+            }
         }
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
         var hasContent by remember { mutableStateOf(true) }
@@ -705,7 +702,6 @@ fun DaysView(
                                 (if (headerHasFilled || isExpanded || isTalkBackEnabled) events else eventsWithoutTime)[0].filter { content == null || it.source == null }
                             val dayEvents =
                                 displayedEvents.let { if (isExpanded) it else it.take(3) }
-                                    .toImmutableList()
                             Spacer(Modifier.height(10.dp))
                             AnimatedVisibility(dayEvents.isNotEmpty()) {
                                 Spacer(Modifier.height(8.dp))
@@ -719,8 +715,7 @@ fun DaysView(
                                     .animateContentSize(appContentSizeAnimationSpec)
                                     .padding(horizontal = 24.dp),
                             )
-                            val appointments =
-                                eventsWithoutTime[0].filter { it.source != null }.toImmutableList()
+                            val appointments = eventsWithoutTime[0].filter { it.source != null }
                             if (displayedEvents.size > 3) {
                                 Spacer(Modifier.height(4.dp))
                                 ExpandArrow(
@@ -1244,7 +1239,7 @@ fun DaysView(
 
 @Composable
 fun EventsRow(
-    events: ImmutableList<ImmutableList<CalendarEvent<*>>>,
+    events: List<List<CalendarEvent<*>>>,
     defaultWidthReduction: Dp,
     viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
     snackbarHostState: SnackbarHostState,

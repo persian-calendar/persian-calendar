@@ -82,7 +82,6 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun AthanSettings(
@@ -97,10 +96,10 @@ fun AthanSettings(
             SettingsSingleSelect(
                 key = PREF_PRAY_TIME_METHOD,
                 entries = remember(resources) {
-                    CalculationMethod.entries.map { it.title(resources) }.toImmutableList()
+                    CalculationMethod.entries.map { it.title(resources) }
                 },
                 entryValues = remember {
-                    CalculationMethod.entries.map { it.name }.toImmutableList()
+                    CalculationMethod.entries.map { it.name }
                 },
                 persistedValue = calculationMethod.name,
                 dialogTitleResId = R.string.pray_methods_calculation,
@@ -110,11 +109,8 @@ fun AthanSettings(
         AnimatedVisibility(coordinates?.isHighLatitude == true) {
             SettingsSingleSelect(
                 key = PREF_HIGH_LATITUDES_METHOD,
-                entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) }
-                    .toImmutableList(),
-                entryValues = remember {
-                    HighLatitudesMethod.entries.map { it.name }.toImmutableList()
-                },
+                entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
+                entryValues = remember { HighLatitudesMethod.entries.map { it.name } },
                 persistedValue = highLatitudesMethod.name,
                 dialogTitleResId = R.string.high_latitudes_method,
                 title = stringResource(R.string.high_latitudes_method),

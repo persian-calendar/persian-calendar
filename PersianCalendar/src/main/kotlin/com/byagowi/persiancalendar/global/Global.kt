@@ -149,9 +149,6 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import java.util.TimeZone
 
 // Using global variable isn't really the best idea.
@@ -163,7 +160,7 @@ import java.util.TimeZone
 // They are all are Compose states so the UI can trace their uses
 // and react on their changes if they are used on the UI.
 
-private val monthNameEmptyList = Array(12) { "" }.toImmutableList()
+private val monthNameEmptyList = List(12) { "" }
 private val persianMonths_ = mutableStateOf(monthNameEmptyList)
 private val persianMonths by persianMonths_
 private val oldEraPersianMonths_ = mutableStateOf(monthNameEmptyList)
@@ -175,7 +172,7 @@ private val gregorianMonths by gregorianMonths_
 private val nepaliMonths_ = mutableStateOf(monthNameEmptyList)
 private val nepaliMonths by nepaliMonths_
 
-private val weekDaysEmptyList = Array(7) { "" }.toImmutableList()
+private val weekDaysEmptyList = List(7) { "" }
 private val weekDaysTitles_ = mutableStateOf(weekDaysEmptyList)
 val weekDaysTitles by weekDaysTitles_
 
@@ -306,8 +303,8 @@ val showTrueNorth by showTrueNorth_
 private val widgetTransparency_ = mutableFloatStateOf(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency by widgetTransparency_
 
-private val enabledCalendars_: MutableState<ImmutableList<Calendar>> =
-    mutableStateOf(persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
+private val enabledCalendars_: MutableState<List<Calendar>> =
+    mutableStateOf(listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC))
 val enabledCalendars by enabledCalendars_
 
 val mainCalendar get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
@@ -439,7 +436,7 @@ private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
 }
 
 // For better or worse it needs the year to function correctly
-fun yearAwareMonthsNames(date: AbstractDate): ImmutableList<String> {
+fun yearAwareMonthsNames(date: AbstractDate): List<String> {
     return when (date) {
         is PersianDate -> if (date.isOldEra) oldEraPersianMonths else persianMonths
         is CivilDate -> gregorianMonths
@@ -656,14 +653,12 @@ fun updateStoredPreference(context: Context) {
 //                val notSetExplicitly = PREF_OTHER_CALENDARS_KEY !in preferences
 //                if (language.isUserAbleToReadPersian && timesDismissed && notSetExplicitly && coordinates == null) (it - Calendar.ISLAMIC) else it
 //            }
-            .toImmutableList()
         secondaryCalendarEnabled_.value = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE,
         )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
-        enabledCalendars_.value =
-            persistentListOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+        enabledCalendars_.value = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
         secondaryCalendarEnabled_.value = false
     }.getOrNull().debugAssertNotNull
 

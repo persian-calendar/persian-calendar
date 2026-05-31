@@ -32,7 +32,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.sample
@@ -177,7 +176,7 @@ fun <T> ChangesHapticFeedback(sampleMillis: Long? = null, block: () -> T) {
 
 // If the user has disabled all the other available calendars, this tries to return the default
 // where it makes more sense
-val enabledCalendarsWithDefault: ImmutableList<Calendar>
+val enabledCalendarsWithDefault: List<Calendar>
     get() = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
 
 @Composable

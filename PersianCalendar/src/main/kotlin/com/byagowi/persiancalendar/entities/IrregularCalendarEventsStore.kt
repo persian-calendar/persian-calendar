@@ -12,7 +12,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.collections.immutable.toPersistentMap
 
 class IrregularCalendarEventsStore(private val eventsRepository: EventsRepository) {
     private fun createCache(type: Calendar) =
@@ -64,7 +63,7 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             val title = "$originalTitle (${numeral.format(year)})"
             val isHoliday = event["holiday"] == "true"
             val source = EventSource.entries.firstOrNull { it.name == event["type"] }
-            val metadata = event.toPersistentMap().put(ORIGINAL_TITLE, originalTitle)
+            val metadata = event + (ORIGINAL_TITLE to originalTitle)
             when (date) {
                 is PersianDate -> {
                     CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)

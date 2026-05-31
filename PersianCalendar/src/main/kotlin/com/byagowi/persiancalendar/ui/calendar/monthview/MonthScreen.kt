@@ -89,7 +89,6 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.viewEvent
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -229,7 +228,7 @@ fun SharedTransitionScope.MonthScreen(
                         val deviceEvents = remember(index) { context.readWeekDeviceEvents(weekJdn) }
                         val events = (0..<7).map { index ->
                             readEvents(weekJdn + index, deviceEvents)
-                        }.toImmutableList()
+                        }
                         EventsRow(
                             events = events,
                             horizontalPadding = 0.dp,

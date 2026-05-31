@@ -79,8 +79,6 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -221,8 +219,8 @@ fun SettingsColor(
 @Composable
 fun SettingsSingleSelect(
     key: String,
-    entries: ImmutableList<String>,
-    entryValues: ImmutableList<String>,
+    entries: List<String>,
+    entryValues: List<String>,
     persistedValue: String,
     dialogTitleResId: Int,
     title: String,
@@ -279,9 +277,9 @@ fun SettingsSingleSelect(
 @Composable
 fun SettingsMultiSelect(
     key: String,
-    entries: ImmutableList<String>,
-    entryValues: ImmutableList<String>,
-    persistedSet: ImmutableSet<String>,
+    entries: List<String>,
+    entryValues: List<String>,
+    persistedSet: Set<String>,
     dialogTitleResId: Int,
     title: String,
     modifier: Modifier = Modifier,

@@ -106,8 +106,6 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.calculator.eval
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
@@ -141,7 +139,7 @@ fun SharedTransitionScope.ConverterScreen(
                     AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
-                        items = remember { ConverterScreenMode.entries.toImmutableList() },
+                        items = remember { ConverterScreenMode.entries },
                     ) { resources.getString(it.title) }
                 },
                 colors = appTopAppBarColors(),
@@ -316,7 +314,6 @@ private fun TimeZones(
     }
     val zones = remember {
         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
-            .toImmutableList()
     }
     val difference = run {
         val distance = secondTimeZone.rawOffset.milliseconds - firstTimeZone.rawOffset.milliseconds
@@ -608,7 +605,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
         jdn = selectedDate,
         today = today,
         selectedCalendar = calendar,
-        shownCalendars = (calendarsList - calendar).toImmutableList(),
+        shownCalendars = calendarsList - calendar,
         isExpanded = isExpanded,
         navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
         navigateToAstronomy = navigateToAstronomy,
@@ -733,7 +730,7 @@ private fun TimeZoneClock(
     timeZone: TimeZone,
     onTimeZoneChange: (TimeZone) -> Unit,
     clock: MutableLongState,
-    zones: ImmutableList<TimeZone>,
+    zones: List<TimeZone>,
     pendingConfirms: SnapshotStateList<() -> Unit>,
     modifier: Modifier = Modifier,
 ) {

@@ -100,8 +100,6 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -153,7 +151,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 activity ?: return@remember emptyList(),
                 primaryColor,
                 insets,
-            ).toImmutableList()
+            )
         }
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
@@ -235,7 +233,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
     if (showScheduleDialog) ScheduleAlarm { showScheduleDialog = false }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
-            persistentListOf(
+            listOf(
                 Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(
                     Icons.Default.Settings,

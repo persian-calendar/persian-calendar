@@ -112,7 +112,6 @@ import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -193,7 +192,7 @@ fun HoroscopeDialog(
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             )
             Column {
-                persistentListOf(AstronomyMode.EARTH, AstronomyMode.SUN).forEach {
+                listOf(AstronomyMode.EARTH, AstronomyMode.SUN).forEach {
                     NavigationRailItem(
                         modifier = Modifier.size(56.dp),
                         selected = mode == it,
@@ -231,7 +230,7 @@ fun HoroscopeDialog(
     }
 }
 
-private val easternHoroscopePositions = persistentListOf(
+private val easternHoroscopePositions = listOf(
     /* 1*/1f / 2 - 1f / 6 to 1f / 2 - 1f / 3,
     /* 2*/1f / 2 - 1f / 6 - 1f / 6 to 1f / 2 - 1f / 3 - 1f / 6,
     /* 3*/1f / 2 - 1f / 3 - 1f / 6 to 1f / 2 - 1f / 3,
@@ -503,17 +502,17 @@ private fun YearHoroscopeDialogContent(
     }
 }
 
-private val geocentricDistanceBodies = persistentListOf(
+private val geocentricDistanceBodies = listOf(
     Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
     Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto,
 )
 
-private val heliocentricDistanceBodies = persistentListOf(
+private val heliocentricDistanceBodies = listOf(
     Body.Mercury, Body.Venus, Body.Earth, Body.Moon, Body.Mars, Body.Jupiter,
     Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto,
 )
 
-private val ascendantBodies = persistentListOf(
+private val ascendantBodies = listOf(
     Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn,
 )
 
