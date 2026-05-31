@@ -27,7 +27,6 @@ import com.byagowi.persiancalendar.LocaleUtils
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
@@ -78,7 +77,7 @@ fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
     }
 
     ScreenScaffold(modifier) {
-        val pickerStates = persistentListOf(
+        val pickerStates = listOf(
             calendarPickerState,
             dayPickerState,
             monthPickerState,

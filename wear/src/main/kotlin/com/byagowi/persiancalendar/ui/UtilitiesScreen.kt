@@ -20,7 +20,6 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun UtilitiesScreen(
@@ -35,7 +34,7 @@ fun UtilitiesScreen(
         ScalingLazyColumn(state = scrollState) {
             item { ListHeader { Text("ابزارها") } }
             items(
-                persistentListOf(
+                listOf(
                     Triple(navigateToConverter, Icons.Default.SwapVerticalCircle, "مبدل"),
                     Triple(navigateToCalendar, Icons.Default.CalendarMonth, "تقویم"),
                     Triple(navigateToGlobe, Icons.Default.Map, "زمین"),
