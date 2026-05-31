@@ -246,7 +246,7 @@ fun CalendarSettings(
             SettingsSingleSelect(
                 key = PREF_HIJRI_OFFSET,
                 // One is formatted with locale's numerals and the other used for keys isn't
-                entries = remember(numeral) { (-2..2).map { numeral.format(it) } },
+                entries = remember(numeral) { (-2..2).map(numeral::format) },
                 entryValues = remember { (-2..2).map { it.toString() } },
                 persistedValue = hijriCalendarOffset.toString(),
                 dialogTitleResId = R.string.hijri_offset,
