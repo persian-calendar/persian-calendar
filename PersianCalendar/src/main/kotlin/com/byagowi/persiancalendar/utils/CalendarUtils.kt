@@ -449,11 +449,10 @@ fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
 fun otherCalendarFormat(
     yearViewYear: Int, calendar: Calendar, otherCalendar: Calendar,
 ): String {
-    val startOfYear = (Jdn(calendar.createDate(yearViewYear, 1, 1)) on otherCalendar).year
-    val endOfYear = ((Jdn(
-        calendar.createDate(yearViewYear + 1, 1, 1),
-    ) - 1) on otherCalendar).year
-    return setOf(startOfYear, endOfYear).joinToString(EN_DASH, transform = numeral::format)
+    return listOf(
+        Jdn(calendar.createDate(yearViewYear, 1, 1)),
+        Jdn(calendar.createDate(yearViewYear + 1, 1, 1)) - 1,
+    ).map { (it on otherCalendar).year }.joinToString(EN_DASH, transform = numeral::format)
 }
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String): String? {
