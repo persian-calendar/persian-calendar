@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.
+
+  This source code is licensed under the Apache 2.0 license found in
+  the LICENSE file in the root directory of this source tree.
+-->
+
+<!--
+When strings are referenced by other resources in the XML, they are
+considered unsafe to move for packing.
+
+See test_find_movable_strings.py.
+ -->
+<resources>
+    <string-array name="string_array">
+        <item>@string/string_array_one</item>
+        <item>@string/string_array_two</item>
+    </string-array>
+
+    <style name="string_pack_style">
+        <item name="android:text">@string/style_text</item>
+        <item name="android:textColor">@color/style_color</item>
+    </style>
+
+    <string name="string_pack_string">@string/other_string</string>
+    <string name="donotpack_string" donotpack="true">Do not pack</string>
+</resources>

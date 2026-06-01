@@ -1,0 +1,13 @@
+{
+  "original_resources_directories": [
+    "app/src/main/"
+  ],
+  "find_resource_files_command": "git ls-files '**.xml' | grep  -E '/(src|res)/'",
+  "assets_directory": "app/src/main/assets/",
+  "safe_widget_classes": [
+  ],
+  "languages_to_pack": ["*"],
+  "languages_to_drop": [],
+  "pack_id_mapping": {},
+  "pack_scripts_directory": "scripts/"
+}

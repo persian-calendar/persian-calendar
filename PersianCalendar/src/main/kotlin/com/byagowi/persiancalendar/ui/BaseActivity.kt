@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
@@ -38,9 +39,14 @@ import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
+import com.whatsapp.stringpacks.StringPackContext
 
 abstract class BaseActivity : ComponentActivity(),
     SharedPreferences.OnSharedPreferenceChangeListener {
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(StringPackContext.wrap(newBase))
+    }
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

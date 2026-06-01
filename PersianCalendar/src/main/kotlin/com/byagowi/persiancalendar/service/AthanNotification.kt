@@ -48,7 +48,13 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.minutes
 
+import com.whatsapp.stringpacks.StringPackContext
+
 class AthanNotification : Service() {
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(StringPackContext.wrap(newBase))
+    }
 
     override fun onBind(intent: Intent): IBinder? = null
 

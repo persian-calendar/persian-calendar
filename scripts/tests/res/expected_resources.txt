@@ -1,0 +1,3 @@
+com.example:plurals/people = 0x7f110000
+com.example:string/no = 0x7f120000
+com.example:string/yes = 0x7f120001

@@ -1,0 +1,3 @@
+R.plurals.people
+R.string.yes
+R.string.irrelevant

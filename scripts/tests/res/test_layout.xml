@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.
+
+  This source code is licensed under the Apache 2.0 license found in
+  the LICENSE file in the root directory of this source tree.
+-->
+
+<!--
+When strings are referenced in the layout, they are considered unsafe to move for packing,
+unless the XML namespace is in the whitelist.
+If the widget implementation is using StringPacks to read the strings, the widget could
+be listed in safe_widgets of config file. Then the strings used in this widget would be
+safely moved to pack file.
+
+See test_find_movable_strings.py.
+ -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+    >
+
+        <TextView
+            android:id="@id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/title"
+            app:text="@string/app_title"
+            tools:text="@string/tool_title"
+        />
+
+        <Image
+            android:id="@id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/image"
+        />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        android:contentDescription="@string/button"
+        app:websiteLink="@{@string/button_url}"
+    />
+
+</LinearLayout>

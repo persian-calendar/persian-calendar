@@ -34,6 +34,7 @@ wear-tiles = "1.6.0"
 wear-tooling-preview = "1.0.0"
 lint = "32.2.1"
 spotless = "8.6.0"
+stringpacks = "0.3.1"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -79,6 +80,7 @@ test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "and
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
+stringpacks = { group = "com.whatsapp.stringpacks", name = "stringpacks", version.ref = "stringpacks" }
 wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
 wear-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
 wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wear-compose" }

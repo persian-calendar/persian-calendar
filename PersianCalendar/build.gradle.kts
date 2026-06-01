@@ -197,7 +197,32 @@ dependencies {
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.androidx.test.ext.junit)
 
+    // StringPacks - efficient binary format for translated strings
+    implementation(libs.stringpacks)
+
     lintChecks(project(":lintChecks"))
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
+
+// StringPacks: pack translated strings into efficient binary .pack files
+run {
+    val configFile = file("config.json")
+    if (configFile.exists()) {
+        val packScript = "$rootDir/scripts/pack_strings.py"
+        tasks.register<Exec>("generateStringPacks") {
+            workingDir = rootDir
+            commandLine("python3", packScript, "--config", configFile.path)
+        }
+        tasks.configureEach {
+            if (name.matches(Regex("^generate.*Assets$"))) {
+                dependsOn("generateStringPacks")
+            }
+        }
+        tasks.named("clean").configure {
+            doFirst {
+                delete(fileTree("$projectDir/src/main/assets").include("strings_*.pack"))
+            }
+        }
+    }
+}

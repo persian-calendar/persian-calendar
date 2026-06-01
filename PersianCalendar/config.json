@@ -1,0 +1,8 @@
+{
+  "original_resources_directories": [
+    "PersianCalendar/src/main/"
+  ],
+  "assets_directory": "PersianCalendar/src/main/assets/",
+  "pack_ids_class_file_path": "PersianCalendar/src/main/kotlin/com/byagowi/persiancalendar/StringPackIds.kt",
+  "pack_scripts_directory": "scripts/"
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) Facebook, Inc. and its affiliates. All rights reserved.
+
+  This source code is licensed under the Apache 2.0 license found in
+  the LICENSE file in the root directory of this source tree.
+-->
+
+<!-- Testing resources for test_move_strings_for_packing.py. -->
+<resources>
+    <string name="hello_world">Hello World!</string>
+    <!-- Comment for string -->
+    <string name="sentence">The quick brown fox jumps over the lazy dog.</string>
+</resources>
