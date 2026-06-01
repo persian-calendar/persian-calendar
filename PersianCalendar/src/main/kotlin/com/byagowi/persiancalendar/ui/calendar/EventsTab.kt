@@ -277,6 +277,7 @@ private fun DayEventContent(
                     TooltipAnchorPosition.Above,
                 ),
                 tooltip = {
+                    val wikipediaEntry = event.metadata["wikipedia"]
                     val text = listOfNotNull(
                         when {
                             event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
@@ -286,9 +287,8 @@ private fun DayEventContent(
                             event.source == EventSource.Iran -> "این رویداد با نام «${event.metadata[ORIGINAL_TITLE] ?: event.title}» در تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران آمده است."
                             else -> null
                         },
-                        when (val wikipediaEntry = event.metadata["wikipedia"]) {
-                            null -> null
-                            else -> "دانشنامهٔ ویکی‌پدیا دارای مدخلی با نام «${
+                        wikipediaEntry?.let {
+                            "دانشنامهٔ ویکی‌پدیا دارای مدخلی با نام «${
                                 wikipediaEntry.replace(
                                     "https://fa.wikipedia.org/wiki/",
                                     "",
@@ -349,7 +349,7 @@ private fun DayEventContent(
                                                     }
                                                 }
                                             } else null,
-                                            event.metadata["wikipedia"]?.let { wikipedia ->
+                                            wikipediaEntry?.let { wikipedia ->
                                                 @Composable { shape: Shape ->
                                                     FilledTonalButton(
                                                         onClick = { uriHandler.openUri(wikipedia) },
