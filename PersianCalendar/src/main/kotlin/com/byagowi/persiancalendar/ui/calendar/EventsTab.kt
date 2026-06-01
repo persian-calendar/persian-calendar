@@ -277,7 +277,7 @@ private fun DayEventContent(
                     TooltipAnchorPosition.Above,
                 ),
                 tooltip = {
-                    val wikipediaEntry = event.metadata["wikipedia"]
+                    val wikipediaEntry: String? = null // event.metadata["wikipedia"]
                     val text = listOfNotNull(
                         when {
                             event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
