@@ -76,16 +76,16 @@ data class EventsRepository(
     @VisibleForTesting
     val irregularCalendarEventsStore = IrregularCalendarEventsStore(this)
     private val persianCalendarEvents = PersianCalendarEventsStore(
-        persianEvents.mapNotNull { createEvent(it, Calendar.SHAMSI) },
+        createEventsList(persianEvents, Calendar.SHAMSI),
     )
     private val islamicCalendarEvents = IslamicCalendarEventsStore(
-        islamicEvents.mapNotNull { createEvent(it, Calendar.ISLAMIC) },
+        createEventsList(islamicEvents, Calendar.ISLAMIC),
     )
     private val gregorianCalendarEvents = GregorianCalendarEventsStore(
-        gregorianEvents.mapNotNull { createEvent(it, Calendar.GREGORIAN) },
+        createEventsList(gregorianEvents, Calendar.GREGORIAN),
     )
     private val nepaliCalendarEvents = NepaliCalendarEventsStore(
-        nepaliEvents.mapNotNull { createEvent(it, Calendar.NEPALI) },
+        createEventsList(nepaliEvents, Calendar.NEPALI),
     )
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
@@ -134,41 +134,42 @@ data class EventsRepository(
         }).filterEvents()
     }
 
-    private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
-        record: CalendarRecord, calendar: Calendar,
-    ): T? {
-        if (skipEvent(record, calendar)) return null
+    private inline fun <reified T : CalendarEvent<out AbstractDate>> createEventsList(
+        events: List<CalendarRecord>, calendar: Calendar,
+    ): List<T> = sequence {
+        events.forEach { record ->
+            if (skipEvent(record, calendar)) return@forEach
+            val isHoliday = determineIsHoliday(record)
+            val title = when {
+                record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
+                record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
+                else -> ""
+            } + record.title.replace(" ـــ ", "، ")
+            val metadata = record.metadata + (ORIGINAL_TITLE to record.title)
+            val source = record.source
+            (when (calendar) {
+                Calendar.SHAMSI -> {
+                    val date = PersianDate(everyYear, record.month, record.day)
+                    CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
+                }
 
-        val isHoliday = determineIsHoliday(record)
-        val title = when {
-            record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
-            record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
-            else -> ""
-        } + record.title.replace(" ـــ ", "، ")
-        val metadata = record.metadata + (ORIGINAL_TITLE to record.title)
-        val source = record.source
-        return (when (calendar) {
-            Calendar.SHAMSI -> {
-                val date = PersianDate(everyYear, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
-            }
+                Calendar.GREGORIAN -> {
+                    val date = CivilDate(everyYear, record.month, record.day)
+                    CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, metadata)
+                }
 
-            Calendar.GREGORIAN -> {
-                val date = CivilDate(everyYear, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, metadata)
-            }
+                Calendar.ISLAMIC -> {
+                    val date = IslamicDate(everyYear, record.month, record.day)
+                    CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, metadata)
+                }
 
-            Calendar.ISLAMIC -> {
-                val date = IslamicDate(everyYear, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, metadata)
-            }
-
-            Calendar.NEPALI -> {
-                val date = NepaliDate(everyYear, record.month, record.day)
-                CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, metadata)
-            }
-        } as? T).debugAssertNotNull
-    }
+                Calendar.NEPALI -> {
+                    val date = NepaliDate(everyYear, record.month, record.day)
+                    CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, metadata)
+                }
+            } as? T).debugAssertNotNull?.let { yield(it) }
+        }
+    }.toList()
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {
         val emptyDeviceCalendar: DeviceCalendarEventsStore = EventsStore.empty()
