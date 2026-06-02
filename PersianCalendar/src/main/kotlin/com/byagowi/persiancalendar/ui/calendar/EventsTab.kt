@@ -65,6 +65,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
@@ -277,7 +278,8 @@ private fun DayEventContent(
                     TooltipAnchorPosition.Above,
                 ),
                 tooltip = {
-                    val wikipediaEntry: String? = null // event.metadata["wikipedia"]
+                    val wikipediaEntry: String? =
+                        if (BuildConfig.DEVELOPMENT) event.metadata["wikipedia"] else null
                     val text = listOfNotNull(
                         when {
                             event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
