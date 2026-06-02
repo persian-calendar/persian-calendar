@@ -621,7 +621,7 @@ fun readEventsWithEquinox(
     now: Long,
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
-    val events = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
+    val events = readEvents(jdn, deviceEvents)
     return if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val resources = LocalResources.current
         val date = jdn.toPersianDate()
