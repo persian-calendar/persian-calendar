@@ -278,9 +278,10 @@ fun SharedTransitionScope.CalendarsOverview(
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 val historicalPersianDate = HistoricalPersianDate(persianDate)
                 AutoSizedBodyText(
-                    historicalPersianDate.jalaliName + persianDelimiter + historicalPersianDate.fasliDayName + run {
-                        historicalPersianDate.extraTitle?.let { " ($it)" }.orEmpty()
-                    },
+                    historicalPersianDate.jalaliName + persianDelimiter + historicalPersianDate.fasliDayName,
+//                            + run {
+//                        historicalPersianDate.extraTitle?.let { " ($it)" }.orEmpty()
+//                    },
                 )
             }
             AnimatedVisibility(enableExtra && BuildConfig.DEVELOPMENT) {
@@ -539,7 +540,8 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier.clip(shape = MaterialTheme.shapes.small)
+                    Modifier
+                        .clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )

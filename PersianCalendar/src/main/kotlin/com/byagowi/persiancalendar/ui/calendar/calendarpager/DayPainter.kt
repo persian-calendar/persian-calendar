@@ -184,9 +184,9 @@ class DayPainter private constructor(
                 (jdn on secondaryCalendar).dayOfMonth,
             ),
             header,
-            if (BuildConfig.DEVELOPMENT && isAstronomicalExtraFeaturesEnabled && eventsRepository.iranAncient && language.isPersian) {
-                jdn?.toPersianDate()?.let { HistoricalPersianDate(it).extraTitle }
-            } else "",
+//            if (BuildConfig.DEVELOPMENT && isAstronomicalExtraFeaturesEnabled && eventsRepository.iranAncient && language.isPersian) {
+//                jdn?.toPersianDate()?.let { HistoricalPersianDate(it).extraTitle }
+//            } else null,
         ).joinToString(" ")
         this.indicators = listOf(
             hasAppointment to paints.appointmentIndicatorPaint,
