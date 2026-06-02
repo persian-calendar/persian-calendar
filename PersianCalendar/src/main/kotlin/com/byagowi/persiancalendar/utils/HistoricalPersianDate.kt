@@ -10,8 +10,9 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.PersianDate
 
-class HistoricalPersianDate(private val persianDate: PersianDate) {
-    private val dayOfYear = Jdn(persianDate) - Jdn(PersianDate(persianDate.year, 1, 1))
+class HistoricalPersianDate(persianDate: PersianDate) {
+    private val year = persianDate.year
+    private val dayOfYear = Jdn(persianDate) - Jdn(PersianDate(year, 1, 1))
     private val dayOfMonth = dayOfYear % 30
     private val month = dayOfYear / 30
 
@@ -39,7 +40,7 @@ class HistoricalPersianDate(private val persianDate: PersianDate) {
         }
 
     @VisibleForTesting
-    val zoroastrianismYear get() = PersianDateEpoch.Zoroastrianism.format(persianDate.year)
+    val zoroastrianismYear get() = PersianDateEpoch.Zoroastrianism.format(year)
     val fasliDayName: String
         get() {
             return when (month) {
@@ -50,7 +51,7 @@ class HistoricalPersianDate(private val persianDate: PersianDate) {
                 else -> " و ${fasliMonthNames[month]} ماه"
             }
         }
-    val jalaliName get() = jalaliDayOfYearName + " " + PersianDateEpoch.Jalali.format(persianDate.year)
+    val jalaliName get() = jalaliDayOfYearName + " " + PersianDateEpoch.Jalali.format(year)
     val jalaliDayOfYearName
         get() = when (month) {
             12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ"
