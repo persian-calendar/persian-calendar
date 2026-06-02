@@ -6,13 +6,14 @@
 package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.PersianDate
 
 class HistoricalPersianDate(private val persianDate: PersianDate) {
-    private val dayOfYear = modernPersianMonthDays[persianDate.month - 1] + persianDate.dayOfMonth
-    private val dayOfMonth = (dayOfYear - 1) % 30
-    private val month = (dayOfYear - 1) / 30
+    private val dayOfYear = Jdn(persianDate) - Jdn(PersianDate(persianDate.year, 1, 1))
+    private val dayOfMonth = dayOfYear % 30
+    private val month = dayOfYear / 30
 
     // Nabor Days روزهای نَبُر - پرهیز از کشتن حیوانات سودمند
     // وهمن، ماه، گوش، رام
@@ -87,8 +88,5 @@ class HistoricalPersianDate(private val persianDate: PersianDate) {
             "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
         )
         // endregion
-
-        private val modernPersianMonthDays =
-            listOf(0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336, 366)
     }
 }
