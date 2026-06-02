@@ -278,11 +278,9 @@ fun SharedTransitionScope.CalendarsOverview(
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 val historicalPersianDate = HistoricalPersianDate(persianDate)
                 AutoSizedBodyText(
-                    historicalPersianDate.jalaliName + persianDelimiter + historicalPersianDate.fasliDayName + when {
-                        historicalPersianDate.isAbstinenceDays -> "نَبُر"
-                        historicalPersianDate.isRestDays -> "𝄞"
-                        else -> null
-                    }?.let { " ($it)" }.orEmpty(),
+                    historicalPersianDate.jalaliName + persianDelimiter + historicalPersianDate.fasliDayName + run {
+                        historicalPersianDate.extraTitle?.let { " ($it)" }.orEmpty()
+                    },
                 )
             }
             AnimatedVisibility(enableExtra && BuildConfig.DEVELOPMENT) {

@@ -30,6 +30,13 @@ class HistoricalPersianDate(private val persianDate: PersianDate) {
             else -> false
         }
 
+    val extraTitle: String?
+        get() = when {
+            isAbstinenceDays -> "نَبُر"
+            isRestDays -> "𝄞"
+            else -> null
+        }
+
     @VisibleForTesting
     val zoroastrianismYear get() = PersianDateEpoch.Zoroastrianism.format(persianDate.year)
     val fasliDayName: String

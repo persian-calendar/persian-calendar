@@ -185,8 +185,7 @@ class DayPainter private constructor(
             ),
             header,
             if (BuildConfig.DEVELOPMENT && isAstronomicalExtraFeaturesEnabled && eventsRepository.iranAncient && language.isPersian) {
-                jdn?.toPersianDate()?.takeIf { HistoricalPersianDate(it).isRestDays }?.let { "𝄞" }
-                    .orEmpty()
+                jdn?.toPersianDate()?.let { HistoricalPersianDate(it).extraTitle }
             } else "",
         ).joinToString(" ")
         this.indicators = listOf(
