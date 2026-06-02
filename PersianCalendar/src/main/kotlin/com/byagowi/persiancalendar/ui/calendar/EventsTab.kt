@@ -95,9 +95,9 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.utils.HistoricalPersianDate
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.jalaliDayOfYear
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -391,7 +391,7 @@ private fun DayEventContent(
                                             if (event is CalendarEvent.DeviceCalendarEvent) {
                                                 append(stringResource(R.string.show_device_calendar_events))
                                             } else if (event.source == EventSource.AncientIran && event.date is PersianDate) {
-                                                append(jalaliDayOfYear(event.date))
+                                                append(HistoricalPersianDate(event.date).jalaliDayOfYearName)
                                             } else {
                                                 if (event.date.year == everyYear) append(
                                                     language.dm.format(

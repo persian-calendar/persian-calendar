@@ -159,6 +159,9 @@ const val RLM = "\u200F"
 
 const val EN_DASH = "–"
 
+// Looks better with Persian as Roozbeh
+const val persianDelimiter = " ــــ "
+
 const val DEFAULT_AM = "ق.ظ"
 const val DEFAULT_PM = "ب.ظ"
 const val DEFAULT_HOLIDAY = "تعطیل"

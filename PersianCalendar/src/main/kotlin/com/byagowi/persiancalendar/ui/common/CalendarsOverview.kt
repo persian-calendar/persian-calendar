@@ -88,6 +88,7 @@ import com.byagowi.persiancalendar.global.showHistoricalCalendars
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.persianDelimiter
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
@@ -97,6 +98,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
+import com.byagowi.persiancalendar.utils.HistoricalPersianDate
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.alternativeEpochs
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -105,7 +107,6 @@ import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isOldEra
-import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
@@ -275,7 +276,14 @@ fun SharedTransitionScope.CalendarsOverview(
             val enableExtra =
                 showHistoricalCalendars || eventsRepository.iranAncient || (isAstronomicalExtraFeaturesEnabled && isExpanded)
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
-                AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
+                val historicalPersianDate = HistoricalPersianDate(persianDate)
+                AutoSizedBodyText(
+                    historicalPersianDate.jalaliName + persianDelimiter + historicalPersianDate.fasliDayName + when {
+                        historicalPersianDate.isAbstinenceDays -> "نَبُر"
+                        historicalPersianDate.isRestDays -> "𝄞"
+                        else -> null
+                    }?.let { " ($it)" }.orEmpty(),
+                )
             }
             AnimatedVisibility(enableExtra && BuildConfig.DEVELOPMENT) {
                 AutoSizedBodyText(alternativeEpochs(persianDate))
@@ -533,8 +541,7 @@ private fun HandleSacredMonth(
             .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
             .then(
                 if (displaySacredness) {
-                    Modifier
-                        .clip(shape = MaterialTheme.shapes.small)
+                    Modifier.clip(shape = MaterialTheme.shapes.small)
                         .clickable { coroutine.launch { tooltipState.show() } }
                 } else Modifier,
             )

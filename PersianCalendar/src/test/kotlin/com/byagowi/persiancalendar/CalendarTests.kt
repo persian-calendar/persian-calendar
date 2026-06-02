@@ -5,13 +5,11 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayTablePositions
+import com.byagowi.persiancalendar.utils.HistoricalPersianDate
 import com.byagowi.persiancalendar.utils.PersianDateEpoch
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
-import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.formatAsSeleucidDate
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.jalaliName
-import com.byagowi.persiancalendar.utils.persianDayOfYear
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -150,10 +148,10 @@ class CalendarTests {
                 jdn,
                 Jdn(IslamicDate(1325, 11, 25)),
             )
-            val persianDate = jdn.toPersianDate()
+            val historicalPersianDate = HistoricalPersianDate(jdn.toPersianDate())
             assertEquals(
                 "۱۵ دی ۸۲۹ جلالی",
-                jalaliName(persianDate.year, persianDayOfYear(persianDate, jdn)),
+                historicalPersianDate.jalaliName,
             )
         }
         run {
@@ -176,8 +174,72 @@ class CalendarTests {
         run {
             assertEquals(
                 "روز ۳ خمسهٔ ۹۴۸ جلالی",
-                jalaliName(1405, 363),
+                HistoricalPersianDate(PersianDate(1405, 12, 27)).jalaliName,
             )
+        }
+        run {
+            assertEquals(
+                "۳۷۶۳ زرتشتیان",
+                HistoricalPersianDate(PersianDate(1404, 1, 1)).zoroastrianismYear,
+            )
+        }
+        run {
+            val abstinenceDays = listOf(
+                PersianDate(1404, 3, 10),
+                PersianDate(1404, 3, 12),
+                PersianDate(1404, 3, 19),
+                PersianDate(1404, 3, 30),
+            )
+            (1..31).forEach { day ->
+                val persianDate = PersianDate(1404, 3, day)
+                assertEquals(
+                    expected = persianDate in abstinenceDays,
+                    actual = HistoricalPersianDate(persianDate).isAbstinenceDays
+                )
+            }
+        }
+        run {
+            val abstinenceDays = listOf(
+                PersianDate(1404, 12, 6),
+                PersianDate(1404, 12, 8),
+                PersianDate(1404, 12, 15),
+            )
+            (1..29).forEach { day ->
+                val persianDate = PersianDate(1404, 12, day)
+                assertEquals(
+                    expected = persianDate in abstinenceDays,
+                    actual = HistoricalPersianDate(persianDate).isAbstinenceDays
+                )
+            }
+        }
+        run {
+            val restDays = listOf(
+                PersianDate(1404, 3, 6),
+                PersianDate(1404, 3, 13),
+                PersianDate(1404, 3, 21),
+                PersianDate(1404, 3, 29),
+            )
+            (1..31).forEach { day ->
+                val persianDate = PersianDate(1404, 3, day)
+                assertEquals(
+                    expected = persianDate in restDays,
+                    actual = HistoricalPersianDate(persianDate).isRestDays
+                )
+            }
+        }
+        run {
+            val restDays = listOf(
+                PersianDate(1404, 12, 2),
+                PersianDate(1404, 12, 9),
+                PersianDate(1404, 12, 17),
+            )
+            (1..31).forEach { day ->
+                val persianDate = PersianDate(1404, 12, day)
+                assertEquals(
+                    expected = persianDate in restDays,
+                    actual = HistoricalPersianDate(persianDate).isRestDays
+                )
+            }
         }
         run {
             // https://w.wiki/DkKf
@@ -210,18 +272,10 @@ class CalendarTests {
     @Test
     fun `historical persian dates smoke test`() {
         (Jdn(PersianDate(1200, 1, 1))..<Jdn(PersianDate(1500, 1, 1))).forEach { jdn ->
-            val date = jdn.toPersianDate()
-            val name = fasliDayName(
-                jdn - Jdn(PersianDate(date.year, 1, 1)) + 1,
-            )
-            val dayOfYear =
-                persianDayOfYear(PersianDate(date.year, date.month, date.dayOfMonth), jdn)
-            assertEquals(
-                expected = name,
-                actual = fasliDayName(dayOfYear),
-                message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name,
-            )
-            jalaliName(jdn.toPersianDate().year, dayOfYear)
+            val persianDate = jdn.toPersianDate()
+            val date = HistoricalPersianDate(persianDate)
+            assert(date.jalaliName.isNotEmpty(), { persianDate })
+            assert(date.fasliDayName.isNotEmpty(), { persianDate })
             formatAsSeleucidDate(jdn)
         }
     }

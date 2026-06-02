@@ -13,14 +13,18 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.res.ResourcesCompat
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.eventsRepository
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.HistoricalPersianDate
 import com.byagowi.persiancalendar.utils.getSecondaryCalendarNumeral
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import java.io.File
@@ -180,6 +184,10 @@ class DayPainter private constructor(
                 (jdn on secondaryCalendar).dayOfMonth,
             ),
             header,
+            if (BuildConfig.DEVELOPMENT && isAstronomicalExtraFeaturesEnabled && eventsRepository.iranAncient && language.isPersian) {
+                jdn?.toPersianDate()?.takeIf { HistoricalPersianDate(it).isRestDays }?.let { "𝄞" }
+                    .orEmpty()
+            } else "",
         ).joinToString(" ")
         this.indicators = listOf(
             hasAppointment to paints.appointmentIndicatorPaint,

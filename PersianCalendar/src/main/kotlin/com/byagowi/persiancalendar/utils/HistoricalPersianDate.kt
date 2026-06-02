@@ -6,76 +6,82 @@
 package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.PersianDate
 
-// the returned value is a zero indexed number
-@VisibleForTesting
-fun persianDayOfYear(persianDate: PersianDate, jdn: Jdn): Int {
-    return jdn - Jdn(PersianDate(persianDate.year, 1, 1)) + 1
+class HistoricalPersianDate(private val persianDate: PersianDate) {
+    private val dayOfYear = modernPersianMonthDays[persianDate.month - 1] + persianDate.dayOfMonth
+    private val dayOfMonth = (dayOfYear - 1) % 30
+    private val month = (dayOfYear - 1) / 30
+
+    // Nabor Days روزهای نَبُر - پرهیز از کشتن حیوانات سودمند
+    // وهمن، ماه، گوش، رام
+    val isAbstinenceDays
+        get() = month < 12 && when (dayOfMonth) {
+            1, 11, 13, 20 -> true
+            else -> false
+        }
+
+    // Rest / Prayer Days روزهای نیایش همگانی و استراحت
+    // اورمزد، دی‌بآذر، دی‌بمهر، دی‌بدین
+    val isRestDays
+        get() = month < 12 && when (dayOfMonth) {
+            0, 7, 14, 22 -> true
+            else -> false
+        }
+
+    @VisibleForTesting
+    val zoroastrianismYear get() = PersianDateEpoch.Zoroastrianism.format(persianDate.year)
+    val fasliDayName: String
+        get() {
+            return when (month) {
+                12 -> lastDayOfYearNames
+                else -> fasliDaysNames
+            }[dayOfMonth] + when (month) {
+                12 -> ""
+                else -> " و ${fasliMonthNames[month]} ماه"
+            }
+        }
+    val jalaliName get() = jalaliDayOfYearName + " " + PersianDateEpoch.Jalali.format(persianDate.year)
+    val jalaliDayOfYearName
+        get() = when (month) {
+            12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ"
+            else -> numeral.format(dayOfMonth + 1) + " " + jalaliMonthNames[month]
+        }
+
+    companion object {
+
+        // region Fasli
+        private val fasliDaysNames = listOf(
+            "اورمزد", "وهمن", "اردیبهشت", "شهریور", "سپندارمزد", "خورداد", "امرداد", "دی‌بآذر",
+            "آذر", "آبان", "خور (خیر)", "ماه", "تیر", "گوش", "دی‌بمهر", "مهر",
+            "سروش", "رشن", "فروردین", "ورهرام", "رام", "باد", "دی‌بدین",
+            "دین", "ارد", "اشتاد", "آسمان", "زامیاد", "مانتره‌سپند", "انارام",
+        )
+
+        private const val leapYearDayName = "اورداد"
+        private val lastDayOfYearNames =
+            listOf("اهنود", "اشتود", "سپنتمد", "وهوخشتر", "وهوشتواش", leapYearDayName)
+
+        private val fasliMonthNames = listOf(
+            "فروردین", "اردیبهشت", "خورداد", "تیر", "امرداد", "شهریور",
+            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
+        )
+
+        private val fasliAlternativeMonthNames = listOf(
+            "فَرَوَشی", "اشاوهیشتا", "هه‌اورتات", "تِشترَیا", "اَمرتات", "خشتره‌ویریه",
+            "میترا", "آبان", "آترا", "دتوشو", "وهومن", "سپنتاآرمیتی",
+        )
+        // endregion
+
+        // region Jalali
+        private val jalaliMonthNames = listOf(
+            "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
+        )
+        // endregion
+
+        private val modernPersianMonthDays =
+            listOf(0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336, 366)
+    }
 }
-
-// region Fasli
-private val fasliDaysNames = listOf(
-    "اورمزد", "وهمن", "اردیبهشت", "شهریور", "سپندارمزد", "خورداد", "امرداد", "دی‌بآذر",
-    "آذر", "آبان", "خور (خیر)", "ماه", "تیر", "گوش", "دی‌بمهر", "مهر",
-    "سروش", "رشن", "فروردین", "ورهرام", "رام", "باد", "دی‌بدین",
-    "دین", "ارد", "اشتاد", "آسمان", "زامیاد", "مانتره‌سپند", "انارام",
-)
-
-private const val leapYearDayName = "اورداد"
-private val lastDayOfYearNames =
-    listOf("اهنود", "اشتود", "سپنتمد", "وهوخشتر", "وهوشتواش", leapYearDayName)
-
-private val fasliMonthNames = listOf(
-    "فروردین", "اردیبهشت", "خورداد", "تیر", "امرداد", "شهریور",
-    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
-)
-
-private val fasliAlternativeMonthNames = listOf(
-    "فَرَوَشی", "اشاوهیشتا", "هه‌اورتات", "تِشترَیا", "اَمرتات", "خشتره‌ویریه",
-    "میترا", "آبان", "آترا", "دتوشو", "وهومن", "سپنتاآرمیتی",
-)
-
-@VisibleForTesting
-fun fasliDayName(dayOfYear: Int): String {
-    val dayOfMonth = (dayOfYear - 1) % 30
-    val month = (dayOfYear - 1) / 30
-    return ((if (month == 12) lastDayOfYearNames else fasliDaysNames)[dayOfMonth]) + if (month == 12) "" else " و ${fasliMonthNames[month]} ماه"
-}
-// endregion
-
-// region Jalali
-private val jalaliMonthNames = listOf(
-    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
-    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
-)
-
-@VisibleForTesting
-fun jalaliName(persianYear: Int?, dayOfYear: Int): String {
-    val dayOfMonth = (dayOfYear - 1) % 30
-    return when (val month = (dayOfYear - 1) / 30) {
-        12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ"
-        else -> numeral.format(dayOfMonth + 1) + " " + jalaliMonthNames[month]
-    } + " " + PersianDateEpoch.Jalali.format(persianYear)
-}
-// endregion
-
-// Looks better with Persian as Roozbeh
-const val persianDelimiter = " ــــ "
-
-fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
-    val dayOfYear = persianDayOfYear(persianDate, jdn)
-    val persianYear = persianDate.year
-    val jalali = jalaliName(persianYear, dayOfYear)
-    return jalali + persianDelimiter + fasliDayName(dayOfYear)
-}
-
-fun jalaliDayOfYear(date: PersianDate): String {
-    val dayOfYear = modernPersianMonthDays[date.month - 1] + date.dayOfMonth
-    return jalaliName(null, dayOfYear)
-}
-
-private val modernPersianMonthDays =
-    listOf(0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336, 366)
