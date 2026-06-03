@@ -117,11 +117,9 @@ import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
-import com.byagowi.persiancalendar.kabulCoordinates
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
 import com.byagowi.persiancalendar.service.widgetWidthCellKey
-import com.byagowi.persiancalendar.tehranCoordinates
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
@@ -147,7 +145,6 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.lang.ref.WeakReference
 import java.util.Date
-import java.util.TimeZone
 import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
