@@ -159,15 +159,15 @@ class CalendarTests {
             // با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
             val date = PersianDate(1400, 6, 24)
             assertEquals(
-                "۳۷۵۹ زرتشتیان",
+                "۳۷۵۹ زرتشتی",
                 PersianDateEpoch.Zoroastrianism.format(date),
             )
             assertEquals(
-                "۳۷۵۹ زرتشتیان",
+                "۳۷۵۹ زرتشتی",
                 PersianDateEpoch.Zoroastrianism.format(date.year),
             )
             assertEquals(
-                "زرتشتیان",
+                "زرتشتی",
                 PersianDateEpoch.Zoroastrianism.format(null),
             )
         }
@@ -179,7 +179,7 @@ class CalendarTests {
         }
         run {
             assertEquals(
-                "۳۷۶۳ زرتشتیان",
+                "۳۷۶۳ زرتشتی",
                 HistoricalPersianDate(PersianDate(1404, 1, 1)).zoroastrianismYear,
             )
         }
