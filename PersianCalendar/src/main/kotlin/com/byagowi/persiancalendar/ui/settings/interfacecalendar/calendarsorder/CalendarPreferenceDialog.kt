@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
 
 import android.os.Build
 import android.view.HapticFeedbackConstants
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -17,7 +16,6 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -44,21 +42,14 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
-import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
-import com.byagowi.persiancalendar.PREF_SHOW_HISTORICAL_CALENDARS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.global.secondaryCalendarEnabled
-import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -87,16 +78,10 @@ fun CalendarPreferenceDialog(
         context.preferences.edit { putBoolean(PREF_CALENDARS_PRIORITY_OPENED_ONCE, true) }
     }
     val coroutineScope = rememberCoroutineScope()
-    var showMore by rememberSaveable { mutableStateOf(false) }
     var isInRotation by rememberSaveable { mutableStateOf(false) }
     if (isInRotation) return
     AppDialog(
         title = { Text(stringResource(R.string.calendars_priority)) },
-        neutralButton = {
-            AnimatedVisibility(!showMore) {
-                TextButton(onClick = { showMore = true }) { Text(stringResource(R.string.more)) }
-            }
-        },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
@@ -193,19 +178,6 @@ fun CalendarPreferenceDialog(
                     Icon(Icons.Rounded.DragHandle, contentDescription = null)
                 }
             }
-        }
-        AnimatedVisibility(showMore) { HorizontalDivider() }
-        AnimatedVisibility(
-            visible = showMore && enabledCalendars.size > 1,
-            modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
-        ) {
-            val context = LocalContext.current
-            SwitchWithLabel(
-                label = stringResource(R.string.show_secondary_calendar) + secondaryCalendar?.let {
-                    spacedColon + stringResource(it.title)
-                }.orEmpty(),
-                checked = secondaryCalendarEnabled,
-            ) { context.preferences.edit { putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, it) } }
         }
     }
 }
