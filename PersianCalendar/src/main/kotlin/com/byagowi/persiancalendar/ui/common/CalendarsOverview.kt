@@ -84,7 +84,6 @@ import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.global.showHistoricalCalendars
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.weekStart
@@ -256,7 +255,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         AnimatedVisibility(
-            ((isExpanded && isAstronomicalExtraFeaturesEnabled) || showHistoricalCalendars) && !persianDate.isOldEra,
+            ((isExpanded && isAstronomicalExtraFeaturesEnabled)) && !persianDate.isOldEra,
         ) {
             val zodiacString =
                 if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
@@ -273,8 +272,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         if (language.isPersian) {
-            val enableExtra =
-                showHistoricalCalendars || eventsRepository.iranAncient || (isAstronomicalExtraFeaturesEnabled && isExpanded)
+            val enableExtra = eventsRepository.iranAncient || (isAstronomicalExtraFeaturesEnabled && isExpanded)
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 val historicalPersianDate = HistoricalPersianDate(persianDate)
                 AutoSizedBodyText(
@@ -284,9 +282,9 @@ fun SharedTransitionScope.CalendarsOverview(
 //                    },
                 )
             }
-            AnimatedVisibility(enableExtra && BuildConfig.DEVELOPMENT) {
-                AutoSizedBodyText(alternativeEpochs(persianDate))
-            }
+//            AnimatedVisibility(enableExtra && BuildConfig.DEVELOPMENT) {
+//                AutoSizedBodyText(alternativeEpochs(persianDate))
+//            }
             AnimatedVisibility(enableExtra) {
                 AutoSizedBodyText(formatAsSeleucidAndYazdegerdDate(jdn))
             }

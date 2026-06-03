@@ -48,7 +48,7 @@ enum class PersianDateEpoch(private val offset: Int, private val title: String) 
     // سالنمای راستی
     // با شماره مجوز ۱۴۰۱/۱/۲۲۷۰۶ اداره فرهنگ استان تهران
     Zoroastrianism(
-        offset = 2359, title = "زرتشتیان",
+        offset = 2359, title = "زرتشتی",
     ),
     Madian(
         offset = 1321, title = "مادی",

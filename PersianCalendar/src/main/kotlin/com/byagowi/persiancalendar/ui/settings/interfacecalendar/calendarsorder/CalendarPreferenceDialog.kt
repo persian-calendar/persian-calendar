@@ -56,7 +56,6 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarEnabled
-import com.byagowi.persiancalendar.global.showHistoricalCalendars
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
@@ -207,16 +206,6 @@ fun CalendarPreferenceDialog(
                 }.orEmpty(),
                 checked = secondaryCalendarEnabled,
             ) { context.preferences.edit { putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, it) } }
-        }
-        AnimatedVisibility(
-            visible = showMore && language.isPersian && BuildConfig.DEVELOPMENT,
-            modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
-        ) {
-            val context = LocalContext.current
-            SwitchWithLabel(
-                label = "نمایش تقویم‌های تاریخی",
-                checked = showHistoricalCalendars,
-            ) { context.preferences.edit { putBoolean(PREF_SHOW_HISTORICAL_CALENDARS, it) } }
         }
     }
 }

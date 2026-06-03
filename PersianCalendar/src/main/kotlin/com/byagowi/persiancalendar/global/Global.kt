@@ -409,9 +409,6 @@ val eventsRepository by eventsRepository_
 private val secondaryCalendarEnabled_ = mutableStateOf(false)
 val secondaryCalendarEnabled by secondaryCalendarEnabled_
 
-private val showHistoricalCalendars_ = mutableStateOf(false)
-val showHistoricalCalendars by showHistoricalCalendars_
-
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
     debugLog("Utils: initGlobal is called")
@@ -524,7 +521,6 @@ fun updateStoredPreference(context: Context) {
         val key = preferences.getString(PREF_SYSTEM_LIGHT_THEME, null)
         Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
     } ?: Theme.LIGHT
-    showHistoricalCalendars_.value = preferences.getBoolean(PREF_SHOW_HISTORICAL_CALENDARS, false)
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isCyberpunk_.value = preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
