@@ -1030,7 +1030,7 @@ private fun Details(
 //                acceptAction = { navigateToHolidaysSettings(null) },
 //            )
 //        } else
-            if (false) {
+            if (true) {
                 val context = LocalContext.current
                 if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
                     var showDialog by remember { mutableStateOf(false) }

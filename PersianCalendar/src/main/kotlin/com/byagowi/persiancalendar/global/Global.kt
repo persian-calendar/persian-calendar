@@ -94,7 +94,6 @@ import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
-import com.byagowi.persiancalendar.PREF_SHOW_HISTORICAL_CALENDARS
 import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
