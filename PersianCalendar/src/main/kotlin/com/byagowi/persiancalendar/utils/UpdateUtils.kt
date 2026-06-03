@@ -478,12 +478,7 @@ fun createSunViewRemoteViews(
     size: DpSize?,
     now: Long,
 ): RemoteViews {
-    val prayTimes = when {
-        coordinates != null -> coordinates
-        language.isAfghanistanExclusive -> kabulCoordinates
-        language.isIranExclusive || TimeZone.getDefault().id == IRAN_TIMEZONE_ID -> tehranCoordinates
-        else -> null
-    }?.calculatePrayTimes()
+    val prayTimes = coordinates?.calculatePrayTimes()
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = androidx.compose.ui.graphics.Color(
         when {
