@@ -277,6 +277,12 @@ enum class Language(val code: String, val nativeName: String) {
             this == NE -> listOf(Calendar.NEPALI, Calendar.GREGORIAN)
             prefersPersianCalendar -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
             else -> listOf(Calendar.GREGORIAN)
+        }.let {
+            if (when (userTimeZoneId) {
+                    IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
+                    else -> false
+                } && Calendar.SHAMSI !in it
+            ) it + Calendar.SHAMSI else it
         }
 
     val defaultWeekStart
