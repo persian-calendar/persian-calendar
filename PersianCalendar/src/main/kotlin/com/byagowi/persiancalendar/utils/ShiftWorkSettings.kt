@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import kotlin.collections.emptyList
 
 @Stable
 data class ShiftWorkSettings(

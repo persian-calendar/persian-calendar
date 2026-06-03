@@ -286,7 +286,9 @@ fun generateMoonInScorpioEntries(
                 val startDay = day
                 var endDay = day
                 var endClock = searchLunarLongitude(endDay, rangeEnd)
-                while (endClock == null) { endDay += 1; endClock = searchLunarLongitude(endDay, rangeEnd) }
+                while (endClock == null) {
+                    endDay += 1; endClock = searchLunarLongitude(endDay, rangeEnd)
+                }
                 val upcoming = firstComing && today <= startDay
                 if (upcoming) firstComing = false
                 yield(

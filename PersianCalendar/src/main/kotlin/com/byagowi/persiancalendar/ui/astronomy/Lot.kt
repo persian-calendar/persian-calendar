@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.global.language
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time

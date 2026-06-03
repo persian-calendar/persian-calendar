@@ -133,6 +133,8 @@ android {
             "SelectableText",
             "IconLocation",
             "DuplicateStrings",
+            "ComposeUnstableCollections",
+            "ComposeUnstableReceiver",
         )
     }
 }
