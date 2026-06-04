@@ -133,6 +133,7 @@ android {
             "SelectableText",
             "IconLocation",
             "DuplicateStrings",
+            // https://github.com/slackhq/compose-lints/issues/567
             "ComposeUnstableCollections",
             "ComposeUnstableReceiver",
         )
