@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -41,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -51,6 +53,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
@@ -65,6 +68,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
@@ -89,6 +93,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
+import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.icons.WikipediaIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -100,6 +105,7 @@ import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
@@ -187,6 +193,40 @@ fun DayEvents(
                         originalLayoutDirection = originalLayoutDirection,
                     )
                 }
+            }
+        }
+
+//        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
+//            Spacer(Modifier.height(16.dp))
+//            EncourageActionLayout(
+//                header = stringResource(R.string.warn_if_events_not_set),
+//                discardAction = {
+//                    context.preferences.edit {
+//                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+//                    }
+//                },
+//                acceptAction = { navigateToHolidaysSettings(null) },
+//            )
+//        } else
+        if (true) {
+            val context = LocalContext.current
+            if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
+                var showDialog by remember { mutableStateOf(false) }
+                if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+
+                EncourageActionLayout(
+                    header = stringResource(R.string.ask_calendar_permission),
+                    discardAction = {
+                        context.preferences.edit {
+                            putBoolean(
+                                PREF_SHOW_DEVICE_CALENDAR_EVENTS,
+                                false,
+                            )
+                        }
+                    },
+                    acceptButton = stringResource(R.string.yes),
+                    acceptAction = { showDialog = true },
+                )
             }
         }
     }

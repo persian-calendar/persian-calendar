@@ -1017,41 +1017,6 @@ private fun Details(
                     if (content != null) content(appointments)
                 }
             }
-
-//        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
-//            Spacer(Modifier.height(16.dp))
-//            EncourageActionLayout(
-//                header = stringResource(R.string.warn_if_events_not_set),
-//                discardAction = {
-//                    context.preferences.edit {
-//                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
-//                    }
-//                },
-//                acceptAction = { navigateToHolidaysSettings(null) },
-//            )
-//        } else
-            if (true) {
-                val context = LocalContext.current
-                if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
-                    var showDialog by remember { mutableStateOf(false) }
-                    if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
-
-                    EncourageActionLayout(
-                        header = stringResource(R.string.ask_calendar_permission),
-                        discardAction = {
-                            context.preferences.edit {
-                                putBoolean(
-                                    PREF_SHOW_DEVICE_CALENDAR_EVENTS,
-                                    false,
-                                )
-                            }
-                        },
-                        acceptButton = stringResource(R.string.yes),
-                        acceptAction = { showDialog = true },
-                    )
-                    Spacer(Modifier.height(8.dp))
-                }
-            }
         }
     }
 }
