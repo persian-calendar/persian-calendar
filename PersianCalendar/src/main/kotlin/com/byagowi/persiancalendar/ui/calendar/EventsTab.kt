@@ -317,8 +317,12 @@ private fun DayEventContent(
                     TooltipAnchorPosition.Above,
                 ),
                 tooltip = {
-                    val wikipediaEntry: String? =
-                        if (BuildConfig.DEVELOPMENT) event.metadata["wikipedia"] else null
+                    val wikipediaEntry: String? = if (when {
+                            BuildConfig.DEVELOPMENT -> true
+                            event.source == EventSource.AncientIran -> true
+                            else -> false
+                        }
+                    ) event.metadata["wikipedia"] else null
                     val text = listOfNotNull(
                         when {
                             event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
