@@ -68,7 +68,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.R
@@ -99,7 +98,6 @@ import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.HistoricalPersianDate
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
-import com.byagowi.persiancalendar.utils.alternativeEpochs
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
 import com.byagowi.persiancalendar.utils.formatDate
@@ -272,7 +270,8 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         if (language.isPersian) {
-            val enableExtra = eventsRepository.iranAncient || (isAstronomicalExtraFeaturesEnabled && isExpanded)
+            val enableExtra =
+                eventsRepository.iranAncient || (isAstronomicalExtraFeaturesEnabled && isExpanded)
             AnimatedVisibility(enableExtra || persianDate.isOldEra) {
                 val historicalPersianDate = HistoricalPersianDate(persianDate)
                 AutoSizedBodyText(

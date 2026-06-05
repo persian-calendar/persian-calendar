@@ -160,7 +160,6 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_OUTDATED_SHOWN
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
-import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
@@ -205,7 +204,6 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AppModesDropDown
-import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationMenuArrow
