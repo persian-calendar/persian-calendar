@@ -57,6 +57,7 @@ android {
             "ta",
             "de",
             "ota",
+            "in",
         )
         base.archivesName.set("PersianCalendar-$versionName-$gitInfo")
     }

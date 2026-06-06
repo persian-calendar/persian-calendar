@@ -68,6 +68,9 @@ enum class Language(val code: String, val nativeName: String) {
     GLK(
         "glk", "گيلکي",
     ),
+    IN(
+        "in", "Bahasa Indonesia",
+    ),
     IT(
         "it", "Italiano",
     ),
