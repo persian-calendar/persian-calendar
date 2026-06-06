@@ -167,13 +167,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, EN_IR, JA, ZH_CN, FR, ES, DE, PT, IT, AR, TR, TG, RU, CKB -> true
+            EN_US, EN_IR, JA, ZH_CN, FR, ES, DE, PT, IT, AR, TR, TG, RU, CKB, IN -> true
             else -> false
         }
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, TR, KMR, TA, TG, NE, RU -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, TR, KMR, TA, TG, NE, RU, IN -> true
             else -> false
         }
 
@@ -181,6 +181,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             FA_AF, PS, UR, ES, DE, AR, CKB, TR, IT, JA, PT, ZH_CN, OTA, KMR, TG, NE, TA -> CalculationMethod.MWL
             FA, AZB, EN_IR, EN_US, GLK -> CalculationMethod.Tehran
+            IN -> CalculationMethod.Singapore
             FR -> CalculationMethod.France
             RU -> CalculationMethod.Russia
         }
@@ -255,7 +256,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA -> true
+            EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, IN -> true
             else -> false
         }
 
@@ -273,6 +274,7 @@ enum class Language(val code: String, val nativeName: String) {
                 Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC,
             ) else listOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
 
+            this == IN -> listOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
             this == EN_IR -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN)
             this == TR -> listOf(Calendar.GREGORIAN, Calendar.ISLAMIC)
             this == AR || this == OTA -> listOf(Calendar.ISLAMIC, Calendar.GREGORIAN)
@@ -292,7 +294,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK, OTA -> WeekDay.SATURDAY
             EN_US -> WeekDay.SUNDAY
-            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
+            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE, IN -> WeekDay.MONDAY
         }
     val defaultWeekStartAsString get() = defaultWeekStart.ordinal.toString()
 
@@ -466,7 +468,7 @@ enum class Language(val code: String, val nativeName: String) {
             EN_US -> $$"%2$s$$sep%3$s$$sep%1$s"
             // Day major, most likely everything else goes here but check via JS'
             // new Date().toLocaleDateString('XX')
-            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> $$"%3$s$$sep%2$s$$sep%1$s"
+            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA, IN -> $$"%3$s$$sep%2$s$$sep%1$s"
         }
         return format.format(
             numeral.format(year),
