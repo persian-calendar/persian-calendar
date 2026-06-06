@@ -209,7 +209,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isArabicScript: Boolean
         get() = when (this) {
             EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, TR, KMR, EN_IR, TG, NE, TA, IN -> false
-            else -> true
+            FA, FA_AF, PS, AR, AZB, CKB, GLK, OTA, UR -> true
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
