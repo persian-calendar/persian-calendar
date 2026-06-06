@@ -99,5 +99,5 @@ adenoxi: Adel Noruzi"</string>
     <string name="method_france" translatable="false">Muslims of France</string>
     <string name="method_russia" translatable="false">Spiritual Administration of Muslims of Russia</string>
     <!-- This originally was Islamic Religious Council of Singapore but let's mention Malaysia also -->
-    <string name="method_singapore" translatable="false">Malaysia / Singapore</string>
+    <string name="method_singapore" translatable="false">Brunei, Indonesia, Malaysia, and Singapore</string>
 </resources>

@@ -80,7 +80,7 @@ fun CalculationMethod.title(resources: Resources): String {
         when (this) {
             CalculationMethod.France -> return "مسلمانان فرانسه"
             CalculationMethod.Russia -> return "ادارهٔ معنوی مسلمانان روسیه"
-            CalculationMethod.Singapore -> return "مالزی / سنگاپور"
+            CalculationMethod.Singapore -> return "برونئی، اندونزی، مالزی، و سنگاپور"
             else -> {}
         }
     }
