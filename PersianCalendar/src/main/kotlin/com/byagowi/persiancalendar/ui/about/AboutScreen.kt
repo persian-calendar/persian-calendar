@@ -100,6 +100,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.faq
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
@@ -262,7 +263,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         ),
     ) {
         // Help
-        if (language.isUserAbleToReadPersian) {
+        if (language.isUserAbleToReadPersian || eventsRepository.iranHolidays || eventsRepository.iranOthers) {
             Row(modifier = Modifier.padding(top = 24.dp, start = 20.dp)) {
                 Icon(
                     modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
