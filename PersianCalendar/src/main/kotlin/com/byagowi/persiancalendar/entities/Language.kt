@@ -293,14 +293,15 @@ enum class Language(val code: String, val nativeName: String) {
     val defaultWeekStart
         get() = when (this) {
             FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK, OTA -> WeekDay.SATURDAY
-            EN_US -> WeekDay.SUNDAY
-            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE, IN -> WeekDay.MONDAY
+            EN_US, IN -> WeekDay.SUNDAY
+            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
         }
     val defaultWeekStartAsString get() = defaultWeekStart.ordinal.toString()
 
     val defaultWeekEnds: Set<WeekDay>
         get() = when {
             this == FA || isIranExclusive -> setOf(WeekDay.FRIDAY)
+            this == IN -> setOf(WeekDay.SATURDAY, WeekDay.SUNDAY, WeekDay.FRIDAY)
             isAfghanistanExclusive -> setOf(WeekDay.FRIDAY)
             isNepali -> setOf(WeekDay.SATURDAY)
             prefersGregorianCalendar -> setOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
