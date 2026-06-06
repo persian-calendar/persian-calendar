@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -54,7 +54,7 @@ fun ProvincesDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { province = provinceName }
-                    .height(SettingsItemHeight.dp)
+                    .defaultMinSize(minHeight = SettingsItemHeight.dp)
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) { Text(provinceName) }
         }
@@ -94,7 +94,7 @@ fun DistrictsDialog(
                         )
                         context.preferences.saveLocation(coordinates, districts[index].first[0])
                     }
-                    .height(SettingsItemHeight.dp)
+                    .defaultMinSize(minHeight = SettingsItemHeight.dp)
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) {
                 Text(

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -71,7 +72,7 @@ fun PrayerSelectDialog(
                         if (it) alarms += alarm else alarms -= alarm
                     }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
-                    .height(SettingsItemHeight.dp),
+                    .defaultMinSize(minHeight = SettingsItemHeight.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Checkbox(checked = alarm in alarms, onCheckedChange = null)
@@ -105,7 +106,7 @@ fun PrayerSelectPreviewDialog(
                         onDismissRequest()
                         startAthan(context, it, null)
                     }
-                    .height(SettingsItemHeight.dp)
+                    .defaultMinSize(minHeight = SettingsItemHeight.dp)
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) { Text(stringResource(it.stringRes)) }
         }

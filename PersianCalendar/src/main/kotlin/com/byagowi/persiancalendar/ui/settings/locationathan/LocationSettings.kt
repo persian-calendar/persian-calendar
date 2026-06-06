@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -42,7 +43,12 @@ fun LocationSettings(
                 onDismissRequest = onDismissRequest,
             )
         }
-        AnimatedVisibility(coordinates != null) {
+        AnimatedVisibility(
+            visible = coordinates != null && (language.isPersianOrDari || when (language) {
+                Language.EN_US, Language.EN_IR -> true
+                else -> false
+            }),
+        ) {
             val context = LocalContext.current
             SettingsClickable(
                 title = when {

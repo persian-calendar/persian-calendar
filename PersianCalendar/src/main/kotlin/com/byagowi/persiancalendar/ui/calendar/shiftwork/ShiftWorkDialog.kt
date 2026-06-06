@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -135,7 +136,7 @@ fun ShiftWorkDialogContent(
                 .fillMaxWidth()
                 .toggleable(recurs, role = Role.Checkbox) { recurs = it }
                 .padding(horizontal = SettingsHorizontalPaddingItem.dp)
-                .height(SettingsItemHeight.dp),
+                .defaultMinSize(minHeight = SettingsItemHeight.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(checked = recurs, onCheckedChange = null)

@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -61,7 +62,7 @@ fun LocationDialog(
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
-                    .height(SettingsItemHeight.dp)
+                    .defaultMinSize(minHeight = SettingsItemHeight.dp)
                     .fillMaxWidth()
                     .clickable {
                         onDismissRequest()

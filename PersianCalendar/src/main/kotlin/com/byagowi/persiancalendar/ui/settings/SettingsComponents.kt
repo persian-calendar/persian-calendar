@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.SettingsBackupRestore
@@ -28,7 +27,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
@@ -57,7 +55,6 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -250,7 +247,7 @@ fun SettingsSingleSelect(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(SettingsItemHeight.dp)
+                            .defaultMinSize(minHeight = SettingsItemHeight.dp)
                             .selectable(entryValue == persistedValue, role = Role.RadioButton) {
                                 context.preferences.edit { putString(key, entryValue) }
                                 onDismissRequest()
@@ -259,14 +256,7 @@ fun SettingsSingleSelect(
                     ) {
                         RadioButton(selected = entryValue == persistedValue, onClick = null)
                         Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                        Text(
-                            entry,
-                            maxLines = 1,
-                            autoSize = TextAutoSize.StepBased(
-                                minFontSize = 9.sp,
-                                maxFontSize = LocalTextStyle.current.fontSize,
-                            ),
-                        )
+                        Text(entry)
                     }
                 }
             }
@@ -316,7 +306,7 @@ fun SettingsMultiSelect(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(SettingsItemHeight.dp)
+                        .defaultMinSize(minHeight = SettingsItemHeight.dp)
                         .toggleable(value = entryValue in result, role = Role.Checkbox) {
                             if (it) result += entryValue else result -= entryValue
                         }
@@ -324,14 +314,7 @@ fun SettingsMultiSelect(
                 ) {
                     Checkbox(checked = entryValue in result, onCheckedChange = null)
                     Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-                    Text(
-                        entry,
-                        maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 9.sp,
-                            maxFontSize = LocalTextStyle.current.fontSize,
-                        ),
-                    )
+                    Text(entry)
                 }
             }
         }

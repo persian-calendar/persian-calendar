@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -166,7 +167,7 @@ fun CalendarPreferenceDialog(
                                 }
                             },
                         )
-                        .height(SettingsItemHeight.dp)
+                        .defaultMinSize(minHeight = SettingsItemHeight.dp)
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                         .fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,

@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -59,7 +60,7 @@ fun LanguageDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(SettingsItemHeight.dp)
+                    .defaultMinSize(minHeight = SettingsItemHeight.dp)
                     .selectable(item == currentLanguage, role = Role.RadioButton) {
                         if (item != currentLanguage) context.preferences.saveLanguage(item)
                         onDismissRequest()
