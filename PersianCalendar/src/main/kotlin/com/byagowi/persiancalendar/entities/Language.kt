@@ -301,7 +301,7 @@ enum class Language(val code: String, val nativeName: String) {
     val defaultWeekEnds: Set<WeekDay>
         get() = when {
             this == FA || isIranExclusive -> setOf(WeekDay.FRIDAY)
-            this == IN -> setOf(WeekDay.SATURDAY, WeekDay.SUNDAY, WeekDay.FRIDAY)
+            this == IN -> setOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
             isAfghanistanExclusive -> setOf(WeekDay.FRIDAY)
             isNepali -> setOf(WeekDay.SATURDAY)
             prefersGregorianCalendar -> setOf(WeekDay.SATURDAY, WeekDay.SUNDAY)
