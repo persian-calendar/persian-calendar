@@ -25,20 +25,14 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner {
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
 
-    /** As [androidx.activity.compose.setOwners] is private */
-    private fun setOwners() {
-        val decorView = window.decorView
-        decorView.setViewTreeLifecycleOwner(this)
-        decorView.setViewTreeSavedStateRegistryOwner(this)
-    }
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         isFullscreen = true
         isInteractive = true
         // isScreenBright = false
-        setOwners()
+        window.decorView.setViewTreeLifecycleOwner(this)
+        window.decorView.setViewTreeSavedStateRegistryOwner(this)
         val composeView = ComposeView(this)
         composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         composeView.setContent { SystemTheme { DreamContent(finish = ::finish) } }
