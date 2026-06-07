@@ -325,7 +325,8 @@
       "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تظاهرات_۱۵_خرداد" } },
 
     { "holiday": false, "month": 3, "day": 15, "type": "Iran",
-      "title": "زندانی‌شدن حضرت امام خمینی (ره) به دست مأموران ستم شاهی پهلوی (۱۳۴۲ ه‍.ش)" },
+      "title": "زندانی‌شدن حضرت امام خمینی (ره) به دست مأموران ستم شاهی پهلوی (۱۳۴۲ ه‍.ش)"
+      "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/تظاهرات_۱۵_خرداد#دستگیری_روح‌الله_خمینی_و_بروز_تظاهرات" } },
 
     { "holiday": false, "month": 3, "day": 20, "type": "Iran",
       "title": "روز صنایع دستی",
