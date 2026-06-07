@@ -5,25 +5,19 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
-import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 
-class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, ViewModelStoreOwner {
+class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner {
 
     private val lifecycleRegistry = LifecycleRegistry(this)
     override val lifecycle get() = lifecycleRegistry
 
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
     override val savedStateRegistry get() = savedStateRegistryController.savedStateRegistry
-
-    private val _viewModelStore = ViewModelStore()
-    override val viewModelStore get() = _viewModelStore
 
     override fun onCreate() {
         super.onCreate()
@@ -35,7 +29,6 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, Vie
     private fun setOwners() {
         val decorView = window.decorView
         decorView.setViewTreeLifecycleOwner(this)
-        decorView.setViewTreeViewModelStoreOwner(this)
         decorView.setViewTreeSavedStateRegistryOwner(this)
     }
 
@@ -65,6 +58,5 @@ class PersianCalendarDreamService : DreamService(), SavedStateRegistryOwner, Vie
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
-        viewModelStore.clear()
     }
 }
