@@ -121,9 +121,11 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
-    val degrees = value.toInt()
-    val minutes = (value % 1 * 60).roundToInt()
+@VisibleForTesting
+fun formatAngle(value: Double, isAbjad: Boolean = false): String {
+    val rounded = (value * 60).roundToInt()
+    val degrees = rounded / 60
+    val minutes = rounded - degrees * 60
     if (isAbjad) return toAbjad(degrees) + " " + toAbjad(minutes)
     return numeral.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
@@ -548,7 +550,7 @@ private fun AscendantZodiac(
         // Alula Borealis (ν UMa) = الأولى الشمالية "The First Northern [Spring]"
         alulaBorealis(time) to (if (language.isArabicScript) "الأولى الشمالية" else "Alula Borealis"),
     ) /*+ run {
-        Lot.entries.map { lot -> lot.calculate(houses[0], isDiurnal, time) to lot.title() }
+        Lot.entries.map { lot -> lot.calculate(houses[0], isDiurnal(houses, time), time) to lot.title() }
     }*/).map { (longitude, title) -> Triple(Zodiac.fromTropical(longitude), longitude, title) }
 
     val numFontStyle = SpanStyle() // to be used later, hopefully

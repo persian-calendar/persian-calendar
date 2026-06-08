@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.ui.astronomy.Lot
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.alulaBorealis
+import com.byagowi.persiancalendar.ui.astronomy.formatAngle
 import com.byagowi.persiancalendar.ui.astronomy.houses
 import com.byagowi.persiancalendar.ui.astronomy.isDiurnal
 import com.byagowi.persiancalendar.ui.astronomy.meanApogee
@@ -562,6 +563,18 @@ class AstronomyTests {
         ).forEachIndexed { i, element ->
             assertEquals(element, ChineseZodiac.entries[i].fixedElement)
         }
+    }
+
+    @Test
+    fun `Check angle roundness`() {
+        listOf(
+            (27 + 59 / 60.0) to "\u200E۲۷°:۵۹’\u200E",
+            (27 + 59.6 / 60.0) to "\u200E۲۸°:۰۰’\u200E",
+            27.99 to "\u200E۲۷°:۵۹’\u200E",
+            27.996 to "\u200E۲۸°:۰۰’\u200E",
+        ).map { (input, expected) ->
+            { assertEquals(expected, formatAngle(input), "$input") }
+        }.let(::assertAll)
     }
 
     @Test
