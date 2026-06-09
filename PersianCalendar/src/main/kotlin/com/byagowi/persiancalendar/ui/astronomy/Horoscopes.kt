@@ -227,7 +227,7 @@ fun HoroscopeDialog(
                 ),
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-            AscendantZodiac(time = time, coordinates = it, abjad = false, isYearEquinox = false)
+            AscendantZodiac(time = time, coordinates = it, abjad = false)
         } ?: Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
     }
 }
@@ -499,7 +499,6 @@ private fun YearHoroscopeDialogContent(
             modifier = planetaryModifier,
             progress = animationProgress.value,
             abjad = abjad,
-            isYearEquinox = true,
         )
     }
 }
@@ -522,17 +521,12 @@ private val ascendantBodies = listOf(
 private fun AscendantZodiac(
     time: Time,
     coordinates: Coordinates,
-    isYearEquinox: Boolean,
     abjad: Boolean,
     modifier: Modifier = Modifier,
     progress: Float = 1f,
 ) {
     val bodiesZodiac = ascendantBodies.map { body ->
-        when (body) {
-            // Sometimes 359.99 puts it in an incorrect house so let's just hardcode it
-            Body.Sun if isYearEquinox -> body to .0
-            else -> body to geocentricLongitudeAndDistanceOfBody(body, time).first
-        }
+        body to ((geocentricLongitudeAndDistanceOfBody(body, time).first * 60).roundToInt() / 60.0)
     }.sortedBy { (_, longitude) -> longitude }.groupBy { (_, longitude) ->
         Zodiac.fromTropical(longitude)
     }
@@ -541,8 +535,8 @@ private fun AscendantZodiac(
     val ascendingNode = meanAscendingNode(time)
     val extras = (listOf(
         meanApogee(time) to /*"⚸" + */stringResource(R.string.black_moon),
-        // North Node / Dragon's Head (ascending node, Rahu) — Moon crosses going north
-        ascendingNode to (if (language.isArabicScript) "رأس" else "Rahu"),
+        // North Node / Dragon's Head (ascending node, Rāhu) — Moon crosses going north
+        ascendingNode to (if (language.isArabicScript) "رأس" else "Rāhu"),
         // South Node / Dragon's Tail (descending node, Ketu) — Moon crosses going south
         (ascendingNode + 180).mod(360f) to (if (language.isArabicScript) "ذنب" else "Ketu"),
         // Hatysa (ι Orionis Aa) = نير السيف "Bright one of the Sword"
