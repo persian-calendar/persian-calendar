@@ -84,7 +84,10 @@ dependencies {
     implementation(libs.wear.protolayout.material3)
     implementation(libs.wear.tiles)
     implementation(libs.wear.tooling.preview)
-    implementation(libs.wear.watchface.complications.data.source.ktx)
+    implementation(libs.wear.watchface.complications.data.source.ktx) {
+        // https://issuetracker.google.com/issues/525074818
+        exclude("androidx.preference", "preference")
+    }
     implementation(libs.work.manager.ktx)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
