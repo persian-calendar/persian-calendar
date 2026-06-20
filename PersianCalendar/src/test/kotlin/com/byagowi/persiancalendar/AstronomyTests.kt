@@ -44,6 +44,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.math.PI
+import kotlin.math.floor
+import kotlin.math.roundToInt
+import kotlin.math.sin
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
@@ -615,5 +619,32 @@ class AstronomyTests {
         ).map { (input, expected) ->
             { assertEquals(expected, toAbjad(input), "$input") }
         }.let(::assertAll)
+    }
+
+    fun toBase60(value: Double, levels: Int): List<Int> {
+        var remainder = value
+        val parts = IntArray(levels)
+        (0..<levels - 1).forEach { i ->
+            parts[i] = floor(remainder).toInt()
+            remainder = (remainder - parts[i]) * 60
+        }
+        parts[levels - 1] = remainder.roundToInt()
+        (levels - 1 downTo 1).forEach { i ->
+            if (parts[i] == 60) {
+                parts[i] = 0
+                parts[i - 1] += 1
+            }
+        }
+        return parts.asList()
+    }
+
+    // Still doesn't match with https://w.wiki/RUY4 though :/
+    @Test
+    fun `sinus table`() {
+        (0..90).forEach { degree ->
+            val parts = toBase60(sin(Math.toRadians(degree.toDouble())), levels = 5)
+            val formattedBase60 = parts.joinToString(", ") { toAbjad(it) }
+            println("$degree\t|\t${toAbjad(degree)}\t|\t$formattedBase60")
+        }
     }
 }
