@@ -88,6 +88,8 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
 }
 
 const val ORIGINAL_TITLE = "originalTitle"
+const val BEGINNING_PERSIAN_YEAR = "beginningPersianYear"
+const val ENDING_PERSIAN_YEAR = "endingPersianYear"
 
 @VisibleForTesting
 fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): AbstractDate? {

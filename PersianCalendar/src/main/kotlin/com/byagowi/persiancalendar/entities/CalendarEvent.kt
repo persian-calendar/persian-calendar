@@ -11,37 +11,37 @@ import java.util.GregorianCalendar
 
 sealed class CalendarEvent<T : AbstractDate>(
     val title: String, val isHoliday: Boolean, val date: T, val source: EventSource?,
-    val metadata: Map<String, String>,
+    val metadata: Map<String, Any>,
 ) {
     class GregorianCalendarEvent(
         title: String, isHoliday: Boolean, date: CivilDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: Map<String, Any>,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date, source, metadata)
 
     class IslamicCalendarEvent(
         title: String, isHoliday: Boolean, date: IslamicDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: Map<String, Any>,
     ) : CalendarEvent<IslamicDate>(title, isHoliday, date, source, metadata)
 
     class PersianCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: Map<String, Any>,
     ) : CalendarEvent<PersianDate>(title, isHoliday, date, source, metadata)
 
     class EquinoxCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: Map<String, Any>,
         val remainingMillis: Long,
     ) : CalendarEvent<PersianDate>(title, isHoliday, date, source, metadata)
 
     class NepaliCalendarEvent(
         title: String, isHoliday: Boolean, date: NepaliDate, source: EventSource?,
-        metadata: Map<String, String>,
+        metadata: Map<String, Any>,
     ) : CalendarEvent<NepaliDate>(title, isHoliday, date, source, metadata)
 
     class DeviceCalendarEvent(
         date: CivilDate, title: String, isHoliday: Boolean, source: EventSource?,
-        metadata: Map<String, String> = emptyMap(),
+        metadata: Map<String, Any> = emptyMap(),
         val id: Long, val description: String, val start: GregorianCalendar,
         val end: GregorianCalendar, val color: String, val time: String?,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date, source, metadata)

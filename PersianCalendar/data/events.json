@@ -387,7 +387,12 @@
       "title": "روز صنعت و معدن" },
 
     { "holiday": false, "month": 4, "day": 10, "type": "Iran",
-      "title": "روز دیپلماسی فرهنگی و تعامل با جهان" },
+      "title": "روز دیپلماسی فرهنگی و تعامل با جهان",
+      "metadata": {
+        "wikipedia": "https://fa.wikipedia.org/wiki/سازمان_فرهنگ_و_ارتباطات_اسلامی",
+        "begin": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1403.pdf#page=7"
+      }
+    },
 
     { "holiday": false, "month": 4, "day": 10, "type": "Iran",
       "title": "روز آزادسازی شهر مهران" },
@@ -436,6 +441,15 @@
     { "holiday": false, "month": 4, "day": 22, "type": "Iran",
       "title": "روز فناوری اطلاعات",
       "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ملی_فناوری_اطلاعات" } },
+
+    { "holiday": false, "month": 4, "day": 23, "type": "Iran",
+      "title": "روز گفت‌وگو و تعامل سازنده با دنیا",
+      "metadata": {
+        "wikipedia": "https://fa.wikipedia.org/wiki/برنامه_جامع_اقدام_مشترک",
+        "begin": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1396.pdf#page=7",
+        "end": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1402.pdf#page=7"
+      }
+    },
 
     { "holiday": false, "month": 4, "day": 23, "type": "Iran",
       "title": "گشایش نخستین مجلس خبرگان رهبری (۱۳۶۲ ه‍.ش)",
