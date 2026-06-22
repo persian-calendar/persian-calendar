@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          submodules: true
           fetch-depth: 1
 
       - uses: gradle/actions/wrapper-validation@v6
@@ -76,6 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          submodules: true
           fetch-depth: 1
 
       - name: Set up JDK
