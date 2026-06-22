@@ -391,7 +391,8 @@
       "title": "روز دیپلماسی فرهنگی و تعامل با جهان",
       "metadata": {
         "wikipedia": "https://fa.wikipedia.org/wiki/سازمان_فرهنگ_و_ارتباطات_اسلامی",
-        "begin": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1403.pdf#page=7"
+        "beginningPersianYear": 1403,
+        "beginningPersianYearReference": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1403.pdf#page=7"
       }
     },
 
@@ -447,8 +448,10 @@
       "title": "روز گفت‌وگو و تعامل سازنده با دنیا",
       "metadata": {
         "wikipedia": "https://fa.wikipedia.org/wiki/برنامه_جامع_اقدام_مشترک",
-        "begin": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1396.pdf#page=7",
-        "end": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1402.pdf#page=7"
+        "beginningPersianYear": 1396,
+        "beginningPersianYearReference": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1396.pdf#page=7",
+        "endingPersianYear": 1402,
+        "endingPersianYearReference": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1402.pdf#page=7"
       }
     },
 
@@ -1317,7 +1320,12 @@
     { "holiday": false, "month": 1, "day": 2, "type": "Iran",
       "title": "روز امر به معروف و نهی از منکر" },
     { "holiday": true, "month": 1, "day": 9, "type": "Iran",
-      "title": "تاسوعای حسینی" },
+      "title": "تاسوعای حسینی",
+      "metadata": {
+        "beginningPersianYear": 1272,
+        "beginningPersianYearReference": "https://upload.wikimedia.org/wikipedia/commons/8/8f/تقویم_فارسی_سال_۱۲۷۲_هجری_شمسی.pdf"
+      }
+    },
     { "holiday": true, "month": 1, "day": 10, "type": "Iran",
       "title": "عاشورای حسینی" },
     { "holiday": false, "month": 1, "day": 11, "type": "Iran",

@@ -378,7 +378,7 @@ private fun DayEventContent(
                                                             }
 
                                                             event.source == EventSource.IranFormer -> {
-                                                                (event.metadata["end"] as? String)?.also(
+                                                                (event.metadata["endingPersianYearReference"] as? String)?.also(
                                                                     uriHandler::openUri,
                                                                 )
                                                             }

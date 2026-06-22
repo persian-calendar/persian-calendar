@@ -103,7 +103,7 @@ data class EventsRepository(
             ),
         ).flatten().filterEvents().filter {
             val begin = (it.metadata[BEGINNING_PERSIAN_YEAR] as? Int).let { begin ->
-                if (begin == null && it.source == EventSource.Iran) 1358 else null
+                if (begin == null && it.source == EventSource.Iran) 1358 else begin
             }
             val end = it.metadata[ENDING_PERSIAN_YEAR] as? Int
             when {
@@ -172,14 +172,7 @@ data class EventsRepository(
                     record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
                     else -> ""
                 } + originalTitle
-                val metadata = buildMap<String, Any> {
-                    putAll(record.metadata)
-                    put(ORIGINAL_TITLE, originalTitle)
-                    record.metadata["begin"]?.let(::extractYear)
-                        ?.also { put(BEGINNING_PERSIAN_YEAR, it) }
-                    record.metadata["end"]?.let(::extractYear)
-                        ?.also { put(ENDING_PERSIAN_YEAR, it) }
-                }
+                val metadata = record.metadata + (ORIGINAL_TITLE to originalTitle)
                 val source = record.source
                 (when (calendar) {
                     Calendar.SHAMSI -> {
@@ -230,12 +223,6 @@ data class EventsRepository(
         val iranDefault = setOf(IRAN_HOLIDAYS_KEY)
         val afghanistanDefault = setOf(AFGHANISTAN_HOLIDAYS_KEY)
         val nepalDefault = setOf(NEPAL_HOLIDAYS_KEY)
-
-        private val tehranUniversityYearPattern =
-            Regex("https://calendar.ut.ac.ir/.*Calendar-(\\d{4}).pdf.*")
-
-        private fun extractYear(link: String): Int? =
-            tehranUniversityYearPattern.find(link)?.groups?.get(1)?.value?.toIntOrNull()
 
         fun getEnabledTypes(preferences: SharedPreferences, language: Language): Set<String> {
             return preferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: when {

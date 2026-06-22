@@ -16,6 +16,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
@@ -137,7 +138,7 @@ abstract class CodeGenerators : DefaultTask() {
     @Serializable
     data class Event(
         val holiday: Boolean, val month: Int, val day: Int, val type: String, val title: String,
-        val metadata: Map<String, String> = emptyMap(),
+        val metadata: Map<String, JsonPrimitive> = emptyMap(),
     )
 
     private fun generateEventsCode(eventsJson: File, builder: FileSpec.Builder) {
@@ -175,7 +176,7 @@ abstract class CodeGenerators : DefaultTask() {
             "day" to Int::class.asClassName(),
             "metadata" to Map::class.asClassName().parameterizedBy(
                 String::class.asClassName(),
-                String::class.asClassName(),
+                Any::class.asClassName(),
             ),
         )
         builder.addType(
@@ -226,7 +227,7 @@ abstract class CodeGenerators : DefaultTask() {
                                             withIndent {
                                                 addStatement("mapOf(")
                                                 it.metadata.forEach { (k, v) ->
-                                                    addStatement("%S to %S,", k, v)
+                                                    addStatement("%S to %L,", k, v)
                                                 }
                                             }
                                             add(")")
