@@ -717,4 +717,3 @@ fun readEventsWithEquinox(
         } else events
     } else events
 }
-
