@@ -658,7 +658,18 @@ private fun EquinoxCountDownContent(
 fun readEvents(
     jdn: Jdn,
     deviceEvents: DeviceCalendarEventsStore,
-): List<CalendarEvent<*>> = sortEvents(eventsRepository.getEvents(jdn, deviceEvents), language)
+): List<CalendarEvent<*>> {
+    val isAfghanistan = language.isAfghanistanExclusive
+    val noPriority = !isAfghanistan && !language.isIranExclusive
+    return eventsRepository.getEvents(jdn, deviceEvents).sortedBy {
+        val priority = (isAfghanistan xor (it.source != EventSource.Afghanistan)) || noPriority
+        when {
+            it.isHoliday -> if (priority) 0L else 1L
+            it !is CalendarEvent.DeviceCalendarEvent -> if (priority) 2L else 3L
+            else -> it.start.timeInMillis
+        }
+    }
+}
 
 @Composable
 fun readEventsWithEquinox(
@@ -706,15 +717,3 @@ fun readEventsWithEquinox(
     } else events
 }
 
-fun sortEvents(events: List<CalendarEvent<*>>, language: Language): List<CalendarEvent<*>> {
-    val isAfghanistan = language.isAfghanistanExclusive
-    val noPriority = !isAfghanistan && !language.isIranExclusive
-    return events.sortedBy {
-        val priority = (isAfghanistan xor (it.source != EventSource.Afghanistan)) || noPriority
-        when {
-            it.isHoliday -> if (priority) 0L else 1L
-            it !is CalendarEvent.DeviceCalendarEvent -> if (priority) 2L else 3L
-            else -> it.start.timeInMillis
-        }
-    }
-}
