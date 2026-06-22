@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -27,7 +28,6 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
-import com.byagowi.persiancalendar.ui.calendar.readEvents
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
@@ -77,7 +77,9 @@ private class EventsViewFactory(
         val secondaryDates = secondaryCalendar?.let { calendar -> days.map { it on calendar } }
         var monthChange = false
         var secondaryMonthChange = false
-        days.map { it to readEvents(it, deviceEvents) }.flatMapIndexed { i, (day, events) ->
+        days.map {
+            it to eventsRepository.getEvents(it, deviceEvents)
+        }.flatMapIndexed { i, (day, events) ->
             val items = buildList {
                 val shiftWorkTitle = shiftWorkSettings.workTitle(day)
                 if (shiftWorkTitle != null) add(shiftWorkTitle)

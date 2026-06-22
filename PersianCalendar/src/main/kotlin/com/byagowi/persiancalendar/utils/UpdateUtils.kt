@@ -126,7 +126,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
-import com.byagowi.persiancalendar.ui.calendar.readEvents
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewDraw
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -642,7 +641,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
         remoteViews.removeAllViews(id)
         val day = monthStartJdn + i - 7 - startingWeekDay
-        val events = readEvents(day, deviceEvents)
+        val events = eventsRepository.getEvents(day, deviceEvents)
         val date = day on mainCalendar
         run {
             val viewId = when {

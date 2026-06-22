@@ -108,6 +108,18 @@ data class EventsRepository(
                 end != null -> persianDate.year <= end
                 else -> true
             }
+        }.let {
+            val isAfghanistan = language.isAfghanistanExclusive
+            val noPriority = !isAfghanistan && !language.isIranExclusive
+            it.sortedBy {
+                val priority =
+                    (isAfghanistan xor (it.source != EventSource.Afghanistan)) || noPriority
+                when {
+                    it.isHoliday -> if (priority) 0L else 1L
+                    it !is CalendarEvent.DeviceCalendarEvent -> if (priority) 2L else 3L
+                    else -> it.start.timeInMillis
+                }
+            }
         }
     }
 

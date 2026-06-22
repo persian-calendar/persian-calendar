@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -75,7 +76,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.outOfMonthAlpha
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
-import com.byagowi.persiancalendar.ui.calendar.readEvents
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -227,7 +227,7 @@ fun SharedTransitionScope.MonthScreen(
                         val resources = LocalResources.current
                         val deviceEvents = remember(index) { context.readWeekDeviceEvents(weekJdn) }
                         val events = (0..<7).map { index ->
-                            readEvents(weekJdn + index, deviceEvents)
+                            eventsRepository.getEvents(weekJdn + index, deviceEvents)
                         }
                         EventsRow(
                             events = events,
