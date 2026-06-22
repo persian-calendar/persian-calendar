@@ -45,9 +45,11 @@ data class EventsRepository(
 
     private fun skipEvent(record: CalendarRecord, calendar: Calendar): Boolean {
         return when (record.source) {
+            EventSource.Iran if iranHolidays && "روز مادر" in record.title -> false
             EventSource.Iran if record.isHoliday && iranHolidays -> false
             EventSource.Iran if iranOthers -> false
-            EventSource.Iran if iranHolidays && "روز مادر " in record.title -> false
+            EventSource.IranFormer if record.isHoliday && iranHolidays -> false
+            EventSource.IranFormer if iranOthers -> false
             EventSource.Afghanistan if record.isHoliday && afghanistanHolidays -> false
             EventSource.Afghanistan if afghanistanOthers -> false
             EventSource.Nepal if record.isHoliday && nepalHolidays -> false
@@ -246,7 +248,7 @@ data class EventsRepository(
                 null -> null
                 EventSource.AncientIran -> IRAN_ANCIENT_KEY
                 EventSource.International -> INTERNATIONAL_KEY
-                EventSource.Iran -> if (isHoliday) IRAN_HOLIDAYS_KEY else IRAN_OTHERS_KEY
+                EventSource.Iran, EventSource.IranFormer -> if (isHoliday) IRAN_HOLIDAYS_KEY else IRAN_OTHERS_KEY
                 EventSource.Nepal -> if (isHoliday) NEPAL_HOLIDAYS_KEY else NEPAL_OTHERS_KEY
                 EventSource.Afghanistan -> if (isHoliday) AFGHANISTAN_HOLIDAYS_KEY else AFGHANISTAN_OTHERS_KEY
             }

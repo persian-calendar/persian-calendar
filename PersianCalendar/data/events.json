@@ -2,6 +2,7 @@
   "Source": {
     "Afghanistan": "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
     "Iran": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1405.pdf",
+    "IranFormer": "",
     "AncientIran": "~https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "International": "~https://www.un.org/en/sections/observances/international-days/",
     "Nepal": ""
@@ -442,7 +443,7 @@
       "title": "روز فناوری اطلاعات",
       "metadata": { "wikipedia": "https://fa.wikipedia.org/wiki/روز_ملی_فناوری_اطلاعات" } },
 
-    { "holiday": false, "month": 4, "day": 23, "type": "Iran",
+    { "holiday": false, "month": 4, "day": 23, "type": "IranFormer",
       "title": "روز گفت‌وگو و تعامل سازنده با دنیا",
       "metadata": {
         "wikipedia": "https://fa.wikipedia.org/wiki/برنامه_جامع_اقدام_مشترک",

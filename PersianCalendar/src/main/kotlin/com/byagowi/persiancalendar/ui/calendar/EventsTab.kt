@@ -249,6 +249,7 @@ private fun DayEventContent(
     val hasTooltip = when {
         language.isPersianOrDari && event is CalendarEvent.DeviceCalendarEvent -> true
         event.source == EventSource.Iran -> true
+        event.source == EventSource.IranFormer -> true
         event.source == EventSource.AncientIran -> true
         event.source == EventSource.International -> true
         event.source == EventSource.Afghanistan -> true
@@ -364,12 +365,22 @@ private fun DayEventContent(
                                 ) {
                                     Row {
                                         val buttons = listOfNotNull(
-                                            if (event.source == EventSource.Iran || event is CalendarEvent.DeviceCalendarEvent) @Composable { shape: Shape ->
+                                            if (when {
+                                                    event.source == EventSource.Iran || event.source == EventSource.IranFormer || event is CalendarEvent.DeviceCalendarEvent -> true
+                                                    else -> false
+                                                }
+                                            ) @Composable { shape: Shape ->
                                                 FilledTonalButton(
                                                     onClick = {
                                                         when {
                                                             event.source == EventSource.Iran -> {
                                                                 uriHandler.openUri(event.source.link)
+                                                            }
+
+                                                            event.source == EventSource.IranFormer -> {
+                                                                (event.metadata["end"] as? String)?.also(
+                                                                    uriHandler::openUri,
+                                                                )
                                                             }
 
                                                             event is CalendarEvent.DeviceCalendarEvent -> {
@@ -502,7 +513,7 @@ private fun DayEventContent(
                 val parts = if (event is CalendarEvent.DeviceCalendarEvent) {
                     listOf("تقویم شخصی")
                 } else when (event.source) {
-                    EventSource.Iran -> listOf("دانشگاه تهران")
+                    EventSource.Iran, EventSource.IranFormer -> listOf("دانشگاه تهران")
                     EventSource.Afghanistan -> listOf("افغانستان")
                     EventSource.International -> listOf("بین‌المللی")
                     EventSource.AncientIran -> listOf("ایران باستان", "جلالی")
