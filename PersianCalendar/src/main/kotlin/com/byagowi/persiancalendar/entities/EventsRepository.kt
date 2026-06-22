@@ -102,7 +102,9 @@ data class EventsRepository(
                 deviceEvents,
             ),
         ).flatten().filterEvents().filter {
-            val begin = it.metadata[BEGINNING_PERSIAN_YEAR] as? Int
+            val begin = (it.metadata[BEGINNING_PERSIAN_YEAR] as? Int).let { begin ->
+                if (begin == null && it.source == EventSource.Iran) 1358 else null
+            }
             val end = it.metadata[ENDING_PERSIAN_YEAR] as? Int
             when {
                 begin != null && end != null -> persianDate.year in begin..end
