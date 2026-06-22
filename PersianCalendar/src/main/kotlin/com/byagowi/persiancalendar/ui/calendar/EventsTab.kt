@@ -78,8 +78,6 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
-import com.byagowi.persiancalendar.entities.ORIGINAL_TITLE
-import com.byagowi.persiancalendar.entities.everyYear
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
@@ -331,7 +329,7 @@ private fun DayEventContent(
                             event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
                             event.source == EventSource.International -> stringResource(R.string.international)
                             event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
-                            event.source == EventSource.Iran -> "این رویداد با نام «${event.metadata[ORIGINAL_TITLE] ?: event.title}» در تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران آمده است."
+                            event.source == EventSource.Iran -> "این رویداد با نام «${event.metadata[EventsRepository.ORIGINAL_TITLE] ?: event.title}» در تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران آمده است."
                             else -> null
                         },
                         wikipediaEntry?.let {
@@ -448,7 +446,7 @@ private fun DayEventContent(
                                             } else if (event.source == EventSource.AncientIran && event.date is PersianDate) {
                                                 append(HistoricalPersianDate(event.date).jalaliDayOfYearName)
                                             } else {
-                                                if (event.date.year == everyYear) append(
+                                                if (event.date.year == EventsRepository.EVERY_YEAR) append(
                                                     language.dm.format(
                                                         numeral.format(event.date.dayOfMonth),
                                                         event.date.monthName,

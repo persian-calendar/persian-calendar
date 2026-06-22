@@ -45,11 +45,12 @@ data class EventsRepository(
 
     private fun skipEvent(record: CalendarRecord, calendar: Calendar): Boolean {
         return when (record.source) {
-            EventSource.Iran if iranHolidays && "روز مادر" in record.title -> false
+            EventSource.Iran if iranHolidays && record.metadata[ALWAYS_DISPLAYED] == true -> false
             EventSource.Iran if record.isHoliday && iranHolidays -> false
             EventSource.Iran if iranOthers -> false
             EventSource.IranFormer if record.isHoliday && iranHolidays -> false
             EventSource.IranFormer if iranOthers -> false
+            EventSource.Afghanistan if afghanistanHolidays && record.metadata[ALWAYS_DISPLAYED] == true -> false
             EventSource.Afghanistan if record.isHoliday && afghanistanHolidays -> false
             EventSource.Afghanistan if afghanistanOthers -> false
             EventSource.Nepal if record.isHoliday && nepalHolidays -> false
@@ -131,7 +132,7 @@ data class EventsRepository(
         val timeZone = TimeZone.getDefault().id
         return this.filter {
             when {
-                "روز مادر" in it.title -> true
+                it.metadata[ALWAYS_DISPLAYED] == true -> true
                 !it.isHoliday && timeZone != IRAN_TIMEZONE_ID && it.source == EventSource.Iran && it.date.calendar == Calendar.ISLAMIC -> false
                 it.isHoliday || it.date.calendar in enabledCalendars || it.date.calendar != Calendar.ISLAMIC -> true
                 else -> false
@@ -162,44 +163,39 @@ data class EventsRepository(
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEventsList(
         events: List<CalendarRecord>, calendar: Calendar,
-    ): List<T> = sequence {
-        events.forEach { record ->
-            if (skipEvent(record, calendar)) return@forEach
-            val isHoliday = determineIsHoliday(record)
-            record.title.split(" ـــ ").forEach { originalTitle ->
-                val title = when {
-                    record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
-                    record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
-                    else -> ""
-                } + originalTitle
-                val metadata = record.metadata + (ORIGINAL_TITLE to originalTitle)
-                val source = record.source
-                (when (calendar) {
-                    Calendar.SHAMSI -> {
-                        val date = PersianDate(everyYear, record.month, record.day)
-                        CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
-                    }
-
-                    Calendar.GREGORIAN -> {
-                        val date = CivilDate(everyYear, record.month, record.day)
-                        CalendarEvent.GregorianCalendarEvent(
-                            title, isHoliday, date, source, metadata,
-                        )
-                    }
-
-                    Calendar.ISLAMIC -> {
-                        val date = IslamicDate(everyYear, record.month, record.day)
-                        CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, metadata)
-                    }
-
-                    Calendar.NEPALI -> {
-                        val date = NepaliDate(everyYear, record.month, record.day)
-                        CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, metadata)
-                    }
-                } as? T).debugAssertNotNull?.let { yield(it) }
+    ): List<T> = events.mapNotNull { record ->
+        if (skipEvent(record, calendar)) return@mapNotNull null
+        val isHoliday = determineIsHoliday(record)
+        val originalTitle = record.title
+        val title = when {
+            record.isHoliday && record.source == EventSource.Iran -> "تعطیلی رسمی به مناسبت "
+            record.isHoliday && (record.source == EventSource.Afghanistan && language.isPersianOrDari) -> "رخصتی به مناسبت "
+            else -> ""
+        } + originalTitle
+        val metadata = record.metadata + (ORIGINAL_TITLE to originalTitle)
+        val source = record.source
+        (when (calendar) {
+            Calendar.SHAMSI -> {
+                val date = PersianDate(EVERY_YEAR, record.month, record.day)
+                CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
             }
-        }
-    }.toList()
+
+            Calendar.GREGORIAN -> {
+                val date = CivilDate(EVERY_YEAR, record.month, record.day)
+                CalendarEvent.GregorianCalendarEvent(title, isHoliday, date, source, metadata)
+            }
+
+            Calendar.ISLAMIC -> {
+                val date = IslamicDate(EVERY_YEAR, record.month, record.day)
+                CalendarEvent.IslamicCalendarEvent(title, isHoliday, date, source, metadata)
+            }
+
+            Calendar.NEPALI -> {
+                val date = NepaliDate(EVERY_YEAR, record.month, record.day)
+                CalendarEvent.NepaliCalendarEvent(title, isHoliday, date, source, metadata)
+            }
+        } as? T).debugAssertNotNull
+    }
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {
         val emptyDeviceCalendar: DeviceCalendarEventsStore = EventsStore.empty()
@@ -224,6 +220,14 @@ data class EventsRepository(
         val afghanistanDefault = setOf(AFGHANISTAN_HOLIDAYS_KEY)
         val nepalDefault = setOf(NEPAL_HOLIDAYS_KEY)
 
+        // This isn't that good approach maybe but is what we used on the project
+        const val EVERY_YEAR = -1
+
+        const val ORIGINAL_TITLE = "originalTitle"
+        const val ALWAYS_DISPLAYED = "alwaysDisplayed"
+        const val BEGINNING_PERSIAN_YEAR = "beginningPersianYear"
+        const val ENDING_PERSIAN_YEAR = "endingPersianYear"
+
         fun getEnabledTypes(preferences: SharedPreferences, language: Language): Set<String> {
             return preferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: when {
                 language.isIranExclusive && TimeZone.getDefault().id == IRAN_TIMEZONE_ID -> iranDefault
@@ -246,6 +250,3 @@ data class EventsRepository(
         fun empty() = EventsRepository(emptySet(), Language.entries[0])
     }
 }
-
-// This isn't that good approach maybe but is what we used on the project
-const val everyYear = -1

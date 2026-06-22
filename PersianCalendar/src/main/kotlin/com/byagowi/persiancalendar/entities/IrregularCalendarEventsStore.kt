@@ -63,7 +63,7 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             val title = "$originalTitle (${numeral.format(year)})"
             val isHoliday = event["holiday"] == "true"
             val source = EventSource.entries.firstOrNull { it.name == event["type"] }
-            val metadata = event + (ORIGINAL_TITLE to originalTitle)
+            val metadata = event + (EventsRepository.ORIGINAL_TITLE to originalTitle)
             when (date) {
                 is PersianDate -> {
                     CalendarEvent.PersianCalendarEvent(title, isHoliday, date, source, metadata)
@@ -86,10 +86,6 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
         }
     }
 }
-
-const val ORIGINAL_TITLE = "originalTitle"
-const val BEGINNING_PERSIAN_YEAR = "beginningPersianYear"
-const val ENDING_PERSIAN_YEAR = "endingPersianYear"
 
 @VisibleForTesting
 fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): AbstractDate? {

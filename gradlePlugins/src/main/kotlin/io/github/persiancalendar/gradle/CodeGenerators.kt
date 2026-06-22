@@ -61,11 +61,11 @@ abstract class CodeGenerators : DefaultTask() {
         setProperty("isWear", isWear)
         val generateDir = generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
 
-        buildList {
-            add("events")
-            if (!isWear) add("cities")
-            if (!isWear) add("districts")
-        }.forEach { name ->
+        run {
+            inputs.file(projectDir / "data" / "events" / "events.json")
+            outputs.file(generateDir / "events.kt")
+        }
+        if (!isWear) listOf("cities", "districts").forEach { name ->
             val input = projectDir / "data" / "$name.json"
             inputs.file(input)
             val output = generateDir / "$name.kt"
@@ -90,11 +90,16 @@ abstract class CodeGenerators : DefaultTask() {
         generatedAppSrcDir.mkdirs()
         val projectDir = pl.projectDirectory.asFile
         val isWear = getIsWear().get()
-        buildList {
-            add("events" to ::generateEventsCode)
-            if (!isWear) add("cities" to ::generateCitiesCode)
-            if (!isWear) add("districts" to ::generateDistrictsCode)
-        }.forEach { (name, generator) ->
+        run {
+            val input = projectDir / "data" / "events" / "events.json"
+            val builder = FileSpec.builder(packageName, "events")
+            generateEventsCode(input, builder)
+            builder.build().writeTo(generatedAppSrcDir)
+        }
+        if (!isWear) listOf(
+            "cities" to ::generateCitiesCode,
+            "districts" to ::generateDistrictsCode,
+        ).forEach { (name, generator) ->
             val input = projectDir / "data" / "$name.json"
             val builder = FileSpec.builder(packageName, name)
             generator(input, builder)
