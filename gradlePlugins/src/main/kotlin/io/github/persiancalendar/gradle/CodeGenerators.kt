@@ -16,8 +16,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -133,17 +135,13 @@ abstract class CodeGenerators : DefaultTask() {
     data class EventStore(
         @SerialName("Source") val source: Map<String, String>,
         @SerialName("#meta") val meta: List<String>,
-        @SerialName("Persian Calendar") val persianCalendar: List<Event>,
-        @SerialName("Hijri Calendar") val islamicCalendar: List<Event>,
-        @SerialName("Gregorian Calendar") val gregorianCalendar: List<Event>,
-        @SerialName("Nepali Calendar") val nepaliCalendar: List<Event>,
-        @SerialName("Irregular Recurring") val irregularRecurring: List<Map<String, JsonElement>>,
+        @SerialName("data") val data: List<Map<String, JsonElement>>,
     )
 
-    @Serializable
     data class Event(
         val holiday: Boolean, val month: Int, val day: Int, val type: String, val title: String,
-        val metadata: Map<String, JsonPrimitive> = emptyMap(),
+        val calendar: String,
+        val metadata: Map<String, JsonElement> = emptyMap(),
     )
 
     private fun generateEventsCode(eventsJson: File, builder: FileSpec.Builder) {
@@ -206,11 +204,32 @@ abstract class CodeGenerators : DefaultTask() {
                 }
                 .build(),
         )
+        val simpleEvents = events.data.filter {
+            it["rule"]?.jsonPrimitive?.content == "simple"
+        }.map { element ->
+            listOf("holiday", "month", "day", "type", "title", "calendar").forEach {
+                assert(it in element.keys)
+            }
+            element.keys.all { key ->
+                key in listOf("holiday", "month", "day", "type", "title", "calendar", "metadata")
+            }
+            val calendars = listOf("Persian", "Hijri", "Gregorian", "Nepali")
+            assert(element["calendar"]?.jsonPrimitive?.content in calendars)
+            Event(
+                holiday = element["holiday"]?.jsonPrimitive?.boolean ?: false,
+                month = element["month"]?.jsonPrimitive?.int ?: 0,
+                day = element["day"]?.jsonPrimitive?.int ?: 0,
+                type = element["type"]?.jsonPrimitive?.content.orEmpty(),
+                title = element["title"]?.jsonPrimitive?.content.orEmpty(),
+                calendar = element["calendar"]?.jsonPrimitive?.content.orEmpty(),
+                metadata = element["metadata"]?.jsonObject?.toMap() ?: emptyMap(),
+            )
+        }
         listOf(
-            events.persianCalendar to "persianEvents",
-            events.islamicCalendar to "islamicEvents",
-            events.gregorianCalendar to "gregorianEvents",
-            events.nepaliCalendar to "nepaliEvents",
+            simpleEvents.filter { it.calendar == "Persian" } to "persianEvents",
+            simpleEvents.filter { it.calendar == "Hijri" } to "islamicEvents",
+            simpleEvents.filter { it.calendar == "Gregorian" } to "gregorianEvents",
+            simpleEvents.filter { it.calendar == "Nepali" } to "nepaliEvents",
         ).forEach { (list, field) ->
             builder.addProperty(
                 PropertySpec
@@ -254,7 +273,11 @@ abstract class CodeGenerators : DefaultTask() {
                 .initializer(
                     buildCodeBlock {
                         addStatement("listOf(")
-                        events.irregularRecurring.forEach {
+                        events.data.filter {
+                            val rule = it["rule"]?.jsonPrimitive?.content
+                            assert(rule != null)
+                            rule != "simple"
+                        }.forEach {
                             withIndent {
                                 addStatement("mapOf(")
                                 it.forEach { (k, v) ->
