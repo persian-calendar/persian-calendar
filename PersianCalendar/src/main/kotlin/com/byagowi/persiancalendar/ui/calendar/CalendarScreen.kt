@@ -166,6 +166,7 @@ import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
@@ -1184,7 +1185,11 @@ private fun Search(
         if (searchTerm.isNullOrBlank()) return@remember emptyList()
         val regex = createSearchRegex(searchTerm)
         context.searchDeviceCalendarEvents(searchTerm) + enabledEvents.asSequence().filter {
-            regex.containsMatchIn(it.title)
+            regex.containsMatchIn(it.title) || run {
+                (it.metadata[EventsRepository.EVENT_ALIAS] as? String)?.let {
+                    regex.containsMatchIn(it)
+                } ?: false
+            }
         }.take(50).toList()
     }
     val padding by animateDpAsState(targetValue = if (isSearchExpanded) 0.dp else 32.dp)

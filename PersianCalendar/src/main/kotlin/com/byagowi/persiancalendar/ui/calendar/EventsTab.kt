@@ -282,8 +282,6 @@ private fun DayEventContent(
             SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                 Text(
                     text = title,
-                    maxLines = if (event.source == EventSource.Iran) 1 else Int.MAX_VALUE,
-                    overflow = TextOverflow.Ellipsis,
                     color = contentColor,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         textDirection = TextDirection.Content,

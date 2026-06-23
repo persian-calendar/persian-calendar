@@ -225,6 +225,7 @@ data class EventsRepository(
 
         const val ORIGINAL_TITLE = "originalTitle"
         const val ALWAYS_DISPLAYED = "alwaysDisplayed"
+        const val EVENT_ALIAS = "alias"
         const val BEGINNING_PERSIAN_YEAR = "beginningPersianYear"
         const val ENDING_PERSIAN_YEAR = "endingPersianYear"
 
