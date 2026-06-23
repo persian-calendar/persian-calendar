@@ -101,7 +101,7 @@ fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry
                 val type = EventSource.entries.firstOrNull { entry -> entry.name == it["type"] }
                 if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && (it["month"] as? Int) == islamicDate.month && IslamicDate(
                         jdn + 1,
-                    ).month != islamicDate.month && (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
+                    ).month != islamicDate.month && ((it["holiday"] as? Boolean) == true || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
                         (it["title"] as? String).orEmpty(),

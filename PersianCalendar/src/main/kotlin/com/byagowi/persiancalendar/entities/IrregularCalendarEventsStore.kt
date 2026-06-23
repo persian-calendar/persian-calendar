@@ -46,13 +46,14 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
                     else -> return@filter false
                 }
             ) return@filter false
+            val isHoliday = (event["holiday"] as? Boolean).debugAssertNotNull == true
             when {
                 event["type"] == "International" && eventsRepository.international -> true
-                event["type"] == "Iran" && eventsRepository.iranHolidays && event["holiday"] == "true" -> true
+                event["type"] == "Iran" && eventsRepository.iranHolidays && isHoliday -> true
                 event["type"] == "Iran" && eventsRepository.iranOthers -> true
-                event["type"] == "Afghanistan" && eventsRepository.afghanistanHolidays && event["holiday"] == "true" -> true
+                event["type"] == "Afghanistan" && eventsRepository.afghanistanHolidays && isHoliday -> true
                 event["type"] == "Afghanistan" && eventsRepository.afghanistanOthers -> true
-                event["type"] == "Nepal" && eventsRepository.nepalHolidays && event["holiday"] == "true" -> true
+                event["type"] == "Nepal" && eventsRepository.nepalHolidays && isHoliday -> true
                 event["type"] == "Nepal" && eventsRepository.nepalOthers -> true
                 event["type"] == "AncientIran" && eventsRepository.iranAncient -> true
                 else -> false
