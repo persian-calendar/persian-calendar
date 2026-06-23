@@ -172,15 +172,12 @@ abstract class CodeGenerators : DefaultTask() {
                 .build(),
         )
         val calendarRecordFields = listOf(
-            "title" to String::class.asClassName(),
+            "title" to typeNameOf<String>(),
             "source" to eventSource,
-            "isHoliday" to Boolean::class.asClassName(),
-            "month" to Int::class.asClassName(),
-            "day" to Int::class.asClassName(),
-            "metadata" to Map::class.asClassName().parameterizedBy(
-                String::class.asClassName(),
-                Any::class.asClassName(),
-            ),
+            "isHoliday" to typeNameOf<Boolean>(),
+            "month" to typeNameOf<Int>(),
+            "day" to typeNameOf<Int>(),
+            "metadata" to typeNameOf<Map<String, Any>>(),
         )
         builder.addType(
             TypeSpec.classBuilder(calendarRecordName)
@@ -204,6 +201,10 @@ abstract class CodeGenerators : DefaultTask() {
                 }
                 .build(),
         )
+        events.data.forEach {
+            val calendars = listOf("Persian", "Hijri", "Gregorian", "Nepali")
+            assert(it["calendar"]?.jsonPrimitive?.content in calendars)
+        }
         val simpleEvents = events.data.filter {
             it["rule"]?.jsonPrimitive?.content == "simple"
         }.map { element ->
@@ -213,8 +214,6 @@ abstract class CodeGenerators : DefaultTask() {
             element.keys.all { key ->
                 key in listOf("holiday", "month", "day", "type", "title", "calendar", "metadata")
             }
-            val calendars = listOf("Persian", "Hijri", "Gregorian", "Nepali")
-            assert(element["calendar"]?.jsonPrimitive?.content in calendars)
             Event(
                 holiday = element["holiday"]?.jsonPrimitive?.boolean ?: false,
                 month = element["month"]?.jsonPrimitive?.int ?: 0,
@@ -269,7 +268,7 @@ abstract class CodeGenerators : DefaultTask() {
         }
         builder.addProperty(
             PropertySpec
-                .builder("irregularRecurringEvents", typeNameOf<List<Map<String, String>>>())
+                .builder("irregularRecurringEvents", typeNameOf<List<Map<String, Any>>>())
                 .initializer(
                     buildCodeBlock {
                         addStatement("listOf(")
@@ -281,9 +280,7 @@ abstract class CodeGenerators : DefaultTask() {
                             withIndent {
                                 addStatement("mapOf(")
                                 it.forEach { (k, v) ->
-                                    withIndent {
-                                        addStatement("%S to %S,", k, v.jsonPrimitive.content)
-                                    }
+                                    withIndent { addStatement("%S to %L,", k, v) }
                                 }
                                 addStatement("),")
                             }

@@ -54,8 +54,8 @@ class EventsTests {
         val calendar = Calendar.GREGORIAN
         assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 5, 3))
         val title = "روز جهانی فلسفه (سومین پنجشنبهٔ نوامبر)"
-        val event = mapOf(
-            "rule" to "nth weekday of month", "nth" to "3", "weekday" to "5", "month" to "11",
+        val event = mapOf<String, Any>(
+            "rule" to "nth weekday of month", "nth" to 3, "weekday" to 5, "month" to 11,
             "type" to "International", "title" to title, "holiday" to "false",
         )
         assertEquals(getDateInstance(event, year, calendar), CivilDate(year, month, day))
@@ -113,9 +113,9 @@ class EventsTests {
     ) {
         val calendar = Calendar.SHAMSI
         assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, weekDay, nth))
-        val event = mapOf(
-            "rule" to "nth weekday of month", "nth" to "$nth",
-            "weekday" to "$weekDay", "month" to "$month",
+        val event = mapOf<String, Any>(
+            "rule" to "nth weekday of month", "nth" to nth,
+            "weekday" to weekDay, "month" to month,
         )
         assertEquals(getDateInstance(event, year, calendar), PersianDate(year, month, day))
     }
@@ -147,7 +147,7 @@ class EventsTests {
         val calendar = Calendar.SHAMSI
         assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, weekDay))
         val event = mapOf(
-            "rule" to "last weekday of month", "weekday" to "$weekDay", "month" to "$month",
+            "rule" to "last weekday of month", "weekday" to weekDay, "month" to month,
         )
         assertEquals(getDateInstance(event, year, calendar), PersianDate(year, month, day))
     }
