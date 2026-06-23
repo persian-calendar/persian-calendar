@@ -99,13 +99,13 @@ fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry
         if (islamicDate.dayOfMonth >= 29) {
             irregularRecurringEvents.forEach {
                 val type = EventSource.entries.firstOrNull { entry -> entry.name == it["type"] }
-                if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && it["month"]?.toIntOrNull() == islamicDate.month && IslamicDate(
+                if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && (it["month"] as? Int) == islamicDate.month && IslamicDate(
                         jdn + 1,
                     ).month != islamicDate.month && (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
-                        it["title"].orEmpty(),
-                        if (it["holiday"] == "true") EntryType.Holiday(type)
+                        (it["title"] as? String).orEmpty(),
+                        if ((it["holiday"] as? Boolean) == true) EntryType.Holiday(type)
                         else EntryType.NonHoliday(type),
                     ),
                 )
