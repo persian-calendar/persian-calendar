@@ -387,9 +387,7 @@ private fun getSystemProperty(key: String?): String? {
 @SuppressLint("PrivateApi")
 fun isMiuiOptimizationDisabled(): Boolean {
     val sysProp = getSystemProperty("persist.sys.miui_optimization")
-    if (sysProp == "0" || sysProp == "false") {
-        return true
-    }
+    if (sysProp == "0" || sysProp == "false") return true
     return runCatching {
         Class.forName("android.miui.AppOpsUtils")
             .getDeclaredMethod("isXOptMode")
@@ -426,12 +424,11 @@ private fun createItemsList(
                 val semPlatformIntField =
                     Build.VERSION::class.java.getDeclaredField("SEM_PLATFORM_INT")
                 val version = semPlatformIntField.getInt(null) - 90000
-                val oneUiVersion = if (version < 0) {
-                    1.0
-                } else {
-                    ((version / 10000).toString() + "." + version % 10000 / 100).toDouble()
+                val oneUiVersion = when {
+                    version < 0 -> 1.0
+                    else -> ((version / 10000).toString() + "." + version % 10000 / 100).toDouble()
                 }
-                "One UI version: $oneUiVersion"
+                if (version < 1.0) "Samsung eXperience" else "One UI version: $oneUiVersion"
             }.getOrNull(),
             "Incremental: " + Build.VERSION.INCREMENTAL,
             run {
