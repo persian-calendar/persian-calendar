@@ -89,6 +89,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -373,7 +374,19 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
 private data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
 private fun createItemsList(activity: Activity, primaryColor: Color, insets: String) = listOf(
-    Item("CPU Instructions Sets", Build.SUPPORTED_ABIS.joinToString(", ")),
+    Item(
+        "CPU Instructions Sets",
+        buildString {
+            append(Build.SUPPORTED_ABIS.joinToString(", "))
+            if (BuildConfig.DEVELOPMENT) {
+                appendLine()
+                append("`uname -m`: ")
+                append(
+                    Runtime.getRuntime().exec("uname -m").inputStream.bufferedReader().readText().trim(),
+                )
+            }
+        },
+    ),
     Item(
         "Android Version",
         Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
