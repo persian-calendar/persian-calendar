@@ -390,7 +390,11 @@ private fun createItemsList(
     ),
     Item(
         "Android Version",
-        Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> Build.VERSION.RELEASE_OR_PREVIEW_DISPLAY
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Build.VERSION.RELEASE_OR_CODENAME
+            else -> Build.VERSION.RELEASE
+        } + " (${Build.VERSION.CODENAME})",
         Build.VERSION.SDK_INT.toString(),
     ),
     Item("Model", Build.MODEL),
@@ -413,7 +417,7 @@ private fun createItemsList(
         "DPI",
         "${activity.resources?.displayMetrics?.densityDpi}, xdpi: ${activity.resources?.displayMetrics?.xdpi}, ydpi: ${activity.resources?.displayMetrics?.ydpi}",
     ),
-    Item("Available Processors", Runtime.getRuntime()?.availableProcessors()?.toString()),
+    Item("Available Processors", runtime.availableProcessors().toString()),
     Item("Industrial Design Name", Build.DEVICE),
     Item("Manufacturer", Build.MANUFACTURER),
     Item("Brand", Build.BRAND),
