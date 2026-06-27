@@ -435,7 +435,9 @@ private fun createItemsList(
             }.getOrNull(),
             "Incremental: " + Build.VERSION.INCREMENTAL,
             run {
-                val miuiVersion = getSystemProperty("ro.miui.ui.version.name") ?: return@run null
+                val miuiVersion = getSystemProperty("ro.miui.ui.version.name")?.takeIf {
+                    it.isNotEmpty()
+                } ?: return@run null
                 val displayVersion =
                     Build.VERSION.INCREMENTAL.substringBefore('.').trimStart('V').toIntOrNull()
                 "MIUI Version: $miuiVersion ($displayVersion) (optimization: ${isMiuiOptimizationDisabled()})"
