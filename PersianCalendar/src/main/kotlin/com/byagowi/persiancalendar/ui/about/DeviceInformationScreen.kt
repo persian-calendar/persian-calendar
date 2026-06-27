@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
@@ -375,6 +376,27 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
 
 private data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
+@SuppressLint("PrivateApi")
+private fun getSystemProperty(key: String?): String? {
+    return runCatching {
+        Class.forName("android.os.SystemProperties").getDeclaredMethod("get", String::class.java)
+            .invoke(null, key) as? String
+    }.getOrNull()
+}
+
+@SuppressLint("PrivateApi")
+fun isMiuiOptimizationDisabled(): Boolean {
+    val sysProp = getSystemProperty("persist.sys.miui_optimization")
+    if (sysProp == "0" || sysProp == "false") {
+        return true
+    }
+    return runCatching {
+        Class.forName("android.miui.AppOpsUtils")
+            .getDeclaredMethod("isXOptMode")
+            .invoke(null) as? Boolean
+    }.getOrNull() ?: false
+}
+
 private fun createItemsList(
     activity: Activity,
     primaryColor: Color,
@@ -390,11 +412,35 @@ private fun createItemsList(
     ),
     Item(
         "Android Version",
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> Build.VERSION.RELEASE_OR_PREVIEW_DISPLAY
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Build.VERSION.RELEASE_OR_CODENAME
-            else -> Build.VERSION.RELEASE
-        } + " (${Build.VERSION.CODENAME})",
+        listOfNotNull(
+            Build.VERSION.RELEASE + " (${Build.VERSION.CODENAME})",
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val value = Build.VERSION.RELEASE_OR_PREVIEW_DISPLAY
+                if (value != Build.VERSION.RELEASE) "Release or preview display: $value" else null
+            } else null,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val value = Build.VERSION.RELEASE_OR_CODENAME
+                if (value != Build.VERSION.RELEASE) "Release or codename: $value" else null
+            } else null,
+            runCatching {
+                val semPlatformIntField =
+                    Build.VERSION::class.java.getDeclaredField("SEM_PLATFORM_INT")
+                val version = semPlatformIntField.getInt(null) - 90000
+                val oneUiVersion = if (version < 0) {
+                    1.0
+                } else {
+                    ((version / 10000).toString() + "." + version % 10000 / 100).toDouble()
+                }
+                "One UI version: $oneUiVersion"
+            }.getOrNull(),
+            "Incremental: " + Build.VERSION.INCREMENTAL,
+            run {
+                val miuiVersion = getSystemProperty("ro.miui.ui.version.name") ?: return@run null
+                val displayVersion =
+                    Build.VERSION.INCREMENTAL.substringBefore('.').trimStart('V').toIntOrNull()
+                "MIUI Version: $miuiVersion ($displayVersion) (optimization: ${isMiuiOptimizationDisabled()})"
+            },
+        ).joinToString("\n"),
         Build.VERSION.SDK_INT.toString(),
     ),
     Item("Model", Build.MODEL),
