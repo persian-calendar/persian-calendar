@@ -89,7 +89,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -99,6 +98,7 @@ import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.html.body
@@ -148,10 +148,12 @@ fun SharedTransitionScope.DeviceInformationScreen(
             }
         } + "\ncutoutPath: " + WindowInsets.cutoutPath?.toSvg(false)
         val items = remember(primaryColor) {
+            val runtime = Runtime.getRuntime() ?: return@remember emptyList()
             createItemsList(
                 activity ?: return@remember emptyList(),
                 primaryColor,
                 insets,
+                runtime,
             )
         }
         LargeTopAppBar(
@@ -373,19 +375,18 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
 
 private data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
-private fun createItemsList(activity: Activity, primaryColor: Color, insets: String) = listOf(
+private fun createItemsList(
+    activity: Activity,
+    primaryColor: Color,
+    insets: String,
+    runtime: Runtime,
+) = listOf(
+    Item("CPU Instructions Sets", Build.SUPPORTED_ABIS.joinToString(", ")),
     Item(
-        "CPU Instructions Sets",
-        buildString {
-            append(Build.SUPPORTED_ABIS.joinToString(", "))
-            if (BuildConfig.DEVELOPMENT) {
-                appendLine()
-                append("`uname -m`: ")
-                append(
-                    Runtime.getRuntime().exec("uname -m").inputStream.bufferedReader().readText().trim(),
-                )
-            }
-        },
+        "Kernel architecture",
+        runCatching {
+            runtime.exec("uname -m").inputStream.bufferedReader().readText().trim()
+        }.getOrNull().debugAssertNotNull,
     ),
     Item(
         "Android Version",
@@ -428,18 +429,38 @@ private fun createItemsList(activity: Activity, primaryColor: Color, insets: Str
     Item("Display", Build.DISPLAY),
     Item("Device Fingerprints", Build.FINGERPRINT),
     Item(
-        "RAM",
+        "RAM (Activity Manager)",
         buildString {
             val activityManager = activity.getSystemService<ActivityManager>()
+            val memoryInfo = ActivityManager.MemoryInfo().also {
+                activityManager?.getMemoryInfo(it)
+            }
             appendLine(
-                humanReadableByteCountBin(
-                    ActivityManager.MemoryInfo().also {
-                        activityManager?.getMemoryInfo(it)
-                    }.totalMem,
-                ),
+                listOf(
+                    "Available Memory" to memoryInfo.availMem,
+                    "Total Memory" to memoryInfo.totalMem,
+                    "Threshold" to memoryInfo.threshold,
+                ).let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN) {
+                        it + ("Free Memory" to memoryInfo.freeMem)
+                    } else it
+                }.joinToString("\n") { (title, value) ->
+                    title + ": " + humanReadableByteCountBin(value)
+                },
             )
+            appendLine("Is Low Memory: ${memoryInfo.lowMemory}")
             append("Is Low Ram Device: ${activityManager?.isLowRamDevice}")
         },
+    ),
+    Item(
+        "RAM (Runtime)",
+        listOf(
+            "Free Memory" to runtime.freeMemory(),
+            "Max Memory" to runtime.maxMemory(),
+            "Total Memory" to runtime.totalMemory(),
+        ).joinToString("\n") { (title, value) ->
+            title + ": " + humanReadableByteCountBin(value)
+        }
     ),
     Item(
         "Battery",
