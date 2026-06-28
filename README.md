@@ -15,6 +15,8 @@ A simple, free and open-source Android calendar
 <a href='https://cafebazaar.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Bazaar' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Bazaar.svg'/></a>
 <a href='https://myket.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Myket' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Myket.svg'/></a>
 
+If your device is running an older version of Android, [see this](./COMPATIBILITY.md).
+
 ## License
 
 Copyright (C) 2012-2026  Android Persian Calendar Developers
@@ -51,6 +53,8 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 <a href='https://github.com/persian-calendar/persian-calendar/releases/'><img height=70 alt='Get it on GitHub' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GitHub.svg'/></a>
 <a href='https://cafebazaar.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Bazaar' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Bazaar.svg'/></a>
 <a href='https://myket.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Myket' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Myket.svg'/></a>
+
+اگر دستگاه شما از نسخهٔ قدیمی‌تری از اندروید استفاده می‌کند، [این را ببینید](./COMPATIBILITY.md).
 
 ## مجوز شرایط استفاده از کد برنامه
 
