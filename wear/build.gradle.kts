@@ -15,12 +15,12 @@ android {
     }
 
     namespace = "com.byagowi.persiancalendar"
-    compileSdk = 37
+    compileSdk { version = release(37) }
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = 26
-        targetSdk = 36
+        minSdk { version = release(26) }
+        targetSdk { version = release(36) }
         versionCode = 53
         versionName = "0.5.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
