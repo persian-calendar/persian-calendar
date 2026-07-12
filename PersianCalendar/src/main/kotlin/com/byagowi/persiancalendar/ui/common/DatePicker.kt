@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.yearAwareMonthsNames
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -66,7 +67,7 @@ private fun DatePickerContent(
         }
         val months = yearAwareMonthsNames(date)
         val monthsFormat = remember(numeral, months) {
-            { item: Int -> numeral.format(item) + " / " + months[item - 1] }
+            { item: Int -> language.inParentheses.format(months[item - 1], numeral.format(item)) }
         }
         val todayYear = remember(calendar, today) { (today on calendar).year }
         val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
