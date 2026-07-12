@@ -367,10 +367,9 @@ fun SharedTransitionScope.WeekScreen(
         ) { paddingValues ->
             val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
             BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-                val screenWidth = this.maxWidth - run {
+                val screenWidth = this.maxWidth - WindowInsets.safeDrawing.asPaddingValues().let {
                     val direction = LocalLayoutDirection.current
-                    val values = WindowInsets.safeDrawing.asPaddingValues()
-                    values.calculateStartPadding(direction) + values.calculateEndPadding(direction)
+                    it.calculateStartPadding(direction) + it.calculateEndPadding(direction)
                 }
                 val pagerSize =
                     calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
