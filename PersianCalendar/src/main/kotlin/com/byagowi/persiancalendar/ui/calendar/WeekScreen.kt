@@ -30,6 +30,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -364,7 +367,11 @@ fun SharedTransitionScope.WeekScreen(
         ) { paddingValues ->
             val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
             BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-                val screenWidth = this.maxWidth
+                val screenWidth = this.maxWidth - run {
+                    val direction = LocalLayoutDirection.current
+                    val values = WindowInsets.safeDrawing.asPaddingValues()
+                    values.calculateStartPadding(direction) + values.calculateEndPadding(direction)
+                }
                 val pagerSize =
                     calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
                 // Don't show weeks pager if there isn't enough space
