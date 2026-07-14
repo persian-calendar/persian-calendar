@@ -107,6 +107,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -1183,6 +1184,7 @@ private fun SharedTransitionScope.CalendarsTab(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()

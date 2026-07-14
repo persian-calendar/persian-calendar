@@ -16,6 +16,7 @@ import android.view.View
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.annotation.RememberInComposition
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.hapticfeedback.HapticFeedback
@@ -180,4 +181,5 @@ val enabledCalendarsWithDefault: List<Calendar>
     get() = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
 
 @Composable
+@ReadOnlyComposable
 fun isLandscape() = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

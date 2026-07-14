@@ -17,6 +17,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,6 +40,7 @@ import androidx.compose.ui.window.DialogWindowProvider
 val Color.isLight: Boolean get() = this.luminance() > .5
 
 @Composable
+@ReadOnlyComposable
 fun getResourcesColor(@ColorRes id: Int) = Color(LocalResources.current.getColor(id, null))
 
 /**
