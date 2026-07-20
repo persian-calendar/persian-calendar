@@ -398,10 +398,6 @@ fun SharedTransitionScope.WeekScreen(
                     val initialScroll =
                         with(density) { (cellHeight * initialHour * scale.floatValue - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
-                    val swipeDownOnScrollableModifier = Modifier.detectSwipe {
-                        val wasAtTop = scrollState.value == 0
-                        { isUp: Boolean -> if (wasAtTop) onSwipeDown(isUp) }
-                    }
                     HorizontalPager(
                         state = weekPagerState,
                         verticalAlignment = Alignment.Top,
@@ -462,7 +458,7 @@ fun SharedTransitionScope.WeekScreen(
                                         animatedVisibilityScope = this@AnimatedContent,
                                         boundsTransform = appBoundsTransform,
                                     ) else Modifier,
-                                    scrollableModifier = swipeDownOnScrollableModifier,
+                                    scrollableModifier = Modifier,
                                     bottomPadding = fabPlaceholderHeight ?: 0.dp,
                                     onAddActionChange = {
                                         if (weekPagerState.currentPage == page) addAction = it
@@ -545,7 +541,7 @@ fun SharedTransitionScope.WeekScreen(
                                 scale = scale,
                                 initialScroll = initialScroll,
                                 cellHeight = cellHeight,
-                                scrollableModifier = swipeDownOnScrollableModifier,
+                                scrollableModifier = Modifier,
                                 numeral = numeral,
                             )
                         }
