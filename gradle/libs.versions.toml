@@ -32,7 +32,7 @@ wear-compose = "1.6.2"
 wear-protolayout = "1.4.1"
 wear-tiles = "1.6.1"
 wear-tooling-preview = "1.0.0"
-lint = "32.3.0"
+lint = "32.3.1"
 spotless = "8.8.0"
 
 [libraries]
