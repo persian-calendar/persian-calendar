@@ -64,6 +64,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -1457,18 +1458,23 @@ private fun SharedTransitionScope.Toolbar(
                 AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(targetState = subtitle) { subtitle ->
                         val fraction by animateFloatAsState(if (isYearView) 1f else 0f)
+                        val subtitleStyle = lerp(
+                            start = MaterialTheme.typography.titleMedium,
+                            stop = MaterialTheme.typography.titleLarge,
+                            fraction = fraction,
+                        )
                         Text(
                             if (isTalkBackEnabled && isYearView) "$subtitle ${
                                 stringResource(R.string.year_view)
                             }"
                             else subtitle,
-                            style = lerp(
-                                start = MaterialTheme.typography.titleMedium,
-                                stop = MaterialTheme.typography.titleLarge,
-                                fraction = fraction,
-                            ),
+                            style = subtitleStyle,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
+                            autoSize = if (isYearView) null else TextAutoSize.StepBased(
+                                minFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                maxFontSize = subtitleStyle.fontSize,
+                            ),
                             modifier = if (isYearView) Modifier else when (yearViewCalendar) {
                                 null, mainCalendar, secondaryCalendar -> Modifier
                                 else -> Modifier
