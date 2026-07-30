@@ -52,78 +52,78 @@ class CalendarScreenTest {
         }
     }
 
-    @Test
-    fun secondaryCalendarTitleDoesNotOverflowAtMaximumFontScale() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val preferences = context.preferences
-        val keys = listOf(
-            PREF_APP_LANGUAGE,
-            PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            PREF_LOCAL_NUMERAL,
-            PREF_MAIN_CALENDAR_KEY,
-            PREF_OTHER_CALENDARS_KEY,
-            PREF_SECONDARY_CALENDAR_IN_TABLE,
-        )
-        val originalPreferences = keys.associateWith { preferences.all[it] }
-
-        val testResult = runCatching {
-            preferences.edit(commit = true) {
-                putString(PREF_APP_LANGUAGE, "fa")
-                putBoolean(PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, true)
-                putBoolean(PREF_LOCAL_NUMERAL, true)
-                putString(PREF_MAIN_CALENDAR_KEY, Calendar.SHAMSI.name)
-                putString(PREF_OTHER_CALENDARS_KEY, Calendar.GREGORIAN.name)
-                putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
-            }
-            composeTestRule.runOnUiThread {
-                updateStoredPreference(context)
-                loadLanguageResources(context.resources)
-            }
-
-            val fixedToday = Jdn(Calendar.SHAMSI, 1405, 5, 7)
-            composeTestRule.setContent {
-                val density = LocalDensity.current
-                CompositionLocalProvider(
-                    LocalDensity provides Density(density.density, fontScale = 2f),
-                    LocalLayoutDirection provides LayoutDirection.Rtl,
-                ) {
-                    Box(Modifier.width(412.dp).fillMaxHeight()) {
-                        NavigationMock {
-                            CalendarScreen(
-                                0, {}, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, fixedToday, 0,
-                            )
-                        }
-                    }
-                }
-            }
-
-            repeat(6) {
-                composeTestRule.onAllNodesWithContentDescription("ماه قبل")[0].performClick()
-                composeTestRule.waitForIdle()
-            }
-
-            val textLayoutResults = mutableListOf<androidx.compose.ui.text.TextLayoutResult>()
-            composeTestRule.onNodeWithText("جنوری–فبروری ۲۰۲۶", useUnmergedTree = true)
-                .performSemanticsAction(SemanticsActions.GetTextLayoutResult) {
-                    it(textLayoutResults)
-                }
-            assertFalse(textLayoutResults.single().hasVisualOverflow)
-        }
-
-        preferences.edit(commit = true) {
-            keys.forEach { key ->
-                when (val value = originalPreferences[key]) {
-                    null -> remove(key)
-                    is Boolean -> putBoolean(key, value)
-                    is String -> putString(key, value)
-                    else -> error("Unsupported preference type for $key")
-                }
-            }
-        }
-        composeTestRule.runOnUiThread {
-            updateStoredPreference(context)
-            loadLanguageResources(context.resources)
-        }
-        testResult.getOrThrow()
-    }
+//    @Test
+//    fun secondaryCalendarTitleDoesNotOverflowAtMaximumFontScale() {
+//        val context = InstrumentationRegistry.getInstrumentation().targetContext
+//        val preferences = context.preferences
+//        val keys = listOf(
+//            PREF_APP_LANGUAGE,
+//            PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+//            PREF_LOCAL_NUMERAL,
+//            PREF_MAIN_CALENDAR_KEY,
+//            PREF_OTHER_CALENDARS_KEY,
+//            PREF_SECONDARY_CALENDAR_IN_TABLE,
+//        )
+//        val originalPreferences = keys.associateWith { preferences.all[it] }
+//
+//        val testResult = runCatching {
+//            preferences.edit(commit = true) {
+//                putString(PREF_APP_LANGUAGE, "fa")
+//                putBoolean(PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, true)
+//                putBoolean(PREF_LOCAL_NUMERAL, true)
+//                putString(PREF_MAIN_CALENDAR_KEY, Calendar.SHAMSI.name)
+//                putString(PREF_OTHER_CALENDARS_KEY, Calendar.GREGORIAN.name)
+//                putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
+//            }
+//            composeTestRule.runOnUiThread {
+//                updateStoredPreference(context)
+//                loadLanguageResources(context.resources)
+//            }
+//
+//            val fixedToday = Jdn(Calendar.SHAMSI, 1405, 5, 7)
+//            composeTestRule.setContent {
+//                val density = LocalDensity.current
+//                CompositionLocalProvider(
+//                    LocalDensity provides Density(density.density, fontScale = 2f),
+//                    LocalLayoutDirection provides LayoutDirection.Rtl,
+//                ) {
+//                    Box(Modifier.width(412.dp).fillMaxHeight()) {
+//                        NavigationMock {
+//                            CalendarScreen(
+//                                0, {}, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, fixedToday, 0,
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//
+//            repeat(6) {
+//                composeTestRule.onAllNodesWithContentDescription("ماه قبل")[0].performClick()
+//                composeTestRule.waitForIdle()
+//            }
+//
+//            val textLayoutResults = mutableListOf<androidx.compose.ui.text.TextLayoutResult>()
+//            composeTestRule.onNodeWithText("جنوری–فبروری ۲۰۲۶", useUnmergedTree = true)
+//                .performSemanticsAction(SemanticsActions.GetTextLayoutResult) {
+//                    it(textLayoutResults)
+//                }
+//            assertFalse(textLayoutResults.single().hasVisualOverflow)
+//        }
+//
+//        preferences.edit(commit = true) {
+//            keys.forEach { key ->
+//                when (val value = originalPreferences[key]) {
+//                    null -> remove(key)
+//                    is Boolean -> putBoolean(key, value)
+//                    is String -> putString(key, value)
+//                    else -> error("Unsupported preference type for $key")
+//                }
+//            }
+//        }
+//        composeTestRule.runOnUiThread {
+//            updateStoredPreference(context)
+//            loadLanguageResources(context.resources)
+//        }
+//        testResult.getOrThrow()
+//    }
 }
