@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.entities
 
-import java.util.Locale
-
 // https://en.wikipedia.org/wiki/Numeral_system
 // See also https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
 enum class Numeral(private val zero: Char) {
@@ -54,7 +52,11 @@ enum class Numeral(private val zero: Char) {
     private inline fun String.mapToString(crossinline action: (Char) -> Char) =
         CharArray(this.length) { action(this[it]) }.concatToString()
 
-    fun formatLongNumber(value: Long) = format("%,d".format(Locale.ENGLISH, value))
+    fun formatLongNumber(value: Long): String {
+        val text = value.toString()
+        val digits = text.removePrefix("-").reversed().chunked(3).joinToString(",").reversed()
+        return format(if (value < 0) "-$digits" else digits)
+    }
 
     val isArabic get() = this == ARABIC
     val isTamil get() = this == TAMIL

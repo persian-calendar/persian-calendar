@@ -66,5 +66,7 @@ https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 
 ## Build
 
+For the Compose Multiplatform website, see [web build instructions](webApp/README.md).
+
 1. In Android Studio, File > New > Project from Version Control.
 2. Use `https://github.com/persian-calendar/persian-calendar` as URL, click the clone button.

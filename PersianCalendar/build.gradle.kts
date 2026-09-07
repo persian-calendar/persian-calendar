@@ -149,13 +149,9 @@ kotlin {
 
 dependencies {
     // Project owned libraries
-    implementation(libs.persiancalendar.calendar)
-    implementation(libs.persiancalendar.praytimes)
-    implementation(libs.persiancalendar.calculator)
-    implementation(libs.persiancalendar.qr)
+    implementation(project(":shared"))
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
-    implementation(libs.astronomy)
 
     // Google/JetBrains
     implementation(libs.androidx.core.ktx)

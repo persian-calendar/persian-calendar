@@ -19,9 +19,9 @@ import kotlin.math.tan
 // to calculate ascendant and midheaven but changed and simplified and now supports all the 12 houses.
 fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
     val (_, cosOb, sinOb) = rotationEctEqd(time).rot[1] // Ecliptic obliquity's sin and cos results
-    val tanPhi = tan(Math.toRadians(latitude))
+    val tanPhi = tan(toRadians(latitude))
     // Right Ascension of the Midheaven (mc)
-    val ramcRad = Math.toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
+    val ramcRad = toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
     val houses = DoubleArray(12)
 
     houses[11 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 1.0 / 3, false)
@@ -35,8 +35,8 @@ fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
 
     val sinRamc = sin(ramcRad)
     val cosRamc = cos(ramcRad)
-    val mc = (Math.toDegrees(atan2(sinRamc, cosRamc * cosOb)) + 360) % 360 // Midheaven
-    val dsc = (Math.toDegrees(atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)) + 360) % 360
+    val mc = (toDegrees(atan2(sinRamc, cosRamc * cosOb)) + 360) % 360 // Midheaven
+    val dsc = (toDegrees(atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)) + 360) % 360
     houses[1 - 1] = (dsc + 180) % 360 // Ascendant, the first house and the most important one
     houses[10 - 1] = mc
     houses[4 - 1] = (mc + 180) % 360 // Nadir or Imum Coeli (IC)
@@ -62,5 +62,8 @@ private fun solvePlacidusCusp(
         val requiredRa = referenceRaRad + (ad + PI / if (isNocturnalCusp) -2 else 2) * cuspRatio
         y = sin(requiredRa); x = cos(requiredRa) * cosOb
     }
-    return (Math.toDegrees(atan2(y, x)) + 360) % 360
+    return (toDegrees(atan2(y, x)) + 360) % 360
 }
+
+private fun toRadians(value: Double) = value * PI / 180
+private fun toDegrees(value: Double) = value * 180 / PI

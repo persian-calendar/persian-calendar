@@ -1,4 +1,10 @@
+import org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec
+import org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsRootPlugin
+
 plugins {
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.compose.multiplatform) apply false
+    alias(libs.plugins.android.multiplatform.library) apply false
     // All the plugins used in subprojects and plugins should be listed here with "apply false"
 
     // PersianCalendar plugins
@@ -12,6 +18,12 @@ plugins {
     alias(libs.plugins.kotlin.plugin.parcelize) apply false
     alias(libs.plugins.kotlin.plugin.serialization) apply false
     alias(libs.plugins.spotless)
+}
+
+plugins.withType<WasmNodeJsRootPlugin> {
+    if (providers.gradleProperty("useSystemNode").orNull == "true") {
+        extensions.configure<WasmNodeJsEnvSpec> { download.set(false) }
+    }
 }
 
 spotless {
@@ -41,6 +53,8 @@ spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("**/build/**")
+        // Preserve the pinned upstream sources and fixtures in their original style.
+        targetExclude("shared/src/commonMain/kotlin/io/**", "shared/src/commonTest/kotlin/io/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 

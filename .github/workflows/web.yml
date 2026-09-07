@@ -1,0 +1,33 @@
+name: Web CI
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+      - uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: temurin
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Shared tests and production website
+        run: ./gradlew :shared:jvmTest :shared:wasmJsBrowserTest :webApp:wasmJsBrowserDistribution --stacktrace
+      - uses: actions/upload-artifact@v7
+        with:
+          name: persian-calendar-web
+          path: webApp/build/dist/wasmJs/productionExecutable
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: shared-test-results
+          path: shared/build/test-results/**/*.xml

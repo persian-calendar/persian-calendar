@@ -1,12 +1,11 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
 
-@JvmInline
+@kotlin.jvm.JvmInline
 value class LunarAge private constructor(private val fraction: Double) {
 
     val isAscending get() = fraction < .5
@@ -32,7 +31,7 @@ value class LunarAge private constructor(private val fraction: Double) {
         fun emoji(coordinates: Coordinates?): String {
             return when {
                 ordinal == 0 -> rawEmoji
-                coordinates?.isSouthernHemisphere == true -> entries[entries.size - ordinal].rawEmoji
+                (coordinates?.latitude ?: 0.0) < 0.0 -> entries[entries.size - ordinal].rawEmoji
                 else -> rawEmoji
             }
         }

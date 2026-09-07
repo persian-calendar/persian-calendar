@@ -15,6 +15,7 @@ junit = "4.13.2"
 junit-runner = "1.14.4"
 junit5 = "6.1.2"
 kotlin = "2.4.10"
+compose-multiplatform = "1.12.0"
 kotlinpoet = "2.3.0"
 kotlinx-html-jvm = "0.12.0"
 kotlinx-serialization = "1.11.0"
@@ -92,6 +93,9 @@ lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "lint" }
 
 [plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
