@@ -33,7 +33,7 @@ wear-protolayout = "1.4.2"
 wear-tiles = "1.6.2"
 wear-tooling-preview = "1.0.0"
 lint = "32.3.1"
-spotless = "8.9.0"
+spotless = "8.10.2"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
