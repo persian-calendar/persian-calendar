@@ -39,6 +39,7 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -110,6 +111,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
+@ReadOnlyComposable
 fun eventColor(event: CalendarEvent<*>): Color {
     return when {
         event is CalendarEvent.DeviceCalendarEvent -> runCatching {
@@ -624,6 +626,7 @@ private fun EquinoxCountDownContent(
 }
 
 @Composable
+@ReadOnlyComposable
 fun readEventsWithEquinox(
     jdn: Jdn,
     now: Long,

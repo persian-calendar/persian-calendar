@@ -14,6 +14,7 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -26,10 +27,12 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MENU_ICON
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
 @Composable
+@NonRestartableComposable
 fun SharedTransitionScope.NavigationOpenNavigationRailIcon(openNavigationRail: () -> Unit) =
     NavigationMenuArrow(fraction = 0f, action = openNavigationRail)
 
 @Composable
+@NonRestartableComposable
 fun SharedTransitionScope.NavigationNavigateUpIcon(navigateUp: () -> Unit) =
     NavigationMenuArrow(fraction = 1f, action = navigateUp)
 

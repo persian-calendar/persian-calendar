@@ -48,6 +48,7 @@ fun getResourcesColor(@ColorRes id: Int) = Color(LocalResources.current.getColor
  * while we need it frequently let's build our own based on Material's
  */
 @Composable
+@ReadOnlyComposable
 @Stable
 fun materialCornerExtraLargeTop(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(
@@ -57,10 +58,10 @@ fun materialCornerExtraLargeTop(): CornerBasedShape {
 }
 
 @Composable
+@ReadOnlyComposable
 @Stable
-fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
-    return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
-}
+fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape =
+    MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
 
 @Composable
 fun Modifier.highlightItem(enabled: Boolean, isOnBackground: Boolean = false): Modifier {

@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -253,4 +254,5 @@ private fun dayNightMask(timeInMillis: Long): ImageBitmap? {
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(device = WearDevices.LARGE_ROUND)
 @Composable
+@NonRestartableComposable
 internal fun GlobeScreenPreview() = GlobeScreen()

@@ -50,6 +50,16 @@ android {
         checkTestSources = true
         checkGeneratedSources = true
         baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
+        disable += listOf(
+            // Tile previews can't be in webp in wear os as far as I tested
+            "ConvertToWebp",
+            // Just waste of space to have both versions while square wear os isn't that popular
+            "SquareAndRoundTilePreviews",
+            // Just waste of space to provide mipmaps
+            "IconLocation",
+            // Make the CI fail in unrelated changes
+            "GradleDependency",
+        )
     }
 
     buildFeatures { compose = true }

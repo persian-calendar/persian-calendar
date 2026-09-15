@@ -43,6 +43,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -224,6 +225,7 @@ fun resolveTypography(): Typography {
 
 // The app's theme after custom dark/light theme is applied
 @Composable
+@ReadOnlyComposable
 private fun effectiveTheme(): Theme {
     if (userSetTheme != Theme.SYSTEM_DEFAULT) return userSetTheme
     return if (isSystemInDarkTheme()) {
@@ -235,6 +237,7 @@ private fun isPowerSaveMode(context: Context): Boolean =
     context.getSystemService<PowerManager>()?.isPowerSaveMode == true
 
 @Composable
+@ReadOnlyComposable
 private fun appColorScheme(): ColorScheme {
     val theme = effectiveTheme()
     val isDark = theme.isDark == true
@@ -273,6 +276,7 @@ private fun appColorScheme(): ColorScheme {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun appShapes(): Shapes {
     return if (BuildConfig.DEVELOPMENT && isCyberpunk) Shapes(
         extraSmall = CutCornerShape(MaterialTheme.shapes.extraSmall.topStart),
@@ -284,6 +288,7 @@ private fun appShapes(): Shapes {
 }
 
 @Composable
+@ReadOnlyComposable
 fun needsScreenSurfaceDragHandle(): Boolean = when (effectiveTheme()) {
     Theme.BLACK -> true
     Theme.MODERN -> !isGradient
@@ -336,6 +341,7 @@ private val noTransition = fadeIn(snap()) togetherWith fadeOut(snap())
 val noTransitionSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { noTransition }
 
 @Composable
+@ReadOnlyComposable
 fun isDynamicGrayscale(): Boolean =
     effectiveTheme().isDynamicColors && LocalResources.current.isDynamicGrayscale
 
@@ -402,6 +408,7 @@ fun appSliderColor(): SliderColors {
 }
 
 @Composable
+@ReadOnlyComposable
 fun appMonthColors(): MonthColors {
     val theme = effectiveTheme()
     val colorAppointments = if (theme.isDynamicColors) getResourcesColor(
@@ -476,6 +483,7 @@ fun appMonthColors(): MonthColors {
 }
 
 @Composable
+@ReadOnlyComposable
 fun nextTimeColor(): Color {
     val theme = effectiveTheme()
     return if (theme.isDynamicColors) when (theme) {
@@ -489,6 +497,7 @@ fun scrollShadowColor(): Color =
     animateColor(Color(if (effectiveTheme().isDark == true) 0x38FFFFFF else 0x38000000)).value
 
 @Composable
+@ReadOnlyComposable
 fun appSunViewColors(): SunViewColors {
     val theme = effectiveTheme()
     val nightColor = if (theme.isDynamicColors) when (theme) {

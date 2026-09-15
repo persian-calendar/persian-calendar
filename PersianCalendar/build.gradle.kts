@@ -137,6 +137,8 @@ android {
             // https://github.com/slackhq/compose-lints/issues/567
             "ComposeUnstableCollections",
             "ComposeUnstableReceiver",
+            // Make the CI fail in unrelated changes
+            "GradleDependency",
         )
     }
 }
