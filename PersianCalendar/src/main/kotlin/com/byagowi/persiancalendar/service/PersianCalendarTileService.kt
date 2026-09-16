@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getDayIconResource
@@ -48,6 +49,9 @@ class PersianCalendarTileService : TileService() {
             today.monthName,
             today.year,
         )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            tile.subtitle = language.my.format(today.monthName, numeral.format(today.year))
+        }
         tile.state = Tile.STATE_ACTIVE
         tile.updateTile()
     }
