@@ -155,12 +155,25 @@ dependencies {
     implementation(libs.persiancalendar.calendar)
     implementation(libs.persiancalendar.equinox) {
         exclude("com.github.persian-calendar.equinox", "equinox-js")
+        exclude("com.github.persian-calendar.equinox", "equinox-linuxarm64")
         exclude("com.github.persian-calendar.equinox", "equinox-linuxx64")
         exclude("com.github.persian-calendar.equinox", "equinox-macosarm64")
         exclude("com.github.persian-calendar.equinox", "equinox-mingwx64")
     }
-    implementation(libs.persiancalendar.praytimes)
-    implementation(libs.persiancalendar.qr)
+    implementation(libs.persiancalendar.praytimes) {
+        exclude("com.github.persian-calendar.praytimes", "praytimes-js")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-linuxarm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-linuxx64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-macosarm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-mingwx64")
+    }
+    implementation(libs.persiancalendar.qr) {
+        exclude("com.github.persian-calendar.qr", "qr-js")
+        exclude("com.github.persian-calendar.qr", "qr-linuxarm64")
+        exclude("com.github.persian-calendar.qr", "qr-linuxx64")
+        exclude("com.github.persian-calendar.qr", "qr-macosarm64")
+        exclude("com.github.persian-calendar.qr", "qr-mingwx64")
+    }
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation(libs.astronomy)

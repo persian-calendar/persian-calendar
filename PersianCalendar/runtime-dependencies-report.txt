@@ -1,29 +1,33 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 2.3.10 (c)
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 2.3.10 (c)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 (c)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
 +--- com.github.persian-calendar:calculator:64d264a2c4c9eff6e7c060c3ff0bff0b15879f0e
 |    +--- org.antlr:antlr4-runtime:4.13.2
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.4.20 (*)
 +--- com.github.persian-calendar:calendar:6e54d1ce5044bf751ed1c0ef8faa9c4a95b55ee3
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 -> 2.4.20 (*)
-+--- com.github.persian-calendar:equinox:8ab6b120db052bb3439c09246113370a4abcbdb3
-|    +--- com.github.persian-calendar.equinox:equinox:8ab6b120db052bb3439c09246113370a4abcbdb3
-|    |    \--- com.github.persian-calendar.equinox:equinox-jvm:8ab6b120db052bb3439c09246113370a4abcbdb3
++--- com.github.persian-calendar:equinox:1bcc9d9068132b4175dde0244ff6811527c3e32a
+|    +--- com.github.persian-calendar.equinox:equinox:1bcc9d9068132b4175dde0244ff6811527c3e32a
+|    |    \--- com.github.persian-calendar.equinox:equinox-jvm:1bcc9d9068132b4175dde0244ff6811527c3e32a
 |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    \--- com.github.persian-calendar.equinox:equinox-jvm:8ab6b120db052bb3439c09246113370a4abcbdb3 (*)
-+--- com.github.persian-calendar:praytimes:619fd6fa2b61fea91f266b7c6d37dba48a6138df
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.3.10
-|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.20 (*)
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.3.10
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.10 -> 2.4.20 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.10 (c)
-+--- com.github.persian-calendar:qr:58da9a077e1acc2ba80b43635533117fea462c7b
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.3.10 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21 -> 2.3.10 (c)
+|    \--- com.github.persian-calendar.equinox:equinox-jvm:1bcc9d9068132b4175dde0244ff6811527c3e32a (*)
++--- com.github.persian-calendar:praytimes:15df263e17b5aa9be2e87d435fe8d9af5060de34
+|    +--- com.github.persian-calendar.praytimes:praytimes:15df263e17b5aa9be2e87d435fe8d9af5060de34
+|    |    \--- com.github.persian-calendar.praytimes:praytimes-jvm:15df263e17b5aa9be2e87d435fe8d9af5060de34
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
+|    \--- com.github.persian-calendar.praytimes:praytimes-jvm:15df263e17b5aa9be2e87d435fe8d9af5060de34 (*)
++--- com.github.persian-calendar:qr:9f663f7eab20c9bc18bd21e00e711051363394b9
+|    +--- com.github.persian-calendar.qr:qr:9f663f7eab20c9bc18bd21e00e711051363394b9
+|    |    \--- com.github.persian-calendar.qr:qr-jvm:9f663f7eab20c9bc18bd21e00e711051363394b9
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
+|    \--- com.github.persian-calendar.qr:qr-jvm:9f663f7eab20c9bc18bd21e00e711051363394b9 (*)
 +--- com.github.cosinekitty:astronomy:61dc07020aaa6885d2c7f688a4d82beaf6edb9ef
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 2.3.10 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.8.0
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.0 -> 2.4.20 (*)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0
+|              \--- org.jetbrains.kotlin:kotlin-stdlib:1.8.0 -> 2.4.20 (*)
 +--- androidx.core:core-ktx:1.19.0
 |    +--- androidx.core:core:1.19.0
 |    |    +--- androidx.annotation:annotation:1.10.0
