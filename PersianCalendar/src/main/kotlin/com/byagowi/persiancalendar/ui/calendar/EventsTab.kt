@@ -39,9 +39,12 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -65,6 +68,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
@@ -99,9 +105,11 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.time.Duration
@@ -109,6 +117,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 @ReadOnlyComposable
@@ -534,6 +543,7 @@ private val countDownTimeParts = listOf(
     R.plurals.days to 1.days,
     R.plurals.hours to 1.hours,
     R.plurals.minutes to 1.minutes,
+    R.plurals.seconds to 1.seconds,
 )
 
 @Composable
@@ -626,10 +636,8 @@ private fun EquinoxCountDownContent(
 }
 
 @Composable
-@ReadOnlyComposable
 fun readEventsWithEquinox(
     jdn: Jdn,
-    now: Long,
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
     val events = eventsRepository.getEvents(jdn, deviceEvents)
@@ -640,7 +648,7 @@ fun readEventsWithEquinox(
         val nextYearJdn = Jdn(nextPersianYearDate)
         if ((jdn - nextYearJdn) in -1..<0) {
             val gregorianYear = (nextYearJdn - 1).toCivilDate().year
-            val equinoxTime = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
+            val equinoxTime = Equinox.NORTHWARD_EQUINOX of gregorianYear
             val title = resources.getString(
                 R.string.spring_equinox,
                 numeral.format(
@@ -657,15 +665,25 @@ fun readEventsWithEquinox(
                     val symbol = zodiac.resolveEmoji(true)
                     language.inParentheses.format(it, "$yearString $title $symbol")
                 } else it
-            } + "\n" + Date(equinoxTime).toGregorianCalendar().formatDateAndTime(withWeekDay = true)
-            val remainedTime = equinoxTime - now
+            } + "\n" + Date(equinoxTime).toGregorianCalendar().formatDateAndTime(
+                withWeekDay = true,
+                withSeconds = true,
+            )
+            var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+            val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+            if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
+                while (isActive) {
+                    now = System.currentTimeMillis()
+                    delay(1.seconds)
+                }
+            }
             val event = CalendarEvent.EquinoxCalendarEvent(
                 title = title,
                 isHoliday = false,
                 date = date,
                 source = null,
                 metadata = emptyMap(),
-                remainingMillis = remainedTime,
+                remainingMillis = equinoxTime - now,
             )
             listOf(event) + events
         } else events

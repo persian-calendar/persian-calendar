@@ -136,7 +136,7 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
-import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.delay
@@ -834,28 +834,30 @@ private fun Header(
 
 @Composable
 private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
-    val seasonsCache = remember { lruCache(1024, create = ::seasons) }
+    val seasonsCache = remember {
+        lruCache(
+            maxSize = 1024,
+            create = { year: Int ->
+                Equinox.entries.map {
+                    val time = it of year
+                    time to Date(time).toGregorianCalendar().formatDateAndTime(withSeconds = true)
+                }
+            },
+        )
+    }
     val seasonsOrder = remember {
         if (coordinates?.isSouthernHemisphere == true) {
             listOf(Season.WINTER, Season.SPRING, Season.SUMMER, Season.AUTUMN)
         } else listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
     }
     val coroutineScope = rememberCoroutineScope()
-    val equinoxes = (1..4).map { i ->
-        Date(
+    val equinoxes = run {
+        val persianYear = jdn.toPersianDate().year
+        (1..4).map { i ->
             seasonsCache[
-                CivilDate(
-                    PersianDate(jdn.toPersianDate().year, i * 3, 29),
-                ).year,
-            ].let {
-                when (i) {
-                    1 -> it.juneSolstice
-                    2 -> it.septemberEquinox
-                    3 -> it.decemberSolstice
-                    else -> it.marchEquinox
-                }
-            }.toMillisecondsSince1970(),
-        ).let { it.time to it.toGregorianCalendar().formatDateAndTime() }
+                CivilDate(PersianDate(persianYear, i * 3, 29)).year,
+            ][i % 4]
+        }
     }
     repeat(2) { row ->
         Row(Modifier.padding(top = 8.dp)) {

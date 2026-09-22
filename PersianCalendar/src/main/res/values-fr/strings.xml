@@ -356,7 +356,11 @@
     <string name="exit_full_screen">Quitter le plein écran</string>
     <string name="color_gradient">Dégradé de couleurs</string>
     <string name="qr_code">Code QR</string>
-    <string name="time_zones">Fuseaux horaires</string>
+    <plurals name="seconds">
+        <item quantity="one">%1$s seconde</item>
+        <item quantity="many">%1$s secondes</item>
+        <item quantity="other">%1$s secondes</item>
+    </plurals>
     <plurals name="weeks">
         <item quantity="one">%1$s semaine</item>
         <item quantity="many">%1$s semaines</item>

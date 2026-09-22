@@ -320,6 +320,12 @@
         <item quantity="many">%1$s %2$s дней</item>
         <item quantity="other">%1$s %2$s дней</item>
     </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s секунда</item>
+        <item quantity="few">%1$s секунды</item>
+        <item quantity="many">%1$s секунд</item>
+        <item quantity="other">%1$s секунд</item>
+    </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s минута</item>
         <item quantity="few">%1$s минуты</item>

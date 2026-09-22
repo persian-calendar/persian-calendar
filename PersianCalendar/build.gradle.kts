@@ -151,9 +151,15 @@ kotlin {
 
 dependencies {
     // Project owned libraries
-    implementation(libs.persiancalendar.calendar)
-    implementation(libs.persiancalendar.praytimes)
     implementation(libs.persiancalendar.calculator)
+    implementation(libs.persiancalendar.calendar)
+    implementation(libs.persiancalendar.equinox) {
+        exclude("com.github.persian-calendar.equinox", "equinox-js")
+        exclude("com.github.persian-calendar.equinox", "equinox-linuxx64")
+        exclude("com.github.persian-calendar.equinox", "equinox-macosarm64")
+        exclude("com.github.persian-calendar.equinox", "equinox-mingwx64")
+    }
+    implementation(libs.persiancalendar.praytimes)
     implementation(libs.persiancalendar.qr)
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0

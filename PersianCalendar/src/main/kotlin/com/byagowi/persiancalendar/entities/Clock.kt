@@ -33,15 +33,37 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
         return IntIntPair(value.toInt(), ((value - value.toInt()) * 60).toInt())
     }
 
-    fun toBasicFormatString(): String {
-        val (hours, minutes) = toHoursAndMinutesPair()
-        return linearFormat(hours, minutes)
+    fun toHoursMinutesSecondsTriplet(): Triple<Int, Int, Int> {
+        if (value.isNaN()) return Triple(0, 0, 0)
+        val hours = value.toInt()
+        val minutes = ((value - hours) * 60).toInt()
+        val seconds = ((value * 3600) % 60).toInt()
+        return Triple(hours, minutes, seconds)
     }
 
-    fun toFormattedString(printAmPm: Boolean = true): String {
-        if (clockIn24) return toBasicFormatString()
+    fun toBasicFormatString(withSeconds: Boolean = false): String {
+        val (hours, minutes, seconds) = toHoursMinutesSecondsTriplet()
+        return if (withSeconds) {
+            linearFormat(hours, minutes, seconds)
+        } else {
+            val (hours, minutes) = toHoursAndMinutesPair()
+            linearFormat(hours, minutes)
+        }
+    }
+
+    fun toFormattedString(
+        printAmPm: Boolean = true,
+        withSeconds: Boolean = false,
+    ): String {
+        if (clockIn24) return toBasicFormatString(withSeconds = withSeconds)
         val (hours, minutes) = toHoursAndMinutesPair()
-        val clockString = linearFormat((hours % 12).takeIf { it != 0 } ?: 12, minutes)
+        val fixedHours = (hours % 12).takeIf { it != 0 } ?: 12
+        val clockString = if (withSeconds) {
+            val (_, minutes, seconds) = toHoursMinutesSecondsTriplet()
+            linearFormat(fixedHours, minutes, seconds)
+        } else {
+            linearFormat(fixedHours, minutes)
+        }
         if (!printAmPm) return clockString
         return language.clockAmPmOrder.format(
             clockString,
@@ -81,6 +103,10 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
         @JvmSynthetic
         private fun linearFormat(hours: Int, minutes: Int) =
             numeral.format("%d:%02d".format(Locale.ENGLISH, hours, minutes))
+
+        @JvmSynthetic
+        private fun linearFormat(hours: Int, minutes: Int, seconds: Int) =
+            numeral.format("%d:%02d:%02d".format(Locale.ENGLISH, hours, minutes, seconds))
 
         val zero = Clock(.0)
     }

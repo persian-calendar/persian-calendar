@@ -185,6 +185,10 @@
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
     <string name="shift_work_reset_button">خاموش‌سازی یا برنامه‌ریزی مجدد</string>
+    <plurals name="seconds">
+        <item quantity="one">%1$s ثانیه</item>
+        <item quantity="other">%1$s ثانیه</item>
+    </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s دقیقه</item>
         <item quantity="other">%1$s دقیقه</item>

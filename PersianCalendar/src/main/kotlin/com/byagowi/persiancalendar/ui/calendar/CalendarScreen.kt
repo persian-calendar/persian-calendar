@@ -945,7 +945,6 @@ private fun Details(
                         (tabs[selectedTab] ?: return@Column)(
                             readEventsWithEquinox(
                                 jdn = selectedDay,
-                                now = now,
                                 // Tabs are disabled when device events are enabled so empty is enough here
                                 deviceEvents = EventsStore.empty(),
                             ),

@@ -301,6 +301,10 @@
         <item quantity="one">%1$s Arbeitstag</item>
         <item quantity="other">%1$s Arbeitstage</item>
     </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s Sekunde</item>
+        <item quantity="other">%1$s Sekunden</item>
+    </plurals>
     <plurals name="months">
         <item quantity="one">%1$s Monat</item>
         <item quantity="other">%1$s Monate</item>

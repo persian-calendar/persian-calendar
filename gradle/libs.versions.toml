@@ -23,6 +23,7 @@ nav3-core = "1.1.5"
 openlocationcode = "1.0.4"
 persiancalendar-calculator = "64d264a2c4c9eff6e7c060c3ff0bff0b15879f0e"
 persiancalendar-calendar = "6e54d1ce5044bf751ed1c0ef8faa9c4a95b55ee3"
+persiancalendar-equinox = "8ab6b120db052bb3439c09246113370a4abcbdb3"
 persiancalendar-praytimes = "619fd6fa2b61fea91f266b7c6d37dba48a6138df"
 persiancalendar-qr = "58da9a077e1acc2ba80b43635533117fea462c7b"
 slack-compose-lint-checks = "1.6.0"
@@ -72,6 +73,7 @@ lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", 
 openlocationcode = { group = "com.google.openlocationcode", name = "openlocationcode", version.ref = "openlocationcode" }
 persiancalendar-calculator = { group = "com.github.persian-calendar", name = "calculator", version.ref = "persiancalendar-calculator" }
 persiancalendar-calendar = { group = "com.github.persian-calendar", name = "calendar", version.ref = "persiancalendar-calendar" }
+persiancalendar-equinox = { group = "com.github.persian-calendar", name = "equinox", version.ref = "persiancalendar-equinox" }
 persiancalendar-praytimes = { group = "com.github.persian-calendar", name = "praytimes", version.ref = "persiancalendar-praytimes" }
 persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", version.ref = "persiancalendar-qr" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }

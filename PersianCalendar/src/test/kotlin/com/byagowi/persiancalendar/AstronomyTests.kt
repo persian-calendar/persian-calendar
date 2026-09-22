@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.ui.astronomy.meanAscendingNode
 import com.byagowi.persiancalendar.ui.astronomy.nairAlSaif
 import com.byagowi.persiancalendar.ui.astronomy.toAbjad
 import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
@@ -44,7 +45,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.util.GregorianCalendar
 import java.util.TimeZone
-import kotlin.math.PI
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -158,11 +158,12 @@ class AstronomyTests {
 
     @Test
     fun `Season equinox`() {
-        val seasons = seasons(2020)
         listOf(
-            seasons.marchEquinox to 1584676196290, seasons.juneSolstice to 1592689411284,
-            seasons.septemberEquinox to 1600781459379, seasons.decemberSolstice to 1608544962334,
-        ).map { (it, time) -> assertEquals(time, it.toMillisecondsSince1970()) }
+            Equinox.NORTHWARD_EQUINOX of 2020 to 1584676176971,
+            Equinox.NORTHERN_SOLSTICE of 2020 to 1592689420448,
+            Equinox.SOUTHWARD_EQUINOX of 2020 to 1600781439124,
+            Equinox.SOUTHERN_SOLSTICE of 2020 to 1608544940426,
+        ).map { (it, time) -> assertEquals(time, it) }
     }
 
     @Test

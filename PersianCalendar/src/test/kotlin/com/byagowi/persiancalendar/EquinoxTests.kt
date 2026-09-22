@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.Equinox
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -11,107 +12,60 @@ import kotlin.test.assertEquals
 class EquinoxTests {
     @ParameterizedTest
     @CsvSource(
+        // Official announced values are from
+        // https://github.com/persian-calendar/equinox-research/blob/main/iran-ground-truth.json
         // https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1405.pdf
-        "2026, 3, 20, 18, 15, 36",
-        /* should be 59 */
+        "2026, 3, 20, 18, 15, 57", // 59 per University of Tehran
         // https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1404.pdf
-        "2025, 3, 20, 12, 31, 26",
-        /* should be 30 */
+        "2025, 3, 20, 12, 31, 29", // 30 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1403.pdf
-        "2024, 3, 20, 6, 36, 24",
-        /* should be 26 */
+        "2024, 3, 20, 6, 36, 24", // 26 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1402.pdf
-        "2023, 3, 21, 0, 54, 23",
-        /* should be 28 */
+        "2023, 3, 21, 0, 54, 26", // 28 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1401.pdf
-        "2022, 3, 20, 19, 3, 21",
-        /* should be 26 */
+        "2022, 3, 20, 19, 3, 25", // 26 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1400.pdf
-        "2021, 3, 20, 13, 7, 17",
-        /* should be 28 */
+        "2021, 3, 20, 13, 7, 28", // 28 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1399.pdf
-        "2020, 3, 20, 7, 19, 56",
-        /* should be 37 */
+        "2020, 3, 20, 7, 19, 36", // 37 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1398.pdf
-        "2019, 3, 21, 1, 28, 18",
-        /* should be 27 */
+        "2019, 3, 21, 1, 28, 26", // 27 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1397.pdf
-        "2018, 3, 20, 19, 45, 17",
-        /* should be 28 */
+        "2018, 3, 20, 19, 45, 27", // 28 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1396.pdf
-        "2017, 3, 20, 13, 58, 45",
-        /* should be 40 */
+        "2017, 3, 20, 13, 58, 37", // 40 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1395.pdf
-        "2016, 3, 20, 8, 0, 2",
-        /* should be 12 */
+        "2016, 3, 20, 8, 0, 11", // 12 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1394.pdf
-        "2015, 3, 21, 2, 15, 2",
-        /* should be 11 */
+        "2015, 3, 21, 2, 15, 9", // 11 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1393.pdf
-        "2014, 3, 20, 20, 26, 50",
-        /* should be 7 */
+        "2014, 3, 20, 20, 27, 5", // 7 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1392.pdf
-        "2013, 3, 20, 14, 31, 39",
-        /* should be 56 */
+        "2013, 3, 20, 14, 31, 54", // 56 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1391.pdf
-        "2012, 3, 20, 8, 44, 15",
-        /* should be 27 */
+        "2012, 3, 20, 8, 44, 25", // 27 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1390.pdf
-        "2011, 3, 21, 2, 50, 45",
-        /* should be 25 */
+        "2011, 3, 21, 2, 50, 43", // 45 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1389.pdf
-        "2010, 3, 20, 21, 1, 55",
-        /* should be 2:13 */
+        "2010, 3, 20, 21, 2, 12", // 13 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1388.pdf
-        "2009, 3, 20, 15, 13, 56",
-        /* should be 39 */
+        "2009, 3, 20, 15, 13, 37", // 39 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1387.pdf
-        "2008, 3, 20, 9, 18, 12",
-        /* should be 19 */
+        "2008, 3, 20, 9, 18, 17", // 19 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1386.pdf
-        "2007, 3, 21, 3, 37, 28",
-        /* should be 26 */
+        "2007, 3, 21, 3, 37, 24", // 26 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1385.pdf
-        "2006, 3, 20, 21, 55, 14",
-        /* should be 35 */
+        "2006, 3, 20, 21, 55, 33", // 35 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1384.pdf
-        "2005, 3, 20, 16, 3, 34",
-        /* should be 24 */
+        "2005, 3, 20, 16, 3, 25", // 24 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1383.pdf
-        "2004, 3, 20, 10, 18, 25",
-        /* should be 37 */
+        "2004, 3, 20, 10, 18, 38", // 37 per University of Tehran
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1382.pdf
-        "2003, 3, 21, 4, 30, 26",
-        /* should be 29:45 */
-        // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1381.pdf
-        "2002, 3, 20, 22, 46, 0",
-        /* should be 2 */
-        // https://calendar.ut.ac.ir/تحويل-سال-هاي-گذشته
-        "2001, 3, 20, 17, 0, 53", /* should be 20 */
-        "2000, 3, 20, 11, 5, 15", /* should be 14 */
-        "1999, 3, 21, 5, 16, 1", /* should be 15:48 */
-        "1998, 3, 20, 23, 24, 19", /* should be 31 */
-        "1997, 3, 20, 17, 24, 53", /* should be 46 */
-        "1996, 3, 20, 11, 33, 3", /* should be 10 */
-        "1995, 3, 21, 5, 44, 32", /* should be 35 */
-        "1994, 3, 20, 23, 57, 55", /* should be 58:13 */
-        "1993, 3, 20, 18, 10, 47", /* should be 50 */
-        "1992, 3, 20, 12, 18, 9", /* should be 11 */
-        "1991, 3, 21, 6, 32, 3", /* should be 4 */
-        "1990, 3, 21, 0, 49, 0", /* should be 26 */
-        "1989, 3, 20, 18, 58, 17", /* should be 29 */
-        "1988, 3, 20, 13, 9, 7", /* should be 8:56 */
-        "1987, 3, 21, 7, 22, 1", /* should be 8 */
-        "1986, 3, 21, 1, 32, 40", /* should be 56 */
-        "1985, 3, 20, 19, 43, 54", /* should be 56 */
-        "1984, 3, 20, 13, 54, 2", /* should be 31 */
-        "1983, 3, 21, 8, 8, 35", /* should be 53 */
-        "1982, 3, 21, 2, 25, 21", /* should be 59 */
-        "1981, 3, 20, 20, 32, 48", /* should be 33:31 */
+        "2003, 3, 21, 4, 29, 46", // 45 per University of Tehran
     )
     fun test_not_change(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
         val calendar = GregorianCalendar(TimeZone.getTimeZone(IRAN_TIMEZONE_ID))
-        calendar.timeInMillis = seasons(year).marchEquinox.toMillisecondsSince1970()
+        calendar.timeInMillis = Equinox.NORTHWARD_EQUINOX of year
         assertEquals(year, calendar[GregorianCalendar.YEAR])
         assertEquals(month, calendar[GregorianCalendar.MONTH] + 1)
         assertEquals(day, calendar[GregorianCalendar.DAY_OF_MONTH])
@@ -121,17 +75,20 @@ class EquinoxTests {
     }
 
     @Test
-    fun test_range() {
-        // And not having random crashes
-        repeat(4000, ::seasons)
+    fun doesNotThrowAcrossExtendedRange() {
+        (-2000..10000).forEach {
+            Equinox.NORTHWARD_EQUINOX of it
+            Equinox.NORTHERN_SOLSTICE of it
+            Equinox.SOUTHWARD_EQUINOX of it
+            Equinox.SOUTHERN_SOLSTICE of it
+        }
     }
 
     @Test
     fun test_other_equinoxes() {
-        val seasons = seasons(2020)
-        assertEquals(1584676196290, seasons.marchEquinox.toMillisecondsSince1970())
-        assertEquals(1592689411284, seasons.juneSolstice.toMillisecondsSince1970())
-        assertEquals(1600781459379, seasons.septemberEquinox.toMillisecondsSince1970())
-        assertEquals(1608544962334, seasons.decemberSolstice.toMillisecondsSince1970())
+        assertEquals(1584676176971, Equinox.NORTHWARD_EQUINOX of 2020)
+        assertEquals(1592689420448, Equinox.NORTHERN_SOLSTICE of 2020)
+        assertEquals(1600781439124, Equinox.SOUTHWARD_EQUINOX of 2020)
+        assertEquals(1608544940426, Equinox.SOUTHERN_SOLSTICE of 2020)
     }
 }

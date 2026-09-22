@@ -350,6 +350,10 @@
         <item quantity="one">%1$s hafta</item>
         <item quantity="other">%1$s hafta</item>
     </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s saniye</item>
+        <item quantity="other">%1$s saniye</item>
+    </plurals>
     <string name="qr_code">Kare Kod</string>
     <string name="color_gradient">Renk Eğimi</string>
     <string name="time_zones">Saat Dilimi</string>

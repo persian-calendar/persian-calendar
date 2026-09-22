@@ -369,6 +369,9 @@
     <plurals name="work_days">
         <item quantity="other">%1$s 个工作日</item>
     </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%1$s 秒</item>
+    </plurals>
     <plurals name="weeks">
         <item quantity="other">%1$s 周</item>
     </plurals>

@@ -94,6 +94,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
+import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -107,8 +108,8 @@ import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.moonNodesAfter
-import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
@@ -445,10 +446,14 @@ private fun YearHoroscopeDialogContent(
             else -> tehranCoordinates to if (language.isArabicScript) "تهران" else "Tehran"
         }
 
-        val time = seasons(gregorianYear).marchEquinox
+        val timeInMillis = when {
+            coordinates.isSouthernHemisphere -> Equinox.SOUTHWARD_EQUINOX
+            else -> Equinox.NORTHWARD_EQUINOX
+        } of gregorianYear
+        val time = Time.fromMillisecondsSince1970(timeInMillis)
         var showTextEdit by remember { mutableStateOf(false) }
         Crossfade(targetState = showTextEdit) { state ->
-            val gregorianCalendar = Date(time.toMillisecondsSince1970()).toGregorianCalendar()
+            val gregorianCalendar = Date(timeInMillis).toGregorianCalendar()
             Box(contentAlignment = Alignment.Center) {
                 if (state) NumberEdit(
                     dismissNumberEdit = { showTextEdit = false },

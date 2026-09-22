@@ -202,6 +202,10 @@
         <item quantity="one">%1$s பணி நாள்</item>
         <item quantity="other">%1$s பணி நாள்கள்</item>
     </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s நொடி</item>
+        <item quantity="other">%1$s நொடிகள்</item>
+    </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s நிமையம்</item>
         <item quantity="other">%1$s நிமையங்கள்</item>

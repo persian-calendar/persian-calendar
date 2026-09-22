@@ -415,6 +415,14 @@
         <item quantity="other">%1$s يوم العمل</item>
     </plurals>
     <string name="navigate_up">انتقال للأعلى</string>
+    <plurals name="seconds">
+        <item quantity="zero">%1$s ثانية</item>
+        <item quantity="one">%1$s ثانية</item>
+        <item quantity="two">%1$s ثانيتين</item>
+        <item quantity="few">%1$s ثواني</item>
+        <item quantity="many">%1$s ثانية</item>
+        <item quantity="other">%1$s ثانية</item>
+    </plurals>
     <string name="open_navigation_rail">فتح درج التنقل</string>
     <string name="more_options">المزيد من الخيارات</string>
     <string name="yes">نعم</string>

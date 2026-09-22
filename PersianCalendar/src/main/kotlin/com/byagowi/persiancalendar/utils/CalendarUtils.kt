@@ -150,11 +150,14 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
     return calendar
 }
 
-fun GregorianCalendar.formatDateAndTime(withWeekDay: Boolean = false): String {
+fun GregorianCalendar.formatDateAndTime(
+    withWeekDay: Boolean = false,
+    withSeconds: Boolean = false,
+): String {
     val jdn = Jdn(this.toCivilDate())
     val weekDayName = if (withWeekDay) jdn.weekDay.title + spacedComma else ""
     return language.timeAndDateFormat.format(
-        Clock(this).toFormattedString(),
+        Clock(this).toFormattedString(withSeconds = withSeconds),
         weekDayName + formatDate(jdn on mainCalendar, forceNonNumerical = true),
     )
 }

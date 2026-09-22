@@ -351,6 +351,11 @@
         <item quantity="many">%1$s giorni lavorativi</item>
         <item quantity="other">%1$s giorni lavorativi</item>
     </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s secondo</item>
+        <item quantity="many">%1$s secondi</item>
+        <item quantity="other">%1$s secondi</item>
+    </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s minuto</item>
         <item quantity="many">%1$s minuti</item>
