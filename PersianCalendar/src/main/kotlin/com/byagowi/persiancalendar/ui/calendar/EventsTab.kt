@@ -3,6 +3,12 @@ package com.byagowi.persiancalendar.ui.calendar
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -620,17 +626,7 @@ private fun EquinoxCountDownContent(
                                     foldedCardBrush,
                                     shape = MaterialTheme.shapes.extraSmall,
                                 ),
-                            ) {
-                                Crossfade("$digit") {
-                                    Text(
-                                        it,
-                                        style = MaterialTheme.typography.headlineSmall,
-                                        textAlign = TextAlign.Center,
-                                        color = backgroundColor,
-                                        modifier = Modifier.width(28.dp),
-                                    )
-                                }
-                            }
+                            ) { AnimatedDigit(digit, backgroundColor) }
                         }
                     }
                 }
@@ -639,6 +635,34 @@ private fun EquinoxCountDownContent(
                 )
             } else Text(x, color = contentColor, style = MaterialTheme.typography.bodyMedium)
         }
+    }
+}
+
+
+@Composable
+private fun AnimatedDigit(
+    digit: Char,
+    contentColor: Color,
+) {
+    AnimatedContent(
+        targetState = digit,
+        transitionSpec = {
+            val durationMillis = 500
+            (slideInVertically(tween(durationMillis)) { -it / 4 } + fadeIn(tween(durationMillis))) togetherWith
+                    (slideOutVertically(tween(durationMillis)) { it / 4 } + fadeOut(
+                        tween(
+                            durationMillis * 4 / 5,
+                        ),
+                    ))
+        },
+    ) { value ->
+        Text(
+            text = value.toString(),
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            color = contentColor,
+            modifier = Modifier.width(28.dp),
+        )
     }
 }
 
