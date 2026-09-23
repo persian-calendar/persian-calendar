@@ -41,17 +41,20 @@ spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("**/build/**")
+        targetExclude("libs/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 
     kotlinGradle {
         target("**/*.gradle.kts")
         targetExclude("**/build/**")
+        targetExclude("libs/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 
     format("misc") {
         target("**/*.md", "**/.gitignore")
+        targetExclude("libs/**")
         trimTrailingWhitespace()
         endWithNewline()
     }
