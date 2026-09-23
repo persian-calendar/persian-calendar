@@ -8,6 +8,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -554,9 +555,7 @@ private fun EquinoxCountDown(
 ) {
     val year = event.date.year + 1
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        CompositionLocalProvider(
-            LocalLayoutDirection provides LayoutDirection.Ltr,
-        ) { EquinoxCountDownContent(contentColor, event, backgroundColor) }
+        EquinoxCountDownContent(contentColor, event, backgroundColor)
         var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
         if (showHoroscopeDialog) YearHoroscopeDialog(year) {
             showHoroscopeDialog = false
@@ -590,7 +589,7 @@ private fun EquinoxCountDownContent(
 ) {
     var remainedTime = event.remainingMillis.milliseconds
     if (remainedTime !in Duration.ZERO..356.days) return
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         val foldedCardBrush = if (isGradient) Brush.verticalGradient(
             .25f to contentColor,
             .499f to contentColor.copy(alpha = if (contentColor.isLight) .75f else .5f),
@@ -605,26 +604,30 @@ private fun EquinoxCountDownContent(
             val x = (remainedTime / interval).toInt()
             remainedTime -= interval * x
             x to pluralStringResource(pluralId, x, numeral.format(x))
-        }.dropWhile { it.first == 0 }.forEach { (_, x) ->
+        }.dropWhile { it.first == 0 }.let {
+            if (LocalLayoutDirection.current == LayoutDirection.Ltr) it else it.asReversed()
+        }.forEach { (_, x) ->
             val parts = x.split(" ")
             if (parts.size == 2 && parts[0].length <= 3 && !isTalkBackEnabled) Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                    val digits = parts[0].padStart(2, numeral.format(0)[0])
-                    digits.forEach {
-                        Text(
-                            "$it",
-                            style = MaterialTheme.typography.headlineSmall,
-                            textAlign = TextAlign.Center,
-                            color = backgroundColor,
-                            modifier = Modifier
-                                .background(
-                                    foldedCardBrush,
-                                    MaterialTheme.shapes.extraSmall,
-                                )
-                                .width(28.dp),
-                        )
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                        val digits = parts[0].padStart(2, numeral.format(0)[0])
+                        digits.forEach {
+                            Text(
+                                "$it",
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = TextAlign.Center,
+                                color = backgroundColor,
+                                modifier = Modifier
+                                    .background(
+                                        foldedCardBrush,
+                                        MaterialTheme.shapes.extraSmall,
+                                    )
+                                    .width(28.dp),
+                            )
+                        }
                     }
                 }
                 Text(
