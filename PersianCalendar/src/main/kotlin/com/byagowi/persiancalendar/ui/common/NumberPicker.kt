@@ -113,7 +113,7 @@ fun NumberPicker(
                 orientation = Orientation.Vertical,
                 state = rememberDraggableState { deltaY ->
                     coroutineScope.launch {
-                        @SuppressLint("AnimatableSnapTo") animatedOffset.snapTo(
+                        animatedOffset.snapTo(
                             animatedOffset.value + deltaY,
                         )
                     }
@@ -145,7 +145,7 @@ fun NumberPicker(
                                 halfNumbersColumnHeightPx,
                             ),
                         )
-                        @SuppressLint("AnimatableSnapTo") animatedOffset.snapTo(0f)
+                        animatedOffset.snapTo(0f)
                     }
                 },
             )
