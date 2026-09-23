@@ -4,3 +4,25 @@
 [submodule "PersianCalendar/data/events"]
 	path = PersianCalendar/data/events
 	url = https://github.com/persian-calendar/events.git
+[submodule "libs/calculator"]
+	path = libs/calculator
+	url = https://github.com/persian-calendar/calculator.git
+[submodule "libs/calendar"]
+	path = libs/calendar
+	url = https://github.com/persian-calendar/calendar.git
+[submodule "libs/equinox"]
+	path = libs/equinox
+	url = https://github.com/persian-calendar/equinox.git
+[submodule "libs/praytimes"]
+	path = libs/praytimes
+	url = https://github.com/persian-calendar/praytimes.git
+[submodule "libs/qr"]
+	path = libs/qr
+	url = https://github.com/persian-calendar/qr.git
+[submodule "libs/open-location-code"]
+	path = libs/open-location-code
+	url = https://github.com/persian-calendar/open-location-code.git
+	branch = main
+[submodule "libs/astronomy"]
+	path = libs/astronomy
+	url = https://github.com/persian-calendar/astronomy

@@ -13,7 +13,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://jitpack.io")
     }
 }
 rootProject.name = "persian-calendar"
@@ -21,3 +20,25 @@ include(":PersianCalendar")
 includeBuild("gradlePlugins")
 include(":wear")
 include(":lintChecks")
+
+listOf("calculator", "calendar", "equinox", "praytimes", "qr").forEach { repo ->
+    includeBuild("libs/$repo") {
+        dependencySubstitution {
+            substitute(module("io.github.persiancalendar:$repo")).using(project(":"))
+        }
+    }
+}
+
+includeBuild("libs/open-location-code/kotlin") {
+    name = "open-location-code"
+    dependencySubstitution {
+        substitute(module("com.google.openlocationcode:openlocationcode")).using(project(":"))
+    }
+}
+
+includeBuild("libs/astronomy/source/kotlin") {
+    name = "astronomy"
+    dependencySubstitution {
+        substitute(module("io.github.cosinekitty:astronomy")).using(project(":"))
+    }
+}

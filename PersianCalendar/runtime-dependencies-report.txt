@@ -1,38 +1,20 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 (c)
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
-+--- com.github.persian-calendar:calculator:54797e692bad5843c48653d9ec0f1642ae548dda
-|    +--- com.github.persian-calendar.calculator:calculator:54797e692bad5843c48653d9ec0f1642ae548dda
-|    |    \--- com.github.persian-calendar.calculator:calculator-jvm:54797e692bad5843c48653d9ec0f1642ae548dda
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    \--- com.github.persian-calendar.calculator:calculator-jvm:54797e692bad5843c48653d9ec0f1642ae548dda (*)
-+--- com.github.persian-calendar:calendar:d8edafd12a4412f6d7975b45e8fa6aadc1ab6464
-|    +--- com.github.persian-calendar.calendar:calendar:d8edafd12a4412f6d7975b45e8fa6aadc1ab6464
-|    |    \--- com.github.persian-calendar.calendar:calendar-jvm:d8edafd12a4412f6d7975b45e8fa6aadc1ab6464
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    \--- com.github.persian-calendar.calendar:calendar-jvm:d8edafd12a4412f6d7975b45e8fa6aadc1ab6464 (*)
-+--- com.github.persian-calendar:equinox:404aeb0e5e198b09b322154ea05f5fa19b30ca0f
-|    +--- com.github.persian-calendar.equinox:equinox:404aeb0e5e198b09b322154ea05f5fa19b30ca0f
-|    |    \--- com.github.persian-calendar.equinox:equinox-jvm:404aeb0e5e198b09b322154ea05f5fa19b30ca0f
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    \--- com.github.persian-calendar.equinox:equinox-jvm:404aeb0e5e198b09b322154ea05f5fa19b30ca0f (*)
-+--- com.github.persian-calendar:praytimes:6c60d90bf8a951d1826499b55fa220deee6a9737
-|    +--- com.github.persian-calendar.praytimes:praytimes:6c60d90bf8a951d1826499b55fa220deee6a9737
-|    |    \--- com.github.persian-calendar.praytimes:praytimes-jvm:6c60d90bf8a951d1826499b55fa220deee6a9737
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    \--- com.github.persian-calendar.praytimes:praytimes-jvm:6c60d90bf8a951d1826499b55fa220deee6a9737 (*)
-+--- com.github.persian-calendar:qr:9f663f7eab20c9bc18bd21e00e711051363394b9
-|    +--- com.github.persian-calendar.qr:qr:9f663f7eab20c9bc18bd21e00e711051363394b9
-|    |    \--- com.github.persian-calendar.qr:qr-jvm:9f663f7eab20c9bc18bd21e00e711051363394b9
-|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    \--- com.github.persian-calendar.qr:qr-jvm:9f663f7eab20c9bc18bd21e00e711051363394b9 (*)
-+--- com.github.cosinekitty:astronomy:61dc07020aaa6885d2c7f688a4d82beaf6edb9ef
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.8.0
-|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.0 -> 2.4.20 (*)
-|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0
-|              \--- org.jetbrains.kotlin:kotlin-stdlib:1.8.0 -> 2.4.20 (*)
++--- io.github.cosinekitty:astronomy -> project ':astronomy'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
++--- io.github.persiancalendar:calculator -> project ':calculator'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
++--- io.github.persiancalendar:calendar -> project ':calendar'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
++--- io.github.persiancalendar:equinox -> project ':equinox'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
++--- com.google.openlocationcode:openlocationcode -> project ':open-location-code'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
++--- io.github.persiancalendar:praytimes -> project ':praytimes'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
++--- io.github.persiancalendar:qr -> project ':qr'
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 +--- androidx.core:core-ktx:1.19.0
 |    +--- androidx.core:core:1.19.0
 |    |    +--- androidx.annotation:annotation:1.10.0
@@ -367,7 +349,6 @@
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0 (*)
 +--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.4.20 (*)
-+--- com.google.openlocationcode:openlocationcode:1.0.4
 +--- androidx.activity:activity-ktx:1.13.0
 |    +--- androidx.activity:activity:1.13.0 (*)
 |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.6.1 -> 2.11.0 (*)

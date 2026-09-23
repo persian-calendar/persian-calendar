@@ -5,7 +5,6 @@ android-test-runner = "1.7.0"
 androidx-activity = "1.13.0"
 androidx-core = "1.19.0"
 androidx-test-ext-junit = "1.3.0"
-astronomy = "61dc07020aaa6885d2c7f688a4d82beaf6edb9ef" # is equal to v2.1.19
 browser = "1.10.0"
 compose-bom = "2026.09.00"
 coroutines = "1.11.0"
@@ -20,12 +19,6 @@ kotlinx-html-jvm = "0.12.0"
 kotlinx-serialization = "1.11.0"
 lifecycle = "2.11.0"
 nav3-core = "1.1.5"
-openlocationcode = "1.0.4"
-persiancalendar-calculator = "54797e692bad5843c48653d9ec0f1642ae548dda"
-persiancalendar-calendar = "d8edafd12a4412f6d7975b45e8fa6aadc1ab6464"
-persiancalendar-equinox = "404aeb0e5e198b09b322154ea05f5fa19b30ca0f"
-persiancalendar-praytimes = "6c60d90bf8a951d1826499b55fa220deee6a9737"
-persiancalendar-qr = "9f663f7eab20c9bc18bd21e00e711051363394b9"
 slack-compose-lint-checks = "1.6.0"
 work-manager = "2.11.2"
 watchface-complications-data-source-ktx = "1.3.0"
@@ -42,7 +35,6 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "nav3-core" }
 androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "nav3-core" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
@@ -70,12 +62,13 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
-openlocationcode = { group = "com.google.openlocationcode", name = "openlocationcode", version.ref = "openlocationcode" }
-persiancalendar-calculator = { group = "com.github.persian-calendar", name = "calculator", version.ref = "persiancalendar-calculator" }
-persiancalendar-calendar = { group = "com.github.persian-calendar", name = "calendar", version.ref = "persiancalendar-calendar" }
-persiancalendar-equinox = { group = "com.github.persian-calendar", name = "equinox", version.ref = "persiancalendar-equinox" }
-persiancalendar-praytimes = { group = "com.github.persian-calendar", name = "praytimes", version.ref = "persiancalendar-praytimes" }
-persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", version.ref = "persiancalendar-qr" }
+persiancalendar-astronomy = { group = "io.github.cosinekitty", name = "astronomy" }
+persiancalendar-openlocationcode = { group = "com.google.openlocationcode", name = "openlocationcode" }
+persiancalendar-calculator = { group = "io.github.persiancalendar", name = "calculator" }
+persiancalendar-calendar = { group = "io.github.persiancalendar", name = "calendar" }
+persiancalendar-equinox = { group = "io.github.persiancalendar", name = "equinox" }
+persiancalendar-praytimes = { group = "io.github.persiancalendar", name = "praytimes" }
+persiancalendar-qr = { group = "io.github.persiancalendar", name = "qr" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
