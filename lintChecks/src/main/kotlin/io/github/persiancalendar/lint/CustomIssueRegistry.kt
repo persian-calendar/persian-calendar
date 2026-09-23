@@ -12,7 +12,6 @@ class CustomIssueRegistry : IssueRegistry() {
         TryCatchDetector.ISSUE,
         UnsafeCastDetector.ISSUE,
         HapticFeedbackDetector.ISSUE,
-        AnimatableSnapToDetector.ISSUE,
         BackHandlerDetector.ISSUE,
     )
 

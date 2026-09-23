@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -156,7 +155,7 @@ fun ColorPickerDialog(
                     }
                     coroutineScope.launch {
                         // TODO: Probably better to move away from Animatable object here
-                        @SuppressLint("AnimatableSnapTo") color.snapTo(newColor)
+                        color.snapTo(newColor)
                     }
                 },
                 colors = when (it) {

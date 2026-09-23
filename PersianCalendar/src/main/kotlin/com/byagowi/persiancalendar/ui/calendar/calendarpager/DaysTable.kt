@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.collection.IntIntPair
@@ -210,7 +209,6 @@ fun daysTable(
                 if (indicatorCenter != null) {
                     // It's only the initial so the use here is valid.
                     // Maybe we could create a new animatable object though.
-                    @SuppressLint("AnimatableSnapTo")
                     animatedCenter.snapTo(indicatorCenter)
                 }
                 val target = if (indicatorCenter != null) 1f else 0f
