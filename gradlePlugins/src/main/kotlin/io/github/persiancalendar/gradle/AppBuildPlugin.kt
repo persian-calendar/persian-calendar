@@ -11,5 +11,13 @@ class AppBuildPlugin : Plugin<Project> {
         target.tasks.register("wearcodegenerators", CodeGenerators::class.java) {
             execute(target, true)
         }
+
+        // guard against duplicate task registration (wear, the main app)
+        val root = target.rootProject
+        val checkSubmodules = root.tasks.findByName("checkSubmodules")
+            ?: root.tasks.register("checkSubmodules", SubmoduleCheck::class.java)
+        target.tasks.matching { it.name == "preReleaseBuild" || it.name == "preNightlyBuild" }.configureEach {
+            dependsOn(checkSubmodules)
+        }
     }
 }
