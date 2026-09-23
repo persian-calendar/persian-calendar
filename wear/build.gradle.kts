@@ -78,7 +78,20 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.persiancalendar.calendar)
+    implementation(libs.persiancalendar.calendar) {
+        exclude("com.github.persian-calendar.calendar", "calendar-iosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-iossimulatorarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-js")
+        exclude("com.github.persian-calendar.calendar", "calendar-linuxarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-linuxx64")
+        exclude("com.github.persian-calendar.calendar", "calendar-macosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-mingwx64")
+        exclude("com.github.persian-calendar.calendar", "calendar-tvosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-tvossimulatorarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-watchosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-watchosdevicearm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-watchossimulatorarm64")
+    }
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation(libs.astronomy)
     implementation(platform(libs.compose.bom))

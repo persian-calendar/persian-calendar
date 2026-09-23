@@ -152,39 +152,74 @@ kotlin {
 dependencies {
     // Project owned libraries
     implementation(libs.persiancalendar.calculator) {
+        exclude("com.github.persian-calendar.calculator", "calculator-iosarm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-iossimulatorarm64")
         exclude("com.github.persian-calendar.calculator", "calculator-js")
         exclude("com.github.persian-calendar.calculator", "calculator-linuxarm64")
         exclude("com.github.persian-calendar.calculator", "calculator-linuxx64")
         exclude("com.github.persian-calendar.calculator", "calculator-macosarm64")
         exclude("com.github.persian-calendar.calculator", "calculator-mingwx64")
+        exclude("com.github.persian-calendar.calculator", "calculator-tvosarm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-tvossimulatorarm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-watchosarm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-watchosdevicearm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-watchossimulatorarm64")
     }
     implementation(libs.persiancalendar.calendar) {
+        exclude("com.github.persian-calendar.calendar", "calendar-iosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-iossimulatorarm64")
         exclude("com.github.persian-calendar.calendar", "calendar-js")
         exclude("com.github.persian-calendar.calendar", "calendar-linuxarm64")
         exclude("com.github.persian-calendar.calendar", "calendar-linuxx64")
         exclude("com.github.persian-calendar.calendar", "calendar-macosarm64")
         exclude("com.github.persian-calendar.calendar", "calendar-mingwx64")
+        exclude("com.github.persian-calendar.calendar", "calendar-tvosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-tvossimulatorarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-watchosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-watchosdevicearm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-watchossimulatorarm64")
     }
     implementation(libs.persiancalendar.equinox) {
+        exclude("com.github.persian-calendar.equinox", "equinox-iosarm64")
+        exclude("com.github.persian-calendar.equinox", "equinox-iossimulatorarm64")
         exclude("com.github.persian-calendar.equinox", "equinox-js")
         exclude("com.github.persian-calendar.equinox", "equinox-linuxarm64")
         exclude("com.github.persian-calendar.equinox", "equinox-linuxx64")
         exclude("com.github.persian-calendar.equinox", "equinox-macosarm64")
         exclude("com.github.persian-calendar.equinox", "equinox-mingwx64")
+        exclude("com.github.persian-calendar.equinox", "equinox-tvosarm64")
+        exclude("com.github.persian-calendar.equinox", "equinox-tvossimulatorarm64")
+        exclude("com.github.persian-calendar.equinox", "equinox-watchosarm64")
+        exclude("com.github.persian-calendar.equinox", "equinox-watchosdevicearm64")
+        exclude("com.github.persian-calendar.equinox", "equinox-watchossimulatorarm64")
     }
     implementation(libs.persiancalendar.praytimes) {
+        exclude("com.github.persian-calendar.praytimes", "praytimes-iosarm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-iossimulatorarm64")
         exclude("com.github.persian-calendar.praytimes", "praytimes-js")
         exclude("com.github.persian-calendar.praytimes", "praytimes-linuxarm64")
         exclude("com.github.persian-calendar.praytimes", "praytimes-linuxx64")
         exclude("com.github.persian-calendar.praytimes", "praytimes-macosarm64")
         exclude("com.github.persian-calendar.praytimes", "praytimes-mingwx64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-tvosarm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-tvossimulatorarm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-watchosarm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-watchosdevicearm64")
+        exclude("com.github.persian-calendar.praytimes", "praytimes-watchossimulatorarm64")
     }
     implementation(libs.persiancalendar.qr) {
+        exclude("com.github.persian-calendar.qr", "qr-iosarm64")
+        exclude("com.github.persian-calendar.qr", "qr-iossimulatorarm64")
         exclude("com.github.persian-calendar.qr", "qr-js")
         exclude("com.github.persian-calendar.qr", "qr-linuxarm64")
         exclude("com.github.persian-calendar.qr", "qr-linuxx64")
         exclude("com.github.persian-calendar.qr", "qr-macosarm64")
         exclude("com.github.persian-calendar.qr", "qr-mingwx64")
+        exclude("com.github.persian-calendar.qr", "qr-tvosarm64")
+        exclude("com.github.persian-calendar.qr", "qr-tvossimulatorarm64")
+        exclude("com.github.persian-calendar.qr", "qr-watchosarm64")
+        exclude("com.github.persian-calendar.qr", "qr-watchosdevicearm64")
+        exclude("com.github.persian-calendar.qr", "qr-watchossimulatorarm64")
     }
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0

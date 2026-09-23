@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '22 8 * * *' # one a day
 
+permissions:
+  contents: write
+
 jobs:
   evaluateChanges:
     name: Evaluate changes for run or skipping nightly build
@@ -59,9 +62,14 @@ jobs:
           ./gradlew PersianCalendar:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
           ./gradlew wear:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > wear/runtime-dependencies-report.txt
 
-      - name: Add and commit the report
-        uses: EndBug/add-and-commit@db73408897f13b2878d08ac8b3f8e51cd492c8f2
-        with:
-          default_author: github_actions
-          message: 'Update the runtime dependencies report'
-          add: PersianCalendar/*.txt wear/*.txt
+      - name: Commit and push the report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add PersianCalendar/*.txt wear/*.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update the runtime dependencies report"
+          git push origin "HEAD:${{ github.ref_name }}"

@@ -56,3 +56,56 @@ spotless {
         endWithNewline()
     }
 }
+
+tasks.register("updatePersianCalendarVersions") {
+    group = "versioning"
+    description = "Replaces the persian-calendar dependency versions in the version catalog with the latest commit on the main branch."
+
+    val versionCatalog = rootProject.file("gradle/libs.versions.toml")
+    val persianCalendarRepositories = mapOf(
+        "persiancalendar-calculator" to "calculator",
+        "persiancalendar-calendar" to "calendar",
+        "persiancalendar-equinox" to "equinox",
+        "persiancalendar-praytimes" to "praytimes",
+        "persiancalendar-qr" to "qr",
+    )
+
+    doLast {
+        val client = java.net.http.HttpClient.newHttpClient()
+        val token = System.getenv("GITHUB_TOKEN")
+        var content = versionCatalog.readText()
+
+        for ((key, repo) in persianCalendarRepositories) {
+            val requestBuilder = java.net.http.HttpRequest.newBuilder(
+                java.net.URI("https://api.github.com/repos/persian-calendar/$repo/commits/main"),
+            )
+                .header("Accept", "application/vnd.github+json")
+                .GET()
+            if (!token.isNullOrBlank()) {
+                requestBuilder.header("Authorization", "Bearer $token")
+            }
+
+            val response = client.send(
+                requestBuilder.build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString(),
+            )
+            require(response.statusCode() == 200) {
+                "Failed to fetch latest commit for $repo (HTTP ${response.statusCode()}): ${response.body()}"
+            }
+
+            val sha = Regex("\"sha\"\\s*:\\s*\"([0-9a-f]{40})\"")
+                .find(response.body())
+                ?.groupValues
+                ?.get(1)
+                ?: error("Could not parse commit SHA for $repo")
+
+            val pattern = Regex("($key\\s*=\\s*)\"[0-9a-f]+\"")
+            content = pattern.replace(content) { match -> "${match.groupValues[1]}\"$sha\"" }
+
+            logger.lifecycle("$repo -> $sha")
+        }
+
+        versionCatalog.writeText(content)
+        logger.lifecycle("Updated ${versionCatalog.name}")
+    }
+}
