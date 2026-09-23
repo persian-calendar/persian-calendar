@@ -151,8 +151,20 @@ kotlin {
 
 dependencies {
     // Project owned libraries
-    implementation(libs.persiancalendar.calculator)
-    implementation(libs.persiancalendar.calendar)
+    implementation(libs.persiancalendar.calculator) {
+        exclude("com.github.persian-calendar.calculator", "calculator-js")
+        exclude("com.github.persian-calendar.calculator", "calculator-linuxarm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-linuxx64")
+        exclude("com.github.persian-calendar.calculator", "calculator-macosarm64")
+        exclude("com.github.persian-calendar.calculator", "calculator-mingwx64")
+    }
+    implementation(libs.persiancalendar.calendar) {
+        exclude("com.github.persian-calendar.calendar", "calendar-js")
+        exclude("com.github.persian-calendar.calendar", "calendar-linuxarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-linuxx64")
+        exclude("com.github.persian-calendar.calendar", "calendar-macosarm64")
+        exclude("com.github.persian-calendar.calendar", "calendar-mingwx64")
+    }
     implementation(libs.persiancalendar.equinox) {
         exclude("com.github.persian-calendar.equinox", "equinox-js")
         exclude("com.github.persian-calendar.equinox", "equinox-linuxarm64")

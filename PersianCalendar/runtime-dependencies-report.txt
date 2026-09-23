@@ -3,11 +3,16 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 (c)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
-+--- com.github.persian-calendar:calculator:64d264a2c4c9eff6e7c060c3ff0bff0b15879f0e
-|    +--- org.antlr:antlr4-runtime:4.13.2
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.4.20 (*)
-+--- com.github.persian-calendar:calendar:6e54d1ce5044bf751ed1c0ef8faa9c4a95b55ee3
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 -> 2.4.20 (*)
++--- com.github.persian-calendar:calculator:da85cfa6d8a899779e386a9d6b12218582065ab2
+|    +--- com.github.persian-calendar.calculator:calculator:da85cfa6d8a899779e386a9d6b12218582065ab2
+|    |    \--- com.github.persian-calendar.calculator:calculator-jvm:da85cfa6d8a899779e386a9d6b12218582065ab2
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
+|    \--- com.github.persian-calendar.calculator:calculator-jvm:da85cfa6d8a899779e386a9d6b12218582065ab2 (*)
++--- com.github.persian-calendar:calendar:5aadacdb7c3a80439b1ffa951f43e314fea7b00b
+|    +--- com.github.persian-calendar.calendar:calendar:5aadacdb7c3a80439b1ffa951f43e314fea7b00b
+|    |    \--- com.github.persian-calendar.calendar:calendar-jvm:5aadacdb7c3a80439b1ffa951f43e314fea7b00b
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
+|    \--- com.github.persian-calendar.calendar:calendar-jvm:5aadacdb7c3a80439b1ffa951f43e314fea7b00b (*)
 +--- com.github.persian-calendar:equinox:1bcc9d9068132b4175dde0244ff6811527c3e32a
 |    +--- com.github.persian-calendar.equinox:equinox:1bcc9d9068132b4175dde0244ff6811527c3e32a
 |    |    \--- com.github.persian-calendar.equinox:equinox-jvm:1bcc9d9068132b4175dde0244ff6811527c3e32a
