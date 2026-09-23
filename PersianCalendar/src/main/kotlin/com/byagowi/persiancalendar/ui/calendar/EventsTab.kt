@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -613,20 +614,23 @@ private fun EquinoxCountDownContent(
             ) {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                     Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                        val digits = parts[0].padStart(2, numeral.format(0)[0])
-                        digits.forEach {
-                            Text(
-                                "$it",
-                                style = MaterialTheme.typography.headlineSmall,
-                                textAlign = TextAlign.Center,
-                                color = backgroundColor,
-                                modifier = Modifier
-                                    .background(
-                                        foldedCardBrush,
-                                        MaterialTheme.shapes.extraSmall,
+                        parts[0].padStart(2, numeral.format(0)[0]).forEach { digit ->
+                            Box(
+                                modifier = Modifier.background(
+                                    foldedCardBrush,
+                                    shape = MaterialTheme.shapes.extraSmall,
+                                ),
+                            ) {
+                                Crossfade("$digit") {
+                                    Text(
+                                        it,
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        textAlign = TextAlign.Center,
+                                        color = backgroundColor,
+                                        modifier = Modifier.width(28.dp),
                                     )
-                                    .width(28.dp),
-                            )
+                                }
+                            }
                         }
                     }
                 }
