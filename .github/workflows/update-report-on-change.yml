@@ -1,0 +1,29 @@
+name: Update dependencies report on dependency changes
+
+on:
+  push:
+    paths:
+      - 'gradle/libs.versions.toml'
+      - 'gradle.properties'
+      - '**/*.gradle.kts'
+      - '**/*.gradle'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'gradle/libs.versions.toml'
+      - 'gradle.properties'
+      - '**/*.gradle.kts'
+      - '**/*.gradle'
+
+permissions:
+  contents: write
+
+jobs:
+  update-report:
+    if: >-
+      github.event_name == 'push' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       github.actor != 'dependabot[bot]')
+    uses: ./.github/workflows/update-dependencies-report.yml
+    with:
+      ref: ${{ github.event_name == 'push' && github.ref_name || github.head_ref }}

@@ -57,19 +57,9 @@ jobs:
             -F document=@"$apk_path"
           rm "$apk_path"
 
-      - name: Update the runtime dependencies report
-        run: |
-          ./gradlew PersianCalendar:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
-          ./gradlew wear:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > wear/runtime-dependencies-report.txt
-
-      - name: Commit and push the report
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PersianCalendar/*.txt wear/*.txt
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-          git commit -m "Update the runtime dependencies report"
-          git push origin "HEAD:${{ github.ref_name }}"
+  update-report:
+    name: Update the runtime dependencies report
+    needs: build
+    uses: ./.github/workflows/update-dependencies-report.yml
+    with:
+      ref: ${{ github.ref_name }}

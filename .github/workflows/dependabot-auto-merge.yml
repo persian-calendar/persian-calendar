@@ -13,10 +13,25 @@ permissions:
   pull-requests: write
 
 jobs:
-  enable-automerge:
+  update-report:
     if: >-
       github.actor == 'dependabot[bot]' &&
       github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.user.id == 49699333 &&
+      github.event.pull_request.user.type == 'Bot' &&
+      startsWith(github.event.pull_request.head.ref, 'dependabot/') &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.draft == false
+    uses: ./.github/workflows/update-dependencies-report.yml
+    with:
+      ref: ${{ github.head_ref }}
+
+  enable-automerge:
+    needs: update-report
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.user.id == 49699333 &&
       github.event.pull_request.user.type == 'Bot' &&
       startsWith(github.event.pull_request.head.ref, 'dependabot/') &&
       github.event.pull_request.head.repo.full_name == github.repository &&

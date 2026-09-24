@@ -12,6 +12,11 @@ class AppBuildPlugin : Plugin<Project> {
             execute(target, true)
         }
 
+        target.tasks.register("updateDependenciesReport", DependenciesReport::class.java) {
+            configurationName.set("releaseRuntimeClasspath")
+            reportFile.set(target.layout.projectDirectory.file("runtime-dependencies-report.txt"))
+        }
+
         // guard against duplicate task registration (wear, the main app)
         val root = target.rootProject
         val checkSubmodules = root.tasks.findByName("checkSubmodules")
