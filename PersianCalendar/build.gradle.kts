@@ -9,13 +9,6 @@ plugins {
 val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
 
 android {
-    sourceSets {
-        operator fun File.div(child: String): File = File(this, child)
-        val generatedAppSrcDir =
-            layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
-        getByName("main").kotlin.directories += generatedAppSrcDir.path
-    }
-
     compileSdk { version = release(37) { minorApiLevel = 1 } }
 
     buildFeatures {

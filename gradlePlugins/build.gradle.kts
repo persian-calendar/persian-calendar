@@ -9,10 +9,12 @@ plugins {
 }
 
 repositories {
+    google()
     mavenCentral()
 }
 
 dependencies {
+    compileOnly(libs.agp)
     implementation(libs.kotlinpoet)
     implementation(libs.kotlinx.serialization.json)
 }

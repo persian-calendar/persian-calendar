@@ -22,11 +22,11 @@ import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import javax.inject.Inject
@@ -43,84 +43,72 @@ abstract class CodeGenerators : DefaultTask() {
     private val eventSource = ClassName(packageName, eventSourceName)
     private val cityItemType = ClassName("com.byagowi.persiancalendar.entities", cityItemName)
 
-    private operator fun File.div(child: String) = File(this, child)
-
-    @InputDirectory
-    abstract fun getGeneratedAppSrcDir(): Property<File>
+    @OutputDirectory
+    abstract fun getGeneratedAppSrcDir(): DirectoryProperty
 
     @Input
     abstract fun getIsWear(): Property<Boolean>
 
     @get:Inject
-    abstract val pl: ProjectLayout
+    abstract val projectLayout: ProjectLayout
 
-    fun execute(target: Project, isWear: Boolean = false) {
-        val projectDir = project.projectDir
-        val generatedAppSrcDir =
-            target.layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
-        generatedAppSrcDir.mkdirs()
-        setProperty("generatedAppSrcDir", generatedAppSrcDir)
-        setProperty("isWear", isWear)
-        val generateDir = generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
+    /** Declares the task inputs; outputs are tracked via [generatedAppSrcDir]. */
+    fun configure() {
+        val projectDir = projectLayout.projectDirectory.asFile
+        val rootDir = projectDir.parentFile
 
-        run {
-            inputs.file(projectDir / "data" / "events" / "events.json")
-            outputs.file(generateDir / "events.kt")
+        inputs.file(projectDir.resolve("data/events/events.json"))
+        if (!getIsWear().get()) {
+            listOf("cities", "districts").forEach { name ->
+                inputs.file(projectDir.resolve("data/$name.json"))
+            }
         }
-        if (!isWear) listOf("cities", "districts").forEach { name ->
-            val input = projectDir / "data" / "$name.json"
-            inputs.file(input)
-            val output = generateDir / "$name.kt"
-            outputs.file(output)
-        }
-
-        if (isWear) {
-            inputs.file(projectDir / "shaders" / "globe.agsl")
+        if (getIsWear().get()) {
+            inputs.file(projectDir.resolve("shaders/globe.agsl"))
         } else {
-            inputs.file(project.rootDir / "THANKS.md")
-            inputs.file(project.rootDir / "FAQ.fa.md")
-            inputs.file(projectDir / "shaders" / "common.vert")
-            inputs.file(projectDir / "shaders" / "globe.frag")
-            inputs.file(projectDir / "shaders" / "sandbox.frag")
+            inputs.file(rootDir.resolve("THANKS.md"))
+            inputs.file(rootDir.resolve("FAQ.fa.md"))
+            inputs.file(projectDir.resolve("shaders/common.vert"))
+            inputs.file(projectDir.resolve("shaders/globe.frag"))
+            inputs.file(projectDir.resolve("shaders/sandbox.frag"))
         }
-        outputs.file(generateDir / "TextStore.kt")
     }
 
     @TaskAction
     fun action() {
-        val generatedAppSrcDir = getGeneratedAppSrcDir().get()
-        generatedAppSrcDir.mkdirs()
-        val projectDir = pl.projectDirectory.asFile
+        val generatedDir = getGeneratedAppSrcDir().get().asFile
+        generatedDir.mkdirs()
+        val projectDir = projectLayout.projectDirectory.asFile
         val isWear = getIsWear().get()
         run {
-            val input = projectDir / "data" / "events" / "events.json"
+            val input = projectDir.resolve("data/events/events.json")
             val builder = FileSpec.builder(packageName, "events")
             generateEventsCode(input, builder)
-            builder.build().writeTo(generatedAppSrcDir)
+            builder.build().writeTo(generatedDir)
         }
         if (!isWear) listOf(
             "cities" to ::generateCitiesCode,
             "districts" to ::generateDistrictsCode,
         ).forEach { (name, generator) ->
-            val input = projectDir / "data" / "$name.json"
+            val input = projectDir.resolve("data/$name.json")
             val builder = FileSpec.builder(packageName, name)
             generator(input, builder)
-            builder.build().writeTo(generatedAppSrcDir)
+            builder.build().writeTo(generatedDir)
         }
-        createTextStore(generatedAppSrcDir, isWear)
+        createTextStore(generatedDir, isWear)
     }
 
     private fun createTextStore(generatedAppSrcDir: File, isWear: Boolean) {
         val builder = FileSpec.builder(packageName, "TextStore")
-        val projectDir = pl.projectDirectory.asFile
+        val projectDir = projectLayout.projectDirectory.asFile
         val rootDir = projectDir.parentFile
         buildList {
-            if (!isWear) add(rootDir / "THANKS.md" to "credits")
-            if (!isWear) add(rootDir / "FAQ.fa.md" to "faq")
-            if (!isWear) add(projectDir / "shaders" / "common.vert" to "commonVertexShader")
-            if (!isWear) add(projectDir / "shaders" / "globe.frag" to "globeFragmentShader")
-            if (isWear) add(projectDir / "shaders" / "globe.agsl" to "globeRuntimeShader")
-            if (!isWear) add(projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader")
+            if (!isWear) add(rootDir.resolve("THANKS.md") to "credits")
+            if (!isWear) add(rootDir.resolve("FAQ.fa.md") to "faq")
+            if (!isWear) add(projectDir.resolve("shaders/common.vert") to "commonVertexShader")
+            if (!isWear) add(projectDir.resolve("shaders/globe.frag") to "globeFragmentShader")
+            if (isWear) add(projectDir.resolve("shaders/globe.agsl") to "globeRuntimeShader")
+            if (!isWear) add(projectDir.resolve("shaders/sandbox.frag") to "sandboxFragmentShader")
         }.forEach { (textFile, fieldName) ->
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class, KModifier.CONST)

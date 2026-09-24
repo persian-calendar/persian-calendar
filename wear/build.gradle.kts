@@ -7,13 +7,6 @@ plugins {
 }
 
 android {
-    sourceSets {
-        operator fun File.div(child: String): File = File(this, child)
-        val generatedAppSrcDir =
-            layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
-        getByName("main").kotlin.directories += generatedAppSrcDir.path
-    }
-
     namespace = "com.byagowi.persiancalendar"
     compileSdk { version = release(37) { minorApiLevel = 1 } }
 

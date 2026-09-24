@@ -21,21 +21,25 @@ abstract class SubmoduleCheck : DefaultTask() {
         val failures = mutableListOf<String>()
         val rootDir = layout.projectDirectory.asFile
 
-        for (line in git(rootDir, "submodule", "status", "--recursive").lineSequence().filter { it.isNotBlank() }) {
+        git(
+            rootDir,
+            "submodule", "status", "--recursive",
+        ).lineSequence().filter { it.isNotBlank() }.forEach { line ->
             val prefix = line[0]
             val rest = line.drop(1).trimStart()
             val sha = rest.substringBefore(' ')
             val path = rest.substringAfter(' ').substringBefore(" (")
 
             when (prefix) {
-                '-' -> continue // uninitialized submodule — nothing checked out to verify
+                '-' -> return@forEach // uninitialized submodule — nothing checked out to verify
                 '+' -> {
                     failures += "$path is checked out at $sha but the parent repo records a different commit (run: git add $path)"
-                    continue
+                    return@forEach
                 }
+
                 'U' -> {
                     failures += "$path is in a conflicted state"
-                    continue
+                    return@forEach
                 }
             }
 
