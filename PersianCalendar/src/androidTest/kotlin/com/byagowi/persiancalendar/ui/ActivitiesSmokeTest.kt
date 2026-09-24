@@ -7,8 +7,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
-import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActivity
 import com.byagowi.persiancalendar.ui.settings.wallpaper.ScreensaverConfigurationActivity
 import com.byagowi.persiancalendar.ui.settings.wallpaper.WallpaperConfigurationActivity
