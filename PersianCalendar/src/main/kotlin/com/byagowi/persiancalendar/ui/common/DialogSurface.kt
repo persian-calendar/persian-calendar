@@ -1,47 +1,23 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.os.Build
-import android.view.WindowManager
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
-import com.byagowi.persiancalendar.ui.utils.findDialogWindow
+import com.byagowi.persiancalendar.ui.theme.appDialogSurfaceColor
 
 @Composable
 fun DialogSurface(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    SetupDialogBlur()
-    val containerColor = AlertDialogDefaults.containerColor
     Surface(
         shape = AlertDialogDefaults.shape,
-        color = containerColor,
-        contentColor = contentColorFor(containerColor),
+        color = appDialogSurfaceColor(),
+        contentColor = contentColorFor(AlertDialogDefaults.containerColor),
         tonalElevation = AlertDialogDefaults.TonalElevation,
         content = content,
         modifier = modifier,
     )
-}
-
-// This initially was taken from https://issuetracker.google.com/issues/296272625#comment3 (public domain)
-// with modification and simplification till Compose provides a native support.
-// It also follows parts of https://source.android.com/docs/core/display/window-blurs
-@Composable
-private fun SetupDialogBlur() {
-    val window = LocalView.current.findDialogWindow()
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
-        window?.windowManager?.isCrossWindowBlurEnabled != true
-    ) return
-
-    LaunchedEffect(window) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        window.setDimAmount(.4f)
-        window.attributes.blurBehindRadius = 30
-        window.attributes = window.attributes
-    }
 }

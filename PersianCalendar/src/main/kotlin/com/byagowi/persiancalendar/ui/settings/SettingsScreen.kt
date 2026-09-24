@@ -85,7 +85,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
@@ -128,6 +127,7 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialo
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.NotificationSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetSettings
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.theme.appDialogProperties
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLandscape
@@ -561,7 +561,7 @@ private fun CutoutDialog(
     @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = appDialogProperties(usePlatformDefaultWidth = false),
     ) {
         DialogSurface {
             val scale = rememberSaveable { mutableFloatStateOf(.75f) }

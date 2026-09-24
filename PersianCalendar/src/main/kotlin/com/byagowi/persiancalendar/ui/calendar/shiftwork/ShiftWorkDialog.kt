@@ -72,6 +72,7 @@ import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.theme.appDialogProperties
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
@@ -85,6 +86,7 @@ fun ShiftWorkDialog(
     onDismissRequest: () -> Unit,
 ) {
     @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+        properties = appDialogProperties(),
         onDismissRequest = onDismissRequest,
         modifier = modifier,
     ) {

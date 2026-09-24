@@ -74,7 +74,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -662,7 +661,7 @@ fun PeriodicTableDialog(
             }
         },
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        usePlatformDefaultWidth = true,
         neutralButton = null,
         confirmButton = null,
         dismissButton = null,

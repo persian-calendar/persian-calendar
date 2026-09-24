@@ -58,12 +58,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.platform.isCrossWindowBlurEnabled
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.text.layoutDirection
@@ -233,6 +236,27 @@ private fun effectiveTheme(): Theme {
     } else systemLightTheme
 }
 
+@Composable
+@ReadOnlyComposable
+fun appDialogSurfaceColor(): Color {
+    return if (LocalWindowInfo.current.isCrossWindowBlurEnabled) when (effectiveTheme()) {
+        Theme.DARK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .7f)
+        Theme.BLACK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .6f)
+        Theme.MODERN -> MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = .65f)
+        else -> MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = .85f)
+    } else MaterialTheme.colorScheme.surfaceContainerHigh
+}
+
+@Composable
+@ReadOnlyComposable
+fun appDialogProperties(usePlatformDefaultWidth: Boolean = true): DialogProperties {
+    return if (LocalWindowInfo.current.isCrossWindowBlurEnabled) DialogProperties(
+        blurBehindRadius = 16.dp,
+        scrimAlpha = .25f,
+        usePlatformDefaultWidth = usePlatformDefaultWidth,
+    ) else DialogProperties(usePlatformDefaultWidth = usePlatformDefaultWidth)
+}
+
 private fun isPowerSaveMode(context: Context): Boolean =
     context.getSystemService<PowerManager>()?.isPowerSaveMode == true
 
@@ -241,19 +265,10 @@ private fun isPowerSaveMode(context: Context): Boolean =
 private fun appColorScheme(): ColorScheme {
     val theme = effectiveTheme()
     val isDark = theme.isDark == true
-    var colorScheme = if (theme.isDynamicColors) {
+    val colorScheme = if (theme.isDynamicColors) {
         val context = LocalContext.current
         if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (isDark) DefaultDarkColorScheme else DefaultLightColorScheme
-    // Handle black theme which is useful for OLED screens
-    if (theme == Theme.BLACK) colorScheme = colorScheme.copy(
-        surface = Color.Black,
-        surfaceContainerLow = colorScheme.surfaceContainerLowest,
-        surfaceContainer = colorScheme.surfaceContainerLowest,
-        surfaceContainerHigh = colorScheme.surfaceContainerLow,
-        surfaceContainerHighest = colorScheme.surfaceContainer,
-    )
-
     val backgroundColor = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> getResourcesColor(android.R.color.system_accent1_600)
         Theme.DARK -> getResourcesColor(android.R.color.system_neutral1_800)

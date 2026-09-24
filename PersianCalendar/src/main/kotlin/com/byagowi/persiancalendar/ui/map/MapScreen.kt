@@ -76,7 +76,6 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withScale
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
