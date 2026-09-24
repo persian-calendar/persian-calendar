@@ -114,17 +114,19 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
     notificationBuilder.setSound(soundUri, AudioManager.STREAM_NOTIFICATION)
     notificationBuilder.setCategory(NotificationCompat.CATEGORY_ALARM)
 
-    val cv = RemoteViews(context.packageName, R.layout.custom_notification)
-    cv.setDirection(R.id.custom_notification_root, context.resources)
-    cv.setTextViewText(R.id.title, title)
-    if (subtitle.isEmpty()) {
-        cv.setViewVisibility(R.id.body, View.GONE)
-    } else {
-        cv.setTextViewText(R.id.body, subtitle)
-    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val cv = RemoteViews(context.packageName, R.layout.custom_notification)
+        cv.setDirection(R.id.custom_notification_root, context.resources)
+        cv.setTextViewText(R.id.title, title)
+        if (subtitle.isEmpty()) {
+            cv.setViewVisibility(R.id.body, View.GONE)
+        } else {
+            cv.setTextViewText(R.id.body, subtitle)
+        }
 
-    notificationBuilder.setCustomContentView(cv)
-        .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+        notificationBuilder.setCustomContentView(cv)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+    }
 
     notificationManager.notify(notificationId, notificationBuilder.build())
 

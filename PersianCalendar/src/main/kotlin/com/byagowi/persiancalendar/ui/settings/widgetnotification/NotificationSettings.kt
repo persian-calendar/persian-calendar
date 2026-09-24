@@ -60,7 +60,7 @@ fun NotificationSettings(modifier: Modifier = Modifier) {
                 summary = stringResource(R.string.notify_date_lock_screen_summary),
             )
         }
-        AnimatedVisibility(isNotifyDate) {
+        AnimatedVisibility(isNotifyDate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Box(
                 Modifier
                     .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
