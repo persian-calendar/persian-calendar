@@ -50,8 +50,9 @@ android {
             "SquareAndRoundTilePreviews",
             // Just waste of space to provide mipmaps
             "IconLocation",
-            // Make the CI fail in unrelated changes
+            // Makes the CI fail in unrelated changes
             "GradleDependency",
+            "AndroidGradlePluginVersion",
         )
     }
 
