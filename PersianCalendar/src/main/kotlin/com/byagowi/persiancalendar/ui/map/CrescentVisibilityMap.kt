@@ -157,8 +157,8 @@ class CrescentVisibilityMap {
                     Array(count) { GeoPoint(ok = false, sunset = .0, moonset = .0, value = .0) }
                 (0..<count step chunkSize).map { start ->
                     async {
-                        val end = minOf(start + chunkSize, count)
                         ensureActive()
+                        val end = minOf(start + chunkSize, count)
                         (start..<end).forEach { index ->
                             val gx = index % gw
                             val gy = index / gw
