@@ -580,10 +580,10 @@ enum class Language(val code: String, val nativeName: String) {
                 MapType.MAGNETIC_INCLINATION -> "میل مغناطیسی"
                 MapType.TIME_ZONES -> null
                 MapType.TECTONIC_PLATES -> "صفحه‌های زمین‌ساخت/تکتونیک"
-                MapType.EVENING_YALLOP -> null
-                MapType.EVENING_ODEH -> null
-                MapType.MORNING_YALLOP -> null
-                MapType.MORNING_ODEH -> null
+                MapType.EVENING_YALLOP -> "رویت هلال در شامگاه (Yallop)"
+                MapType.EVENING_ODEH -> "رویت هلال در شامگاه (Odeh)"
+                MapType.MORNING_YALLOP -> "رویت هلال در بامداد (Yallop)"
+                MapType.MORNING_ODEH -> "رویت هلال در بامداد (Odeh)"
             }
 
             else -> null

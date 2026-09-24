@@ -163,20 +163,18 @@ fun SharedTransitionScope.MapScreen(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         onDismissRequest = { showMapTypesDialog = false },
     ) {
-        MapType.entries.drop(1) // Hide "None" option
-            // Hide moon visibilities for now unless is a development build
-            .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }.forEach {
-                Text(
-                    language.mapType(it) ?: stringResource(it.title),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            showMapTypesDialog = false
-                            mapType = it
-                        }
-                        .padding(vertical = 16.dp, horizontal = 24.dp),
-                )
-            }
+        MapType.entries.drop(1).forEach {
+            Text(
+                language.mapType(it) ?: stringResource(it.title),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        showMapTypesDialog = false
+                        mapType = it
+                    }
+                    .padding(vertical = 16.dp, horizontal = 24.dp),
+            )
+        }
     }
 
     val context = LocalContext.current
