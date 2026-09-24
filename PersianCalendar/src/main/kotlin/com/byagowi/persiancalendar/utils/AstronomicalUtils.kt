@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.res.Resources
 import android.icu.util.ChineseCalendar
-import android.os.Build
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R

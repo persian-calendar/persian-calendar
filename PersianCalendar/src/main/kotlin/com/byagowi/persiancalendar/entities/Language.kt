@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.entities
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService

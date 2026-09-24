@@ -58,7 +58,8 @@ fun DreamContent(
     Canvas(
         modifier = modifier
             .clickable(indication = null, interactionSource = null, onClick = finish)
-            .onSizeChanged { patternDrawable.setSize(it.width, it.height) }.fillMaxSize()
+            .onSizeChanged { patternDrawable.setSize(it.width, it.height) }
+            .fillMaxSize(),
     ) {
         drawIntoCanvas { patternDrawable.draw(it, rotation * direction) }
     }

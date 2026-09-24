@@ -518,7 +518,7 @@ private fun createItemsList(
             "Total Memory" to runtime.totalMemory(),
         ).joinToString("\n") { (title, value) ->
             title + ": " + humanReadableByteCountBin(value)
-        }
+        },
     ),
     Item(
         "Battery",
