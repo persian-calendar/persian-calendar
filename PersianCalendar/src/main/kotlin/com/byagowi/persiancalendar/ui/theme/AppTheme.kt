@@ -262,8 +262,8 @@ fun appDialogSurfaceColor(): Color {
     } else MaterialTheme.colorScheme.surfaceContainerHigh
 }
 
-//@Composable
-//@ReadOnlyComposable
+// @Composable
+// @ReadOnlyComposable
 fun appDialogProperties(usePlatformDefaultWidth: Boolean = true): DialogProperties {
 //    return if (isCrossWindowBlur()) DialogProperties(
 //        blurBehindRadius = 16.dp,
