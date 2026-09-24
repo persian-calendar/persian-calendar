@@ -3,26 +3,24 @@ package io.github.persiancalendar.gradle
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
+import org.gradle.api.provider.Provider
+
+internal fun generatedAppSourceDir(project: Project): Provider<Directory> =
+    project.layout.buildDirectory.dir("generated/source/appsrc/main")
 
 class AppBuildPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        val generatedSourceDir = target.layout.buildDirectory.dir("generated/source/appsrc/main")
-
+        // One task per module; the wear module flips the same flag.
         target.tasks.register("codegenerators", CodeGenerators::class.java) {
-            getGeneratedAppSrcDir().set(generatedSourceDir)
-            getIsWear().set(false)
-            configure()
-        }
-        target.tasks.register("wearcodegenerators", CodeGenerators::class.java) {
-            getGeneratedAppSrcDir().set(generatedSourceDir)
-            getIsWear().set(true)
-            configure()
+            configure(isWear = target.name == "wear")
         }
 
         // Register the generated sources with AGP so they are compiled and linted.
         target.plugins.withId("com.android.application") {
             val android = target.extensions.getByType(CommonExtension::class.java)
-            android.sourceSets.getByName("main").kotlin.directories += generatedSourceDir.get().asFile.path
+            android.sourceSets.getByName("main").kotlin.directories +=
+                generatedAppSourceDir(target).get().asFile.path
         }
 
         target.tasks.register("updateDependenciesReport", DependenciesReport::class.java) {

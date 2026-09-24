@@ -52,18 +52,23 @@ abstract class CodeGenerators : DefaultTask() {
     @get:Inject
     abstract val projectLayout: ProjectLayout
 
-    /** Declares the task inputs; outputs are tracked via [generatedAppSrcDir]. */
-    fun configure() {
+    init {
+        getGeneratedAppSrcDir().convention(generatedAppSourceDir(project))
+    }
+
+    /** Sets [getIsWear] and declares the task inputs; outputs are [getGeneratedAppSrcDir]. */
+    fun configure(isWear: Boolean) {
+        getIsWear().set(isWear)
         val projectDir = projectLayout.projectDirectory.asFile
         val rootDir = projectDir.parentFile
 
         inputs.file(projectDir.resolve("data/events/events.json"))
-        if (!getIsWear().get()) {
+        if (!isWear) {
             listOf("cities", "districts").forEach { name ->
                 inputs.file(projectDir.resolve("data/$name.json"))
             }
         }
-        if (getIsWear().get()) {
+        if (isWear) {
             inputs.file(projectDir.resolve("shaders/globe.agsl"))
         } else {
             inputs.file(rootDir.resolve("THANKS.md"))
