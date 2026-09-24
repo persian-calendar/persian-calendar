@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
+import com.byagowi.persiancalendar.ui.FixStatusBarIconsColor
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -164,6 +165,7 @@ fun SharedTransitionScope.MapScreen(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         onDismissRequest = { showMapTypesDialog = false },
     ) {
+        FixStatusBarIconsColor()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             MapType.entries.drop(1).forEach {
                 Text(

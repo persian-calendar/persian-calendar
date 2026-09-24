@@ -419,6 +419,7 @@ private fun AppNavigationRail(
         modifier = Modifier.width(railWidth + startPadding),
         windowInsets = WindowInsets(),
     ) {
+        FixStatusBarIconsColor()
         Box(Modifier.navigationRailTopGradient()) {
             val scrollState = rememberScrollState()
             Column(
@@ -476,16 +477,22 @@ private fun AppNavigationRail(
     }
 }
 
+// Unfortunately some dialogs reset status bar icons color, this fixes it
 @Composable
-private fun Modifier.navigationRailTopGradient(): Modifier {
-    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+fun FixStatusBarIconsColor() {
     val view = LocalView.current
+    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
     LaunchedEffect(isBackgroundColorLight) {
         view.findDialogWindow()?.let { window ->
             WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars =
                 isBackgroundColorLight
         }
     }
+}
+
+@Composable
+private fun Modifier.navigationRailTopGradient(): Modifier {
+    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
     val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
     val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
     val topColor by animateColor(
