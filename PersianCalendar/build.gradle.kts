@@ -16,7 +16,7 @@ android {
         getByName("main").kotlin.directories += generatedAppSrcDir.path
     }
 
-    compileSdk { version = release(37) }
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
 
     buildFeatures {
         buildConfig = true

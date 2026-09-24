@@ -15,7 +15,7 @@ android {
     }
 
     namespace = "com.byagowi.persiancalendar"
-    compileSdk { version = release(37) }
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
