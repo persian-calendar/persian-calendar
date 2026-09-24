@@ -9,7 +9,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
@@ -21,24 +21,13 @@ includeBuild("gradlePlugins")
 include(":wear")
 include(":lintChecks")
 
-listOf("calculator", "calendar", "equinox", "praytimes", "qr").forEach { repo ->
-    includeBuild("libs/$repo") {
-        dependencySubstitution {
-            substitute(module("io.github.persiancalendar:$repo")).using(project(":"))
-        }
-    }
+listOf("calculator", "calendar", "equinox", "praytimes", "qr").forEach { name ->
+    include(":$name")
+    project(":$name").projectDir = file("libs/$name")
 }
 
-includeBuild("libs/open-location-code/kotlin") {
-    name = "open-location-code"
-    dependencySubstitution {
-        substitute(module("com.google.openlocationcode:openlocationcode")).using(project(":"))
-    }
-}
+include(":open-location-code")
+project(":open-location-code").projectDir = file("libs/open-location-code/kotlin")
 
-includeBuild("libs/astronomy/source/kotlin") {
-    name = "astronomy"
-    dependencySubstitution {
-        substitute(module("io.github.cosinekitty:astronomy")).using(project(":"))
-    }
-}
+include(":astronomy")
+project(":astronomy").projectDir = file("libs/astronomy/source/kotlin")

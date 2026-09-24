@@ -1,9 +1,9 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
-+--- io.github.cosinekitty:astronomy -> project ':astronomy'
++--- project ':astronomy'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- io.github.persiancalendar:calendar -> project ':calendar'
++--- project ':calendar'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 +--- androidx.compose:compose-bom:2026.09.00
 |    +--- androidx.compose.material:material-icons-extended:1.7.8 (c)

@@ -1,19 +1,19 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
-+--- io.github.cosinekitty:astronomy -> project ':astronomy'
++--- project ':astronomy'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- io.github.persiancalendar:calculator -> project ':calculator'
++--- project ':calculator'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- io.github.persiancalendar:calendar -> project ':calendar'
++--- project ':calendar'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- io.github.persiancalendar:equinox -> project ':equinox'
++--- project ':equinox'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- com.google.openlocationcode:openlocationcode -> project ':open-location-code'
++--- project ':open-location-code'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- io.github.persiancalendar:praytimes -> project ':praytimes'
++--- project ':praytimes'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-+--- io.github.persiancalendar:qr -> project ':qr'
++--- project ':qr'
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 +--- androidx.core:core-ktx:1.19.0
 |    +--- androidx.core:core:1.19.0

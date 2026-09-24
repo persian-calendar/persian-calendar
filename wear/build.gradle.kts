@@ -72,9 +72,8 @@ kotlin {
 }
 
 dependencies {
-    // Project maintained libraries
-    implementation(libs.persiancalendar.astronomy)
-    implementation(libs.persiancalendar.calendar)
+    implementation(project(":astronomy"))
+    implementation(project(":calendar"))
 
     // Google/JetBrains
     implementation(platform(libs.compose.bom))

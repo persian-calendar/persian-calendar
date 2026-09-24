@@ -148,14 +148,13 @@ kotlin {
 }
 
 dependencies {
-    // Project maintained libraries
-    implementation(libs.persiancalendar.astronomy)
-    implementation(libs.persiancalendar.calculator)
-    implementation(libs.persiancalendar.calendar)
-    implementation(libs.persiancalendar.equinox)
-    implementation(libs.persiancalendar.openlocationcode)
-    implementation(libs.persiancalendar.praytimes)
-    implementation(libs.persiancalendar.qr)
+    implementation(project(":astronomy"))
+    implementation(project(":calculator"))
+    implementation(project(":calendar"))
+    implementation(project(":equinox"))
+    implementation(project(":open-location-code"))
+    implementation(project(":praytimes"))
+    implementation(project(":qr"))
 
     // Google/JetBrains
     implementation(libs.androidx.core.ktx)

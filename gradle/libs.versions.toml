@@ -54,13 +54,6 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
-persiancalendar-astronomy = { group = "io.github.cosinekitty", name = "astronomy" }
-persiancalendar-openlocationcode = { group = "com.google.openlocationcode", name = "openlocationcode" }
-persiancalendar-calculator = { group = "io.github.persiancalendar", name = "calculator" }
-persiancalendar-calendar = { group = "io.github.persiancalendar", name = "calendar" }
-persiancalendar-equinox = { group = "io.github.persiancalendar", name = "equinox" }
-persiancalendar-praytimes = { group = "io.github.persiancalendar", name = "praytimes" }
-persiancalendar-qr = { group = "io.github.persiancalendar", name = "qr" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
@@ -82,6 +75,7 @@ lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.re
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-plugin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
