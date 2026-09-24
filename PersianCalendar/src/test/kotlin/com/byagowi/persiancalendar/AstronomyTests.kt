@@ -41,8 +41,7 @@ import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import kotlin.test.Test
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.floor
@@ -260,14 +259,12 @@ class AstronomyTests {
             329.96107258615484, 61.762612284235615, 145.29968044985748,
             234.77117761711645, 318.8433129667867,
         )
-        (1380..1420).mapIndexed { i, year ->
+        (1380..1420).forEachIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val houses = houses(35.68, 51.42, time);
-            {
-                assertEquals(ascendants[i], houses[0], 1.0e-5, "$year")
-                assertEquals(midheavens[i], houses[9], 1.0e-5, "$year")
-            }
-        }.run(::assertAll)
+            assertEquals(ascendants[i], houses[0], 1.0e-5, "$year")
+            assertEquals(midheavens[i], houses[9], 1.0e-5, "$year")
+        }
         // Smoke test
         (1300..1500).forEach { year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
@@ -285,21 +282,19 @@ class AstronomyTests {
                 Lot.Wheat to Zodiac.SAGITTARIUS,
                 Lot.Grapes to Zodiac.SCORPIO,
             ),
-        ).flatMap { (year, expected) ->
+        ).forEach { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val houses = houses(tehranCoordinates.latitude, tehranCoordinates.longitude, time)
             val ascendant = houses[0]
             val isDiurnal = isDiurnal(houses, time)
-            expected.entries.map { (lot, zodiac) ->
-                {
-                    assertEquals(
-                        expected = zodiac,
-                        actual = Zodiac.fromTropical(lot.calculate(ascendant, isDiurnal, time)),
-                        message = "$year",
-                    )
-                }
+            expected.entries.forEach { (lot, zodiac) ->
+                assertEquals(
+                    expected = zodiac,
+                    actual = Zodiac.fromTropical(lot.calculate(ascendant, isDiurnal, time)),
+                    message = "$year",
+                )
             }
-        }.run(::assertAll)
+        }
     }
 
     fun Zodiac.with(degrees: Int, minutes: Int): Double = ordinal * 30 + degrees + minutes / 60.0
@@ -312,10 +307,10 @@ class AstronomyTests {
             1401 to Zodiac.GEMINI.with(27, 11),
             1402 to Zodiac.LEO.with(7, 59),
             1403 to Zodiac.VIRGO.with(18, 46),
-        ).map { (year, expected) ->
+        ).forEach { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            { assertEquals(expected, meanApogee(time), .15, "$year") }
-        }.run(::assertAll)
+            assertEquals(expected, meanApogee(time), .15, "$year")
+        }
     }
 
     @Test
@@ -326,30 +321,30 @@ class AstronomyTests {
             1401 to Zodiac.TAURUS.with(23, 42),
             1402 to Zodiac.TAURUS.with(4, 23),
             1403 to Zodiac.ARIES.with(15, 44),
-        ).map { (year, expected) ->
+        ).forEach { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            { assertEquals(expected, meanAscendingNode(time), .15, "$year") }
-        }.run(::assertAll)
+            assertEquals(expected, meanAscendingNode(time), .15, "$year")
+        }
     }
 
     @Test
     fun `Check nairAlSaif`() {
         listOf(
             1402 to Zodiac.GEMINI.with(23, 25),
-        ).map { (year, expected) ->
+        ).forEach { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            { assertEquals(expected, nairAlSaif(time), .1, "$year") }
-        }.run(::assertAll)
+            assertEquals(expected, nairAlSaif(time), .1, "$year")
+        }
     }
 
     @Test
     fun `Check alulaBorealis`() {
         listOf(
             1402 to Zodiac.VIRGO.with(6, 46),
-        ).map { (year, expected) ->
+        ).forEach { (year, expected) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            { assertEquals(expected, alulaBorealis(time), .25, "$year") }
-        }.run(::assertAll)
+            assertEquals(expected, alulaBorealis(time), .25, "$year")
+        }
     }
 
     @Test
@@ -430,12 +425,12 @@ class AstronomyTests {
             // 1403 to Zodiac.LEO, // implied
             1404 to Zodiac.CANCER, // Eslamieh one matches, Eghbal is way off
             1405 to Zodiac.LIBRA, // Eslamieh one matches, Eghbal is way off
-        ).map { (year, sign) ->
+        ).forEach { (year, sign) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val ascendant = houses(35.68, 51.42, time)[0]
             println("$year: ${ascendant % 30}");
-            { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
-        }.run(::assertAll)
+            assertEquals(sign, Zodiac.fromTropical(ascendant), "$year")
+        }
     }
 
     @Test
@@ -449,8 +444,8 @@ class AstronomyTests {
             5.351511497078217, 41.0773712487118, 77.73659794974952,
         )
         expectations.zip(houses(35.68, 51.42, time)) { expected, actual ->
-            { assertEquals(expected, actual, 0.025) }
-        }.run(::assertAll)
+            assertEquals(expected, actual, 0.025)
+        }
     }
 
     @Test
@@ -504,10 +499,10 @@ class AstronomyTests {
             setOf(TIGER, HORSE, RABBIT),
             setOf(RABBIT, GOAT, TIGER),
         ).zip(ChineseZodiac.entries) { bestMatch, yearZodiac ->
-            bestMatch.map {
-                { assertContains(listOf(BEST, BETTER), yearZodiac compatibilityWith it) }
+            bestMatch.forEach {
+                assertContains(listOf(BEST, BETTER), yearZodiac compatibilityWith it)
             }
-        }.flatten().let(::assertAll)
+        }
 
         listOf(
             setOf(PIG, TIGER, DOG, SNAKE, RABBIT, ROOSTER, RAT),
@@ -523,20 +518,20 @@ class AstronomyTests {
             setOf(MONKEY, PIG, RAT, OX, SNAKE, GOAT, DOG),
             setOf(RAT, ROOSTER, DOG, DRAGON, HORSE, OX, PIG),
         ).zip(ChineseZodiac.entries) { neutralMatches, yearZodiac ->
-            neutralMatches.map { { assertEquals(NEUTRAL, yearZodiac compatibilityWith it) } }
-        }.flatten().let(::assertAll)
+            neutralMatches.forEach { assertEquals(NEUTRAL, yearZodiac compatibilityWith it) }
+        }
 
         listOf(HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE).zip(
             ChineseZodiac.entries,
         ) { worseMatch, yearZodiac ->
-            { assertEquals(WORSE, yearZodiac compatibilityWith worseMatch) }
-        }.let(::assertAll)
+            assertEquals(WORSE, yearZodiac compatibilityWith worseMatch)
+        }
 
         listOf(GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY).zip(
             ChineseZodiac.entries,
         ) { worstMatch, yearZodiac ->
-            { assertEquals(WORST, yearZodiac compatibilityWith worstMatch) }
-        }.let(::assertAll)
+            assertEquals(WORST, yearZodiac compatibilityWith worstMatch)
+        }
     }
 
     /**
@@ -577,9 +572,9 @@ class AstronomyTests {
             (27 + 59.6 / 60.0) to "\u200E۲۸°:۰۰’\u200E",
             27.99 to "\u200E۲۷°:۵۹’\u200E",
             27.996 to "\u200E۲۸°:۰۰’\u200E",
-        ).map { (input, expected) ->
-            { assertEquals(expected, formatAngle(input), "$input") }
-        }.let(::assertAll)
+        ).forEach { (input, expected) ->
+            assertEquals(expected, formatAngle(input), "$input")
+        }
     }
 
     @Test
@@ -617,9 +612,9 @@ class AstronomyTests {
             30 to "ل",
             31 to "لا",
             // 360 to "سش"
-        ).map { (input, expected) ->
-            { assertEquals(expected, toAbjad(input), "$input") }
-        }.let(::assertAll)
+        ).forEach { (input, expected) ->
+            assertEquals(expected, toAbjad(input), "$input")
+        }
     }
 
     fun toBase60(value: Double, levels: Int): List<Int> {

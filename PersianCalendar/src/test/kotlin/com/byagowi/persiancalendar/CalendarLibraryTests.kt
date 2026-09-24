@@ -10,8 +10,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -447,8 +446,8 @@ class CalendarLibraryTests {
             22.0 to Clock.TimeSlot.Dusk,
             1.0 to Clock.TimeSlot.Dusk,
             1.5 to Clock.TimeSlot.Dusk,
-        ).map { (hour, slot) ->
-            { assertEquals(slot, Clock(hour).timeSlot, "$hour") }
-        }.let(::assertAll)
+        ).forEach { (hour, slot) ->
+            assertEquals(slot, Clock(hour).timeSlot, "$hour")
+        }
     }
 }

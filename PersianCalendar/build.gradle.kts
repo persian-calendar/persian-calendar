@@ -71,8 +71,6 @@ android {
         }
     }
 
-    testOptions.unitTests.all { it.useJUnitPlatform() }
-
     buildTypes {
         create("nightly") {
             signingConfig = signingConfigs.getByName("nightly")
@@ -188,14 +186,7 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
 
-    testImplementation(libs.junit)
-
-    testImplementation(kotlin("test"))
-
-    testImplementation(libs.junit.platform.runner)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.params)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(kotlin("test-junit")) // Migrate to kotlin("test") while KMP adoption
 
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.rules)

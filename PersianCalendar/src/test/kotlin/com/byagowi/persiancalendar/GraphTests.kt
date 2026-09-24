@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.ui.calendar.Graph
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GraphTests {

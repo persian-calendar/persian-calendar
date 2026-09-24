@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar
 
 import io.github.persiancalendar.calculator.eval
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
@@ -43,12 +41,13 @@ class CalculatorTests {
         )
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "5+ 5 5 6 +  7",
-        "7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)",
-    )
-    fun `test errors`(input: String) {
-        assertFails { eval(input) }
+    @Test
+    fun `test errors`() {
+        listOf(
+            "5+ 5 5 6 +  7",
+            "7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)",
+        ).forEach { input ->
+            assertFails { eval(input) }
+        }
     }
 }

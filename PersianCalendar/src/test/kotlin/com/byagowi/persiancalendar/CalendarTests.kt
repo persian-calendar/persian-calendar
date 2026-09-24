@@ -13,31 +13,29 @@ import com.byagowi.persiancalendar.utils.formatDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 class CalendarTests {
-    @ParameterizedTest
-    @CsvSource(
-        "1397, 1, 31",
-        "1397, 2, 31",
-        "1397, 3, 31",
-        "1397, 4, 31",
-        "1397, 5, 31",
-        "1397, 6, 31",
-        "1397, 7, 30",
-        "1397, 8, 30",
-        "1397, 9, 30",
-        "1397, 10, 30",
-        "1397, 11, 30",
-        "1397, 12, 29",
-    )
-    fun `getMonthLength calculating correctness`(year: Int, month: Int, day: Int) {
-        assertEquals(day, Calendar.SHAMSI.getMonthLength(year, month))
+    @Test
+    fun `getMonthLength calculating correctness`() {
+        listOf(
+            Triple(1397, 1, 31),
+            Triple(1397, 2, 31),
+            Triple(1397, 3, 31),
+            Triple(1397, 4, 31),
+            Triple(1397, 5, 31),
+            Triple(1397, 6, 31),
+            Triple(1397, 7, 30),
+            Triple(1397, 8, 30),
+            Triple(1397, 9, 30),
+            Triple(1397, 10, 30),
+            Triple(1397, 11, 30),
+            Triple(1397, 12, 29),
+        ).forEach { (year, month, day) ->
+            assertEquals(day, Calendar.SHAMSI.getMonthLength(year, month))
+        }
     }
 
     @Test
@@ -66,77 +64,74 @@ class CalendarTests {
         }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "0, 1398, 9, 9",
-        "1, 1398, 9, 10",
-        "2, 1398, 9, 11",
-        "3, 1398, 9, 12",
-        "4, 1398, 9, 13",
-        "5, 1398, 9, 14",
-        "6, 1398, 9, 15",
-        "0, 1398, 9, 16",
-        "1, 1398, 9, 17",
-        "2, 1398, 9, 18",
-        "3, 1398, 9, 19",
-        "4, 1398, 9, 20",
-        "5, 1398, 9, 21",
-        "6, 1398, 9, 22",
-    )
-    fun `weekDay calculations correctness`(
-        weekDay: Int, year: Int, month: Int, dayOfMonth: Int,
-    ) {
-        assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDay.ordinal)
+    @Test
+    fun `weekDay calculations correctness`() {
+        listOf(
+            listOf(0, 1398, 9, 9),
+            listOf(1, 1398, 9, 10),
+            listOf(2, 1398, 9, 11),
+            listOf(3, 1398, 9, 12),
+            listOf(4, 1398, 9, 13),
+            listOf(5, 1398, 9, 14),
+            listOf(6, 1398, 9, 15),
+            listOf(0, 1398, 9, 16),
+            listOf(1, 1398, 9, 17),
+            listOf(2, 1398, 9, 18),
+            listOf(3, 1398, 9, 19),
+            listOf(4, 1398, 9, 20),
+            listOf(5, 1398, 9, 21),
+            listOf(6, 1398, 9, 22),
+        ).forEach { (weekDay, year, month, dayOfMonth) ->
+            assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDay.ordinal)
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "1363, 3, 19, 1400, 11, 15, 37, 7, 27",
-        "1400, 6, 31, 1400, 8, 1, 0, 1, 1",
-        "1363, 11, 15, 1400, 11, 15, 37, 0, 0",
-        "1363, 11, 14, 1400, 11, 15, 37, 0, 1",
-        "1363, 11, 16, 1400, 11, 15, 36, 11, 29",
-        "1400, 7, 15, 1400, 11, 15, 0, 4, 0",
-        "1400, 8, 15, 1400, 11, 15, 0, 3, 0",
-        "1400, 9, 15, 1400, 11, 15, 0, 2, 0",
-        "1400, 10, 15, 1400, 11, 15, 0, 1, 0",
-        // Adopted from https://www.ssu.ac.ir/cms/fileadmin/user_upload/Moavenatha/MBehdashti/Gostaresh/pdf/amar/dastor/Mohasebe-Sen.pdf
-        // Except we don't have the same result
-        "1360, 5, 20, 1379, 6, 10, 19, 0, 21",
-        "1360, 5, 20, 1379, 6, 10, 19, 0, 21",
-        "1360, 5, 20, 1360, 6, 10, 0, 0, 21",
-    )
-    fun `test date parts difference`(
-        fromYear: Int, fromMonth: Int, fromDay: Int,
-        toYear: Int, toMonth: Int, toDay: Int,
-        year: Int, month: Int, day: Int,
-    ) {
-        val lower = PersianDate(fromYear, fromMonth, fromDay)
-        val higher = PersianDate(toYear, toMonth, toDay)
-        val (y, m, d) = calculateDatePartsDifference(lower, higher, Calendar.SHAMSI)
-        assertEquals(day, d)
-        assertEquals(month, m)
-        assertEquals(year, y)
+    @Test
+    fun `test date parts difference`() {
+        listOf(
+            intArrayOf(1363, 3, 19, 1400, 11, 15, 37, 7, 27),
+            intArrayOf(1400, 6, 31, 1400, 8, 1, 0, 1, 1),
+            intArrayOf(1363, 11, 15, 1400, 11, 15, 37, 0, 0),
+            intArrayOf(1363, 11, 14, 1400, 11, 15, 37, 0, 1),
+            intArrayOf(1363, 11, 16, 1400, 11, 15, 36, 11, 29),
+            intArrayOf(1400, 7, 15, 1400, 11, 15, 0, 4, 0),
+            intArrayOf(1400, 8, 15, 1400, 11, 15, 0, 3, 0),
+            intArrayOf(1400, 9, 15, 1400, 11, 15, 0, 2, 0),
+            intArrayOf(1400, 10, 15, 1400, 11, 15, 0, 1, 0),
+            // Adopted from https://www.ssu.ac.ir/cms/fileadmin/user_upload/Moavenatha/MBehdashti/Gostaresh/pdf/amar/dastor/Mohasebe-Sen.pdf
+            // Except we don't have the same result
+            intArrayOf(1360, 5, 20, 1379, 6, 10, 19, 0, 21),
+            intArrayOf(1360, 5, 20, 1379, 6, 10, 19, 0, 21),
+            intArrayOf(1360, 5, 20, 1360, 6, 10, 0, 0, 21),
+        ).forEach { row ->
+            val lower = PersianDate(row[0], row[1], row[2])
+            val higher = PersianDate(row[3], row[4], row[5])
+            val (y, m, d) = calculateDatePartsDifference(lower, higher, Calendar.SHAMSI)
+            assertEquals(row[8], d)
+            assertEquals(row[7], m)
+            assertEquals(row[6], y)
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource(
-        "1400, 12, 15, 75, 89",
-        "1400, 10, 1, 1, 89",
-        "1400, 12, 29, 89, 89",
-        "1399, 12, 30, 90, 90",
-        "1399, 9, 30, 90, 90",
-        "1399, 8, 30, 60, 90",
-        "1399, 7, 30, 30, 90",
-        "1399, 6, 31, 93, 93",
-        "1399, 4, 1, 1, 93",
-        "1399, 3, 31, 93, 93",
-    )
-    fun `season passed days`(year: Int, month: Int, day: Int, passedDays: Int, daysCount: Int) {
-        val jdn = Jdn(Calendar.SHAMSI, year, month, day)
-        val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
-        assertEquals(passedDays, passedDaysInSeason)
-        assertEquals(daysCount, totalSeasonDays)
+    @Test
+    fun `season passed days`() {
+        listOf(
+            listOf(1400, 12, 15, 75, 89),
+            listOf(1400, 10, 1, 1, 89),
+            listOf(1400, 12, 29, 89, 89),
+            listOf(1399, 12, 30, 90, 90),
+            listOf(1399, 9, 30, 90, 90),
+            listOf(1399, 8, 30, 60, 90),
+            listOf(1399, 7, 30, 30, 90),
+            listOf(1399, 6, 31, 93, 93),
+            listOf(1399, 4, 1, 1, 93),
+            listOf(1399, 3, 31, 93, 93),
+        ).forEach { (year, month, day, passedDays, daysCount) ->
+            val jdn = Jdn(Calendar.SHAMSI, year, month, day)
+            val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
+            assertEquals(passedDays, passedDaysInSeason)
+            assertEquals(daysCount, totalSeasonDays)
+        }
     }
 
     @Test
@@ -308,9 +303,9 @@ class CalendarTests {
             PersianDate(1404, 11, 16) to "۲۳ کانون آخر ۲۳۳۷",
             PersianDate(1404, 11, 30) to "۶ شباط ۲۳۳۷",
             PersianDate(1404, 12, 15) to "۲۱ شباط ۲۳۳۷",
-        ).map { (persianDate, expected) ->
-            { assertEquals(expected, formatAsSeleucidDate(Jdn(persianDate))) }
-        }.run(::assertAll)
+        ).forEach { (persianDate, expected) ->
+            assertEquals(expected, formatAsSeleucidDate(Jdn(persianDate)))
+        }
     }
 
     @Test

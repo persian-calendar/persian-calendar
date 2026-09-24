@@ -7,24 +7,23 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
+import kotlin.test.Test
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.test.assertEquals
 
 class PrayTimeTests {
-    @ParameterizedTest
-    @EnumSource(CalculationMethod::class)
-    fun `smoke test different calculation methods`(method: CalculationMethod) {
-        Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
-            createCalendar("GMT-4:00", 2018, 9, 5),
-            method,
-            AsrMethod.Standard,
-            HighLatitudesMethod.NightMiddle,
-            method.defaultMidnight,
-        )
+    @Test
+    fun `smoke test different calculation methods`() {
+        CalculationMethod.entries.forEach { method ->
+            Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
+                createCalendar("GMT-4:00", 2018, 9, 5),
+                method,
+                AsrMethod.Standard,
+                HighLatitudesMethod.NightMiddle,
+                method.defaultMidnight,
+            )
+        }
     }
 
     @Test
