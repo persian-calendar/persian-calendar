@@ -7,9 +7,9 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
-import kotlin.test.Test
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PrayTimeTests {

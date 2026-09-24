@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar
 
 import io.github.persiancalendar.qr.qr
-import kotlin.test.Test
 import kotlin.math.ceil
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class QrTests {

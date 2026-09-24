@@ -189,7 +189,7 @@ class CalendarTests {
                 val persianDate = PersianDate(1404, 3, day)
                 assertEquals(
                     expected = persianDate in abstinenceDays,
-                    actual = HistoricalPersianDate(persianDate).isAbstinenceDays
+                    actual = HistoricalPersianDate(persianDate).isAbstinenceDays,
                 )
             }
         }
@@ -203,7 +203,7 @@ class CalendarTests {
                 val persianDate = PersianDate(1404, 12, day)
                 assertEquals(
                     expected = persianDate in abstinenceDays,
-                    actual = HistoricalPersianDate(persianDate).isAbstinenceDays
+                    actual = HistoricalPersianDate(persianDate).isAbstinenceDays,
                 )
             }
         }
@@ -218,7 +218,7 @@ class CalendarTests {
                 val persianDate = PersianDate(1404, 3, day)
                 assertEquals(
                     expected = persianDate in restDays,
-                    actual = HistoricalPersianDate(persianDate).isRestDays
+                    actual = HistoricalPersianDate(persianDate).isRestDays,
                 )
             }
         }
@@ -232,7 +232,7 @@ class CalendarTests {
                 val persianDate = PersianDate(1404, 12, day)
                 assertEquals(
                     expected = persianDate in restDays,
-                    actual = HistoricalPersianDate(persianDate).isRestDays
+                    actual = HistoricalPersianDate(persianDate).isRestDays,
                 )
             }
         }
