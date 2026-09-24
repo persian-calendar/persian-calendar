@@ -1,10 +1,9 @@
 package com.byagowi.persiancalendar
 
-import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.Equinox
-import kotlin.test.Test
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EquinoxTests {

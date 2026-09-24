@@ -41,12 +41,12 @@ import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
-import kotlin.test.Test
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.sin
+import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
@@ -261,7 +261,7 @@ class AstronomyTests {
         )
         (1380..1420).forEachIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            val houses = houses(35.68, 51.42, time);
+            val houses = houses(35.68, 51.42, time)
             assertEquals(ascendants[i], houses[0], 1.0e-5, "$year")
             assertEquals(midheavens[i], houses[9], 1.0e-5, "$year")
         }
@@ -428,7 +428,7 @@ class AstronomyTests {
         ).forEach { (year, sign) ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val ascendant = houses(35.68, 51.42, time)[0]
-            println("$year: ${ascendant % 30}");
+            println("$year: ${ascendant % 30}")
             assertEquals(sign, Zodiac.fromTropical(ascendant), "$year")
         }
     }
