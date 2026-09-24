@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Resources
 import android.icu.util.ChineseCalendar
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.EARTH
