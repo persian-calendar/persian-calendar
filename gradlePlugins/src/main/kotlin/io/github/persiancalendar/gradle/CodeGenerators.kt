@@ -52,13 +52,9 @@ abstract class CodeGenerators : DefaultTask() {
     @get:Inject
     abstract val projectLayout: ProjectLayout
 
-    init {
-        getGeneratedAppSrcDir().convention(generatedAppSourceDir(project))
-    }
-
-    /** Sets [getIsWear] and declares the task inputs; outputs are [getGeneratedAppSrcDir]. */
     fun configure(isWear: Boolean) {
         getIsWear().set(isWear)
+        getGeneratedAppSrcDir().set(generatedAppSourceDir(project))
         val projectDir = projectLayout.projectDirectory.asFile
         val rootDir = projectDir.parentFile
 
