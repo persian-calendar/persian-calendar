@@ -212,10 +212,8 @@ fun update(context: Context, updateDate: Boolean) {
         readAndStoreDeviceCalendarEventsOfTheDay(context)
 
 //        // Quick tile
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
-//            TileService.requestListeningState(context, tileComponent)
-//        }
+//        val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
+//        TileService.requestListeningState(context, tileComponent)
 
         updateLauncherIcon(date, context)
     }
@@ -1745,7 +1743,7 @@ private data class NotificationData(
             else -> false
         } && Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
 
-        if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (!isTalkBackEnabled) {
             val holidays = getEventsTitle(
                 events,
                 holiday = true,

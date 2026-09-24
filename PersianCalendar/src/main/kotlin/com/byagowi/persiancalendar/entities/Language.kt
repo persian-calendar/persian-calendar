@@ -660,9 +660,7 @@ enum class Language(val code: String, val nativeName: String) {
             imm.enabledInputMethodList.forEach outer@{ method ->
                 imm.getEnabledInputMethodSubtypeList(method, true).forEach { submethod ->
                     if (submethod.mode == "keyboard") {
-                        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            submethod.languageTag
-                        } else @Suppress("DEPRECATION") submethod.locale
+                        val locale = submethod.languageTag
                         debugLog("Language: '$locale' is available in keyboards")
                         if (locale.isEmpty()) return@forEach
                         val language = valueOfLanguageCode(locale) ?: valueOfLanguageCode(

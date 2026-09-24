@@ -680,7 +680,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
         ) {
             val isPersian = calendar == Calendar.SHAMSI
             val zodiacs = listOf(selectedDate, secondSelectedDate).map {
-                if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                if (isPersian) {
                     ChineseZodiac.fromPersianCalendar(it.toPersianDate())
                 } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
             }

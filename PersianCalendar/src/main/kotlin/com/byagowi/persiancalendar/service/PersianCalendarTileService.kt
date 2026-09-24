@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.utils.monthName
 /**
  * Created by Alireza Afkar on 19/6/2018AD.
  */
-@RequiresApi(Build.VERSION_CODES.N)
 class PersianCalendarTileService : TileService() {
 
     override fun onClick() {

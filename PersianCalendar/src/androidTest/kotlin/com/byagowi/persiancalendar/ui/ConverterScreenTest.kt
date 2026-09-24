@@ -97,7 +97,7 @@ class ConverterScreenTest {
     @Test
     fun testChineseAnimalYearName() {
         // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) (1..5).flatMap {
+        (1..5).flatMap {
             listOf(
                 ChineseZodiac.RAT, ChineseZodiac.OX, ChineseZodiac.TIGER,
                 ChineseZodiac.RABBIT, ChineseZodiac.DRAGON, ChineseZodiac.SNAKE,

@@ -103,7 +103,6 @@ enum class ChineseZodiac(
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             entries[(persianDate.year + 5).mod(12)]
 
-        @RequiresApi(Build.VERSION_CODES.N)
         fun fromChineseCalendar(chineseDate: ChineseCalendar): ChineseZodiac =
             entries[(chineseDate[ChineseCalendar.YEAR] - 1) % 12]
     }
