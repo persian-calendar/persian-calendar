@@ -28,7 +28,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Grid3x3
 import androidx.compose.material.icons.filled.LocationOn
@@ -162,17 +164,19 @@ fun SharedTransitionScope.MapScreen(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         onDismissRequest = { showMapTypesDialog = false },
     ) {
-        MapType.entries.drop(1).forEach {
-            Text(
-                language.mapType(it) ?: stringResource(it.title),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        showMapTypesDialog = false
-                        mapType = it
-                    }
-                    .padding(vertical = 16.dp, horizontal = 24.dp),
-            )
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            MapType.entries.drop(1).forEach {
+                Text(
+                    language.mapType(it) ?: stringResource(it.title),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            showMapTypesDialog = false
+                            mapType = it
+                        }
+                        .padding(vertical = 16.dp, horizontal = 24.dp),
+                )
+            }
         }
     }
 
