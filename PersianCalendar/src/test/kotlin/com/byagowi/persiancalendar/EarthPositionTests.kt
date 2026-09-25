@@ -10,6 +10,14 @@ class EarthPositionTests {
     private val paris = EarthPosition(48.857, 2.351)
 
     @Test
+    fun toEarthHeading() {
+        // https://www.movable-type.co.uk/scripts/latlong.html
+        val heading = cambridge.toEarthHeading(paris)
+        assertEquals(404.3e3f, heading.metres, 1.0e2f)
+        assertEquals(156.2f, heading.heading, 1.0e-1f)
+    }
+
+    @Test
     fun intermediatePoints() {
         // https://www.movable-type.co.uk/scripts/latlong.html
         val points = cambridge.intermediatePoints(paris, 4).toList()
