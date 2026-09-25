@@ -119,7 +119,6 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.WeekDay
-import com.byagowi.persiancalendar.entities.shortTitleId
 import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
@@ -422,8 +421,8 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 
 private fun getIslamicCalendarOffset(preferences: SharedPreferences): Int {
     return if (preferences.isIslamicOffsetExpired) 0
-    else preferences.getString(PREF_HIJRI_OFFSET, DEFAULT_HIJRI_OFFSET.toString())
-        ?.toIntOrNull() ?: DEFAULT_HIJRI_OFFSET
+    else preferences.getString(PREF_HIJRI_OFFSET, DEFAULT_HIJRI_OFFSET.toString())?.toIntOrNull()
+        ?: DEFAULT_HIJRI_OFFSET
 }
 
 // For better or worse it needs the year to function correctly
@@ -466,8 +465,16 @@ fun loadLanguageResources(resources: Resources) {
         "e" to resources.getString(R.string.shift_work_evening),
         "n" to resources.getString(R.string.shift_work_night),
     )
-    calendarsTitlesAbbr_.value =
-        Calendar.entries.associateWith { resources.getString(it.shortTitleId) }
+    calendarsTitlesAbbr_.value = Calendar.entries.associateWith {
+        resources.getString(
+            when (it) {
+                Calendar.SHAMSI -> R.string.persian_calendar_short
+                Calendar.ISLAMIC -> R.string.hijri_calendar_short
+                Calendar.GREGORIAN -> R.string.gregorian_calendar_short
+                Calendar.NEPALI -> R.string.nepali_calendar_short
+            },
+        )
+    }
     when {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two
