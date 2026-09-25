@@ -6,20 +6,22 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import com.byagowi.persiancalendar.shared.AppContainer
 import com.byagowi.persiancalendar.shared.HelloWorld
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.app_name
+import org.jetbrains.compose.resources.stringResource
 
 fun main() {
-    // Make the native window title bar follow the system appearance on macOS
-    // (Compose themes the content itself, but the title bar needs this hint).
+    // Fortunately only macOS needs this hint to get title bar dark mode
     System.setProperty("apple.awt.application.appearance", "system")
 
     application {
         Window(
             onCloseRequest = ::exitApplication,
-            title = "Persian Calendar",
+            title = stringResource(Res.string.app_name),
             state = WindowState(width = 480.dp, height = 720.dp),
         ) {
             AppContainer {
-                HelloWorld("Hello, Desktop!")
+                HelloWorld(stringResource(Res.string.app_name))
             }
         }
     }

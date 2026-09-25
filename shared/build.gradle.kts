@@ -15,6 +15,10 @@ kotlin {
         namespace = "com.byagowi.persiancalendar.shared"
         compileSdk = 37
         minSdk = 23
+
+        androidResources {
+            enable = true
+        }
     }
 
     jvm("desktop")
@@ -39,9 +43,22 @@ kotlin {
                 api(libs.compose.multiplatform.runtime)
                 api(libs.compose.multiplatform.foundation)
                 implementation(libs.compose.multiplatform.material3)
+                api(libs.compose.components.resources)
             }
         }
     }
+}
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.byagowi.persiancalendar.shared.generated.resources"
+    // Point CMP's commonMain resources at the Android res directory so both
+    // AAPT (R.string) and Compose resources (Res.string) read the same files,
+    // without a symlink.
+    customDirectory(
+        sourceSetName = "commonMain",
+        directoryProvider = provider { layout.projectDirectory.dir("src/androidMain/res") },
+    )
 }
 
 tasks.configureEach {

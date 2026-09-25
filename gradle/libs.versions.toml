@@ -45,6 +45,7 @@ compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-multiplatform-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "compose-multiplatform" }
 compose-multiplatform-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose-multiplatform-material3" }
 compose-multiplatform-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose-multiplatform" }
+compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "compose-multiplatform" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
