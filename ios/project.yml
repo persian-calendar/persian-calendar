@@ -1,0 +1,27 @@
+# XcodeGen configuration for the iOS bootstrap app.
+# Usage: brew install xcodegen && cd ios && xcodegen generate
+name: ios
+options:
+  bundleIdPrefix: com.byagowi.persiancalendar
+  deploymentTarget:
+    iOS: "15.0"
+settings:
+  base:
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+targets:
+  ios:
+    type: application
+    platform: iOS
+    sources:
+      - ios
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.byagowi.persiancalendar.ios
+        FRAMEWORK_SEARCH_PATHS: $(inherited) $(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+        OTHER_LDFLAGS: $(inherited) -framework shared
+    preBuildScripts:
+      - name: Build Kotlin shared framework
+        basedOnDependencyAnalysis: false
+        script: |
+          cd "$SRCROOT/.."
+          ./gradlew :shared:embedAndSignAppleFrameworkForXcode

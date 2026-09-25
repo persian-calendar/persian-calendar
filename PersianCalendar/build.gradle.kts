@@ -142,13 +142,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":astronomy"))
-    implementation(project(":calculator"))
-    implementation(project(":calendar"))
-    implementation(project(":equinox"))
-    implementation(project(":open-location-code"))
-    implementation(project(":praytimes"))
-    implementation(project(":qr"))
+    implementation(project(":shared"))
 
     // Google/JetBrains
     implementation(libs.androidx.core.ktx)
@@ -188,5 +182,3 @@ dependencies {
 
     lintChecks(project(":lintChecks"))
 }
-
-tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }

@@ -24,8 +24,6 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
-import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -46,33 +44,24 @@ abstract class CodeGenerators : DefaultTask() {
     @OutputDirectory
     abstract fun getGeneratedAppSrcDir(): DirectoryProperty
 
-    @Input
-    abstract fun getIsWear(): Property<Boolean>
-
     @get:Inject
     abstract val projectLayout: ProjectLayout
 
-    fun configure(isWear: Boolean) {
-        getIsWear().set(isWear)
+    fun configure() {
         getGeneratedAppSrcDir().set(generatedAppSourceDir(project))
         val projectDir = projectLayout.projectDirectory.asFile
         val rootDir = projectDir.parentFile
 
         inputs.file(projectDir.resolve("data/events/events.json"))
-        if (!isWear) {
-            listOf("cities", "districts").forEach { name ->
-                inputs.file(projectDir.resolve("data/$name.json"))
-            }
+        listOf("cities", "districts").forEach { name ->
+            inputs.file(projectDir.resolve("data/$name.json"))
         }
-        if (isWear) {
-            inputs.file(projectDir.resolve("shaders/globe.agsl"))
-        } else {
-            inputs.file(rootDir.resolve("THANKS.md"))
-            inputs.file(rootDir.resolve("FAQ.fa.md"))
-            inputs.file(projectDir.resolve("shaders/common.vert"))
-            inputs.file(projectDir.resolve("shaders/globe.frag"))
-            inputs.file(projectDir.resolve("shaders/sandbox.frag"))
-        }
+        inputs.file(projectDir.resolve("shaders/globe.agsl"))
+        inputs.file(rootDir.resolve("THANKS.md"))
+        inputs.file(rootDir.resolve("FAQ.fa.md"))
+        inputs.file(projectDir.resolve("shaders/common.vert"))
+        inputs.file(projectDir.resolve("shaders/globe.frag"))
+        inputs.file(projectDir.resolve("shaders/sandbox.frag"))
     }
 
     @TaskAction
@@ -80,14 +69,13 @@ abstract class CodeGenerators : DefaultTask() {
         val generatedDir = getGeneratedAppSrcDir().get().asFile
         generatedDir.mkdirs()
         val projectDir = projectLayout.projectDirectory.asFile
-        val isWear = getIsWear().get()
         run {
             val input = projectDir.resolve("data/events/events.json")
             val builder = FileSpec.builder(packageName, "events")
             generateEventsCode(input, builder)
             builder.build().writeTo(generatedDir)
         }
-        if (!isWear) listOf(
+        listOf(
             "cities" to ::generateCitiesCode,
             "districts" to ::generateDistrictsCode,
         ).forEach { (name, generator) ->
@@ -96,20 +84,20 @@ abstract class CodeGenerators : DefaultTask() {
             generator(input, builder)
             builder.build().writeTo(generatedDir)
         }
-        createTextStore(generatedDir, isWear)
+        createTextStore(generatedDir)
     }
 
-    private fun createTextStore(generatedAppSrcDir: File, isWear: Boolean) {
+    private fun createTextStore(generatedAppSrcDir: File) {
         val builder = FileSpec.builder(packageName, "TextStore")
         val projectDir = projectLayout.projectDirectory.asFile
         val rootDir = projectDir.parentFile
         buildList {
-            if (!isWear) add(rootDir.resolve("THANKS.md") to "credits")
-            if (!isWear) add(rootDir.resolve("FAQ.fa.md") to "faq")
-            if (!isWear) add(projectDir.resolve("shaders/common.vert") to "commonVertexShader")
-            if (!isWear) add(projectDir.resolve("shaders/globe.frag") to "globeFragmentShader")
-            if (isWear) add(projectDir.resolve("shaders/globe.agsl") to "globeRuntimeShader")
-            if (!isWear) add(projectDir.resolve("shaders/sandbox.frag") to "sandboxFragmentShader")
+            add(rootDir.resolve("THANKS.md") to "credits")
+            add(rootDir.resolve("FAQ.fa.md") to "faq")
+            add(projectDir.resolve("shaders/common.vert") to "commonVertexShader")
+            add(projectDir.resolve("shaders/globe.frag") to "globeFragmentShader")
+            add(projectDir.resolve("shaders/globe.agsl") to "globeRuntimeShader")
+            add(projectDir.resolve("shaders/sandbox.frag") to "sandboxFragmentShader")
         }.forEach { (textFile, fieldName) ->
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class, KModifier.CONST)

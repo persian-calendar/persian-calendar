@@ -4,6 +4,8 @@ plugins {
     // PersianCalendar plugins
     alias(libs.plugins.com.android.application) apply false
     alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.android.kotlin.multiplatform.library) apply false
+    alias(libs.plugins.compose.multiplatform) apply false
     id("io.github.persiancalendar.appbuildplugin") apply false
 
     // gradlePlugins plugins

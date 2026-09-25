@@ -1,8 +1,8 @@
 [submodule "fastlane"]
 	path = fastlane
 	url = https://github.com/persian-calendar/persian-calendar-metadata.git
-[submodule "PersianCalendar/data/events"]
-	path = PersianCalendar/data/events
+[submodule "shared/data/events"]
+	path = shared/data/events
 	url = https://github.com/persian-calendar/events.git
 [submodule "libs/calculator"]
 	path = libs/calculator

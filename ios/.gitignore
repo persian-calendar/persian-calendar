@@ -1,0 +1,5 @@
+# run `brew install xcodegen && xcodegen generate && open ios.xcodeproj`
+ios.xcodeproj
+ios.xcworkspace
+*.xcuserstate
+*.xcscmblueprint

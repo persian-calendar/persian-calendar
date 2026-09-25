@@ -66,8 +66,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":astronomy"))
-    implementation(project(":calendar"))
+    implementation(project(":shared"))
 
     // Google/JetBrains
     implementation(platform(libs.compose.bom))
@@ -103,5 +102,3 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
     lintChecks(project(":lintChecks"))
 }
-
-tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }

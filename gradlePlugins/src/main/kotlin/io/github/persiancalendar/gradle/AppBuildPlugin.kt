@@ -11,19 +11,22 @@ internal fun generatedAppSourceDir(project: Project): Provider<Directory> =
 
 class AppBuildPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        val taskProvider = target.tasks.register("codegenerators", CodeGenerators::class.java) {
-            // Load more lightweight version of codegen for wear
-            configure(isWear = target.name == "wear")
-        }
+        // Codegen runs only in the module(s) that bundle the source data
+        // (currently the shared KMP module).
+        if (target.file("data/events/events.json").exists()) {
+            val taskProvider = target.tasks.register("codegenerators", CodeGenerators::class.java) {
+                configure()
+            }
 
-        target.plugins.withId("com.android.application") {
-            val androidComponents =
-                target.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
-            androidComponents.onVariants { variant ->
-                variant.sources.kotlin?.addGeneratedSourceDirectory(
-                    taskProvider,
-                    CodeGenerators::getGeneratedAppSrcDir,
-                )
+            target.plugins.withId("com.android.application") {
+                val androidComponents =
+                    target.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
+                androidComponents.onVariants { variant ->
+                    variant.sources.kotlin?.addGeneratedSourceDirectory(
+                        taskProvider,
+                        CodeGenerators::getGeneratedAppSrcDir,
+                    )
+                }
             }
         }
 

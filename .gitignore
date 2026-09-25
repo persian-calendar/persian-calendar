@@ -128,9 +128,10 @@ Temporary Items
 .apdisk
 
 # secret information
-/app/src/main/res/values/secret_info.xml
+/PersianCalendar/src/main/res/values/secret_info.xml
 
 PersianCalendar/release/
 *.hprof
 
 captures/
+kotlin-js-store/
