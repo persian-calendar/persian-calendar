@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -44,7 +43,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.shared.generated.resources.Res
@@ -66,38 +64,36 @@ fun CalendarPicker(
     betterToUseShortCalendarName: Boolean = false,
     onValueChange: (Calendar) -> Unit,
 ) {
-    val resources = LocalResources.current
     if (items.size >= 2) SegmentedButtonItemsPicker(
         value = value,
-        items = items,
+        items = items.associateWith {
+            stringResource(
+                if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
+                    it.shortTitle
+                } else it.title,
+            )
+        },
         backgroundColor = backgroundColor,
         height = calendarPickerHeight(),
         modifier = modifier,
         onValueChange = onValueChange,
-    ) {
-        resources.getString(
-            (if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
-                it.shortTitle
-            } else it.title).stringId,
-        )
-    }
+    )
 }
 
 @Composable
 private fun <T> SegmentedButtonItemsPicker(
     value: T,
     onValueChange: (T) -> Unit,
-    items: List<T>,
+    items: Map<T, String>,
     backgroundColor: Color,
     height: Dp,
     modifier: Modifier = Modifier,
-    label: (T) -> String,
 ) {
     BoxWithConstraints(modifier = modifier) {
         val isGradient = isGradient
         val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         fun visualIndex(item: T) =
-            if (isRtl) items.size - 1 - items.indexOf(item) else items.indexOf(item)
+            if (isRtl) items.size - 1 - items.keys.indexOf(item) else items.keys.indexOf(item)
 
         val selectDateTypeString = stringResource(Res.string.select_type_date)
         val view = LocalView.current
@@ -197,7 +193,7 @@ private fun <T> SegmentedButtonItemsPicker(
                     else -> LocalRippleConfiguration.current
                 },
             ) {
-                items.forEachIndexed { index, item ->
+                items.toList().forEachIndexed { index, (item, title) ->
                     SegmentedButton(
                         border = BorderStroke(0.dp, Color.Transparent),
                         selected = value == item,
@@ -220,7 +216,7 @@ private fun <T> SegmentedButtonItemsPicker(
                             .weight(1f),
                     ) {
                         Text(
-                            text = label(item),
+                            text = title,
                             maxLines = 1,
                             softWrap = false,
                             autoSize = TextAutoSize.StepBased(

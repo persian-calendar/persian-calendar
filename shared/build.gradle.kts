@@ -9,7 +9,6 @@ plugins {
 }
 
 val generatedAppSrcDir = layout.buildDirectory.dir("generated/source/appsrc/main").get().asFile
-val generatedAppSrcDirAndroidMain = layout.buildDirectory.dir("generated/source/appsrc/androidMain").get().asFile
 
 kotlin {
     jvmToolchain(21)
@@ -48,9 +47,6 @@ kotlin {
                 implementation(libs.compose.multiplatform.material3)
                 api(libs.compose.components.resources)
             }
-        }
-        androidMain {
-            kotlin.srcDir(generatedAppSrcDirAndroidMain)
         }
         jsMain {
             dependencies {

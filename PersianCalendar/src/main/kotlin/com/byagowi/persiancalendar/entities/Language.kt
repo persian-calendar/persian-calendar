@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.shared.generated.resources.Res
@@ -378,13 +377,37 @@ enum class Language(val code: String, val nativeName: String) {
     fun getWeekDays(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInPersian
         EN_IR -> weekDaysInEnglishIran
-        else -> WeekDay.stringIds.map { resources.getString(it.stringId) }
+        else -> WeekDay.entries.map {
+            resources.getString(
+                when (it) {
+                    WeekDay.SATURDAY -> R.string.saturday
+                    WeekDay.SUNDAY -> R.string.sunday
+                    WeekDay.MONDAY -> R.string.monday
+                    WeekDay.TUESDAY -> R.string.tuesday
+                    WeekDay.WEDNESDAY -> R.string.wednesday
+                    WeekDay.THURSDAY -> R.string.thursday
+                    WeekDay.FRIDAY -> R.string.friday
+                },
+            )
+        }
     }
 
     fun getWeekDaysInitials(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInitialsInPersian
         EN_IR -> weekDaysInitialsInEnglishIran
-        else -> WeekDay.shortStringIds.map { resources.getString(it.stringId) }
+        else -> WeekDay.entries.map {
+            resources.getString(
+                when (it) {
+                    WeekDay.SATURDAY -> R.string.saturday_short
+                    WeekDay.SUNDAY -> R.string.sunday_short
+                    WeekDay.MONDAY -> R.string.monday_short
+                    WeekDay.TUESDAY -> R.string.tuesday_short
+                    WeekDay.WEDNESDAY -> R.string.wednesday_short
+                    WeekDay.THURSDAY -> R.string.thursday_short
+                    WeekDay.FRIDAY -> R.string.friday_short
+                },
+            )
+        }
     }
 
     fun getCountryName(cityItem: CityItem): String = when {

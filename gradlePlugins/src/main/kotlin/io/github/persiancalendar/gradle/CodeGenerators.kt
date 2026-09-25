@@ -28,7 +28,6 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import javax.inject.Inject
-import javax.xml.parsers.DocumentBuilderFactory
 
 abstract class CodeGenerators : DefaultTask() {
 
@@ -45,15 +44,11 @@ abstract class CodeGenerators : DefaultTask() {
     @OutputDirectory
     abstract fun getGeneratedAppSrcDir(): DirectoryProperty
 
-    @OutputDirectory
-    abstract fun getGeneratedAppSrcDirAndroidMain(): DirectoryProperty
-
     @get:Inject
     abstract val projectLayout: ProjectLayout
 
     fun configure() {
         getGeneratedAppSrcDir().set(generatedAppSourceDir(project))
-        getGeneratedAppSrcDirAndroidMain().set(project.layout.buildDirectory.dir("generated/source/appsrc/androidMain"))
         val projectDir = projectLayout.projectDirectory.asFile
         val rootDir = projectDir.parentFile
 
@@ -70,11 +65,6 @@ abstract class CodeGenerators : DefaultTask() {
         inputs.file(projectDir.resolve("data/worldmap.txt"))
         inputs.file(projectDir.resolve("data/timezones.txt"))
         inputs.file(projectDir.resolve("data/tectonicplates.txt"))
-        inputs.files(
-            project.fileTree(projectDir.resolve("src/androidMain/res")).matching {
-                include("**/*.xml")
-            },
-        )
     }
 
     @TaskAction
@@ -98,10 +88,6 @@ abstract class CodeGenerators : DefaultTask() {
             builder.build().writeTo(generatedDir)
         }
         createTextStore(generatedDir)
-        createAndroidStringIds(
-            resDir = projectDir.resolve("src/androidMain/res"),
-            outputDir = getGeneratedAppSrcDirAndroidMain().get().asFile,
-        )
     }
 
     private fun createTextStore(generatedAppSrcDir: File) {
@@ -129,99 +115,18 @@ abstract class CodeGenerators : DefaultTask() {
         ).forEach { (fieldName, path) ->
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class)
-                    .initializer(buildCodeBlock { addStatement("%S", projectDir.resolve(path).readText()) })
+                    .initializer(
+                        buildCodeBlock {
+                            addStatement(
+                                "%S",
+                                projectDir.resolve(path).readText(),
+                            )
+                        },
+                    )
                     .build(),
             )
         }
         builder.build().writeTo(generatedAppSrcDir)
-    }
-
-    private val kotlinHardKeywords = setOf(
-        "as", "break", "class", "continue", "do", "else", "false", "for", "fun",
-        "if", "in", "interface", "is", "null", "object", "package", "return", "super",
-        "this", "throw", "true", "try", "typealias", "typeof", "val", "var", "when", "while",
-    )
-
-    private fun createAndroidStringIds(resDir: File, outputDir: File) {
-        val builder = FileSpec.builder(packageName, "AndroidStringIds")
-        val rClass = ClassName("com.byagowi.persiancalendar.shared", "R")
-        val stringResourceClass = ClassName("org.jetbrains.compose.resources", "StringResource")
-        val pluralStringResourceClass = ClassName("org.jetbrains.compose.resources", "PluralStringResource")
-        builder.addImport("com.byagowi.persiancalendar.utils", "debugAssertNotNull")
-
-        builder.addProperty(
-            PropertySpec.builder("stringIds", typeNameOf<Map<String, Int>>(), KModifier.PRIVATE)
-                .initializer(
-                    buildCodeBlock {
-                        addStatement("mapOf(")
-                        collectResourceNames(resDir, "string").forEach { name ->
-                            val field = if (name in kotlinHardKeywords) "`$name`" else name
-                            withIndent { addStatement("%S to %T.string.%L,", name, rClass, field) }
-                        }
-                        add(")")
-                    },
-                )
-                .build(),
-        )
-        builder.addProperty(
-            PropertySpec.builder("pluralIds", typeNameOf<Map<String, Int>>(), KModifier.PRIVATE)
-                .initializer(
-                    buildCodeBlock {
-                        addStatement("mapOf(")
-                        collectResourceNames(resDir, "plurals").forEach { name ->
-                            val field = if (name in kotlinHardKeywords) "`$name`" else name
-                            withIndent { addStatement("%S to %T.plurals.%L,", name, rClass, field) }
-                        }
-                        add(")")
-                    },
-                )
-                .build(),
-        )
-        builder.addProperty(
-            PropertySpec.builder("stringId", typeNameOf<Int>())
-                .receiver(stringResourceClass)
-                .getter(
-                    FunSpec.getterBuilder()
-                        .addStatement("return stringIds[this.key].debugAssertNotNull ?: %T.string.empty", rClass)
-                        .build(),
-                )
-                .build(),
-        )
-        builder.addProperty(
-            PropertySpec.builder("pluralId", typeNameOf<Int>())
-                .receiver(pluralStringResourceClass)
-                .getter(
-                    FunSpec.getterBuilder()
-                        .addStatement("return pluralIds[this.key].debugAssertNotNull ?: %T.plurals.empty", rClass)
-                        .build(),
-                )
-                .build(),
-        )
-        outputDir.mkdirs()
-        builder.build().writeTo(outputDir)
-    }
-
-    private fun collectResourceNames(resDir: File, tagName: String): Set<String> {
-        val factory = DocumentBuilderFactory.newInstance()
-        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
-        factory.setFeature("http://xml.org/sax/features/external-general-entities", false)
-        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
-        val names = sortedSetOf<String>()
-        resDir.listFiles().orEmpty()
-            .filter { it.isDirectory && (it.name == "values" || it.name.startsWith("values-")) }
-            .forEach { dir ->
-                dir.listFiles().orEmpty()
-                    .filter { it.extension == "xml" }
-                    .forEach { xml ->
-                        val document = factory.newDocumentBuilder().parse(xml)
-                        val nodes = document.getElementsByTagName(tagName)
-                        repeat(nodes.length) { index ->
-                            val name = nodes.item(index).attributes.getNamedItem("name")?.nodeValue
-                            if (name != null) names.add(name)
-                        }
-                    }
-            }
-        return names
     }
 
     @Serializable

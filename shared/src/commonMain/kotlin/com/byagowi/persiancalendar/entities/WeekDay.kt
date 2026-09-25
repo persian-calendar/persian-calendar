@@ -25,18 +25,6 @@ enum class WeekDay {
     operator fun plus(other: Int): WeekDay = entries[(ordinal + other) % 7]
 
     companion object {
-        // To be used only by the Language object
-        val stringIds = listOf(
-            Res.string.saturday, Res.string.sunday, Res.string.monday, Res.string.tuesday,
-            Res.string.wednesday, Res.string.thursday, Res.string.friday,
-        )
-
-        val shortStringIds = listOf(
-            Res.string.saturday_short, Res.string.sunday_short, Res.string.monday_short,
-            Res.string.tuesday_short, Res.string.wednesday_short, Res.string.thursday_short,
-            Res.string.friday_short,
-        )
-
         // Get a WeekDay from ISO-8601's ordinal, from 1 (Monday) to 7 (Sunday).
         fun fromISO8601(value: Int): WeekDay = entries[value % 7]
     }
