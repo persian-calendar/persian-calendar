@@ -63,7 +63,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -82,6 +81,10 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.return_to_today
+import com.byagowi.persiancalendar.shared.generated.resources.sample_inputs
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AppModesDropDown
@@ -107,6 +110,7 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.calculator.eval
+import org.jetbrains.compose.resources.stringResource
 import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
@@ -136,12 +140,11 @@ fun SharedTransitionScope.ConverterScreen(
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
-                    val resources = LocalResources.current
                     AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
-                        items = remember { ConverterScreenMode.entries },
-                    ) { resources.getString(it.title) }
+                        items = ConverterScreenMode.entries.associateWith { stringResource(it.title) },
+                    )
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
@@ -156,7 +159,7 @@ fun SharedTransitionScope.ConverterScreen(
                         AnimatedVisibility(resetButtonVisibility) {
                             AppIconButton(
                                 icon = Icons.AutoMirrored.Default.Backspace,
-                                title = stringResource(R.string.return_to_today),
+                                title = stringResource(Res.string.return_to_today),
                                 onClick = resetAction,
                             )
                         }
@@ -166,7 +169,7 @@ fun SharedTransitionScope.ConverterScreen(
                     AnimatedVisibility(anyPendingConfirm) {
                         AppIconButton(
                             icon = Icons.Default.Done,
-                            title = stringResource(R.string.accept),
+                            title = stringResource(Res.string.accept),
                             onClick = { pendingConfirms.forEach { it() } },
                         )
                     }
@@ -461,7 +464,7 @@ private fun QrCode(
                 }
             },
             modifier = modifier.padding(top = 16.dp),
-        ) { Text(stringResource(R.string.sample_inputs)) }
+        ) { Text(stringResource(Res.string.sample_inputs)) }
     }
 
     @Composable
@@ -527,6 +530,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
 
     val context = LocalContext.current
     val resources = LocalResources.current
+    val chooserTitle = stringResource(screenMode.title)
     LaunchedEffect(key1 = screenMode) {
         onResetActionChange {
             when (screenMode) {
@@ -540,7 +544,6 @@ private fun SharedTransitionScope.ConverterAndDistance(
             }
         }
         onShareActionChange {
-            val chooserTitle = resources.getString(screenMode.title)
             if (screenMode == ConverterScreenMode.CONVERTER) {
                 val calendarsList = enabledCalendarsWithDefault
                 val otherCalendars = calendarsList - calendar

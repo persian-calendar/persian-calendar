@@ -246,6 +246,7 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.days
 
 @Composable
@@ -1433,21 +1434,18 @@ private fun SharedTransitionScope.Toolbar(
                     ),
                 verticalArrangement = Arrangement.Center,
             ) {
-                val resources = LocalResources.current
                 val density = LocalDensity.current
                 if (isYearView) AppModesDropDown(
                     value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
-                    items = enabledCalendarsWithDefault,
+                    items = enabledCalendarsWithDefault.associateWith {
+                        stringResource(if (language.isArabicScript && density.fontScale == 1f) {
+                            it.title
+                        } else it.shortTitle)
+                    },
                     small = subtitle.isNotEmpty(),
                     modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),
-                ) {
-                    resources.getString(
-                        (if (language.isArabicScript && density.fontScale == 1f) {
-                            it.title
-                        } else it.shortTitle).stringId,
-                    )
-                } else Crossfade(targetState = title) { title ->
+                ) else Crossfade(targetState = title) { title ->
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleLarge,

@@ -39,10 +39,9 @@ import com.byagowi.persiancalendar.ui.utils.performLongPress
 fun <T> AppModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
-    items: List<T>,
+    items: Map<T, String>,
     modifier: Modifier = Modifier,
     small: Boolean = false,
-    label: (T) -> String,
 ) {
     var showMenu by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback = LocalHapticFeedback.current
@@ -67,7 +66,7 @@ fun <T> AppModesDropDown(
                 .onSizeChanged { dropDownWidth = it.width },
         ) {
             Text(
-                label(value),
+                items[value].orEmpty(),
                 style = lerp(
                     start = MaterialTheme.typography.titleMedium,
                     stop = MaterialTheme.typography.titleLarge,
@@ -88,9 +87,9 @@ fun <T> AppModesDropDown(
             onDismissRequest = { showMenu = false },
             minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
         ) {
-            items.forEach { entry ->
+            items.forEach { (entry, label) ->
                 AppDropdownMenuRadioItem(
-                    text = { Text(label(entry)) },
+                    text = { Text(label) },
                     isSelected = value == entry,
                     withRadio = false,
                 ) {
