@@ -12,7 +12,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -138,7 +137,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -174,7 +172,6 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -190,6 +187,32 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.add_event
+import com.byagowi.persiancalendar.shared.generated.resources.ask_calendar_permission
+import com.byagowi.persiancalendar.shared.generated.resources.ask_user_to_set_location
+import com.byagowi.persiancalendar.shared.generated.resources.calendar
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.empty
+import com.byagowi.persiancalendar.shared.generated.resources.enable_notification
+import com.byagowi.persiancalendar.shared.generated.resources.events
+import com.byagowi.persiancalendar.shared.generated.resources.month_pray_times
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.no_event
+import com.byagowi.persiancalendar.shared.generated.resources.planetary_hours
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.shared.generated.resources.search_in_events
+import com.byagowi.persiancalendar.shared.generated.resources.select_date
+import com.byagowi.persiancalendar.shared.generated.resources.select_year
+import com.byagowi.persiancalendar.shared.generated.resources.shift_work_settings
+import com.byagowi.persiancalendar.shared.generated.resources.show_secondary_calendar
+import com.byagowi.persiancalendar.shared.generated.resources.times
+import com.byagowi.persiancalendar.shared.generated.resources.week_number
+import com.byagowi.persiancalendar.shared.generated.resources.year
+import com.byagowi.persiancalendar.shared.generated.resources.year_view
+import com.byagowi.persiancalendar.shared.generated.resources.yes
 import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.applyOffset
@@ -246,6 +269,7 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.days
 
@@ -360,7 +384,7 @@ fun SharedTransitionScope.CalendarScreen(
                 ) { appointmentsIsEmpty ->
                     if (appointmentsIsEmpty) Box {
                         Text(
-                            text = stringResource(R.string.no_event),
+                            text = stringResource(Res.string.no_event),
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(vertical = 8.dp, horizontal = 24.dp)
@@ -404,7 +428,7 @@ fun SharedTransitionScope.CalendarScreen(
                         if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
                         EncourageActionLayout(
-                            header = stringResource(R.string.ask_calendar_permission),
+                            header = stringResource(Res.string.ask_calendar_permission),
                             discardAction = {
                                 context.preferences.edit {
                                     putBoolean(
@@ -413,7 +437,7 @@ fun SharedTransitionScope.CalendarScreen(
                                     )
                                 }
                             },
-                            acceptButton = stringResource(R.string.yes),
+                            acceptButton = stringResource(Res.string.yes),
                             acceptAction = { showDialog = true },
                         )
                     }
@@ -453,7 +477,7 @@ fun SharedTransitionScope.CalendarScreen(
             ) else Column {
                 EncourageActionLayout(
                     modifier = Modifier.padding(vertical = 16.dp),
-                    header = stringResource(R.string.ask_user_to_set_location),
+                    header = stringResource(Res.string.ask_user_to_set_location),
                     discardAction = {
                         context.preferences.edit { putBoolean(PREF_DISMISSED_TIMES, true) }
                         removeThirdTab = true
@@ -601,7 +625,7 @@ fun SharedTransitionScope.CalendarScreen(
                             addEvent(AddEventData.fromJdn(selectedDay))
                         } else addAction()
                     },
-                ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
+                ) { Icon(Icons.Default.Add, stringResource(Res.string.add_event)) }
             }
         },
     ) { paddingValues ->
@@ -1101,8 +1125,8 @@ private fun ShiftWorkView(shiftWorkTitle: String?, today: Jdn, selectedDay: Jdn)
     }
 }
 
-private enum class DetailsTab(@get:StringRes val title: Int) {
-    Calendar(R.string.calendar), Events(R.string.events), Times(R.string.times),
+private enum class DetailsTab(val title: StringResource) {
+    Calendar(Res.string.calendar), Events(Res.string.events), Times(Res.string.times),
 }
 
 @Composable
@@ -1118,7 +1142,7 @@ private fun SharedTransitionScope.CalendarsTab(
     Column(
         modifier
             .clickable(
-                onClickLabel = stringResource(R.string.more),
+                onClickLabel = stringResource(Res.string.more),
                 onClick = { isExpanded = !isExpanded },
             )
             .padding(top = topPadding, bottom = 12.dp),
@@ -1145,8 +1169,8 @@ private fun SharedTransitionScope.CalendarsTab(
                     context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
                 }
                 EncourageActionLayout(
-                    header = stringResource(R.string.enable_notification),
-                    acceptButton = stringResource(R.string.yes),
+                    header = stringResource(Res.string.enable_notification),
+                    acceptButton = stringResource(Res.string.yes),
                     discardAction = {
                         context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                     },
@@ -1173,7 +1197,7 @@ private fun SharedTransitionScope.CalendarsTab(
 
             EncourageActionLayout(
                 header = "مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟",
-                acceptButton = stringResource(R.string.yes),
+                acceptButton = stringResource(Res.string.yes),
                 discardAction = ::ignore,
             ) {
                 val alarmManager = context.getSystemService<AlarmManager>()
@@ -1251,11 +1275,11 @@ private fun Search(
                 onSearch = {},
                 expanded = isSearchExpanded,
                 onExpandedChange = {},
-                placeholder = { Text(stringResource(R.string.search_in_events)) },
+                placeholder = { Text(stringResource(Res.string.search_in_events)) },
                 trailingIcon = {
                     AppIconButton(
                         icon = Icons.Default.Close,
-                        title = stringResource(R.string.close),
+                        title = stringResource(Res.string.close),
                     ) { closeSearch() }
                 },
             )
@@ -1370,7 +1394,8 @@ private fun SharedTransitionScope.Toolbar(
                     yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
                 if (isYearView && yearViewCalendar != null) {
                     title = stringResource(
-                        if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view,
+                        if (yearViewIsInYearSelection) Res.string.select_year
+                        else Res.string.year_view,
                     )
                     subtitle = if (!isTalkBackEnabled && run {
                             yearViewOffset == 0 || yearViewIsInYearSelection
@@ -1414,8 +1439,8 @@ private fun SharedTransitionScope.Toolbar(
                         indication = null,
                         interactionSource = null,
                         onClickLabel = stringResource(
-                            if (isYearView && !yearViewIsInYearSelection) R.string.select_year
-                            else R.string.year_view,
+                            if (isYearView && !yearViewIsInYearSelection) Res.string.select_year
+                            else Res.string.year_view,
                         ),
                     ) {
                         if (isYearView) coroutineScope.launch {
@@ -1463,7 +1488,7 @@ private fun SharedTransitionScope.Toolbar(
                         )
                         Text(
                             if (isTalkBackEnabled && isYearView) "$subtitle ${
-                                stringResource(R.string.year_view)
+                                stringResource(Res.string.year_view)
                             }"
                             else subtitle,
                             style = subtitleStyle,
@@ -1480,9 +1505,9 @@ private fun SharedTransitionScope.Toolbar(
                                     .background(LocalContentColor.current.copy(alpha = .175f))
                                     .clickable(
                                         onClickLabel = buildString {
-                                            append(stringResource(R.string.cancel))
+                                            append(stringResource(Res.string.cancel))
                                             append(" ")
-                                            append(stringResource(R.string.year_view))
+                                            append(stringResource(Res.string.year_view))
                                         },
                                     ) { onYearViewCalendarChange(null) }
                                     .padding(horizontal = 8.dp)
@@ -1524,7 +1549,7 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(visible = isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
-                    title = stringResource(R.string.next_x, stringResource(R.string.year)),
+                    title = stringResource(Res.string.next_x, stringResource(Res.string.year)),
                 ) {
                     coroutineScope.launch {
                         YearViewCommand.NextMonth.execute(
@@ -1537,7 +1562,7 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
-                    title = stringResource(R.string.previous_x, stringResource(R.string.year)),
+                    title = stringResource(Res.string.previous_x, stringResource(Res.string.year)),
                 ) {
                     coroutineScope.launch {
                         YearViewCommand.PreviousMonth.execute(
@@ -1559,7 +1584,7 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(!isYearView) {
                 AppIconButton(
                     icon = Icons.Default.Search,
-                    title = stringResource(R.string.search_in_events),
+                    title = stringResource(Res.string.search_in_events),
                     onClick = openSearch,
                 )
             }
@@ -1617,17 +1642,17 @@ private fun SharedTransitionScope.Menu(
     }
 
     ThreeDotsDropdownMenu { closeMenu ->
-        AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
+        AppDropdownMenuItem({ Text(stringResource(Res.string.select_date)) }) {
             closeMenu()
             showDatePickerDialog = true
         }
 
-        AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
+        AppDropdownMenuItem({ Text(stringResource(Res.string.shift_work_settings)) }) {
             closeMenu()
             showShiftWorkDialog = true
         }
 
-        if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
+        if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(Res.string.month_pray_times)) }) {
             closeMenu()
             val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
                 baseJdn = today,
@@ -1636,9 +1661,7 @@ private fun SharedTransitionScope.Menu(
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
         if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem(
-            {
-                Text(stringResource(R.string.planetary_hours))
-            },
+            { Text(stringResource(Res.string.planetary_hours)) },
         ) {
             showPlanetaryHoursDialog = true
             closeMenu()
@@ -1651,13 +1674,13 @@ private fun SharedTransitionScope.Menu(
             item: T,
             action: () -> Unit,
             prefKey: String,
-            @StringRes title: Int,
+            titleRes: StringResource,
             preferredAction: T,
             swipeIcon: ImageVector,
             valueToStoreOnClick: () -> String,
         ) {
             AppDropdownMenuItem(
-                text = { Text(stringResource(title)) },
+                text = { Text(stringResource(titleRes)) },
                 trailingIcon = icon@{
                     if (isTalkBackEnabled) return@icon
                     Box(
@@ -1678,7 +1701,7 @@ private fun SharedTransitionScope.Menu(
                 item = item,
                 action = action,
                 prefKey = PREF_SWIPE_UP_ACTION,
-                title = item.titleId,
+                titleRes = item.titleRes,
                 preferredAction = preferredSwipeUpAction,
                 swipeIcon = Icons.TwoTone.SwipeUp,
             ) { (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name }
@@ -1689,7 +1712,7 @@ private fun SharedTransitionScope.Menu(
                 item = item,
                 action = action,
                 prefKey = PREF_SWIPE_DOWN_ACTION,
-                title = item.titleId,
+                titleRes = item.titleRes,
                 preferredAction = preferredSwipeDownAction,
                 swipeIcon = Icons.TwoTone.SwipeDown,
             ) { (if (preferredSwipeDownAction == item) SwipeDownAction.None else item).name }
@@ -1698,7 +1721,7 @@ private fun SharedTransitionScope.Menu(
         HorizontalDivider()
 
         AppDropdownMenuCheckableItem(
-            text = { Text(stringResource(R.string.week_number)) },
+            text = { Text(stringResource(Res.string.week_number)) },
             isChecked = isShowWeekOfYearEnabled,
             onValueChange = {
                 context.preferences.edit { putBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, it) }
@@ -1711,7 +1734,7 @@ private fun SharedTransitionScope.Menu(
 
         var showSecondaryCalendarSubMenu by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuExpandableItem(
-            text = { Text(stringResource(R.string.show_secondary_calendar)) },
+            text = { Text(stringResource(Res.string.show_secondary_calendar)) },
             isExpanded = showSecondaryCalendarSubMenu,
             onClick = { showSecondaryCalendarSubMenu = !showSecondaryCalendarSubMenu },
         )
@@ -1719,7 +1742,7 @@ private fun SharedTransitionScope.Menu(
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
             AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
-                    text = { Text(stringResource(calendar?.title?.stringId ?: R.string.empty)) },
+                    text = { Text(stringResource(calendar?.title ?: Res.string.empty)) },
                     isSelected = calendar == secondaryCalendar,
                 ) {
                     context.preferences.edit {
