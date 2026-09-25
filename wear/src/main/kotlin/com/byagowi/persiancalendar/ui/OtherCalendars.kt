@@ -14,8 +14,8 @@ import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
+import com.byagowi.persiancalendar.entities.Jdn
 
 @Composable
 fun OtherCalendars(

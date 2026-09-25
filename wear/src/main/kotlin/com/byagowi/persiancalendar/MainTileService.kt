@@ -21,6 +21,7 @@ import androidx.wear.tiles.EventBuilders
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.google.common.util.concurrent.ListenableFuture
 import io.github.persiancalendar.calendar.PersianDate

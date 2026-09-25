@@ -31,9 +31,9 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.EntryType
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.getEventsOfDay
 import kotlinx.coroutines.launch
 

@@ -21,6 +21,13 @@ kotlin {
         androidResources {
             enable = true
         }
+
+        compilerOptions {
+            freeCompilerArgs.add("-P")
+            freeCompilerArgs.add(
+                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.byagowi.persiancalendar.parcelize.CommonParcelize",
+            )
+        }
     }
 
     jvm("desktop")

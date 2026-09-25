@@ -14,6 +14,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import org.jetbrains.compose.resources.StringResource
 
 enum class Calendar(
     val title: StringResource,

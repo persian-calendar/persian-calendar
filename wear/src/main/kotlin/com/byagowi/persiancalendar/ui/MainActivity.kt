@@ -26,11 +26,12 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.MotionScheme
 import androidx.wear.compose.material3.dynamicColorScheme
 import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.dataStore
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
+import com.byagowi.persiancalendar.today
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive

@@ -1,53 +1,17 @@
 package com.byagowi.persiancalendar
 
-import android.os.Parcelable
 import androidx.compose.runtime.annotation.RememberInComposition
-import io.github.persiancalendar.calendar.AbstractDate
+import com.byagowi.persiancalendar.entities.Jdn
 import io.github.persiancalendar.calendar.CivilDate
-import io.github.persiancalendar.calendar.IslamicDate
-import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 import java.util.GregorianCalendar
 
-// Julian day number, basically a day counter starting from some day in concept
-// https://en.wikipedia.org/wiki/Julian_day
-@Parcelize
-@Serializable
-@JvmInline
-value class Jdn(val value: Long) : Parcelable {
-    constructor(value: AbstractDate) : this(value.toJdn())
-
-    fun toIslamicDate() = IslamicDate(value)
-    fun toCivilDate() = CivilDate(value)
-    fun toPersianDate() = PersianDate(value)
-
-    operator fun compareTo(other: Jdn) = value compareTo other.value
-    operator fun plus(other: Int): Jdn = Jdn(value + other)
-    operator fun minus(other: Int): Jdn = Jdn(value - other)
-
-    // Difference of two Jdn values in days
-    operator fun minus(other: Jdn): Int = (value - other.value).toInt()
-
-    operator fun rangeTo(that: Jdn): Sequence<Jdn> =
-        (this.value..that.value).asSequence().map(::Jdn)
-
-    operator fun rangeUntil(that: Jdn): Sequence<Jdn> =
-        (this.value..<that.value).asSequence().map(::Jdn)
-
-    val isYearSupportedOnApp get() = (this.toPersianDate().year - IranianIslamicDateConverter.latestSupportedYearOfIran) in -1..0
-
-    companion object {
-        @RememberInComposition
-        fun today(): Jdn {
-            val calendar = GregorianCalendar.getInstance()
-            val jdn = CivilDate(
-                calendar[GregorianCalendar.YEAR],
-                calendar[GregorianCalendar.MONTH] + 1,
-                calendar[GregorianCalendar.DAY_OF_MONTH],
-            )
-            return Jdn(jdn)
-        }
-    }
+@RememberInComposition
+fun Jdn.Companion.today(): Jdn {
+    val calendar = GregorianCalendar.getInstance()
+    val jdn = CivilDate(
+        calendar[GregorianCalendar.YEAR],
+        calendar[GregorianCalendar.MONTH] + 1,
+        calendar[GregorianCalendar.DAY_OF_MONTH],
+    )
+    return Jdn(jdn)
 }

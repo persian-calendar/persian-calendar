@@ -19,9 +19,9 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.ScreenStage
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.scrollAway
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.getEventsOfDay
 
 @Composable

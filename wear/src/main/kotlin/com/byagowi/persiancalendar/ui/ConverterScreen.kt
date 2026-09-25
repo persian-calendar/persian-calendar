@@ -22,8 +22,9 @@ import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
+import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.today
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate

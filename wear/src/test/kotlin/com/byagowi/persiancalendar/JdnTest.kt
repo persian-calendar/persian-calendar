@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar
 
+import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.WeekDay
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlin.test.Test
@@ -12,6 +14,7 @@ class JdnTest {
         val civilDate = CivilDate(2025, 12, 18)
         val jdn = Jdn(civilDate)
         assertEquals(civilDate, jdn.toCivilDate())
+        assertEquals(WeekDay.THURSDAY, jdn.weekDay)
     }
 
     @Test

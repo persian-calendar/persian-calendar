@@ -42,11 +42,12 @@ import androidx.wear.compose.material3.scrollAway
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.Entry
 import com.byagowi.persiancalendar.EntryType
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generateEntries
 import com.byagowi.persiancalendar.generated.EventSource
+import com.byagowi.persiancalendar.today
 
 @Composable
 fun MainScreen(

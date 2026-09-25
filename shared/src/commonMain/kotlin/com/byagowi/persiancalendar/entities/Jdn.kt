@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
+import com.byagowi.persiancalendar.parcelize.CommonParcelable
+import com.byagowi.persiancalendar.parcelize.CommonParcelize
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -11,10 +13,10 @@ import kotlin.math.ceil
 
 // Julian day number, basically a day counter starting from some day in concept
 // https://en.wikipedia.org/wiki/Julian_day
-//@Parcelize
+@CommonParcelize
 @Serializable
 @kotlin.jvm.JvmInline
-value class Jdn(val value: Long) {
+value class Jdn(val value: Long) : CommonParcelable {
     constructor(value: AbstractDate) : this(value.toJdn())
     constructor(
         calendar: Calendar,

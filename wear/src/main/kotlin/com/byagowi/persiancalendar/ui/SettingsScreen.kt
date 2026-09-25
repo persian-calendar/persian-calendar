@@ -31,17 +31,18 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
-import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.ancientIranKey
 import com.byagowi.persiancalendar.complicationHideWeekDay
 import com.byagowi.persiancalendar.complicationMonthNumber
 import com.byagowi.persiancalendar.complicationWeekdayInitial
 import com.byagowi.persiancalendar.editPreferences
 import com.byagowi.persiancalendar.enabledEventsKey
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.internationalKey
 import com.byagowi.persiancalendar.iranNonHolidaysKey
 import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
+import com.byagowi.persiancalendar.today
 import kotlinx.coroutines.launch
 
 @Composable
