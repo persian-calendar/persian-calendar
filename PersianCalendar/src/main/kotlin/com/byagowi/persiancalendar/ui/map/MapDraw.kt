@@ -9,7 +9,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
-import androidx.annotation.RawRes
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
@@ -23,6 +22,9 @@ import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.generated.tectonicplates
+import com.byagowi.persiancalendar.generated.timezones
+import com.byagowi.persiancalendar.generated.worldmap
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -62,29 +64,23 @@ class MapDraw(
     // Just a little wider to avoid hairline artifact between two maps in map screen
     private val backgroundMapRect = Rect(0, 0, mapWidth + 1, mapHeight)
 
-    private fun createPathFromResourceText(resources: Resources, @RawRes id: Int): Path {
-        val path = resources.openRawResource(id).readBytes().decodeToString()
-        // In case Compose addPathNodes became private bring back
-        // https://github.com/persian-calendar/persian-calendar/blob/5a7ff8a/PersianCalendar/src/main/kotlin/com/byagowi/persiancalendar/ui/map/PathParser.kt
-        return addPathNodes(path).toPath().asAndroidPath()
-    }
-
     private fun Path.translateBy(dx: Float, dy: Float) =
         Path().also { it.addPath(this, Matrix().apply { setTranslate(dx, dy) }) }
 
     private fun Path.scaleBy(sx: Float, sy: Float) =
         Path().also { it.addPath(this, Matrix().apply { setScale(sx, sy) }) }
 
-    private val mapPath: Path = createPathFromResourceText(resources, R.raw.worldmap)
-    private val timezones: Path by lazy(LazyThreadSafetyMode.NONE) {
-        createPathFromResourceText(resources, R.raw.timezones)
+    private fun createPathFromText(text: String): Path = addPathNodes(text).toPath().asAndroidPath()
+    private val mapPath: Path = createPathFromText(worldmap)
+    private val timezonesPath: Path by lazy(LazyThreadSafetyMode.NONE) {
+        createPathFromText(timezones)
             // `topojson['transform']` result, turn it to degrees scale
             .scaleBy(0.17586713f, 0.08793366f).translateBy(-180f, -90f)
             // Make it the same scale as mapPath
             .translateBy(180f, -90f).scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
     }
-    private val tectonicPlates: Path by lazy(LazyThreadSafetyMode.NONE) {
-        createPathFromResourceText(resources, R.raw.tectonicplates)
+    private val tectonicPlatesPath: Path by lazy(LazyThreadSafetyMode.NONE) {
+        createPathFromText(tectonicplates)
             // `topojson['transform']` result, turn it to degrees scale
             .scaleBy(0.17586713f, 0.074727945f)
             .translateBy(-180f, -66.1632f)
@@ -131,8 +127,8 @@ class MapDraw(
             MapType.MAGNETIC_INCLINATION, MapType.MAGNETIC_DECLINATION, MapType.MAGNETIC_FIELD_STRENGTH ->
                 canvas.drawBitmap(maskMap, null, mapRect, null)
 
-            MapType.TIME_ZONES -> canvas.drawPath(timezones, miscPaint)
-            MapType.TECTONIC_PLATES -> canvas.drawPath(tectonicPlates, miscPaint)
+            MapType.TIME_ZONES -> canvas.drawPath(timezonesPath, miscPaint)
+            MapType.TECTONIC_PLATES -> canvas.drawPath(tectonicPlatesPath, miscPaint)
             MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH ->
                 canvas.drawBitmap(crescentVisibilityMap.bitmap, null, mapRect, null)
         }

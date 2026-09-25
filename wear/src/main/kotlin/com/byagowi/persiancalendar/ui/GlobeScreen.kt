@@ -47,7 +47,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.input.pointer.util.addPointerInputChange
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.toIntSize
 import androidx.compose.ui.util.fastAny
@@ -59,8 +58,8 @@ import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.tooling.preview.devices.WearDevices
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.globeRuntimeShader
+import com.byagowi.persiancalendar.generated.worldmap
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
@@ -77,6 +76,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.PI
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
@@ -85,12 +85,7 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) RuntimeShader(globeRuntimeShader)
         else null
     }
-    val resources = LocalResources.current
-    val path = remember {
-        addPathNodes(
-            resources.openRawResource(R.raw.worldmap).readBytes().decodeToString(),
-        ).toPath()
-    }
+    val path = remember { addPathNodes(worldmap).toPath() }
 
     var zoom by remember { mutableFloatStateOf(1f) }
     val x = remember { mutableFloatStateOf(Float.NaN) }
@@ -158,12 +153,12 @@ fun GlobeScreen(modifier: Modifier = Modifier) {
             @OptIn(FlowPreview::class) LaunchedEffect(Unit) {
                 scrollDelta.onEach { delta ->
                     zoom = (zoom + delta / 1000).coerceAtLeast(.1f)
-                }.debounce(50).collect { zoomOverscrollEffect() }
+                }.debounce(50.milliseconds).collect { zoomOverscrollEffect() }
             }
             Box(
                 Modifier
                     .pointerInput(Unit) {
-                        var lastPointerId: PointerId? = null
+                        var lastPointerId: PointerId?
                         val tracker = VelocityTracker()
                         awaitEachGesture {
                             val down = awaitFirstDown(requireUnconsumed = false)

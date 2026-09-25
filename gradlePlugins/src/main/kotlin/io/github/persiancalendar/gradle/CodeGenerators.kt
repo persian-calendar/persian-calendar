@@ -62,6 +62,9 @@ abstract class CodeGenerators : DefaultTask() {
         inputs.file(projectDir.resolve("shaders/common.vert"))
         inputs.file(projectDir.resolve("shaders/globe.frag"))
         inputs.file(projectDir.resolve("shaders/sandbox.frag"))
+        inputs.file(projectDir.resolve("data/worldmap.txt"))
+        inputs.file(projectDir.resolve("data/timezones.txt"))
+        inputs.file(projectDir.resolve("data/tectonicplates.txt"))
     }
 
     @TaskAction
@@ -102,6 +105,17 @@ abstract class CodeGenerators : DefaultTask() {
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class, KModifier.CONST)
                     .initializer(buildCodeBlock { addStatement("%S", textFile.readText()) })
+                    .build(),
+            )
+        }
+        listOf(
+            "worldmap" to "data/worldmap.txt",
+            "timezones" to "data/timezones.txt",
+            "tectonicplates" to "data/tectonicplates.txt",
+        ).forEach { (fieldName, path) ->
+            builder.addProperty(
+                PropertySpec.builder(fieldName, String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", projectDir.resolve(path).readText()) })
                     .build(),
             )
         }
