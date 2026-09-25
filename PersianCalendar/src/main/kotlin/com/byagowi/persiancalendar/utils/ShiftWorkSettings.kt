@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
@@ -16,6 +15,9 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.days
+import org.jetbrains.compose.resources.pluralStringResource
 
 @Stable
 data class ShiftWorkSettings(
@@ -60,7 +62,6 @@ data class ShiftWorkSettings(
     }
 
     @Composable
-    @ReadOnlyComposable
     fun getShiftWorksInDaysDistance(today: Jdn, jdn: Jdn): String? {
         if (records.isEmpty()) return null
         if ((jdn - today) !in 1..365) return null
@@ -68,7 +69,7 @@ data class ShiftWorkSettings(
         if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
         @Suppress("SimplifiableCallChain") return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
             pluralStringResource(
-                R.plurals.days, days.size, numeral.format(days.size),
+                Res.plurals.days, days.size, numeral.format(days.size),
             ) + " " + title
         }.joinToString(spacedComma)
     }

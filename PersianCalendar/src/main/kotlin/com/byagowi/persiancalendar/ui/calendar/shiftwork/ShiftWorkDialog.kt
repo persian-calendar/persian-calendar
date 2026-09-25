@@ -45,7 +45,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -66,6 +65,8 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.shift_work_record_title
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DialogSurface
@@ -78,6 +79,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
+import org.jetbrains.compose.resources.pluralStringResource
 
 @Composable
 fun ShiftWorkDialog(
@@ -171,7 +173,7 @@ fun ShiftWorkDialogContent(
                     @Suppress("SimplifiableCallChain") val summary =
                         shiftWorks.filter { it.length != 0 }.map {
                             pluralStringResource(
-                                R.plurals.shift_work_record_title,
+                                Res.plurals.shift_work_record_title,
                                 it.length,
                                 numeral.format(it.length),
                                 shiftWorkKeyToString(it.type),

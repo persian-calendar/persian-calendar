@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
@@ -68,8 +67,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -78,7 +75,6 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withScale
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.EarthPosition
@@ -87,6 +83,20 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.days
+import com.byagowi.persiancalendar.shared.generated.resources.hours
+import com.byagowi.persiancalendar.shared.generated.resources.map
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.shared.generated.resources.select_date
+import com.byagowi.persiancalendar.shared.generated.resources.show_direct_path_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_globe_view_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_grid_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_location_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_my_location_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_night_mask_label
+import com.byagowi.persiancalendar.shared.generated.resources.today
 import com.byagowi.persiancalendar.ui.FixStatusBarIconsColor
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -104,6 +114,9 @@ import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toEarthPosition
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import java.util.Date
 import kotlin.math.abs
 import kotlin.math.min
@@ -191,7 +204,7 @@ fun SharedTransitionScope.MapScreen(
                     .calculateTopPadding() + (16 + menuHeight + 16).dp,
             ),
         ) { Box(Modifier.fillMaxSize()) }
-        val mapString = stringResource(R.string.map)
+        val mapString = stringResource(Res.string.map)
         val scale = rememberSaveable { mutableFloatStateOf(1f) }
         val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
         val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
@@ -319,12 +332,13 @@ fun SharedTransitionScope.MapScreen(
                 @Composable
                 fun MenuItem(
                     icon: ImageVector,
-                    @StringRes titleId: Int,
+                    titleRes: StringResource,
                     modifier: Modifier = Modifier,
                     isEnabled: Boolean = false,
                     onClick: () -> Unit,
                 ) {
-                    val title = language.mapButtons(stringId = titleId) ?: stringResource(titleId)
+                    val title =
+                        language.mapButtons(stringRes = titleRes) ?: stringResource(titleRes)
                     Box(modifier.weight(weight = 1f)) {
                         val tint by animateColor(
                             color = if (isEnabled) {
@@ -339,13 +353,13 @@ fun SharedTransitionScope.MapScreen(
 
                 MenuItem(
                     icon = Icons.Default._3dRotation,
-                    titleId = R.string.show_globe_view_label,
+                    titleRes = Res.string.show_globe_view_label,
                     isEnabled = showGlobeView,
                 ) { showGlobeView = !showGlobeView }
 
                 MenuItem(
                     icon = Icons.Default.SocialDistance,
-                    titleId = R.string.show_direct_path_label,
+                    titleRes = Res.string.show_direct_path_label,
                     isEnabled = isDirectPathMode,
                     modifier = Modifier.alpha(
                         alpha = animateFloatAsState(
@@ -363,18 +377,18 @@ fun SharedTransitionScope.MapScreen(
 
                 MenuItem(
                     icon = Icons.Default.Grid3x3,
-                    titleId = R.string.show_grid_label,
+                    titleRes = Res.string.show_grid_label,
                     isEnabled = displayGrid,
                 ) { displayGrid = !displayGrid }
 
                 MenuItem(
                     icon = Icons.Default.MyLocation,
-                    titleId = R.string.show_my_location_label,
+                    titleRes = Res.string.show_my_location_label,
                 ) { showGpsDialog = true }
 
                 MenuItem(
                     icon = Icons.Default.LocationOn,
-                    titleId = R.string.show_location_label,
+                    titleRes = Res.string.show_location_label,
                     isEnabled = markedCoordinates != null && displayLocation,
                 ) {
                     if (markedCoordinates == null) {
@@ -384,7 +398,7 @@ fun SharedTransitionScope.MapScreen(
 
                 MenuItem(
                     icon = Icons.Default.NightlightRound,
-                    titleId = R.string.show_night_mask_label,
+                    titleRes = Res.string.show_night_mask_label,
                     isEnabled = mapType != MapType.NONE,
                 ) {
                     if (mapType == MapType.NONE) {
@@ -436,11 +450,11 @@ fun SharedTransitionScope.MapScreen(
                             .fillMaxWidth()
                             .combinedClickable(
                                 onClick = { showDatePickerDialog = true },
-                                onClickLabel = stringResource(R.string.select_date),
+                                onClickLabel = stringResource(Res.string.select_date),
                                 onLongClick = {
                                     timeInMillis.longValue = System.currentTimeMillis()
                                 },
-                                onLongClickLabel = stringResource(R.string.today),
+                                onLongClickLabel = stringResource(Res.string.today),
                             )
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(
@@ -474,15 +488,15 @@ private fun SharedTransitionScope.TimeArrow(
             }.inWholeMilliseconds
         },
         onClickLabel = stringResource(
-            if (isPrevious) R.string.previous_x else R.string.next_x,
-            pluralStringResource(R.plurals.hours, 1, numeral.format(1)),
+            if (isPrevious) Res.string.previous_x else Res.string.next_x,
+            pluralStringResource(Res.plurals.hours, 1, numeral.format(1)),
         ),
         onLongClick = {
             timeInMillis.longValue += (if (isPrevious) -10 else 10).days.inWholeMilliseconds
         },
         onLongClickLabel = stringResource(
-            if (isPrevious) R.string.previous_x else R.string.next_x,
-            pluralStringResource(R.plurals.days, 10, numeral.format(10)),
+            if (isPrevious) Res.string.previous_x else Res.string.next_x,
+            pluralStringResource(Res.plurals.days, 10, numeral.format(10)),
         ),
         isPrevious = isPrevious,
     )

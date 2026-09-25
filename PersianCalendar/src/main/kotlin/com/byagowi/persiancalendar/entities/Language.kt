@@ -15,6 +15,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.show_direct_path_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_globe_view_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_grid_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_location_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_my_location_label
+import com.byagowi.persiancalendar.shared.generated.resources.show_night_mask_label
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.map.MapType
@@ -24,6 +31,7 @@ import com.byagowi.persiancalendar.utils.listOf7Items
 import com.byagowi.persiancalendar.utils.logException
 import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.persiancalendar.praytimes.CalculationMethod
+import org.jetbrains.compose.resources.StringResource
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.roundToLong
@@ -591,15 +599,15 @@ enum class Language(val code: String, val nativeName: String) {
         }
     }
 
-    fun mapButtons(stringId: Int): String? {
+    fun mapButtons(stringRes: StringResource): String? {
         return when (this) {
-            FA, FA_AF -> when (stringId) {
-                R.string.show_globe_view_label -> "کرهٔ سه‌بعدی"
-                R.string.show_direct_path_label -> "مسیر مستقیم"
-                R.string.show_grid_label -> "توری"
-                R.string.show_my_location_label -> "مکان‌یاب / GPS"
-                R.string.show_location_label -> "مکان"
-                R.string.show_night_mask_label -> "تاریکی شب"
+            FA, FA_AF -> when (stringRes) {
+                Res.string.show_globe_view_label -> "کرهٔ سه‌بعدی"
+                Res.string.show_direct_path_label -> "مسیر مستقیم"
+                Res.string.show_grid_label -> "توری"
+                Res.string.show_my_location_label -> "مکان‌یاب / GPS"
+                Res.string.show_location_label -> "مکان"
+                Res.string.show_night_mask_label -> "تاریکی شب"
                 else -> null
             }
 

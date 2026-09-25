@@ -76,7 +76,6 @@ value class Jdn(val value: Long) : Parcelable {
         (this.value..<that.value).asSequence().map(::Jdn)
 
     val isYearSupportedOnApp get() = (this.toPersianDate().year - supportedYearOfIranCalendar) in -1..0
-
 }
 
 fun Jdn.toAstronomyTime(hourOfDay: Int, setIranTime: Boolean = false): Time {
