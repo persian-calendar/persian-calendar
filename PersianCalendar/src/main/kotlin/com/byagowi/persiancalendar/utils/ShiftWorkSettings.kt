@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS

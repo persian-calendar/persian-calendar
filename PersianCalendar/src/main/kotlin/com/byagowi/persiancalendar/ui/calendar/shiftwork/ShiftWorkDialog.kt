@@ -45,7 +45,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -55,7 +54,6 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.language
@@ -66,7 +64,17 @@ import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.add
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.more_options
+import com.byagowi.persiancalendar.shared.generated.resources.recurs
+import com.byagowi.persiancalendar.shared.generated.resources.remove
+import com.byagowi.persiancalendar.shared.generated.resources.shift_work_days_head
 import com.byagowi.persiancalendar.shared.generated.resources.shift_work_record_title
+import com.byagowi.persiancalendar.shared.generated.resources.shift_work_reset_button
+import com.byagowi.persiancalendar.shared.generated.resources.shift_work_starting_date
+import com.byagowi.persiancalendar.shared.generated.resources.shift_work_starting_date_edit
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DialogSurface
@@ -80,6 +88,7 @@ import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ShiftWorkDialog(
@@ -129,8 +138,8 @@ fun ShiftWorkDialogContent(
     Column(modifier) {
         Text(
             stringResource(
-                if (isFirstSetup) R.string.shift_work_starting_date
-                else R.string.shift_work_starting_date_edit,
+                if (isFirstSetup) Res.string.shift_work_starting_date
+                else Res.string.shift_work_starting_date_edit,
                 formatDate(startingDate on mainCalendar),
             ),
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -145,7 +154,7 @@ fun ShiftWorkDialogContent(
         ) {
             Checkbox(checked = recurs, onCheckedChange = null)
             Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
-            Text(stringResource(R.string.recurs))
+            Text(stringResource(Res.string.recurs))
         }
         TextButton(
             onClick = {
@@ -156,7 +165,7 @@ fun ShiftWorkDialogContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-        ) { Text(stringResource(R.string.shift_work_reset_button)) }
+        ) { Text(stringResource(Res.string.shift_work_reset_button)) }
 
         val lazyListState = rememberLazyListState()
         var selectedTypeDropdownIndex by remember { mutableIntStateOf(-1) }
@@ -215,12 +224,12 @@ fun ShiftWorkDialogContent(
                                     IconButton(onClick = { selectedTypeDropdownIndex = position }) {
                                         ExpandArrow(
                                             isExpanded = selectedTypeDropdownIndex == position,
-                                            contentDescription = stringResource(R.string.more_options),
+                                            contentDescription = stringResource(Res.string.more_options),
                                         )
                                     }
                                 },
                             )
-                            val durationString = stringResource(R.string.shift_work_days_head)
+                            val durationString = stringResource(Res.string.shift_work_days_head)
                             AppDropdownMenu(
                                 expanded = selectedTypeDropdownIndex == position,
                                 onDismissRequest = { selectedTypeDropdownIndex = -1 },
@@ -279,7 +288,7 @@ fun ShiftWorkDialogContent(
                         IconButton(onClick = { shiftWorks.removeAt(position) }) {
                             Icon(
                                 imageVector = Icons.Default.RemoveCircleOutline,
-                                contentDescription = stringResource(R.string.remove),
+                                contentDescription = stringResource(Res.string.remove),
                                 tint = MaterialTheme.colorScheme.primary,
                             )
                         }
@@ -294,10 +303,10 @@ fun ShiftWorkDialogContent(
         Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
             TextButton(
                 onClick = { shiftWorks += ShiftWorkRecord(shiftWorkKeyToString("r"), 1) },
-            ) { Text(stringResource(R.string.add)) }
+            ) { Text(stringResource(Res.string.add)) }
             Spacer(Modifier.weight(1f))
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
             Spacer(Modifier.width(8.dp))
             TextButton(
@@ -313,7 +322,7 @@ fun ShiftWorkDialogContent(
                     }
                     onDismissRequest()
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         }
     }
 }
