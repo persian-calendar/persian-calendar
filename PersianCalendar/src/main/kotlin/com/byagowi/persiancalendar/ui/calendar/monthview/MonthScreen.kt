@@ -60,6 +60,8 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.shortTitle
+import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled

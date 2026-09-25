@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
+import com.byagowi.persiancalendar.entities.shortTitle
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString

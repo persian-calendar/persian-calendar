@@ -6,6 +6,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
+import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates

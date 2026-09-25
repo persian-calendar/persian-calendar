@@ -40,6 +40,7 @@ import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language

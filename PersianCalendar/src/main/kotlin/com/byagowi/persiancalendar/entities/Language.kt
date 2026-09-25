@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
@@ -369,13 +370,13 @@ enum class Language(val code: String, val nativeName: String) {
     fun getWeekDays(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInPersian
         EN_IR -> weekDaysInEnglishIran
-        else -> WeekDay.stringIds.map { resources.getString(it) }
+        else -> WeekDay.stringIds.map { resources.getString(it.stringId) }
     }
 
     fun getWeekDaysInitials(resources: Resources): List<String> = when (this) {
         FA, FA_AF -> weekDaysInitialsInPersian
         EN_IR -> weekDaysInitialsInEnglishIran
-        else -> WeekDay.shortStringIds.map(resources::getString)
+        else -> WeekDay.shortStringIds.map { resources.getString(it.stringId) }
     }
 
     fun getCountryName(cityItem: CityItem): String = when {

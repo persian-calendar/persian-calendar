@@ -8,6 +8,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral

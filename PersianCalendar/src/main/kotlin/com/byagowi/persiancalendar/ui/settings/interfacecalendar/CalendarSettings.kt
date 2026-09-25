@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
+import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude

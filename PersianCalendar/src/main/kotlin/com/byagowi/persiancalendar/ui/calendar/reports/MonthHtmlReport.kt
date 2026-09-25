@@ -5,6 +5,7 @@ import androidx.annotation.CheckResult
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar

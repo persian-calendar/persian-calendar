@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalResources
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.cosinekitty.astronomy.Time

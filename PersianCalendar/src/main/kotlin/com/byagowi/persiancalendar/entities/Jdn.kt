@@ -54,21 +54,6 @@ value class Jdn(val value: Long) : Parcelable {
     // Difference of two Jdn values in days
     operator fun minus(other: Jdn): Int = (value - other.value).toInt()
 
-    fun toGregorianCalendar(): GregorianCalendar = GregorianCalendar().also {
-        val gregorian = this.toCivilDate()
-        it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
-    }
-
-    fun toAstronomyTime(hourOfDay: Int, setIranTime: Boolean = false): Time {
-        val date = toGregorianCalendar()
-        if (setIranTime) date.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
-        date[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
-        date[GregorianCalendar.MINUTE] = 0
-        date[GregorianCalendar.SECOND] = 0
-        date[GregorianCalendar.MILLISECOND] = 0
-        return Time.fromMillisecondsSince1970(date.timeInMillis)
-    }
-
     fun getWeekOfYear(startOfYear: Jdn, weekStart: WeekDay): Int {
         val dayOfYear = this - startOfYear
         return ceil(1 + (dayOfYear - (this.weekDay - weekStart)) / 7.0).toInt()
@@ -97,4 +82,19 @@ value class Jdn(val value: Long) : Parcelable {
         @RememberInComposition
         fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
     }
+}
+
+fun Jdn.toAstronomyTime(hourOfDay: Int, setIranTime: Boolean = false): Time {
+    val date = toGregorianCalendar()
+    if (setIranTime) date.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+    date[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
+    date[GregorianCalendar.MINUTE] = 0
+    date[GregorianCalendar.SECOND] = 0
+    date[GregorianCalendar.MILLISECOND] = 0
+    return Time.fromMillisecondsSince1970(date.timeInMillis)
+}
+
+fun Jdn.toGregorianCalendar(): GregorianCalendar = GregorianCalendar().also {
+    val gregorian = this.toCivilDate()
+    it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
 }

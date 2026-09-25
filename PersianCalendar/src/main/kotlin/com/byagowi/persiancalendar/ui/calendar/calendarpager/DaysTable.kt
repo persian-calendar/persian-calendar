@@ -64,6 +64,8 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.shortTitle
+import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled

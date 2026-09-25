@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
+import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.BEST
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.BETTER

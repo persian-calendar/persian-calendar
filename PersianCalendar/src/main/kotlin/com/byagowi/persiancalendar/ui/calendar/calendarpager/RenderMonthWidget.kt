@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.shortTitle
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral

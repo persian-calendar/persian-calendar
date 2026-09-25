@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.utils.update
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        com.byagowi.persiancalendar.utils.isDebugBuild = BuildConfig.DEVELOPMENT
         initGlobal(this) // mostly used for things should be provided in locale level
         update(this, true)
 

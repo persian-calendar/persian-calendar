@@ -19,6 +19,8 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.entities.title
+import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -45,7 +47,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -53,8 +54,6 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
-
-val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
     jdn.weekDay.title + spacedComma + formatDate(date, calendarNameInLinear)

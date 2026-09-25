@@ -76,6 +76,8 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.entities.title
+import com.byagowi.persiancalendar.entities.toAstronomyTime
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled

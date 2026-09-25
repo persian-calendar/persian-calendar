@@ -8,6 +8,8 @@ import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.toAstronomyTime
+import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon

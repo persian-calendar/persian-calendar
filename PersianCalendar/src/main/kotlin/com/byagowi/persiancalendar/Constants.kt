@@ -4,8 +4,6 @@ import android.graphics.Color
 import android.os.Build
 import io.github.persiancalendar.praytimes.Coordinates
 
-const val LOG_TAG = "PersianCalendar"
-
 const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
 const val EXPANDED_TIME_STATE_KEY = "ExpandedTimeState"
 

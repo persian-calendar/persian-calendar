@@ -3,10 +3,13 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.plugin.parcelize)
+    alias(libs.plugins.kotlin.plugin.serialization)
     id("io.github.persiancalendar.appbuildplugin")
 }
 
 val generatedAppSrcDir = layout.buildDirectory.dir("generated/source/appsrc/main").get().asFile
+val generatedAppSrcDirAndroidMain = layout.buildDirectory.dir("generated/source/appsrc/androidMain").get().asFile
 
 kotlin {
     jvmToolchain(21)
@@ -44,6 +47,14 @@ kotlin {
                 api(libs.compose.multiplatform.foundation)
                 implementation(libs.compose.multiplatform.material3)
                 api(libs.compose.components.resources)
+            }
+        }
+        androidMain {
+            kotlin.srcDir(generatedAppSrcDirAndroidMain)
+        }
+        jsMain {
+            dependencies {
+                implementation(libs.kotlinx.browser)
             }
         }
     }

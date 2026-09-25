@@ -110,13 +110,6 @@ val HighLatitudesMethod.titleStringId
         HighLatitudesMethod.None -> R.string.none
     }
 
-inline val <T> T.debugAssertNotNull: T
-    inline get() = if (BuildConfig.DEVELOPMENT) checkNotNull(this) else this
-
-fun debugLog(vararg message: Any?) {
-    if (BuildConfig.DEVELOPMENT) Log.d(LOG_TAG, message.joinToString(", "))
-}
-
 @Suppress("NOTHING_TO_INLINE")
 inline fun handleAngleWrapping(angleChange: Float, pi: Float = Math.PI.toFloat()): Float {
     return when {
