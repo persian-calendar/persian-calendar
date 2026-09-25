@@ -32,6 +32,14 @@ enum class Numeral(private val zero: Char) {
         }
     }
 
+    fun formatLongNumber(value: Long) = format(
+        value.toString()
+            .reversed()
+            .chunked(3)
+            .joinToString(",")
+            .reversed(),
+    )
+
     fun parseDouble(number: String): Double? {
         if (isArabic) return number.toDoubleOrNull()
         if (isTamil) when (number) {
