@@ -8,6 +8,7 @@ import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors

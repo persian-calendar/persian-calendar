@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.today
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Locale
 

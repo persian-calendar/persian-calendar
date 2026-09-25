@@ -120,6 +120,7 @@ import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.generated.citiesStore
+import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.SwipeUpAction
 import com.byagowi.persiancalendar.ui.theme.Theme
@@ -465,7 +466,7 @@ fun loadLanguageResources(resources: Resources) {
         "n" to resources.getString(R.string.shift_work_night),
     )
     calendarsTitlesAbbr_.value =
-        Calendar.entries.associateWith { resources.getString(it.shortTitle) }
+        Calendar.entries.associateWith { resources.getString(it.shortTitle.stringId) }
     when {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two

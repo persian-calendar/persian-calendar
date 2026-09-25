@@ -99,6 +99,7 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled

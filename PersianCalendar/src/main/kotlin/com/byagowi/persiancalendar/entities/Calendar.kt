@@ -1,30 +1,38 @@
 package com.byagowi.persiancalendar.entities
 
-import androidx.annotation.StringRes
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.gregorian_calendar
+import com.byagowi.persiancalendar.shared.generated.resources.gregorian_calendar_short
+import com.byagowi.persiancalendar.shared.generated.resources.hijri_calendar
+import com.byagowi.persiancalendar.shared.generated.resources.hijri_calendar_short
+import com.byagowi.persiancalendar.shared.generated.resources.nepali_calendar
+import com.byagowi.persiancalendar.shared.generated.resources.nepali_calendar_short
+import com.byagowi.persiancalendar.shared.generated.resources.persian_calendar
+import com.byagowi.persiancalendar.shared.generated.resources.persian_calendar_short
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import org.jetbrains.compose.resources.StringResource
 
 enum class Calendar(
-    @get:StringRes val title: Int,
-    @get:StringRes val shortTitle: Int,
+    val title: StringResource,
+    val shortTitle: StringResource,
     val preferredNumeral: Numeral,
 ) {
     // So vital, don't ever change names of these
     SHAMSI(
-        R.string.persian_calendar, R.string.persian_calendar_short, Numeral.PERSIAN,
+        Res.string.persian_calendar, Res.string.persian_calendar_short, Numeral.PERSIAN,
     ),
     ISLAMIC(
-        R.string.hijri_calendar, R.string.hijri_calendar_short, Numeral.ARABIC_INDIC,
+        Res.string.hijri_calendar, Res.string.hijri_calendar_short, Numeral.ARABIC_INDIC,
     ),
     GREGORIAN(
-        R.string.gregorian_calendar, R.string.gregorian_calendar_short, Numeral.ARABIC,
+        Res.string.gregorian_calendar, Res.string.gregorian_calendar_short, Numeral.ARABIC,
     ),
     NEPALI(
-        R.string.nepali_calendar, R.string.nepali_calendar_short, Numeral.DEVANAGARI,
+        Res.string.nepali_calendar, Res.string.nepali_calendar_short, Numeral.DEVANAGARI,
     );
 
     fun createDate(year: Int, month: Int, day: Int): AbstractDate = when (this) {

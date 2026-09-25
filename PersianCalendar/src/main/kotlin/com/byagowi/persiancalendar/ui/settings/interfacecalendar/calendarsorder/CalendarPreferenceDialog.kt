@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.customActions
@@ -45,10 +44,15 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.move_down
+import com.byagowi.persiancalendar.shared.generated.resources.move_up
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -56,6 +60,7 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.safePerformHapticFeedback
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CalendarPreferenceDialog(
@@ -64,8 +69,8 @@ fun CalendarPreferenceDialog(
 ) {
     val view = LocalView.current
     val context = LocalContext.current
-    val moveUp = stringResource(R.string.move_up)
-    val moveDown = stringResource(R.string.move_down)
+    val moveUp = stringResource(Res.string.move_up)
+    val moveDown = stringResource(Res.string.move_down)
     val enabledCalendars = rememberSaveable { enabledCalendars.toMutableStateList() }
     val calendars = rememberSaveable {
         val orderedCalendars = enabledCalendars + (Calendar.entries - enabledCalendars.toSet()) -
@@ -81,9 +86,9 @@ fun CalendarPreferenceDialog(
     var isInRotation by rememberSaveable { mutableStateOf(false) }
     if (isInRotation) return
     AppDialog(
-        title = { Text(stringResource(R.string.calendars_priority)) },
+        title = { Text(stringResource(Res.string.calendars_priority)) },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
         confirmButton = {
             TextButton(
@@ -106,7 +111,7 @@ fun CalendarPreferenceDialog(
                         putString(PREF_OTHER_CALENDARS_KEY, result.drop(1).joinToString(","))
                     }
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
         modifier = modifier,

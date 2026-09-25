@@ -174,6 +174,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -1442,9 +1443,9 @@ private fun SharedTransitionScope.Toolbar(
                     modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),
                 ) {
                     resources.getString(
-                        if (language.isArabicScript && density.fontScale == 1f) {
+                        (if (language.isArabicScript && density.fontScale == 1f) {
                             it.title
-                        } else it.shortTitle,
+                        } else it.shortTitle).stringId,
                     )
                 } else Crossfade(targetState = title) { title ->
                     Text(
@@ -1720,7 +1721,7 @@ private fun SharedTransitionScope.Menu(
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
             AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
-                    text = { Text(stringResource(calendar?.title ?: R.string.none)) },
+                    text = { Text(stringResource(calendar?.title?.stringId ?: R.string.empty)) },
                     isSelected = calendar == secondaryCalendar,
                 ) {
                     context.preferences.edit {

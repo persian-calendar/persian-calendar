@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R

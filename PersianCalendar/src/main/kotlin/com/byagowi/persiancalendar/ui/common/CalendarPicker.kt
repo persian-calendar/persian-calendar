@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
+import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -74,9 +75,9 @@ fun CalendarPicker(
         onValueChange = onValueChange,
     ) {
         resources.getString(
-            if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
+            (if (language.betterToUseShortCalendarName || betterToUseShortCalendarName) {
                 it.shortTitle
-            } else it.title,
+            } else it.title).stringId,
         )
     }
 }

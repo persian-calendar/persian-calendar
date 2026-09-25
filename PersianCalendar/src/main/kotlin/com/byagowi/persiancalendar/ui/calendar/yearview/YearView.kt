@@ -63,6 +63,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.select_month
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
@@ -76,6 +78,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 import kotlin.math.floor
 
@@ -205,7 +208,7 @@ fun YearView(
                                         .padding(padding)
                                         .clip(shape)
                                         .then(detectZoom)
-                                        .clickable(onClickLabel = stringResource(R.string.select_month)) {
+                                        .clickable(onClickLabel = stringResource(Res.string.select_month)) {
                                             closeYearView()
                                             selectMonth(calendar, offset)
                                         }

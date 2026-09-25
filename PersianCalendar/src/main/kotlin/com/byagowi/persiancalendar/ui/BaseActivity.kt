@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.updateAccessibilityFlows

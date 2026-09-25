@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable

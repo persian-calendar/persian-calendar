@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialogContent
 import org.junit.Rule

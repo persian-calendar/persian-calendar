@@ -77,11 +77,6 @@ value class Jdn(val value: Long) : Parcelable {
 
     val isYearSupportedOnApp get() = (this.toPersianDate().year - supportedYearOfIranCalendar) in -1..0
 
-    companion object {
-        // Better to use App provided today() where possible
-        @RememberInComposition
-        fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
-    }
 }
 
 fun Jdn.toAstronomyTime(hourOfDay: Int, setIranTime: Boolean = false): Time {
@@ -98,3 +93,7 @@ fun Jdn.toGregorianCalendar(): GregorianCalendar = GregorianCalendar().also {
     val gregorian = this.toCivilDate()
     it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
 }
+
+// Better to use App provided today() where possible
+@RememberInComposition
+fun Jdn.Companion.today() = Jdn(Date().toGregorianCalendar().toCivilDate())

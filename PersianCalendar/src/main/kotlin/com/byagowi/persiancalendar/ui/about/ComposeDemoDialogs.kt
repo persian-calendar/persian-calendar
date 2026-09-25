@@ -63,7 +63,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
@@ -79,10 +78,14 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.isBoldFont
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.service.AlarmWorker
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.close
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.common.BaseAppDialog
@@ -96,6 +99,7 @@ import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import org.intellij.lang.annotations.Language
+import org.jetbrains.compose.resources.stringResource
 import java.util.concurrent.TimeUnit
 import kotlin.math.floor
 import kotlin.math.min
@@ -362,7 +366,7 @@ fun ScheduleAlarm(
                         Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
                     }
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
     ) {
@@ -462,7 +466,7 @@ fun ConverterDialog(
             }
         },
         dismissButton = {
-            TextButton(onDismissRequest) { Text(stringResource(R.string.close)) }
+            TextButton(onDismissRequest) { Text(stringResource(Res.string.close)) }
         },
     ) {
         items(pagesCount) {

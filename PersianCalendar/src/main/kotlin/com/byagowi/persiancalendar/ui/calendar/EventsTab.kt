@@ -65,8 +65,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -98,6 +96,19 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.afghanistan_events
+import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.days
+import com.byagowi.persiancalendar.shared.generated.resources.horoscope
+import com.byagowi.persiancalendar.shared.generated.resources.hours
+import com.byagowi.persiancalendar.shared.generated.resources.international
+import com.byagowi.persiancalendar.shared.generated.resources.minutes
+import com.byagowi.persiancalendar.shared.generated.resources.seconds
+import com.byagowi.persiancalendar.shared.generated.resources.settings
+import com.byagowi.persiancalendar.shared.generated.resources.show_device_calendar_events
+import com.byagowi.persiancalendar.shared.generated.resources.view_source
+import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
@@ -118,6 +129,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -237,7 +250,7 @@ private fun DayEventContent(
             .fillMaxWidth()
             .clip(shape)
             .background(backgroundColor)
-            .clickable(onClickLabel = stringResource(R.string.view_source)) {
+            .clickable(onClickLabel = stringResource(Res.string.view_source)) {
                 if (event is CalendarEvent.DeviceCalendarEvent) {
                     viewEvent(event)
                 } else if (hasTooltip) coroutineScope.launch {
@@ -302,8 +315,8 @@ private fun DayEventContent(
                     val text = listOfNotNull(
                         when {
                             event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
-                            event.source == EventSource.Afghanistan -> stringResource(R.string.afghanistan_events)
-                            event.source == EventSource.International -> stringResource(R.string.international)
+                            event.source == EventSource.Afghanistan -> stringResource(Res.string.afghanistan_events)
+                            event.source == EventSource.International -> stringResource(Res.string.international)
                             event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
                             event.source == EventSource.Iran -> "این رویداد با نام «${event.metadata[EventsRepository.ORIGINAL_TITLE] ?: event.title}» در تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران آمده است."
                             else -> null
@@ -320,7 +333,7 @@ private fun DayEventContent(
                     val uriHandler = LocalUriHandler.current
                     RichTooltip(
                         modifier = Modifier.clickable(
-                            onClickLabel = stringResource(R.string.close),
+                            onClickLabel = stringResource(Res.string.close),
                             indication = null,
                             interactionSource = null,
                         ) { coroutineScope.launch { tooltipState.dismiss() } },
@@ -365,7 +378,7 @@ private fun DayEventContent(
                                                     shape = shape,
                                                 ) {
                                                     Row(verticalAlignment = Alignment.CenterVertically) {
-                                                        Text(stringResource(R.string.view_source))
+                                                        Text(stringResource(Res.string.view_source))
                                                         Icon(
                                                             imageVector = when {
                                                                 event is CalendarEvent.DeviceCalendarEvent -> {
@@ -418,7 +431,7 @@ private fun DayEventContent(
                                     Text(
                                         buildString {
                                             if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                append(stringResource(R.string.show_device_calendar_events))
+                                                append(stringResource(Res.string.show_device_calendar_events))
                                             } else if (event.source == EventSource.AncientIran && event.date is PersianDate) {
                                                 append(HistoricalPersianDate(event.date).jalaliDayOfYearName)
                                             } else {
@@ -456,7 +469,7 @@ private fun DayEventContent(
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Settings,
-                                            contentDescription = stringResource(R.string.settings),
+                                            contentDescription = stringResource(Res.string.settings),
                                         )
                                     }
                                 }
@@ -502,7 +515,7 @@ private fun DayEventContent(
                     else -> false
                 }
                 val clickModifier = if (isClickable) Modifier.clickable(
-                    onClickLabel = stringResource(R.string.view_source),
+                    onClickLabel = stringResource(Res.string.view_source),
                 ) {
                     coroutineScope.launch {
                         if (tooltipState.isVisible) tooltipState.dismiss() else tooltipState.show()
@@ -547,10 +560,10 @@ private fun DayEventContent(
 }
 
 private val countDownTimeParts = listOf(
-    R.plurals.days to 1.days,
-    R.plurals.hours to 1.hours,
-    R.plurals.minutes to 1.minutes,
-    R.plurals.seconds to 1.seconds,
+    Res.plurals.days to 1.days,
+    Res.plurals.hours to 1.hours,
+    Res.plurals.minutes to 1.minutes,
+    Res.plurals.seconds to 1.seconds,
 )
 
 @Composable
@@ -570,7 +583,7 @@ private fun EquinoxCountDown(
             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                 TooltipAnchorPosition.Above,
             ),
-            tooltip = { PlainTooltip { Text(stringResource(R.string.horoscope)) } },
+            tooltip = { PlainTooltip { Text(stringResource(Res.string.horoscope)) } },
             state = rememberTooltipState(),
         ) {
             Surface(
@@ -580,7 +593,7 @@ private fun EquinoxCountDown(
                 contentColor = backgroundColor,
             ) {
                 Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-                    Icon(AstrologyIcon, stringResource(R.string.horoscope))
+                    Icon(AstrologyIcon, stringResource(Res.string.horoscope))
                 }
             }
         }
@@ -688,7 +701,7 @@ fun readEventsWithEquinox(
                 ),
             ).let {
                 if (isAstronomicalExtraFeaturesEnabled) {
-                    val yearString = stringResource(R.string.year)
+                    val yearString = stringResource(Res.string.year)
                     val zodiac = ChineseZodiac.fromPersianCalendar(nextPersianYearDate)
                     val title = zodiac.format(resources, withEmoji = false, isPersian = true)
                     val symbol = zodiac.resolveEmoji(true)

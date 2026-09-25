@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.toGregorianCalendar
+import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreenMode
