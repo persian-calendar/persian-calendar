@@ -53,8 +53,7 @@ compose.resources {
     publicResClass = true
     packageOfResClass = "com.byagowi.persiancalendar.shared.generated.resources"
     // Point CMP's commonMain resources at the Android res directory so both
-    // AAPT (R.string) and Compose resources (Res.string) read the same files,
-    // without a symlink.
+    // AAPT (R.string) and Compose resources (Res.string) read the same files.
     customDirectory(
         sourceSetName = "commonMain",
         directoryProvider = provider { layout.projectDirectory.dir("src/androidMain/res") },
