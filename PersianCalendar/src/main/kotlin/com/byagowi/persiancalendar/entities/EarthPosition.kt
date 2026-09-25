@@ -5,7 +5,6 @@ import com.byagowi.persiancalendar.global.language
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.parcelize.Parcelize
 import kotlin.math.PI
-import kotlin.math.acos
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -23,27 +22,31 @@ data class EarthPosition(val latitude: Double, val longitude: Double) : Parcelab
 
     fun toCoordinates(): Coordinates = Coordinates(latitude, longitude, .0)
 
+    private fun Double.toRadians(): Double = this * PI / 180.0
+    private fun Double.toDegrees(): Double = this * 180.0 / PI
+
     fun toEarthHeading(target: EarthPosition): EarthHeading {
-        // great circle formula from:
-        // https://web.archive.org/web/20161209044600/http://williams.best.vwh.net/avform.htm
-        val lat1 = Math.toRadians(latitude) //7155849931833333333e-19 0.71
-        val lat2 = Math.toRadians(target.latitude) //3737913479489224943e-19 0.373
-        val lon1 = Math.toRadians(-longitude) //-5055637064497558276 e-19 -0.505
-        val lon2 = Math.toRadians(-target.longitude) //-69493192920839161e-17  -0.69
-        val a = sin((lat1 - lat2) / 2)
-        val b = sin((lon1 - lon2) / 2)
-        // https://en.wikipedia.org/wiki/Haversine_formula
-        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b)) //3774840207564380360e-19
-        //d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
-        // double c=a*a+Math.cos(lat1)*Math.cos(lat2))*b*b
-        val tc1 = if (d > 0) {
-            //tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
-            val x =
-                acos((sin(lat2) - sin(lat1) * cos(d)) / (sin(d) * cos(lat1)))/*2646123918118404228e-18*/
-            if (sin(lon2 - lon1) < 0) x else 2 * PI - x
-        } else 0.0
-        //  tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
-        return EarthHeading((d * 6371e3).toFloat(), (tc1 * 180 / PI).toFloat())
+        val lat1 = this.latitude.toRadians()
+        val lat2 = target.latitude.toRadians()
+        val lon1 = this.longitude.toRadians()
+        val lon2 = target.longitude.toRadians()
+
+        val dLat = lat2 - lat1
+        val dLon = lon2 - lon1
+
+        // Haversine distance on a spherical Earth (radius ~6,371 km)
+        val a = sin(dLat / 2.0).pow(2) + cos(lat1) * cos(lat2) * sin(dLon / 2.0).pow(2)
+        val d = 2.0 * asin(sqrt(a.coerceIn(0.0, 1.0)))
+        val distanceMeters = (d * 6_371_000.0).toFloat()
+
+        // Great circle initial bearing formula
+        val y = sin(dLon) * cos(lat2)
+        val x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
+
+        // Normalize bearing to 0.0 .. 360.0 degrees
+        val bearingDegrees = ((atan2(y, x).toDegrees() + 360.0) % 360.0).toFloat()
+
+        return EarthHeading(distanceMeters, bearingDegrees)
     }
 
     // Ported from https://www.movable-type.co.uk/scripts/latlong.html MIT License
