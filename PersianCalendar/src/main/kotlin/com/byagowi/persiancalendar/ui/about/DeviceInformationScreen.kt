@@ -74,7 +74,6 @@ import androidx.compose.ui.graphics.toSvg
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -91,7 +90,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.device_information
+import com.byagowi.persiancalendar.shared.generated.resources.help
+import com.byagowi.persiancalendar.shared.generated.resources.print
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -117,6 +119,7 @@ import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
+import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
 
 @Composable
@@ -160,7 +163,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
         }
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
-            title = { Text(stringResource(R.string.device_information)) },
+            title = { Text(stringResource(Res.string.device_information)) },
             colors = appTopAppBarColors(),
             navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             actions = {
@@ -169,7 +172,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 }
                 AppIconButton(
                     icon = Icons.Default.Print,
-                    title = stringResource(R.string.print),
+                    title = stringResource(Res.string.print),
                 ) { context.openHtmlInBrowser(generateHtmlReport(items)) }
                 AppIconButton(
                     icon = Icons.Default.SportsEsports,
@@ -266,7 +269,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                     Icon(
                         modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.help),
+                        contentDescription = stringResource(Res.string.help),
                     )
                 },
             )

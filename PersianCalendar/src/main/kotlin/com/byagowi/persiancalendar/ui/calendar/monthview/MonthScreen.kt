@@ -50,14 +50,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.shortTitle
@@ -71,6 +69,13 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.nth_week_of_year
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.shared.generated.resources.schedule
+import com.byagowi.persiancalendar.shared.generated.resources.week
+import com.byagowi.persiancalendar.shared.generated.resources.week_days_name_column
 import com.byagowi.persiancalendar.ui.calendar.EventsRow
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -92,6 +97,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.MonthScreen(
@@ -136,7 +142,7 @@ fun SharedTransitionScope.MonthScreen(
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     val date = focusedJdn on mainCalendar
-                    val screenTitle = stringResource(R.string.schedule)
+                    val screenTitle = stringResource(Res.string.schedule)
                     Column(Modifier.semantics { this.contentDescription = screenTitle }) {
                         Crossfade(targetState = date.monthName) { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
@@ -156,7 +162,7 @@ fun SharedTransitionScope.MonthScreen(
                     ) { coroutineScope.launch { state.animateScrollToItem(index = initialItem) } }
                     AppIconButton(
                         icon = Icons.Default.KeyboardArrowDown,
-                        title = stringResource(R.string.next_x, stringResource(R.string.week)),
+                        title = stringResource(Res.string.next_x, stringResource(Res.string.week)),
                     ) {
                         coroutineScope.launch {
                             state.animateScrollToItem(index = state.firstVisibleItemIndex + 1)
@@ -164,7 +170,10 @@ fun SharedTransitionScope.MonthScreen(
                     }
                     AppIconButton(
                         icon = Icons.Default.KeyboardArrowUp,
-                        title = stringResource(R.string.previous_x, stringResource(R.string.week)),
+                        title = stringResource(
+                            Res.string.previous_x,
+                            stringResource(Res.string.week),
+                        ),
                     ) {
                         coroutineScope.launch {
                             state.animateScrollToItem(index = state.firstVisibleItemIndex - 1)
@@ -202,7 +211,7 @@ fun SharedTransitionScope.MonthScreen(
                         ) {
                             val weekDay = weekStart + column
                             val description = stringResource(
-                                R.string.week_days_name_column,
+                                Res.string.week_days_name_column,
                                 weekDay.title,
                             )
                             Text(
@@ -254,7 +263,7 @@ fun SharedTransitionScope.MonthScreen(
                                         weekJdn.getWeekOfYear(startOfYearJdn, weekStart),
                                     )
                                     val description = stringResource(
-                                        R.string.nth_week_of_year,
+                                        Res.string.nth_week_of_year,
                                         formattedWeekNumber,
                                     )
                                     Box(

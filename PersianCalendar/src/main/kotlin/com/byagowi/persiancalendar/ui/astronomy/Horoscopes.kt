@@ -55,7 +55,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -75,7 +74,6 @@ import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
@@ -85,6 +83,13 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.kabulCoordinates
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.black_moon
+import com.byagowi.persiancalendar.shared.generated.resources.horoscope
+import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
+import com.byagowi.persiancalendar.shared.generated.resources.select_year
+import com.byagowi.persiancalendar.shared.generated.resources.year_name
 import com.byagowi.persiancalendar.tehranCoordinates
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppIconButton
@@ -95,7 +100,7 @@ import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
-import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.titleStringRes
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
@@ -115,12 +120,14 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import java.util.Date
 import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
+import kotlin.time.Duration.Companion.milliseconds
 
 @VisibleForTesting
 fun formatAngle(value: Double, isAbjad: Boolean = false): String {
@@ -159,7 +166,7 @@ fun HoroscopeDialog(
 
             @Composable
             fun format(body: Body, longitude: Double, distance: Double): String {
-                return stringResource(body.titleStringId) + ": %s %s %s%s".format(
+                return stringResource(body.titleStringRes) + ": %s %s %s%s".format(
                     formatAngle(longitude % 30), // Remaining angle
                     Zodiac.fromTropical(longitude).symbol,
                     if (language.isArabicScript) RLM else "",
@@ -312,7 +319,10 @@ fun YearHoroscopeDialog(
     ) {
         val state = rememberPagerState(yearPages / 2) { yearPages }
         val animationProgress = remember { Animatable(0f) }
-        LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
+        LaunchedEffect(Unit) {
+            delay(700.milliseconds)
+            animationProgress.animateTo(1f)
+        }
         var abjad by remember { mutableStateOf(false) }
         val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
         if (remember { derivedStateOf { state.currentPageOffsetFraction != 0f } }.value) {
@@ -355,7 +365,7 @@ fun YearHoroscopeDialog(
             when (it) {
                 FooterAction.Confirm -> AppIconButton(
                     icon = Icons.Default.Done,
-                    title = stringResource(R.string.accept),
+                    title = stringResource(Res.string.accept),
                     onClick = { pendingConfirms.forEach { it() } },
                 )
 
@@ -402,8 +412,8 @@ private fun YearHoroscopeDialogContent(
             }
         }
         val resources = LocalResources.current
-        val horoscopeString = stringResource(R.string.horoscope)
-        val yearNameString = stringResource(R.string.year_name)
+        val horoscopeString = stringResource(Res.string.horoscope)
+        val yearNameString = stringResource(Res.string.year_name)
         val yearNameModifier = if (isTalkBackEnabled) Modifier.semantics {
             this.contentDescription = yearNameString
             this.isTraversalGroup = true
@@ -475,7 +485,7 @@ private fun YearHoroscopeDialogContent(
                         ) + spacedComma + "شمسی در $cityName"
                     } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
                     gregorianCalendar.formatDateAndTime(withWeekDay = true) + run {
-                        if (isMoonInScorpio(time)) spacedComma + stringResource(R.string.moon_in_scorpio)
+                        if (isMoonInScorpio(time)) spacedComma + stringResource(Res.string.moon_in_scorpio)
                         else ""
                     },
                     dateStringOfOtherCalendars(Jdn(gregorianCalendar.toCivilDate()), spacedComma),
@@ -485,7 +495,7 @@ private fun YearHoroscopeDialogContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClickLabel = stringResource(R.string.select_year)) {
+                        .clickable(onClickLabel = stringResource(Res.string.select_year)) {
                             showTextEdit = true
                         }
                         .then(if (state) Modifier.alpha(.0f) else Modifier),
@@ -539,7 +549,7 @@ private fun AscendantZodiac(
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val ascendingNode = meanAscendingNode(time)
     val extras = (listOf(
-        meanApogee(time) to /*"⚸" + */stringResource(R.string.black_moon),
+        meanApogee(time) to /*"⚸" + */stringResource(Res.string.black_moon),
         // North Node / Dragon's Head (ascending node, Rāhu) — Moon crosses going north
         ascendingNode to (if (language.isArabicScript) "رأس" else "Rāhu"),
         // South Node / Dragon's Tail (descending node, Ketu) — Moon crosses going south
@@ -566,11 +576,10 @@ private fun AscendantZodiac(
                 .alpha(1 - progress * .9f),
             fontSize = 40.sp,
         )
+        @Suppress("SimplifiableCallChain") val house = setOf(
+            zodiac, Zodiac.fromTropical(houses[i]),
+        ).map { it.shortTitle }.joinToString("/")
         val text = buildAnnotatedString {
-            val resources = LocalResources.current
-            val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
-                it.shortTitle(resources)
-            }
             appendAngle(
                 title = when (i) {
                     0 -> (if (language.isArabicScript) "طالع" else "Ascendant") + "\n"
@@ -582,7 +591,7 @@ private fun AscendantZodiac(
             val bodies = bodiesZodiac[zodiac] ?: emptyList()
             bodies.forEach { (body, longitude) ->
                 appendLine()
-                appendAngle(stringResource(body.titleStringId), longitude)
+                appendAngle(stringResource(body.titleStringRes), longitude)
             }
             extras.filter { (sign) -> zodiac == sign }.forEach { (_, value, title) ->
                 appendLine()

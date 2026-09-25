@@ -34,7 +34,6 @@ import androidx.compose.ui.input.pointer.util.addPointerInputChange
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.lerp
 import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
@@ -44,8 +43,9 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.utils.handleAngleWrapping
 import com.byagowi.persiancalendar.utils.symbol
-import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.titleStringRes
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
@@ -65,7 +65,7 @@ fun EarthView(
     val typeface = resolveAndroidCustomTypeface()
     val textPath = remember { Path() }
     val geocentricPlanetsTitles = geocentricPlanetsList.map {
-        stringResource(it.titleStringId) + " " + it.symbol
+        stringResource(it.titleStringRes) + " " + it.symbol
     }
     val trianglePath = remember { Path() }
     val zodiacForegroundColor = Color(0x18808080)
@@ -111,7 +111,7 @@ fun EarthView(
     }
     val resources = LocalResources.current
     val solarDraw = remember(resources) { SolarDraw(resources) }
-    val labels = remember(resources) { Zodiac.entries.map { it.shortTitle(resources) } }
+    val labels = Zodiac.entries.map { it.shortTitle }
     val symbols = remember { Zodiac.entries.map { it.symbol } }
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current

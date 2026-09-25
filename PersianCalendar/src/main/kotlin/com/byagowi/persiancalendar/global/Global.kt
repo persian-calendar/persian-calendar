@@ -119,6 +119,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.WeekDay
+import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
@@ -486,7 +487,7 @@ fun loadLanguageResources(resources: Resources) {
         else -> resources.getString(R.string.holiday)
     }
     nothingScheduledString_.value = resources.getString(R.string.nothing_scheduled)
-    prayTimesTitles_.value = PrayTime.entries.associateWith { resources.getString(it.stringRes) }
+    prayTimesTitles_.value = PrayTime.entries.associateWith { resources.getString(it.stringResId) }
     spacedOr_.value = resources.getString(R.string.spaced_or)
     spacedAndInDates_.value = if (language.languagePrefersHalfSpaceAndInDates) " "
     else resources.getString(R.string.spaced_and)

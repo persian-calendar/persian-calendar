@@ -54,7 +54,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -89,6 +88,18 @@ import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.persianDelimiter
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority
+import com.byagowi.persiancalendar.shared.generated.resources.days_distance
+import com.byagowi.persiancalendar.shared.generated.resources.end_of_year_diff
+import com.byagowi.persiancalendar.shared.generated.resources.iran_time
+import com.byagowi.persiancalendar.shared.generated.resources.month
+import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
+import com.byagowi.persiancalendar.shared.generated.resources.season
+import com.byagowi.persiancalendar.shared.generated.resources.start_of_year_diff
+import com.byagowi.persiancalendar.shared.generated.resources.week
+import com.byagowi.persiancalendar.shared.generated.resources.year
+import com.byagowi.persiancalendar.shared.generated.resources.zodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
@@ -118,6 +129,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.CalendarsOverview(
@@ -170,7 +182,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 AnimatedContent(
                     if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
                         jdn.weekDay.title,
-                        stringResource(R.string.iran_time),
+                        stringResource(Res.string.iran_time),
                     ) else jdn.weekDay.title,
                     transitionSpec = appCrossfadeSpec,
                 ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
@@ -178,7 +190,7 @@ fun SharedTransitionScope.CalendarsOverview(
             val context = LocalContext.current
             TabEditButton(
                 action = navigateToCalendarsPrioritySettings,
-                title = stringResource(R.string.calendars_priority),
+                title = stringResource(Res.string.calendars_priority),
                 visible = isExpanded && remember {
                     PREF_MAIN_CALENDAR_KEY !in context.preferences && PREF_CALENDARS_PRIORITY_OPENED_ONCE !in context.preferences
                 },
@@ -192,7 +204,7 @@ fun SharedTransitionScope.CalendarsOverview(
         AnimatedVisibility(!isToday) {
             AutoSizedBodyText(
                 listOf(
-                    stringResource(R.string.days_distance),
+                    stringResource(Res.string.days_distance),
                     spacedColon,
                     calculateDaysDifference(resources, jdn, today, selectedCalendar),
                 ).joinToString(""),
@@ -213,7 +225,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 }
 
                 else -> ""
-            } else stringResource(R.string.moon_in_scorpio)
+            } else stringResource(Res.string.moon_in_scorpio)
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
@@ -258,12 +270,12 @@ fun SharedTransitionScope.CalendarsOverview(
             ((isExpanded && isAstronomicalExtraFeaturesEnabled)) && !persianDate.isOldEra,
         ) {
             val zodiacString =
-                if (language.isPersianOrDari) "برج شمسی" else stringResource(R.string.zodiac)
+                if (language.isPersianOrDari) "برج شمسی" else stringResource(Res.string.zodiac)
             val borji = PersianDate.borjiFromJdn(jdn.value)
             val zodiac = Zodiac.entries.getOrNull(borji.month - 1) ?: Zodiac.ARIES
             val zodiacTitle = language.dm.format(
                 numeral.format(borji.dayOfMonth),
-                stringResource(zodiac.titleId),
+                stringResource(zodiac.titleRes),
             )
             AutoSizedBodyText(
                 text = zodiacString + spacedColon + zodiac.symbol + " " + zodiacTitle,
@@ -331,10 +343,10 @@ fun SharedTransitionScope.CalendarsOverview(
             val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)
             listOf(
-                Triple(R.string.week, jdn.weekDay - weekStart + 1, 7),
-                Triple(R.string.month, date.dayOfMonth, monthLength),
-                Triple(R.string.season, passedDaysInSeason, totalSeasonDays),
-                Triple(R.string.year, jdn - startOfYearJdn, endOfYearJdn - startOfYearJdn),
+                Triple(Res.string.week, jdn.weekDay - weekStart + 1, 7),
+                Triple(Res.string.month, date.dayOfMonth, monthLength),
+                Triple(Res.string.season, passedDaysInSeason, totalSeasonDays),
+                Triple(Res.string.year, jdn - startOfYearJdn, endOfYearJdn - startOfYearJdn),
             )
         }
 
@@ -390,7 +402,7 @@ fun SharedTransitionScope.CalendarsOverview(
         AnimatedVisibility(isExpanded) {
             AutoSizedBodyText(
                 stringResource(
-                    R.string.start_of_year_diff,
+                    Res.string.start_of_year_diff,
                     numeral.format(jdn - startOfYearJdn + 1),
                     numeral.format(currentWeek),
                     numeral.format(date.month),
@@ -400,7 +412,7 @@ fun SharedTransitionScope.CalendarsOverview(
         AnimatedVisibility(isExpanded) {
             AutoSizedBodyText(
                 stringResource(
-                    R.string.end_of_year_diff,
+                    Res.string.end_of_year_diff,
                     numeral.format(endOfYearJdn - jdn),
                     numeral.format(weeksCount - currentWeek),
                     numeral.format(12 - date.month),

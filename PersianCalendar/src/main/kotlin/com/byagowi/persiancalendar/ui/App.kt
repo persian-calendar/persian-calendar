@@ -73,7 +73,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -95,7 +94,6 @@ import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.toGregorianCalendar
@@ -105,6 +103,17 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.about
+import com.byagowi.persiancalendar.shared.generated.resources.astronomy
+import com.byagowi.persiancalendar.shared.generated.resources.calendar
+import com.byagowi.persiancalendar.shared.generated.resources.compass
+import com.byagowi.persiancalendar.shared.generated.resources.date_converter
+import com.byagowi.persiancalendar.shared.generated.resources.exit
+import com.byagowi.persiancalendar.shared.generated.resources.season
+import com.byagowi.persiancalendar.shared.generated.resources.settings
+import com.byagowi.persiancalendar.shared.generated.resources.theme_dark
+import com.byagowi.persiancalendar.shared.generated.resources.theme_light
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
@@ -130,6 +139,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -372,13 +382,13 @@ private sealed interface Screen : NavKey {
 
     companion object {
         val navEntries = listOf(
-            Triple(Calendar, Icons.Default.DateRange, R.string.calendar),
-            Triple(Converter, Icons.Default.SwapVerticalCircle, R.string.date_converter),
-            Triple(Compass, Icons.Default.Explore, R.string.compass),
-            Triple(Astronomy(), AstrologyIcon, R.string.astronomy),
-            Triple(Settings(), Icons.Default.Settings, R.string.settings),
-            Triple(About, Icons.Default.Info, R.string.about),
-            Triple(Exit, Icons.Default.Cancel, R.string.exit),
+            Triple(Calendar, Icons.Default.DateRange, Res.string.calendar),
+            Triple(Converter, Icons.Default.SwapVerticalCircle, Res.string.date_converter),
+            Triple(Compass, Icons.Default.Explore, Res.string.compass),
+            Triple(Astronomy(), AstrologyIcon, Res.string.astronomy),
+            Triple(Settings(), Icons.Default.Settings, Res.string.settings),
+            Triple(About, Icons.Default.Info, Res.string.about),
+            Triple(Exit, Icons.Default.Cancel, Res.string.exit),
         )
 
         fun fromName(value: String?): Screen = when (Shortcut.fromName(value)) {
@@ -447,14 +457,14 @@ private fun AppNavigationRail(
                     disabledIconColor = animateColor(defaultColors.disabledIconColor).value,
                     disabledTextColor = animateColor(defaultColors.disabledTextColor).value,
                 )
-                Screen.navEntries.forEach { (screen, icon, titleId) ->
+                Screen.navEntries.forEach { (screen, icon, titleRes) ->
                     WideNavigationRailItem(
                         icon = { Icon(imageVector = icon, contentDescription = null) },
                         colors = colors,
                         railExpanded = true,
                         label = {
                             Text(
-                                text = stringResource(titleId),
+                                text = stringResource(titleRes),
                                 modifier = Modifier.width(railWidth - 104.dp),
                                 maxLines = 1,
                                 fontSize = LocalTextStyle.current.fontSize,
@@ -538,8 +548,8 @@ private fun NavigationRailSeasonsPager(now: Long) {
         Image(
             ImageBitmap.imageResource(season.imageId),
             contentScale = ContentScale.FillWidth,
-            contentDescription = "${stringResource(R.string.season)}$spacedColon${
-                stringResource(season.nameStringId)
+            contentDescription = "${stringResource(Res.string.season)}$spacedColon${
+                stringResource(season.nameStringRes)
             }",
             colorFilter = imageFilter,
             modifier = Modifier
@@ -583,7 +593,9 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
         val tint by animateColor(MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) .9f else .6f))
         Icon(
             it,
-            stringResource(if (isDark) R.string.theme_dark else R.string.theme_light),
+            stringResource(
+                if (isDark) Res.string.theme_dark else Res.string.theme_light,
+            ),
             tint = tint,
         )
     }

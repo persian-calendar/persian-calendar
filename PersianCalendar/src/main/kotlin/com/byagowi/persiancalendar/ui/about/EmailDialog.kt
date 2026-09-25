@@ -18,14 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.about_email_sum
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.continue_button
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EmailDialog(
@@ -42,12 +45,12 @@ fun EmailDialog(
                     onDismissRequest()
                     launchEmailIntent(context, message)
                 },
-            ) { Text(stringResource(R.string.continue_button)) }
+            ) { Text(stringResource(Res.string.continue_button)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
-        title = { Text(stringResource(R.string.about_email_sum)) },
+        title = { Text(stringResource(Res.string.about_email_sum)) },
         modifier = modifier,
     ) {
         TextField(

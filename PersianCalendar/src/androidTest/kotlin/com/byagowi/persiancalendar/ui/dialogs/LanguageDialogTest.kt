@@ -1,10 +1,11 @@
 package com.byagowi.persiancalendar.ui.dialogs
 
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.language
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.LanguageDialog
+import org.jetbrains.compose.resources.stringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -16,7 +17,7 @@ class LanguageDialogTest {
     fun basicSmokeTest() {
         var languageString = ""
         composeTestRule.setContent {
-            languageString = stringResource(R.string.language)
+            languageString = stringResource(Res.string.language)
             LanguageDialog {}
         }
         composeTestRule.onNodeWithText(languageString).assertExists()

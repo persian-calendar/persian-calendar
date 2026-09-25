@@ -11,13 +11,16 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_NEXT_ARROW
 import com.byagowi.persiancalendar.SHARED_CONTENT_PREVIOUS_ARROW
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.day
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.performLongPress
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.TimeArrow(
@@ -33,8 +36,8 @@ fun SharedTransitionScope.TimeArrow(
         imageVector = if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
         else Icons.AutoMirrored.Default.KeyboardArrowRight,
         contentDescription = stringResource(
-            if (isPrevious) R.string.previous_x else R.string.next_x,
-            stringResource(R.string.day),
+            if (isPrevious) Res.string.previous_x else Res.string.next_x,
+            stringResource(Res.string.day),
         ),
         modifier = modifier
             .sharedElement(

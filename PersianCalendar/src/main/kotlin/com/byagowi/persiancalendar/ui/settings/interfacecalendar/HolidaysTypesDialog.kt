@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -45,15 +44,23 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.events
+import com.byagowi.persiancalendar.shared.generated.resources.holiday
+import com.byagowi.persiancalendar.shared.generated.resources.international
+import com.byagowi.persiancalendar.shared.generated.resources.other_holidays
+import com.byagowi.persiancalendar.shared.generated.resources.view_source
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.utils.preferences
+import org.jetbrains.compose.resources.stringResource
 import java.util.TimeZone
 
 @Composable
@@ -67,10 +74,10 @@ fun HolidaysTypesDialog(
         EventsRepository.getEnabledTypes(context.preferences, language).toMutableStateList()
     }
     AppDialog(
-        title = { Text(stringResource(R.string.events)) },
+        title = { Text(stringResource(Res.string.events)) },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
         },
         confirmButton = {
@@ -81,7 +88,7 @@ fun HolidaysTypesDialog(
                         putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet())
                     }
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         },
         modifier = modifier,
         onDismissRequest = onDismissRequest,
@@ -126,7 +133,7 @@ fun HolidaysTypesDialog(
                 @Composable
                 fun International() {
                     ItemCheckBox(
-                        label = stringResource(R.string.international),
+                        label = stringResource(Res.string.international),
                         enabledTypes = enabledTypes,
                         key = EventsRepository.INTERNATIONAL_KEY,
                         destinationItem = destinationItem,
@@ -145,7 +152,7 @@ fun HolidaysTypesDialog(
                         contentAlignment = Alignment.CenterStart,
                     ) {
                         Text(
-                            stringResource(R.string.other_holidays),
+                            stringResource(Res.string.other_holidays),
                             modifier = Modifier
                                 .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                                 .semantics { this.hideFromAccessibility() },
@@ -162,8 +169,8 @@ fun HolidaysTypesDialog(
             } else {
                 CountryEvents(
                     sourceLink = EventSource.Nepal.link,
-                    holidaysTitle = stringResource(R.string.holiday),
-                    nonHolidaysTitle = stringResource(R.string.other_holidays),
+                    holidaysTitle = stringResource(Res.string.holiday),
+                    nonHolidaysTitle = stringResource(Res.string.other_holidays),
                     enabledTypes = enabledTypes,
                     holidaysKey = EventsRepository.NEPAL_HOLIDAYS_KEY,
                     nonHolidaysKey = EventsRepository.NEPAL_OTHERS_KEY,
@@ -243,7 +250,7 @@ fun CountryEvents(
                                 ),
                             ),
                         ),
-                    ) { append(stringResource(R.string.view_source)) }
+                    ) { append(stringResource(Res.string.view_source)) }
                 },
             )
         }

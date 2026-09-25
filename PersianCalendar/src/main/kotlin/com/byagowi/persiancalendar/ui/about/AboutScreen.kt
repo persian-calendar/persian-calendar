@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.about
 
 import android.content.Context
 import android.os.Build
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
@@ -84,9 +83,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -105,6 +102,24 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.about
+import com.byagowi.persiancalendar.shared.generated.resources.about_contributors_list
+import com.byagowi.persiancalendar.shared.generated.resources.about_designers_list
+import com.byagowi.persiancalendar.shared.generated.resources.about_developers
+import com.byagowi.persiancalendar.shared.generated.resources.about_developers_list
+import com.byagowi.persiancalendar.shared.generated.resources.about_email_sum
+import com.byagowi.persiancalendar.shared.generated.resources.about_help_subtitle
+import com.byagowi.persiancalendar.shared.generated.resources.about_license_sum
+import com.byagowi.persiancalendar.shared.generated.resources.about_license_title
+import com.byagowi.persiancalendar.shared.generated.resources.about_send_mail
+import com.byagowi.persiancalendar.shared.generated.resources.about_translators_list
+import com.byagowi.persiancalendar.shared.generated.resources.app_name
+import com.byagowi.persiancalendar.shared.generated.resources.device_information
+import com.byagowi.persiancalendar.shared.generated.resources.help
+import com.byagowi.persiancalendar.shared.generated.resources.licenses
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.version
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
@@ -116,6 +131,8 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.AboutScreen(
@@ -129,7 +146,7 @@ fun SharedTransitionScope.AboutScreen(
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
-                title = { Text(stringResource(R.string.about)) },
+                title = { Text(stringResource(Res.string.about)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
                     NavigationOpenNavigationRailIcon(openNavigationRail)
@@ -137,7 +154,7 @@ fun SharedTransitionScope.AboutScreen(
                 actions = {
                     AppIconButton(
                         icon = Icons.Default.PermDeviceInformation,
-                        title = stringResource(R.string.device_information),
+                        title = stringResource(Res.string.device_information),
                         onClick = navigateToDeviceInformation,
                     )
                 },
@@ -202,7 +219,7 @@ private fun Header(modifier: Modifier = Modifier) {
         ) {
             Column {
                 Text(
-                    stringResource(R.string.app_name),
+                    stringResource(Res.string.app_name),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = LocalContentColor.current,
                 )
@@ -212,12 +229,12 @@ private fun Header(modifier: Modifier = Modifier) {
                             // Don't use local numeral if version name is multi-parted (debug and nightly builds)
                             if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
                             else numeral.format(BuildConfig.VERSION_NAME, skipSeparators = true)
-                        append(stringResource(R.string.version, version))
+                        append(stringResource(Res.string.version, version))
                         if (language.isUserAbleToReadPersian) {
                             appendLine()
                             append(
                                 stringResource(
-                                    R.string.about_help_subtitle,
+                                    Res.string.about_help_subtitle,
                                     numeral.format(supportedYearOfIranCalendar - 1),
                                     numeral.format(supportedYearOfIranCalendar),
                                 ),
@@ -248,7 +265,7 @@ private fun Header(modifier: Modifier = Modifier) {
                         .graphicsLayer { renderEffect = logoEffect }
                         .fillMaxSize(),
                     painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
-                    contentDescription = stringResource(R.string.app_name),
+                    contentDescription = stringResource(Res.string.app_name),
                     contentScale = ContentScale.Fit,
                 )
             }
@@ -269,11 +286,11 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
                 Icon(
                     modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
                     imageVector = Icons.AutoMirrored.Default.Help,
-                    contentDescription = stringResource(R.string.help),
+                    contentDescription = stringResource(Res.string.help),
                 )
                 Column(Modifier.padding(start = 4.dp)) {
                     Text(
-                        stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge,
+                        stringResource(Res.string.help), style = MaterialTheme.typography.bodyLarge,
                     )
                 }
             }
@@ -284,14 +301,14 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
 
         // Licenses
         Text(
-            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
+            stringResource(Res.string.licenses, MaterialTheme.typography.bodyLarge),
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
         )
         AboutScreenButton(
             icon = Icons.Default.Folder,
             action = { navigateToLicenses() },
-            title = R.string.about_license_title,
-            summary = R.string.about_license_sum,
+            title = Res.string.about_license_title,
+            summary = Res.string.about_license_sum,
         )
 
         var showMore by remember { mutableStateOf(false) }
@@ -301,7 +318,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
                     .alpha(AppBlendAlpha)
                     .padding(horizontal = 24.dp, vertical = 8.dp),
                 onClick = { showMore = true },
-            ) { Text(stringResource(R.string.more)) }
+            ) { Text(stringResource(Res.string.more)) }
         }
         // Bug report
         AnimatedVisibility(showMore && remember { Jdn.today() }.isYearSupportedOnApp) {
@@ -309,8 +326,8 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             AboutScreenButton(
                 icon = Icons.Default.Email,
                 action = { showDialog = true },
-                title = R.string.about_send_mail,
-                summary = R.string.about_email_sum,
+                title = Res.string.about_send_mail,
+                summary = Res.string.about_email_sum,
             )
             if (showDialog) EmailDialog { showDialog = false }
         }
@@ -357,7 +374,7 @@ private fun HelpItems() {
                     ExpandArrow(
                         isExpanded = expandedItem == i,
                         tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(Res.string.more),
                         isLineStart = true,
                         modifier = expandArrowSizeModifier,
                     )
@@ -383,8 +400,8 @@ private fun HelpItems() {
 private fun AboutScreenButton(
     icon: ImageVector,
     action: (context: Context) -> Unit,
-    @StringRes title: Int,
-    @StringRes summary: Int,
+    title: StringResource,
+    summary: StringResource,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -416,25 +433,22 @@ private fun AboutScreenButton(
 @Composable
 private fun Developers(modifier: Modifier = Modifier) {
     Column(modifier) {
-        val resources = LocalResources.current
-        val developersBeforeShuffle = remember {
-            listOf(
-                R.string.about_developers_list to Icons.Default.Android,
-                R.string.about_designers_list to Icons.Default.Palette,
-                R.string.about_translators_list to Icons.Default.Translate,
-                R.string.about_contributors_list to Icons.Default.Android,
-            ).flatMap { (listId: Int, icon: ImageVector) ->
-                resources.getString(listId).trim().split("\n").map {
-                    val (username, displayName) = it.split(": ")
-                    Triple(username, displayName, icon)
-                }
+        val developersBeforeShuffle = listOf(
+            stringResource(Res.string.about_developers_list) to Icons.Default.Android,
+            stringResource(Res.string.about_designers_list) to Icons.Default.Palette,
+            stringResource(Res.string.about_translators_list) to Icons.Default.Translate,
+            stringResource(Res.string.about_contributors_list) to Icons.Default.Android,
+        ).flatMap { (list: String, icon: ImageVector) ->
+            list.trim().split("\n").map {
+                val (username, displayName) = it.split(": ")
+                Triple(username, displayName, icon)
             }
         }
         var refreshToken by remember { mutableIntStateOf(0) }
         val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
 
         Text(
-            stringResource(R.string.about_developers),
+            stringResource(Res.string.about_developers),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .padding(start = 24.dp, end = 12.dp, top = 12.dp)

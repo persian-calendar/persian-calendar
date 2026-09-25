@@ -6,15 +6,16 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.return_to_today
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TodayActionButton(visible: Boolean = true, onClick: () -> Unit) {
     AnimatedVisibility(visible, enter = scaleIn(), exit = scaleOut()) {
         AppIconButton(
             icon = Icons.Default.Restore,
-            title = stringResource(R.string.return_to_today),
+            title = stringResource(Res.string.return_to_today),
             onClick = onClick,
         )
     }

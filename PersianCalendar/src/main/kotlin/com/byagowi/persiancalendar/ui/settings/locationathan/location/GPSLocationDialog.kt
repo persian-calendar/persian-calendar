@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -43,6 +42,16 @@ import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.continue_button
+import com.byagowi.persiancalendar.shared.generated.resources.gps_internet_description
+import com.byagowi.persiancalendar.shared.generated.resources.latitude
+import com.byagowi.persiancalendar.shared.generated.resources.location_access
+import com.byagowi.persiancalendar.shared.generated.resources.longitude
+import com.byagowi.persiancalendar.shared.generated.resources.phone_location_required
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -55,6 +64,7 @@ import com.byagowi.persiancalendar.utils.saveLocation
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 
@@ -66,7 +76,7 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
 
     var showDialog by rememberSaveable { mutableStateOf(true) }
     if (showDialog) AppDialog(
-        title = { Text(stringResource(R.string.location_access)) },
+        title = { Text(stringResource(Res.string.location_access)) },
         confirmButton = {
             TextButton(
                 onClick = {
@@ -78,15 +88,15 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
                         ),
                     )
                 },
-            ) { Text(stringResource(R.string.continue_button)) }
+            ) { Text(stringResource(Res.string.continue_button)) }
         },
         dismissButton = {
-            TextButton(onClick = { setGranted(false) }) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = { setGranted(false) }) { Text(stringResource(Res.string.cancel)) }
         },
         onDismissRequest = { setGranted(false) },
     ) {
         Text(
-            stringResource(R.string.phone_location_required),
+            stringResource(Res.string.phone_location_required),
             Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
         )
     }
@@ -139,11 +149,11 @@ fun GPSLocationDialog(
                             context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                         }.onFailure(logException)
                     },
-                ) { Text(stringResource(R.string.accept)) }
+                ) { Text(stringResource(Res.string.accept)) }
             },
         ) {
             Text(
-                stringResource(R.string.gps_internet_description),
+                stringResource(Res.string.gps_internet_description),
                 modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
             )
         }
@@ -210,7 +220,7 @@ fun GPSLocationDialog(
                 TextButton(
                     onClick = onDismissRequest,
                     modifier = Modifier.fillMaxWidth(),
-                ) { Text(stringResource(R.string.close)) }
+                ) { Text(stringResource(Res.string.close)) }
             }
         },
     ) {
@@ -228,10 +238,10 @@ fun GPSLocationDialog(
         val text = buildAnnotatedString {
             appendLine(
                 "%s$spacedColon$LRM%s°%s%s$spacedColon$LRM%s°".format(
-                    stringResource(R.string.latitude),
+                    stringResource(Res.string.latitude),
                     numeral.format("%.4f".format(Locale.ENGLISH, coord.latitude)),
                     "\n",
-                    stringResource(R.string.longitude),
+                    stringResource(Res.string.longitude),
                     numeral.format("%.4f".format(Locale.ENGLISH, coord.longitude)),
                 ),
             )

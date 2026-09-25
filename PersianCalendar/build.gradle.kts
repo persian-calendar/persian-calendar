@@ -131,6 +131,8 @@ android {
             // Makes the CI fail in unrelated changes
             "GradleDependency",
             "AndroidGradlePluginVersion",
+            // Useless complain we don't care about
+            "SyntheticAccessor",
         )
     }
 }

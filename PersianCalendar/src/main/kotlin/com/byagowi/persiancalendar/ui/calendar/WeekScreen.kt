@@ -100,7 +100,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -117,7 +116,6 @@ import androidx.core.util.lruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.byagowi.persiancalendar.EN_DASH
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_ICON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -138,6 +136,12 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.add_event
+import com.byagowi.persiancalendar.shared.generated.resources.calendar
+import com.byagowi.persiancalendar.shared.generated.resources.day_view
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.week_view
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.daysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
@@ -167,6 +171,7 @@ import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -270,7 +275,7 @@ fun SharedTransitionScope.WeekScreen(
                             } + 4.dp
                         }
                         .padding(end = 8.dp),
-                ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
+                ) { Icon(Icons.Default.Add, stringResource(Res.string.add_event)) }
             },
             topBar = {
                 @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -281,7 +286,7 @@ fun SharedTransitionScope.WeekScreen(
                                 interactionSource = null,
                                 indication = ripple(bounded = false),
                                 onClickLabel = stringResource(
-                                    if (!isWeekView) R.string.week_view else R.string.calendar,
+                                    if (!isWeekView) Res.string.week_view else Res.string.calendar,
                                 ),
                             ) { if (!isWeekView) isWeekView = true else navigateUp() },
                         ) {
@@ -351,8 +356,8 @@ fun SharedTransitionScope.WeekScreen(
                                 boundsTransform = appBoundsTransform,
                             ),
                         ) {
-                            val title = if (isWeekView) stringResource(R.string.day_view)
-                            else stringResource(R.string.week_view)
+                            val title = if (isWeekView) stringResource(Res.string.day_view)
+                            else stringResource(Res.string.week_view)
                             TooltipBox(
                                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                                     TooltipAnchorPosition.Above,
@@ -682,7 +687,7 @@ fun DaysView(
             if (days == 1) {
                 var isExpanded by rememberSaveable { mutableStateOf(false) }
                 val clickToExpandModifier = Modifier.clickable(
-                    onClickLabel = stringResource(R.string.more),
+                    onClickLabel = stringResource(Res.string.more),
                     interactionSource = null,
                     indication = null,
                 ) { isExpanded = !isExpanded }
@@ -914,7 +919,7 @@ fun DaysView(
                                             .clickable(
                                                 indication = null,
                                                 interactionSource = null,
-                                                onClickLabel = stringResource(R.string.add_event),
+                                                onClickLabel = stringResource(Res.string.add_event),
                                             ) {
                                                 if (!isAddEventBoxEnabled) {
                                                     interaction = Interaction.AddBox
@@ -1092,7 +1097,7 @@ fun DaysView(
                         .clickable(
                             indication = null,
                             interactionSource = null,
-                            onClickLabel = stringResource(R.string.add_event),
+                            onClickLabel = stringResource(Res.string.add_event),
                         ) { addAction() }
                         .pointerInput(Unit) {
                             awaitEachGesture {
@@ -1259,7 +1264,7 @@ fun EventsRow(
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val clickToExpandModifier = Modifier.clickable(
-        onClickLabel = stringResource(R.string.more),
+        onClickLabel = stringResource(Res.string.more),
         interactionSource = null,
         indication = null,
     ) { isExpanded = !isExpanded }

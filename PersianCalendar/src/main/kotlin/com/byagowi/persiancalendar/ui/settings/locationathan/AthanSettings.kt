@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -41,8 +40,8 @@ import com.byagowi.persiancalendar.PREF_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.athanVibration
@@ -53,6 +52,22 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.invalidateAthanChannel
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.asr_hanafi_juristic
+import com.byagowi.persiancalendar.shared.generated.resources.athan_alarm
+import com.byagowi.persiancalendar.shared.generated.resources.athan_alarm_summary
+import com.byagowi.persiancalendar.shared.generated.resources.athan_gap
+import com.byagowi.persiancalendar.shared.generated.resources.athan_gap_summary
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.custom_athan
+import com.byagowi.persiancalendar.shared.generated.resources.default_athan
+import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_method
+import com.byagowi.persiancalendar.shared.generated.resources.midnight
+import com.byagowi.persiancalendar.shared.generated.resources.notification_athan_help
+import com.byagowi.persiancalendar.shared.generated.resources.pray_methods
+import com.byagowi.persiancalendar.shared.generated.resources.pray_methods_calculation
+import com.byagowi.persiancalendar.shared.generated.resources.preview
+import com.byagowi.persiancalendar.shared.generated.resources.vibration
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
@@ -69,11 +84,12 @@ import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.title
-import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.titleStringRes
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AthanSettings(
@@ -94,31 +110,31 @@ fun AthanSettings(
                     CalculationMethod.entries.map { it.name }
                 },
                 persistedValue = calculationMethod.name,
-                dialogTitleResId = R.string.pray_methods_calculation,
-                title = stringResource(R.string.pray_methods),
+                dialogTitleResId = Res.string.pray_methods_calculation,
+                title = stringResource(Res.string.pray_methods),
             )
         }
         AnimatedVisibility(coordinates?.isHighLatitude == true) {
             SettingsSingleSelect(
                 key = PREF_HIGH_LATITUDES_METHOD,
-                entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
+                entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringRes) },
                 entryValues = remember { HighLatitudesMethod.entries.map { it.name } },
                 persistedValue = highLatitudesMethod.name,
-                dialogTitleResId = R.string.high_latitudes_method,
-                title = stringResource(R.string.high_latitudes_method),
+                dialogTitleResId = Res.string.high_latitudes_method,
+                title = stringResource(Res.string.high_latitudes_method),
             )
         }
         AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
             SettingsSwitch(
                 key = PREF_ASR_HANAFI_JURISTIC,
                 value = asrMethod == AsrMethod.Hanafi,
-                title = stringResource(R.string.asr_hanafi_juristic),
+                title = stringResource(Res.string.asr_hanafi_juristic),
             )
         }
         AnimatedVisibility(isLocationSet) {
             SettingsClickable(
-                title = stringResource(R.string.athan_gap),
-                summary = stringResource(R.string.athan_gap_summary),
+                title = stringResource(Res.string.athan_gap),
+                summary = stringResource(Res.string.athan_gap_summary),
             ) { onDismissRequest -> AthanGapDialog(onDismissRequest = onDismissRequest) }
         }
 
@@ -160,8 +176,8 @@ fun AthanSettings(
 
         AnimatedVisibility(isLocationSet) {
             SettingsClickable(
-                title = stringResource(R.string.athan_alarm),
-                summary = stringResource(R.string.athan_alarm_summary),
+                title = stringResource(Res.string.athan_alarm),
+                summary = stringResource(Res.string.athan_alarm_summary),
                 defaultOpen = destination == PREF_ATHAN_ALARM,
             ) { onDismissRequest ->
                 if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
@@ -171,13 +187,13 @@ fun AthanSettings(
         }
         AnimatedVisibility(isLocationSet) {
             SettingsClickable(
-                title = stringResource(R.string.custom_athan),
+                title = stringResource(Res.string.custom_athan),
                 summary = athanSoundName?.takeIf { it.isNotBlank() }
-                    ?: stringResource(R.string.default_athan),
+                    ?: stringResource(Res.string.default_athan),
             ) { onDismissRequest -> AthanSelectDialog(onDismissRequest = onDismissRequest) }
         }
         AnimatedVisibility(isLocationSet) {
-            SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
+            SettingsClickable(stringResource(Res.string.preview)) { onDismissRequest ->
                 if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
                     PrayerSelectPreviewDialog(onDismissRequest = onDismissRequest)
                 }
@@ -185,12 +201,12 @@ fun AthanSettings(
         }
         AnimatedVisibility(
             preferencesUpdateToken.let { getEnabledAlarms(context).isNotEmpty() } && isLocationSet && language.isPersianOrDari,
-        ) { SettingsHelp(stringResource(R.string.notification_athan_help)) }
+        ) { SettingsHelp(stringResource(Res.string.notification_athan_help)) }
         AnimatedVisibility(isLocationSet) {
             SettingsSwitch(
                 key = PREF_ATHAN_VIBRATION,
                 value = athanVibration,
-                title = stringResource(R.string.vibration),
+                title = stringResource(Res.string.vibration),
                 summary = language.tryTranslateAthanVibrationSummary(),
                 onBeforeToggle = {
                     invalidateAthanChannel(context)
@@ -203,14 +219,14 @@ fun AthanSettings(
                 mutableStateOf(getMidnightMethodPreferenceSummary(context, resources))
             }
             SettingsClickable(
-                title = stringResource(R.string.midnight),
+                title = stringResource(Res.string.midnight),
                 summary = midnightSummary,
             ) { onDismissRequest ->
                 AppDialog(
-                    title = { Text(stringResource(R.string.midnight)) },
+                    title = { Text(stringResource(Res.string.midnight)) },
                     onDismissRequest = onDismissRequest,
                     dismissButton = {
-                        TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+                        TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
                     },
                 ) {
                     val currentSelectionKey =
@@ -259,6 +275,6 @@ private fun getMidnightMethodPreferenceSummary(context: Context, resources: Reso
 
 private fun midnightMethodToString(resources: Resources, method: MidnightMethod): String {
     return PrayTime.pairFromMidnightMethod(method).joinToString(EN_DASH) {
-        resources.getString(it.stringRes)
+        resources.getString(it.stringResId)
     }
 }

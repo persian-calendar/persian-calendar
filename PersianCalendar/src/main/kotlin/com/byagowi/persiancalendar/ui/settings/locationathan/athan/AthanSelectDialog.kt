@@ -19,12 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.content.IntentCompat
@@ -34,6 +32,15 @@ import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.invalidateAthanChannel
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.abdulbasit
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.custom_athan
+import com.byagowi.persiancalendar.shared.generated.resources.default_athan
+import com.byagowi.persiancalendar.shared.generated.resources.entezar
+import com.byagowi.persiancalendar.shared.generated.resources.moazzenzadeh
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.theme_default
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -43,6 +50,7 @@ import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import org.jetbrains.compose.resources.stringResource
 import java.io.File
 
 @Composable
@@ -94,60 +102,59 @@ fun AthanSelectDialog(
     AppDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
-        title = { Text(stringResource(R.string.custom_athan)) },
+        title = { Text(stringResource(Res.string.custom_athan)) },
         modifier = modifier,
     ) {
         val resources = LocalResources.current
-        remember<List<Pair<Int, () -> Unit>>> {
-            listOf(
-                R.string.default_athan to R.raw.special,
-                R.string.abdulbasit to R.raw.abdulbasit,
-                R.string.moazzenzadeh to R.raw.moazzenzadeh,
-                R.string.entezar to R.raw.entezar,
-            ).map { (stringId, rawId) ->
-                stringId to {
-                    invalidateAthanChannel(context)
-                    context.preferences.edit {
-                        putString(PREF_ATHAN_URI, resources.getRawUri(rawId))
-                        putString(PREF_ATHAN_NAME, resources.getString(stringId))
-                    }
-                    onDismissRequest()
+        listOf(
+            Res.string.default_athan to R.raw.special,
+            Res.string.abdulbasit to R.raw.abdulbasit,
+            Res.string.moazzenzadeh to R.raw.moazzenzadeh,
+            Res.string.entezar to R.raw.entezar,
+        ).map { (stringRes, rawId) ->
+            val title = stringResource(stringRes)
+            stringRes to {
+                invalidateAthanChannel(context)
+                context.preferences.edit {
+                    putString(PREF_ATHAN_URI, resources.getRawUri(rawId))
+                    putString(PREF_ATHAN_NAME, title)
                 }
-            } + listOf(
-                R.string.theme_default to {
-                    runCatching {
-                        deviceRingtone.launch(Unit)
-                    }.onFailure(logException).onFailure {
-                        showUnsupportedActionToast(context)
-                    }.onFailure { onDismissRequest() }
-                },
-                R.string.more to {
-                    runCatching {
-                        soundFilePicker.launch(
-                            arrayOf(
-                                "audio/mpeg", // mpga mpega mp1 mp2 mp3
-                                "audio/aac", // adts aac ass
-                                "audio/midi", // midi
-                                "audio/ac3", // ac3
-                                "audio/flac", // flac
-                                "audio/ogg", // oga ogg opus spx
-                                "audio/mp4", // m4a
-                                "audio/x-wav", // wav
-                            ),
-                        )
-                        if (language.isPersianOrDari) Toast.makeText(
-                            context,
-                            "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
-                            Toast.LENGTH_LONG,
-                        ).show()
-                    }.onFailure(logException).onFailure {
-                        showUnsupportedActionToast(context)
-                    }.onFailure { onDismissRequest() }
-                },
-            )
-        }.forEach { (stringId, callback) ->
+                onDismissRequest()
+            }
+        } + listOf(
+            Res.string.theme_default to {
+                runCatching {
+                    deviceRingtone.launch(Unit)
+                }.onFailure(logException).onFailure {
+                    showUnsupportedActionToast(context)
+                }.onFailure { onDismissRequest() }.let {}
+            },
+            Res.string.more to {
+                runCatching {
+                    soundFilePicker.launch(
+                        arrayOf(
+                            "audio/mpeg", // mpga mpega mp1 mp2 mp3
+                            "audio/aac", // adts aac ass
+                            "audio/midi", // midi
+                            "audio/ac3", // ac3
+                            "audio/flac", // flac
+                            "audio/ogg", // oga ogg opus spx
+                            "audio/mp4", // m4a
+                            "audio/x-wav", // wav
+                        ),
+                    )
+                    if (language.isPersianOrDari) Toast.makeText(
+                        context,
+                        "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
+                        Toast.LENGTH_LONG,
+                    ).show()
+                }.onFailure(logException).onFailure {
+                    showUnsupportedActionToast(context)
+                }.onFailure { onDismissRequest() }.let {}
+            },
+        ).forEach { (stringId, callback) ->
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier

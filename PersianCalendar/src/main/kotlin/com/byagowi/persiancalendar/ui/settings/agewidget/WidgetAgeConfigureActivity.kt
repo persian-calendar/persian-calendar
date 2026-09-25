@@ -18,7 +18,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -27,10 +26,17 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET_START
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.age_widget_title
+import com.byagowi.persiancalendar.shared.generated.resources.select_date
+import com.byagowi.persiancalendar.shared.generated.resources.select_widgets_background_color
+import com.byagowi.persiancalendar.shared.generated.resources.select_widgets_text_color
+import com.byagowi.persiancalendar.shared.generated.resources.starting_date
+import com.byagowi.persiancalendar.shared.generated.resources.widget_background_color
+import com.byagowi.persiancalendar.shared.generated.resources.widget_text_color
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
@@ -40,6 +46,7 @@ import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
+import org.jetbrains.compose.resources.stringResource
 
 class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
@@ -85,7 +92,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
                     putString(PREF_TITLE_AGE_WIDGET + appWidgetId, text)
                 }
             },
-            label = { Text(stringResource(R.string.age_widget_title)) },
+            label = { Text(stringResource(Res.string.age_widget_title)) },
         )
 
         val primaryKey = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
@@ -94,7 +101,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         var primaryJdn by remember {
             mutableStateOf(context.preferences.getJdnOrNull(primaryKey) ?: today)
         }
-        SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
+        SettingsClickable(stringResource(Res.string.select_date)) { onDismissRequest ->
             DatePickerDialog(
                 initialJdn = primaryJdn,
                 onDismissRequest = onDismissRequest,
@@ -110,7 +117,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
             var jdn by remember {
                 mutableStateOf(context.preferences.getJdnOrNull(secondaryKey) ?: today)
             }
-            SettingsClickable(stringResource(R.string.starting_date)) { onDismissRequest ->
+            SettingsClickable(stringResource(Res.string.starting_date)) { onDismissRequest ->
                 DatePickerDialog(
                     initialJdn = jdn,
                     onDismissRequest = onDismissRequest,
@@ -127,16 +134,16 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
         WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
         AnimatedVisibility(!prefersWidgetsDynamicColors) {
             SettingsColor(
-                title = stringResource(R.string.widget_text_color),
-                summary = stringResource(R.string.select_widgets_text_color),
+                title = stringResource(Res.string.widget_text_color),
+                summary = stringResource(Res.string.select_widgets_text_color),
                 isBackgroundPick = false,
                 key = PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
             )
         }
         AnimatedVisibility(!prefersWidgetsDynamicColors) {
             SettingsColor(
-                title = stringResource(R.string.widget_background_color),
-                summary = stringResource(R.string.select_widgets_background_color),
+                title = stringResource(Res.string.widget_background_color),
+                summary = stringResource(Res.string.select_widgets_background_color),
                 isBackgroundPick = true,
                 key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
             )

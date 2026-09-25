@@ -32,14 +32,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.ui.BaseActivity
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import org.jetbrains.compose.resources.stringResource
 
 // This is used in various widgets screens, screensaver and wallpaper settings screens
 // Please test the different usages when modifying
@@ -97,7 +98,7 @@ abstract class BaseConfigurationActivity(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 Spacer(Modifier.height(16.dp))
-                                Button(onClick = ::onAcceptClick) { Text(stringResource(R.string.accept)) }
+                                Button(onClick = ::onAcceptClick) { Text(stringResource(Res.string.accept)) }
                                 Spacer(Modifier.height(4.dp))
                                 Settings()
                                 Spacer(Modifier.height(16.dp))

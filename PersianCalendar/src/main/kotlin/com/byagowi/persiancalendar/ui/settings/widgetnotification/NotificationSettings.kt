@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -20,13 +19,19 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.enable_notify
+import com.byagowi.persiancalendar.shared.generated.resources.large_day_number_on_notification
+import com.byagowi.persiancalendar.shared.generated.resources.notify_date
+import com.byagowi.persiancalendar.shared.generated.resources.notify_date_lock_screen
+import com.byagowi.persiancalendar.shared.generated.resources.notify_date_lock_screen_summary
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.utils.preferences
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NotificationSettings(modifier: Modifier = Modifier) {
@@ -39,8 +44,8 @@ fun NotificationSettings(modifier: Modifier = Modifier) {
             SettingsSwitch(
                 key = PREF_NOTIFY_DATE,
                 value = isNotifyDate,
-                title = stringResource(R.string.notify_date),
-                summary = stringResource(R.string.enable_notify),
+                title = stringResource(Res.string.notify_date),
+                summary = stringResource(Res.string.enable_notify),
                 onBeforeToggle = { value: Boolean ->
                     if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
                             context, Manifest.permission.POST_NOTIFICATIONS,
@@ -56,8 +61,8 @@ fun NotificationSettings(modifier: Modifier = Modifier) {
             SettingsSwitch(
                 key = PREF_NOTIFY_DATE_LOCK_SCREEN,
                 value = isNotifyDateOnLockScreen,
-                title = stringResource(R.string.notify_date_lock_screen),
-                summary = stringResource(R.string.notify_date_lock_screen_summary),
+                title = stringResource(Res.string.notify_date_lock_screen),
+                summary = stringResource(Res.string.notify_date_lock_screen_summary),
             )
         }
         AnimatedVisibility(isNotifyDate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -69,7 +74,7 @@ fun NotificationSettings(modifier: Modifier = Modifier) {
                 SettingsSwitch(
                     key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
                     value = isLargeDayNumberOnNotification,
-                    title = stringResource(R.string.large_day_number_on_notification),
+                    title = stringResource(Res.string.large_day_number_on_notification),
                     summary = when {
                         language.isPersianOrDari -> "نمایش روز ماه به صورت عددی بزرگ در اعلان برنامه"
                         else -> null

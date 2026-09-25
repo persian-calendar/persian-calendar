@@ -14,15 +14,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.athan_gap_summary
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.preferences
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
 @Composable
@@ -41,7 +44,7 @@ fun AthanGapDialog(
     }
     AppDialog(
         modifier = modifier,
-        title = { Text(stringResource(R.string.athan_gap_summary)) },
+        title = { Text(stringResource(Res.string.athan_gap_summary)) },
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
@@ -52,10 +55,10 @@ fun AthanGapDialog(
                         putString(PREF_ATHAN_GAP, "$value")
                     }
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {

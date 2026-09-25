@@ -1,12 +1,13 @@
 package com.byagowi.persiancalendar.ui.dialogs
 
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
+import org.jetbrains.compose.resources.stringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,7 +20,7 @@ class CoordinatesDialogTest {
         var showDialog = true
         var cancelString = ""
         composeTestRule.setContent {
-            cancelString = stringResource(R.string.cancel)
+            cancelString = stringResource(Res.string.cancel)
             if (showDialog) CoordinatesDialog { showDialog = false }
         }
         assert(showDialog)

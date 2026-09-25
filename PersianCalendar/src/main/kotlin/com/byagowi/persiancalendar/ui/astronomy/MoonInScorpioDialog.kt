@@ -41,7 +41,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +53,12 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.astronomy
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
+import com.byagowi.persiancalendar.shared.generated.resources.tropical
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NumberEdit
@@ -64,6 +69,7 @@ import com.byagowi.persiancalendar.utils.lunarLongitude
 import com.byagowi.persiancalendar.utils.searchLunarLongitude
 import com.byagowi.persiancalendar.utils.toCivilDate
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import java.util.GregorianCalendar
 import kotlin.math.abs
 
@@ -90,10 +96,10 @@ fun MoonInScorpioDialog(
     val currentYear = (today on mainCalendar).year
     val types = listOf(
         run {
-            if (language.isPersianOrDari) "برج" else stringResource(R.string.tropical)
+            if (language.isPersianOrDari) "برج" else stringResource(Res.string.tropical)
         } to Zodiac.SCORPIO.tropicalRange,
         run {
-            if (language.isPersianOrDari) "صورت فلکی" else stringResource(R.string.astronomy)
+            if (language.isPersianOrDari) "صورت فلکی" else stringResource(Res.string.astronomy)
         } to Zodiac.SCORPIO.iauRange,
     )
     val yearPagerState = rememberPagerState(initialPage = yearPages / 2, pageCount = { yearPages })
@@ -117,7 +123,7 @@ fun MoonInScorpioDialog(
                     when (action) {
                         HeaderAction.Confirm -> AppIconButton(
                             icon = Icons.Default.Done,
-                            title = stringResource(R.string.accept),
+                            title = stringResource(Res.string.accept),
                             onClick = { pendingConfirms.forEach { it() } },
                         )
 
@@ -156,7 +162,7 @@ fun MoonInScorpioDialog(
                                 }
                             }
                             Text(
-                                stringResource(R.string.moon_in_scorpio) + spacedComma + numeral.format(
+                                stringResource(Res.string.moon_in_scorpio) + spacedComma + numeral.format(
                                     year,
                                 ),
                                 maxLines = 1,
@@ -176,7 +182,7 @@ fun MoonInScorpioDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
     ) {
         val pagerState = rememberPagerState(initialPage = 0, pageCount = { types.size })

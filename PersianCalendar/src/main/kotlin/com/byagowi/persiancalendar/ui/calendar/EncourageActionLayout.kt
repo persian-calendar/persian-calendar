@@ -22,20 +22,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.ignore
+import com.byagowi.persiancalendar.shared.generated.resources.settings
 import com.byagowi.persiancalendar.ui.theme.animateColor
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ColumnScope.EncourageActionLayout(
     header: String,
     modifier: Modifier = Modifier,
     hideOnAccept: Boolean = true,
-    acceptButton: String = stringResource(R.string.settings),
+    acceptButton: String = stringResource(Res.string.settings),
     discardAction: () -> Unit = {},
     acceptAction: () -> Unit,
 ) {
@@ -65,7 +67,7 @@ fun ColumnScope.EncourageActionLayout(
                         shown = false
                     },
                     Modifier.weight(1f),
-                ) { Text(stringResource(R.string.ignore), textAlign = TextAlign.Center) }
+                ) { Text(stringResource(Res.string.ignore), textAlign = TextAlign.Center) }
                 Spacer(Modifier.width(8.dp))
                 val defaultButtonColors = ButtonDefaults.buttonColors()
                 Button(

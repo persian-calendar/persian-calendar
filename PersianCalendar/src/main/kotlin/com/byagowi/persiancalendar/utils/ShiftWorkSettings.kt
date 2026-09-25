@@ -3,11 +3,9 @@ package com.byagowi.persiancalendar.utils
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.numeral
@@ -16,7 +14,9 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.days
+import com.byagowi.persiancalendar.shared.generated.resources.days_distance
 import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Stable
 data class ShiftWorkSettings(
@@ -66,7 +66,7 @@ data class ShiftWorkSettings(
         if ((jdn - today) !in 1..365) return null
         val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::workTitle)
         if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
-        @Suppress("SimplifiableCallChain") return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
+        @Suppress("SimplifiableCallChain") return stringResource(Res.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
             pluralStringResource(
                 Res.plurals.days, days.size, numeral.format(days.size),
             ) + " " + title

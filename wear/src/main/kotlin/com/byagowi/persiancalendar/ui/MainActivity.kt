@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@JvmSynthetic
 @Composable
 private fun WearApp() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

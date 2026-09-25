@@ -7,8 +7,10 @@ import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.resume
+import com.byagowi.persiancalendar.shared.generated.resources.stop
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun StopButton(
@@ -23,7 +25,9 @@ fun StopButton(
         Crossfade(targetState = isStopped) { isStopped ->
             Icon(
                 imageVector = if (isStopped) Icons.Default.PlayArrow else Icons.Default.Stop,
-                contentDescription = stringResource(if (isStopped) R.string.resume else R.string.stop),
+                contentDescription = stringResource(
+                    if (isStopped) Res.string.resume else Res.string.stop,
+                ),
             )
         }
     }

@@ -19,20 +19,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.location
+import com.byagowi.persiancalendar.shared.generated.resources.more
 import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveCity
 import com.byagowi.persiancalendar.utils.sortCityNames
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LocationDialog(
@@ -49,12 +51,12 @@ fun LocationDialog(
     AppDialogWithLazyColumn(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.location)) },
+        title = { Text(stringResource(Res.string.location)) },
         confirmButton = if (language.isIranExclusive) ({
             TextButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { showProvincesDialog = true },
-            ) { Text(stringResource(R.string.more), Modifier.padding(8.dp)) }
+            ) { Text(stringResource(Res.string.more), Modifier.padding(8.dp)) }
         }) else null,
     ) {
         items(cities, key = { it.key }) { city ->

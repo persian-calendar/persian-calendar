@@ -45,7 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -92,6 +91,26 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.astronomical_info_summary
+import com.byagowi.persiancalendar.shared.generated.resources.astronomy
+import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority
+import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority_summary
+import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.events
+import com.byagowi.persiancalendar.shared.generated.resources.events_summary
+import com.byagowi.persiancalendar.shared.generated.resources.hijri_offset
+import com.byagowi.persiancalendar.shared.generated.resources.hijri_offset_summary
+import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
+import com.byagowi.persiancalendar.shared.generated.resources.settings
+import com.byagowi.persiancalendar.shared.generated.resources.show_device_calendar_events
+import com.byagowi.persiancalendar.shared.generated.resources.show_device_calendar_events_summary
+import com.byagowi.persiancalendar.shared.generated.resources.week_ends
+import com.byagowi.persiancalendar.shared.generated.resources.week_ends_summary
+import com.byagowi.persiancalendar.shared.generated.resources.week_number
+import com.byagowi.persiancalendar.shared.generated.resources.week_number_summary
+import com.byagowi.persiancalendar.shared.generated.resources.week_start
+import com.byagowi.persiancalendar.shared.generated.resources.week_start_summary
 import com.byagowi.persiancalendar.ui.about.EnableInDeviceCalendar
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -108,6 +127,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import java.util.TimeZone
 
 @Composable
@@ -126,8 +146,8 @@ fun CalendarSettings(
         AnimatedVisibility(language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars) {
             var shownOnce by rememberSaveable { mutableStateOf(false) }
             SettingsClickable(
-                title = stringResource(R.string.events),
-                summary = stringResource(R.string.events_summary),
+                title = stringResource(Res.string.events),
+                summary = stringResource(Res.string.events_summary),
                 defaultOpen = destination == PREF_HOLIDAY_TYPES && destinationItem != PREF_SHOW_DEVICE_CALENDAR_EVENTS,
             ) { onDismissRequest ->
                 HolidaysTypesDialog(destinationItem = destinationItem.takeIf { !shownOnce }) {
@@ -141,8 +161,8 @@ fun CalendarSettings(
             SettingsSwitch(
                 key = PREF_SHOW_DEVICE_CALENDAR_EVENTS,
                 value = isShowDeviceCalendarEvents,
-                title = stringResource(R.string.show_device_calendar_events),
-                summary = stringResource(R.string.show_device_calendar_events_summary),
+                title = stringResource(Res.string.show_device_calendar_events),
+                summary = stringResource(Res.string.show_device_calendar_events_summary),
                 onBeforeToggle = {
                     if (it && ActivityCompat.checkSelfPermission(
                             context, Manifest.permission.READ_CALENDAR,
@@ -170,8 +190,8 @@ fun CalendarSettings(
         }
         Box(Modifier.highlightItem(destination == PREF_MAIN_CALENDAR_KEY)) {
             SettingsClickable(
-                title = stringResource(R.string.calendars_priority),
-                summary = stringResource(R.string.calendars_priority_summary),
+                title = stringResource(Res.string.calendars_priority),
+                summary = stringResource(Res.string.calendars_priority_summary),
                 defaultOpen = destination == PREF_MAIN_CALENDAR_KEY,
             ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest = onDismissRequest) }
         }
@@ -181,8 +201,8 @@ fun CalendarSettings(
             SettingsSwitch(
                 key = PREF_ASTRONOMICAL_FEATURES,
                 value = isAstronomicalExtraFeaturesEnabled,
-                title = stringResource(R.string.astronomy),
-                summary = stringResource(R.string.astronomical_info_summary),
+                title = stringResource(Res.string.astronomy),
+                summary = stringResource(Res.string.astronomical_info_summary),
                 onBeforeToggle = {
                     val preferences = context.preferences
                     if (PREF_SHOW_MOON_IN_SCORPIO !in preferences) preferences.edit {
@@ -196,7 +216,7 @@ fun CalendarSettings(
                 SettingsSwitch(
                     key = PREF_SHOW_MOON_IN_SCORPIO,
                     value = showMoonInScorpio,
-                    title = stringResource(R.string.moon_in_scorpio),
+                    title = stringResource(Res.string.moon_in_scorpio),
                     extraWidget = {
                         Row(
                             Modifier
@@ -249,9 +269,9 @@ fun CalendarSettings(
                 entries = remember(numeral) { (-2..2).map(numeral::format) },
                 entryValues = remember { (-2..2).map { it.toString() } },
                 persistedValue = hijriCalendarOffset.toString(),
-                dialogTitleResId = R.string.hijri_offset,
-                title = stringResource(R.string.hijri_offset),
-                summaryResId = R.string.hijri_offset_summary,
+                dialogTitleResId = Res.string.hijri_offset,
+                title = stringResource(Res.string.hijri_offset),
+                summaryResId = Res.string.hijri_offset_summary,
             )
         }
         val weekDays = remember(weekStart) { WeekDay.entries.map { it + weekStart.ordinal } }
@@ -263,16 +283,16 @@ fun CalendarSettings(
             entries = weekDaysTitles,
             entryValues = weekDaysValues,
             persistedValue = weekStart.ordinal.toString(),
-            dialogTitleResId = R.string.week_start_summary,
-            title = stringResource(R.string.week_start),
+            dialogTitleResId = Res.string.week_start_summary,
+            title = stringResource(Res.string.week_start),
         )
         SettingsMultiSelect(
             key = PREF_WEEK_ENDS,
             entries = weekDaysTitles,
             entryValues = weekDaysValues,
             persistedSet = weekEnds.map { it.ordinal.toString() }.toSet(),
-            dialogTitleResId = R.string.week_ends_summary,
-            title = stringResource(R.string.week_ends),
+            dialogTitleRes = Res.string.week_ends_summary,
+            title = stringResource(Res.string.week_ends),
         )
     }
 }
@@ -282,8 +302,8 @@ fun WeekOfYearSetting() {
     SettingsSwitch(
         key = PREF_SHOW_WEEK_OF_YEAR_NUMBER,
         value = isShowWeekOfYearEnabled,
-        title = stringResource(R.string.week_number),
-        summary = stringResource(R.string.week_number_summary),
+        title = stringResource(Res.string.week_number),
+        summary = stringResource(Res.string.week_number_summary),
     )
 }
 
@@ -297,7 +317,7 @@ private fun FilledSettingsButton(onClick: () -> Unit) {
     FilledIconButton(colors = colors, onClick = onClick) {
         Icon(
             Icons.Default.Settings,
-            contentDescription = stringResource(R.string.settings),
+            contentDescription = stringResource(Res.string.settings),
         )
     }
 }
@@ -343,7 +363,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
     AppDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.close)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.close)) }
         },
         neutralButton = {
             Row {

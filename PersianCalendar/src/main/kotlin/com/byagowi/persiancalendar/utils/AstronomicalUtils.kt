@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
-import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
@@ -14,6 +13,19 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.earth
+import com.byagowi.persiancalendar.shared.generated.resources.empty
+import com.byagowi.persiancalendar.shared.generated.resources.jupiter
+import com.byagowi.persiancalendar.shared.generated.resources.mars
+import com.byagowi.persiancalendar.shared.generated.resources.mercury
+import com.byagowi.persiancalendar.shared.generated.resources.moon
+import com.byagowi.persiancalendar.shared.generated.resources.neptune
+import com.byagowi.persiancalendar.shared.generated.resources.pluto
+import com.byagowi.persiancalendar.shared.generated.resources.saturn
+import com.byagowi.persiancalendar.shared.generated.resources.sun
+import com.byagowi.persiancalendar.shared.generated.resources.uranus
+import com.byagowi.persiancalendar.shared.generated.resources.venus
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import io.github.cosinekitty.astronomy.Aberration
@@ -28,6 +40,7 @@ import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.search
 import io.github.cosinekitty.astronomy.sunPosition
+import org.jetbrains.compose.resources.StringResource
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -150,8 +163,24 @@ fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
     return Math.toDegrees(atan2(vec.z, vec.y))
 }
 
+val Body.titleStringRes
+    get(): StringResource = when (this) {
+        Body.Mercury -> Res.string.mercury
+        Body.Venus -> Res.string.venus
+        Body.Earth -> Res.string.earth
+        Body.Mars -> Res.string.mars
+        Body.Jupiter -> Res.string.jupiter
+        Body.Saturn -> Res.string.saturn
+        Body.Uranus -> Res.string.uranus
+        Body.Neptune -> Res.string.neptune
+        Body.Pluto -> Res.string.pluto
+        Body.Sun -> Res.string.sun
+        Body.Moon -> Res.string.moon
+        else -> Res.string.empty
+    }
+
 val Body.titleStringId
-    @StringRes get(): Int = when (this) {
+    get(): Int = when (this) {
         Body.Mercury -> R.string.mercury
         Body.Venus -> R.string.venus
         Body.Earth -> R.string.earth

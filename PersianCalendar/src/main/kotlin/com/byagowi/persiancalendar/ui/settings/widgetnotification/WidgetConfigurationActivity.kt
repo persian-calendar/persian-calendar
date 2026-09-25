@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.today
@@ -14,6 +13,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColors
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.location
 import com.byagowi.persiancalendar.ui.settings.SettingsSectionLayout
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.WeekOfYearSetting
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationSettings
@@ -115,7 +116,7 @@ class Widget4x2ConfigurationActivity : BaseWidgetConfigurationActivity() {
     override fun ColumnScope.Settings() {
         TextScaleSettings()
         WidgetSettings()
-        SettingsSectionLayout(R.string.location)
+        SettingsSectionLayout(Res.string.location)
         LocationSettings()
     }
 }
@@ -141,7 +142,7 @@ class WidgetSunViewConfigurationActivity : BaseWidgetConfigurationActivity() {
     @Composable
     override fun ColumnScope.Settings() {
         WidgetColoringSettings()
-        SettingsSectionLayout(R.string.location)
+        SettingsSectionLayout(Res.string.location)
         LocationSettings()
     }
 }

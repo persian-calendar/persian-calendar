@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -31,9 +30,18 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.altitude
+import com.byagowi.persiancalendar.shared.generated.resources.altitude_praytime
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.coordinates
+import com.byagowi.persiancalendar.shared.generated.resources.latitude
+import com.byagowi.persiancalendar.shared.generated.resources.longitude
+import com.byagowi.persiancalendar.shared.generated.resources.map
+import com.byagowi.persiancalendar.shared.generated.resources.save
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -42,6 +50,7 @@ import com.byagowi.persiancalendar.utils.geocode
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
 @Composable
@@ -57,9 +66,9 @@ fun CoordinatesDialog(
 ) {
     val coordinates = inputCoordinates ?: coordinates
     val fields = listOf(
-        R.string.latitude to PREF_LATITUDE,
-        R.string.longitude to PREF_LONGITUDE,
-        R.string.altitude to PREF_ALTITUDE,
+        Res.string.latitude to PREF_LATITUDE,
+        Res.string.longitude to PREF_LONGITUDE,
+        Res.string.altitude to PREF_ALTITUDE,
     )
     val state = (coordinates?.run { listOf(latitude, longitude, elevation) }
         ?: List(3) { .0 }).map { rememberSaveable { mutableStateOf(it.toString()) } }
@@ -77,7 +86,7 @@ fun CoordinatesDialog(
         }
     }
     AppDialog(
-        title = { Text(stringResource(R.string.coordinates)) },
+        title = { Text(stringResource(Res.string.coordinates)) },
         neutralButton = {
             navigateToMap?.also {
                 TextButton(
@@ -85,15 +94,15 @@ fun CoordinatesDialog(
                         onDismissRequest()
                         navigateToMap()
                     },
-                ) { Text(stringResource(R.string.map)) }
+                ) { Text(stringResource(Res.string.map)) }
             }
             if (isFromMap) SwitchWithLabel(
-                stringResource(R.string.save),
+                stringResource(Res.string.save),
                 checked = saveCoordinates,
             ) { toggleSaveCoordinates(it) }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
         confirmButton = {
             val context = LocalContext.current
@@ -117,12 +126,12 @@ fun CoordinatesDialog(
                         notifyChange(newCoordinates)
                     } else context.preferences.edit { fields.map { it.second }.forEach(::remove) }
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
         modifier = modifier,
     ) {
-        fields.zip(state.withIndex()) { (stringId), (i, fieldState) ->
+        fields.zip(state.withIndex()) { (stringRes), (i, fieldState) ->
             val uiDirection = LocalLayoutDirection.current
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 TextField(
@@ -131,12 +140,12 @@ fun CoordinatesDialog(
                         .padding(vertical = 2.dp),
                     label = {
                         CompositionLocalProvider(LocalLayoutDirection provides uiDirection) {
-                            Text(stringResource(stringId), modifier = Modifier.fillMaxWidth())
+                            Text(stringResource(stringRes), modifier = Modifier.fillMaxWidth())
                         }
                     },
                     isError = parseDouble(fieldState.value)?.takeIf { isValidPart(it, i) } == null,
                     value = numeral.format(fieldState.value, isInEdit = true).let {
-                        if (stringId == R.string.altitude) it else it.replace("°", "") + "°"
+                        if (stringRes == Res.string.altitude) it else it.replace("°", "") + "°"
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     onValueChange = {
@@ -147,7 +156,7 @@ fun CoordinatesDialog(
             }
         }
         Text(
-            stringResource(R.string.altitude_praytime),
+            stringResource(Res.string.altitude_praytime),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier
                 .fillMaxWidth()

@@ -18,19 +18,23 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.athan_alarm
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.preview
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.utils.startAthan
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PrayerSelectDialog(
@@ -45,7 +49,7 @@ fun PrayerSelectDialog(
     AppDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.athan_alarm)) },
+        title = { Text(stringResource(Res.string.athan_alarm)) },
         confirmButton = {
             TextButton(
                 onClick = {
@@ -57,10 +61,10 @@ fun PrayerSelectDialog(
                         )
                     }
                 },
-            ) { Text(stringResource(R.string.accept)) }
+            ) { Text(stringResource(Res.string.accept)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
     ) {
         PrayTime.athans.forEach { alarm ->
@@ -90,9 +94,9 @@ fun PrayerSelectPreviewDialog(
     AppDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.preview)) },
+        title = { Text(stringResource(Res.string.preview)) },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
         },
     ) {
         val context = LocalContext.current

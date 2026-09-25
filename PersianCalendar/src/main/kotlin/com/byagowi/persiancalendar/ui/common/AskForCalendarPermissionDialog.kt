@@ -14,15 +14,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.calendar_access
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
+import com.byagowi.persiancalendar.shared.generated.resources.continue_button
+import com.byagowi.persiancalendar.shared.generated.resources.phone_calendar_required
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.preferences
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AskForCalendarPermissionDialog(
@@ -54,14 +58,14 @@ fun AskForCalendarPermissionDialog(
     var showDialog by rememberSaveable { mutableStateOf(true) }
     if (showDialog) AppDialog(
         modifier = modifier,
-        title = { Text(stringResource(R.string.calendar_access)) },
+        title = { Text(stringResource(Res.string.calendar_access)) },
         confirmButton = {
             TextButton(
                 onClick = {
                     showDialog = false
                     launcher.launch(Manifest.permission.READ_CALENDAR)
                 },
-            ) { Text(stringResource(R.string.continue_button)) }
+            ) { Text(stringResource(Res.string.continue_button)) }
         },
         dismissButton = {
             TextButton(
@@ -69,12 +73,12 @@ fun AskForCalendarPermissionDialog(
                     context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
                     setGranted(false)
                 },
-            ) { Text(stringResource(R.string.cancel)) }
+            ) { Text(stringResource(Res.string.cancel)) }
         },
         onDismissRequest = { setGranted(false) },
     ) {
         Text(
-            stringResource(R.string.phone_calendar_required),
+            stringResource(Res.string.phone_calendar_required),
             Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
         )
     }

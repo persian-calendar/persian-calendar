@@ -47,17 +47,20 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.keepScreenOn
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.compass
+import com.byagowi.persiancalendar.shared.generated.resources.exit_full_screen
+import com.byagowi.persiancalendar.shared.generated.resources.full_screen
+import com.byagowi.persiancalendar.shared.generated.resources.level
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppFloatingActionButton
@@ -69,6 +72,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 
@@ -99,7 +103,7 @@ fun SharedTransitionScope.LevelScreen(
     Column(modifier.then(if (isFullscreen) Modifier.keepScreenOn() else Modifier)) {
         AnimatedVisibility(visible = !isFullscreen) {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
-                title = { Text(stringResource(R.string.level)) },
+                title = { Text(stringResource(Res.string.level)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
@@ -116,7 +120,7 @@ fun SharedTransitionScope.LevelScreen(
                     }
                     AppIconButton(
                         icon = Icons.Default.Fullscreen,
-                        title = stringResource(R.string.full_screen),
+                        title = stringResource(Res.string.full_screen),
                     ) { isFullscreen = true }
                 },
             )
@@ -160,7 +164,7 @@ fun SharedTransitionScope.LevelScreen(
                 Crossfade(isFullscreen) {
                     if (!it) AppIconButton(
                         icon = Icons.Default.Explore,
-                        title = stringResource(R.string.compass),
+                        title = stringResource(Res.string.compass),
                         modifier = Modifier.sharedBounds(
                             sharedContentState = rememberSharedContentState(
                                 key = SHARED_CONTENT_KEY_COMPASS,
@@ -203,7 +207,7 @@ fun SharedTransitionScope.LevelScreen(
             isVisible = isFullscreen,
             action = { isFullscreen = false },
             icon = Icons.Default.FullscreenExit,
-            title = stringResource(R.string.exit_full_screen),
+            title = stringResource(Res.string.exit_full_screen),
         )
     }
 }

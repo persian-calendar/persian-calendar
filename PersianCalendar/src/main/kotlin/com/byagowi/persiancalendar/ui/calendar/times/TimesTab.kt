@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -37,13 +36,16 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.location
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.settings
 import com.byagowi.persiancalendar.ui.calendar.TabEditButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
@@ -57,6 +59,7 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.title
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.TimesTab(
@@ -84,7 +87,7 @@ fun SharedTransitionScope.TimesTab(
             Modifier
                 .fillMaxWidth()
                 .clickable(
-                    onClickLabel = stringResource(R.string.more),
+                    onClickLabel = stringResource(Res.string.more),
                     onClick = { isExpanded = !isExpanded },
                 )
                 .padding(vertical = 12.dp),
@@ -110,10 +113,10 @@ fun SharedTransitionScope.TimesTab(
                     modifier = Modifier.combinedClickable(
                         indication = null,
                         interactionSource = null,
-                        onClickLabel = stringResource(R.string.more),
+                        onClickLabel = stringResource(Res.string.more),
                         onClick = { isExpanded = !isExpanded },
                         onLongClickLabel = if (language.isPersianOrDari) "تنظیم مکان" else {
-                            stringResource(R.string.location)
+                            stringResource(Res.string.location)
                         },
                         onLongClick = { navigateToSettingsLocationTab() },
                     ),
@@ -133,9 +136,9 @@ fun SharedTransitionScope.TimesTab(
                     .combinedClickable(
                         indication = null,
                         interactionSource = null,
-                        onClickLabel = stringResource(R.string.more),
+                        onClickLabel = stringResource(Res.string.more),
                         onClick = { isExpanded = !isExpanded },
-                        onLongClickLabel = stringResource(R.string.settings),
+                        onLongClickLabel = stringResource(Res.string.settings),
                         onLongClick = { navigateToSettingsLocationTab() },
                     )
                     .align(Alignment.CenterHorizontally),
@@ -149,7 +152,7 @@ fun SharedTransitionScope.TimesTab(
 
         TabEditButton(
             action = navigateToSettingsLocationTab,
-            title = stringResource(R.string.settings),
+            title = stringResource(Res.string.settings),
             visible = isExpanded,
         )
     }

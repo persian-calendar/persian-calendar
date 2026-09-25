@@ -1,16 +1,18 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.about_license_title
+import com.byagowi.persiancalendar.shared.generated.resources.device_information
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
+import org.jetbrains.compose.resources.stringResource
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,7 +28,7 @@ class AboutScreenTest {
         var navigateToDeviceInformationIsCalled = false
         var deviceInformationString = ""
         composeTestRule.setContent {
-            deviceInformationString = stringResource(R.string.device_information)
+            deviceInformationString = stringResource(Res.string.device_information)
             NavigationMock {
                 AboutScreen(
                     openNavigationRail = {},
@@ -46,7 +48,7 @@ class AboutScreenTest {
         var navigateToLicensesIsCalled = false
         var licensesString = ""
         composeTestRule.setContent {
-            licensesString = stringResource(R.string.about_license_title)
+            licensesString = stringResource(Res.string.about_license_title)
             NavigationMock {
                 AboutScreen(
                     openNavigationRail = {},

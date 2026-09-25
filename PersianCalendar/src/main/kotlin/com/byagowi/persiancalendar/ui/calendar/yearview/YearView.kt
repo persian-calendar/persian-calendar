@@ -45,14 +45,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.util.lruCache
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -65,6 +63,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.select_month
+import com.byagowi.persiancalendar.shared.generated.resources.select_year
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
@@ -288,7 +287,7 @@ fun YearView(
                                 .background(LocalContentColor.current.copy(alpha = alpha))
                                 .padding((32 * alpha).dp)
                                 .then(detectZoom)
-                                .clickable(onClickLabel = stringResource(R.string.select_year)) {
+                                .clickable(onClickLabel = stringResource(Res.string.select_year)) {
                                     coroutineScope.launch {
                                         if (scale.floatValue == yearSelectionModeScale) {
                                             scale.floatValue = 1f

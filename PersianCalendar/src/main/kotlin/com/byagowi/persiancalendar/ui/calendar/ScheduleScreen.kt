@@ -39,12 +39,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
@@ -55,6 +53,12 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.print
+import com.byagowi.persiancalendar.shared.generated.resources.schedule
+import com.byagowi.persiancalendar.shared.generated.resources.select_date
+import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -72,6 +76,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
 @Composable
@@ -121,7 +126,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 modifier = swipeDownModifier,
                 title = {
                     val date = firstVisibleItemJdn on mainCalendar
-                    val screenTitle = stringResource(R.string.schedule)
+                    val screenTitle = stringResource(Res.string.schedule)
                     Column(Modifier.semantics { this.contentDescription = screenTitle }) {
                         Crossfade(targetState = date.monthName) { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
@@ -161,7 +166,7 @@ fun SharedTransitionScope.ScheduleScreen(
                     }
 
                     ThreeDotsDropdownMenu { closeMenu ->
-                        AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
+                        AppDropdownMenuItem({ Text(stringResource(Res.string.select_date)) }) {
                             showDatePickerDialog = true
                             closeMenu()
                         }
@@ -177,7 +182,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             }.onFailure(logException)
                         }
                         AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.print)) },
+                            text = { Text(stringResource(Res.string.print)) },
                             trailingIcon = {
                                 Box(
                                     Modifier
@@ -187,11 +192,11 @@ fun SharedTransitionScope.ScheduleScreen(
                                             indication = ripple(bounded = false),
                                             interactionSource = null,
                                             onClick = { showPrintReport() },
-                                            onClickLabel = stringResource(R.string.print),
+                                            onClickLabel = stringResource(Res.string.print),
                                             onLongClick = { showPrintReport(true) },
                                             onLongClickLabel = language.inParentheses.format(
-                                                stringResource(R.string.print),
-                                                stringResource(R.string.year),
+                                                stringResource(Res.string.print),
+                                                stringResource(Res.string.year),
                                             ),
                                         ),
                                 ) { /*Icon(Icons.Default.Print, contentDescription = "Print")*/ }
@@ -217,7 +222,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 items(ITEMS_COUNT) { index ->
                     val jdn = indexToJdn(baseJdn, index)
                     if (index == 0 || index == ITEMS_COUNT - 1) return@items MoreButton(
-                        title = stringResource(R.string.more),
+                        title = stringResource(Res.string.more),
                         modifier = Modifier.padding(
                             top = if (index == 0) 20.dp else 16.dp,
                             bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),

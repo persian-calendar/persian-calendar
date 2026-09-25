@@ -82,7 +82,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -105,6 +104,21 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.astronomy
+import com.byagowi.persiancalendar.shared.generated.resources.day
+import com.byagowi.persiancalendar.shared.generated.resources.horoscope
+import com.byagowi.persiancalendar.shared.generated.resources.map
+import com.byagowi.persiancalendar.shared.generated.resources.moon
+import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.planetary_hours
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.shared.generated.resources.select_date
+import com.byagowi.persiancalendar.shared.generated.resources.sun
+import com.byagowi.persiancalendar.shared.generated.resources.today
+import com.byagowi.persiancalendar.shared.generated.resources.tropical
+import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -129,7 +143,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.symbol
-import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.titleStringRes
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toObserver
@@ -142,6 +156,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import java.util.Date
 import kotlin.math.PI
 import kotlin.math.cos
@@ -231,7 +246,7 @@ fun SharedTransitionScope.AstronomyScreen(
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     Text(
-                        stringResource(R.string.astronomy),
+                        stringResource(Res.string.astronomy),
                         maxLines = 1,
                         autoSize = TextAutoSize.StepBased(
                             maxFontSize = LocalTextStyle.current.fontSize,
@@ -252,7 +267,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     ) { resetButtonAction() }
                     AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
-                            label = stringResource(R.string.tropical),
+                            label = stringResource(Res.string.tropical),
                             checked = isTropical,
                             labelBeforeSwitch = true,
                             useUncheckedBorderColorForChecked = true,
@@ -284,22 +299,22 @@ fun SharedTransitionScope.AstronomyScreen(
                     ) { showMoonInScorpioDialog = false }
 
                     ThreeDotsDropdownMenu { closeMenu ->
-                        AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
+                        AppDropdownMenuItem({ Text(stringResource(Res.string.select_date)) }) {
                             closeMenu()
                             isDatePickerDialogShown = true
                         }
-                        AppDropdownMenuItem({ Text(stringResource(R.string.map)) }) {
+                        AppDropdownMenuItem({ Text(stringResource(Res.string.map)) }) {
                             closeMenu()
                             navigateToMap(timeInMillis.longValue)
                         }
-                        AppDropdownMenuItem({ Text(stringResource(R.string.horoscope)) }) {
+                        AppDropdownMenuItem({ Text(stringResource(Res.string.horoscope)) }) {
                             showHoroscopeDialog = true
                             closeMenu()
                         }
                         AppDropdownMenuItem(
                             text = {
-                                val horoscopeString = stringResource(R.string.horoscope)
-                                val yearString = stringResource(R.string.year)
+                                val horoscopeString = stringResource(Res.string.horoscope)
+                                val yearString = stringResource(Res.string.year)
                                 Text(horoscopeString + spacedComma + yearString)
                             },
                         ) {
@@ -307,13 +322,13 @@ fun SharedTransitionScope.AstronomyScreen(
                             closeMenu()
                         }
                         if (coordinates != null) AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.planetary_hours)) },
+                            text = { Text(stringResource(Res.string.planetary_hours)) },
                         ) {
                             showPlanetaryHoursDialog = true
                             closeMenu()
                         }
                         AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.moon_in_scorpio)) },
+                            text = { Text(stringResource(Res.string.moon_in_scorpio)) },
                         ) {
                             showMoonInScorpioDialog = true
                             closeMenu()
@@ -505,9 +520,9 @@ private fun SharedTransitionScope.SliderBar(
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = showDatePickerDialog,
-                    onClickLabel = stringResource(R.string.select_date),
+                    onClickLabel = stringResource(Res.string.select_date),
                     onLongClick = resetButtonAction,
-                    onLongClickLabel = stringResource(R.string.today),
+                    onLongClickLabel = stringResource(Res.string.today),
                 )
                 .sharedElement(
                     sharedContentState = rememberSharedContentState(
@@ -576,13 +591,13 @@ private fun SharedTransitionScope.TimeArrow(
     TimeArrow(
         onClick = { buttonScrollSlider(if (isPrevious) -1 else 1) },
         onClickLabel = stringResource(
-            if (isPrevious) R.string.previous_x else R.string.next_x,
-            stringResource(R.string.day),
+            if (isPrevious) Res.string.previous_x else Res.string.next_x,
+            stringResource(Res.string.day),
         ),
         onLongClick = { buttonScrollSlider(if (isPrevious) -365 else 365) },
         onLongClickLabel = stringResource(
-            if (isPrevious) R.string.previous_x else R.string.next_x,
-            stringResource(R.string.year),
+            if (isPrevious) Res.string.previous_x else Res.string.next_x,
+            stringResource(Res.string.year),
         ),
         isPrevious = isPrevious,
         modifier = modifier,
@@ -622,7 +637,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 )
             }
         }
-        val map = stringResource(R.string.map)
+        val map = stringResource(Res.string.map)
         NavigationRailItem(
             modifier = Modifier
                 .size(56.dp)
@@ -691,7 +706,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 AstronomyMode.SUN -> {
                     val textPath = remember { Path() }
                     val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
-                        stringResource(it.titleStringId) + " " + it.symbol
+                        stringResource(it.titleStringRes) + " " + it.symbol
                     }
                     val typeface = resolveAndroidCustomTypeface()
                     val colorTextPaint = remember(typeface) {
@@ -808,13 +823,13 @@ private fun Header(
             Row(Modifier.padding(top = 8.dp)) {
                 listOf(
                     // ☉☀️
-                    Triple(sunZodiac, R.string.sun, Color(0xcceaaa00)),
+                    Triple(sunZodiac, Res.string.sun, Color(0xcceaaa00)),
                     // ☽it.moonPhaseEmoji
-                    Triple(moonZodiac, R.string.moon, Color(0xcc606060)),
-                ).forEach { (zodiac, titleId, color) ->
+                    Triple(moonZodiac, Res.string.moon, Color(0xcc606060)),
+                ).forEach { (zodiac, titleRes, color) ->
                     Box(Modifier.weight(1f)) {
-                        val title = stringResource(titleId)
-                        val value = stringResource(zodiac.titleId)
+                        val title = stringResource(titleRes)
+                        val value = stringResource(zodiac.titleRes)
                         Cell(
                             modifier = Modifier
                                 .semantics(mergeDescendants = true) {
@@ -864,7 +879,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
         Row(Modifier.padding(top = 8.dp)) {
             repeat(2) { cell ->
                 Box(Modifier.weight(1f)) {
-                    val title = stringResource(seasonsOrder[cell + row * 2].nameStringId)
+                    val title = stringResource(seasonsOrder[cell + row * 2].nameStringRes)
                     val (time, formattedTime) = equinoxes[cell + row * 2]
                     Cell(
                         modifier = Modifier
@@ -872,7 +887,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
                             .semantics(true) {
                                 this.contentDescription = title + spacedComma + formattedTime
                             }
-                            .clickable(onClickLabel = stringResource(R.string.select_date)) {
+                            .clickable(onClickLabel = stringResource(Res.string.select_date)) {
                                 coroutineScope.launch { animateToTime(timeInMillis, time) }
                             }
                             .clearAndSetSemantics {},

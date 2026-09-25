@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
+import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
@@ -75,7 +76,7 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
-    val prayTimeName = context.getString(prayTime.stringRes).let {
+    val prayTimeName = context.getString(prayTime.stringResId).let {
         if (!language.isPersianOrDari) return@let it
         val athanGap = (context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
             ?: .0).roundToInt()
@@ -92,7 +93,7 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
     val prayTimes = coordinates?.calculatePrayTimes()
     val isJafari = calculationMethod.isJafari
     val subtitle = prayTime.upcomingTimes(isJafari).joinToString(" - ") {
-        "${context.getString(it.stringRes)}: ${prayTimes?.get(it)?.toFormattedString().orEmpty()}"
+        "${context.getString(it.stringResId)}: ${prayTimes?.get(it)?.toFormattedString().orEmpty()}"
     }
 
     val notificationBuilder = NotificationCompat.Builder(context, notificationChannelId)

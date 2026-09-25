@@ -3,16 +3,17 @@ package com.byagowi.persiancalendar.ui.dialogs
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.today
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialogContent
+import org.jetbrains.compose.resources.stringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -25,7 +26,7 @@ class ShiftWorkDialogTest {
     fun basicSmokeTest() {
         var acceptString = ""
         composeTestRule.setContent {
-            acceptString = stringResource(R.string.accept)
+            acceptString = stringResource(Res.string.accept)
             ShiftWorkDialog(today) {}
         }
         composeTestRule.onNodeWithText(acceptString).assertExists()

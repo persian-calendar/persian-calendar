@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
 import android.annotation.SuppressLint
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -48,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -59,9 +57,11 @@ import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.common.ColorBox
@@ -76,13 +76,15 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.preferences
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
 import kotlin.math.roundToInt
 
 fun LazyListScope.settingsSection(
     canScrollBackward: Boolean,
     disableStickyHeader: Boolean,
-    @StringRes title: Int,
+    title: StringResource,
     subtitle: @Composable () -> String? = { null },
     content: @Composable () -> Unit,
 ) {
@@ -106,7 +108,7 @@ fun LazyListScope.settingsSection(
 @SuppressLint("ComposableLambdaParameterNaming")
 @Composable
 fun SettingsSectionLayout(
-    @StringRes title: Int,
+    title: StringResource,
     modifier: Modifier = Modifier,
     subtitle: @Composable () -> String? = { null },
 ) {
@@ -219,10 +221,10 @@ fun SettingsSingleSelect(
     entries: List<String>,
     entryValues: List<String>,
     persistedValue: String,
-    dialogTitleResId: Int,
+    dialogTitleResId: StringResource,
     title: String,
     modifier: Modifier = Modifier,
-    summaryResId: Int? = null,
+    summaryResId: StringResource? = null,
 ) {
     val context = LocalContext.current
     SettingsClickable(
@@ -237,7 +239,7 @@ fun SettingsSingleSelect(
         AppDialog(
             title = { Text(stringResource(dialogTitleResId)) },
             dismissButton = {
-                TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+                TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
             },
             onDismissRequest = onDismissRequest,
         ) {
@@ -270,7 +272,7 @@ fun SettingsMultiSelect(
     entries: List<String>,
     entryValues: List<String>,
     persistedSet: Set<String>,
-    dialogTitleResId: Int,
+    dialogTitleRes: StringResource,
     title: String,
     modifier: Modifier = Modifier,
     summary: String? = null,
@@ -287,10 +289,10 @@ fun SettingsMultiSelect(
                 .toMutableStateList()
         }
         AppDialog(
-            title = { Text(stringResource(dialogTitleResId)) },
+            title = { Text(stringResource(dialogTitleRes)) },
             onDismissRequest = onDismissRequest,
             dismissButton = {
-                TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+                TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.cancel)) }
             },
             confirmButton = {
                 TextButton(
@@ -298,7 +300,7 @@ fun SettingsMultiSelect(
                         onDismissRequest()
                         context.preferences.edit { putStringSet(key, result.toSet()) }
                     },
-                ) { Text(stringResource(R.string.accept)) }
+                ) { Text(stringResource(Res.string.accept)) }
             },
         ) {
             entries.zip(entryValues) { entry, entryValue ->
@@ -457,7 +459,7 @@ fun SettingsSlider(
             AnimatedVisibility(visible = isDefault) { Spacer(Modifier.width(16.dp)) }
             AnimatedVisibility(visible = !isDefault) {
                 IconButton(onClick = { onValueChange(defaultValue) }) {
-                    Icon(Icons.Default.SettingsBackupRestore, stringResource(R.string.cancel))
+                    Icon(Icons.Default.SettingsBackupRestore, stringResource(Res.string.cancel))
                 }
             }
         }

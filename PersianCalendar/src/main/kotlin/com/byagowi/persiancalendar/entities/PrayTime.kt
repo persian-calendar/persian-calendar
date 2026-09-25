@@ -1,25 +1,35 @@
 package com.byagowi.persiancalendar.entities
 
-import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.ui.graphics.Color
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.asr
+import com.byagowi.persiancalendar.shared.generated.resources.dhuhr
+import com.byagowi.persiancalendar.shared.generated.resources.fajr
+import com.byagowi.persiancalendar.shared.generated.resources.imsak
+import com.byagowi.persiancalendar.shared.generated.resources.isha
+import com.byagowi.persiancalendar.shared.generated.resources.maghrib
+import com.byagowi.persiancalendar.shared.generated.resources.midnight
+import com.byagowi.persiancalendar.shared.generated.resources.sunrise
+import com.byagowi.persiancalendar.shared.generated.resources.sunset
 import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
+import org.jetbrains.compose.resources.StringResource
 
-enum class PrayTime(@get:StringRes val stringRes: Int, val tint: Color = Color.Gray) {
+enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray) {
     // Don't ever change name of these, they are stored in preferences
-    IMSAK(R.string.imsak),
-    FAJR(R.string.fajr, tint = Color(0xFF009788)),
-    SUNRISE(R.string.sunrise),
-    DHUHR(R.string.dhuhr, tint = Color(0xFFF1A42A)),
-    ASR(R.string.asr, tint = Color(0xFFF57C01)),
-    SUNSET(R.string.sunset),
-    MAGHRIB(R.string.maghrib, tint = Color(0xFF5E35B1)),
-    ISHA(R.string.isha, tint = Color(0xFF283593)),
-    MIDNIGHT(R.string.midnight);
+    IMSAK(Res.string.imsak),
+    FAJR(Res.string.fajr, tint = Color(0xFF009788)),
+    SUNRISE(Res.string.sunrise),
+    DHUHR(Res.string.dhuhr, tint = Color(0xFFF1A42A)),
+    ASR(Res.string.asr, tint = Color(0xFFF57C01)),
+    SUNSET(Res.string.sunset),
+    MAGHRIB(Res.string.maghrib, tint = Color(0xFF5E35B1)),
+    ISHA(Res.string.isha, tint = Color(0xFF283593)),
+    MIDNIGHT(Res.string.midnight);
 
     // Is the time can even bypass silent device or do not disturb device settings
     val isBypassDnd get() = this == FAJR
@@ -104,3 +114,16 @@ enum class PrayTime(@get:StringRes val stringRes: Int, val tint: Color = Color.G
         }
     }
 }
+
+val PrayTime.stringResId
+    get() = when (this) {
+        PrayTime.IMSAK -> R.string.imsak
+        PrayTime.FAJR -> R.string.fajr
+        PrayTime.SUNRISE -> R.string.sunrise
+        PrayTime.DHUHR -> R.string.dhuhr
+        PrayTime.ASR -> R.string.asr
+        PrayTime.SUNSET -> R.string.sunset
+        PrayTime.MAGHRIB -> R.string.maghrib
+        PrayTime.ISHA -> R.string.isha
+        PrayTime.MIDNIGHT -> R.string.midnight
+    }

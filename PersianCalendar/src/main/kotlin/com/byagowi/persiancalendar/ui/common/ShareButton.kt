@@ -5,11 +5,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_SHARE_BUTTON
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.share
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.ShareActionButton(
@@ -18,7 +19,7 @@ fun SharedTransitionScope.ShareActionButton(
 ) {
     AppIconButton(
         icon = Icons.Default.Share,
-        title = stringResource(R.string.share),
+        title = stringResource(Res.string.share),
         modifier = modifier.sharedElement(
             sharedContentState = rememberSharedContentState(
                 key = SHARED_CONTENT_KEY_SHARE_BUTTON,

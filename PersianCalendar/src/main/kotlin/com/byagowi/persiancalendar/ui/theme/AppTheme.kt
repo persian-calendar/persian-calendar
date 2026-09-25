@@ -258,7 +258,7 @@ fun appDialogSurfaceColor(): Color {
         Theme.DARK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .7f)
         Theme.BLACK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .6f)
         Theme.MODERN -> MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = .65f)
-        else -> MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = .85f)
+        else -> MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = .8f)
     } else MaterialTheme.colorScheme.surfaceContainerHigh
 }
 

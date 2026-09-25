@@ -48,7 +48,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
@@ -58,7 +57,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -78,6 +76,17 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.add_event
+import com.byagowi.persiancalendar.shared.generated.resources.month
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.nth_week_of_year
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.shared.generated.resources.select_day
+import com.byagowi.persiancalendar.shared.generated.resources.select_month
+import com.byagowi.persiancalendar.shared.generated.resources.week_days_name_column
+import com.byagowi.persiancalendar.shared.generated.resources.week_view
+import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
@@ -86,6 +95,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import io.github.persiancalendar.calendar.AbstractDate
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.ceil
 import kotlin.math.min
 
@@ -258,7 +268,7 @@ fun daysTable(
                 ) {
                     val weekDay = weekStart + column
                     val description = stringResource(
-                        R.string.week_days_name_column,
+                        Res.string.week_days_name_column,
                         weekDay.title,
                     )
                     Text(
@@ -349,7 +359,7 @@ fun daysTable(
                                     .fillMaxSize()
                                     .then(
                                         if (onWeekClick != null) Modifier.clickable(
-                                            onClickLabel = stringResource(R.string.week_view),
+                                            onClickLabel = stringResource(Res.string.week_view),
                                             indication = cellRipple,
                                             interactionSource = null,
                                         ) {
@@ -370,7 +380,7 @@ fun daysTable(
                             ) {
                                 val formattedWeekNumber = numeral.format(weekNumber)
                                 val description =
-                                    stringResource(R.string.nth_week_of_year, formattedWeekNumber)
+                                    stringResource(Res.string.nth_week_of_year, formattedWeekNumber)
                                 Text(
                                     formattedWeekNumber,
                                     fontSize = with(density) { (daysTextSize * .625f).toSp() },
@@ -388,8 +398,8 @@ fun daysTable(
                                     indication = cellRipple,
                                     interactionSource = null,
                                     onClick = { setSelectedDay(day) },
-                                    onClickLabel = stringResource(R.string.select_day),
-                                    onLongClickLabel = stringResource(R.string.add_event),
+                                    onClickLabel = stringResource(Res.string.select_day),
+                                    onLongClickLabel = stringResource(Res.string.add_event),
                                     onLongClick = {
                                         setSelectedDay(day)
                                         addEvent(AddEventData.fromJdn(day))
@@ -506,13 +516,13 @@ private fun PagerArrow(
     isPrevious: Boolean,
     week: Int?,
 ) {
-    val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
+    val stringRes = if (isPrevious) Res.string.previous_x else Res.string.next_x
     Icon(
         if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
         else Icons.AutoMirrored.Default.KeyboardArrowRight,
         contentDescription = if (week == null) {
-            stringResource(stringId, stringResource(R.string.month))
-        } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1),
+            stringResource(stringRes, stringResource(Res.string.month))
+        } else stringResource(Res.string.nth_week_of_year, week + if (isPrevious) -1 else 1),
         modifier = Modifier
             .offset(
                 x = if (isPrevious) 16.dp else (screenWidth - pagerArrowSize.dp),
@@ -523,9 +533,9 @@ private fun PagerArrow(
                     indication = ripple(bounded = false),
                     interactionSource = null,
                     onClick = { arrowAction(isPrevious, false) },
-                    onClickLabel = stringResource(R.string.select_month),
+                    onClickLabel = stringResource(Res.string.select_month),
                     onLongClick = { arrowAction(isPrevious, true) },
-                    onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
+                    onLongClickLabel = stringResource(stringRes, stringResource(Res.string.year)),
                 ) else Modifier.clickable(
                     indication = ripple(bounded = false),
                     interactionSource = null,

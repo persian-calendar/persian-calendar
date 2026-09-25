@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -24,14 +23,16 @@ import androidx.core.content.edit
 import androidx.core.view.children
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TEXT_SCALE
 import com.byagowi.persiancalendar.PREF_WIDGET_TEXT_SCALE
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.widget_text_size
 import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
+import org.jetbrains.compose.resources.stringResource
 
 abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
     contentNeedsMaxHeight = true,
@@ -110,7 +111,7 @@ abstract class BaseWidgetConfigurationActivity : BaseConfigurationActivity(
         val key = PREF_WIDGET_TEXT_SCALE + appWidgetId
         val preferences = LocalContext.current.preferences
         SettingsSlider(
-            title = stringResource(R.string.widget_text_size),
+            title = stringResource(Res.string.widget_text_size),
             value = preferencesUpdateToken.let {
                 preferences.getFloat(key, DEFAULT_WIDGET_TEXT_SCALE)
             },

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -17,7 +16,6 @@ import com.byagowi.persiancalendar.PREF_ENGLISH_WEEKDAYS_IN_IRAN_ENGLISH
 import com.byagowi.persiancalendar.PREF_ISO8601_DATE_FORMAT
 import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_THEME
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.alternativePersianMonthsInAzeri
 import com.byagowi.persiancalendar.global.easternGregorianArabicMonths
@@ -26,10 +24,16 @@ import com.byagowi.persiancalendar.global.englishWeekDaysInIranEnglish
 import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.localNumeralPreference
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.enable_native_digits
+import com.byagowi.persiancalendar.shared.generated.resources.language
+import com.byagowi.persiancalendar.shared.generated.resources.native_digits
+import com.byagowi.persiancalendar.shared.generated.resources.select_skin
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.preferences
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun InterfaceSettings(
@@ -51,14 +55,14 @@ fun InterfaceSettings(
                     .clearAndSetSemantics {},
             ) {
                 SettingsClickable(
-                    title = stringResource(R.string.select_skin),
+                    title = stringResource(Res.string.select_skin),
                     summary = themeDisplayName,
                     defaultOpen = destination == PREF_THEME,
                 ) { onDismissRequest -> ThemeDialog(onDismissRequest = onDismissRequest) }
             }
         }
         SettingsClickable(
-            title = stringResource(R.string.language),
+            title = stringResource(Res.string.language),
             summary = language.nativeName,
         ) { onDismissRequest -> LanguageDialog(onDismissRequest = onDismissRequest) }
         AnimatedVisibility(language.isPersian) {
@@ -105,8 +109,8 @@ fun InterfaceSettings(
             SettingsSwitch(
                 key = PREF_LOCAL_NUMERAL,
                 value = localNumeralPreference,
-                title = stringResource(R.string.native_digits),
-                summary = stringResource(R.string.enable_native_digits),
+                title = stringResource(Res.string.native_digits),
+                summary = stringResource(Res.string.enable_native_digits),
             )
         }
     }

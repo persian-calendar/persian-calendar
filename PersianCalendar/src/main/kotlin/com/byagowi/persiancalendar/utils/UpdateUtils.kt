@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.entities.shortTitle
+import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.calculationMethod
@@ -157,7 +158,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 private val useDefaultPriority
-    @JvmSynthetic get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen
+    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastLanguage: Language? = null
@@ -301,7 +302,7 @@ fun getOwghat(
 ): String {
     return prayTimes?.getNextPrayTime(clock)?.let {
         buildString {
-            append(context.getString(it.stringRes))
+            append(context.getString(it.stringResId))
             append(": ")
             append(prayTimes[it].toFormattedString())
             if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) {
@@ -1395,12 +1396,12 @@ fun create4x2RemoteViews(
                 textHolderViewId,
                 buildString {
                     if (language.isPersianOrDari && prayTime.isAthan) append("اذان ")
-                    appendLine(context.getString(prayTime.stringRes))
+                    appendLine(context.getString(prayTime.stringResId))
                     append(timeClock.toFormattedString(printAmPm = false))
                 },
             )
             remoteViews.setupForegroundTextColors(textHolderViewId)
-            Triple(textHolderViewId, prayTime.stringRes, timeClock)
+            Triple(textHolderViewId, prayTime.stringResId, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
             timeClock > clock
@@ -1803,7 +1804,7 @@ private data class NotificationData(
                                     headViewId,
                                     buildString {
                                         if (language.isPersianOrDari && prayTime.isAthan) append("اذان ")
-                                        append(context.getString(prayTime.stringRes))
+                                        append(context.getString(prayTime.stringResId))
                                     },
                                 )
                                 it.setTextViewText(
@@ -1872,7 +1873,6 @@ private fun RemoteViews.configureClock(@IdRes viewId: Int) {
     setCharSequence(viewId, "setFormat24Hour", clockFormat)
 }
 
-@JvmSynthetic
 @RequiresApi(Build.VERSION_CODES.S)
 private fun RemoteViews.setAlpha(@IdRes viewId: Int, value: Float): Unit =
     setFloat(viewId, "setAlpha", value)
@@ -1884,7 +1884,6 @@ private fun RemoteViews.setupForegroundTextColors(@IdRes vararg ids: Int) {
     }
 }
 
-@JvmSynthetic
 private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) {
     if (text.isBlank()) setViewVisibility(viewId, View.GONE)
     else {

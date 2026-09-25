@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
@@ -16,6 +15,11 @@ import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.highLatitudesMethod
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.midnightMethod
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_angle_based
+import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_night_middle
+import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_one_seventh
+import com.byagowi.persiancalendar.shared.generated.resources.none
 import io.github.cosinekitty.astronomy.Observer
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -23,6 +27,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
+import org.jetbrains.compose.resources.StringResource
 import java.util.GregorianCalendar
 import kotlin.math.abs
 
@@ -101,12 +106,12 @@ fun CalculationMethod.title(resources: Resources): String {
 // As "twilight may persist throughout the night during some months of the year" can happen in latitudes
 val Coordinates.isHighLatitude: Boolean get() = abs(latitude) > 48
 
-val HighLatitudesMethod.titleStringId
-    @StringRes get(): Int = when (this) {
-        HighLatitudesMethod.NightMiddle -> R.string.high_latitudes_night_middle
-        HighLatitudesMethod.AngleBased -> R.string.high_latitudes_angle_based
-        HighLatitudesMethod.OneSeventh -> R.string.high_latitudes_one_seventh
-        HighLatitudesMethod.None -> R.string.none
+val HighLatitudesMethod.titleStringRes
+    get(): StringResource = when (this) {
+        HighLatitudesMethod.NightMiddle -> Res.string.high_latitudes_night_middle
+        HighLatitudesMethod.AngleBased -> Res.string.high_latitudes_angle_based
+        HighLatitudesMethod.OneSeventh -> Res.string.high_latitudes_one_seventh
+        HighLatitudesMethod.None -> Res.string.none
     }
 
 @Suppress("NOTHING_TO_INLINE")

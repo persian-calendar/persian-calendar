@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,10 +34,11 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.symbol
-import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.titleStringRes
 import com.byagowi.persiancalendar.utils.toCivilDate
 import io.github.cosinekitty.astronomy.Body
 import io.github.persiancalendar.praytimes.Coordinates
+import org.jetbrains.compose.resources.stringResource
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 
@@ -185,7 +185,7 @@ fun PlanetaryHoursDialog(
                     contentDescription = null,
                 )
                 AutoSizedText(
-                    text = stringResource(row.planet.body.titleStringId) + " " + row.planet.body.symbol,
+                    text = stringResource(row.planet.body.titleStringRes) + " " + row.planet.body.symbol,
                     modifier = Modifier.weight(1f),
                 )
                 AutoSizedText(

@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -52,7 +51,6 @@ import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.STORED_IMAGE_NAME
 import com.byagowi.persiancalendar.global.customFontName
@@ -64,6 +62,17 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.bold_text
+import com.byagowi.persiancalendar.shared.generated.resources.color_gradient
+import com.byagowi.persiancalendar.shared.generated.resources.holidays_in_red
+import com.byagowi.persiancalendar.shared.generated.resources.more
+import com.byagowi.persiancalendar.shared.generated.resources.remove
+import com.byagowi.persiancalendar.shared.generated.resources.select_font
+import com.byagowi.persiancalendar.shared.generated.resources.skin
+import com.byagowi.persiancalendar.shared.generated.resources.theme_dark
+import com.byagowi.persiancalendar.shared.generated.resources.theme_light
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
@@ -75,6 +84,7 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import org.jetbrains.compose.resources.stringResource
 import java.io.File
 import kotlin.random.Random
 
@@ -92,14 +102,14 @@ fun ThemeDialog(
     val anyThemeHasGradient = themesToCheck.any { it.hasGradient }
     val anyThemeIsDynamicColors = themesToCheck.any { it.isDynamicColors }
     AppDialog(
-        title = { Text(stringResource(R.string.skin)) },
+        title = { Text(stringResource(Res.string.skin)) },
         onDismissRequest = onDismissRequest,
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.accept)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(Res.string.accept)) }
         },
         neutralButton = {
             AnimatedVisibility(visible = !showMore && (anyThemeHasGradient || anyThemeIsDynamicColors)) {
-                TextButton(onClick = { showMore = true }) { Text(stringResource(R.string.more)) }
+                TextButton(onClick = { showMore = true }) { Text(stringResource(Res.string.more)) }
             }
         },
         modifier = modifier,
@@ -109,8 +119,8 @@ fun ThemeDialog(
             .height(8.dp)
             .semantics { this.hideFromAccessibility() }
         val systemThemeOptions = listOf(
-            Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
-            Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme),
+            Triple(Res.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
+            Triple(Res.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme),
         )
         Theme.entries.forEach { entry ->
             Row(
@@ -183,7 +193,7 @@ fun ThemeDialog(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             SwitchWithLabel(
-                label = stringResource(R.string.color_gradient),
+                label = stringResource(Res.string.color_gradient),
                 checked = isGradient,
             ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, it) } }
         }
@@ -193,7 +203,7 @@ fun ThemeDialog(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             SwitchWithLabel(
-                label = stringResource(R.string.holidays_in_red),
+                label = stringResource(Res.string.holidays_in_red),
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
@@ -203,7 +213,7 @@ fun ThemeDialog(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             SwitchWithLabel(
-                label = stringResource(R.string.bold_text),
+                label = stringResource(Res.string.bold_text),
                 checked = isBoldFont,
             ) { context.preferences.edit { putBoolean(PREF_BOLD_FONT, it) } }
         }
@@ -268,7 +278,7 @@ private fun ColumnScope.FontPicker(
                             showUnsupportedActionToast(context)
                         }.getOrNull().debugAssertNotNull
                     },
-                ) { Text(stringResource(R.string.select_font)) }
+                ) { Text(stringResource(Res.string.select_font)) }
                 AnimatedVisibility(
                     customFontToken != null,
                     Modifier.padding(start = 8.dp),
@@ -278,7 +288,7 @@ private fun ColumnScope.FontPicker(
                             context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
                             File(context.filesDir, STORED_FONT_NAME).delete()
                         },
-                    ) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                    ) { Icon(Icons.Default.Delete, stringResource(Res.string.remove)) }
                 }
             }
             AnimatedVisibility(customFontToken != null) {
@@ -325,7 +335,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                             context.preferences.edit { remove(PREF_CUSTOM_IMAGE_NAME) }
                             File(context.filesDir, STORED_FONT_NAME).delete()
                         },
-                    ) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                    ) { Icon(Icons.Default.Delete, stringResource(Res.string.remove)) }
                 }
             }
             AnimatedVisibility(customImageName != null) {

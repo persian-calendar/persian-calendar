@@ -10,16 +10,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.yearAwareMonthsNames
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.day
+import com.byagowi.persiancalendar.shared.generated.resources.month
+import com.byagowi.persiancalendar.shared.generated.resources.next_x
+import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.shared.generated.resources.select_day
+import com.byagowi.persiancalendar.shared.generated.resources.select_month
+import com.byagowi.persiancalendar.shared.generated.resources.select_year
+import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DatePicker(
@@ -78,9 +86,9 @@ private fun DatePickerContent(
             label = daysFormat,
             range = 1..monthsLength,
             value = date.dayOfMonth,
-            onClickLabel = stringResource(R.string.select_day),
-            onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.day)),
-            onNextLabel = stringResource(R.string.next_x, stringResource(R.string.day)),
+            onClickLabel = stringResource(Res.string.select_day),
+            onPreviousLabel = stringResource(Res.string.previous_x, stringResource(Res.string.day)),
+            onNextLabel = stringResource(Res.string.next_x, stringResource(Res.string.day)),
             pendingConfirms = pendingConfirms,
         ) {
             onValueChange(Jdn(calendar, date.year, date.month, it))
@@ -92,9 +100,12 @@ private fun DatePickerContent(
             label = monthsFormat,
             range = 1..yearMonths,
             value = date.month,
-            onClickLabel = stringResource(R.string.select_month),
-            onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.month)),
-            onNextLabel = stringResource(R.string.next_x, stringResource(R.string.month)),
+            onClickLabel = stringResource(Res.string.select_month),
+            onPreviousLabel = stringResource(
+                Res.string.previous_x,
+                stringResource(Res.string.month),
+            ),
+            onNextLabel = stringResource(Res.string.next_x, stringResource(Res.string.month)),
             pendingConfirms = pendingConfirms,
         ) { month ->
             val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
@@ -106,9 +117,12 @@ private fun DatePickerContent(
             modifier = Modifier.weight(1f),
             range = startYear..startYear + yearsLimit,
             value = date.year,
-            onClickLabel = stringResource(R.string.select_year),
-            onPreviousLabel = stringResource(R.string.previous_x, stringResource(R.string.year)),
-            onNextLabel = stringResource(R.string.next_x, stringResource(R.string.year)),
+            onClickLabel = stringResource(Res.string.select_year),
+            onPreviousLabel = stringResource(
+                Res.string.previous_x,
+                stringResource(Res.string.year),
+            ),
+            onNextLabel = stringResource(Res.string.next_x, stringResource(Res.string.year)),
             pendingConfirms = pendingConfirms,
         ) { year ->
             val month = date.month.coerceIn(1, calendar.getYearMonths(year))

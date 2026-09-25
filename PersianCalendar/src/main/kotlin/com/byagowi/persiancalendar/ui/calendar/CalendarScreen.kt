@@ -1464,9 +1464,11 @@ private fun SharedTransitionScope.Toolbar(
                     value = yearViewCalendar ?: mainCalendar,
                     onValueChange = onYearViewCalendarChange,
                     items = enabledCalendarsWithDefault.associateWith {
-                        stringResource(if (language.isArabicScript && density.fontScale == 1f) {
-                            it.title
-                        } else it.shortTitle)
+                        stringResource(
+                            if (language.isArabicScript && density.fontScale == 1f) {
+                                it.title
+                            } else it.shortTitle,
+                        )
                     },
                     small = subtitle.isNotEmpty(),
                     modifier = Modifier.alpha(backButtonFraction.floatValue.coerceIn(0f, 1f)),

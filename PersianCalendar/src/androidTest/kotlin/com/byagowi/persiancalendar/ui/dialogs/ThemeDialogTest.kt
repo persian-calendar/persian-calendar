@@ -1,12 +1,13 @@
 package com.byagowi.persiancalendar.ui.dialogs
 
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.ThemeDialog
+import org.jetbrains.compose.resources.stringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,7 +20,7 @@ class ThemeDialogTest {
         var showDialog = true
         var acceptString = ""
         composeTestRule.setContent {
-            acceptString = stringResource(R.string.accept)
+            acceptString = stringResource(Res.string.accept)
             if (showDialog) ThemeDialog { showDialog = false }
         }
         assert(showDialog)

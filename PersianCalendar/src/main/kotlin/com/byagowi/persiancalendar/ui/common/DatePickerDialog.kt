@@ -30,17 +30,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.days_distance
+import com.byagowi.persiancalendar.shared.generated.resources.return_to_today
+import com.byagowi.persiancalendar.shared.generated.resources.select_date
+import com.byagowi.persiancalendar.shared.generated.resources.today
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
 @Composable
@@ -58,7 +63,7 @@ fun DatePickerDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Row {
-                val title = stringResource(R.string.accept)
+                val title = stringResource(Res.string.accept)
                 val anyPendingConfirm = pendingConfirms.isNotEmpty()
                 AnimatedVisibility(anyPendingConfirm) {
                     AppIconButton(
@@ -73,7 +78,7 @@ fun DatePickerDialog(
                             onSuccess(jdn)
                         },
                     ) {
-                        val description = stringResource(R.string.select_date)
+                        val description = stringResource(Res.string.select_date)
                         Text(
                             title,
                             modifier = Modifier.semantics {
@@ -87,9 +92,9 @@ fun DatePickerDialog(
         neutralButton = {
             AnimatedVisibility(visible = jdn != today, enter = fadeIn(), exit = fadeOut()) {
                 TextButton(onClick = { jdn = today }) {
-                    val description = stringResource(R.string.return_to_today)
+                    val description = stringResource(Res.string.return_to_today)
                     Text(
-                        stringResource(R.string.today),
+                        stringResource(Res.string.today),
                         modifier = Modifier.semantics { this.contentDescription = description },
                     )
                 }
@@ -117,7 +122,7 @@ fun DatePickerDialog(
             ) { jdn = today + it } else AnimatedVisibility(jdn != today) {
                 AnimatedContent(
                     targetState = listOf(
-                        stringResource(R.string.days_distance), spacedColon,
+                        stringResource(Res.string.days_distance), spacedColon,
                         calculateDaysDifference(
                             LocalResources.current,
                             jdn,
@@ -141,7 +146,7 @@ fun DatePickerDialog(
                             .clickable(
                                 indication = null,
                                 interactionSource = null,
-                                onClickLabel = stringResource(R.string.days_distance),
+                                onClickLabel = stringResource(Res.string.days_distance),
                             ) { showNumberEdit = true },
                         contentAlignment = Alignment.Center,
                     ) {

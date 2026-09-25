@@ -1,9 +1,22 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.content.res.Resources
-import androidx.annotation.StringRes
-import com.byagowi.persiancalendar.R
+import androidx.compose.runtime.Composable
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.aquarius
+import com.byagowi.persiancalendar.shared.generated.resources.aries
+import com.byagowi.persiancalendar.shared.generated.resources.cancer
+import com.byagowi.persiancalendar.shared.generated.resources.capricorn
+import com.byagowi.persiancalendar.shared.generated.resources.gemini
+import com.byagowi.persiancalendar.shared.generated.resources.leo
+import com.byagowi.persiancalendar.shared.generated.resources.libra
+import com.byagowi.persiancalendar.shared.generated.resources.pisces
+import com.byagowi.persiancalendar.shared.generated.resources.sagittarius
+import com.byagowi.persiancalendar.shared.generated.resources.scorpio
+import com.byagowi.persiancalendar.shared.generated.resources.taurus
+import com.byagowi.persiancalendar.shared.generated.resources.virgo
 import io.github.persiancalendar.calendar.PersianDate
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.floor
 
 /**
@@ -42,26 +55,26 @@ import kotlin.math.floor
 enum class Zodiac(
     private val iauRangeStart: Double,
     val symbol: String,
-    @get:StringRes val titleId: Int,
+    val titleRes: StringResource,
 ) {
-    ARIES(33.18, "♈", R.string.aries), // 0-30 (Tropical)
-    TAURUS(51.16, "♉", R.string.taurus), // 30-60
-    GEMINI(93.44, "♊", R.string.gemini), // 60-90
-    CANCER(119.48, "♋", R.string.cancer), // 90-120
-    LEO(135.30, "♌", R.string.leo), // 120-150
-    VIRGO(173.34, "♍", R.string.virgo), // 150-180
-    LIBRA(224.17, "♎", R.string.libra), // 180-210
-    SCORPIO(242.57, "♏", R.string.scorpio), // 210-240
-    SAGITTARIUS(271.26, "♐", R.string.sagittarius), // 240-270
-    CAPRICORN(302.49, "♑", R.string.capricorn), // 270-300
-    AQUARIUS(311.72, "♒", R.string.aquarius), // 300-330
-    PISCES(348.58, "♓", R.string.pisces); // 330-360
+    ARIES(33.18, "♈", Res.string.aries), // 0-30 (Tropical)
+    TAURUS(51.16, "♉", Res.string.taurus), // 30-60
+    GEMINI(93.44, "♊", Res.string.gemini), // 60-90
+    CANCER(119.48, "♋", Res.string.cancer), // 90-120
+    LEO(135.30, "♌", Res.string.leo), // 120-150
+    VIRGO(173.34, "♍", Res.string.virgo), // 150-180
+    LIBRA(224.17, "♎", Res.string.libra), // 180-210
+    SCORPIO(242.57, "♏", Res.string.scorpio), // 210-240
+    SAGITTARIUS(271.26, "♐", Res.string.sagittarius), // 240-270
+    CAPRICORN(302.49, "♑", Res.string.capricorn), // 270-300
+    AQUARIUS(311.72, "♒", Res.string.aquarius), // 300-330
+    PISCES(348.58, "♓", Res.string.pisces); // 330-360
 
     // Some language have translation of Zodiac signs in a parenthesis which isn't always needed
-    fun shortTitle(resources: Resources) = resources.getString(titleId).split(" (")[0]
+    val shortTitle @Composable get() = stringResource(titleRes).split(" (")[0]
 
     private val iauNextRangeStart: Double
-        @JvmSynthetic get() = entries.getOrNull(ordinal + 1)?.iauRangeStart
+        get() = entries.getOrNull(ordinal + 1)?.iauRangeStart
             ?: (ARIES.iauRangeStart + 360)
 
     val iauRange get() = listOf(iauRangeStart, iauNextRangeStart)

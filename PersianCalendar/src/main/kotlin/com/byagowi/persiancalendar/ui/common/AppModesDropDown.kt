@@ -25,15 +25,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.open
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun <T> AppModesDropDown(
@@ -50,7 +52,7 @@ fun <T> AppModesDropDown(
             .clip(MaterialTheme.shapes.extraLarge)
             .background(LocalContentColor.current.copy(alpha = .175f))
             .clickable(
-                onClickLabel = stringResource(if (showMenu) R.string.close else R.string.open),
+                onClickLabel = stringResource(if (showMenu) Res.string.close else Res.string.open),
             ) {
                 showMenu = !showMenu
                 if (showMenu) hapticFeedback.performLongPress()

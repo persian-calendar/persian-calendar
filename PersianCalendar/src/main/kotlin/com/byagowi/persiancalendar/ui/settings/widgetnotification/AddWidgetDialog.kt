@@ -16,11 +16,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.add
+import com.byagowi.persiancalendar.shared.generated.resources.pref_widget
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AddWidgetDialog(
@@ -47,7 +49,7 @@ fun AddWidgetDialog(
             Spacer(Modifier.height(16.dp))
             val description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 widget.loadDescription(context).toString()
-            } else stringResource(R.string.pref_widget)
+            } else stringResource(Res.string.pref_widget)
             Image(
                 bitmap = ImageBitmap.imageResource(widget.previewImage),
                 contentDescription = description,
@@ -59,7 +61,7 @@ fun AddWidgetDialog(
             TextButton(
                 onClick = ::addWidget,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) { Text(stringResource(R.string.add)) }
+            ) { Text(stringResource(Res.string.add)) }
         }
         Spacer(Modifier.height(16.dp))
     }

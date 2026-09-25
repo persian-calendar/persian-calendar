@@ -58,7 +58,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -87,6 +86,14 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.compass
+import com.byagowi.persiancalendar.shared.generated.resources.help
+import com.byagowi.persiancalendar.shared.generated.resources.level
+import com.byagowi.persiancalendar.shared.generated.resources.map
+import com.byagowi.persiancalendar.shared.generated.resources.qibla
+import com.byagowi.persiancalendar.shared.generated.resources.show_sun_and_moon_path_in_24_hours
+import com.byagowi.persiancalendar.shared.generated.resources.true_north
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
@@ -110,6 +117,7 @@ import com.byagowi.persiancalendar.utils.handleAngleWrappingDegrees
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.toEarthPosition
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -190,7 +198,7 @@ fun SharedTransitionScope.CompassScreen(
                     Column {
                         Text(
                             if (isSliderShown) Clock(time).toBasicFormatString() else stringResource(
-                                R.string.compass,
+                                Res.string.compass,
                             ),
                         )
                         val subtitle = cityName ?: coordinates?.run {
@@ -216,7 +224,7 @@ fun SharedTransitionScope.CompassScreen(
                 actions = {
                     if (coordinates != null) AppIconButton(
                         icon = In24HoursIcon,
-                        title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
+                        title = stringResource(Res.string.show_sun_and_moon_path_in_24_hours),
                         modifier = Modifier.rotate(sliderValue / 24f * 360f),
                     ) {
                         if (isTimeShiftAnimate) {
@@ -226,14 +234,14 @@ fun SharedTransitionScope.CompassScreen(
                     }
                     if (coordinates != null) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
-                            text = { Text(stringResource(R.string.true_north)) },
+                            text = { Text(stringResource(Res.string.true_north)) },
                             isChecked = showTrueNorth,
                         ) {
                             context.preferences.edit { putBoolean(PREF_TRUE_NORTH_IN_COMPASS, it) }
                             closeMenu()
                         }
                         AppDropdownMenuCheckableItem(
-                            text = { Text(stringResource(R.string.qibla)) },
+                            text = { Text(stringResource(Res.string.qibla)) },
                             isChecked = showQibla,
                         ) {
                             closeMenu()
@@ -334,7 +342,7 @@ fun SharedTransitionScope.CompassScreen(
                 AppBottomAppBar(overlay = { Angle(angle, declination.value) }) {
                     AppIconButton(
                         icon = ImageVector.vectorResource(R.drawable.ic_level),
-                        title = stringResource(R.string.level),
+                        title = stringResource(Res.string.level),
                         modifier = Modifier.sharedBounds(
                             sharedContentState = rememberSharedContentState(
                                 key = SHARED_CONTENT_KEY_LEVEL,
@@ -346,7 +354,7 @@ fun SharedTransitionScope.CompassScreen(
                     )
                     AppIconButton(
                         icon = Icons.Default.Map,
-                        title = stringResource(R.string.map),
+                        title = stringResource(Res.string.map),
                         modifier = Modifier.sharedBounds(
                             sharedContentState = rememberSharedContentState(
                                 key = SHARED_CONTENT_KEY_MAP,
@@ -359,7 +367,7 @@ fun SharedTransitionScope.CompassScreen(
                     Spacer(Modifier.weight(1f))
                     AppIconButton(
                         icon = Icons.Default.Info,
-                        title = stringResource(R.string.help),
+                        title = stringResource(Res.string.help),
                     ) {
                         showSnackbarMessage(
                             resources.getString(

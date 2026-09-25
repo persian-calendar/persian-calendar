@@ -37,22 +37,23 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.generated.stringId
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.select_type_date
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -98,7 +99,7 @@ private fun <T> SegmentedButtonItemsPicker(
         fun visualIndex(item: T) =
             if (isRtl) items.size - 1 - items.indexOf(item) else items.indexOf(item)
 
-        val selectDateTypeString = stringResource(R.string.select_type_date)
+        val selectDateTypeString = stringResource(Res.string.select_type_date)
         val view = LocalView.current
         val density = LocalDensity.current
         val capsuleShape = RoundedCornerShape(height / 2)

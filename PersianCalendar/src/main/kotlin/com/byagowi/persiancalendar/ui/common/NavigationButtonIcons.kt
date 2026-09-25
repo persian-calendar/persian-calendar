@@ -16,15 +16,17 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_ARROW_ICON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MENU_ICON
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.navigate_up
+import com.byagowi.persiancalendar.shared.generated.resources.open_navigation_rail
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 @NonRestartableComposable
@@ -43,8 +45,9 @@ fun SharedTransitionScope.NavigationMenuArrow(
     modifier: Modifier = Modifier,
     action: () -> Unit,
 ) {
-    val title =
-        stringResource(if (fraction == 0f) R.string.open_navigation_rail else R.string.navigate_up)
+    val title = stringResource(
+        if (fraction == 0f) Res.string.open_navigation_rail else Res.string.navigate_up,
+    )
     TooltipBox(
         modifier = modifier,
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),

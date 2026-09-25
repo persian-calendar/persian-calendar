@@ -9,7 +9,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.LocalActivity
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
@@ -78,7 +77,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -101,6 +99,23 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.service.PersianCalendarWallpaperService
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
+import com.byagowi.persiancalendar.shared.generated.resources.add_quick_settings_tile
+import com.byagowi.persiancalendar.shared.generated.resources.add_widget
+import com.byagowi.persiancalendar.shared.generated.resources.athan
+import com.byagowi.persiancalendar.shared.generated.resources.athan_disabled_summary
+import com.byagowi.persiancalendar.shared.generated.resources.calendar
+import com.byagowi.persiancalendar.shared.generated.resources.dynamic_icon
+import com.byagowi.persiancalendar.shared.generated.resources.live_wallpaper_settings
+import com.byagowi.persiancalendar.shared.generated.resources.location
+import com.byagowi.persiancalendar.shared.generated.resources.pref_interface
+import com.byagowi.persiancalendar.shared.generated.resources.pref_notification
+import com.byagowi.persiancalendar.shared.generated.resources.pref_ui
+import com.byagowi.persiancalendar.shared.generated.resources.pref_widget
+import com.byagowi.persiancalendar.shared.generated.resources.screensaver_settings
+import com.byagowi.persiancalendar.shared.generated.resources.settings
+import com.byagowi.persiancalendar.shared.generated.resources.spaced_and
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.ConverterDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
@@ -139,6 +154,8 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedTransitionScope.SettingsScreen(
@@ -161,7 +178,7 @@ fun SharedTransitionScope.SettingsScreen(
                     windowInsets = WindowInsets(),
                     title = {
                         AnimatedContent(
-                            targetState = stringResource(R.string.settings),
+                            targetState = stringResource(Res.string.settings),
                             transitionSpec = appCrossfadeSpec,
                         ) { state -> Text(state) }
                     },
@@ -278,8 +295,8 @@ fun SharedTransitionScope.SettingsScreen(
 enum class SettingsTab(
     private val outlinedIcon: ImageVector,
     private val filledIcon: ImageVector,
-    @get:StringRes private val firstTitle: Int,
-    @get:StringRes private val secondTitle: Int,
+    private val firstTitle: StringResource,
+    private val secondTitle: StringResource,
     val content: LazyListScope.(
         listState: LazyListState,
         disableStickyHeader: Boolean,
@@ -291,49 +308,49 @@ enum class SettingsTab(
     InterfaceCalendar(
         outlinedIcon = Icons.Outlined.Palette,
         filledIcon = Icons.Default.Palette,
-        firstTitle = R.string.pref_interface,
-        secondTitle = R.string.calendar,
+        firstTitle = Res.string.pref_interface,
+        secondTitle = Res.string.calendar,
         content = { listState, disableStickyHeader, destination, destinationItem, _ ->
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.pref_ui,
+                title = Res.string.pref_ui,
             ) { InterfaceSettings(destination = destination) }
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.calendar,
+                title = Res.string.calendar,
             ) { CalendarSettings(destination, destinationItem) }
         },
     ),
     WidgetNotification(
         outlinedIcon = Icons.Outlined.Widgets,
         filledIcon = Icons.Default.Widgets,
-        firstTitle = R.string.pref_notification,
-        secondTitle = R.string.pref_widget,
+        firstTitle = Res.string.pref_notification,
+        secondTitle = Res.string.pref_widget,
         content = { listState, disableStickyHeader, _, _, _ ->
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.pref_notification,
+                title = Res.string.pref_notification,
             ) { NotificationSettings() }
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.pref_widget,
+                title = Res.string.pref_widget,
             ) { WidgetSettings() }
         },
     ),
     LocationAthan(
         outlinedIcon = Icons.Outlined.LocationOn,
         filledIcon = Icons.Default.LocationOn,
-        firstTitle = R.string.location,
-        secondTitle = R.string.athan,
+        firstTitle = Res.string.location,
+        secondTitle = Res.string.athan,
         content = { listState, disableStickyHeader, destination, _, navigateToMap ->
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.location,
+                title = Res.string.location,
                 subtitle = {
                     if (language.isUserAbleToReadPersian && coordinates == null) {
                         "اگر مایلید اوقات نمایش داده شود این بخش را تنظیم کنید"
@@ -343,9 +360,9 @@ enum class SettingsTab(
             settingsSection(
                 canScrollBackward = listState.canScrollBackward,
                 disableStickyHeader = disableStickyHeader,
-                title = R.string.athan,
+                title = Res.string.athan,
                 subtitle = {
-                    if (coordinates == null) stringResource(R.string.athan_disabled_summary) else null
+                    if (coordinates == null) stringResource(Res.string.athan_disabled_summary) else null
                 },
             ) { AthanSettings(destination) }
         },
@@ -354,7 +371,7 @@ enum class SettingsTab(
     @Composable
     fun Title(modifier: Modifier = Modifier) {
         Text(
-            stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
+            stringResource(firstTitle) + stringResource(Res.string.spaced_and) + stringResource(
                 secondTitle,
             ),
             modifier = modifier,
@@ -379,7 +396,7 @@ private fun MenuItems(
     val context = LocalContext.current
     val resources = LocalResources.current
     AppDropdownMenuItem(
-        text = { Text(stringResource(R.string.live_wallpaper_settings)) },
+        text = { Text(stringResource(Res.string.live_wallpaper_settings)) },
         trailingIcon = {
             val componentName = ComponentName(context, PersianCalendarWallpaperService::class.java)
             val isCurrent = runCatching {
@@ -401,7 +418,7 @@ private fun MenuItems(
                 },
             ) {
                 val icon = if (isCurrent) Icons.Default.Settings else Icons.Default.Check
-                Icon(imageVector = icon, contentDescription = stringResource(R.string.accept))
+                Icon(imageVector = icon, contentDescription = stringResource(Res.string.accept))
             }
         },
     ) {
@@ -410,14 +427,14 @@ private fun MenuItems(
             context.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
         }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
     }
-    AppDropdownMenuItem({ Text(stringResource(R.string.screensaver_settings)) }) {
+    AppDropdownMenuItem({ Text(stringResource(Res.string.screensaver_settings)) }) {
         closeMenu()
         runCatching {
             context.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS))
         }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        AppDropdownMenuItem({ Text(stringResource(R.string.add_quick_settings_tile)) }) {
+        AppDropdownMenuItem({ Text(stringResource(Res.string.add_quick_settings_tile)) }) {
             closeMenu()
             context.getSystemService<StatusBarManager>()?.requestAddTileService(
                 ComponentName(
@@ -436,12 +453,12 @@ private fun MenuItems(
             ).isRequestPinAppWidgetSupported
         }.getOrNull() == true) {
         AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.add_widget)) },
+            text = { Text(stringResource(Res.string.add_widget)) },
             onClick = openAddWidgetDialog,
         )
     }
     if (supportsDynamicIcon(mainCalendar, language)) AppDropdownMenuCheckableItem(
-        text = { Text(stringResource(R.string.dynamic_icon)) },
+        text = { Text(stringResource(Res.string.dynamic_icon)) },
         isChecked = isDynamicIconEnabled,
     ) {
         context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, it) }
