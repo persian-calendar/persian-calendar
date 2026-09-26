@@ -167,7 +167,6 @@ import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
@@ -188,6 +187,7 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.add_event
 import com.byagowi.persiancalendar.shared.generated.resources.ask_calendar_permission
@@ -195,7 +195,6 @@ import com.byagowi.persiancalendar.shared.generated.resources.ask_user_to_set_lo
 import com.byagowi.persiancalendar.shared.generated.resources.calendar
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.close
-import com.byagowi.persiancalendar.shared.generated.resources.empty
 import com.byagowi.persiancalendar.shared.generated.resources.enable_notification
 import com.byagowi.persiancalendar.shared.generated.resources.events
 import com.byagowi.persiancalendar.shared.generated.resources.month_pray_times

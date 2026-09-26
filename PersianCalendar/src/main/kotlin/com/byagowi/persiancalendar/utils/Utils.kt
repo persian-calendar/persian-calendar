@@ -6,7 +6,6 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.calculationMethod
