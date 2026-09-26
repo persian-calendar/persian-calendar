@@ -10,4 +10,5 @@ package com.byagowi.persiancalendar.parcelize
 @Retention(AnnotationRetention.BINARY)
 annotation class CommonParcelize
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 expect interface CommonParcelable
