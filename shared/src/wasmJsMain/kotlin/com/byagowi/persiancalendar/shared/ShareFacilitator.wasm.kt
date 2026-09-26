@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.js.ExperimentalWasmJsInterop::class)
+
 package com.byagowi.persiancalendar.shared
 
 import androidx.compose.runtime.Composable
@@ -12,13 +14,19 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.skia.EncodedImageFormat
 import org.jetbrains.skia.Image
+import org.khronos.webgl.Uint8Array
 import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
+import kotlin.js.JsAny
+import kotlin.js.JsArray
+import kotlin.js.toJsArray
+import kotlin.js.toJsNumber
+import kotlin.js.toJsString
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual abstract class ShareFacilitator {
+actual abstract class ShareFacilitator private constructor() {
     actual companion object {
         @Composable
         @Suppress("DEPRECATION")
@@ -36,7 +44,8 @@ actual abstract class ShareFacilitator {
     actual fun shareImageBitmap(imageBitmap: ImageBitmap) {
         val bytes = Image.makeFromBitmap(imageBitmap.asSkiaBitmap())
             .encodeToData(EncodedImageFormat.PNG)?.bytes ?: return
-        download(Blob(arrayOf(bytes), BlobPropertyBag("image/png")), "result.png")
+        val uint8 = Uint8Array(bytes.map { (it.toInt() and 0xFF).toJsNumber() }.toJsArray())
+        download(blob(uint8, "image/png"), "result.png")
     }
 
     actual fun shareText(text: String) {
@@ -45,12 +54,19 @@ actual abstract class ShareFacilitator {
     }
 
     actual fun shareTextFile(text: String, fileName: String, mime: String) {
-        download(Blob(arrayOf(text), BlobPropertyBag(mime)), fileName)
+        download(blob(text.toJsString(), mime), fileName)
     }
 
     actual fun openHtmlInBrowser(html: String) {
-        val url = URL.createObjectURL(Blob(arrayOf(html), BlobPropertyBag("text/html")))
+        val url = URL.createObjectURL(blob(html.toJsString(), "text/html"))
         window.open(url, "_blank")
+        return
+    }
+
+    private fun blob(part: JsAny, type: String): Blob {
+        val parts = JsArray<JsAny?>()
+        parts[0] = part
+        return Blob(parts, BlobPropertyBag(type))
     }
 
     private fun download(blob: Blob, fileName: String) {
@@ -61,6 +77,12 @@ actual abstract class ShareFacilitator {
         document.body?.appendChild(anchor)
         anchor.click()
         document.body?.removeChild(anchor)
-        window.setTimeout({ URL.revokeObjectURL(url) }, 10_000)
+        window.setTimeout(
+            {
+                URL.revokeObjectURL(url)
+                null
+            },
+            10_000,
+        )
     }
 }

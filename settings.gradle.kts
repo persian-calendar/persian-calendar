@@ -28,6 +28,14 @@ dependencyResolutionManagement {
             metadataSources { artifact() }
             content { includeModule("com.yarnpkg", "yarn") }
         }
+        // Binaryen distribution used by Kotlin/Wasm. Same reason as above.
+        ivy {
+            name = "Binaryen Distributions"
+            url = uri("https://github.com/WebAssembly/binaryen/releases/download")
+            patternLayout { artifact("version_[revision]/binaryen-version_[revision]-[classifier].[ext]") }
+            metadataSources { artifact() }
+            content { includeModule("com.github.webassembly", "binaryen") }
+        }
     }
 }
 rootProject.name = "persian-calendar"

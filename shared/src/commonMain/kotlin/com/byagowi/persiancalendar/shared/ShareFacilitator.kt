@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-expect abstract class ShareFacilitator {
+expect abstract class ShareFacilitator private constructor() {
     companion object {
         @Composable
         fun create(chooserTitle: String): ShareFacilitator

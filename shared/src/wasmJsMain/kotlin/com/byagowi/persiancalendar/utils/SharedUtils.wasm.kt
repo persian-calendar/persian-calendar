@@ -6,4 +6,4 @@ actual val logException: (Throwable) -> Unit = Throwable::printStackTrace
 
 actual var isDebugBuild: Boolean = !window.location.href.startsWith("https:")
 
-actual fun debugLog(vararg message: Any?) = console.log(message)
+actual fun debugLog(vararg message: Any?) = println(message.joinToString(", "))

@@ -5,7 +5,7 @@ plugins {
 }
 
 kotlin {
-    js {
+    wasmJs {
         browser {
             commonWebpackConfig {
                 outputFileName = "persian-calendar.js"
@@ -15,7 +15,7 @@ kotlin {
     }
 
     sourceSets {
-        jsMain.dependencies {
+        wasmJsMain.dependencies {
             implementation(project(":shared"))
             implementation(compose.ui)
             implementation(libs.kotlinx.browser)

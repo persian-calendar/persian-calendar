@@ -34,7 +34,7 @@ kotlin {
     }
 
     jvm("desktop")
-    js {
+    wasmJs {
         browser()
     }
     iosArm64()
@@ -65,7 +65,7 @@ kotlin {
                 implementation(libs.androidx.core.ktx)
             }
         }
-        jsMain {
+        wasmJsMain {
             dependencies {
                 implementation(libs.kotlinx.browser)
             }
