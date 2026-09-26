@@ -10,6 +10,7 @@ import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.nativeCanvas
@@ -20,10 +21,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.level
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.debugLog
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Level(
@@ -48,7 +51,12 @@ fun Level(
         }
     }
     val density = LocalDensity.current
-    val announcer = remember { SensorEventAnnouncer(R.string.level) }
+    val levelString by rememberUpdatedState(stringResource(Res.string.level))
+    val announcer = remember {
+        object : SensorEventAnnouncer() {
+            override val text: String get() = levelString
+        }
+    }
     val view = LocalView.current
     LaunchedEffect(isStopped) {
         var lastFeedback = -1L

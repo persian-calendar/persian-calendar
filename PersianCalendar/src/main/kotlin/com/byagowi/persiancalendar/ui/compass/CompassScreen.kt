@@ -47,6 +47,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -88,12 +89,16 @@ import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.compass
+import com.byagowi.persiancalendar.shared.generated.resources.east
 import com.byagowi.persiancalendar.shared.generated.resources.help
 import com.byagowi.persiancalendar.shared.generated.resources.level
 import com.byagowi.persiancalendar.shared.generated.resources.map
+import com.byagowi.persiancalendar.shared.generated.resources.north
 import com.byagowi.persiancalendar.shared.generated.resources.qibla
 import com.byagowi.persiancalendar.shared.generated.resources.show_sun_and_moon_path_in_24_hours
+import com.byagowi.persiancalendar.shared.generated.resources.south
 import com.byagowi.persiancalendar.shared.generated.resources.true_north
+import com.byagowi.persiancalendar.shared.generated.resources.west
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
@@ -393,6 +398,11 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    val northString by rememberUpdatedState(stringResource(Res.string.north))
+    val eastString by rememberUpdatedState(stringResource(Res.string.east))
+    val westString by rememberUpdatedState(stringResource(Res.string.west))
+    val southString by rememberUpdatedState(stringResource(Res.string.south))
+    val qiblaString by rememberUpdatedState(stringResource(Res.string.qibla))
     DisposableEffect(lifecycleOwner) {
         val sensorManager =
             context.getSystemService<SensorManager>() ?: return@DisposableEffect onDispose {}
@@ -404,11 +414,21 @@ fun SharedTransitionScope.CompassScreen(
 
         // Accessibility announcing helpers on when the phone is headed on a specific direction
         val checkIfA11yAnnounceIsNeeded = run {
-            val northAnnouncer = SensorEventAnnouncer(R.string.north)
-            val eastAnnouncer = SensorEventAnnouncer(R.string.east, false)
-            val westAnnouncer = SensorEventAnnouncer(R.string.west, false)
-            val southAnnouncer = SensorEventAnnouncer(R.string.south, false)
-            val qiblaAnnouncer = SensorEventAnnouncer(R.string.qibla, false);
+            val northAnnouncer = object : SensorEventAnnouncer() {
+                override val text: String get() = northString
+            }
+            val eastAnnouncer = object : SensorEventAnnouncer(false) {
+                override val text: String get() = eastString
+            }
+            val westAnnouncer = object : SensorEventAnnouncer(false) {
+                override val text: String get() = westString
+            }
+            val southAnnouncer = object : SensorEventAnnouncer(false) {
+                override val text: String get() = southString
+            }
+            val qiblaAnnouncer = object : SensorEventAnnouncer(false) {
+                override val text: String get() = qiblaString
+            };
             { angle: Float ->
                 northAnnouncer.check(context, isNearToDegree(0f, angle))
                 eastAnnouncer.check(context, isNearToDegree(90f, angle))
