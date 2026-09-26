@@ -45,6 +45,7 @@ spotless {
         target("**/*.kt")
         targetExclude("**/build/**")
         targetExclude("libs/**")
+        targetExclude("shared/src/commonMain/kotlin/com/byagowi/persiancalendar/icons/material/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 

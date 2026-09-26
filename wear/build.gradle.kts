@@ -73,7 +73,6 @@ dependencies {
     // Google/JetBrains
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.activity)
-    implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.lifecycle.process)

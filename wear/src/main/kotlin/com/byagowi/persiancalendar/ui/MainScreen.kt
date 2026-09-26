@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Construction
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -47,6 +45,7 @@ import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generateEntries
 import com.byagowi.persiancalendar.generated.EventSource
+import com.byagowi.persiancalendar.icons.material.filled.constructionIcon
 import com.byagowi.persiancalendar.today
 
 @Composable
@@ -66,7 +65,7 @@ fun MainScreen(
             EdgeButton(
                 onClick = navigateToUtilities,
                 buttonSize = EdgeButtonSize.Medium,
-            ) { Icon(Icons.Default.Construction, contentDescription = "ابزارها") }
+            ) { Icon(constructionIcon, contentDescription = "ابزارها") }
         },
     ) {
         OtherCalendars(

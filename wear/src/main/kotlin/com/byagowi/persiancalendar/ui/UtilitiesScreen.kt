@@ -4,11 +4,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,6 +15,10 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import com.byagowi.persiancalendar.icons.material.filled.calendarMonthIcon
+import com.byagowi.persiancalendar.icons.material.filled.mapIcon
+import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.icons.material.filled.swapVerticalCircleIcon
 
 @Composable
 fun UtilitiesScreen(
@@ -35,10 +34,10 @@ fun UtilitiesScreen(
             item { ListHeader { Text("ابزارها") } }
             items(
                 listOf(
-                    Triple(navigateToConverter, Icons.Default.SwapVerticalCircle, "مبدل"),
-                    Triple(navigateToCalendar, Icons.Default.CalendarMonth, "تقویم"),
-                    Triple(navigateToGlobe, Icons.Default.Map, "زمین"),
-                    Triple(navigateToSettings, Icons.Default.Settings, "تنظیمات"),
+                    Triple(navigateToConverter, swapVerticalCircleIcon, "مبدل"),
+                    Triple(navigateToCalendar, calendarMonthIcon, "تقویم"),
+                    Triple(navigateToGlobe, mapIcon, "زمین"),
+                    Triple(navigateToSettings, settingsIcon, "تنظیمات"),
                 ),
             ) { (action, icon, title) ->
                 FilledTonalButton(
