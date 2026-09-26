@@ -533,8 +533,9 @@ fun createSunViewRemoteViews(
             selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
         ) createRoundPath(width, height, roundPixelSize) else null
     remoteViews.setTextColor(R.id.message, color.toArgb())
-    val message =
-        if (prayTimes == null) context.getString(R.string.ask_user_to_set_location) else ""
+    val message = if (prayTimes == null) context.getString(
+        com.byagowi.persiancalendar.shared.R.string.ask_user_to_set_location,
+    ) else ""
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.message, message)
     remoteViews.setImageViewBitmap(
         R.id.image,
@@ -636,7 +637,7 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
             val weekDay = weekStart + i
             remoteViews.setTextViewText(id, weekDay.shortTitle)
             val contentDescription = context.getString(
-                R.string.week_days_name_column,
+                com.byagowi.persiancalendar.shared.R.string.week_days_name_column,
                 weekDay.title,
             )
             remoteViews.setContentDescription(id, contentDescription)
@@ -730,7 +731,10 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         if (isShowWeekOfYearEnabled) monthWidgetWeeks.drop(1).forEachIndexed { i, id ->
             val weekNumber = numeral.format(weekOfYearStart + i)
             remoteViews.setTextViewText(id, weekNumber)
-            val contentDescription = context.getString(R.string.nth_week_of_year, weekNumber)
+            val contentDescription = context.getString(
+                com.byagowi.persiancalendar.shared.R.string.nth_week_of_year,
+                weekNumber,
+            )
             remoteViews.setContentDescription(id, contentDescription)
         }
         val visibility = if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
@@ -749,7 +753,10 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
         remoteViews.setContentDescription(
             R.id.add_event,
-            context.getString(if (offset == 0) R.string.add_event else R.string.return_to_today),
+            context.getString(
+                if (offset == 0) com.byagowi.persiancalendar.shared.R.string.add_event
+                else com.byagowi.persiancalendar.shared.R.string.return_to_today,
+            ),
         )
         remoteViews.setImageViewResource(
             R.id.add_event,
@@ -767,7 +774,10 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         remoteViews.setOnClickPendingIntent(R.id.previous_month, previousPendingIntent)
         remoteViews.setContentDescription(
             R.id.previous_month,
-            context.getString(R.string.previous_x, context.getString(R.string.month)),
+            context.getString(
+                com.byagowi.persiancalendar.shared.R.string.previous_x,
+                context.getString(com.byagowi.persiancalendar.shared.R.string.month),
+            ),
         )
         val nextPendingIntent = PendingIntent.getBroadcast(
             context, 0,
@@ -779,7 +789,10 @@ private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: In
         remoteViews.setOnClickPendingIntent(R.id.next_month, nextPendingIntent)
         remoteViews.setContentDescription(
             R.id.next_month,
-            context.getString(R.string.next_x, context.getString(R.string.month)),
+            context.getString(
+                com.byagowi.persiancalendar.shared.R.string.next_x,
+                context.getString(com.byagowi.persiancalendar.shared.R.string.month),
+            ),
         )
         val action = jdnActionKey + monthStartJdn.value
         remoteViews.setOnClickPendingIntent(
@@ -913,7 +926,10 @@ fun createMonthViewRemoteViews(context: Context, size: DpSize?, today: Jdn): Rem
         setWeekNumberText = if (size != null && prefersWidgetsDynamicColors) { i, text ->
             val id = monthWidgetWeeks[i]
             remoteViews.setTextViewText(id, text)
-            val contentDescription = context.getString(R.string.nth_week_of_year, text)
+            val contentDescription = context.getString(
+                com.byagowi.persiancalendar.shared.R.string.nth_week_of_year,
+                text,
+            )
             remoteViews.setContentDescription(id, contentDescription)
             cellRadius.let {
                 it * if (mainCalendarNumeral.isArabicIndicVariants) 1f else .8f
@@ -1107,7 +1123,10 @@ fun createMapRemoteViews(context: Context, size: DpSize?, now: Long): RemoteView
         debugLog("A new map is rendered and cached")
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
-    remoteViews.setContentDescription(R.id.image, context.getString(R.string.map))
+    remoteViews.setContentDescription(
+        R.id.image,
+        context.getString(com.byagowi.persiancalendar.shared.R.string.map),
+    )
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent("MAP"))
     return remoteViews
 }
@@ -1131,7 +1150,10 @@ private fun createMoonRemoteViews(context: Context, size: DpSize?, now: Long): R
         )
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
-    remoteViews.setContentDescription(R.id.image, context.getString(R.string.map))
+    remoteViews.setContentDescription(
+        R.id.image,
+        context.getString(com.byagowi.persiancalendar.shared.R.string.map),
+    )
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent("ASTRONOMY"))
     return remoteViews
 }
@@ -1226,7 +1248,9 @@ fun create4x1RemoteViews(
     )
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
-        if (isWidgetClock && isForcedIranTimeEnabled) "(" + context.getString(R.string.iran_time) + ")" else "",
+        if (isWidgetClock && isForcedIranTimeEnabled) "(" + context.getString(
+            com.byagowi.persiancalendar.shared.R.string.iran_time,
+        ) + ")" else "",
     )
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, context.launchAppPendingIntent())
     return remoteViews
@@ -1423,7 +1447,7 @@ fun create4x2RemoteViews(
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2,
             context.getString(
-                R.string.n_till,
+                com.byagowi.persiancalendar.shared.R.string.n_till,
                 (if (difference.value < .0) difference + Clock(24.0) else difference).asRemainingTime(
                     context.resources, short = language.isTamil,
                 ),
@@ -1680,7 +1704,7 @@ private data class NotificationData(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 notificationId.toString(),
-                context.getString(R.string.app_name),
+                context.getString(com.byagowi.persiancalendar.shared.R.string.app_name),
                 if (useDefaultPriority) NotificationManager.IMPORTANCE_DEFAULT
                 else NotificationManager.IMPORTANCE_LOW,
             )

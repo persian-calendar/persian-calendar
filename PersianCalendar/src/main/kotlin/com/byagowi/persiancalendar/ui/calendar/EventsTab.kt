@@ -78,7 +78,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -107,6 +106,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.minutes
 import com.byagowi.persiancalendar.shared.generated.resources.seconds
 import com.byagowi.persiancalendar.shared.generated.resources.settings
 import com.byagowi.persiancalendar.shared.generated.resources.show_device_calendar_events
+import com.byagowi.persiancalendar.shared.generated.resources.spring_equinox
 import com.byagowi.persiancalendar.shared.generated.resources.view_source
 import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
@@ -691,8 +691,8 @@ fun readEventsWithEquinox(
         if ((jdn - nextYearJdn) in -1..<0) {
             val gregorianYear = (nextYearJdn - 1).toCivilDate().year
             val equinoxTime = Equinox.NORTHWARD_EQUINOX of gregorianYear
-            val title = resources.getString(
-                R.string.spring_equinox,
+            val title = stringResource(
+                Res.string.spring_equinox,
                 numeral.format(
                     when (mainCalendar) {
                         Calendar.SHAMSI -> date.year + if (date.month == 12) 1 else 0

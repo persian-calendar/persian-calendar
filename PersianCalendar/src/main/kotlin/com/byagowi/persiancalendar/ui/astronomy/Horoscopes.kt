@@ -211,7 +211,7 @@ fun HoroscopeDialog(
                             Icon(
                                 ImageVector.vectorResource(it.icon),
                                 modifier = Modifier.size(24.dp),
-                                contentDescription = null,
+                                contentDescription = stringResource(it.titleRes),
                                 tint = Color.Unspecified,
                             )
                         },

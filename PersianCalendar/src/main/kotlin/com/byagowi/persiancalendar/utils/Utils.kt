@@ -72,7 +72,11 @@ fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elev
 fun Coordinates.toEarthPosition() = EarthPosition(this.latitude, this.longitude)
 
 fun showUnsupportedActionToast(context: Context) {
-    Toast.makeText(context, R.string.not_supported_action, Toast.LENGTH_SHORT).show()
+    Toast.makeText(
+        context,
+        com.byagowi.persiancalendar.shared.R.string.not_supported_action,
+        Toast.LENGTH_SHORT,
+    ).show()
 }
 
 // The same order as https://praytimes.org/
@@ -86,16 +90,16 @@ fun CalculationMethod.title(resources: Resources): String {
         }
     }
     val titleId = when (this) {
-        CalculationMethod.MWL -> R.string.method_mwl
-        CalculationMethod.ISNA -> R.string.method_isna
-        CalculationMethod.Egypt -> R.string.method_egypt
-        CalculationMethod.Makkah -> R.string.method_makkah
-        CalculationMethod.Karachi -> R.string.method_karachi
-        CalculationMethod.Jafari -> R.string.method_jafari
-        CalculationMethod.Tehran -> R.string.method_tehran
-        CalculationMethod.France -> R.string.method_france
-        CalculationMethod.Russia -> R.string.method_russia
-        CalculationMethod.Singapore -> R.string.method_singapore
+        CalculationMethod.MWL -> com.byagowi.persiancalendar.shared.R.string.method_mwl
+        CalculationMethod.ISNA -> com.byagowi.persiancalendar.shared.R.string.method_isna
+        CalculationMethod.Egypt -> com.byagowi.persiancalendar.shared.R.string.method_egypt
+        CalculationMethod.Makkah -> com.byagowi.persiancalendar.shared.R.string.method_makkah
+        CalculationMethod.Karachi -> com.byagowi.persiancalendar.shared.R.string.method_karachi
+        CalculationMethod.Jafari -> com.byagowi.persiancalendar.shared.R.string.method_jafari
+        CalculationMethod.Tehran -> com.byagowi.persiancalendar.shared.R.string.method_tehran
+        CalculationMethod.France -> com.byagowi.persiancalendar.shared.R.string.method_france
+        CalculationMethod.Russia -> com.byagowi.persiancalendar.shared.R.string.method_russia
+        CalculationMethod.Singapore -> com.byagowi.persiancalendar.shared.R.string.method_singapore
     }
     return resources.getString(titleId)
 }

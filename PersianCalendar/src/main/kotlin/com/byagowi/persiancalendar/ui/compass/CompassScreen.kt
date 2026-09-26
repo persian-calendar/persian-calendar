@@ -376,8 +376,8 @@ fun SharedTransitionScope.CompassScreen(
                     ) {
                         showSnackbarMessage(
                             resources.getString(
-                                if (sensorNotFound) R.string.compass_not_found
-                                else R.string.calibrate_compass_summary,
+                                if (sensorNotFound) com.byagowi.persiancalendar.shared.R.string.compass_not_found
+                                else com.byagowi.persiancalendar.shared.R.string.calibrate_compass_summary,
                             ),
                             SnackbarDuration.Long,
                         )
@@ -505,7 +505,7 @@ fun SharedTransitionScope.CompassScreen(
                     isListening = true
                 } else if (coordinates != null) {
                     showSnackbarMessage(
-                        resources.getString(R.string.compass_not_found),
+                        resources.getString(com.byagowi.persiancalendar.shared.R.string.compass_not_found),
                         SnackbarDuration.Short,
                     )
                     sensorNotFound = true

@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.utils.logException
 
 fun appStandbyStatus(context: Context): String? {
@@ -28,13 +28,12 @@ fun appStandbyStatus(context: Context): String? {
     }.getOrNull()
 }
 
-fun launchEmailIntent(context: Context, message: String) {
-    val bucket =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-            "\nStandby Bucket: ${appStandbyStatus(context)}"
-        else ""
+fun launchEmailIntent(context: Context, subject: String, message: String) {
+    val bucket = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) "\nStandby Bucket: ${
+        appStandbyStatus(context)
+    }"
+    else ""
     val email = "persian-calendar-admin@googlegroups.com"
-    val subject = context.getString(R.string.app_name)
     val body = """$message
 
 

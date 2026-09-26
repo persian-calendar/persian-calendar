@@ -93,7 +93,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import androidx.core.util.lruCache
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
@@ -104,6 +103,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
 import com.byagowi.persiancalendar.shared.generated.resources.day
@@ -163,6 +163,7 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -179,7 +180,7 @@ fun SharedTransitionScope.AstronomyScreen(
     LaunchedEffect(Unit) {
         val interval = 10.seconds.inWholeMilliseconds
         while (true) {
-            delay(interval)
+            delay(interval.milliseconds)
             timeInMillis.longValue += interval
         }
     }
@@ -630,7 +631,7 @@ private fun SharedTransitionScope.SolarDisplay(
                         if (it == AstronomyMode.MOON) MoonIcon(astronomyState, solarDraw) else Icon(
                             ImageVector.vectorResource(it.icon),
                             modifier = Modifier.size(24.dp),
-                            contentDescription = null,
+                            contentDescription = stringResource(it.titleRes),
                             tint = Color.Unspecified,
                         )
                     },

@@ -112,7 +112,6 @@ import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Language
@@ -121,6 +120,7 @@ import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.WeekDay
 import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.generated.citiesStore
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.SwipeUpAction
 import com.byagowi.persiancalendar.ui.theme.Theme

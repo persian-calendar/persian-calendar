@@ -90,7 +90,6 @@ import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.global.isCyberpunk
@@ -100,6 +99,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.service.PersianCalendarWallpaperService
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.add_quick_settings_tile
@@ -440,7 +440,7 @@ private fun MenuItems(
                 ComponentName(
                     context.packageName, PersianCalendarTileService::class.qualifiedName.orEmpty(),
                 ),
-                resources.getString(R.string.app_name),
+                resources.getString(com.byagowi.persiancalendar.shared.R.string.app_name),
                 Icon.createWithResource(context, R.drawable.day19),
                 {},
                 {},

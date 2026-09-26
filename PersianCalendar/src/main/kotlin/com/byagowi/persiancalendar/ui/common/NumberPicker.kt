@@ -64,8 +64,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import kotlinx.coroutines.launch
 import kotlin.math.abs

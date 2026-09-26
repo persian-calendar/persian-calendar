@@ -4,7 +4,6 @@ import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.toAstronomyTime
@@ -13,6 +12,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.earth
 import com.byagowi.persiancalendar.shared.generated.resources.empty

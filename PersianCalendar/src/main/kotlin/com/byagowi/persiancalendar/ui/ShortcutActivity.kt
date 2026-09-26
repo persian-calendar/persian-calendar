@@ -14,16 +14,15 @@ abstract class BaseShortcut(val shortcut: Shortcut) : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val label = getString(shortcut.stringId)
-        val shortcut = ShortcutInfoCompat.Builder(this, shortcut.name)
-            .setShortLabel(label)
-            .setLongLabel(label)
-            .setIntent(
-                Intent(this, MainActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .setAction(shortcut.name),
-            )
-            .setIcon(IconCompat.createWithResource(this, shortcut.icon))
-            .build()
+        val shortcut =
+            ShortcutInfoCompat.Builder(this, shortcut.name).setShortLabel(label).setLongLabel(label)
+                .setIntent(
+                    Intent(
+                        this,
+                        MainActivity::class.java,
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        .setAction(shortcut.name),
+                ).setIcon(IconCompat.createWithResource(this, shortcut.icon)).build()
         setResult(RESULT_OK, ShortcutManagerCompat.createShortcutResultIntent(this, shortcut))
         finish()
     }
@@ -31,11 +30,26 @@ abstract class BaseShortcut(val shortcut: Shortcut) : Activity() {
 
 // It should match xml/shortcuts.xml also
 enum class Shortcut(@get:StringRes val stringId: Int, @get:DrawableRes val icon: Int) {
-    CONVERTER(R.string.converter, R.drawable.sc_converter),
-    COMPASS(R.string.compass, R.drawable.sc_compass),
-    LEVEL(R.string.level, R.drawable.sc_level),
-    ASTRONOMY(R.string.horoscope, R.drawable.sc_astronomy),
-    MAP(R.string.map, R.drawable.sc_map);
+    CONVERTER(
+        com.byagowi.persiancalendar.shared.R.string.converter,
+        R.drawable.sc_converter,
+    ),
+    COMPASS(
+        com.byagowi.persiancalendar.shared.R.string.compass,
+        R.drawable.sc_compass,
+    ),
+    LEVEL(
+        com.byagowi.persiancalendar.shared.R.string.level,
+        R.drawable.sc_level,
+    ),
+    ASTRONOMY(
+        com.byagowi.persiancalendar.shared.R.string.horoscope,
+        R.drawable.sc_astronomy,
+    ),
+    MAP(
+        com.byagowi.persiancalendar.shared.R.string.map,
+        R.drawable.sc_map,
+    );
 
     companion object {
         fun fromName(name: String?) = Shortcut.entries.firstOrNull { it.name == name }

@@ -70,7 +70,11 @@ fun AthanSelectDialog(
             putString(PREF_ATHAN_NAME, title)
             putString(PREF_ATHAN_URI, uri.toString())
         }
-        Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            context,
+            com.byagowi.persiancalendar.shared.R.string.custom_notification_is_set,
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     val deviceRingtone = rememberLauncherForActivityResult(PickRingtoneContract()) {
@@ -79,7 +83,11 @@ fun AthanSelectDialog(
             val ringtone = RingtoneManager.getRingtone(context, uri) ?: return@callback null
             ringtone.getTitle(context).orEmpty() to uri
         }
-        Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            context,
+            com.byagowi.persiancalendar.shared.R.string.custom_notification_is_set,
+            Toast.LENGTH_SHORT,
+        ).show()
     }
     val soundFilePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument(),

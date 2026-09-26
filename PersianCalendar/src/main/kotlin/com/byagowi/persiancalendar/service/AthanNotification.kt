@@ -56,10 +56,15 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val notificationChannel = NotificationChannel(
-            notificationChannelId, context.getString(R.string.athan),
+            notificationChannelId,
+            context.getString(
+                com.byagowi.persiancalendar.shared.R.string.athan,
+            ),
             NotificationManager.IMPORTANCE_HIGH,
         ).also {
-            it.description = context.getString(R.string.athan)
+            it.description = context.getString(
+                com.byagowi.persiancalendar.shared.R.string.athan,
+            )
             it.enableLights(true)
             it.lightColor = Color.GREEN
             if (athanVibration) it.vibrationPattern = LongArray(2) { 500 }
@@ -82,13 +87,18 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
             ?: .0).roundToInt()
         if (athanGap <= 0) return@let "اذان $it"
         context.resources.getQuantityString(
-            R.plurals.minutes,
+            com.byagowi.persiancalendar.shared.R.plurals.minutes,
             abs(athanGap),
             numeral.format(abs(athanGap)),
         ) + " پیش از اذان " + it
     }
     val title = if (cityName == null) prayTimeName
-    else "$prayTimeName$spacedComma${context.getString(R.string.in_city_time, cityName)}"
+    else "$prayTimeName$spacedComma${
+        context.getString(
+            com.byagowi.persiancalendar.shared.R.string.in_city_time,
+            cityName,
+        )
+    }"
 
     val prayTimes = coordinates?.calculatePrayTimes()
     val isJafari = calculationMethod.isJafari

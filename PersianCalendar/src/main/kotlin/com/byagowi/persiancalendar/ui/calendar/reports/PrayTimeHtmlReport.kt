@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.reports
 
 import android.content.res.Resources
 import androidx.annotation.CheckResult
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
@@ -15,6 +14,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.monthName

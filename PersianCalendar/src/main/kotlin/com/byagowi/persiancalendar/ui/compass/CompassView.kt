@@ -253,11 +253,11 @@ private class CompassView(private val resources: Resources) {
         when {
             it % 6 == 0 -> if (language.isArabicScript) resources.getString(
                 when (it) {
-                    0 -> R.string.north
-                    6 -> R.string.east
-                    12 -> R.string.south
-                    18 -> R.string.west
-                    else -> R.string.empty
+                    0 -> com.byagowi.persiancalendar.shared.R.string.north
+                    6 -> com.byagowi.persiancalendar.shared.R.string.east
+                    12 -> com.byagowi.persiancalendar.shared.R.string.south
+                    18 -> com.byagowi.persiancalendar.shared.R.string.west
+                    else -> com.byagowi.persiancalendar.shared.R.string.empty
                 },
             ) else cardinalDirection(it)
 

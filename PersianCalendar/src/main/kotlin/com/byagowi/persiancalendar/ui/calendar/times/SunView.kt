@@ -34,10 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.ui.utils.dp

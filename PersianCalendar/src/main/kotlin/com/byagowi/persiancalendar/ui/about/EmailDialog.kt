@@ -12,6 +12,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about_email_sum
+import com.byagowi.persiancalendar.shared.generated.resources.app_name
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.continue_button
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -40,10 +42,11 @@ fun EmailDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             val context = LocalContext.current
+            val subject by rememberUpdatedState(stringResource(Res.string.app_name))
             TextButton(
                 onClick = {
                     onDismissRequest()
-                    launchEmailIntent(context, message)
+                    launchEmailIntent(context, subject, message)
                 },
             ) { Text(stringResource(Res.string.continue_button)) }
         },

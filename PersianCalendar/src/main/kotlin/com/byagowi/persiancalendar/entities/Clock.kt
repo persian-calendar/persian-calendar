@@ -3,13 +3,13 @@ package com.byagowi.persiancalendar.entities
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
 import androidx.collection.IntIntPair
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.amString
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.pmString
 import com.byagowi.persiancalendar.global.spacedAndInDates
+import com.byagowi.persiancalendar.shared.R
 import java.util.GregorianCalendar
 import java.util.Locale
 import kotlin.time.Duration.Companion.hours

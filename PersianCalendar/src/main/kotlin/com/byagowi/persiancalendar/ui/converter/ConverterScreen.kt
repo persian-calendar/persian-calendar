@@ -70,8 +70,6 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_CALCULATOR_INPUT
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -82,6 +80,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.return_to_today
@@ -548,7 +547,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
                             jdn = selectedDate,
                             date = selectedDate on calendar,
                         ),
-                        resources.getString(R.string.equivalent_to),
+                        resources.getString(com.byagowi.persiancalendar.shared.R.string.equivalent_to),
                         otherCalendars.joinToString(spacedComma) {
                             formatDate(date = selectedDate on it)
                         },

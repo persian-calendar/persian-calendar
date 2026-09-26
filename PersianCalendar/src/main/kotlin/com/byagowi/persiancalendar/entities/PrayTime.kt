@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.ui.graphics.Color
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.asr
 import com.byagowi.persiancalendar.shared.generated.resources.dhuhr
@@ -46,8 +46,8 @@ enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray)
     // Used in Athan notification
     val drawable
         get() = when (this) {
-            DHUHR, ASR -> R.drawable.brightness7
-            else -> R.drawable.brightness4
+            DHUHR, ASR -> com.byagowi.persiancalendar.R.drawable.brightness7
+            else -> com.byagowi.persiancalendar.R.drawable.brightness4
         }
 
     // Used in times tab for items that are always shown

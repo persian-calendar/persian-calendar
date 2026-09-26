@@ -5,7 +5,7 @@ import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.EARTH
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.FIRE
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.METAL

@@ -11,9 +11,9 @@ import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.iso8601DateFormat
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.show_direct_path_label
 import com.byagowi.persiancalendar.shared.generated.resources.show_globe_view_label

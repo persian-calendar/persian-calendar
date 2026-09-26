@@ -10,7 +10,6 @@ import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -42,6 +41,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.yearAwareMonthsNames
+import com.byagowi.persiancalendar.shared.R
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate

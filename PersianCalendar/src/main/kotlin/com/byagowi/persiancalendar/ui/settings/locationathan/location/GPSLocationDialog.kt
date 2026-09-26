@@ -39,10 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.LRM
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
@@ -120,7 +119,7 @@ fun GPSLocationDialog(
         else onDismissRequest()
     }
 
-    var message by remember { mutableStateOf(resources.getString(R.string.wait_for_gps)) }
+    var message by remember { mutableStateOf(resources.getString(com.byagowi.persiancalendar.shared.R.string.wait_for_gps)) }
     var coordinates by remember { mutableStateOf<Coordinates?>(null) }
     var cityName by remember { mutableStateOf<String?>(null) }
     var countryCode by remember { mutableStateOf<String?>(null) }
@@ -171,12 +170,14 @@ fun GPSLocationDialog(
 
             override fun onProviderEnabled(provider: String) {
                 isOneProviderEnabled = true
-                message = resources.getString(R.string.wait_for_gps)
+                message = resources.getString(
+                    com.byagowi.persiancalendar.shared.R.string.wait_for_gps,
+                )
             }
 
             override fun onProviderDisabled(provider: String) {
                 if (!isOneProviderEnabled) message =
-                    resources.getString(R.string.enable_location_services)
+                    resources.getString(com.byagowi.persiancalendar.shared.R.string.enable_location_services)
             }
         }
 
