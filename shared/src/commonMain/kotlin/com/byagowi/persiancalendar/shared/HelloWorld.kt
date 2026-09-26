@@ -18,6 +18,5 @@ fun HelloWorld(message: String) {
             Text(message + "\n 2000-01-01 -> " + PersianDate(CivilDate(2000, 1, 1)))
             QrView("https://example.com") {}
         }
-
     }
 }
