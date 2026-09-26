@@ -17,7 +17,7 @@ import com.byagowi.persiancalendar.utils.logException
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-actual abstract class ShareFacilitator private constructor() {
+actual abstract class ShareFacilitator private actual constructor() {
     actual companion object {
         @Composable
         actual fun create(chooserTitle: String): ShareFacilitator {

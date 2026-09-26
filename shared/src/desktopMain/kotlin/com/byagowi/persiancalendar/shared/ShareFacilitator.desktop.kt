@@ -15,7 +15,7 @@ import java.awt.Desktop
 import java.io.File
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual abstract class ShareFacilitator private constructor() {
+actual abstract class ShareFacilitator private actual constructor() {
     actual companion object {
         @Composable
         @Suppress("DEPRECATION")

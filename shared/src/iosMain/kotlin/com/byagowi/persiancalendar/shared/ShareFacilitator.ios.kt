@@ -22,7 +22,7 @@ import platform.UIKit.UIImage
 import platform.UIKit.UIViewController
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual abstract class ShareFacilitator private constructor() {
+actual abstract class ShareFacilitator private actual constructor() {
     actual companion object {
         @Composable
         actual fun create(chooserTitle: String): ShareFacilitator {
