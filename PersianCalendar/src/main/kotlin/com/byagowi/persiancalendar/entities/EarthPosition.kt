@@ -44,7 +44,7 @@ data class EarthPosition(val latitude: Double, val longitude: Double) : Parcelab
         val x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
 
         // Normalize bearing to 0.0 .. 360.0 degrees
-        val bearingDegrees = ((atan2(y, x).toDegrees() + 360.0) % 360.0).toFloat()
+        val bearingDegrees = atan2(y, x).toDegrees().mod(360.0).toFloat()
 
         return EarthHeading(distanceMeters, bearingDegrees)
     }
