@@ -202,6 +202,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.month_pray_times
 import com.byagowi.persiancalendar.shared.generated.resources.more
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
 import com.byagowi.persiancalendar.shared.generated.resources.no_event
+import com.byagowi.persiancalendar.shared.generated.resources.none
 import com.byagowi.persiancalendar.shared.generated.resources.planetary_hours
 import com.byagowi.persiancalendar.shared.generated.resources.previous_x
 import com.byagowi.persiancalendar.shared.generated.resources.search_in_events
@@ -1745,7 +1746,7 @@ private fun SharedTransitionScope.Menu(
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
             AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
-                    text = { Text(stringResource(calendar?.title ?: Res.string.empty)) },
+                    text = { Text(stringResource(calendar?.title ?: Res.string.none)) },
                     isSelected = calendar == secondaryCalendar,
                 ) {
                     context.preferences.edit {
