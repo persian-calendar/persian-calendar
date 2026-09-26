@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
+import com.byagowi.persiancalendar.utils.logException
 import org.jetbrains.skia.EncodedImageFormat
 import org.jetbrains.skia.Image
 import java.awt.Desktop
@@ -35,21 +36,21 @@ actual abstract class ShareFacilitator {
                 .encodeToData(EncodedImageFormat.PNG)?.bytes ?: return
             val file = saveAsTempFile("result.png").apply { writeBytes(bytes) }
             openFile(file)
-        }.onFailure { it.printStackTrace() }
+        }.onFailure(logException)
     }
 
     actual fun shareText(text: String) {
         runCatching {
             @Suppress("DEPRECATION")
             clipboard.setText(AnnotatedString(text))
-        }.onFailure { it.printStackTrace() }
+        }.onFailure(logException)
     }
 
     actual fun shareTextFile(text: String, fileName: String, mime: String) {
         runCatching {
             val file = saveAsTempFile(fileName).apply { writeText(text) }
             openFile(file)
-        }.onFailure { it.printStackTrace() }
+        }.onFailure(logException)
     }
 
     actual fun openHtmlInBrowser(html: String) {
@@ -58,7 +59,7 @@ actual abstract class ShareFacilitator {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(file.toURI())
             }
-        }.onFailure { it.printStackTrace() }
+        }.onFailure(logException)
     }
 
     private fun saveAsTempFile(fileName: String): File =

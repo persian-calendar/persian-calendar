@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar.utils
 
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
+expect val logException: (Throwable) -> Unit
+
 expect var isDebugBuild: Boolean
 
 inline val <T> T.debugAssertNotNull: T
