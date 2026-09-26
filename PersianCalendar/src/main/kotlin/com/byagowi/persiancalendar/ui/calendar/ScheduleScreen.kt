@@ -43,6 +43,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
@@ -69,7 +70,6 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.isLandscape
-import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
@@ -172,11 +172,15 @@ fun SharedTransitionScope.ScheduleScreen(
                         }
 
                         val context = LocalContext.current
+                        val shareFacilitator = ShareFacilitator.create(
+                            stringResource(Res.string.schedule),
+                        )
+
                         fun showPrintReport(isWholeYear: Boolean = false) {
                             closeMenu()
                             val date = firstVisibleItemJdn on mainCalendar
                             runCatching {
-                                context.openHtmlInBrowser(
+                                shareFacilitator.openHtmlInBrowser(
                                     monthHtmlReport(context, date, wholeYear = isWholeYear),
                                 )
                             }.onFailure(logException)

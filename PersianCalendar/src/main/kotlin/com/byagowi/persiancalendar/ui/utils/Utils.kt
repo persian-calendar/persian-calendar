@@ -6,14 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
 import android.view.HapticFeedbackConstants
 import android.view.View
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
@@ -23,10 +21,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.core.app.ShareCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
@@ -36,8 +31,6 @@ import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.sample
-import java.io.ByteArrayOutputStream
-import java.io.File
 
 inline val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
 inline val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -53,56 +46,6 @@ fun Context.bringMarketPage(packageName: String = this.packageName) {
         }.onFailure(logException)
     }
 }
-
-fun Bitmap.toPngByteArray(): ByteArray {
-    val buffer = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 100, buffer)
-    return buffer.toByteArray()
-}
-
-// fun Bitmap.toPngBase64(): String =
-//     "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
-
-inline fun Context.saveAsCacheFile(fileName: String, crossinline action: (File) -> Unit): Uri {
-    return FileProvider.getUriForFile(
-        applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action),
-    )
-}
-
-fun Context.openHtmlInBrowser(html: String) {
-    runCatching {
-        CustomTabsIntent.Builder().build()
-            .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-            .launchUrl(this, saveAsCacheFile("persian-calendar.html") { it.writeText(html) })
-    }.onFailure(logException)
-}
-
-fun Context.shareText(text: String, chooserTitle: String) {
-    runCatching {
-        ShareCompat.IntentBuilder(this).setType("text/plain").setChooserTitle(chooserTitle)
-            .setText(text).startChooser()
-    }.onFailure(logException)
-}
-
-private fun Context.shareUriFile(uri: Uri, mime: String) {
-    runCatching {
-        startActivity(
-            Intent.createChooser(
-                Intent(Intent.ACTION_SEND).also {
-                    it.type = mime
-                    it.putExtra(Intent.EXTRA_STREAM, uri)
-                },
-                getString(R.string.share),
-            ),
-        )
-    }.onFailure(logException)
-}
-
-fun Context.shareTextFile(text: String, fileName: String, mime: String) =
-    shareUriFile(saveAsCacheFile(fileName) { it.writeText(text) }, mime)
-
-fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
-    shareUriFile(saveAsCacheFile(fileName) { it.writeBytes(binary) }, mime)
 
 fun getFileName(context: Context, uri: Uri): String? {
     if (uri.scheme == ContentResolver.SCHEME_CONTENT) context.contentResolver.query(

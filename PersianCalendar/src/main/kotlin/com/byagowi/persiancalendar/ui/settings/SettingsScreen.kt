@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.customImageName
 import com.byagowi.persiancalendar.global.isCyberpunk
@@ -146,7 +147,6 @@ import com.byagowi.persiancalendar.ui.theme.appDialogProperties
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLandscape
-import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
@@ -532,11 +532,12 @@ private fun MenuItems(
         val result = remember(command) {
             Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
         }
+        val shareFacilitator = ShareFacilitator.create(stringResource(Res.string.settings))
         AppDialog(
             onDismissRequest = { command = "" },
             neutralButton = {
                 TextButton(
-                    onClick = { context.shareTextFile(result, "log.txt", "text/plain") },
+                    onClick = { shareFacilitator.shareTextFile(result, "log.txt", "text/plain") },
                 ) { Text("Share") }
             },
         ) { Text(result) }

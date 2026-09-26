@@ -71,6 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_CALCULATOR_INPUT
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -104,7 +105,6 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
@@ -131,7 +131,8 @@ fun SharedTransitionScope.ConverterScreen(
 ) {
     var screenMode by rememberSaveable { mutableStateOf(initialScreenMode) }
     var resetButtonVisibility by remember { mutableStateOf(false) }
-    var shareAction by remember { mutableStateOf({}) }
+    var shareAction by remember { mutableStateOf<(ShareFacilitator) -> Unit>({}) }
+    val shareFacilitator = ShareFacilitator.create(stringResource(screenMode.titleRes))
     var resetAction by remember { mutableStateOf({}) }
     val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     Scaffold(
@@ -143,7 +144,7 @@ fun SharedTransitionScope.ConverterScreen(
                     AppModesDropDown(
                         value = screenMode,
                         onValueChange = { screenMode = it },
-                        items = ConverterScreenMode.entries.associateWith { stringResource(it.title) },
+                        items = ConverterScreenMode.entries.associateWith { stringResource(it.titleRes) },
                     )
                 },
                 colors = appTopAppBarColors(),
@@ -174,7 +175,7 @@ fun SharedTransitionScope.ConverterScreen(
                         )
                     }
                     AnimatedVisibility(visible = !anyPendingConfirm) {
-                        ShareActionButton(action = shareAction)
+                        ShareActionButton(action = { shareAction(shareFacilitator) })
                     }
                 },
             )
@@ -281,7 +282,7 @@ private val oneMinutes = 1.minutes.inWholeMilliseconds
 @Composable
 private fun TimeZones(
     pendingConfirms: SnapshotStateList<() -> Unit>,
-    onShareActionChange: (() -> Unit) -> Unit,
+    onShareActionChange: ((ShareFacilitator) -> Unit) -> Unit,
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
 ) {
@@ -289,8 +290,6 @@ private fun TimeZones(
     val utc = TimeZone.getTimeZone("UTC")
     var secondTimeZone by rememberSaveable { mutableStateOf(utc) }
     val clock = remember { mutableLongStateOf(System.currentTimeMillis()) }
-    val context = LocalContext.current
-    val chooserTitle = stringResource(ConverterScreenMode.TIME_ZONES.title)
     onResetButtonVisibilityChange(
         run {
             val sameClock = abs(clock.longValue - System.currentTimeMillis()) > oneMinutes
@@ -298,8 +297,8 @@ private fun TimeZones(
         },
     )
     LaunchedEffect(key1 = Unit) {
-        onShareActionChange {
-            context.shareText(
+        onShareActionChange { shareFacilitator ->
+            shareFacilitator.shareText(
                 listOf(firstTimeZone, secondTimeZone).joinToString("\n") { timeZone ->
                     timeZone.displayName + ": " + Clock(
                         GregorianCalendar(timeZone).also {
@@ -307,7 +306,6 @@ private fun TimeZones(
                         },
                     ).toBasicFormatString()
                 },
-                chooserTitle,
             )
         }
         onResetActionChange {
@@ -360,7 +358,7 @@ private fun TimeZones(
 
 @Composable
 private fun Calculator(
-    onShareActionChange: (() -> Unit) -> Unit,
+    onShareActionChange: ((ShareFacilitator) -> Unit) -> Unit,
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
 ) {
@@ -382,9 +380,8 @@ private fun Calculator(
         // running this inside a runCatching block is absolutely important
         eval(input)
     }.getOrElse { it.message }.orEmpty()
-    val chooserTitle = stringResource(ConverterScreenMode.CALCULATOR.title)
     LaunchedEffect(key1 = Unit) {
-        onShareActionChange { context.shareText(result, chooserTitle) }
+        onShareActionChange { shareFacilitator -> shareFacilitator.shareText(result) }
         onResetActionChange { input = "" }
     }
     val defaultTextFieldColors = TextFieldDefaults.colors()
@@ -436,7 +433,7 @@ private fun Calculator(
 
 @Composable
 private fun QrCode(
-    onShareActionChange: (() -> Unit) -> Unit,
+    onShareActionChange: ((ShareFacilitator) -> Unit) -> Unit,
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
     maxHorizontalHeight: Dp,
@@ -510,7 +507,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
     navigateToCalendarsPrioritySettings: () -> Unit,
     pendingConfirms: SnapshotStateList<() -> Unit>,
     screenMode: ConverterScreenMode,
-    onShareActionChange: (() -> Unit) -> Unit,
+    onShareActionChange: ((ShareFacilitator) -> Unit) -> Unit,
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
     today: Jdn,
@@ -528,9 +525,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
         },
     )
 
-    val context = LocalContext.current
     val resources = LocalResources.current
-    val chooserTitle = stringResource(screenMode.title)
     LaunchedEffect(key1 = screenMode) {
         onResetActionChange {
             when (screenMode) {
@@ -543,11 +538,11 @@ private fun SharedTransitionScope.ConverterAndDistance(
                 else -> {}
             }
         }
-        onShareActionChange {
+        onShareActionChange { shareFacilitator ->
             if (screenMode == ConverterScreenMode.CONVERTER) {
                 val calendarsList = enabledCalendarsWithDefault
                 val otherCalendars = calendarsList - calendar
-                context.shareText(
+                shareFacilitator.shareText(
                     text = listOf(
                         dayTitleSummary(
                             jdn = selectedDate,
@@ -558,10 +553,9 @@ private fun SharedTransitionScope.ConverterAndDistance(
                             formatDate(date = selectedDate on it)
                         },
                     ).joinToString(separator = " "),
-                    chooserTitle = chooserTitle,
                 )
             } else if (screenMode == ConverterScreenMode.DISTANCE) {
-                context.shareText(
+                shareFacilitator.shareText(
                     text = listOf(
                         calculateDaysDifference(
                             resources,
@@ -572,7 +566,6 @@ private fun SharedTransitionScope.ConverterAndDistance(
                         formatDate(selectedDate on calendar),
                         formatDate(secondSelectedDate on calendar),
                     ).joinToString("\n"),
-                    chooserTitle = chooserTitle,
                 )
             }
         }

@@ -90,6 +90,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.device_information
 import com.byagowi.persiancalendar.shared.generated.resources.help
@@ -100,8 +101,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
@@ -161,6 +160,8 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 runtime,
             )
         }
+        val shareFacilitator =
+            ShareFacilitator.create(stringResource(Res.string.device_information))
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
             title = { Text(stringResource(Res.string.device_information)) },
@@ -168,12 +169,16 @@ fun SharedTransitionScope.DeviceInformationScreen(
             navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             actions = {
                 ShareActionButton {
-                    context.shareTextFile(generateHtmlReport(items), "device.html", "text/html")
+                    shareFacilitator.shareTextFile(
+                        generateHtmlReport(items),
+                        "device.html",
+                        "text/html",
+                    )
                 }
                 AppIconButton(
                     icon = Icons.Default.Print,
                     title = stringResource(Res.string.print),
-                ) { context.openHtmlInBrowser(generateHtmlReport(items)) }
+                ) { shareFacilitator.openHtmlInBrowser(generateHtmlReport(items)) }
                 AppIconButton(
                     icon = Icons.Default.SportsEsports,
                     title = "Game",
@@ -393,8 +398,7 @@ fun isMiuiOptimizationDisabled(): Boolean {
     val sysProp = getSystemProperty("persist.sys.miui_optimization")
     if (sysProp == "0" || sysProp == "false") return true
     return runCatching {
-        Class.forName("android.miui.AppOpsUtils")
-            .getDeclaredMethod("isXOptMode")
+        Class.forName("android.miui.AppOpsUtils").getDeclaredMethod("isXOptMode")
             .invoke(null) as? Boolean
     }.getOrNull() ?: false
 }

@@ -21,23 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.withScale
-import com.byagowi.persiancalendar.ui.utils.shareBinaryFile
-import com.byagowi.persiancalendar.ui.utils.toPngByteArray
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import io.github.persiancalendar.qr.qr
 
 @Composable
 fun QrView(
     text: String,
     modifier: Modifier = Modifier,
-    onShareActionChange: (() -> Unit) -> Unit,
+    onShareActionChange: ((ShareFacilitator) -> Unit) -> Unit,
 ) {
     val qr = remember(text) { qr(text) }
     val paint = remember { Paint() }
@@ -117,18 +112,20 @@ fun QrView(
             .clickable { isRounded = !isRounded },
     ) { drawQr(drawContext.canvas, size = this.size.width) }
 
-    val context = LocalContext.current
     val surfaceColor by rememberUpdatedState(MaterialTheme.colorScheme.surface)
     LaunchedEffect(Unit) {
-        onShareActionChange {
+        onShareActionChange { shareFacilitator ->
             val size = 1280
-            val bitmap = createBitmap(size, size).applyCanvas {
-                drawColor(surfaceColor.toArgb())
-                withScale(1 - 64f / size, 1 - 64f / size, size / 2f, size / 2f) {
-                    drawQr(Canvas(this), size.toFloat())
-                }
+            val imageBitmap = ImageBitmap(size, size)
+            Canvas(imageBitmap).also { canvas ->
+                canvas.drawRect(
+                    0f, 0f, size.toFloat(), size.toFloat(),
+                    Paint().also { it.color = surfaceColor },
+                )
+                canvas.scale(1 - 64f / size)
+                drawQr(canvas, size.toFloat())
             }
-            context.shareBinaryFile(bitmap.toPngByteArray(), "result.png", "image/png")
+            shareFacilitator.shareImageBitmap(imageBitmap)
         }
     }
 }

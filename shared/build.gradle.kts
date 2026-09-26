@@ -23,9 +23,12 @@ kotlin {
         }
 
         compilerOptions {
-            freeCompilerArgs.add("-P")
-            freeCompilerArgs.add(
-                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.byagowi.persiancalendar.parcelize.CommonParcelize",
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-P",
+                    "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.byagowi.persiancalendar.parcelize.CommonParcelize",
+                    "-Xexpect-actual-classes",
+                ),
             )
         }
     }
@@ -53,6 +56,12 @@ kotlin {
                 api(libs.compose.multiplatform.foundation)
                 implementation(libs.compose.multiplatform.material3)
                 api(libs.compose.components.resources)
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation(libs.browser)
+                implementation(libs.androidx.core.ktx)
             }
         }
         jsMain {

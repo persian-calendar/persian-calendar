@@ -3,11 +3,9 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
-import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.asrMethod
@@ -73,7 +71,6 @@ val Coordinates.isSouthernHemisphere get() = latitude < .0
 fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elevation)
 fun Coordinates.toEarthPosition() = EarthPosition(this.latitude, this.longitude)
 
-val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 fun showUnsupportedActionToast(context: Context) {
     Toast.makeText(context, R.string.not_supported_action, Toast.LENGTH_SHORT).show()
 }

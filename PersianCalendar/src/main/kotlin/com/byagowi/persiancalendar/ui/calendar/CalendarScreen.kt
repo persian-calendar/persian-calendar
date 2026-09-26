@@ -167,6 +167,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
@@ -252,7 +253,6 @@ import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.addEvent
 import com.byagowi.persiancalendar.utils.calendar
@@ -1654,13 +1654,14 @@ private fun SharedTransitionScope.Menu(
             showShiftWorkDialog = true
         }
 
+        val shareFacilitator = ShareFacilitator.create(stringResource(Res.string.calendar))
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(Res.string.month_pray_times)) }) {
             closeMenu()
             val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
                 baseJdn = today,
                 monthsDistance = selectedMonthOffset,
             )
-            context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
+            shareFacilitator.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
         if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem(
             { Text(stringResource(Res.string.planetary_hours)) },

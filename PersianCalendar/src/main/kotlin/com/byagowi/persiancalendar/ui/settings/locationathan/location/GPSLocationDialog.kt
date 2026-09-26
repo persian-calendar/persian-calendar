@@ -40,6 +40,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
@@ -54,7 +55,6 @@ import com.byagowi.persiancalendar.shared.generated.resources.longitude
 import com.byagowi.persiancalendar.shared.generated.resources.phone_location_required
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.geocode
@@ -235,6 +235,7 @@ fun GPSLocationDialog(
         val coord = coordinates ?: return@AppDialog Text(
             message, textModifier, textAlign = TextAlign.Center,
         )
+        val shareFacilitator = ShareFacilitator.create(cityName.orEmpty())
         val text = buildAnnotatedString {
             appendLine(
                 "%s$spacedColon$LRM%s°%s%s$spacedColon$LRM%s°".format(
@@ -255,7 +256,7 @@ fun GPSLocationDialog(
                             textDecoration = TextDecoration.Underline,
                         ),
                     ),
-                ) { context.shareText(geoLink, cityName.orEmpty()) },
+                ) { shareFacilitator.shareText(geoLink) },
             ) { appendLine(geoLink) }
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
             cityName?.also(::appendLine)
@@ -271,7 +272,7 @@ fun GPSLocationDialog(
                             textDecoration = TextDecoration.Underline,
                         ),
                     ),
-                ) { context.shareText(plusLink, cityName.orEmpty()) },
+                ) { shareFacilitator.shareText(plusLink) },
             ) { append(plusLink) }
         }
         SelectionContainer { Text(text, modifier = textModifier, textAlign = TextAlign.Center) }

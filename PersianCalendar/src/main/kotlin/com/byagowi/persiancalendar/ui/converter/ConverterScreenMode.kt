@@ -8,7 +8,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.qr_code
 import com.byagowi.persiancalendar.shared.generated.resources.time_zones
 import org.jetbrains.compose.resources.StringResource
 
-enum class ConverterScreenMode(val title: StringResource, val backspaceReset: Boolean = false) {
+enum class ConverterScreenMode(val titleRes: StringResource, val backspaceReset: Boolean = false) {
     CONVERTER(Res.string.date_converter),
     DISTANCE(Res.string.days_distance),
     CALCULATOR(Res.string.calculator, backspaceReset = true),
