@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.icons.material.filled
+package com.byagowi.persiancalendar.ui.icons.material.outlined
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
 @Suppress("CheckReturnValue")
-public val swipeDownIcon: ImageVector
+public val swipeDownOutlinedIcon: ImageVector
   get() {
     if (_swipe_down != null) {
       return _swipe_down!!
@@ -65,21 +65,14 @@ public val swipeDownIcon: ImageVector
             reflectiveQuadTo(9.25f, 6.43f)
             quadToRelative(0.4f, -0.15f, 0.76f, 0.02f)
             reflectiveQuadToRelative(0.51f, 0.57f)
-            lineToRelative(2.4f, 6.58f)
-            lineToRelative(0.95f, -0.35f)
-            lineTo(12.85f, 10.43f)
-            quadTo(12.7f, 10.02f, 12.88f, 9.66f)
-            reflectiveQuadTo(13.45f, 9.15f)
-            reflectiveQuadToRelative(0.76f, 0.03f)
-            reflectiveQuadToRelative(0.51f, 0.58f)
-            lineToRelative(1.02f, 2.82f)
-            lineToRelative(0.93f, -0.35f)
-            lineTo(16f, 10.35f)
-            quadTo(15.85f, 9.95f, 16.03f, 9.59f)
-            quadTo(16.2f, 9.23f, 16.6f, 9.07f)
-            reflectiveQuadTo(17.36f, 9.1f)
-            quadToRelative(0.36f, 0.17f, 0.51f, 0.57f)
-            lineToRelative(0.68f, 1.88f)
+            lineToRelative(3.7f, 10.18f)
+            lineToRelative(-2.5f, 0.18f)
+            lineTo(15f, 18.9f)
+            quadToRelative(0.18f, 0.08f, 0.38f, 0.09f)
+            reflectiveQuadToRelative(0.38f, -0.04f)
+            lineToRelative(3.93f, -1.43f)
+            quadToRelative(0.78f, -0.27f, 1.13f, -1.04f)
+            reflectiveQuadToRelative(0.07f, -1.54f)
             lineTo(19.5f, 11.2f)
             quadToRelative(-0.15f, -0.4f, 0.03f, -0.76f)
             quadTo(19.7f, 10.07f, 20.1f, 9.92f)
@@ -89,6 +82,26 @@ public val swipeDownIcon: ImageVector
             quadToRelative(0.58f, 1.58f, -0.11f, 3.06f)
             quadToRelative(-0.69f, 1.49f, -2.26f, 2.06f)
             lineToRelative(-3.93f, 1.43f)
+            close()
+            moveTo(14.2f, 14.2f)
+            lineTo(12.85f, 10.43f)
+            quadTo(12.7f, 10.02f, 12.88f, 9.66f)
+            reflectiveQuadTo(13.45f, 9.15f)
+            reflectiveQuadToRelative(0.76f, 0.03f)
+            reflectiveQuadToRelative(0.51f, 0.58f)
+            lineTo(16.1f, 13.5f)
+            lineToRelative(-1.9f, 0.7f)
+            close()
+            moveToRelative(2.83f, -1.03f)
+            lineTo(16f, 10.35f)
+            quadTo(15.85f, 9.95f, 16.03f, 9.59f)
+            quadTo(16.2f, 9.23f, 16.6f, 9.07f)
+            reflectiveQuadTo(17.36f, 9.1f)
+            quadToRelative(0.36f, 0.17f, 0.51f, 0.57f)
+            lineToRelative(1.03f, 2.8f)
+            lineToRelative(-1.88f, 0.7f)
+            close()
+            moveToRelative(0.2f, 1.95f)
             close()
           }
         }

@@ -240,8 +240,8 @@ import com.byagowi.persiancalendar.ui.icons.material.filled.editIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowDownIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowUpIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.searchIcon
-import com.byagowi.persiancalendar.ui.icons.material.filled.swipeDownIcon
-import com.byagowi.persiancalendar.ui.icons.material.filled.swipeUpIcon
+import com.byagowi.persiancalendar.ui.icons.material.outlined.swipeDownOutlinedIcon
+import com.byagowi.persiancalendar.ui.icons.material.outlined.swipeUpOutlinedIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -1683,19 +1683,21 @@ private fun SharedTransitionScope.Menu(
         ) {
             AppDropdownMenuItem(
                 text = { Text(stringResource(titleRes)) },
-                trailingIcon = icon@{
-                    if (isTalkBackEnabled) return@icon
-                    Box(
+                trailingIcon = {
+                    if (!isTalkBackEnabled) Box(
                         Modifier.clickable(null, ripple(bounded = false)) {
                             context.preferences.edit { putString(prefKey, valueToStoreOnClick()) }
                         },
                     ) {
                         val alpha by animateFloatAsState(if (preferredAction == item) 1f else .2f)
                         val color = LocalContentColor.current.copy(alpha = alpha)
-                        Icon(swipeIcon, null, tint = color)
+                        Icon(imageVector = swipeIcon, contentDescription = null, tint = color)
                     }
                 },
-            ) { closeMenu(); action() }
+            ) {
+                closeMenu()
+                action()
+            }
         }
 
         swipeUpActions.forEach { (item, action) ->
@@ -1705,7 +1707,7 @@ private fun SharedTransitionScope.Menu(
                 prefKey = PREF_SWIPE_UP_ACTION,
                 titleRes = item.titleRes,
                 preferredAction = preferredSwipeUpAction,
-                swipeIcon = swipeUpIcon,
+                swipeIcon = swipeUpOutlinedIcon,
             ) { (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name }
         }
 
@@ -1716,7 +1718,7 @@ private fun SharedTransitionScope.Menu(
                 prefKey = PREF_SWIPE_DOWN_ACTION,
                 titleRes = item.titleRes,
                 preferredAction = preferredSwipeDownAction,
-                swipeIcon = swipeDownIcon,
+                swipeIcon = swipeDownOutlinedIcon,
             ) { (if (preferredSwipeDownAction == item) SwipeDownAction.None else item).name }
         }
 

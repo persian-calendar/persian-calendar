@@ -49,10 +49,12 @@ class AppBuildPlugin : Plugin<Project> {
                         "open_in_browser", "open_in_new", "palette", "perm_device_information",
                         "play_arrow", "print", "remove_circle_outline", "restore", "search",
                         "settings", "settings_backup_restore", "share", "social_distance",
-                        "sports_esports", "stop", "swap_vertical_circle", "swipe_down", "swipe_up",
-                        "sync_alt", "translate", "widgets", "yard",
+                        "sports_esports", "stop", "swap_vertical_circle", "sync_alt", "translate",
+                        "widgets", "yard",
                     ),
-                    "outlined" to listOf("light_mode", "location_on", "palette", "widgets"),
+                    "outlined" to listOf(
+                        "light_mode", "location_on", "palette", "swipe_down", "swipe_up", "widgets",
+                    ),
                     "rounded" to listOf("drag_handle"),
                 ),
             )
