@@ -8,6 +8,7 @@ options:
 settings:
   base:
     ENABLE_USER_SCRIPT_SANDBOXING: NO
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
 targets:
   ios:
     type: application

@@ -15,6 +15,10 @@ val generatedAppSrcDir = layout.buildDirectory.dir("generated/source/appsrc/main
 kotlin {
     jvmToolchain(21)
 
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
+
     android {
         namespace = "com.byagowi.persiancalendar.shared"
         compileSdk = 37

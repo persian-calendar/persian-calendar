@@ -7,6 +7,10 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
+
     wasmJs {
         browser {
             commonWebpackConfig {
