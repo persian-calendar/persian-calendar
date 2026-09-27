@@ -103,16 +103,12 @@ import com.byagowi.persiancalendar.icons.material.filled.permDeviceInformationIc
 import com.byagowi.persiancalendar.icons.material.filled.translateIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about
-import com.byagowi.persiancalendar.shared.generated.resources.about_contributors_list
-import com.byagowi.persiancalendar.shared.generated.resources.about_designers_list
 import com.byagowi.persiancalendar.shared.generated.resources.about_developers
-import com.byagowi.persiancalendar.shared.generated.resources.about_developers_list
 import com.byagowi.persiancalendar.shared.generated.resources.about_email_sum
 import com.byagowi.persiancalendar.shared.generated.resources.about_help_subtitle
 import com.byagowi.persiancalendar.shared.generated.resources.about_license_sum
 import com.byagowi.persiancalendar.shared.generated.resources.about_license_title
 import com.byagowi.persiancalendar.shared.generated.resources.about_send_mail
-import com.byagowi.persiancalendar.shared.generated.resources.about_translators_list
 import com.byagowi.persiancalendar.shared.generated.resources.app_name
 import com.byagowi.persiancalendar.shared.generated.resources.device_information
 import com.byagowi.persiancalendar.shared.generated.resources.help
@@ -432,19 +428,8 @@ private fun AboutScreenButton(
 @Composable
 private fun Developers(modifier: Modifier = Modifier) {
     Column(modifier) {
-        val developersBeforeShuffle = listOf(
-            stringResource(Res.string.about_developers_list) to androidIcon,
-            stringResource(Res.string.about_designers_list) to paletteIcon,
-            stringResource(Res.string.about_translators_list) to translateIcon,
-            stringResource(Res.string.about_contributors_list) to androidIcon,
-        ).flatMap { (list: String, icon: ImageVector) ->
-            list.trim().split("\n").map {
-                val (username, displayName) = it.split(": ")
-                Triple(username, displayName, icon)
-            }
-        }
         var refreshToken by remember { mutableIntStateOf(0) }
-        val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
+        val shuffledDevelopers = remember(refreshToken) { developers.shuffled() }
 
         Text(
             stringResource(Res.string.about_developers),
@@ -468,21 +453,20 @@ private fun Developers(modifier: Modifier = Modifier) {
                     .padding(horizontal = 16.dp),
             ) {
                 val uriHandler = LocalUriHandler.current
-                developers.forEach { (username, displayName, icon) ->
+                shuffledDevelopers.forEach { (username, displayName, icon) ->
                     ElevatedFilterChip(
                         modifier = Modifier.padding(all = 4.dp),
-                        onClick = click@{
-                            if (username in listOf("ImanSoltanian", "SeyedHamed")) return@click
-                            uriHandler.openUri("https://github.com/$username")
+                        onClick = {
+                            if (username != null) uriHandler.openUri("https://github.com/$username")
                         },
                         label = { Text(displayName) },
                         selected = true,
                         colors = FilterChipDefaults.elevatedFilterChipColors(),
                         leadingIcon = {
                             Icon(
-                                icon,
+                                imageVector = icon,
                                 contentDescription = displayName,
-                                Modifier.size(AssistChipDefaults.IconSize),
+                                modifier = Modifier.size(AssistChipDefaults.IconSize),
                             )
                         },
                     )
@@ -490,4 +474,88 @@ private fun Developers(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+private val developers: List<Triple<String?, String, ImageVector>> by lazy(LazyThreadSafetyMode.NONE) {
+    listOf(
+        listOf(
+            null to "Iman Soltanian",
+            "behdude" to "Behdad Pournader",
+            "MehraraAbedi" to "Mehrara Abedi",
+            "Arasteh" to "Mahmoud Arasteh",
+            "MEHDIMYADI" to "Mehdi Dimyadi",
+            null to "Seyed Hamed",
+        ).map { Triple(it.first, it.second, paletteIcon) },
+        listOf(
+            "ebraminio" to "Ebrahim Byagowi",
+            "hamidsafdari" to "Hamid Safdari",
+            "behdad222" to "Behdad Abedi",
+            "HrBDev" to "Hamidreza Bayat",
+            "alirezaafkar" to "Alireza Afkar",
+            "MEHDIMYADI" to "Mehdi Dimyadi",
+            "runo280" to "Ruhollah Nosrati",
+            "FtADev" to "Fatemeh Akhlaghi",
+            "MasoodFallahpoor" to "Masood Fallahpoor",
+            "beigirad" to "Farhad BeigiRad",
+            "ilius" to "Saeed Rasooli",
+            "IamRezaMousavi" to "Reza Mousavi",
+            "roozbehp" to "Roozbeh Pournader",
+            "MohammadHanifi" to "Mohammad Hanifi",
+            "Developer-N" to "Mohsen Ahmadnia",
+
+            "La-Volpe" to "Javad Arjmandi",
+            "mehdisadeghi" to "Mehdi Sadeghi",
+            "abbas-oveissi" to "Abbas Oveissi",
+            "aysha319" to "Aysha Aminnejad",
+            "Tenkei" to "Keivan Esbati",
+            "mohamadhadibi" to "Mohammad Hadi",
+            "alirezaivaz" to "Alireza Ivaz",
+            "AminBakhtiyari" to "Amin Bakhtiyari",
+            "SCR-IR" to "SCR-IR",
+            "MMeshkiny" to "Mohsen Meshkini",
+            "AryanAhadinia" to "Aryan Ahadinia",
+            "shahabhm" to "Shahab Hosseini Moghaddam",
+            "MohammadKashaniJabbari" to "Mohammad Kashani",
+            "nullkit" to "Hamid Mahmoudi",
+            "xmha97" to "Muhammadhussein Ammari",
+            "ivadham" to "Ali Mahdavi",
+            "omasouri" to "Omid Masouri",
+            "mb-real" to "Mehdi Bahrami",
+            "shhonarmandi" to "Mohsen Honarmandi",
+            "Arazavi260353" to "Ardalan Razavi",
+            "Mpartoa" to "Mehdi Hassanian",
+            "hidp123" to "hidp123",
+            "danialbehzadi" to "Danial Behzadi",
+            "M-D-6" to "Mohammad Daemi",
+            "ifarbod" to "iFarbod",
+            "rzasharifi" to "RzaSharifi",
+            "AmirApA" to "AMiR",
+            "griffin0t03h" to "Sina Moradi",
+            "Developer-N" to "Mohsen Ahmadnia",
+            "MeHajHo3ein" to "Hossein Mirjani",
+            "Amirroid" to "Amirreza Gholami",
+            "SM2A" to "Seyed Mohammad Amin Atyabi",
+            "adenoxi" to "Adel Noruzi",
+        ).map { Triple(it.first, it.second, androidIcon) },
+        listOf(
+            "mehdy" to "Mehdy Khoshnoody",
+            "yethrosh" to "Muhammad Shuaib",
+            "TaherAzizi" to "Taher Azizi",
+            "LordArma" to "Alireza Moayed Ahmadi",
+            "Matjafari" to "Mahdieh Jafari",
+            "raminjavadi" to "Ramin Javadi",
+            "alborzjafari" to "Alborz Jafari",
+            "Mg136" to "Mokhtar Garmehi",
+            "alaaddinb" to "Alaaddin Biçici",
+            "darafsh" to "Mohammad HeidarZadeh",
+            "NP-Sagar-Dhakal" to "Sagar Dhakal",
+            "szescxz" to "szescxz",
+            "DannyRavi" to "Daniel Khosravi",
+            "rzasharifi" to "RzaSharifi",
+            "TamilNeram" to "Tamil Neram",
+            "shhonarmandi" to "Mohsen Honarmandi",
+            "bgo-eiu" to "bgo-eiu",
+            "arifpedia" to "Arif Budiman",
+        ).map { Triple(it.first, it.second, translateIcon) },
+    ).flatten()
 }
