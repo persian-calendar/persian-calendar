@@ -171,6 +171,7 @@ dependencies {
 
     lintChecks(libs.slack.compose.lint.checks)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.espresso.core)
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
 
