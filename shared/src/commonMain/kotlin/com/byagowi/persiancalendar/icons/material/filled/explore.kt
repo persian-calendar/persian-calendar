@@ -69,18 +69,6 @@ public val exploreIcon: ImageVector
             quadToRelative(-1.35f, 1.35f, -3.17f, 2.14f)
             reflectiveQuadTo(12f, 22f)
             close()
-            moveToRelative(0f, -2f)
-            quadToRelative(3.33f, 0f, 5.66f, -2.34f)
-            reflectiveQuadTo(20f, 12f)
-            quadTo(20f, 8.67f, 17.66f, 6.34f)
-            reflectiveQuadTo(12f, 4f)
-            quadTo(8.68f, 4f, 6.34f, 6.34f)
-            reflectiveQuadTo(4f, 12f)
-            reflectiveQuadToRelative(2.34f, 5.66f)
-            reflectiveQuadTo(12f, 20f)
-            close()
-            moveToRelative(0f, -8f)
-            close()
           }
         }
         .build()

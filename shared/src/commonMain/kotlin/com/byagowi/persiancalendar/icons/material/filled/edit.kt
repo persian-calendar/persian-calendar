@@ -35,13 +35,6 @@ public val editIcon: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(5f, 19f)
-            horizontalLineTo(6.43f)
-            lineTo(16.2f, 9.23f)
-            lineTo(14.78f, 7.8f)
-            lineTo(5f, 17.58f)
-            verticalLineTo(19f)
-            close()
             moveTo(3f, 21f)
             verticalLineTo(16.75f)
             lineTo(16.2f, 3.57f)
@@ -57,14 +50,11 @@ public val editIcon: ImageVector
             lineTo(7.25f, 21f)
             horizontalLineTo(3f)
             close()
-            moveTo(19f, 6.4f)
-            lineTo(17.6f, 5f)
+            moveTo(17.6f, 7.8f)
             lineTo(19f, 6.4f)
-            close()
-            moveTo(15.48f, 8.52f)
-            lineTo(14.78f, 7.8f)
-            lineTo(16.2f, 9.23f)
-            lineTo(15.48f, 8.52f)
+            lineTo(17.6f, 5f)
+            lineTo(16.2f, 6.4f)
+            lineToRelative(1.4f, 1.4f)
             close()
           }
         }

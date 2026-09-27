@@ -109,16 +109,6 @@ public val yardIcon: ImageVector
             reflectiveQuadTo(20f, 22f)
             horizontalLineTo(4f)
             close()
-            moveTo(4f, 20f)
-            horizontalLineTo(20f)
-            verticalLineTo(4f)
-            horizontalLineTo(4f)
-            verticalLineTo(20f)
-            close()
-            moveToRelative(0f, 0f)
-            verticalLineTo(4f)
-            verticalLineTo(20f)
-            close()
           }
         }
         .build()

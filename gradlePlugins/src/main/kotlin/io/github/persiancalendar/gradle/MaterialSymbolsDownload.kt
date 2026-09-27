@@ -41,14 +41,16 @@ abstract class MaterialSymbolsDownload : DefaultTask() {
         iconsByVariant.get().forEach { (variant, icons) ->
             val variantDir = File(root, variant)
             variantDir.mkdirs()
-            val urlSegment = if (variant == "filled") {
-                "Material+Symbols"
-            } else {
-                "Material+Symbols+${variant.replaceFirstChar { it.uppercaseChar() }}"
+            val (family, fill) = when (variant) {
+                "filled" -> "Outlined" to 1
+                "outlined" -> "Outlined" to 0
+                "rounded" -> "Rounded" to 1
+                "sharp" -> "Sharp" to 1
+                else -> variant.replaceFirstChar { it.uppercaseChar() } to 1
             }
             val packageName = "$ICON_PACKAGE_PREFIX.$variant"
             icons.forEach { fileName ->
-                val url = "$ICON_BASE_URL/$urlSegment/24dp/$fileName.kt"
+                val url = "$ICON_BASE_URL/Material+Symbols+$family/24dp/$fileName.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,$fill,0,50"
                 val content = download(client, url) ?: return@forEach
                 val target = File(variantDir, "$fileName.kt")
                 target.writeText(

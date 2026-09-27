@@ -77,18 +77,6 @@ public val myLocationIcon: ImageVector
             reflectiveQuadTo(12f, 16f)
             reflectiveQuadTo(9.18f, 14.83f)
             close()
-            moveToRelative(4.24f, -1.41f)
-            quadTo(14f, 12.83f, 14f, 12f)
-            reflectiveQuadTo(13.41f, 10.59f)
-            reflectiveQuadTo(12f, 10f)
-            reflectiveQuadToRelative(-1.41f, 0.59f)
-            quadTo(10f, 11.18f, 10f, 12f)
-            reflectiveQuadToRelative(0.59f, 1.41f)
-            reflectiveQuadTo(12f, 14f)
-            reflectiveQuadToRelative(1.41f, -0.59f)
-            close()
-            moveTo(12f, 12f)
-            close()
           }
         }
         .build()

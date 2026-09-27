@@ -35,13 +35,6 @@ public val motorcycleIcon: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(10.7f, 11f)
-            horizontalLineTo(9.95f)
-            quadTo(9.83f, 11f, 9.58f, 11f)
-            reflectiveQuadTo(8.95f, 11f)
-            horizontalLineTo(12.7f)
-            horizontalLineToRelative(-2f)
-            close()
             moveTo(5f, 19f)
             quadTo(2.93f, 19f, 1.46f, 17.54f)
             reflectiveQuadTo(0f, 14f)
@@ -90,13 +83,6 @@ public val motorcycleIcon: ImageVector
             reflectiveQuadTo(2f, 14f)
             reflectiveQuadToRelative(0.88f, 2.13f)
             reflectiveQuadTo(5f, 17f)
-            close()
-            moveTo(9.95f, 13f)
-            horizontalLineTo(10.7f)
-            lineToRelative(2f, -2f)
-            horizontalLineTo(8.95f)
-            quadToRelative(0.38f, 0.42f, 0.63f, 0.92f)
-            reflectiveQuadTo(9.95f, 13f)
             close()
           }
         }

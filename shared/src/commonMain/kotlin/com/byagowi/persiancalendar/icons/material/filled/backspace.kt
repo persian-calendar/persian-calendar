@@ -64,15 +64,6 @@ public val backspaceIcon: ImageVector
             reflectiveQuadTo(20f, 20f)
             horizontalLineTo(9f)
             close()
-            moveTo(4.5f, 12f)
-            lineTo(9f, 18f)
-            horizontalLineTo(20f)
-            verticalLineTo(6f)
-            horizontalLineTo(9f)
-            lineTo(4.5f, 12f)
-            close()
-            moveToRelative(10f, 0f)
-            close()
           }
         }
         .build()

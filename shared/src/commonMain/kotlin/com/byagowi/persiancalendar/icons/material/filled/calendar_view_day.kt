@@ -49,12 +49,6 @@ public val calendarViewDayIcon: ImageVector
             reflectiveQuadTo(19f, 17f)
             horizontalLineTo(5f)
             close()
-            moveTo(5f, 15f)
-            horizontalLineTo(19f)
-            verticalLineTo(9f)
-            horizontalLineTo(5f)
-            verticalLineToRelative(6f)
-            close()
             moveTo(3f, 5f)
             verticalLineTo(3f)
             horizontalLineTo(21f)
@@ -66,10 +60,6 @@ public val calendarViewDayIcon: ImageVector
             horizontalLineTo(21f)
             verticalLineToRelative(2f)
             horizontalLineTo(3f)
-            close()
-            moveTo(5f, 9f)
-            verticalLineToRelative(6f)
-            verticalLineTo(9f)
             close()
           }
         }

@@ -69,18 +69,6 @@ public val infoIcon: ImageVector
             quadToRelative(-1.35f, 1.35f, -3.17f, 2.14f)
             reflectiveQuadTo(12f, 22f)
             close()
-            moveToRelative(0f, -2f)
-            quadToRelative(3.35f, 0f, 5.68f, -2.32f)
-            reflectiveQuadTo(20f, 12f)
-            reflectiveQuadTo(17.68f, 6.32f)
-            reflectiveQuadTo(12f, 4f)
-            reflectiveQuadTo(6.33f, 6.32f)
-            reflectiveQuadTo(4f, 12f)
-            reflectiveQuadToRelative(2.33f, 5.68f)
-            reflectiveQuadTo(12f, 20f)
-            close()
-            moveToRelative(0f, -8f)
-            close()
           }
         }
         .build()

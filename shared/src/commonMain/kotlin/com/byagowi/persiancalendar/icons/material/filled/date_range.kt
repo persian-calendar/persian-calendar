@@ -93,16 +93,6 @@ public val dateRangeIcon: ImageVector
             horizontalLineTo(5f)
             verticalLineTo(20f)
             close()
-            moveTo(5f, 8f)
-            horizontalLineTo(19f)
-            verticalLineTo(6f)
-            horizontalLineTo(5f)
-            verticalLineTo(8f)
-            close()
-            moveTo(5f, 8f)
-            verticalLineTo(6f)
-            verticalLineTo(8f)
-            close()
           }
         }
         .build()

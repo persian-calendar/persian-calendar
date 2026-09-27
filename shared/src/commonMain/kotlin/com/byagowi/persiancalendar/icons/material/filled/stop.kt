@@ -35,21 +35,11 @@ public val stopIcon: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(8f, 8f)
-            verticalLineToRelative(8f)
-            verticalLineTo(8f)
-            close()
             moveTo(6f, 18f)
             verticalLineTo(6f)
             horizontalLineTo(18f)
             verticalLineTo(18f)
             horizontalLineTo(6f)
-            close()
-            moveTo(8f, 16f)
-            horizontalLineToRelative(8f)
-            verticalLineTo(8f)
-            horizontalLineTo(8f)
-            verticalLineToRelative(8f)
             close()
           }
         }

@@ -40,13 +40,6 @@ public val playArrowIcon: ImageVector
             lineToRelative(11f, 7f)
             lineTo(8f, 19f)
             close()
-            moveToRelative(2f, -7f)
-            close()
-            moveToRelative(0f, 3.35f)
-            lineTo(15.25f, 12f)
-            lineTo(10f, 8.65f)
-            verticalLineToRelative(6.7f)
-            close()
           }
         }
         .build()
