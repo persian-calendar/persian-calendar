@@ -106,7 +106,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
-import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
+import com.byagowi.persiancalendar.ui.icons.in24HoursIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.infoIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.mapIcon
 import com.byagowi.persiancalendar.ui.theme.appSliderColor
@@ -227,7 +227,7 @@ fun SharedTransitionScope.CompassScreen(
                 },
                 actions = {
                     if (coordinates != null) AppIconButton(
-                        icon = In24HoursIcon,
+                        icon = in24HoursIcon,
                         title = stringResource(Res.string.show_sun_and_moon_path_in_24_hours),
                         modifier = Modifier.rotate(sliderValue / 24f * 360f),
                     ) {

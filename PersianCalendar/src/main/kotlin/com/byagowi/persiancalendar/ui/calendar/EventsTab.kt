@@ -106,12 +106,12 @@ import com.byagowi.persiancalendar.shared.generated.resources.view_source
 import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
-import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
-import com.byagowi.persiancalendar.ui.icons.WikipediaIcon
+import com.byagowi.persiancalendar.ui.icons.astrologyIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.openInBrowserIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.openInNewIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.yardIcon
+import com.byagowi.persiancalendar.ui.icons.wikipediaIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
@@ -399,7 +399,7 @@ private fun DayEventContent(
                                                         shape = shape,
                                                     ) {
                                                         Icon(
-                                                            imageVector = WikipediaIcon,
+                                                            imageVector = wikipediaIcon,
                                                             modifier = Modifier.requiredSize(24.dp),
                                                             contentDescription = "Wikipedia",
                                                         )
@@ -592,7 +592,7 @@ private fun EquinoxCountDown(
                 contentColor = backgroundColor,
             ) {
                 Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-                    Icon(AstrologyIcon, stringResource(Res.string.horoscope))
+                    Icon(astrologyIcon, stringResource(Res.string.horoscope))
                 }
             }
         }

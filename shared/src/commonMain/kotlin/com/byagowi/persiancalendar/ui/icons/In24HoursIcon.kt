@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
 @Stable
-val In24HoursIcon by lazy(LazyThreadSafetyMode.NONE) {
+val in24HoursIcon by lazy(LazyThreadSafetyMode.NONE) {
     makeIconFromPath(
         // Made from:
         // * https://fonts.google.com/icons?selected=Material%20Icons%20Outlined%3Alocal_convenience_store%3A
@@ -18,4 +18,4 @@ val In24HoursIcon by lazy(LazyThreadSafetyMode.NONE) {
 
 @Preview
 @Composable
-internal fun In24HoursPreview() = Icon(In24HoursIcon, null, tint = Color.Gray)
+internal fun In24HoursPreview() = Icon(in24HoursIcon, null, tint = Color.Gray)

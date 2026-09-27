@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 const val MaterialIconDimension = 24f
 
 // From https://stackoverflow.com/a/71723593 with some tweaks
-fun makeIconFromPath(
+internal fun makeIconFromPath(
     path: String,
     viewportWidth: Float = MaterialIconDimension,
     viewportHeight: Float = MaterialIconDimension,

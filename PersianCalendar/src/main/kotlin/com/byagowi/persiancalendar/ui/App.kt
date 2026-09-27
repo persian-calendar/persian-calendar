@@ -116,7 +116,7 @@ import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
-import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
+import com.byagowi.persiancalendar.ui.icons.astrologyIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.cancelIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.dateRangeIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.exploreIcon
@@ -384,7 +384,7 @@ private sealed interface Screen : NavKey {
             Triple(Calendar, dateRangeIcon, Res.string.calendar),
             Triple(Converter, swapVerticalCircleIcon, Res.string.date_converter),
             Triple(Compass, exploreIcon, Res.string.compass),
-            Triple(Astronomy(), AstrologyIcon, Res.string.astronomy),
+            Triple(Astronomy(), astrologyIcon, Res.string.astronomy),
             Triple(Settings(), settingsIcon, Res.string.settings),
             Triple(About, infoIcon, Res.string.about),
             Triple(Exit, cancelIcon, Res.string.exit),
