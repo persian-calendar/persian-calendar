@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
@@ -41,6 +42,7 @@ import io.github.cosinekitty.astronomy.Vector
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
+import kotlinx.coroutines.runBlocking
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -91,7 +93,9 @@ class MapDraw(
     // How the two above are created: https://gist.github.com/ebraminio/8313cff47813a5c9f98278c7ee8cde4e
 
     private val maskMap = createBitmap(360 / scaleDegree, 180 / scaleDegree)
-    private val crescentVisibilityMap = CrescentVisibilityMap()
+    private val crescentVisibilityMap by lazy(LazyThreadSafetyMode.NONE) {
+        CrescentVisibilityMap()
+    }
     private var maskSunX = .0f
     private var maskSunY = .0f
     private var maskMoonX = .0f
@@ -129,8 +133,12 @@ class MapDraw(
 
             MapType.TIME_ZONES -> canvas.drawPath(timezonesPath, miscPaint)
             MapType.TECTONIC_PLATES -> canvas.drawPath(tectonicPlatesPath, miscPaint)
-            MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH ->
-                canvas.drawBitmap(crescentVisibilityMap.bitmap, null, mapRect, null)
+            MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH -> canvas.drawBitmap(
+                crescentVisibilityMap.bitmap.asAndroidBitmap(),
+                null,
+                mapRect,
+                null,
+            )
         }
     }
 
@@ -160,11 +168,15 @@ class MapDraw(
             }
 
             MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH -> {
-                maskFormattedTime = formatDate(
-                    Jdn(maskDateSink.toCivilDate()) on mainCalendar,
-                    forceNonNumerical = true,
-                )
-                crescentVisibilityMap.update(maskDateSink, mapType)
+                val date = maskDateSink.toCivilDate()
+                maskFormattedTime = formatDate(Jdn(date) on mainCalendar, forceNonNumerical = true)
+                runBlocking {
+                    crescentVisibilityMap.update(
+                        baseTime = Time(date.year, date.month, date.dayOfMonth, 0, 0, .0),
+                        mapType = mapType,
+                        threads = Runtime.getRuntime().availableProcessors().coerceAtLeast(1),
+                    )
+                }
             }
 
             else -> Unit

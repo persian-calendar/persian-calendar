@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.set
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Paint
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Direction
@@ -22,9 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import java.util.GregorianCalendar
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.pow
@@ -34,11 +35,18 @@ import kotlin.time.Duration.Companion.seconds
 // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
 class CrescentVisibilityMap {
     private val scaleDown = 2
-    val bitmap: Bitmap = createBitmap(360 / scaleDown, 180 / scaleDown)
-
-    fun update(date: GregorianCalendar, mapType: MapType) {
-        bitmap.eraseColor(Color.TRANSPARENT)
-        render(date, mapType)
+    private val width = 360 / scaleDown
+    private val height = 180 / scaleDown
+    val bitmap = ImageBitmap(width, height)
+    private val canvas = Canvas(bitmap)
+    private val paint = Paint().also {
+        it.isAntiAlias = false
+        it.blendMode = BlendMode.Src
+    }
+    private val slots = Array(width * height) { index ->
+        val x = index % width
+        val y = index / width
+        Rect(x.toFloat(), y.toFloat(), x + 1f, y + 1f)
     }
 
     private data class GeoPoint(
@@ -105,37 +113,29 @@ class CrescentVisibilityMap {
         return GeoPoint(ok = true, sunset = sunset, moonset = moonset, value = value)
     }
 
-    // Cheap: turns an (interpolated) point into a color, mirroring the old inline logic.
-    private fun classify(point: GeoPoint, multiplier: Int, isYallop: Boolean): Int {
-        if (!point.ok) return Color.TRANSPARENT
+    // Cheap: turns an (interpolated) point into a color.
+    private fun classify(point: GeoPoint, multiplier: Int, isYallop: Boolean): Color {
+        if (!point.ok) return Color.Transparent
         val lagTime = (point.moonset - point.sunset) * multiplier
-        if (lagTime < 0) return 0x70FF0000
-        return if (isYallop) {
-            when {
-                point.value > .216 -> 0x7F3EFF00 // Crescent easily visible
-                point.value > -.014 -> 0x7F3EFF6D // Crescent visible under perfect conditions
-                point.value > -.160 -> 0x7F00FF9E // May need optical aid to find crescent
-                point.value > -.232 -> 0x7F00FFFA // Will need optical aid to find crescent
-                point.value > -.293 -> 0x7F3C78FF // Crescent not visible with telescope
-                else -> Color.TRANSPARENT
-            }
-        } else {
-            when {
-                point.value >= 5.65 -> 0x7F3EFF00 // Crescent is visible by naked eye
-                point.value >= 2.00 -> 0x7F00FF9E // Crescent is visible by optical aid
-                point.value >= -.96 -> 0x7F3C78FF // Crescent is visible only by optical aid
-                else -> Color.TRANSPARENT
-            }
+        if (lagTime < 0) return Color(0x70FF0000)
+        return if (isYallop) when {
+            point.value > .216 -> Color(0x7F3EFF00) // Crescent easily visible
+            point.value > -.014 -> Color(0x7F3EFF6D) // Crescent visible under perfect conditions
+            point.value > -.160 -> Color(0x7F00FF9E) // May need optical aid to find crescent
+            point.value > -.232 -> Color(0x7F00FFFA) // Will need optical aid to find crescent
+            point.value > -.293 -> Color(0x7F3C78FF) // Crescent not visible with telescope
+            else -> Color.Transparent
+        } else when {
+            point.value >= 5.65 -> Color(0x7F3EFF00) // Crescent is visible by naked eye
+            point.value >= 2.00 -> Color(0x7F00FF9E) // Crescent is visible by optical aid
+            point.value >= -.96 -> Color(0x7F3C78FF) // Crescent is visible only by optical aid
+            else -> Color.Transparent
         }
     }
 
-    private fun render(date: GregorianCalendar, mapType: MapType) {
+    suspend fun update(baseTime: Time, mapType: MapType, threads: Int) {
         val isYallop = mapType == MapType.MORNING_YALLOP || mapType == MapType.EVENING_YALLOP
         val isEvening = mapType == MapType.EVENING_YALLOP || mapType == MapType.EVENING_ODEH
-        val baseTime = Time(
-            date[GregorianCalendar.YEAR], date[GregorianCalendar.MONTH] + 1,
-            date[GregorianCalendar.DAY_OF_MONTH], 0, 0, .0,
-        )
         val direction = if (isEvening) Direction.Set else Direction.Rise
         val multiplier = if (isEvening) 1 else -1
         val outputWidth = 360 / scaleDown
@@ -145,13 +145,9 @@ class CrescentVisibilityMap {
         val gw = outputWidth / heavyStep + 1
         val gh = outputHeight / heavyStep + 1
 
-        // Evaluate the expensive astronomy on a coarse grid, in parallel like the C
-        // version's OpenMP loop. The astronomy calls are pure, so this is thread-safe;
-        // the interpolation below is cheap and stays on the calling thread.
-        val grid = runBlocking(Dispatchers.Default) {
+        val grid = withContext(Dispatchers.Default) {
             withTimeoutOrNull(5.seconds) {
                 val count = gw * gh
-                val threads = Runtime.getRuntime().availableProcessors().coerceAtLeast(1)
                 val chunkSize = (count + threads - 1) / threads
                 val result =
                     Array(count) { GeoPoint(ok = false, sunset = .0, moonset = .0, value = .0) }
@@ -199,7 +195,8 @@ class CrescentVisibilityMap {
                     moonset = (w00 * p00.moonset + w10 * p10.moonset + w01 * p01.moonset + w11 * p11.moonset) / oksum,
                     value = (w00 * p00.value + w10 * p10.value + w01 * p01.value + w11 * p11.value) / oksum,
                 ) else GeoPoint(ok = false, sunset = .0, moonset = .0, value = .0)
-                bitmap[x, y] = classify(interpolated, multiplier, isYallop)
+                paint.color = classify(interpolated, multiplier, isYallop)
+                canvas.drawRect(slots[x + y * width], paint)
             }
         }
     }
