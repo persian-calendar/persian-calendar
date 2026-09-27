@@ -66,8 +66,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
-import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowDownIcon
-import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowUpIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
 import com.byagowi.persiancalendar.shared.generated.resources.nth_week_of_year
@@ -86,6 +84,8 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowDownIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowUpIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors

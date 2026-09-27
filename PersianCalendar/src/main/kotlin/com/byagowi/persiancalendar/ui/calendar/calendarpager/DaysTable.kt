@@ -73,8 +73,6 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
-import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowLeftIcon
-import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowRightIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.add_event
 import com.byagowi.persiancalendar.shared.generated.resources.month
@@ -87,6 +85,8 @@ import com.byagowi.persiancalendar.shared.generated.resources.week_days_name_col
 import com.byagowi.persiancalendar.shared.generated.resources.week_view
 import com.byagowi.persiancalendar.shared.generated.resources.year
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowLeftIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowRightIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile

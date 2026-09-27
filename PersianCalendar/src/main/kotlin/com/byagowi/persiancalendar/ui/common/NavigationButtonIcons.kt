@@ -19,11 +19,11 @@ import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_ARROW_ICON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MENU_ICON
-import com.byagowi.persiancalendar.icons.material.filled.arrowBackIcon
-import com.byagowi.persiancalendar.icons.material.filled.menuIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.navigate_up
 import com.byagowi.persiancalendar.shared.generated.resources.open_navigation_rail
+import com.byagowi.persiancalendar.ui.icons.material.filled.arrowBackIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.menuIcon
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import org.jetbrains.compose.resources.stringResource
 

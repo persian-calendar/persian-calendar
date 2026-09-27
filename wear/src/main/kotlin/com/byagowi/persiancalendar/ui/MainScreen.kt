@@ -45,8 +45,8 @@ import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generateEntries
 import com.byagowi.persiancalendar.generated.EventSource
-import com.byagowi.persiancalendar.icons.material.filled.constructionIcon
 import com.byagowi.persiancalendar.today
+import com.byagowi.persiancalendar.ui.icons.material.filled.constructionIcon
 
 @Composable
 fun MainScreen(

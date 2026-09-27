@@ -17,9 +17,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
-import com.byagowi.persiancalendar.icons.material.filled.moreVertIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.more_options
+import com.byagowi.persiancalendar.ui.icons.material.filled.moreVertIcon
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import org.jetbrains.compose.resources.stringResource
 

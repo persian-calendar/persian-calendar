@@ -84,8 +84,6 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
-import com.byagowi.persiancalendar.icons.material.filled.infoIcon
-import com.byagowi.persiancalendar.icons.material.filled.mapIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.compass
 import com.byagowi.persiancalendar.shared.generated.resources.east
@@ -109,6 +107,8 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.infoIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.mapIcon
 import com.byagowi.persiancalendar.ui.theme.appSliderColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback

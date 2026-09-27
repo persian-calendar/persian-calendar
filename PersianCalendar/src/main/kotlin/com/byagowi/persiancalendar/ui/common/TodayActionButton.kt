@@ -4,9 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
-import com.byagowi.persiancalendar.icons.material.filled.restoreIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.return_to_today
+import com.byagowi.persiancalendar.ui.icons.material.filled.restoreIcon
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

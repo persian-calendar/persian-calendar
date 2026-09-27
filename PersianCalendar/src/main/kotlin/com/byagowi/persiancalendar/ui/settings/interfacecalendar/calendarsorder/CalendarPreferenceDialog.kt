@@ -45,7 +45,6 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.icons.material.rounded.dragHandleRoundedIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority
@@ -53,6 +52,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.move_down
 import com.byagowi.persiancalendar.shared.generated.resources.move_up
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.icons.material.rounded.dragHandleRoundedIcon
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey

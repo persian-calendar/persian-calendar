@@ -89,7 +89,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
-import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.astronomical_info_summary
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
@@ -114,6 +113,7 @@ import com.byagowi.persiancalendar.ui.about.EnableInDeviceCalendar
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
+import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect

@@ -15,10 +15,10 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import com.byagowi.persiancalendar.icons.material.filled.calendarMonthIcon
-import com.byagowi.persiancalendar.icons.material.filled.mapIcon
-import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
-import com.byagowi.persiancalendar.icons.material.filled.swapVerticalCircleIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.calendarMonthIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.mapIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.swapVerticalCircleIcon
 
 @Composable
 fun UtilitiesScreen(

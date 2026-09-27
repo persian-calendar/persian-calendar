@@ -5,9 +5,9 @@ import androidx.compose.ui.graphics.toSvg
 import androidx.compose.ui.graphics.vector.VectorPath
 import androidx.compose.ui.graphics.vector.toPath
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.byagowi.persiancalendar.icons.material.filled.arrowBackIcon
-import com.byagowi.persiancalendar.icons.material.filled.menuIcon
 import com.byagowi.persiancalendar.ui.common.fillDrawerArrowPath
+import com.byagowi.persiancalendar.ui.icons.material.filled.arrowBackIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.menuIcon
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test

@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.icons.material.filled.moreHorizIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.moreHorizIcon
 
 @Composable
 fun MoreButton(

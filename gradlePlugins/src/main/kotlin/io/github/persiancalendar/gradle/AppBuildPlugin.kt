@@ -57,7 +57,7 @@ class AppBuildPlugin : Plugin<Project> {
                 ),
             )
             outputRootDir.set(
-                target.layout.projectDirectory.dir("src/commonMain/kotlin/com/byagowi/persiancalendar/icons/material"),
+                target.layout.projectDirectory.dir("src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material"),
             )
             outputs.upToDateWhen { false }
         }

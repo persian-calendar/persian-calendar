@@ -83,12 +83,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.icons.material.filled.androidIcon
-import com.byagowi.persiancalendar.icons.material.filled.motorcycleIcon
-import com.byagowi.persiancalendar.icons.material.filled.permDeviceInformationIcon
-import com.byagowi.persiancalendar.icons.material.filled.printIcon
-import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
-import com.byagowi.persiancalendar.icons.material.filled.sportsEsportsIcon
 import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.device_information
@@ -99,6 +93,12 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
+import com.byagowi.persiancalendar.ui.icons.material.filled.androidIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.motorcycleIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.permDeviceInformationIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.printIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.sportsEsportsIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException

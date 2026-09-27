@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_SHARE_BUTTON
-import com.byagowi.persiancalendar.icons.material.filled.shareIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.share
+import com.byagowi.persiancalendar.ui.icons.material.filled.shareIcon
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import org.jetbrains.compose.resources.stringResource
 

@@ -51,10 +51,6 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.icons.material.filled.exploreIcon
-import com.byagowi.persiancalendar.icons.material.filled.fullscreenExitIcon
-import com.byagowi.persiancalendar.icons.material.filled.fullscreenIcon
-import com.byagowi.persiancalendar.icons.material.filled.syncAltIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.compass
 import com.byagowi.persiancalendar.shared.generated.resources.exit_full_screen
@@ -67,6 +63,10 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
+import com.byagowi.persiancalendar.ui.icons.material.filled.exploreIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.fullscreenExitIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.fullscreenIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.syncAltIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform

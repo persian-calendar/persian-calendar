@@ -90,10 +90,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.icons.material.filled.openInBrowserIcon
-import com.byagowi.persiancalendar.icons.material.filled.openInNewIcon
-import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
-import com.byagowi.persiancalendar.icons.material.filled.yardIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.afghanistan_events
 import com.byagowi.persiancalendar.shared.generated.resources.close
@@ -112,6 +108,10 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.icons.WikipediaIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.openInBrowserIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.openInNewIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.yardIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec

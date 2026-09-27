@@ -27,9 +27,9 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.icons.material.filled.brightness7Icon
-import com.byagowi.persiancalendar.icons.material.filled.nightlightRoundIcon
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.icons.material.filled.brightness7Icon
+import com.byagowi.persiancalendar.ui.icons.material.filled.nightlightRoundIcon
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.symbol

@@ -59,8 +59,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
-import com.byagowi.persiancalendar.icons.material.filled.deleteIcon
-import com.byagowi.persiancalendar.icons.material.filled.imageIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.bold_text
@@ -74,6 +72,8 @@ import com.byagowi.persiancalendar.shared.generated.resources.theme_dark
 import com.byagowi.persiancalendar.shared.generated.resources.theme_light
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
+import com.byagowi.persiancalendar.ui.icons.material.filled.deleteIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.imageIcon
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem

@@ -132,9 +132,6 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.weekStart
-import com.byagowi.persiancalendar.icons.material.filled.addIcon
-import com.byagowi.persiancalendar.icons.material.filled.calendarViewDayIcon
-import com.byagowi.persiancalendar.icons.material.filled.calendarViewWeekIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.add_event
 import com.byagowi.persiancalendar.shared.generated.resources.calendar
@@ -150,6 +147,9 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.icons.material.filled.addIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.calendarViewDayIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.calendarViewWeekIcon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec

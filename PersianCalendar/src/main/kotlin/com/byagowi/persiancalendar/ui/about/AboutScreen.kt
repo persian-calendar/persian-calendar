@@ -94,13 +94,6 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
-import com.byagowi.persiancalendar.icons.material.filled.androidIcon
-import com.byagowi.persiancalendar.icons.material.filled.emailIcon
-import com.byagowi.persiancalendar.icons.material.filled.folderIcon
-import com.byagowi.persiancalendar.icons.material.filled.helpIcon
-import com.byagowi.persiancalendar.icons.material.filled.paletteIcon
-import com.byagowi.persiancalendar.icons.material.filled.permDeviceInformationIcon
-import com.byagowi.persiancalendar.icons.material.filled.translateIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about
 import com.byagowi.persiancalendar.shared.generated.resources.about_developers
@@ -121,6 +114,13 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenNavigationRailIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.icons.material.filled.androidIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.emailIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.folderIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.helpIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.paletteIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.permDeviceInformationIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.translateIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec

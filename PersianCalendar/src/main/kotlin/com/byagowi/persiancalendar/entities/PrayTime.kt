@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
 import androidx.compose.ui.graphics.Color
-import com.byagowi.persiancalendar.icons.material.filled.brightness4Icon
-import com.byagowi.persiancalendar.icons.material.filled.brightness7Icon
 import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.asr
@@ -14,6 +12,8 @@ import com.byagowi.persiancalendar.shared.generated.resources.maghrib
 import com.byagowi.persiancalendar.shared.generated.resources.midnight
 import com.byagowi.persiancalendar.shared.generated.resources.sunrise
 import com.byagowi.persiancalendar.shared.generated.resources.sunset
+import com.byagowi.persiancalendar.ui.icons.material.filled.brightness4Icon
+import com.byagowi.persiancalendar.ui.icons.material.filled.brightness7Icon
 import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
 import org.jetbrains.compose.resources.StringResource

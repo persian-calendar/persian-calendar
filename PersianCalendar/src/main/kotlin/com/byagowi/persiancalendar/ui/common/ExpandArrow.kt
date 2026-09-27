@@ -12,7 +12,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import com.byagowi.persiancalendar.icons.material.filled.expandMoreIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.expandMoreIcon
 
 @Composable
 fun ExpandArrow(

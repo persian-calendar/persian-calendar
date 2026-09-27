@@ -76,12 +76,6 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
-import com.byagowi.persiancalendar.icons.material.filled._3dRotationIcon
-import com.byagowi.persiancalendar.icons.material.filled.grid3x3Icon
-import com.byagowi.persiancalendar.icons.material.filled.locationOnIcon
-import com.byagowi.persiancalendar.icons.material.filled.myLocationIcon
-import com.byagowi.persiancalendar.icons.material.filled.nightlightRoundIcon
-import com.byagowi.persiancalendar.icons.material.filled.socialDistanceIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.days
 import com.byagowi.persiancalendar.shared.generated.resources.hours
@@ -103,6 +97,12 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TimeArrow
 import com.byagowi.persiancalendar.ui.common.appTransformable
+import com.byagowi.persiancalendar.ui.icons.material.filled._3dRotationIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.grid3x3Icon
+import com.byagowi.persiancalendar.ui.icons.material.filled.locationOnIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.myLocationIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.nightlightRoundIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.socialDistanceIcon
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor

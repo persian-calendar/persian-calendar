@@ -61,7 +61,6 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.icons.material.filled.removeCircleOutlineIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.add
@@ -79,6 +78,7 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
+import com.byagowi.persiancalendar.ui.icons.material.filled.removeCircleOutlineIcon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appDialogProperties
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem

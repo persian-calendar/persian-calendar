@@ -56,12 +56,12 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.icons.material.filled.helpIcon
-import com.byagowi.persiancalendar.icons.material.filled.settingsBackupRestoreIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.icons.material.filled.helpIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.settingsBackupRestoreIcon
 import com.byagowi.persiancalendar.ui.preferencesUpdateToken
 import com.byagowi.persiancalendar.ui.settings.common.ColorBox
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog

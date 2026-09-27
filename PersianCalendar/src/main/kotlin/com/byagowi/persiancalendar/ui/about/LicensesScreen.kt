@@ -58,14 +58,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.generated.credits
-import com.byagowi.persiancalendar.icons.material.filled.infoIcon
-import com.byagowi.persiancalendar.icons.material.filled.motorcycleIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about_license_title
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
+import com.byagowi.persiancalendar.ui.icons.material.filled.infoIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.motorcycleIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import org.jetbrains.compose.resources.stringResource

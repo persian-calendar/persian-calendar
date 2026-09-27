@@ -15,7 +15,7 @@ import java.time.Duration
 import java.util.zip.GZIPInputStream
 
 private const val ICON_BASE_URL = "https://fonts.gstatic.com/render/v1"
-private const val ICON_PACKAGE_PREFIX = "com.byagowi.persiancalendar.icons.material"
+private const val ICON_PACKAGE_PREFIX = "com.byagowi.persiancalendar.ui.icons.material"
 
 private val AUTO_MIRRORED_ICONS = setOf(
     "arrow_back",

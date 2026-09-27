@@ -11,12 +11,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_NEXT_ARROW
 import com.byagowi.persiancalendar.SHARED_CONTENT_PREVIOUS_ARROW
-import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowLeftIcon
-import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowRightIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.day
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
 import com.byagowi.persiancalendar.shared.generated.resources.previous_x
+import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowLeftIcon
+import com.byagowi.persiancalendar.ui.icons.material.filled.keyboardArrowRightIcon
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import org.jetbrains.compose.resources.stringResource
