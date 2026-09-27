@@ -52,11 +52,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -70,7 +68,6 @@ import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.QIBLA_LATITUDE
 import com.byagowi.persiancalendar.QIBLA_LONGITUDE
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
@@ -88,6 +85,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.compass
 import com.byagowi.persiancalendar.shared.generated.resources.east
 import com.byagowi.persiancalendar.shared.generated.resources.help
+import com.byagowi.persiancalendar.shared.generated.resources.ic_level
 import com.byagowi.persiancalendar.shared.generated.resources.level
 import com.byagowi.persiancalendar.shared.generated.resources.map
 import com.byagowi.persiancalendar.shared.generated.resources.north
@@ -122,6 +120,7 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.toEarthPosition
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -345,7 +344,7 @@ fun SharedTransitionScope.CompassScreen(
                 }
                 AppBottomAppBar(overlay = { Angle(angle, declination.value) }) {
                     AppIconButton(
-                        icon = ImageVector.vectorResource(R.drawable.ic_level),
+                        icon = vectorResource(Res.drawable.ic_level),
                         title = stringResource(Res.string.level),
                         modifier = Modifier.sharedBounds(
                             sharedContentState = rememberSharedContentState(

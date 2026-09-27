@@ -36,8 +36,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.util.lerp
 import androidx.core.content.res.ResourcesCompat
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isBoldFont
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
@@ -88,8 +88,10 @@ fun EarthView(
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.color = 0x38808080
             it.textAlign = Paint.Align.CENTER
-            it.typeface =
-                ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+            it.typeface = ResourcesCompat.getFont(
+                context,
+                R.font.notosanssymbolsregularzodiacsubset,
+            )
             if (isBoldFont) it.isFakeBoldText = true
         }
     }

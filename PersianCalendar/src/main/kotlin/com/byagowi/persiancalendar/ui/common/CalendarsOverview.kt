@@ -69,7 +69,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -88,6 +87,7 @@ import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.persianDelimiter
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority
 import com.byagowi.persiancalendar.shared.generated.resources.days_distance

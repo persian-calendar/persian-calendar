@@ -111,9 +111,9 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
     val notificationBuilder = NotificationCompat.Builder(context, notificationChannelId)
     notificationBuilder.setAutoCancel(true).setWhen(System.currentTimeMillis()).setSmallIcon(
         when (prayTime.imageVector) {
-            brightness7Icon -> R.drawable.brightness7
-            brightness4Icon -> R.drawable.brightness4
-            else -> R.drawable.brightness4
+            brightness7Icon -> com.byagowi.persiancalendar.shared.R.drawable.brightness7
+            brightness4Icon -> com.byagowi.persiancalendar.shared.R.drawable.brightness4
+            else -> com.byagowi.persiancalendar.shared.R.drawable.brightness4
         },
     ).setContentTitle(title).setContentText(subtitle)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

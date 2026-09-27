@@ -18,7 +18,10 @@ class AngleDisplay(
     context: Context, defaultFormat: String = "00.0",
     private val backgroundText: String = "88.8",
 ) {
-    private val lcd = ResourcesCompat.getFont(context, R.font.dseg7classicminibolditalicsubset)
+    private val lcd = ResourcesCompat.getFont(
+        context,
+        com.byagowi.persiancalendar.shared.R.font.dseg7classicminibolditalicsubset,
+    )
 
     // The characters '!' is a whitespace on the font
     private val whiteSpace = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) '!' else ' '

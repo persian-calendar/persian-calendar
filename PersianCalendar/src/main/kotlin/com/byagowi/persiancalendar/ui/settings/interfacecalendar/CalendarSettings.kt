@@ -69,7 +69,6 @@ import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.WeekDay
@@ -89,6 +88,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.astronomical_info_summary
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
@@ -243,7 +243,9 @@ fun CalendarSettings(
                                     Text(
                                         Zodiac.SCORPIO.symbol,
                                         fontFamily = FontFamily(
-                                            Font(R.font.notosanssymbolsregularzodiacsubset),
+                                            Font(
+                                                R.font.notosanssymbolsregularzodiacsubset,
+                                            ),
                                         ),
                                         fontSize = 20.sp,
                                         modifier = Modifier.padding(horizontal = 8.dp),
