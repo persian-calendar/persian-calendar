@@ -2,12 +2,17 @@ package com.byagowi.persiancalendar.entities
 
 import androidx.compose.runtime.annotation.RememberInComposition
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.global.weekDaysTitles
+import com.byagowi.persiancalendar.global.weekDaysTitlesInitials
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Time
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
+
+val WeekDay.shortTitle: String get() = weekDaysTitlesInitials[this.ordinal]
+val WeekDay.title: String get() = weekDaysTitles[this.ordinal]
 
 fun Jdn.toAstronomyTime(hourOfDay: Int, setIranTime: Boolean = false): Time {
     val date = toGregorianCalendar()
