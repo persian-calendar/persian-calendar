@@ -100,17 +100,14 @@ import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.titleStringRes
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.NodeEventKind
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.Vector
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
-import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.moonNodesAfter
-import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -134,17 +131,6 @@ fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     val minutes = rounded - degrees * 60
     if (isAbjad) return toAbjad(degrees) + " " + toAbjad(minutes)
     return numeral.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
-}
-
-fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
-    return when (body) {
-        Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
-        Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
-        else -> {
-            val ecliptic = equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
-            ecliptic.elon to ecliptic.vec.length()
-        }
-    }
 }
 
 @Composable

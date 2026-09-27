@@ -193,7 +193,10 @@ fun SharedTransitionScope.AstronomyScreen(
             Jdn(date.toGregorianCalendar(forceLocalTime = true).toCivilDate())
         }
     }
-    val astronomyState = AstronomyState(timeInMillis.longValue)
+    val astronomyState = AstronomyState(
+        timeInMillis.longValue,
+        remember(coordinates) { coordinates?.toObserver() },
+    )
     val coroutineScope = rememberCoroutineScope()
 
     val scale = rememberSaveable { mutableFloatStateOf(.25f) }

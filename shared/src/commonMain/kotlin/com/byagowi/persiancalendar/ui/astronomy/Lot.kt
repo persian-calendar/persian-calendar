@@ -1,8 +1,12 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import com.byagowi.persiancalendar.global.language
+import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
+import io.github.cosinekitty.astronomy.equatorialToEcliptic
+import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.sunPosition
 
 // Arabic lots (سهام) — Abu Ma'shar / classical Islamic tradition for year charts
 // https://en.wikipedia.org/wiki/Arabic_parts
@@ -43,7 +47,7 @@ enum class Lot(
     // ⚠️ DRAFT — verified against 1225 manuscript result only; no source confirms the grape name.
     Grapes(arabicTitle = "سهم العنب", bodies = Body.Jupiter to Body.Venus);
 
-    fun title() = if (language.isArabicScript) arabicTitle else name
+    fun title(isArabicScript: Boolean) = if (isArabicScript) arabicTitle else name
 
     // Arabic lots (سهام): formula is (ASC + x − y).mod(360), reversed for nocturnal charts
     private fun lot(ascendant: Double, x: Double, y: Double) = (ascendant + x - y).mod(360.0)
@@ -57,4 +61,15 @@ enum class Lot(
             if (isDiurnal) bodies.second else bodies.first, time,
         ).first,
     )
+}
+
+fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
+    return when (body) {
+        Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
+        Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
+        else -> {
+            val ecliptic = equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
+            ecliptic.elon to ecliptic.vec.length()
+        }
+    }
 }

@@ -6,6 +6,7 @@ import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
+import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
@@ -16,11 +17,10 @@ import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.sunPosition
 
-class AstronomyState(timeInMillis: Long) {
+class AstronomyState(timeInMillis: Long, private val observer: Observer?) {
     private val time = Time.fromMillisecondsSince1970(timeInMillis)
     val sun = sunPosition(time)
     val moon = eclipticGeoMoon(time)
-    private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates?.toObserver() }
     val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
         observer?.let { observer -> sunlitSideMoonTiltAngle(time, observer).toFloat() }
     }

@@ -1136,7 +1136,7 @@ private fun createMoonRemoteViews(context: Context, size: DpSize?, now: Long): R
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_moon)
     val solarDraw = SolarDraw(context.resources)
     val bitmap = createBitmap(width, height).applyCanvas {
-        val state = AstronomyState(timeInMillis = now)
+        val state = AstronomyState(timeInMillis = now, observer = coordinates?.toObserver())
         solarDraw.moon(
             this,
             state.sun,

@@ -6,7 +6,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
 
-@JvmInline
+@kotlin.jvm.JvmInline
 value class LunarAge private constructor(private val fraction: Double) {
 
     val isAscending get() = fraction < .5
