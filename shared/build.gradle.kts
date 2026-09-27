@@ -63,6 +63,7 @@ kotlin {
                 implementation(libs.compose.multiplatform.material3)
                 implementation(libs.compose.multiplatform.tooling)
                 api(libs.compose.components.resources)
+                api(libs.jetbrains.navigation3.ui)
             }
         }
         androidMain {

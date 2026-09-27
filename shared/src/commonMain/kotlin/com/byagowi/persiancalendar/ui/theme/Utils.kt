@@ -6,7 +6,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-
 val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
 
 @Composable

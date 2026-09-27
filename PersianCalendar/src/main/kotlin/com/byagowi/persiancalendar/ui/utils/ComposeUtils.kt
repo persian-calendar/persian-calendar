@@ -84,20 +84,6 @@ fun View.findDialogWindow(): Window? =
 private tailrec fun ViewParent.findDialogWindowProvider(): DialogWindowProvider? =
     this as? DialogWindowProvider ?: parent?.findDialogWindowProvider()
 
-val appBoundsTransform = BoundsTransform { _, _ ->
-    spring(
-        stiffness = Spring.StiffnessMediumLow,
-        dampingRatio = Spring.DampingRatioLowBouncy,
-        visibilityThreshold = Rect.VisibilityThreshold,
-    )
-}
-
-val appContentSizeAnimationSpec = spring(
-    stiffness = Spring.StiffnessMediumLow,
-    dampingRatio = Spring.DampingRatioLowBouncy,
-    visibilityThreshold = IntSize.VisibilityThreshold,
-)
-
 // When something needs to match with Material default theme corner sizes
 const val ExtraLargeShapeCornerSize = 28f
 const val LargeShapeCornerSize = 16f
