@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
-import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch

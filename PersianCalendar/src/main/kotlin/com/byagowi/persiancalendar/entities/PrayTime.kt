@@ -106,4 +106,3 @@ enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray)
         }
     }
 }
-
