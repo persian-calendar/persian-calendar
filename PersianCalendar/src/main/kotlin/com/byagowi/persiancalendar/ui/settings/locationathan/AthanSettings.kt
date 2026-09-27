@@ -41,7 +41,6 @@ import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.athanVibration
@@ -83,6 +82,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.stringResId
 import com.byagowi.persiancalendar.utils.title
 import com.byagowi.persiancalendar.utils.titleStringRes
 import io.github.persiancalendar.praytimes.AsrMethod

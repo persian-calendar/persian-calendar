@@ -78,11 +78,9 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -157,6 +155,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import java.util.Date
 import kotlin.math.PI
 import kotlin.math.cos
@@ -629,9 +628,9 @@ private fun SharedTransitionScope.SolarDisplay(
                     onClick = { onModeChange(it) },
                     icon = {
                         if (it == AstronomyMode.MOON) MoonIcon(astronomyState, solarDraw) else Icon(
-                            ImageVector.vectorResource(it.icon),
+                            imageVector = vectorResource(it.icon),
                             modifier = Modifier.size(24.dp),
-                            contentDescription = stringResource(it.titleRes),
+                            contentDescription = stringResource(it.title),
                             tint = Color.Unspecified,
                         )
                     },

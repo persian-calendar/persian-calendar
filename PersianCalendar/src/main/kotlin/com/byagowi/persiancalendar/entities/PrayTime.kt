@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
 import androidx.compose.ui.graphics.Color
-import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.asr
 import com.byagowi.persiancalendar.shared.generated.resources.dhuhr
@@ -36,17 +35,11 @@ enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray)
     val isAthan get() = this in athans
 
     // Used in days view
+    // If something new should be added please update AthanNotification also
     val imageVector
         get() = when (this) {
             DHUHR, ASR -> brightness7Icon
             else -> brightness4Icon
-        }
-
-    // Used in Athan notification
-    val drawable
-        get() = when (this) {
-            DHUHR, ASR -> com.byagowi.persiancalendar.R.drawable.brightness7
-            else -> com.byagowi.persiancalendar.R.drawable.brightness4
         }
 
     // Used in times tab for items that are always shown
@@ -114,15 +107,3 @@ enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray)
     }
 }
 
-val PrayTime.stringResId
-    get() = when (this) {
-        PrayTime.IMSAK -> R.string.imsak
-        PrayTime.FAJR -> R.string.fajr
-        PrayTime.SUNRISE -> R.string.sunrise
-        PrayTime.DHUHR -> R.string.dhuhr
-        PrayTime.ASR -> R.string.asr
-        PrayTime.SUNSET -> R.string.sunset
-        PrayTime.MAGHRIB -> R.string.maghrib
-        PrayTime.ISHA -> R.string.isha
-        PrayTime.MIDNIGHT -> R.string.midnight
-    }

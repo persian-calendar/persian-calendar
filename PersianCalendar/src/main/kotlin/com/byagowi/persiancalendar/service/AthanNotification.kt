@@ -19,7 +19,6 @@ import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
-import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
@@ -27,6 +26,8 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.icons.material.filled.brightness4Icon
+import com.byagowi.persiancalendar.ui.icons.material.filled.brightness7Icon
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.debugLog
@@ -34,6 +35,7 @@ import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.setDirection
+import com.byagowi.persiancalendar.utils.stringResId
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -107,8 +109,13 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
     }
 
     val notificationBuilder = NotificationCompat.Builder(context, notificationChannelId)
-    notificationBuilder.setAutoCancel(true).setWhen(System.currentTimeMillis())
-        .setSmallIcon(prayTime.drawable).setContentTitle(title).setContentText(subtitle)
+    notificationBuilder.setAutoCancel(true).setWhen(System.currentTimeMillis()).setSmallIcon(
+            when (prayTime.imageVector) {
+                brightness7Icon -> R.drawable.brightness7
+                brightness4Icon -> R.drawable.brightness4
+                else -> R.drawable.brightness4
+            },
+        ).setContentTitle(title).setContentText(subtitle)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 //        .setContentIntent(
 //            PendingIntent.getActivity(

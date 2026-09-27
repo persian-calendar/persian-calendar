@@ -49,11 +49,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
@@ -120,6 +118,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import java.util.Date
 import java.util.TimeZone
 import kotlin.math.abs
@@ -208,9 +207,9 @@ fun HoroscopeDialog(
                         onClick = { mode = it },
                         icon = {
                             Icon(
-                                ImageVector.vectorResource(it.icon),
+                                imageVector = vectorResource(it.icon),
                                 modifier = Modifier.size(24.dp),
-                                contentDescription = stringResource(it.titleRes),
+                                contentDescription = stringResource(it.title),
                                 tint = Color.Unspecified,
                             )
                         },

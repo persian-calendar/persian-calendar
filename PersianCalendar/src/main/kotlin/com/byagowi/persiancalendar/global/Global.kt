@@ -118,7 +118,6 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.WeekDay
-import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
@@ -135,6 +134,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
+import com.byagowi.persiancalendar.utils.stringResId
 import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate

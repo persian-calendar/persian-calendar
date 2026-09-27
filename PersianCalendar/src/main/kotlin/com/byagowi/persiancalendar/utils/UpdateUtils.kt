@@ -87,7 +87,6 @@ import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.entities.shortTitle
-import com.byagowi.persiancalendar.entities.stringResId
 import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.global.calculationMethod

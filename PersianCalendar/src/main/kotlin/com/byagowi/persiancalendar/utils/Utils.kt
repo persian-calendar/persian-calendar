@@ -7,11 +7,13 @@ import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.entities.EarthPosition
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.highLatitudesMethod
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.midnightMethod
+import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_angle_based
 import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_night_middle
@@ -64,8 +66,6 @@ fun Coordinates.calculatePrayTimes(
         midnightMethod,
     )
 }
-
-val Coordinates.isSouthernHemisphere get() = latitude < .0
 
 fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elevation)
 fun Coordinates.toEarthPosition() = EarthPosition(this.latitude, this.longitude)
@@ -126,3 +126,16 @@ inline fun handleAngleWrapping(angleChange: Float, pi: Float = Math.PI.toFloat()
 @Suppress("NOTHING_TO_INLINE")
 inline fun handleAngleWrappingDegrees(angleChange: Float): Float =
     handleAngleWrapping(angleChange, 180f)
+
+val PrayTime.stringResId
+    get() = when (this) {
+        PrayTime.IMSAK -> R.string.imsak
+        PrayTime.FAJR -> R.string.fajr
+        PrayTime.SUNRISE -> R.string.sunrise
+        PrayTime.DHUHR -> R.string.dhuhr
+        PrayTime.ASR -> R.string.asr
+        PrayTime.SUNSET -> R.string.sunset
+        PrayTime.MAGHRIB -> R.string.maghrib
+        PrayTime.ISHA -> R.string.isha
+        PrayTime.MIDNIGHT -> R.string.midnight
+    }
