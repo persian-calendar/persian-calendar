@@ -20,11 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.ZeroCornerSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.FullscreenExit
-import androidx.compose.material.icons.filled.SyncAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +51,10 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.icons.material.filled.exploreIcon
+import com.byagowi.persiancalendar.icons.material.filled.fullscreenExitIcon
+import com.byagowi.persiancalendar.icons.material.filled.fullscreenIcon
+import com.byagowi.persiancalendar.icons.material.filled.syncAltIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.compass
 import com.byagowi.persiancalendar.shared.generated.resources.exit_full_screen
@@ -113,13 +112,13 @@ fun SharedTransitionScope.LevelScreen(
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         )
                         AppIconButton(
-                            icon = Icons.Default.SyncAlt,
+                            icon = syncAltIcon,
                             title = language.centimeter + " / " + language.inch,
                             modifier = Modifier.rotate(rotation),
                         ) { cmInchFlip = !cmInchFlip }
                     }
                     AppIconButton(
-                        icon = Icons.Default.Fullscreen,
+                        icon = fullscreenIcon,
                         title = stringResource(Res.string.full_screen),
                     ) { isFullscreen = true }
                 },
@@ -163,7 +162,7 @@ fun SharedTransitionScope.LevelScreen(
             ) {
                 Crossfade(isFullscreen) {
                     if (!it) AppIconButton(
-                        icon = Icons.Default.Explore,
+                        icon = exploreIcon,
                         title = stringResource(Res.string.compass),
                         modifier = Modifier.sharedBounds(
                             sharedContentState = rememberSharedContentState(
@@ -206,7 +205,7 @@ fun SharedTransitionScope.LevelScreen(
                 .padding(top = 72.dp),
             isVisible = isFullscreen,
             action = { isFullscreen = false },
-            icon = Icons.Default.FullscreenExit,
+            icon = fullscreenExitIcon,
             title = stringResource(Res.string.exit_full_screen),
         )
     }

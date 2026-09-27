@@ -45,13 +45,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Motorcycle
-import androidx.compose.material.icons.filled.PermDeviceInformation
-import androidx.compose.material.icons.filled.Print
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -90,6 +83,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.icons.material.filled.androidIcon
+import com.byagowi.persiancalendar.icons.material.filled.motorcycleIcon
+import com.byagowi.persiancalendar.icons.material.filled.permDeviceInformationIcon
+import com.byagowi.persiancalendar.icons.material.filled.printIcon
+import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.icons.material.filled.sportsEsportsIcon
 import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.device_information
@@ -176,11 +175,11 @@ fun SharedTransitionScope.DeviceInformationScreen(
                     )
                 }
                 AppIconButton(
-                    icon = Icons.Default.Print,
+                    icon = printIcon,
                     title = stringResource(Res.string.print),
                 ) { shareFacilitator.openHtmlInBrowser(generateHtmlReport(items)) }
                 AppIconButton(
-                    icon = Icons.Default.SportsEsports,
+                    icon = sportsEsportsIcon,
                     title = "Game",
                 ) {
                     runCatching {
@@ -247,15 +246,15 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
             listOf(
-                Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
+                Triple(androidIcon, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(
-                    Icons.Default.Settings,
+                    settingsIcon,
                     "API " + Build.VERSION.SDK_INT,
                 ) { showScheduleDialog = true },
-                Triple(Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0]) {
+                Triple(motorcycleIcon, Build.SUPPORTED_ABIS[0]) {
                     showScheduleDialog = true
                 },
-                Triple(Icons.Default.PermDeviceInformation, Build.MODEL) {
+                Triple(permDeviceInformationIcon, Build.MODEL) {
                     showScheduleDialog = true
                 },
             )

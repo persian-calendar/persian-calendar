@@ -49,10 +49,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CalendarViewDay
-import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -136,6 +132,9 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.icons.material.filled.addIcon
+import com.byagowi.persiancalendar.icons.material.filled.calendarViewDayIcon
+import com.byagowi.persiancalendar.icons.material.filled.calendarViewWeekIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.add_event
 import com.byagowi.persiancalendar.shared.generated.resources.calendar
@@ -275,7 +274,7 @@ fun SharedTransitionScope.WeekScreen(
                             } + 4.dp
                         }
                         .padding(end = 8.dp),
-                ) { Icon(Icons.Default.Add, stringResource(Res.string.add_event)) }
+                ) { Icon(addIcon, stringResource(Res.string.add_event)) }
             },
             topBar = {
                 @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -365,8 +364,8 @@ fun SharedTransitionScope.WeekScreen(
                                 tooltip = { PlainTooltip { Text(title) } },
                                 state = rememberTooltipState(),
                             ) {
-                                if (isWeekViewState) Icon(Icons.Default.CalendarViewDay, title)
-                                else Icon(Icons.Default.CalendarViewWeek, title)
+                                if (isWeekViewState) Icon(calendarViewDayIcon, title)
+                                else Icon(calendarViewWeekIcon, title)
                             }
                         }
                     },

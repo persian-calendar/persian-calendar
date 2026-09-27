@@ -26,9 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -87,6 +84,8 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.showQibla
 import com.byagowi.persiancalendar.global.showTrueNorth
+import com.byagowi.persiancalendar.icons.material.filled.infoIcon
+import com.byagowi.persiancalendar.icons.material.filled.mapIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.compass
 import com.byagowi.persiancalendar.shared.generated.resources.east
@@ -358,7 +357,7 @@ fun SharedTransitionScope.CompassScreen(
                         onClick = navigateToLevel,
                     )
                     AppIconButton(
-                        icon = Icons.Default.Map,
+                        icon = mapIcon,
                         title = stringResource(Res.string.map),
                         modifier = Modifier.sharedBounds(
                             sharedContentState = rememberSharedContentState(
@@ -370,10 +369,7 @@ fun SharedTransitionScope.CompassScreen(
                         onClick = navigateToMap,
                     )
                     Spacer(Modifier.weight(1f))
-                    AppIconButton(
-                        icon = Icons.Default.Info,
-                        title = stringResource(Res.string.help),
-                    ) {
+                    AppIconButton(icon = infoIcon, title = stringResource(Res.string.help)) {
                         showSnackbarMessage(
                             resources.getString(
                                 if (sensorNotFound) com.byagowi.persiancalendar.shared.R.string.compass_not_found

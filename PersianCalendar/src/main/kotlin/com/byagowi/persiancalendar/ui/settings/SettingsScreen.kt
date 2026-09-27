@@ -34,15 +34,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Widgets
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -97,6 +88,14 @@ import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.icons.material.filled.checkIcon
+import com.byagowi.persiancalendar.icons.material.filled.locationOnIcon
+import com.byagowi.persiancalendar.icons.material.filled.paletteIcon
+import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.icons.material.filled.widgetsIcon
+import com.byagowi.persiancalendar.icons.material.outlined.locationOnOutlinedIcon
+import com.byagowi.persiancalendar.icons.material.outlined.paletteOutlinedIcon
+import com.byagowi.persiancalendar.icons.material.outlined.widgetsOutlinedIcon
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.service.PersianCalendarWallpaperService
 import com.byagowi.persiancalendar.shared.ShareFacilitator
@@ -306,8 +305,8 @@ enum class SettingsTab(
     ) -> Unit,
 ) {
     InterfaceCalendar(
-        outlinedIcon = Icons.Outlined.Palette,
-        filledIcon = Icons.Default.Palette,
+        outlinedIcon = paletteOutlinedIcon,
+        filledIcon = paletteIcon,
         firstTitle = Res.string.pref_interface,
         secondTitle = Res.string.calendar,
         content = { listState, disableStickyHeader, destination, destinationItem, _ ->
@@ -324,8 +323,8 @@ enum class SettingsTab(
         },
     ),
     WidgetNotification(
-        outlinedIcon = Icons.Outlined.Widgets,
-        filledIcon = Icons.Default.Widgets,
+        outlinedIcon = widgetsOutlinedIcon,
+        filledIcon = widgetsIcon,
         firstTitle = Res.string.pref_notification,
         secondTitle = Res.string.pref_widget,
         content = { listState, disableStickyHeader, _, _, _ ->
@@ -342,8 +341,8 @@ enum class SettingsTab(
         },
     ),
     LocationAthan(
-        outlinedIcon = Icons.Outlined.LocationOn,
-        filledIcon = Icons.Default.LocationOn,
+        outlinedIcon = locationOnOutlinedIcon,
+        filledIcon = locationOnIcon,
         firstTitle = Res.string.location,
         secondTitle = Res.string.athan,
         content = { listState, disableStickyHeader, destination, _, navigateToMap ->
@@ -417,7 +416,7 @@ private fun MenuItems(
                     }.onFailure(logException).onFailure { showUnsupportedActionToast(context) }
                 },
             ) {
-                val icon = if (isCurrent) Icons.Default.Settings else Icons.Default.Check
+                val icon = if (isCurrent) settingsIcon else checkIcon
                 Icon(imageVector = icon, contentDescription = stringResource(Res.string.accept))
             }
         },

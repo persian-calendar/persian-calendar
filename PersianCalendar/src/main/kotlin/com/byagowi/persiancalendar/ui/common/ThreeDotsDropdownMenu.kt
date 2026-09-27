@@ -6,8 +6,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +17,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
+import com.byagowi.persiancalendar.icons.material.filled.moreVertIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.more_options
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -49,7 +48,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
                 ),
             )
             AppIconButton(
-                icon = Icons.Default.MoreVert,
+                icon = moreVertIcon,
                 title = stringResource(Res.string.more_options),
                 modifier = Modifier.rotate(rotation),
             ) { expanded = !expanded }

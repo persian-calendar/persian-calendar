@@ -167,7 +167,6 @@ dependencies {
     implementation(libs.compose.animation)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.runtime)
-    implementation(libs.compose.material.icons.extended)
     implementation(libs.kotlinx.serialization.core)
 
     lintChecks(libs.slack.compose.lint.checks)

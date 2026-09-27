@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -14,6 +12,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import com.byagowi.persiancalendar.icons.material.filled.expandMoreIcon
 
 @Composable
 fun ExpandArrow(
@@ -36,7 +35,7 @@ fun ExpandArrow(
         ),
     )
     Icon(
-        imageVector = Icons.Default.ExpandMore,
+        imageVector = expandMoreIcon,
         contentDescription = contentDescription,
         modifier = Modifier.rotate(angle) then modifier,
         tint = tint,

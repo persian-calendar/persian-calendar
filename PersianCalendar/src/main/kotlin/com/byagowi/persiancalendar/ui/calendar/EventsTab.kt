@@ -25,11 +25,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
@@ -95,6 +90,10 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.openInBrowserIcon
+import com.byagowi.persiancalendar.icons.material.filled.openInNewIcon
+import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.icons.material.filled.yardIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.afghanistan_events
 import com.byagowi.persiancalendar.shared.generated.resources.close
@@ -292,8 +291,8 @@ private fun DayEventContent(
             },
         ) {
             Icon(
-                if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
-                else Icons.AutoMirrored.Default.OpenInNew,
+                if (event is CalendarEvent.EquinoxCalendarEvent) yardIcon
+                else openInNewIcon,
                 contentDescription = null,
                 tint = contentColor,
                 modifier = Modifier.padding(start = 8.dp),
@@ -382,10 +381,10 @@ private fun DayEventContent(
                                                         Icon(
                                                             imageVector = when {
                                                                 event is CalendarEvent.DeviceCalendarEvent -> {
-                                                                    Icons.AutoMirrored.Default.OpenInNew
+                                                                    openInNewIcon
                                                                 }
 
-                                                                else -> Icons.Default.OpenInBrowser
+                                                                else -> openInBrowserIcon
                                                             },
                                                             contentDescription = null,
                                                             modifier = Modifier.padding(start = 8.dp),
@@ -468,7 +467,7 @@ private fun DayEventContent(
                                         },
                                     ) {
                                         Icon(
-                                            imageVector = Icons.Default.Settings,
+                                            imageVector = settingsIcon,
                                             contentDescription = stringResource(Res.string.settings),
                                         )
                                     }

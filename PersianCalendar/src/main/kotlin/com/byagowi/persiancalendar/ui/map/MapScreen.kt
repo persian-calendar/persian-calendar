@@ -30,13 +30,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Grid3x3
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material.icons.filled.NightlightRound
-import androidx.compose.material.icons.filled.SocialDistance
-import androidx.compose.material.icons.filled._3dRotation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -83,6 +76,12 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showQibla
+import com.byagowi.persiancalendar.icons.material.filled._3dRotationIcon
+import com.byagowi.persiancalendar.icons.material.filled.grid3x3Icon
+import com.byagowi.persiancalendar.icons.material.filled.locationOnIcon
+import com.byagowi.persiancalendar.icons.material.filled.myLocationIcon
+import com.byagowi.persiancalendar.icons.material.filled.nightlightRoundIcon
+import com.byagowi.persiancalendar.icons.material.filled.socialDistanceIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.days
 import com.byagowi.persiancalendar.shared.generated.resources.hours
@@ -352,13 +351,13 @@ fun SharedTransitionScope.MapScreen(
                 }
 
                 MenuItem(
-                    icon = Icons.Default._3dRotation,
+                    icon = _3dRotationIcon,
                     titleRes = Res.string.show_globe_view_label,
                     isEnabled = showGlobeView,
                 ) { showGlobeView = !showGlobeView }
 
                 MenuItem(
-                    icon = Icons.Default.SocialDistance,
+                    icon = socialDistanceIcon,
                     titleRes = Res.string.show_direct_path_label,
                     isEnabled = isDirectPathMode,
                     modifier = Modifier.alpha(
@@ -376,18 +375,18 @@ fun SharedTransitionScope.MapScreen(
                 }
 
                 MenuItem(
-                    icon = Icons.Default.Grid3x3,
+                    icon = grid3x3Icon,
                     titleRes = Res.string.show_grid_label,
                     isEnabled = displayGrid,
                 ) { displayGrid = !displayGrid }
 
                 MenuItem(
-                    icon = Icons.Default.MyLocation,
+                    icon = myLocationIcon,
                     titleRes = Res.string.show_my_location_label,
                 ) { showGpsDialog = true }
 
                 MenuItem(
-                    icon = Icons.Default.LocationOn,
+                    icon = locationOnIcon,
                     titleRes = Res.string.show_location_label,
                     isEnabled = markedCoordinates != null && displayLocation,
                 ) {
@@ -397,7 +396,7 @@ fun SharedTransitionScope.MapScreen(
                 }
 
                 MenuItem(
-                    icon = Icons.Default.NightlightRound,
+                    icon = nightlightRoundIcon,
                     titleRes = Res.string.show_night_mask_label,
                     isEnabled = mapType != MapType.NONE,
                 ) {

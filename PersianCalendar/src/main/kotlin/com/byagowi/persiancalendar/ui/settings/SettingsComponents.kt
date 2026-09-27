@@ -19,9 +19,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Help
-import androidx.compose.material.icons.filled.SettingsBackupRestore
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -59,6 +56,8 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.helpIcon
+import com.byagowi.persiancalendar.icons.material.filled.settingsBackupRestoreIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
@@ -359,7 +358,7 @@ fun SettingsHelp(
         summary = null,
         widget = {
             Icon(
-                imageVector = Icons.AutoMirrored.Default.Help,
+                imageVector = helpIcon,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = MaterialTheme.colorScheme.primary,
@@ -459,7 +458,7 @@ fun SettingsSlider(
             AnimatedVisibility(visible = isDefault) { Spacer(Modifier.width(16.dp)) }
             AnimatedVisibility(visible = !isDefault) {
                 IconButton(onClick = { onValueChange(defaultValue) }) {
-                    Icon(Icons.Default.SettingsBackupRestore, stringResource(Res.string.cancel))
+                    Icon(settingsBackupRestoreIcon, stringResource(Res.string.cancel))
                 }
             }
         }

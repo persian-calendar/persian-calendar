@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.icons.material.filled.doneIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.days_distance
@@ -66,10 +65,7 @@ fun DatePickerDialog(
                 val title = stringResource(Res.string.accept)
                 val anyPendingConfirm = pendingConfirms.isNotEmpty()
                 AnimatedVisibility(anyPendingConfirm) {
-                    AppIconButton(
-                        Icons.Default.Done,
-                        title,
-                    ) { pendingConfirms.forEach { it() } }
+                    AppIconButton(doneIcon, title) { pendingConfirms.forEach { it() } }
                 }
                 AnimatedVisibility(!anyPendingConfirm) {
                     TextButton(

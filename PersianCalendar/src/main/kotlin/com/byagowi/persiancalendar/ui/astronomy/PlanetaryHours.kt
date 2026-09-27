@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Brightness7
-import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -30,6 +27,8 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.brightness7Icon
+import com.byagowi.persiancalendar.icons.material.filled.nightlightRoundIcon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.formatDate
@@ -181,7 +180,7 @@ fun PlanetaryHoursDialog(
                     modifier = Modifier.weight(2f),
                 )
                 Icon(
-                    imageVector = if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
+                    imageVector = if (row.isDay) brightness7Icon else nightlightRoundIcon,
                     contentDescription = null,
                 )
                 AutoSizedText(

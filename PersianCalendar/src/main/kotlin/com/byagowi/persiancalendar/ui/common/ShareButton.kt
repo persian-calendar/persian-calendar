@@ -1,12 +1,11 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_SHARE_BUTTON
+import com.byagowi.persiancalendar.icons.material.filled.shareIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.share
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
@@ -18,7 +17,7 @@ fun SharedTransitionScope.ShareActionButton(
     action: () -> Unit,
 ) {
     AppIconButton(
-        icon = Icons.Default.Share,
+        icon = shareIcon,
         title = stringResource(Res.string.share),
         modifier = modifier.sharedElement(
             sharedContentState = rememberSharedContentState(

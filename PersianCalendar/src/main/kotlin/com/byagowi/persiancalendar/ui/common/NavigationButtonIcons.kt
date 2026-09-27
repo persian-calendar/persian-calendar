@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +19,8 @@ import androidx.lifecycle.compose.dropUnlessStarted
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_ARROW_ICON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MENU_ICON
+import com.byagowi.persiancalendar.icons.material.filled.arrowBackIcon
+import com.byagowi.persiancalendar.icons.material.filled.menuIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.navigate_up
 import com.byagowi.persiancalendar.shared.generated.resources.open_navigation_rail
@@ -66,8 +65,8 @@ fun SharedTransitionScope.NavigationMenuArrow(
                     boundsTransform = appBoundsTransform,
                 )
             when (fraction) {
-                0f -> Icon(imageVector = Icons.Default.Menu, null, iconModifier)
-                1f -> Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, null, iconModifier)
+                0f -> Icon(imageVector = menuIcon, null, iconModifier)
+                1f -> Icon(imageVector = arrowBackIcon, null, iconModifier)
                 else -> DrawerArrowDrawable(fraction = fraction, modifier = iconModifier)
             }
         }

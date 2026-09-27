@@ -28,9 +28,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Backspace
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -80,6 +77,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.backspaceIcon
+import com.byagowi.persiancalendar.icons.material.filled.doneIcon
 import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
@@ -157,8 +156,9 @@ fun SharedTransitionScope.ConverterScreen(
                         LocalLayoutDirection provides LayoutDirection.Ltr,
                     ) {
                         AnimatedVisibility(resetButtonVisibility) {
+                            val backspaceSpace = null
                             AppIconButton(
-                                icon = Icons.AutoMirrored.Default.Backspace,
+                                icon = backspaceIcon,
                                 title = stringResource(Res.string.return_to_today),
                                 onClick = resetAction,
                             )
@@ -168,7 +168,7 @@ fun SharedTransitionScope.ConverterScreen(
                     }
                     AnimatedVisibility(anyPendingConfirm) {
                         AppIconButton(
-                            icon = Icons.Default.Done,
+                            icon = doneIcon,
                             title = stringResource(Res.string.accept),
                             onClick = { pendingConfirms.forEach { it() } },
                         )

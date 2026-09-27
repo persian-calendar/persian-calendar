@@ -28,9 +28,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Motorcycle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -61,6 +58,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.generated.credits
+import com.byagowi.persiancalendar.icons.material.filled.infoIcon
+import com.byagowi.persiancalendar.icons.material.filled.motorcycleIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about_license_title
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -130,7 +129,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
         listOf<Triple<String, @Composable () -> Unit, () -> Unit>>(
             Triple(
                 first = "GPLv3",
-                second = { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
+                second = { Icon(imageVector = infoIcon, contentDescription = "License") },
             ) { showPeriodicTableDialog = true },
             Triple(
                 first = KotlinVersion.CURRENT.toString(),
@@ -140,7 +139,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                 first = "API ${Build.VERSION.SDK_INT}",
                 second = {
                     Icon(
-                        imageVector = Icons.Default.Motorcycle,
+                        imageVector = motorcycleIcon,
                         contentDescription = "API",
                     )
                 },

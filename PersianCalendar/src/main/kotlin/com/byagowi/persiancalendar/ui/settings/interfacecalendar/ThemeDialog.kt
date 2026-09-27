@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
@@ -62,6 +59,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
+import com.byagowi.persiancalendar.icons.material.filled.deleteIcon
+import com.byagowi.persiancalendar.icons.material.filled.imageIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.bold_text
@@ -288,7 +287,7 @@ private fun ColumnScope.FontPicker(
                             context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
                             File(context.filesDir, STORED_FONT_NAME).delete()
                         },
-                    ) { Icon(Icons.Default.Delete, stringResource(Res.string.remove)) }
+                    ) { Icon(deleteIcon, stringResource(Res.string.remove)) }
                 }
             }
             AnimatedVisibility(customFontToken != null) {
@@ -325,7 +324,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                             showUnsupportedActionToast(context)
                         }.getOrNull().debugAssertNotNull
                     },
-                ) { Icon(Icons.Default.Image, null) }
+                ) { Icon(imageIcon, null) }
                 AnimatedVisibility(
                     customImageName != null,
                     Modifier.padding(start = 8.dp),
@@ -335,7 +334,7 @@ private fun ColumnScope.ImagePicker(showMore: Boolean) {
                             context.preferences.edit { remove(PREF_CUSTOM_IMAGE_NAME) }
                             File(context.filesDir, STORED_FONT_NAME).delete()
                         },
-                    ) { Icon(Icons.Default.Delete, stringResource(Res.string.remove)) }
+                    ) { Icon(deleteIcon, stringResource(Res.string.remove)) }
                 }
             }
             AnimatedVisibility(customImageName != null) {

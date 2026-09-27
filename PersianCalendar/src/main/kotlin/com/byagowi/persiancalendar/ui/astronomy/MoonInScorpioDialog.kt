@@ -15,8 +15,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +51,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.doneIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
@@ -122,7 +121,7 @@ fun MoonInScorpioDialog(
                 ) { action ->
                     when (action) {
                         HeaderAction.Confirm -> AppIconButton(
-                            icon = Icons.Default.Done,
+                            icon = doneIcon,
                             title = stringResource(Res.string.accept),
                             onClick = { pendingConfirms.forEach { it() } },
                         )

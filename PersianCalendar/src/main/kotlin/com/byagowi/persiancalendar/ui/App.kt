@@ -25,15 +25,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.ModeNight
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SwapVerticalCircle
-import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -103,6 +94,14 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
+import com.byagowi.persiancalendar.icons.material.filled.cancelIcon
+import com.byagowi.persiancalendar.icons.material.filled.dateRangeIcon
+import com.byagowi.persiancalendar.icons.material.filled.exploreIcon
+import com.byagowi.persiancalendar.icons.material.filled.infoIcon
+import com.byagowi.persiancalendar.icons.material.filled.modeNightIcon
+import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
+import com.byagowi.persiancalendar.icons.material.filled.swapVerticalCircleIcon
+import com.byagowi.persiancalendar.icons.material.outlined.lightModeOutlinedIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
@@ -382,13 +381,13 @@ private sealed interface Screen : NavKey {
 
     companion object {
         val navEntries = listOf(
-            Triple(Calendar, Icons.Default.DateRange, Res.string.calendar),
-            Triple(Converter, Icons.Default.SwapVerticalCircle, Res.string.date_converter),
-            Triple(Compass, Icons.Default.Explore, Res.string.compass),
+            Triple(Calendar, dateRangeIcon, Res.string.calendar),
+            Triple(Converter, swapVerticalCircleIcon, Res.string.date_converter),
+            Triple(Compass, exploreIcon, Res.string.compass),
             Triple(Astronomy(), AstrologyIcon, Res.string.astronomy),
-            Triple(Settings(), Icons.Default.Settings, Res.string.settings),
-            Triple(About, Icons.Default.Info, Res.string.about),
-            Triple(Exit, Icons.Default.Cancel, Res.string.exit),
+            Triple(Settings(), settingsIcon, Res.string.settings),
+            Triple(About, infoIcon, Res.string.about),
+            Triple(Exit, cancelIcon, Res.string.exit),
         )
 
         fun fromName(value: String?): Screen = when (Shortcut.fromName(value)) {
@@ -565,7 +564,7 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
     val isDark = userSetTheme.isDark ?: return
     val context = LocalContext.current
     Crossfade(
-        targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+        targetState = if (isDark) lightModeOutlinedIcon else modeNightIcon,
         modifier = Modifier
             .semantics { this.hideFromAccessibility() }
             .padding(bottom = 20.dp, end = 28.dp)

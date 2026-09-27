@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -82,6 +80,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.doneIcon
 import com.byagowi.persiancalendar.kabulCoordinates
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
@@ -364,7 +363,7 @@ fun YearHoroscopeDialog(
         ) {
             when (it) {
                 FooterAction.Confirm -> AppIconButton(
-                    icon = Icons.Default.Done,
+                    icon = doneIcon,
                     title = stringResource(Res.string.accept),
                     onClick = { pendingConfirms.forEach { it() } },
                 )

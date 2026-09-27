@@ -2,9 +2,6 @@ package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
@@ -14,6 +11,8 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_NEXT_ARROW
 import com.byagowi.persiancalendar.SHARED_CONTENT_PREVIOUS_ARROW
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowLeftIcon
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowRightIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.day
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
@@ -33,8 +32,7 @@ fun SharedTransitionScope.TimeArrow(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     Icon(
-        imageVector = if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
-        else Icons.AutoMirrored.Default.KeyboardArrowRight,
+        imageVector = if (isPrevious) keyboardArrowLeftIcon else keyboardArrowRightIcon,
         contentDescription = stringResource(
             if (isPrevious) Res.string.previous_x else Res.string.next_x,
             stringResource(Res.string.day),

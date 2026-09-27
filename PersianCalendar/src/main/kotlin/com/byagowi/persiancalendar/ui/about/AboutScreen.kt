@@ -39,14 +39,6 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Help
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.PermDeviceInformation
-import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -102,6 +94,13 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.icons.material.filled.androidIcon
+import com.byagowi.persiancalendar.icons.material.filled.emailIcon
+import com.byagowi.persiancalendar.icons.material.filled.folderIcon
+import com.byagowi.persiancalendar.icons.material.filled.helpIcon
+import com.byagowi.persiancalendar.icons.material.filled.paletteIcon
+import com.byagowi.persiancalendar.icons.material.filled.permDeviceInformationIcon
+import com.byagowi.persiancalendar.icons.material.filled.translateIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about
 import com.byagowi.persiancalendar.shared.generated.resources.about_contributors_list
@@ -153,7 +152,7 @@ fun SharedTransitionScope.AboutScreen(
                 },
                 actions = {
                     AppIconButton(
-                        icon = Icons.Default.PermDeviceInformation,
+                        icon = permDeviceInformationIcon,
                         title = stringResource(Res.string.device_information),
                         onClick = navigateToDeviceInformation,
                     )
@@ -285,7 +284,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             Row(modifier = Modifier.padding(top = 24.dp, start = 20.dp)) {
                 Icon(
                     modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
-                    imageVector = Icons.AutoMirrored.Default.Help,
+                    imageVector = helpIcon,
                     contentDescription = stringResource(Res.string.help),
                 )
                 Column(Modifier.padding(start = 4.dp)) {
@@ -305,7 +304,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
         )
         AboutScreenButton(
-            icon = Icons.Default.Folder,
+            icon = folderIcon,
             action = { navigateToLicenses() },
             title = Res.string.about_license_title,
             summary = Res.string.about_license_sum,
@@ -324,7 +323,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         AnimatedVisibility(showMore && remember { Jdn.today() }.isYearSupportedOnApp) {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
-                icon = Icons.Default.Email,
+                icon = emailIcon,
                 action = { showDialog = true },
                 title = Res.string.about_send_mail,
                 summary = Res.string.about_email_sum,
@@ -434,10 +433,10 @@ private fun AboutScreenButton(
 private fun Developers(modifier: Modifier = Modifier) {
     Column(modifier) {
         val developersBeforeShuffle = listOf(
-            stringResource(Res.string.about_developers_list) to Icons.Default.Android,
-            stringResource(Res.string.about_designers_list) to Icons.Default.Palette,
-            stringResource(Res.string.about_translators_list) to Icons.Default.Translate,
-            stringResource(Res.string.about_contributors_list) to Icons.Default.Android,
+            stringResource(Res.string.about_developers_list) to androidIcon,
+            stringResource(Res.string.about_designers_list) to paletteIcon,
+            stringResource(Res.string.about_translators_list) to translateIcon,
+            stringResource(Res.string.about_contributors_list) to androidIcon,
         ).flatMap { (list: String, icon: ImageVector) ->
             list.trim().split("\n").map {
                 val (username, displayName) = it.split(": ")

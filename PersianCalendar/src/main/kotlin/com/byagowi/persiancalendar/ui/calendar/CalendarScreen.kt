@@ -66,15 +66,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.twotone.SwipeDown
-import androidx.compose.material.icons.twotone.SwipeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -187,6 +178,14 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.shiftWorkSettings
+import com.byagowi.persiancalendar.icons.material.filled.addIcon
+import com.byagowi.persiancalendar.icons.material.filled.closeIcon
+import com.byagowi.persiancalendar.icons.material.filled.editIcon
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowDownIcon
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowUpIcon
+import com.byagowi.persiancalendar.icons.material.filled.searchIcon
+import com.byagowi.persiancalendar.icons.material.filled.swipeDownIcon
+import com.byagowi.persiancalendar.icons.material.filled.swipeUpIcon
 import com.byagowi.persiancalendar.shared.ShareFacilitator
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.add_event
@@ -625,7 +624,7 @@ fun SharedTransitionScope.CalendarScreen(
                             addEvent(AddEventData.fromJdn(selectedDay))
                         } else addAction()
                     },
-                ) { Icon(Icons.Default.Add, stringResource(Res.string.add_event)) }
+                ) { Icon(addIcon, stringResource(Res.string.add_event)) }
             }
         },
     ) { paddingValues ->
@@ -1278,7 +1277,7 @@ private fun Search(
                 placeholder = { Text(stringResource(Res.string.search_in_events)) },
                 trailingIcon = {
                     AppIconButton(
-                        icon = Icons.Default.Close,
+                        icon = closeIcon,
                         title = stringResource(Res.string.close),
                     ) { closeSearch() }
                 },
@@ -1550,7 +1549,7 @@ private fun SharedTransitionScope.Toolbar(
             }
             AnimatedVisibility(visible = isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
-                    icon = Icons.Default.KeyboardArrowDown,
+                    icon = keyboardArrowDownIcon,
                     title = stringResource(Res.string.next_x, stringResource(Res.string.year)),
                 ) {
                     coroutineScope.launch {
@@ -1563,7 +1562,7 @@ private fun SharedTransitionScope.Toolbar(
             }
             AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
-                    icon = Icons.Default.KeyboardArrowUp,
+                    icon = keyboardArrowUpIcon,
                     title = stringResource(Res.string.previous_x, stringResource(Res.string.year)),
                 ) {
                     coroutineScope.launch {
@@ -1585,7 +1584,7 @@ private fun SharedTransitionScope.Toolbar(
             }
             AnimatedVisibility(!isYearView) {
                 AppIconButton(
-                    icon = Icons.Default.Search,
+                    icon = searchIcon,
                     title = stringResource(Res.string.search_in_events),
                     onClick = openSearch,
                 )
@@ -1706,7 +1705,7 @@ private fun SharedTransitionScope.Menu(
                 prefKey = PREF_SWIPE_UP_ACTION,
                 titleRes = item.titleRes,
                 preferredAction = preferredSwipeUpAction,
-                swipeIcon = Icons.TwoTone.SwipeUp,
+                swipeIcon = swipeUpIcon,
             ) { (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name }
         }
 
@@ -1717,7 +1716,7 @@ private fun SharedTransitionScope.Menu(
                 prefKey = PREF_SWIPE_DOWN_ACTION,
                 titleRes = item.titleRes,
                 preferredAction = preferredSwipeDownAction,
-                swipeIcon = Icons.TwoTone.SwipeDown,
+                swipeIcon = swipeDownIcon,
             ) { (if (preferredSwipeDownAction == item) SwipeDownAction.None else item).name }
         }
 
@@ -1791,7 +1790,7 @@ fun BoxScope.TabEditButton(
             ) {
                 IconButton(onClick = action, modifier = Modifier.alpha(.5f)) {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        imageVector = editIcon,
                         contentDescription = title,
                     )
                 }

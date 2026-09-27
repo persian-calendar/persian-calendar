@@ -1,9 +1,8 @@
 package com.byagowi.persiancalendar.entities
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Brightness4
-import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.ui.graphics.Color
+import com.byagowi.persiancalendar.icons.material.filled.brightness4Icon
+import com.byagowi.persiancalendar.icons.material.filled.brightness7Icon
 import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.asr
@@ -39,8 +38,8 @@ enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray)
     // Used in days view
     val imageVector
         get() = when (this) {
-            DHUHR, ASR -> Icons.Default.Brightness7
-            else -> Icons.Default.Brightness4
+            DHUHR, ASR -> brightness7Icon
+            else -> brightness4Icon
         }
 
     // Used in Athan notification

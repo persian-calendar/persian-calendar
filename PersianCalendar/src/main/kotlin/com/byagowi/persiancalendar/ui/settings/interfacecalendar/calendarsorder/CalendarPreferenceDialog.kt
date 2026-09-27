@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,6 +45,7 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.icons.material.rounded.dragHandleRoundedIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.calendars_priority
@@ -180,7 +179,7 @@ fun CalendarPreferenceDialog(
                     Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                     Text(stringResource(calendar.title))
                     Spacer(Modifier.weight(1f))
-                    Icon(Icons.Rounded.DragHandle, contentDescription = null)
+                    Icon(dragHandleRoundedIcon, contentDescription = null)
                 }
             }
         }

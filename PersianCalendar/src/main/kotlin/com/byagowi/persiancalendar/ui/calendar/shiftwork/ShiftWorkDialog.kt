@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,6 +61,7 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.icons.material.filled.removeCircleOutlineIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.add
@@ -287,7 +286,7 @@ fun ShiftWorkDialogContent(
                         }
                         IconButton(onClick = { shiftWorks.removeAt(position) }) {
                             Icon(
-                                imageVector = Icons.Default.RemoveCircleOutline,
+                                imageVector = removeCircleOutlineIcon,
                                 contentDescription = stringResource(Res.string.remove),
                                 tint = MaterialTheme.colorScheme.primary,
                             )

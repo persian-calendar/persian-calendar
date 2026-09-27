@@ -26,9 +26,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -69,6 +66,8 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowDownIcon
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowUpIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
 import com.byagowi.persiancalendar.shared.generated.resources.nth_week_of_year
@@ -161,7 +160,7 @@ fun SharedTransitionScope.MonthScreen(
                         }.value,
                     ) { coroutineScope.launch { state.animateScrollToItem(index = initialItem) } }
                     AppIconButton(
-                        icon = Icons.Default.KeyboardArrowDown,
+                        icon = keyboardArrowDownIcon,
                         title = stringResource(Res.string.next_x, stringResource(Res.string.week)),
                     ) {
                         coroutineScope.launch {
@@ -169,7 +168,7 @@ fun SharedTransitionScope.MonthScreen(
                         }
                     }
                     AppIconButton(
-                        icon = Icons.Default.KeyboardArrowUp,
+                        icon = keyboardArrowUpIcon,
                         title = stringResource(
                             Res.string.previous_x,
                             stringResource(Res.string.week),

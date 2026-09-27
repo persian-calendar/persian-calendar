@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -76,6 +73,8 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowLeftIcon
+import com.byagowi.persiancalendar.icons.material.filled.keyboardArrowRightIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.add_event
 import com.byagowi.persiancalendar.shared.generated.resources.month
@@ -518,8 +517,7 @@ private fun PagerArrow(
 ) {
     val stringRes = if (isPrevious) Res.string.previous_x else Res.string.next_x
     Icon(
-        if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
-        else Icons.AutoMirrored.Default.KeyboardArrowRight,
+        if (isPrevious) keyboardArrowLeftIcon else keyboardArrowRightIcon,
         contentDescription = if (week == null) {
             stringResource(stringRes, stringResource(Res.string.month))
         } else stringResource(Res.string.nth_week_of_year, week + if (isPrevious) -1 else 1),

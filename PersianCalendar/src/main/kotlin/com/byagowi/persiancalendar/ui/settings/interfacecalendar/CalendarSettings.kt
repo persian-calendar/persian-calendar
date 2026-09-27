@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -91,6 +89,7 @@ import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
+import com.byagowi.persiancalendar.icons.material.filled.settingsIcon
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.astronomical_info_summary
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
@@ -276,8 +275,7 @@ fun CalendarSettings(
         }
         val weekDays = remember(weekStart) { WeekDay.entries.map { it + weekStart.ordinal } }
         val weekDaysTitles = remember(weekDays) { weekDays.map { it.title } }
-        val weekDaysValues =
-            remember(weekDays) { weekDays.map { it.ordinal.toString() } }
+        val weekDaysValues = remember(weekDays) { weekDays.map { it.ordinal.toString() } }
         SettingsSingleSelect(
             key = PREF_WEEK_START,
             entries = weekDaysTitles,
@@ -315,10 +313,7 @@ private fun FilledSettingsButton(onClick: () -> Unit) {
         contentColor = animateColor(defaultColors.contentColor).value,
     )
     FilledIconButton(colors = colors, onClick = onClick) {
-        Icon(
-            Icons.Default.Settings,
-            contentDescription = stringResource(Res.string.settings),
-        )
+        Icon(settingsIcon, contentDescription = stringResource(Res.string.settings))
     }
 }
 
