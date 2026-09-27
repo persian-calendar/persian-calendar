@@ -177,10 +177,10 @@
         <item quantity="one">%1$s گھنٹہ</item>
         <item quantity="other">%1$s گھنٹے</item>
     </plurals>
-    <string name="spaced_and">" و "</string>
-    <string name="spaced_or">" یا "</string>
-    <string name="spaced_comma">"، "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_and">\u0020و\u0020</string>
+    <string name="spaced_or">\u0020یا\u0020</string>
+    <string name="spaced_comma">،\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <string name="device_information">اطلاعات دستگاه</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>

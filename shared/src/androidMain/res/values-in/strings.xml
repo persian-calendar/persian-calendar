@@ -179,10 +179,10 @@
     <string name="shift_work_starting_date">%1$s, yang dipilih pada kalender, adalah hari awal kerja shift.</string>
     <string name="shift_work_starting_date_edit">%1$s, yang sebelumnya dipilih, adalah hari awal kerja shift yang dipilih.</string>
     <string name="shift_work_reset_button">Nonaktifkan atau program ulang</string>
-    <string name="spaced_and">" dan "</string>
-    <string name="spaced_or">" atau "</string>
-    <string name="spaced_comma">", "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_and">\u0020dan\u0020</string>
+    <string name="spaced_or">\u0020atau\u0020</string>
+    <string name="spaced_comma">,\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <string name="device_information">Informasi Perangkat</string>
     <string name="center_align_widgets_summary">Perataan tengah widget 4x1 dan 2x2</string>
     <string name="center_align_widgets">Ratakan widget ke tengah</string>

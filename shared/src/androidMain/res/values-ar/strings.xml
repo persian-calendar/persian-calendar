@@ -192,10 +192,10 @@
     <string name="shift_work_starting_date">%1$s، حدد على التقويم، هو مدة إزاحة وقت العمل من اليوم.</string>
     <string name="shift_work_starting_date_edit">%1$s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
-    <string name="spaced_and">" و "</string>
-    <string name="spaced_or">" أو "</string>
-    <string name="spaced_comma">"، "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_and">\u0020و\u0020</string>
+    <string name="spaced_or">\u0020أو\u0020</string>
+    <string name="spaced_comma">،\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <string name="device_information">معلومات الجهاز</string>
     <string name="center_align_widgets_summary">توسيط المصغر 4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>

@@ -200,10 +200,10 @@
         <item quantity="many">%1$s horas</item>
         <item quantity="other">%1$s horas</item>
     </plurals>
-    <string name="spaced_and">" y "</string>
-    <string name="spaced_or">" o "</string>
-    <string name="spaced_comma">", "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_and">\u0020y\u0020</string>
+    <string name="spaced_or">\u0020o\u0020</string>
+    <string name="spaced_comma">,\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <string name="device_information">Información del dispositivo</string>
     <string name="center_align_widgets_summary">Alineación central de widgets 4x1 y 2x2</string>
     <string name="center_align_widgets">Centrar los widgets</string>

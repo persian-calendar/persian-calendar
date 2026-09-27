@@ -116,7 +116,7 @@
     <string name="language">Idioma</string>
     <string name="week_number_summary">Mostrar número da semana no calendário</string>
     <string name="week_start_summary">Selecionar dia de começo da semana</string>
-    <string name="spaced_or">" ou "</string>
+    <string name="spaced_or">\u0020ou\u0020</string>
     <string name="week_ends">Fins-de-semana</string>
     <string name="week_ends_summary">Selecionar dias de fins-de-semana</string>
     <string name="latitude">Latitude</string>
@@ -126,7 +126,7 @@
     <string name="nth_week_of_year">%1$s semana do ano</string>
     <string name="july">Julho</string>
     <string name="tuesday">Terça-Feira</string>
-    <string name="spaced_and">" e "</string>
+    <string name="spaced_and">\u0020e\u0020</string>
     <string name="shift_work_days_head">Duração</string>
     <string name="other_holidays">Outros</string>
     <string name="february">Fevereiro</string>

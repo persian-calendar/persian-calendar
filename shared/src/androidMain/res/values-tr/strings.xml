@@ -121,10 +121,10 @@
     <string name="center_align_widgets">Widget’ları ortaya hizala</string>
     <string name="center_align_widgets_summary">4x1 ve 2x2 Widget’ları ortaya hizala</string>
     <string name="device_information">Cihaz Bilgisi</string>
-    <string name="spaced_colon">": "</string>
-    <string name="spaced_comma">", "</string>
-    <string name="spaced_and">" ve "</string>
-    <string name="spaced_or">" veya "</string>
+    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_comma">,\u0020</string>
+    <string name="spaced_and">\u0020ve\u0020</string>
+    <string name="spaced_or">\u0020veya\u0020</string>
     <plurals name="minutes">
         <item quantity="one">%1$s dakika</item>
         <item quantity="other">%1$s dakika</item>

@@ -20,10 +20,10 @@
         <item quantity="other">%1$s minutes</item>
     </plurals>
     <string name="shift_work_reset_button">Désactiver ou reprogrammer</string>
-    <string name="spaced_and">" et "</string>
-    <string name="spaced_or">" ou "</string>
-    <string name="spaced_comma">", "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_and">\u0020et\u0020</string>
+    <string name="spaced_or">\u0020ou\u0020</string>
+    <string name="spaced_comma">,\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <plurals name="hours">
         <item quantity="one">%1$s heure</item>
         <item quantity="many">%1$s heures</item>

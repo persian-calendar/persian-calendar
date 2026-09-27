@@ -137,8 +137,8 @@
 \n
 \nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
     <string name="wait_for_gps">Пожалуйста, подождите… Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
-    <string name="spaced_comma">", "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_comma">,\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <string name="center_align_widgets_summary">Выравнивание по центру виджетов 4x1 и 2x2</string>
     <string name="prefer_linear_date_summary">Используйте 2000/1/1 вместо 1 января 2000 года в виджете и уведомлении</string>
     <string name="select_widgets_background_color">Выберите пользовательский цвет для фона виджетов</string>
@@ -259,8 +259,8 @@
     <string name="shift_work_starting_date">%1$s, выбранный в календаре, является днем начала сменной работы.</string>
     <string name="shift_work_starting_date_edit">%1$s, выбранный ранее, является выбранным днем начала сменной работы.</string>
     <string name="shift_work_reset_button">Отключить или перепрограммировать</string>
-    <string name="spaced_and">" и "</string>
-    <string name="spaced_or">" или "</string>
+    <string name="spaced_and">\u0020и\u0020</string>
+    <string name="spaced_or">\u0020или\u0020</string>
     <string name="device_information">Информация об устройстве</string>
     <string name="center_align_widgets">Выравнивание виджетов по центру</string>
     <string name="n_till">%1$s до %2$s</string>

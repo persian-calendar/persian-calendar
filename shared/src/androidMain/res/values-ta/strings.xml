@@ -38,10 +38,10 @@
     <string name="shift_work_starting_date">%1$s, நாட்காட்டியில் தேர்ந்தெடுக்கப்பட்டது, மாற்று வேலை தொடக்க நாள்.</string>
     <string name="shift_work_starting_date_edit">%1$s, முன்பு தேர்ந்தெடுக்கப்பட்ட, தேர்ந்தெடுக்கப்பட்ட மாற்று வேலை தொடக்க நாள்.</string>
     <string name="shift_work_reset_button">முடக்கு அல்லது மறுநிரல்</string>
-    <string name="spaced_and">" மற்றும் "</string>
-    <string name="spaced_or">" அல்லது "</string>
-    <string name="spaced_comma">", "</string>
-    <string name="spaced_colon">": "</string>
+    <string name="spaced_and">\u0020மற்றும்\u0020</string>
+    <string name="spaced_or">\u0020அல்லது\u0020</string>
+    <string name="spaced_comma">,\u0020</string>
+    <string name="spaced_colon">:\u0020</string>
     <string name="device_information">கருவி தகவல்</string>
     <string name="center_align_widgets_summary">4x1 மற்றும் 2x2 நிரல்பலகைகளை நடுவில் சீரமை</string>
     <string name="center_align_widgets">நிரல்பலகைகளை நடுவில் சீரமை</string>
