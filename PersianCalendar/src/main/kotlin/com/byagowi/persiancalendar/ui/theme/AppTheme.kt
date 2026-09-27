@@ -372,11 +372,6 @@ fun appSwitchColors(useUncheckedBorderColorForChecked: Boolean = false): SwitchC
     )
 }
 
-val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
-
-@Composable
-fun animateColor(color: Color) = animateColorAsState(color, appColorAnimationSpec, "color")
-
 /** This is similar to what [androidx.compose.animation.Crossfade] uses */
 private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
 
