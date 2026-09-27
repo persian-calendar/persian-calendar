@@ -137,10 +137,11 @@ fun CalendarSettings(
 ) {
     Column(modifier = modifier) {
         val context = LocalContext.current
+        val today = remember { Jdn.today() }
         if ((language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian) && (when (TimeZone.getDefault().id) {
                 AFGHANISTAN_TIMEZONE_ID, IRAN_TIMEZONE_ID -> false
                 else -> true
-            } || !remember { Jdn.today() }.isYearSupportedOnApp)
+            } || !today.isYearSupportedOnApp)
         ) EnableInDeviceCalendar(Modifier.align(Alignment.CenterHorizontally))
         AnimatedVisibility(language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian || !eventsRepository.isEmpty || Calendar.SHAMSI in enabledCalendars) {
             var shownOnce by rememberSaveable { mutableStateOf(false) }

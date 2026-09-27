@@ -316,7 +316,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             ) { Text(stringResource(Res.string.more)) }
         }
         // Bug report
-        AnimatedVisibility(showMore && remember { Jdn.today() }.isYearSupportedOnApp) {
+        AnimatedVisibility(showMore) {
             var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = emailIcon,
