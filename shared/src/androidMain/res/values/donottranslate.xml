@@ -1,77 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_developers_list" translatable="false">"ebraminio: Ebrahim Byagowi
-hamidsafdari: Hamid Safdari
-behdad222: Behdad Abedi
-HrBDev: Hamidreza Bayat
-alirezaafkar: Alireza Afkar
-MEHDIMYADI: Mehdi Dimyadi
-runo280: Ruhollah Nosrati
-FtADev: Fatemeh Akhlaghi
-MasoodFallahpoor: Masood Fallahpoor
-beigirad: Farhad BeigiRad
-ilius: Saeed Rasooli
-IamRezaMousavi: Reza Mousavi
-roozbehp: Roozbeh Pournader
-MohammadHanifi: Mohammad Hanifi
-Developer-N: Mohsen Ahmadnia"</string>
-    <string name="about_designers_list" translatable="false">"MEHDIMYADI: Mehdi Dimyadi
-MehraraAbedi: Mehrara Abedi
-behdude: Behdad Pournader
-ImanSoltanian: Iman Soltanian
-Arasteh: Mahmoud Arasteh
-SeyedHamed: Seyed Hamed"</string>
-    <string name="about_translators_list" translatable="false">"yethrosh: Muhammad Shuaib
-TaherAzizi: Taher Azizi
-mehdy: Mehdy Khoshnoody
-LordArma: Alireza Moayed Ahmadi
-Matjafari: Mahdieh Jafari
-raminjavadi: Ramin Javadi
-alborzjafari: Alborz Jafari
-Mg136: Mokhtar Garmehi
-alaaddinb: Alaaddin Biçici
-darafsh: Mohammad HeidarZadeh
-NP-Sagar-Dhakal: Sagar Dhakal
-szescxz: szescxz
-DannyRavi: Daniel Khosravi
-rzasharifi: RzaSharifi
-TamilNeram: Tamil Neram
-shhonarmandi: Mohsen Honarmandi
-bgo-eiu: bgo-eiu
-arifpedia: Arif Budiman"</string>
-    <string name="about_contributors_list" translatable="false">"La-Volpe: Javad Arjmandi
-mehdisadeghi: Mehdi Sadeghi
-abbas-oveissi: Abbas Oveissi
-aysha319: Aysha Aminnejad
-Tenkei: Keivan Esbati
-mohamadhadibi: Mohammad Hadi
-alirezaivaz: Alireza Ivaz
-AminBakhtiyari: Amin Bakhtiyari
-SCR-IR: SCR-IR
-MMeshkiny: Mohsen Meshkini
-AryanAhadinia: Aryan Ahadinia
-shahabhm: Shahab Hosseini Moghaddam
-MohammadKashaniJabbari: Mohammad Kashani
-nullkit: Hamid Mahmoudi
-xmha97: Muhammadhussein Ammari
-ivadham: Ali Mahdavi
-omasouri: Omid Masouri
-mb-real: Mehdi Bahrami
-shhonarmandi: Mohsen Honarmandi
-Arazavi260353: Ardalan Razavi
-Mpartoa: Mehdi Hassanian
-hidp123: hidp123
-danialbehzadi: Danial Behzadi
-M-D-6: Mohammad Daemi
-ifarbod: iFarbod
-rzasharifi: RzaSharifi
-AmirApA: AMiR
-griffin0t03h: Sina Moradi
-Developer-N: Mohsen Ahmadnia
-MeHajHo3ein: Hossein Mirjani
-Amirroid: Amirreza Gholami
-SM2A: Seyed Mohammad Amin Atyabi
-adenoxi: Adel Noruzi"</string>
+    <string name="about_developers_list" translatable="false">ebraminio: Ebrahim Byagowi\nhamidsafdari: Hamid Safdari\nbehdad222: Behdad Abedi\nHrBDev: Hamidreza Bayat\nalirezaafkar: Alireza Afkar\nMEHDIMYADI: Mehdi Dimyadi\nruno280: Ruhollah Nosrati\nFtADev: Fatemeh Akhlaghi\nMasoodFallahpoor: Masood Fallahpoor\nbeigirad: Farhad BeigiRad\nilius: Saeed Rasooli\nIamRezaMousavi: Reza Mousavi\nroozbehp: Roozbeh Pournader\nMohammadHanifi: Mohammad Hanifi\nDeveloper-N: Mohsen Ahmadnia</string>
+    <string name="about_designers_list" translatable="false">MEHDIMYADI: Mehdi Dimyadi\nMehraraAbedi: Mehrara Abedi\nbehdude: Behdad Pournader\nImanSoltanian: Iman Soltanian\nArasteh: Mahmoud Arasteh\nSeyedHamed: Seyed Hamed</string>
+    <string name="about_translators_list" translatable="false">yethrosh: Muhammad Shuaib\nTaherAzizi: Taher Azizi\nmehdy: Mehdy Khoshnoody\nLordArma: Alireza Moayed Ahmadi\nMatjafari: Mahdieh Jafari\nraminjavadi: Ramin Javadi\nalborzjafari: Alborz Jafari\nMg136: Mokhtar Garmehi\nalaaddinb: Alaaddin Biçici\ndarafsh: Mohammad HeidarZadeh\nNP-Sagar-Dhakal: Sagar Dhakal\nszescxz: szescxz\nDannyRavi: Daniel Khosravi\nrzasharifi: RzaSharifi\nTamilNeram: Tamil Neram\nshhonarmandi: Mohsen Honarmandi\nbgo-eiu: bgo-eiu\narifpedia: Arif Budiman</string>
+    <string name="about_contributors_list" translatable="false">La-Volpe: Javad Arjmandi\nmehdisadeghi: Mehdi Sadeghi\nabbas-oveissi: Abbas Oveissi\naysha319: Aysha Aminnejad\nTenkei: Keivan Esbati\nmohamadhadibi: Mohammad Hadi\nalirezaivaz: Alireza Ivaz\nAminBakhtiyari: Amin Bakhtiyari\nSCR-IR: SCR-IR\nMMeshkiny: Mohsen Meshkini\nAryanAhadinia: Aryan Ahadinia\nshahabhm: Shahab Hosseini Moghaddam\nMohammadKashaniJabbari: Mohammad Kashani\nnullkit: Hamid Mahmoudi\nxmha97: Muhammadhussein Ammari\nivadham: Ali Mahdavi\nomasouri: Omid Masouri\nmb-real: Mehdi Bahrami\nshhonarmandi: Mohsen Honarmandi\nArazavi260353: Ardalan Razavi\nMpartoa: Mehdi Hassanian\nhidp123: hidp123\ndanialbehzadi: Danial Behzadi\nM-D-6: Mohammad Daemi\nifarbod: iFarbod\nrzasharifi: RzaSharifi\nAmirApA: AMiR\ngriffin0t03h: Sina Moradi\nDeveloper-N: Mohsen Ahmadnia\nMeHajHo3ein: Hossein Mirjani\nAmirroid: Amirreza Gholami\nSM2A: Seyed Mohammad Amin Atyabi\nadenoxi: Adel Noruzi</string>
     <string name="international">مناسبت‌های بین‌المللی و جهانی</string>
     <string name="afghanistan_events">افغانستان</string>
     <string name="about_help_subtitle" translatable="false">نسخهٔ سال %s-%s</string>
