@@ -43,19 +43,19 @@ spotless {
 
     kotlin {
         target("**/*.kt")
-        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/icons/material/**")
+        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 
     kotlinGradle {
         target("**/*.gradle.kts")
-        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/icons/material/**")
+        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 
     format("misc") {
         target("**/*.md", "**/.gitignore")
-        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/icons/material/**")
+        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**")
         trimTrailingWhitespace()
         endWithNewline()
     }
