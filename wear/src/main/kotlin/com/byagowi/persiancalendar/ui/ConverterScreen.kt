@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +41,7 @@ fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
     val calendarPickerState = rememberSaveable(saver = PickerState.Saver) {
         PickerState(3, 0, false)
     }
-    val calendarIndex = calendarPickerState.selectedOptionIndex
+    val calendarIndex by remember { derivedStateOf { calendarPickerState.selectedOptionIndex } }
     val yearsLimit = 200
     val yearPickerState = rememberSaveable(
         calendarIndex, yearsLimit, saver = PickerState.Saver,
@@ -53,9 +54,11 @@ fun ConverterScreen(todayJdn: Jdn, modifier: Modifier = Modifier) {
         calendarIndex, daysOnMonth, today[calendarIndex].dayOfMonth, saver = PickerState.Saver,
     ) { PickerState(daysOnMonth, today[calendarIndex].dayOfMonth - 1) }
     val currentJdn = run {
-        val year = yearPickerState.selectedOptionIndex - yearsLimit / 2 + today[calendarIndex].year
-        val month = monthPickerState.selectedOptionIndex + 1
-        val day = dayPickerState.selectedOptionIndex + 1
+        val year by remember {
+            derivedStateOf { yearPickerState.selectedOptionIndex - yearsLimit / 2 + today[calendarIndex].year }
+        }
+        val month by remember { derivedStateOf { monthPickerState.selectedOptionIndex + 1 } }
+        val day by remember { derivedStateOf { dayPickerState.selectedOptionIndex + 1 } }
         val date = when (calendarIndex) {
             0 -> PersianDate(year, month, day)
             1 -> CivilDate(year, month, day)
