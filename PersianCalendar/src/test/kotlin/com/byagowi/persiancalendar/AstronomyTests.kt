@@ -159,10 +159,10 @@ class AstronomyTests {
     @Test
     fun `Season equinox`() {
         listOf(
-            Equinox.NORTHWARD_EQUINOX of 2020 to 1584676176971,
-            Equinox.NORTHERN_SOLSTICE of 2020 to 1592689420448,
-            Equinox.SOUTHWARD_EQUINOX of 2020 to 1600781439124,
-            Equinox.SOUTHERN_SOLSTICE of 2020 to 1608544940426,
+            Equinox.NorthwardEquinox of 2020 to 1584676176971,
+            Equinox.NorthernSolstice of 2020 to 1592689420448,
+            Equinox.SouthwardEquinox of 2020 to 1600781439124,
+            Equinox.SouthernSolstice of 2020 to 1608544940426,
         ).map { (it, time) -> assertEquals(time, it) }
     }
 

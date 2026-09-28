@@ -62,7 +62,7 @@ class EquinoxTests {
             intArrayOf(2003, 3, 21, 4, 29, 46), // 45 per University of Tehran
         ).forEach { row ->
             val calendar = GregorianCalendar(TimeZone.getTimeZone(IRAN_TIMEZONE_ID))
-            calendar.timeInMillis = Equinox.NORTHWARD_EQUINOX of row[0]
+            calendar.timeInMillis = Equinox.NorthwardEquinox of row[0]
             assertEquals(row[0], calendar[GregorianCalendar.YEAR])
             assertEquals(row[1], calendar[GregorianCalendar.MONTH] + 1)
             assertEquals(row[2], calendar[GregorianCalendar.DAY_OF_MONTH])
@@ -75,18 +75,18 @@ class EquinoxTests {
     @Test
     fun doesNotThrowAcrossExtendedRange() {
         (-2000..10000).forEach {
-            Equinox.NORTHWARD_EQUINOX of it
-            Equinox.NORTHERN_SOLSTICE of it
-            Equinox.SOUTHWARD_EQUINOX of it
-            Equinox.SOUTHERN_SOLSTICE of it
+            Equinox.NorthwardEquinox of it
+            Equinox.NorthernSolstice of it
+            Equinox.SouthwardEquinox of it
+            Equinox.SouthernSolstice of it
         }
     }
 
     @Test
     fun test_other_equinoxes() {
-        assertEquals(1584676176971, Equinox.NORTHWARD_EQUINOX of 2020)
-        assertEquals(1592689420448, Equinox.NORTHERN_SOLSTICE of 2020)
-        assertEquals(1600781439124, Equinox.SOUTHWARD_EQUINOX of 2020)
-        assertEquals(1608544940426, Equinox.SOUTHERN_SOLSTICE of 2020)
+        assertEquals(1584676176971, Equinox.NorthwardEquinox of 2020)
+        assertEquals(1592689420448, Equinox.NorthernSolstice of 2020)
+        assertEquals(1600781439124, Equinox.SouthwardEquinox of 2020)
+        assertEquals(1608544940426, Equinox.SouthernSolstice of 2020)
     }
 }

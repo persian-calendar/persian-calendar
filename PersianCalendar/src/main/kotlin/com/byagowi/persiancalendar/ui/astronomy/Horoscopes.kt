@@ -441,8 +441,8 @@ private fun YearHoroscopeDialogContent(
         }
 
         val timeInMillis = when {
-            coordinates.isSouthernHemisphere -> Equinox.SOUTHWARD_EQUINOX
-            else -> Equinox.NORTHWARD_EQUINOX
+            coordinates.isSouthernHemisphere -> Equinox.SouthwardEquinox
+            else -> Equinox.NorthwardEquinox
         } of gregorianYear
         val time = Time.fromMillisecondsSince1970(timeInMillis)
         var showTextEdit by remember { mutableStateOf(false) }

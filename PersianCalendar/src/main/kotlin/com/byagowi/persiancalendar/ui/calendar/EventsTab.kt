@@ -689,7 +689,7 @@ fun readEventsWithEquinox(
         val nextYearJdn = Jdn(nextPersianYearDate)
         if ((jdn - nextYearJdn) in -1..<0) {
             val gregorianYear = (nextYearJdn - 1).toCivilDate().year
-            val equinoxTime = Equinox.NORTHWARD_EQUINOX of gregorianYear
+            val equinoxTime = Equinox.NorthwardEquinox of gregorianYear
             val title = stringResource(
                 Res.string.spring_equinox,
                 numeral.format(
