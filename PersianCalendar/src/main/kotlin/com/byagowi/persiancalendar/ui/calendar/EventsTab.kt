@@ -122,8 +122,8 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.equinox.Equinox
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive

@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar
 
-import io.github.persiancalendar.Equinox
+import io.github.persiancalendar.equinox.Equinox
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.test.Test

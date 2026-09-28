@@ -149,9 +149,9 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
-import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.equinox.Equinox
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource

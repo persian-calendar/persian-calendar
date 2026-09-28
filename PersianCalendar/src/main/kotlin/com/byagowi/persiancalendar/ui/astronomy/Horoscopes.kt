@@ -108,9 +108,9 @@ import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.moonNodesAfter
-import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.equinox.Equinox
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

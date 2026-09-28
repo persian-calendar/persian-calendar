@@ -38,9 +38,9 @@ import com.byagowi.persiancalendar.ui.astronomy.meanAscendingNode
 import com.byagowi.persiancalendar.ui.astronomy.nairAlSaif
 import com.byagowi.persiancalendar.ui.astronomy.toAbjad
 import io.github.cosinekitty.astronomy.seasons
-import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.equinox.Equinox
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.GregorianCalendar
 import java.util.TimeZone
