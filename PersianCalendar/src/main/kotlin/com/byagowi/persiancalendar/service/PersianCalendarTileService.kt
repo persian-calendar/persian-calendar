@@ -6,7 +6,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import androidx.annotation.RequiresApi
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.entities.today
@@ -23,7 +22,6 @@ import com.byagowi.persiancalendar.utils.monthName
 /**
  * Created by Alireza Afkar on 19/6/2018AD.
  */
-@RequiresApi(Build.VERSION_CODES.N)
 class PersianCalendarTileService : TileService() {
 
     override fun onClick() {

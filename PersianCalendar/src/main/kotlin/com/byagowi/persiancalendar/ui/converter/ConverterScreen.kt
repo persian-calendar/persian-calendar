@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
 import android.icu.util.ChineseCalendar
-import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -676,9 +675,8 @@ private fun SharedTransitionScope.ConverterAndDistance(
         ) {
             val isPersian = calendar == Calendar.SHAMSI
             val zodiacs = listOf(selectedDate, secondSelectedDate).map {
-                if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                    ChineseZodiac.fromPersianCalendar(it.toPersianDate())
-                } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
+                if (isPersian) ChineseZodiac.fromPersianCalendar(it.toPersianDate())
+                else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
             }
             val resources = LocalResources.current
             TextWithSlideAnimation(

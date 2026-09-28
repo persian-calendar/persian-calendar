@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Resources
 import android.icu.util.ChineseCalendar
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.EARTH
@@ -103,7 +101,6 @@ enum class ChineseZodiac(
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             entries[(persianDate.year + 5).mod(12)]
 
-        @RequiresApi(Build.VERSION_CODES.N)
         fun fromChineseCalendar(chineseDate: ChineseCalendar): ChineseZodiac =
             entries[(chineseDate[ChineseCalendar.YEAR] - 1) % 12]
     }

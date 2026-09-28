@@ -135,7 +135,7 @@ fun generateYearName(
             ),
             resources.getString(R.string.persian_calendar_short),
         ),
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        run {
             val date = ChineseCalendar(
                 Date(timeInMillis ?: jdn.toGregorianCalendar().timeInMillis),
             )
@@ -148,7 +148,7 @@ fun generateYearName(
                 ),
                 resources.getString(R.string.chinese) + spacedComma + numeral.format(year),
             )
-        } else null,
+        },
     ).let { if (language.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
     return "${resources.getString(R.string.year_name)}$spacedColon$yearNames"
 }

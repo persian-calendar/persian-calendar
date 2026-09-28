@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
 import android.icu.util.ChineseCalendar
-import android.os.Build
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -99,7 +98,7 @@ class ConverterScreenTest {
     @Test
     fun testChineseAnimalYearName() {
         // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) (1..5).flatMap {
+        (1..5).flatMap {
             listOf(
                 ChineseZodiac.RAT, ChineseZodiac.OX, ChineseZodiac.TIGER,
                 ChineseZodiac.RABBIT, ChineseZodiac.DRAGON, ChineseZodiac.SNAKE,
