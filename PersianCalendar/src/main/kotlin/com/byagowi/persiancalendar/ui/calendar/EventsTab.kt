@@ -181,7 +181,7 @@ fun DayEvents(
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy((if (compact) 4 else 8).dp),
     ) {
         events.forEach { event ->

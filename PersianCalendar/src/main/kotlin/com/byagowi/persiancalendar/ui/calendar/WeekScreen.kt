@@ -720,7 +720,6 @@ fun DaysView(
                                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                                 viewEvent = viewEvent,
                                 modifier = Modifier
-                                    .fillMaxWidth()
                                     .animateContentSize(appContentSizeAnimationSpec)
                                     .padding(horizontal = 24.dp),
                             )
