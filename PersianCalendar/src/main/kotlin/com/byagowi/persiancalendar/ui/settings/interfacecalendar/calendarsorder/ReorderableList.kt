@@ -59,7 +59,7 @@ private inline fun <T> List<T>.firstIndexOfIndexed(predicate: (Int, T) -> Boolea
 }
 
 private inline fun <T> List<T>.lastIndexOfIndexed(predicate: (Int, T) -> Boolean): Int? {
-    for (i in lastIndex downTo 0) {
+    (lastIndex downTo 0).forEach { i ->
         if (predicate(i, this[i])) return i
     }
     return null

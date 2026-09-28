@@ -21,8 +21,7 @@ class ElvisEmptyStringDetector : Detector(), SourceCodeScanner {
             val psiNode = node.sourcePsi ?: return
             if (psiNode.text != "\"\"") return
             // PSI parents are always properly connected, unlike UAST parents for wrapped literals
-            val parentText = psiNode.parent?.text ?: return
-            if (!parentText.contains(Regex("""\?:\s*""(?!")"""))) return
+            if (Regex("""\?:\s*""(?!")""") !in (psiNode.parent?.text ?: return)) return
             context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),

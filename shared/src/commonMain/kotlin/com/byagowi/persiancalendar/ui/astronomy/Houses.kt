@@ -37,8 +37,8 @@ fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
 
     val sinRamc = sin(ramcRad)
     val cosRamc = cos(ramcRad)
-    val mc = ((atan2(sinRamc, cosRamc * cosOb)).radiansToDegrees() + 360) % 360 // Midheaven
-    val dsc = ((atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)).radiansToDegrees() + 360) % 360
+    val mc = atan2(sinRamc, cosRamc * cosOb).radiansToDegrees().mod(360.0) // Midheaven
+    val dsc = atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb).radiansToDegrees().mod(360.0)
     houses[1 - 1] = (dsc + 180) % 360 // Ascendant, the first house and the most important one
     houses[10 - 1] = mc
     houses[4 - 1] = (mc + 180) % 360 // Nadir or Imum Coeli (IC)

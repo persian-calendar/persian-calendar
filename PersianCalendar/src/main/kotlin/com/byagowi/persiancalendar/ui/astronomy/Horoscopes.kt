@@ -651,12 +651,12 @@ fun meanAscendingNode(time: Time): Double {
     // Using both crossing kinds halves the interval (~13.6 days) for better accuracy.
     var prevLon = Double.NaN
     var prevTt = Double.NaN
-    for (event in moonNodesAfter(time.addDays(-16.0))) {
+    moonNodesAfter(time.addDays(-16.0)).forEach { event ->
         val moonLon = eclipticGeoMoon(event.time).lon
         val nodeLon = if (event.kind == NodeEventKind.Ascending) moonLon
         else (moonLon - 180.0).mod(360.0)
         if (event.time.tt > time.tt) {
-            if (prevLon.isNaN()) break
+            if (prevLon.isNaN()) return@forEach
             val fraction = (time.tt - prevTt) / (event.time.tt - prevTt)
             // Normalize delta to [-180, 180] to handle retrograde wraparound near 0°/360°
             val delta = (nodeLon - prevLon + 180).mod(360.0) - 180
@@ -690,7 +690,7 @@ fun toAbjad(number: Int): String {
     if (number == 0) return "۰" // It is like this though https://imgur.com/a/0eMBO2c
     var n = number
     return buildString {
-        for (value in abjadMap.keys) {
+        abjadMap.keys.forEach { value ->
             while (n >= value) {
                 append(abjadMap[value])
                 n -= value
