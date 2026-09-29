@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -150,5 +151,5 @@ fun fillDrawerArrowPath(
     path.close()
 }
 
-private val ARROW_HEAD_ANGLE = Math.toRadians(45.0).toFloat()
+private const val ARROW_HEAD_ANGLE = (PI / 4).toFloat()
 private val ARROW_HEAD_ANGLE_COSINE = cos(ARROW_HEAD_ANGLE)
