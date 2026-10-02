@@ -51,9 +51,3 @@ listOf("calculator", "calendar", "equinox", "praytimes", "qr").forEach { name ->
     include(":$name")
     project(":$name").projectDir = file("libs/$name")
 }
-
-include(":open-location-code")
-project(":open-location-code").projectDir = file("libs/open-location-code/kotlin")
-
-include(":astronomy")
-project(":astronomy").projectDir = file("libs/astronomy/source/kotlin")
