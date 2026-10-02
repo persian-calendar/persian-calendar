@@ -6649,7 +6649,7 @@ private class AscentInfo(
 
 private fun findAscent(
     depth: Int,
-    context: SearchContext_Altitude,
+    context: SearchContextAltitude,
     maxDerivAlt: Double,
     t1: Time,
     t2: Time,
@@ -6795,7 +6795,7 @@ private fun maxAltitudeSlope(body: Body, latitude: Double): Double {
 private val RISE_SET_DT = 0.42      // 10.08 hours: Nyquist-safe for 22-hour period.
 
 
-private class SearchContext_Altitude(
+private class SearchContextAltitude(
     private val body: Body,
     private val direction: Direction,
     private val observer: Observer,
@@ -6825,7 +6825,7 @@ private fun internalSearchAltitude(
         throw IllegalArgumentException("Target altitude is not valid: $targetAltitude")
 
     val maxDerivAlt = maxAltitudeSlope(body, observer.latitude)
-    val context = SearchContext_Altitude(body, direction, observer, bodyRadiusAu, targetAltitude)
+    val context = SearchContextAltitude(body, direction, observer, bodyRadiusAu, targetAltitude)
 
     // We allow searching forward or backward in time.
     // But we want to keep t1 < t2, so we need a few if/else statements.

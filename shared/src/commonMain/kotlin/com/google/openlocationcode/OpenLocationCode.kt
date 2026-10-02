@@ -538,7 +538,7 @@ class OpenLocationCode(originalCode: String) {
             // Limit the maximum number of digits in the code.
             var codeLength = min(codeLength, MAX_DIGIT_COUNT)
             // Check that the code length requested is valid.
-            if (codeLength < PAIR_CODE_LENGTH && codeLength % 2 == 1 || codeLength < MIN_DIGIT_COUNT) {
+            if (((codeLength < PAIR_CODE_LENGTH) && ((codeLength % 2) == 1)) || (codeLength < MIN_DIGIT_COUNT)) {
                 throw IllegalArgumentException("Illegal code length $codeLength")
             }
 
