@@ -51,11 +51,9 @@ kotlin {
             kotlin.srcDir(generatedAppSrcDir)
 
             dependencies {
-                api(project(":astronomy"))
                 api(project(":calculator"))
                 api(project(":calendar"))
                 api(project(":equinox"))
-                api(project(":open-location-code"))
                 api(project(":praytimes"))
                 api(project(":qr"))
                 api(libs.compose.multiplatform.runtime)
