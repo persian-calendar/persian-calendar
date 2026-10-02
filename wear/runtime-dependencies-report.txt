@@ -1,17 +1,4 @@
 +--- project :shared
-|    +--- project :calculator
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
-|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
-|    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    |         \--- org.jetbrains:annotations:13.0 -> 23.0.0
-|    +--- project :calendar
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    +--- project :equinox
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    +--- project :praytimes
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    +--- project :qr
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 |    +--- androidx.browser:browser:1.10.0
 |    |    +--- androidx.activity:activity:1.9.0 -> 1.13.0
 |    |    |    +--- androidx.activity:activity-compose:1.13.0 (c)
@@ -25,7 +12,10 @@
 |    |    |    |    |    |         |    \--- androidx.annotation:annotation-jvm:1.10.0
 |    |    |    |    |    |         |         +--- org.jetbrains.compose.annotation-internal:annotation:1.8.0 -> 1.9.1 (c)
 |    |    |    |    |    |         |         |    \--- androidx.annotation:annotation:1.9.1 -> 1.10.0 (*)
-|    |    |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.20 (*)
+|    |    |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.20
+|    |    |    |    |    |         |              +--- org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20 (c)
+|    |    |    |    |    |         |              |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
+|    |    |    |    |    |         |              \--- org.jetbrains:annotations:13.0 -> 23.0.0
 |    |    |    |    |    |         +--- androidx.lifecycle:lifecycle-common-java8:2.11.0 (c)
 |    |    |    |    |    |         |    +--- androidx.annotation:annotation:1.8.1 -> 1.10.0 (*)
 |    |    |    |    |    |         |    +--- androidx.lifecycle:lifecycle-common:2.11.0
