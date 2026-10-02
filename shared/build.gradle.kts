@@ -49,13 +49,15 @@ kotlin {
     sourceSets {
         commonMain {
             kotlin.srcDir(generatedAppSrcDir)
+            kotlin.srcDirs(
+                "../libs/calculator/src/commonMain/kotlin",
+                "../libs/calendar/src/commonMain/kotlin",
+                "../libs/equinox/src/commonMain/kotlin",
+                "../libs/praytimes/src/commonMain/kotlin",
+                "../libs/qr/src/commonMain/kotlin",
+            )
 
             dependencies {
-                api(project(":calculator"))
-                api(project(":calendar"))
-                api(project(":equinox"))
-                api(project(":praytimes"))
-                api(project(":qr"))
                 api(libs.compose.multiplatform.runtime)
                 api(libs.compose.multiplatform.foundation)
                 implementation(libs.compose.multiplatform.material3)
