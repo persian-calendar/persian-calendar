@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 
 fun main() {
-    // Fortunately only macOS needs this hint to get title bar dark mode
+    // macOS needs this hint to get title bar dark mode
     System.setProperty("apple.awt.application.appearance", "system")
 
     application {
