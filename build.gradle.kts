@@ -43,19 +43,23 @@ spotless {
 
     kotlin {
         target("**/*.kt")
-        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**")
+        targetExclude(
+            "libs/**",
+            "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**",
+            "shared/src/commonMain/kotlin/io/github/cosinekitty/astronomy/Astronomy.kt",
+        )
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 
     kotlinGradle {
         target("**/*.gradle.kts")
-        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**")
+        targetExclude("libs/**")
         ktlint().editorConfigOverride(editorConfigOverride)
     }
 
     format("misc") {
         target("**/*.md", "**/.gitignore")
-        targetExclude("libs/**", "shared/src/commonMain/kotlin/com/byagowi/persiancalendar/ui/icons/material/**")
+        targetExclude("libs/**")
         trimTrailingWhitespace()
         endWithNewline()
     }
