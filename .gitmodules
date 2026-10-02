@@ -19,10 +19,3 @@
 [submodule "libs/qr"]
 	path = libs/qr
 	url = https://github.com/persian-calendar/qr.git
-[submodule "libs/open-location-code"]
-	path = libs/open-location-code
-	url = https://github.com/persian-calendar/open-location-code.git
-	branch = main
-[submodule "libs/astronomy"]
-	path = libs/astronomy
-	url = https://github.com/persian-calendar/astronomy
