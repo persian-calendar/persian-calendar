@@ -1,14 +1,10 @@
 +--- project :shared
-|    +--- project :astronomy
+|    +--- project :calculator
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
 |    |         \--- org.jetbrains:annotations:13.0 -> 23.0.0
-|    +--- project :calculator
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 |    +--- project :calendar
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 |    +--- project :equinox
-|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
-|    +--- project :open-location-code
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
 |    +--- project :praytimes
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.20 (*)
