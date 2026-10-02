@@ -10,9 +10,11 @@ uniform sampler2D u_tex0;
 
 const float PI = 3.1415926;
 
-float rand(vec2 co) {
-    // https://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
-    return fract(sin(mod(dot(co, vec2(12.9898, 78.233)), PI)) * 43758.5453);
+// Hash without Sine, David Hoskins, MIT License, https://www.shadertoy.com/view/4djSRW
+float hash12(vec2 p) {
+    vec3 p3 = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
 }
 
 void main() {
@@ -30,7 +32,7 @@ void main() {
     } else {
         float v = 4.4 - r / R * 3.7; // Globe's glow
         // Adds random glowing stars
-        float rand = rand(vec2(floor(-u_x * 10.0 + xy.x / 4.0), floor(u_y * 10.0 + xy.y / 4.0)));
+        float rand = hash12(vec2(floor(-u_x * 10.0 + xy.x / 4.0), floor(u_y * 10.0 + xy.y / 4.0)));
         if (rand > 0.997) v = abs(sin(u_time + (1.0 - rand) / 0.003 * 2.0 * PI));
         gl_FragColor = vec4(v, v, v, 1.0);
     }
