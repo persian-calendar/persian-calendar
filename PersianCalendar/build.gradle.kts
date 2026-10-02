@@ -75,13 +75,16 @@ android {
             buildConfigField("boolean", "DEVELOPMENT", "true")
         }
 
-        getByName("debug") {
+        debug {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitInfo"
             buildConfigField("boolean", "DEVELOPMENT", "true")
             applicationIdSuffix = ".debug"
         }
 
-        getByName("release") {
+        release {
+            optimization {
+                enable = true
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
