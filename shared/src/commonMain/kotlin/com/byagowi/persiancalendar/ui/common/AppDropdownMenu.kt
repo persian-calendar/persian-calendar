@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -56,7 +55,6 @@ fun AppDropdownMenuItem(
     }
 }
 
-@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuRadioItem(
     text: @Composable () -> Unit,
@@ -72,7 +70,6 @@ fun AppDropdownMenuRadioItem(
     ) { setSelected() }
 }
 
-@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuCheckableItem(
     text: @Composable () -> Unit,
@@ -91,7 +88,6 @@ fun AppDropdownMenuCheckableItem(
     ) { onValueChange(!isChecked) }
 }
 
-@SuppressLint("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuExpandableItem(
     text: @Composable () -> Unit,
