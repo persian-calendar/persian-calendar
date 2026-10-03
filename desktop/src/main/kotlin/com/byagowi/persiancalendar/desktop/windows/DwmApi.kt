@@ -9,7 +9,7 @@ import com.sun.jna.ptr.IntByReference
 import com.sun.jna.win32.StdCallLibrary
 import java.awt.Window
 
-@Suppress("FunctionName")
+@Suppress("FunctionName", "ClassName")
 interface DwmApi : StdCallLibrary {
     fun DwmSetWindowAttribute(
         hwnd: HWND,
