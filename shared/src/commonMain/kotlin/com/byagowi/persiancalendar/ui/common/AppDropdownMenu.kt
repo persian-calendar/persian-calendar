@@ -55,6 +55,7 @@ fun AppDropdownMenuItem(
     }
 }
 
+@Suppress("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuRadioItem(
     text: @Composable () -> Unit,
@@ -70,6 +71,7 @@ fun AppDropdownMenuRadioItem(
     ) { setSelected() }
 }
 
+@Suppress("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuCheckableItem(
     text: @Composable () -> Unit,
@@ -88,6 +90,7 @@ fun AppDropdownMenuCheckableItem(
     ) { onValueChange(!isChecked) }
 }
 
+@Suppress("ComposableLambdaParameterNaming,ComposableLambdaParameterPosition")
 @Composable
 fun AppDropdownMenuExpandableItem(
     text: @Composable () -> Unit,
