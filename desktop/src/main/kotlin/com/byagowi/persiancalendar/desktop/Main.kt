@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.desktop
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -17,18 +18,26 @@ fun main() {
     // macOS needs this hint to get title bar dark mode
     System.setProperty("apple.awt.application.appearance", "system")
 
+    // Experimental specially since it needs the window to be undecorated
+    val enableTransparency = false
+
     application {
         Window(
             onCloseRequest = ::exitApplication,
             title = stringResource(Res.string.app_name),
             state = WindowState(width = 800.dp, height = 600.dp),
+            transparent = enableTransparency,
+            undecorated = enableTransparency,
         ) {
             val isSystemInDarkTheme = isSystemInDarkTheme()
             LaunchedEffect(key1 = isSystemInDarkTheme) {
                 DwmApi.applyWindowsDarkMode(window, isDark = isSystemInDarkTheme)
+                if (enableTransparency) {
+                    DwmApi.applyBackdrop(window, DwmApi.DWM_SYSTEMBACKDROP_TYPE.DWMSBT_TRANSIENTWINDOW)
+                }
             }
 
-            AppContainer {
+            AppContainer(enableTransparency) {
                 HelloWorld(stringResource(Res.string.app_name))
             }
         }

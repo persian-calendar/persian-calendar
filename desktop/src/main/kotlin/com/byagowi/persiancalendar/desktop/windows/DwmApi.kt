@@ -20,7 +20,6 @@ interface DwmApi : StdCallLibrary {
 
     fun DwmExtendFrameIntoClientArea(hwnd: HWND, pMarMargins: MARGINS): Int
 
-    // Win32 MARGINS structure layout mapping for JNA
     @Structure.FieldOrder("cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight")
     class MARGINS(
         @JvmField var cxLeftWidth: Int = 0,
@@ -29,6 +28,7 @@ interface DwmApi : StdCallLibrary {
         @JvmField var cyBottomHeight: Int = 0,
     ) : Structure()
 
+    @Suppress("SpellCheckingInspection")
     enum class DWM_SYSTEMBACKDROP_TYPE {
         DWMSBT_AUTO, DWMSBT_NONE, DWMSBT_MAINWINDOW, DWMSBT_TRANSIENTWINDOW, DWMSBT_TABBEDWINDOW
     }

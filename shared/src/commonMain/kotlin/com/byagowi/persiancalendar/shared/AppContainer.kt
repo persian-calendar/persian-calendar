@@ -12,14 +12,21 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AppContainer(content: @Composable BoxScope.() -> Unit) {
+fun AppContainer(
+    enableTransparency: Boolean = false,
+    content: @Composable BoxScope.() -> Unit,
+) {
     MaterialTheme(if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+                .background(
+                    if (enableTransparency) Color.Transparent
+                    else MaterialTheme.colorScheme.background,
+                ),
         ) {
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
                 content()
