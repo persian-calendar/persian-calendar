@@ -15,6 +15,8 @@ kotlin {
 dependencies {
     implementation(project(":shared"))
     implementation(compose.desktop.currentOs)
+    implementation(libs.jna)
+    implementation(libs.jna.platform)
 }
 
 compose.desktop {
