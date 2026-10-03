@@ -1,12 +1,12 @@
 package com.byagowi.persiancalendar.desktop.windows
 
+import com.byagowi.persiancalendar.utils.logException
 import com.sun.jna.Native
 import com.sun.jna.Pointer
+import com.sun.jna.Structure
 import com.sun.jna.platform.win32.WinDef.HWND
 import com.sun.jna.ptr.IntByReference
 import com.sun.jna.win32.StdCallLibrary
-import com.byagowi.persiancalendar.utils.logException
-import com.sun.jna.Structure
 import java.awt.Window
 
 @Suppress("FunctionName")
@@ -22,11 +22,15 @@ interface DwmApi : StdCallLibrary {
 
     // Win32 MARGINS structure layout mapping for JNA
     @Structure.FieldOrder("cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight")
-    class MARGINS : Structure() {
-        @JvmField var cxLeftWidth: Int = 0
-        @JvmField var cxRightWidth: Int = 0
-        @JvmField var cyTopHeight: Int = 0
-        @JvmField var cyBottomHeight: Int = 0
+    class MARGINS(
+        @JvmField var cxLeftWidth: Int = 0,
+        @JvmField var cxRightWidth: Int = 0,
+        @JvmField var cyTopHeight: Int = 0,
+        @JvmField var cyBottomHeight: Int = 0,
+    ) : Structure()
+
+    enum class DWM_SYSTEMBACKDROP_TYPE {
+        DWMSBT_AUTO, DWMSBT_NONE, DWMSBT_MAINWINDOW, DWMSBT_TRANSIENTWINDOW, DWMSBT_TABBEDWINDOW
     }
 
     companion object {
@@ -36,10 +40,12 @@ interface DwmApi : StdCallLibrary {
             }.onFailure(logException).getOrNull()
         }
 
+        private fun Window.hwnd() = HWND(Pointer(Native.getWindowID(this)))
+
         fun applyWindowsDarkMode(window: Window, isDark: Boolean) {
             if ("win" in System.getProperty("os.name").lowercase()) runCatching {
                 DwmApi.INSTANCE?.DwmSetWindowAttribute(
-                    HWND(Pointer(Native.getWindowID(window))),
+                    window.hwnd(),
                     // DWMWA_USE_IMMERSIVE_DARK_MODE = 20 is Windows 10 (Build 18985+) older
                     // versions needed 19 but skipped for simplicity
                     20,
@@ -50,29 +56,17 @@ interface DwmApi : StdCallLibrary {
             }.onFailure(logException)
         }
 
-        fun applyAcrylicEffect(window: Window) {
+        fun applyBackdrop(window: Window, backdrop: DWM_SYSTEMBACKDROP_TYPE) {
             if ("win" in System.getProperty("os.name").lowercase()) runCatching {
                 val dwm = INSTANCE ?: return@runCatching
-                val hwndAddress = Native.getWindowID(window)
-                val hwnd = HWND(Pointer(hwndAddress))
-
-                // 1. DwmExtendFrameIntoClientArea
-                val margins = MARGINS().also {
-                    it.cxLeftWidth = -1
-                    it.cxRightWidth = -1
-                    it.cyTopHeight = -1
-                    it.cyBottomHeight = -1
-                }
-                dwm.DwmExtendFrameIntoClientArea(hwnd, margins)
-
-                val backdropVal = IntByReference(3) // Transient window backdrop (Acrylic-like effect)
+                val hwnd = window.hwnd()
+                dwm.DwmExtendFrameIntoClientArea(hwnd, MARGINS(-1, -1, -1, -1))
                 dwm.DwmSetWindowAttribute(
                     hwnd,
                     38, // DWMWA_SYSTEMBACKDROP_TYPE
-                    backdropVal,
-                    Integer.BYTES
+                    IntByReference(backdrop.ordinal),
+                    Integer.BYTES,
                 )
-
                 window.repaint()
             }.onFailure(logException)
         }
