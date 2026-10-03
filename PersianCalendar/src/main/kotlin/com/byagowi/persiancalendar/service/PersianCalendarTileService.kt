@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.service
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -28,7 +27,7 @@ class PersianCalendarTileService : TileService() {
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 launchAppPendingIntent()?.let(::startActivityAndCollapse)
-            } else @SuppressLint("StartActivityAndCollapseDeprecated") {
+            } else @Suppress("StartActivityAndCollapseDeprecated") {
                 @Suppress("DEPRECATION")
                 startActivityAndCollapse(
                     Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),

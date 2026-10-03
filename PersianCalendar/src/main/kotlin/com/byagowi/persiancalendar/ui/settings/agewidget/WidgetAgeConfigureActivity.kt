@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.agewidget
 
-import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.widget.RemoteViews
 import androidx.activity.compose.BackHandler
@@ -74,7 +73,7 @@ class WidgetAgeConfigureActivity : BaseWidgetConfigurationActivity() {
 
     @Composable
     override fun ColumnScope.Settings() {
-        @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
+        @Suppress("UseBackHandlerInsteadOfPredictiveBackHandler")
         BackHandler(onBack = ::finish)
         val context = LocalContext.current
         val initialTitle = remember {

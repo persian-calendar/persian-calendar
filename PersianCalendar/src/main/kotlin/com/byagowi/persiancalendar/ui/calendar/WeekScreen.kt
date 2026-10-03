@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -328,7 +327,7 @@ fun SharedTransitionScope.WeekScreen(
                     colors = appTopAppBarColors(),
                     navigationIcon = {
                         if (isAddEventBoxEnabled) {
-                            @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler") BackHandler {
+                            @Suppress("UseBackHandlerInsteadOfPredictiveBackHandler") BackHandler {
                                 isAddEventBoxEnabled = false
                             }
                         }
@@ -598,7 +597,7 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
 const val defaultCellHeight = 64
 const val initialHour = 8
 
-@SuppressLint("ComposeModifierWithoutDefault")
+@Suppress("ComposeModifierWithoutDefault")
 @Composable
 fun DaysView(
     onAddActionChange: (() -> Unit) -> Unit,
@@ -622,7 +621,7 @@ fun DaysView(
     initialScroll: Int,
     cellHeight: Dp,
     numeral: Numeral,
-    @SuppressLint("ModifierParameter") scrollableModifier: Modifier,
+    @Suppress("ModifierParameter") scrollableModifier: Modifier,
     modifier: Modifier = Modifier,
     content: (@Composable ColumnScope.(appointments: List<CalendarEvent<*>>, headerScrollState: ScrollState, onHasContentChange: (Boolean) -> Unit) -> Unit)? = null,
 ) {

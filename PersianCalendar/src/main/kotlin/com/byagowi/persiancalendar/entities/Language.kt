@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.entities
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.view.inputmethod.InputMethodManager
@@ -656,10 +655,10 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     companion object {
-        @SuppressLint("ConstantLocale")
+        @Suppress("ConstantLocale")
         val userDeviceLanguage = Locale.getDefault().language ?: "en"
 
-        @SuppressLint("ConstantLocale")
+        @Suppress("ConstantLocale")
         private val userDeviceCountry = Locale.getDefault().country ?: "IR"
 
         private val userTimeZoneId = TimeZone.getDefault().id ?: IRAN_TIMEZONE_ID

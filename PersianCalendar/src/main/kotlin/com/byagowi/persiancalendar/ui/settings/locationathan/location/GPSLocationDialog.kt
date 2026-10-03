@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -193,7 +192,7 @@ fun GPSLocationDialog(
         }
 
         onDispose {
-            @SuppressLint("MissingPermission") if (ActivityCompat.checkSelfPermission(
+            @Suppress("MissingPermission") if (ActivityCompat.checkSelfPermission(
                     context, Manifest.permission.ACCESS_FINE_LOCATION,
                 ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
                     context, Manifest.permission.ACCESS_COARSE_LOCATION,

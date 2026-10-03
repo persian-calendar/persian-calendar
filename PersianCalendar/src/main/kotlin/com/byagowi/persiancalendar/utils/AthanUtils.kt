@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.utils
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ContentResolver
@@ -43,7 +42,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 // https://stackoverflow.com/a/69505596
-@SuppressLint("StringFormatTrivial")
+@Suppress("StringFormatTrivial")
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
     ContentResolver.SCHEME_ANDROID_RESOURCE, this.getResourcePackageName(rawRes),
     this.getResourceTypeName(rawRes), this.getResourceEntryName(rawRes),

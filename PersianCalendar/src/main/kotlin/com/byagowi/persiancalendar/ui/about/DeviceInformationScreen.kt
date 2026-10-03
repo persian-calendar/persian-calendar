@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
@@ -384,7 +383,7 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
 
 private data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
-@SuppressLint("PrivateApi")
+@Suppress("PrivateApi")
 private fun getSystemProperty(key: String?): String? {
     return runCatching {
         Class.forName("android.os.SystemProperties").getDeclaredMethod("get", String::class.java)
@@ -392,7 +391,7 @@ private fun getSystemProperty(key: String?): String? {
     }.getOrNull()
 }
 
-@SuppressLint("PrivateApi")
+@Suppress("PrivateApi")
 fun isMiuiOptimizationDisabled(): Boolean {
     val sysProp = getSystemProperty("persist.sys.miui_optimization")
     if (sysProp == "0" || sysProp == "false") return true

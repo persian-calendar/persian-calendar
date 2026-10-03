@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.theme
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
@@ -98,7 +97,7 @@ import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import java.io.File
 
-@SuppressLint("ComposeModifierMissing")
+@Suppress("ComposeModifierMissing")
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(

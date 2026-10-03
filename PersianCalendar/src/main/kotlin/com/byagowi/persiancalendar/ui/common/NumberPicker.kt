@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
@@ -281,7 +280,7 @@ fun NumberEdit(
         pendingConfirms += clearFocus
         onDispose { pendingConfirms -= clearFocus }
     }
-    @SuppressLint("UseBackHandlerInsteadOfPredictiveBackHandler")
+    @Suppress("UseBackHandlerInsteadOfPredictiveBackHandler")
     BackHandler { clearFocus() }
 
     fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
