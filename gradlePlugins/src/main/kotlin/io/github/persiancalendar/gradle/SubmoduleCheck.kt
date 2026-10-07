@@ -5,7 +5,6 @@ import org.gradle.api.GradleException
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
-import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 
@@ -65,15 +64,5 @@ abstract class SubmoduleCheck : DefaultTask() {
         logger.lifecycle("Submodule check passed.")
     }
 
-    private fun git(dir: File, vararg args: String): String {
-        val out = ByteArrayOutputStream()
-        execOperations.exec {
-            workingDir(dir)
-            commandLine(listOf("git") + args)
-            standardOutput = out
-            errorOutput = ByteArrayOutputStream()
-            isIgnoreExitValue = true
-        }
-        return out.toString().trimEnd()
-    }
+    private fun git(dir: File, vararg args: String): String = execOperations.git(dir, *args)
 }
