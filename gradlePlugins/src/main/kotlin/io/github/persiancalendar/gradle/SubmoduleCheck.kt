@@ -17,50 +17,49 @@ abstract class SubmoduleCheck : DefaultTask() {
 
     @TaskAction
     fun run() {
-        val failures = mutableListOf<String>()
         val rootDir = layout.projectDirectory.asFile
 
-        git(
-            rootDir,
-            "submodule", "status", "--recursive",
-        ).lineSequence().filter { it.isNotBlank() }.forEach { line ->
-            val prefix = line[0]
-            val rest = line.drop(1).trimStart()
-            val sha = rest.substringBefore(' ')
-            val path = rest.substringAfter(' ').substringBefore(" (")
+        val failures = buildList {
+            git(
+                rootDir,
+                "submodule", "status", "--recursive",
+            ).lineSequence().filter { it.isNotBlank() }.forEach { line ->
+                val prefix = line[0]
+                val rest = line.drop(1).trimStart()
+                val sha = rest.substringBefore(' ')
+                val path = rest.substringAfter(' ').substringBefore(" (")
 
-            when (prefix) {
-                '-' -> return@forEach // uninitialized submodule — nothing checked out to verify
-                '+' -> {
-                    failures += "$path is checked out at $sha but the parent repo records a different commit (run: git add $path)"
-                    return@forEach
+                when (prefix) {
+                    '-' -> return@forEach // uninitialized submodule — nothing checked out to verify
+                    '+' -> {
+                        add("$path is checked out at $sha but the parent repo records a different commit (run: git add $path)")
+                        return@forEach
+                    }
+
+                    'U' -> {
+                        add("$path is in a conflicted state")
+                        return@forEach
+                    }
                 }
 
-                'U' -> {
-                    failures += "$path is in a conflicted state"
-                    return@forEach
+                val subDir = File(rootDir, path)
+
+                if (git(subDir, "status", "--porcelain").isNotBlank()) {
+                    add("submodule has uncommitted changes: $path")
                 }
-            }
 
-            val subDir = File(rootDir, path)
-
-            if (git(subDir, "status", "--porcelain").isNotBlank()) {
-                failures += "submodule has uncommitted changes: $path"
-            }
-
-            // Refresh remote-tracking refs first, since `git push` does not update them.
-            git(subDir, "fetch", "--quiet", "origin")
-            if (git(subDir, "branch", "-r", "--contains", "HEAD").isBlank()) {
-                failures += "submodule HEAD ($sha) is not pushed to its remote: $path"
+                // Refresh remote-tracking refs first, since `git push` does not update them.
+                git(subDir, "fetch", "--quiet", "origin")
+                if (git(subDir, "branch", "-r", "--contains", "HEAD").isBlank()) {
+                    add("submodule HEAD ($sha) is not pushed to its remote: $path")
+                }
             }
         }
 
-        if (failures.isNotEmpty()) {
-            throw GradleException(
-                "Submodule check failed — commit and push submodule changes before building a release.\n" +
+        if (failures.isNotEmpty()) throw GradleException(
+            "Submodule check failed — commit and push submodule changes before building a release.\n" +
                     failures.joinToString("\n") { "  - $it" },
-            )
-        }
+        )
         logger.lifecycle("Submodule check passed.")
     }
 
