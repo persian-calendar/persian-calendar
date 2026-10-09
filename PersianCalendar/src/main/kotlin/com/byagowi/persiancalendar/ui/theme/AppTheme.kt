@@ -233,9 +233,11 @@ fun resolveTypography(): Typography {
 @Composable
 @ReadOnlyComposable
 private fun effectiveTheme(): Theme {
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val context = LocalContext.current
     if (userSetTheme != Theme.SYSTEM_DEFAULT) return userSetTheme
-    return if (isSystemInDarkTheme()) {
-        if (isPowerSaveMode(LocalContext.current)) Theme.BLACK else systemDarkTheme
+    return if (isSystemInDarkTheme) {
+        if (isPowerSaveMode(context)) Theme.BLACK else systemDarkTheme
     } else systemLightTheme
 }
 
