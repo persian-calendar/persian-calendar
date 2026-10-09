@@ -1214,9 +1214,14 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
     if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 1) return false
     val alarmManager = context.getSystemService<AlarmManager>()
-    return isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false || !isIgnoringBatteryOptimizations(
-        context,
-    )
+    return when {
+        isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching {
+            alarmManager?.canScheduleExactAlarms()
+        }.getOrNull().debugAssertNotNull == false -> true
+
+        !isIgnoringBatteryOptimizations(context) -> true
+        else -> false
+    }
 }
 
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
