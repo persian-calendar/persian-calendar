@@ -394,8 +394,7 @@ private fun getSystemProperty(key: String?): String? {
 @Suppress("PrivateApi")
 fun isMiuiOptimizationDisabled(): Boolean {
     val sysProp = getSystemProperty("persist.sys.miui_optimization")
-    if (sysProp == "0" || sysProp == "false") return true
-    return runCatching {
+    return sysProp == "0" || sysProp == "false" || runCatching {
         Class.forName("android.miui.AppOpsUtils").getDeclaredMethod("isXOptMode")
             .invoke(null) as? Boolean
     }.getOrNull() ?: false

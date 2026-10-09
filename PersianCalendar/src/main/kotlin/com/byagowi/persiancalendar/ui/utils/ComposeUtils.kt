@@ -4,11 +4,7 @@ import android.view.View
 import android.view.ViewParent
 import android.view.Window
 import androidx.annotation.ColorRes
-import androidx.compose.animation.BoundsTransform
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CornerBasedShape
@@ -22,11 +18,9 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.DialogWindowProvider
 
 /**

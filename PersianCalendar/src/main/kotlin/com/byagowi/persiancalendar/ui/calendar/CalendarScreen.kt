@@ -499,31 +499,29 @@ fun SharedTransitionScope.CalendarScreen(
 
     Scaffold(
         modifier = modifier.onKeyEvent { keyEvent ->
-            if (!isYearView && keyEvent.type == KeyEventType.KeyDown) {
-                when (keyEvent.key) {
-                    Key.W -> {
-                        navigateToWeek(selectedDay)
-                        true
-                    }
-
-                    Key.M -> {
-                        navigateToMonthView(selectedDay)
-                        true
-                    }
-
-                    Key.Y -> {
-                        isYearView = true
-                        true
-                    }
-
-                    Key.A -> {
-                        navigateToSchedule(selectedDay)
-                        true
-                    }
-
-                    else -> false
+            !isYearView && keyEvent.type == KeyEventType.KeyDown && when (keyEvent.key) {
+                Key.W -> {
+                    navigateToWeek(selectedDay)
+                    true
                 }
-            } else false
+
+                Key.M -> {
+                    navigateToMonthView(selectedDay)
+                    true
+                }
+
+                Key.Y -> {
+                    isYearView = true
+                    true
+                }
+
+                Key.A -> {
+                    navigateToSchedule(selectedDay)
+                    true
+                }
+
+                else -> false
+            }
         },
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -1216,8 +1214,9 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
     if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 1) return false
     val alarmManager = context.getSystemService<AlarmManager>()
-    if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) return true
-    return !isIgnoringBatteryOptimizations(context)
+    return isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false || !isIgnoringBatteryOptimizations(
+        context,
+    )
 }
 
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {

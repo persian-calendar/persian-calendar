@@ -57,9 +57,7 @@ sealed class CalendarEvent<T : AbstractDate>(
 
     override fun equals(other: Any?): Boolean {
         return other is CalendarEvent<*> &&
-                other.title == title && other.isHoliday == isHoliday && other.date == date && (if (this is EquinoxCalendarEvent && other is EquinoxCalendarEvent)
-            remainingMillis == other.remainingMillis
-        else true)
+                other.title == title && other.isHoliday == isHoliday && other.date == date && (!(this is EquinoxCalendarEvent && other is EquinoxCalendarEvent) || remainingMillis == other.remainingMillis)
         // Let's not get into details of device calendar
     }
 

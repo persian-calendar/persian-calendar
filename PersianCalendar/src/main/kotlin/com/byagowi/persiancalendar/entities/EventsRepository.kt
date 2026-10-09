@@ -72,8 +72,8 @@ data class EventsRepository(
 
     init {
         // It is vital to configure calendar before loading of the events
-        IslamicDate.useUmmAlQura = if (iranHolidays || iranOthers) false
-        else afghanistanHolidays || language.mightPreferUmmAlquraIslamicCalendar
+        IslamicDate.useUmmAlQura =
+            !(iranHolidays || iranOthers) && (afghanistanHolidays || language.mightPreferUmmAlquraIslamicCalendar)
     }
 
     @VisibleForTesting

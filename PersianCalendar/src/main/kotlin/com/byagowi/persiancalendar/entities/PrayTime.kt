@@ -46,7 +46,7 @@ enum class PrayTime(val stringRes: StringResource, val tint: Color = Color.Gray)
     fun isAlwaysShown(isJafari: Boolean): Boolean {
         return when (this) {
             FAJR, DHUHR, MAGHRIB -> true
-            else -> if (isJafari) false else when (this) {
+            else -> !isJafari && when (this) {
                 ASR, ISHA -> true
                 else -> false
             }

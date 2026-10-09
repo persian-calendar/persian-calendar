@@ -11,10 +11,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -244,18 +241,18 @@ private fun effectiveTheme(): Theme {
 @Composable
 @ReadOnlyComposable
 private fun isCrossWindowBlur(): Boolean {
-    // LocalWindowInfo.current.isCrossWindowBlurEnabled
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    // Replace with LocalWindowInfo.current.isCrossWindowBlurEnabled later
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && run {
         LocalActivity.current?.window?.windowManager?.isCrossWindowBlurEnabled == true
-    } else {
-        false
     }
 }
 
 @Composable
 @ReadOnlyComposable
 fun appDialogSurfaceColor(): Color {
-    return if (isCrossWindowBlur()) when (effectiveTheme()) {
+    val isCrossWindowBlur = isCrossWindowBlur()
+    val effectiveTheme = effectiveTheme()
+    return if (isCrossWindowBlur) when (effectiveTheme) {
         Theme.DARK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .7f)
         Theme.BLACK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .6f)
         Theme.MODERN -> MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = .65f)
@@ -299,8 +296,8 @@ private fun isPowerSaveMode(context: Context): Boolean =
 private fun appColorScheme(): ColorScheme {
     val theme = effectiveTheme()
     val isDark = theme.isDark == true
+    val context = LocalContext.current
     val colorScheme = if (theme.isDynamicColors) {
-        val context = LocalContext.current
         if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (isDark) DefaultDarkColorScheme else DefaultLightColorScheme
     val backgroundColor = if (theme.isDynamicColors) when (theme) {
