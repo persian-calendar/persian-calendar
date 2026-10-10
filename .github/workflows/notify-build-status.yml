@@ -1,3 +1,5 @@
+permissions: {}
+
 on:
   workflow_run:
     workflows: [Android CI]
