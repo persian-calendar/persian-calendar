@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.os.CancellationSignal
 import android.provider.CalendarContract
 import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
@@ -49,6 +50,7 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.Date
 import java.util.GregorianCalendar
+import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -164,17 +166,21 @@ fun GregorianCalendar.formatDateAndTime(
 // Google Meet generates weird and ugly descriptions with lines having such patterns, let's get rid of them
 private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
 
-private fun readDeviceEvents(
+internal fun readDeviceEvents(
     context: Context,
     startingDate: GregorianCalendar,
     duration: Duration,
     limit: Int,
     searchTerm: String? = null,
+    settings: DeviceCalendarQuerySettings = deviceCalendarQuerySettings(),
+    cancellationSignal: CancellationSignal? = null,
 ): List<CalendarEvent.DeviceCalendarEvent> {
-    if (!isShowDeviceCalendarEvents || ActivityCompat.checkSelfPermission(
+    cancellationSignal?.throwIfCanceled()
+    if (!settings.enabled) return emptyList()
+    if (ActivityCompat.checkSelfPermission(
             context, Manifest.permission.READ_CALENDAR,
         ) != PackageManager.PERMISSION_GRANTED
-    ) return emptyList()
+    ) throw SecurityException("Calendar permission is unavailable")
 
     val selection: String?
     val selectionArgs: Array<String>?
@@ -190,7 +196,7 @@ private fun readDeviceEvents(
         boundaryRegex = null
     }
 
-    return runCatching {
+    return run {
         val endingDate = GregorianCalendar(startingDate.timeZone).apply {
             timeInMillis = startingDate.timeInMillis
             add(GregorianCalendar.DAY_OF_MONTH, duration.inWholeDays.toInt())
@@ -219,10 +225,14 @@ private fun readDeviceEvents(
             CalendarContract.Instances.BEGIN + " ASC LIMIT ${
                 limit * if (searchTerm != null) 3 else 1
             }",
+            cancellationSignal,
         )?.use { cursor ->
-            generateSequence { if (cursor.moveToNext()) cursor else null }.filter {
+            generateSequence {
+                cancellationSignal?.throwIfCanceled()
+                if (cursor.moveToNext()) cursor else null
+            }.filter {
                 it.getString(5) == "1" && // is visible
-                        it.getLong(9) !in eventCalendarsIdsToExclude && run {
+                        it.getLong(9) !in settings.excludedIds && run {
                     boundaryRegex == null || boundaryRegex.containsMatchIn(
                         it.getString(1).orEmpty(),
                     ) || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
@@ -236,23 +246,50 @@ private fun readDeviceEvents(
                 )
                 CalendarEvent.DeviceCalendarEvent(
                     id = it.getLong(0),
-                    title = it.getString(1),
-                    time = if (interval.isAllDay) null else Clock(interval.start).toBasicFormatString() + (if (it.getLong(
+                    title = it.getString(1).orEmpty(),
+                    time = if (interval.isAllDay) null else settings.formatTime(interval.start) + (if (it.getLong(
                             3,
                         ) != it.getLong(4) && it.getLong(4) != 0L
-                    ) " $EN_DASH ${Clock(interval.end).toBasicFormatString()}"
+                    ) " $EN_DASH ${settings.formatTime(interval.end)}"
                     else ""),
                     interval = interval,
                     description = it.getString(2)?.replace(descriptionCleaningPattern, "")
                         .orEmpty(),
                     color = it.getString(7) ?: it.getString(8).orEmpty(),
-                    isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday,
+                    isHoliday = it.getLong(9) in settings.holidayIds,
                     source = null,
                 )
             }.take(limit).toList()
-        }
-    }.onFailure(logException).getOrNull() ?: emptyList()
+        } ?: error("Calendar provider returned no cursor")
+    }.also {
+        cancellationSignal?.throwIfCanceled()
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) !=
+            PackageManager.PERMISSION_GRANTED
+        ) throw SecurityException("Calendar permission was revoked")
+    }
 }
+
+internal data class DeviceCalendarQuerySettings(
+    val enabled: Boolean,
+    val timeZone: TimeZone,
+    val excludedIds: Set<Long>,
+    val holidayIds: Set<Long>,
+    val numeral: Numeral,
+) {
+    fun formatTime(calendar: GregorianCalendar): String {
+        val (hours, minutes) = Clock(calendar).toHoursAndMinutesPair()
+        return numeral.format("%d:%02d".format(Locale.ENGLISH, hours, minutes))
+    }
+}
+
+// Capture Compose-backed preferences before crossing the provider I/O boundary.
+internal fun deviceCalendarQuerySettings() = DeviceCalendarQuerySettings(
+    enabled = isShowDeviceCalendarEvents,
+    timeZone = if (isForcedIranTimeEnabled) TimeZone.getTimeZone(IRAN_TIMEZONE_ID) else TimeZone.getDefault(),
+    excludedIds = buildSet { eventCalendarsIdsToExclude.forEach { add(it) } },
+    holidayIds = buildSet { eventCalendarsIdsAsHoliday.forEach { add(it) } },
+    numeral = numeral,
+)
 
 fun createSearchRegex(searchTerm: String): Regex =
     Regex("\\b" + Regex.escape(searchTerm), RegexOption.IGNORE_CASE)
@@ -262,15 +299,17 @@ fun Context.readDaysDeviceEvents(
     duration: Duration,
     limit: Int = 100,
 ) = DeviceCalendarEventsStore(
-    readDeviceEvents(
-        this,
-        DeviceEventInterval.startOfDay(
-            jdn.toCivilDate(),
-            if (isForcedIranTimeEnabled) TimeZone.getTimeZone(IRAN_TIMEZONE_ID) else TimeZone.getDefault(),
-        ),
-        duration,
-        limit = limit,
-    ),
+    runCatching {
+        readDeviceEvents(
+            this,
+            DeviceEventInterval.startOfDay(
+                jdn.toCivilDate(),
+                if (isForcedIranTimeEnabled) TimeZone.getTimeZone(IRAN_TIMEZONE_ID) else TimeZone.getDefault(),
+            ),
+            duration,
+            limit = limit,
+        )
+    }.onFailure(logException).getOrDefault(emptyList()),
 )
 
 fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days, 120)
@@ -279,9 +318,10 @@ fun Context.readTwoWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 14.day
 fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32.days, 750)
 fun Context.readYearDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 366.days)
 
-fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<CalendarEvent<*>>> {
+fun createMonthEventsList(
+    date: AbstractDate, deviceEvents: DeviceCalendarEventsStore,
+): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
-    val deviceEvents = context.readMonthDeviceEvents(baseJdn)
     return (0..<mainCalendar.getMonthLength(date.year, date.month)).map { baseJdn + it }
         .associateWith { eventsRepository.getEvents(it, deviceEvents) }
 }
@@ -290,13 +330,15 @@ fun Context.searchDeviceCalendarEvents(searchTerm: String?): List<CalendarEvent.
     val now = System.currentTimeMillis()
     val startDate = Date().toGregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) }
     val duration = (365L * 2L).days // 1 year backwards + 1 year forward
-    val events = readDeviceEvents(
-        context = this,
-        startingDate = startDate,
-        duration = duration,
-        searchTerm = searchTerm,
-        limit = 100,
-    )
+    val events = runCatching {
+        readDeviceEvents(
+            context = this,
+            startingDate = startDate,
+            duration = duration,
+            searchTerm = searchTerm,
+            limit = 100,
+        )
+    }.onFailure(logException).getOrDefault(emptyList())
     val (upcoming, past) = events.partition { it.start.timeInMillis >= now }
     val sortedUpcoming = upcoming.sortedBy { it.start.timeInMillis }
     val sortedPast = past.sortedByDescending { it.start.timeInMillis }

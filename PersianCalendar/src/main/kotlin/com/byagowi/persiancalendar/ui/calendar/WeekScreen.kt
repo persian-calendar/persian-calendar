@@ -124,7 +124,6 @@ import com.byagowi.persiancalendar.entities.shortTitle
 import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -165,8 +164,6 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readDayDeviceEvents
-import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
@@ -430,7 +427,6 @@ fun SharedTransitionScope.WeekScreen(
                                 }
                             }
 
-                            val context = LocalContext.current
                             val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(
                                 today, mainCalendar.getMonthsDistance(today, selectedDay),
                             )
@@ -438,11 +434,9 @@ fun SharedTransitionScope.WeekScreen(
                             val pageWeekStart = (today + (page - weeksLimit / 2) * 7).let {
                                 it - (it.weekDay - weekStart)
                             }
-                            val weekDeviceEvents = remember(
-                                refreshToken,
-                                isShowDeviceCalendarEvents,
-                                pageWeekStart,
-                            ) { context.readWeekDeviceEvents(pageWeekStart) }
+                            val weekDeviceEvents = rememberDeviceCalendarEvents(
+                                pageWeekStart, days = 7, refreshToken = refreshToken,
+                            ).data
 
                             if (hasWeeksPager) daysTable(
                                 monthStartDate,
@@ -520,10 +514,9 @@ fun SharedTransitionScope.WeekScreen(
                                 }
                             }
 
-                            val context = LocalContext.current
-                            val dayDeviceEvents = remember(
-                                refreshToken, isShowDeviceCalendarEvents, pageDay,
-                            ) { context.readDayDeviceEvents(pageDay) }
+                            val dayDeviceEvents = rememberDeviceCalendarEvents(
+                                pageDay, days = 1, limit = 120, refreshToken = refreshToken,
+                            ).data
 
                             DaysView(
                                 bottomPadding = fabPlaceholderHeight ?: 0.dp,
@@ -989,7 +982,9 @@ fun DaysView(
                                 }
                                 .requiredSize(
                                     with(density) { (cellWidthPx / columnsCount - defaultWidthReductionPx).toDp() },
-                                    (with(density) { ((end - start) * cellHeightPx).toDp() } - heightSizeReduction).coerceAtLeast(1.dp),
+                                    (with(density) { ((end - start) * cellHeightPx).toDp() } - heightSizeReduction).coerceAtLeast(
+                                        1.dp,
+                                    ),
                                 )
                                 .clickable { viewEvent(event) }
                                 .background(color, MaterialTheme.shapes.small)

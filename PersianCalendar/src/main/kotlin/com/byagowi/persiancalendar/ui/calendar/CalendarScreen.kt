@@ -264,8 +264,6 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
-import com.byagowi.persiancalendar.utils.readDayDeviceEvents
-import com.byagowi.persiancalendar.utils.searchDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -856,10 +854,9 @@ private fun Details(
     ) {
         val detailsWidth = this.maxWidth
 
-        val context = LocalContext.current
-        val dayDeviceEvents = remember(
-            refreshToken, isShowDeviceCalendarEvents, selectedDay,
-        ) { context.readDayDeviceEvents(selectedDay) }
+        val dayDeviceEvents = rememberDeviceCalendarEvents(
+            selectedDay, days = 1, limit = 120, refreshToken = refreshToken,
+        ).data
         val scale = remember {
             mutableFloatStateOf(
                 if (isTablet) .75f else (maxHeight.value / (25f * defaultCellHeight)).coerceIn(
@@ -1253,12 +1250,12 @@ private fun Search(
     }
     val repository = eventsRepository
     val enabledEvents = remember(key1 = today) { repository.getEnabledEvents(today) }
-    val context = LocalContext.current
-    val items = remember(searchTerm) {
+    val deviceResults = rememberDeviceCalendarSearch(searchTerm, today)
+    val items = remember(searchTerm, deviceResults, enabledEvents) {
         val searchTerm = searchTerm
         if (searchTerm.isNullOrBlank()) return@remember emptyList()
         val regex = createSearchRegex(searchTerm)
-        context.searchDeviceCalendarEvents(searchTerm) + enabledEvents.asSequence().filter {
+        deviceResults.data + enabledEvents.asSequence().filter {
             regex.containsMatchIn(it.title) || run {
                 (it.metadata[EventsRepository.EVENT_ALIAS] as? String)?.let {
                     regex.containsMatchIn(it)

@@ -71,7 +71,11 @@ private class EventsViewFactory(
     )
 
     private val enabledAlarms = getEnabledAlarms(context)
-    private val items = run {
+
+    @Volatile
+    private var items: List<Any> = emptyList()
+
+    private fun loadItems(): List<Any> = run {
         val today = Jdn.today()
         val deviceEvents = context.readTwoWeekDeviceEvents(today)
         val days = (today..<today + 14).toList()
@@ -118,11 +122,14 @@ private class EventsViewFactory(
     override fun getViewTypeCount(): Int = 1
     override fun getItemId(position: Int): Long = position.toLong()
     override fun hasStableIds(): Boolean = true
-    override fun onDataSetChanged() = Unit
+    override fun onDataSetChanged() {
+        items = loadItems()
+    }
+
     override fun getCount(): Int = items.size
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_item)
-        val entry = items[position]
+        val entry = items.getOrNull(position) ?: return row
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
 
         if (entry == Spacer) {

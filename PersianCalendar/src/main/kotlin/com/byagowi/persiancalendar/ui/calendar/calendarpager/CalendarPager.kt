@@ -5,22 +5,19 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.AddEventData
-import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import kotlinx.coroutines.launch
 
 @Composable
@@ -58,7 +55,6 @@ fun CalendarPager(
     )
 
     Box(modifier) {
-        val context = LocalContext.current
         HorizontalPager(
             state = calendarPagerState,
             verticalAlignment = Alignment.Top,
@@ -66,9 +62,9 @@ fun CalendarPager(
             val monthStartDate =
                 mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
             val monthStartJdn = Jdn(monthStartDate)
-            val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
-                context.readMonthDeviceEvents(monthStartJdn)
-            }
+            val monthDeviceEvents = rememberDeviceCalendarEvents(
+                monthStartJdn, days = 32, limit = 750, refreshToken = refreshToken,
+            ).data
             daysTable(
                 monthStartDate,
                 monthStartJdn,

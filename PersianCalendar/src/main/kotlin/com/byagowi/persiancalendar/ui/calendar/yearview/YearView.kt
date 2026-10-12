@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isBoldFont
@@ -68,6 +67,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
+import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEvents
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
@@ -75,7 +75,6 @@ import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
-import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
@@ -177,14 +176,13 @@ fun YearView(
 
             Column(Modifier.fillMaxWidth()) {
                 if (scale.floatValue != yearSelectionModeScale) {
-                    val yearDeviceEvents: DeviceCalendarEventsStore = remember(yearOffset, today) {
-                        val yearStartJdn = Jdn(
-                            calendar.createDate(
-                                (today on calendar).year + yearOffset, 1, 1,
-                            ),
-                        )
-                        context.readYearDeviceEvents(yearStartJdn)
-                    }
+                    val yearStartJdn = Jdn(
+                        calendar.createDate(
+                            (today on calendar).year + yearOffset, 1, 1,
+                        ),
+                    )
+                    val yearDeviceEvents =
+                        rememberDeviceCalendarEvents(yearStartJdn, days = 366).data
                     FlowRow(
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth(),

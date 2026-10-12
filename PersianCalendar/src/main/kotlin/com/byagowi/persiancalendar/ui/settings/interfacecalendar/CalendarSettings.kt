@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
@@ -111,6 +112,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.week_start
 import com.byagowi.persiancalendar.shared.generated.resources.week_start_summary
 import com.byagowi.persiancalendar.ui.about.EnableInDeviceCalendar
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.calendar.rememberCalendarProviderQuery
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
@@ -341,9 +343,18 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
         showUnsupportedActionToast(context)
         onDismissRequest()
     }
+    var lastSuccessfulCalendars by remember {
+        mutableStateOf<Map<String, List<CalendarsEntry>>?>(null)
+    }
+    LaunchedEffect(calendars) {
+        if (calendars != null) lastSuccessfulCalendars = calendars
+    }
+    val latestCalendars by rememberUpdatedState(calendars ?: lastSuccessfulCalendars)
     DisposableEffect(Unit) {
         onDispose {
-            val shownIds = calendars.values.flatten().map { it.id }.toSet()
+            // A dismissed or failed initial load must not erase the saved calendar selection.
+            val shownIds = latestCalendars?.values?.flatten()?.map { it.id }?.toSet()
+                ?: return@onDispose
             context.preferences.edit {
                 putString(
                     PREF_CALENDARS_IDS_TO_EXCLUDE,
@@ -372,7 +383,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
         },
     ) {
         var holidayTextWidth by remember { mutableStateOf(64.dp) }
-        calendars.entries.forEachIndexed { i, (accountName, values) ->
+        calendars.orEmpty().entries.forEachIndexed { i, (accountName, values) ->
             Spacer(Modifier.height((if (i == 0) 24 else 16).dp))
             Row {
                 Text(
@@ -442,33 +453,44 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, List<CalendarsEntry>> {
-    val context = LocalContext.current
-    val calendars = remember {
-        runCatching {
-            context.contentResolver.query(
-                CalendarContract.Calendars.CONTENT_URI.buildUpon().build(),
-                arrayOf(
-                    CalendarContract.Calendars._ID, // 0
-                    CalendarContract.Calendars.ACCOUNT_NAME, // 1
-                    CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, // 2
-                    CalendarContract.Calendars.CALENDAR_COLOR, // 3
-                    CalendarContract.Calendars.VISIBLE, // 4
-                ),
-                null, null, null,
-            )?.use { cursor ->
-                generateSequence { if (cursor.moveToNext()) cursor else null }.filter {
-                    it.getString(4) == "1"
-                }.map {
-                    CalendarsEntry(
-                        it.getLong(0),
-                        it.getString(1),
-                        it.getString(2),
-                        it.getIntOrNull(3)?.let(::Color),
-                    )
-                }.groupBy { it.accountName }
-            }
-        }.onFailure(logException).onFailure(onFailure).getOrNull() ?: emptyMap()
+private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, List<CalendarsEntry>>? {
+    val context = LocalContext.current.applicationContext
+    val result = rememberCalendarProviderQuery<Map<String, List<CalendarsEntry>>?>(
+        key = context,
+        empty = null,
+    ) { cancellationSignal ->
+        context.contentResolver.query(
+            CalendarContract.Calendars.CONTENT_URI.buildUpon().build(),
+            arrayOf(
+                CalendarContract.Calendars._ID, // 0
+                CalendarContract.Calendars.ACCOUNT_NAME, // 1
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, // 2
+                CalendarContract.Calendars.CALENDAR_COLOR, // 3
+                CalendarContract.Calendars.VISIBLE, // 4
+            ),
+            null, null, null, cancellationSignal,
+        )?.use { cursor ->
+            generateSequence {
+                cancellationSignal.throwIfCanceled()
+                if (cursor.moveToNext()) cursor else null
+            }.filter {
+                it.getString(4) == "1"
+            }.map {
+                CalendarsEntry(
+                    it.getLong(0),
+                    it.getString(1).orEmpty(),
+                    it.getString(2).orEmpty(),
+                    it.getIntOrNull(3)?.let(::Color),
+                )
+            }.groupBy { it.accountName }
+        } ?: error("Calendar provider returned no calendars cursor")
     }
-    return calendars
+    val latestOnFailure by rememberUpdatedState(onFailure)
+    LaunchedEffect(result.error) {
+        result.error?.let {
+            logException(it)
+            latestOnFailure(it)
+        }
+    }
+    return result.data
 }

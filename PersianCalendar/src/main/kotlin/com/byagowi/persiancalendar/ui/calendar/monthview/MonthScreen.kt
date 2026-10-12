@@ -44,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.semantics.contentDescription
@@ -80,6 +79,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.outOfMonthAlpha
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
+import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEvents
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -93,7 +93,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -233,9 +232,8 @@ fun SharedTransitionScope.MonthScreen(
                 LazyColumn(state = state) {
                     items(ITEMS_COUNT) { index ->
                         val weekJdn = indexToJdn(baseJdn, index)
-                        val context = LocalContext.current
                         val resources = LocalResources.current
-                        val deviceEvents = remember(index) { context.readWeekDeviceEvents(weekJdn) }
+                        val deviceEvents = rememberDeviceCalendarEvents(weekJdn, days = 7).data
                         val events = (0..<7).map { index ->
                             eventsRepository.getEvents(weekJdn + index, deviceEvents)
                         }

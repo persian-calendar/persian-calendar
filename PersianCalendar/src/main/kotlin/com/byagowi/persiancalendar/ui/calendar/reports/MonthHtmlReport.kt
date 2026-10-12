@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.CheckResult
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.title
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -44,7 +45,10 @@ import kotlinx.html.tr
 import kotlinx.html.unsafe
 
 @CheckResult
-fun monthHtmlReport(context: Context, date: AbstractDate, wholeYear: Boolean) = createHTML().html {
+fun monthHtmlReport(
+    context: Context, date: AbstractDate, wholeYear: Boolean,
+    deviceEvents: Map<Jdn, DeviceCalendarEventsStore>,
+) = createHTML().html {
     attributes["lang"] = language.language
     attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"
     head {
@@ -76,13 +80,20 @@ sup { font-size: x-small; position: absolute }
         (if (wholeYear) {
             val calendar = date.calendar
             (1..calendar.getYearMonths(date.year)).map { calendar.createDate(date.year, it, 1) }
-        } else listOf(date)).forEach { div("page") { generateMonthPage(context, it) } }
+        } else listOf(date)).forEach {
+            div("page") {
+                generateMonthPage(
+                    it,
+                    deviceEvents[Jdn(it)] ?: DeviceCalendarEventsStore.empty(),
+                )
+            }
+        }
         script { unsafe { +"print()" } }
     }
 }
 
-private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
-    val events = createMonthEventsList(context, date)
+private fun DIV.generateMonthPage(date: AbstractDate, deviceEvents: DeviceCalendarEventsStore) {
+    val events = createMonthEventsList(date, deviceEvents)
     fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(

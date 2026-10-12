@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import androidx.collection.mutableLongSetOf
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
@@ -9,9 +8,11 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -27,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -43,7 +45,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.entities.CalendarEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
+import com.byagowi.persiancalendar.entities.DeviceEventInterval
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -70,14 +76,20 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import com.byagowi.persiancalendar.utils.calendar
+import com.byagowi.persiancalendar.utils.deviceCalendarQuerySettings
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readDayDeviceEvents
+import com.byagowi.persiancalendar.utils.queryCalendarProvider
+import com.byagowi.persiancalendar.utils.readDeviceEvents
 import com.byagowi.persiancalendar.utils.viewEvent
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.days
 
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
@@ -105,6 +117,18 @@ fun SharedTransitionScope.ScheduleScreen(
         }
     }
     val coroutineScope = rememberCoroutineScope()
+    var printJob by remember { mutableStateOf<Job?>(null) }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) printJob?.cancel()
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+            printJob?.cancel()
+        }
+    }
     val language = language
 
     val preferredSwipeUpAction = preferredSwipeUpAction
@@ -179,11 +203,44 @@ fun SharedTransitionScope.ScheduleScreen(
                         fun showPrintReport(isWholeYear: Boolean = false) {
                             closeMenu()
                             val date = firstVisibleItemJdn on mainCalendar
-                            runCatching {
-                                shareFacilitator.openHtmlInBrowser(
-                                    monthHtmlReport(context, date, wholeYear = isWholeYear),
-                                )
-                            }.onFailure(logException)
+                            val settings = deviceCalendarQuerySettings()
+                            val dates =
+                                if (isWholeYear) (1..date.calendar.getYearMonths(date.year)).map {
+                                    date.calendar.createDate(date.year, it, 1)
+                                } else listOf(date)
+                            printJob?.cancel()
+                            printJob = coroutineScope.launch {
+                                runCatching {
+                                    val deviceEvents = queryCalendarProvider { signal ->
+                                        dates.associate { month ->
+                                            val jdn = Jdn(month)
+                                            jdn to DeviceCalendarEventsStore(
+                                                readDeviceEvents(
+                                                    context.applicationContext,
+                                                    DeviceEventInterval.startOfDay(
+                                                        jdn.toCivilDate(),
+                                                        settings.timeZone,
+                                                    ),
+                                                    32.days,
+                                                    750,
+                                                    settings = settings,
+                                                    cancellationSignal = signal,
+                                                ),
+                                            )
+                                        }
+                                    }
+                                    if (settings != deviceCalendarQuerySettings() || date.calendar != mainCalendar) {
+                                        return@launch
+                                    }
+                                    // HTML formatting, preference reads, and launching stay on Main.
+                                    shareFacilitator.openHtmlInBrowser(
+                                        monthHtmlReport(context, date, isWholeYear, deviceEvents),
+                                    )
+                                }.onFailure { error ->
+                                    if (error is CancellationException) throw error
+                                    logException(error)
+                                }
+                            }
                         }
                         AppDropdownMenuItem(
                             text = { Text(stringResource(Res.string.print)) },
@@ -215,7 +272,6 @@ fun SharedTransitionScope.ScheduleScreen(
             val circleTextStyle =
                 if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                 else MaterialTheme.typography.titleLarge
-            val eventsCache = eventsCache(refreshToken)
             val viewEvent = viewEvent(refreshCalendar)
             LazyColumn(
                 state = listState,
@@ -236,8 +292,16 @@ fun SharedTransitionScope.ScheduleScreen(
                         baseJdn = jdn
                         coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
                     }
-                    val events = eventsCache(jdn)
+                    val deviceEvents = rememberDeviceCalendarEvents(
+                        jdn, days = 1, limit = 120, refreshToken = refreshToken,
+                    )
+                    val events = eventsRepository.getEvents(jdn, deviceEvents.data)
                     Column {
+                        // Give pending days a size so LazyColumn does not enqueue hundreds of
+                        // zero-height rows before the first asynchronous result arrives.
+                        if (events.isEmpty() && deviceEvents.status == CalendarProviderStatus.Loading) {
+                            Spacer(Modifier.height(64.dp))
+                        }
                         val date = jdn on mainCalendar
                         if (events.isNotEmpty()) Row(
                             Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
@@ -325,17 +389,3 @@ fun SharedTransitionScope.ScheduleScreen(
 
 private const val ITEMS_COUNT = 365 * 2
 private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT / 2
-
-@Composable
-private fun eventsCache(refreshToken: Int): @Composable (Jdn) -> List<CalendarEvent<*>> {
-    val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
-    val context = LocalContext.current
-    return { jdn ->
-        if (jdn.value in emptyDays) emptyList() else {
-            val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
-            val events = eventsRepository.getEvents(jdn, deviceEvents)
-            if (events.isEmpty()) emptyDays += jdn.value
-            events
-        }
-    }
-}
