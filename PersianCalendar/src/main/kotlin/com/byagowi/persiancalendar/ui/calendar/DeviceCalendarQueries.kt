@@ -28,6 +28,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
 
 enum class CalendarProviderStatus { Loading, Ready, PermissionDenied, Error }
 
@@ -66,7 +67,7 @@ fun <T> rememberCalendarProviderQuery(
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             state = CalendarProviderState(empty, CalendarProviderStatus.Loading)
             runCatching {
-                if (debounceMillis > 0) delay(debounceMillis)
+                if (debounceMillis > 0) delay(debounceMillis.milliseconds)
                 // Read the latest closure on Main; do not read Compose state in the I/O lambda.
                 val request = latestQuery
                 val result = queryCalendarProvider(request)

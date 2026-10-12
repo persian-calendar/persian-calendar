@@ -178,7 +178,7 @@ fun CalendarSettings(
                     var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                     Row {
                         AnimatedVisibility(
-                            isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty(),
+                            isShowDeviceCalendarEvents && resolveDeviceCalendars {}.orEmpty().isNotEmpty(),
                         ) { FilledSettingsButton { showEventsSettingsDialog = true } }
                     }
                     if (showEventsSettingsDialog) EventsSettingsDialog {
