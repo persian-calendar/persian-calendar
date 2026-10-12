@@ -16,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.toGregorianCalendar
@@ -86,8 +88,9 @@ fun addEvent(
     refreshCalendar: () -> Unit,
     snackbarHostState: SnackbarHostState,
 ): (AddEventData) -> Unit {
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
-        refreshCalendar()
+        refreshCalendarAfterActivityResult(lifecycle, refreshCalendar)
     }
 
     val context = LocalContext.current
@@ -96,7 +99,7 @@ fun addEvent(
 
     addEventData?.let { data ->
         AskForCalendarPermissionDialog { isGranted ->
-            refreshCalendar()
+            refreshCalendarAfterActivityResult(lifecycle, refreshCalendar)
             if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
                 if (language.isPersianOrDari) coroutineScope.launch {
                     if (snackbarHostState.showSnackbar(
@@ -127,11 +130,20 @@ private class ViewEventContract :
 
 @Composable
 fun viewEvent(refreshCalendar: () -> Unit): (CalendarEvent.DeviceCalendarEvent) -> Unit {
-    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
+        refreshCalendarAfterActivityResult(lifecycle, refreshCalendar)
+    }
     val context = LocalContext.current
     return { event ->
         launcher.runCatching { launcher.launch(event) }.onFailure {
             showUnsupportedActionToast(context)
         }.onFailure(logException)
     }
+}
+
+// Normal activity results arrive before RESUMED. The provider's resume load already covers those;
+// only a result delivered without leaving the resumed screen needs a separate invalidation.
+internal fun refreshCalendarAfterActivityResult(lifecycle: Lifecycle, refreshCalendar: () -> Unit) {
+    if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) refreshCalendar()
 }

@@ -37,11 +37,11 @@ import androidx.compose.material3.WideNavigationRailState
 import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -69,9 +69,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.currentStateAsState
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -108,9 +105,11 @@ import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
+import com.byagowi.persiancalendar.ui.calendar.LocalCalendarProviderRevision
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.WeekScreen
 import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
+import com.byagowi.persiancalendar.ui.calendar.rememberCalendarProviderRevision
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
@@ -132,13 +131,10 @@ import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
@@ -146,185 +142,170 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val railState = rememberWideNavigationRailState()
     var refreshToken by rememberSaveable { mutableIntStateOf(0) }
     val refreshCalendar: () -> Unit = { ++refreshToken }
-    LaunchedEffect(Unit) {
-        snapshotFlow { resumeToken }.collect {
-            if (it > 1) {
-                delay(.5.seconds)
-                refreshCalendar()
-                delay(.5.seconds)
-                refreshCalendar()
-            }
-        }
-    }
-    var today by remember { mutableStateOf(Jdn.today()) }
-    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
-    val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
-    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) LaunchedEffect(Unit) {
-        while (isActive) {
-            today = Jdn.today()
-            now = System.currentTimeMillis()
-            delay(30.seconds)
-            refreshCalendar()
-        }
-    }
+    // Display time and provider invalidation have different lifetimes and causes.
+    val now by rememberAppClock()
+    val today = remember(now) { Jdn.today() }
+    val providerRevision = rememberCalendarProviderRevision()
     LockOrientationForCompassAndLevel(backStack)
     AppNavigationRail(now, railState, backStack, finish)
-    SharedTransitionLayout {
-        var bringDayCommand by rememberSaveable { mutableStateOf(initialJdn) }
-        val commandBringDay: (Jdn) -> Unit = { day -> bringDayCommand = day }
-        val coroutineScope = rememberCoroutineScope()
-        val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
-        val navigateUp: () -> Unit = {
-            // Don't simplify this and make sure it's used in NavDisplay's onBack.
-            if (backStack.size < 2) finish() else backStack.removeLastOrNull()
-        }
-        val navigateToHolidaysSettings: (String?) -> Unit = { item ->
-            backStack += Screen.Settings(
-                tab = SettingsTab.InterfaceCalendar,
-                settings = PREF_HOLIDAY_TYPES,
-                settingsItem = item,
-            )
-        }
-        val navigateToCalendarsPrioritySettings = {
-            backStack += Screen.Settings(
-                tab = SettingsTab.InterfaceCalendar,
-                settings = PREF_MAIN_CALENDAR_KEY,
-            )
-        }
+    CompositionLocalProvider(LocalCalendarProviderRevision provides (providerRevision + refreshToken)) {
+        SharedTransitionLayout {
+            var bringDayCommand by rememberSaveable { mutableStateOf(initialJdn) }
+            val commandBringDay: (Jdn) -> Unit = { day -> bringDayCommand = day }
+            val coroutineScope = rememberCoroutineScope()
+            val openNavigationRail: () -> Unit = { coroutineScope.launch { railState.expand() } }
+            val navigateUp: () -> Unit = {
+                // Don't simplify this and make sure it's used in NavDisplay's onBack.
+                if (backStack.size < 2) finish() else backStack.removeLastOrNull()
+            }
+            val navigateToHolidaysSettings: (String?) -> Unit = { item ->
+                backStack += Screen.Settings(
+                    tab = SettingsTab.InterfaceCalendar,
+                    settings = PREF_HOLIDAY_TYPES,
+                    settingsItem = item,
+                )
+            }
+            val navigateToCalendarsPrioritySettings = {
+                backStack += Screen.Settings(
+                    tab = SettingsTab.InterfaceCalendar,
+                    settings = PREF_MAIN_CALENDAR_KEY,
+                )
+            }
 
-        NavDisplay(
-            backStack = backStack,
-            onBack = navigateUp,
-            predictivePopTransitionSpec = {
-                ContentTransform(fadeIn(), fadeOut())
-            },
-            entryProvider = entryProvider {
-                entry<Screen.Calendar> {
-                    CalendarScreen(
-                        refreshToken = refreshToken,
-                        refreshCalendar = refreshCalendar,
-                        bringDayCommand = bringDayCommand,
-                        clearBringDayCommand = { bringDayCommand = null },
-                        openNavigationRail = openNavigationRail,
-                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        navigateToSettingsLocationTabSetAthanAlarm = {
-                            backStack += Screen.Settings(
-                                tab = SettingsTab.LocationAthan,
-                                settings = PREF_ATHAN_ALARM,
-                            )
-                        },
-                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                        navigateToSchedule = { day -> backStack += Screen.Schedule(day = day) },
-                        navigateToWeek = { day -> backStack += Screen.Week(day = day) },
-                        navigateToMonthView = { day -> backStack += Screen.Month(day = day) },
-                        navigateToSettingsLocationTab = {
-                            backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
-                        },
-                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day = day) },
-                        today = today,
-                        now = now,
-                    )
-                }
-                entry<Screen.Month> {
-                    MonthScreen(
-                        navigateUp = navigateUp,
-                        initiallySelectedDay = it.day,
-                        today = today,
-                        refreshCalendar = refreshCalendar,
-                        commandBringDay = commandBringDay,
-                    )
-                }
-                entry<Screen.Schedule> {
-                    ScheduleScreen(
-                        refreshToken = refreshToken,
-                        refreshCalendar = refreshCalendar,
-                        commandBringDay = commandBringDay,
-                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        navigateUp = navigateUp,
-                        initiallySelectedDay = it.day,
-                        today = today,
-                    )
-                }
-                entry<Screen.Week> {
-                    WeekScreen(
-                        refreshToken = refreshToken,
-                        refreshCalendar = refreshCalendar,
-                        commandBringDay = commandBringDay,
-                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        initiallySelectedDay = it.day,
-                        navigateUp = navigateUp,
-                        today = today,
-                        now = now,
-                    )
-                }
-                entry<Screen.Converter> {
-                    ConverterScreen(
-                        openNavigationRail = openNavigationRail,
-                        navigateToAstronomy = { day -> backStack += Screen.Astronomy(day = day) },
-                        navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                        noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
-                        today = today,
-                    )
-                }
-                entry<Screen.Compass> {
-                    CompassScreen(
-                        openNavigationRail = openNavigationRail,
-                        navigateToLevel = { backStack += Screen.Level },
-                        navigateToMap = { backStack += Screen.Map() },
-                        navigateToSettingsLocationTab = {
-                            backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
-                        },
-                        noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
-                        today = today,
-                        now = now,
-                    )
-                }
-                entry<Screen.Level> {
-                    LevelScreen(
-                        navigateUp = navigateUp,
-                        navigateToCompass = { backStack += Screen.Compass },
-                    )
-                }
-                entry<Screen.Astronomy> {
-                    AstronomyScreen(
-                        openNavigationRail = openNavigationRail,
-                        navigateToMap = { time -> backStack += Screen.Map(time = time) },
-                        initialTime = rememberSaveable {
-                            it.day?.toGregorianCalendar()?.timeInMillis
-                                ?: System.currentTimeMillis()
-                        },
-                        today = today,
-                        noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
-                    )
-                }
-                entry<Screen.Map> {
-                    MapScreen(
-                        navigateUp = navigateUp,
-                        fromSettings = it.fromSettings,
-                        initialTime = remember { it.time ?: System.currentTimeMillis() },
-                        today = today,
-                    )
-                }
-                entry<Screen.Settings> {
-                    SettingsScreen(
-                        openNavigationRail = openNavigationRail,
-                        navigateToMap = { backStack += Screen.Map(fromSettings = true) },
-                        initialTab = it.tab,
-                        destination = it.settings,
-                        destinationItem = it.settingsItem,
-                    )
-                }
-                entry<Screen.About> {
-                    AboutScreen(
-                        openNavigationRail = openNavigationRail,
-                        navigateToLicenses = { backStack += Screen.Licenses },
-                        navigateToDeviceInformation = { backStack += Screen.Device },
-                    )
-                }
-                entry<Screen.Licenses> { LicensesScreen(navigateUp = navigateUp) }
-                entry<Screen.Device> { DeviceInformationScreen(navigateUp = navigateUp) }
-            },
-        )
+            NavDisplay(
+                backStack = backStack,
+                onBack = navigateUp,
+                predictivePopTransitionSpec = {
+                    ContentTransform(fadeIn(), fadeOut())
+                },
+                entryProvider = entryProvider {
+                    entry<Screen.Calendar> {
+                        CalendarScreen(
+                            refreshToken = refreshToken,
+                            refreshCalendar = refreshCalendar,
+                            bringDayCommand = bringDayCommand,
+                            clearBringDayCommand = { bringDayCommand = null },
+                            openNavigationRail = openNavigationRail,
+                            navigateToHolidaysSettings = navigateToHolidaysSettings,
+                            navigateToSettingsLocationTabSetAthanAlarm = {
+                                backStack += Screen.Settings(
+                                    tab = SettingsTab.LocationAthan,
+                                    settings = PREF_ATHAN_ALARM,
+                                )
+                            },
+                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                            navigateToSchedule = { day -> backStack += Screen.Schedule(day = day) },
+                            navigateToWeek = { day -> backStack += Screen.Week(day = day) },
+                            navigateToMonthView = { day -> backStack += Screen.Month(day = day) },
+                            navigateToSettingsLocationTab = {
+                                backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
+                            },
+                            navigateToAstronomy = { day -> backStack += Screen.Astronomy(day = day) },
+                            today = today,
+                            now = now,
+                        )
+                    }
+                    entry<Screen.Month> {
+                        MonthScreen(
+                            navigateUp = navigateUp,
+                            initiallySelectedDay = it.day,
+                            today = today,
+                            refreshCalendar = refreshCalendar,
+                            commandBringDay = commandBringDay,
+                        )
+                    }
+                    entry<Screen.Schedule> {
+                        ScheduleScreen(
+                            refreshToken = refreshToken,
+                            refreshCalendar = refreshCalendar,
+                            commandBringDay = commandBringDay,
+                            navigateToHolidaysSettings = navigateToHolidaysSettings,
+                            navigateUp = navigateUp,
+                            initiallySelectedDay = it.day,
+                            today = today,
+                        )
+                    }
+                    entry<Screen.Week> {
+                        WeekScreen(
+                            refreshToken = refreshToken,
+                            refreshCalendar = refreshCalendar,
+                            commandBringDay = commandBringDay,
+                            navigateToHolidaysSettings = navigateToHolidaysSettings,
+                            initiallySelectedDay = it.day,
+                            navigateUp = navigateUp,
+                            today = today,
+                            now = now,
+                        )
+                    }
+                    entry<Screen.Converter> {
+                        ConverterScreen(
+                            openNavigationRail = openNavigationRail,
+                            navigateToAstronomy = { day -> backStack += Screen.Astronomy(day = day) },
+                            navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
+                            noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
+                            today = today,
+                        )
+                    }
+                    entry<Screen.Compass> {
+                        CompassScreen(
+                            openNavigationRail = openNavigationRail,
+                            navigateToLevel = { backStack += Screen.Level },
+                            navigateToMap = { backStack += Screen.Map() },
+                            navigateToSettingsLocationTab = {
+                                backStack += Screen.Settings(tab = SettingsTab.LocationAthan)
+                            },
+                            noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
+                            today = today,
+                            now = now,
+                        )
+                    }
+                    entry<Screen.Level> {
+                        LevelScreen(
+                            navigateUp = navigateUp,
+                            navigateToCompass = { backStack += Screen.Compass },
+                        )
+                    }
+                    entry<Screen.Astronomy> {
+                        AstronomyScreen(
+                            openNavigationRail = openNavigationRail,
+                            navigateToMap = { time -> backStack += Screen.Map(time = time) },
+                            initialTime = rememberSaveable {
+                                it.day?.toGregorianCalendar()?.timeInMillis
+                                    ?: System.currentTimeMillis()
+                            },
+                            today = today,
+                            noBackStackAction = navigateUp.takeIf { backStack.size < 2 },
+                        )
+                    }
+                    entry<Screen.Map> {
+                        MapScreen(
+                            navigateUp = navigateUp,
+                            fromSettings = it.fromSettings,
+                            initialTime = remember { it.time ?: System.currentTimeMillis() },
+                            today = today,
+                        )
+                    }
+                    entry<Screen.Settings> {
+                        SettingsScreen(
+                            openNavigationRail = openNavigationRail,
+                            navigateToMap = { backStack += Screen.Map(fromSettings = true) },
+                            initialTab = it.tab,
+                            destination = it.settings,
+                            destinationItem = it.settingsItem,
+                        )
+                    }
+                    entry<Screen.About> {
+                        AboutScreen(
+                            openNavigationRail = openNavigationRail,
+                            navigateToLicenses = { backStack += Screen.Licenses },
+                            navigateToDeviceInformation = { backStack += Screen.Device },
+                        )
+                    }
+                    entry<Screen.Licenses> { LicensesScreen(navigateUp = navigateUp) }
+                    entry<Screen.Device> { DeviceInformationScreen(navigateUp = navigateUp) }
+                },
+            )
+        }
     }
 }
 

@@ -178,7 +178,8 @@ fun CalendarSettings(
                     var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                     Row {
                         AnimatedVisibility(
-                            isShowDeviceCalendarEvents && resolveDeviceCalendars {}.orEmpty().isNotEmpty(),
+                            isShowDeviceCalendarEvents && resolveDeviceCalendars {}.orEmpty()
+                                .isNotEmpty(),
                         ) { FilledSettingsButton { showEventsSettingsDialog = true } }
                     }
                     if (showEventsSettingsDialog) EventsSettingsDialog {
@@ -458,6 +459,10 @@ private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, 
     val result = rememberCalendarProviderQuery<Map<String, List<CalendarsEntry>>?>(
         key = context,
         empty = null,
+        permissionGranted = {
+            ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) ==
+                    PackageManager.PERMISSION_GRANTED
+        },
     ) { cancellationSignal ->
         context.contentResolver.query(
             CalendarContract.Calendars.CONTENT_URI.buildUpon().build(),

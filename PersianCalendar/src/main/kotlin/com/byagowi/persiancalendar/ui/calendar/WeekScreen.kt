@@ -653,16 +653,15 @@ fun DaysView(
                     ),
             )
         }
-        val eventsWithoutTime = remember(events) {
-            events.map { dayEvents ->
-                dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.isAllDay }
-            }
+        // Device event equality omits time/all-day changes; don't retain a filtered old list.
+        val eventsWithoutTime = events.map { dayEvents ->
+            dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.isAllDay }
         }
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
         var hasContent by remember { mutableStateOf(true) }
-        val hasHeader by remember(events, hasContent) {
-            val needsHeader =
-                maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || (content != null && hasContent)
+        val needsHeader =
+            maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager) || (content != null && hasContent)
+        val hasHeader by remember(needsHeader, scrollState, initialScroll) {
             derivedStateOf { needsHeader && scrollState.value <= initialScroll }
         }
         val context = LocalContext.current

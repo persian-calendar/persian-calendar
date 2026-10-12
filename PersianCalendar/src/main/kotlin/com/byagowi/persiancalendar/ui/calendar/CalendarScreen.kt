@@ -627,9 +627,8 @@ fun SharedTransitionScope.CalendarScreen(
             }
         },
     ) { paddingValues ->
-        // Refresh the calendar on resume
+        // Record the visit; provider loading owns its own lifecycle.
         LaunchedEffect(Unit) {
-            refreshCalendar()
             context.preferences.edit {
                 putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
             }

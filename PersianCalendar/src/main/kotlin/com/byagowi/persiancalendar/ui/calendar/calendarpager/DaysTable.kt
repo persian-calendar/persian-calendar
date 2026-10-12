@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.shiftWorkTitles
+import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.shared.generated.resources.Res
@@ -134,7 +135,7 @@ fun daysTable(
     val context = LocalContext.current
     val baseDayPainter = remember(
         cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile, isBoldFont,
-        secondaryCalendar,
+        secondaryCalendar, isRtl, language, mainCalendarNumeral, numeral, showMoonInScorpio,
     ) {
         DayPainter(
             context = context,
@@ -279,7 +280,13 @@ fun daysTable(
                 }
             }
 
-            val holidaysPositions = remember(eventsRepository, deviceEvents, monthStartJdn) {
+            val holidaysPositions = remember(
+                eventsRepository,
+                deviceEvents,
+                monthStartJdn,
+                weekEnds.toSet(),
+                weekStart,
+            ) {
                 DayTablePositions()
             }
             var todayPosition by remember(today) { mutableStateOf<IntIntPair?>(null) }
@@ -412,14 +419,16 @@ fun daysTable(
                                     },
                                 ),
                         ) {
-                            val events = remember(eventsRepository, deviceEvents) {
+                            val events = remember(day, eventsRepository, deviceEvents) {
                                 eventsRepository.getEvents(day, deviceEvents)
                             }
                             val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
                             if (isHoliday) holidaysPositions.add(row = row, column = column)
                             val dayPainter = remember(
                                 baseDayPainter,
+                                day,
                                 events,
+                                isHoliday,
                                 secondaryCalendar,
                                 shiftWorkSettings,
                                 // titles is used inside the settings object
