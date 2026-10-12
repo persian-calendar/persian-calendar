@@ -53,7 +53,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.entities.EventsStore
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.shortTitle
 import com.byagowi.persiancalendar.entities.title
@@ -338,7 +338,7 @@ fun SharedTransitionScope.MonthScreen(
                                                     resources = resources,
                                                     jdn = jdn,
                                                     isToday = isToday,
-                                                    deviceCalendarEvents = EventsStore.empty(),
+                                                    deviceCalendarEvents = DeviceCalendarEventsStore.empty(),
                                                     withZodiac = isToday,
                                                     withOtherCalendars = false,
                                                     withTitle = true,

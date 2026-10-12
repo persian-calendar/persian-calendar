@@ -160,8 +160,8 @@ import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -969,7 +969,7 @@ private fun Details(
                             readEventsWithEquinox(
                                 jdn = selectedDay,
                                 // Tabs are disabled when device events are enabled so empty is enough here
-                                deviceEvents = EventsStore.empty(),
+                                deviceEvents = DeviceCalendarEventsStore.empty(),
                             ),
                         )
                     }

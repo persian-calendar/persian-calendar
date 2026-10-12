@@ -116,6 +116,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTEN
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
+import com.byagowi.persiancalendar.entities.DeviceEventDaySegment
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
@@ -570,17 +571,20 @@ private fun hoursFractionOfDay(date: GregorianCalendar): Float =
     date[GregorianCalendar.HOUR_OF_DAY] + date[GregorianCalendar.MINUTE] / 60f
 
 private data class EventDivision(
-    val event: CalendarEvent.DeviceCalendarEvent, val column: Int, val columnsCount: Int,
+    val event: CalendarEvent.DeviceCalendarEvent, val segment: DeviceEventDaySegment,
+    val column: Int, val columnsCount: Int,
 )
 
-private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<EventDivision> {
+private fun addDivisions(
+    events: List<Pair<CalendarEvent.DeviceCalendarEvent, DeviceEventDaySegment>>,
+): List<EventDivision> {
     val graph = Graph(events.size)
     events.indices.forEach { i ->
         events.indices.forEach inner@{ j ->
             if (i == j) return@inner
-            val a = events[i]
-            val b = events[j]
-            if (a.start.timeInMillis in (b.start.timeInMillis..<b.end.timeInMillis)) {
+            val a = events[i].second
+            val b = events[j].second
+            if (a.startMillis < b.endMillis && b.startMillis < a.endMillis) {
                 graph.addEdge(i, j)
             }
         }
@@ -591,7 +595,9 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
         val max = group.maxOf { colors[it] } + 1
         group.forEach { columnsCount[it] = max }
     }
-    return events.indices.map { EventDivision(events[it], colors[it], columnsCount[it]) }
+    return events.indices.map {
+        EventDivision(events[it].first, events[it].second, colors[it], columnsCount[it])
+    }
 }
 
 const val defaultCellHeight = 64
@@ -642,21 +648,21 @@ fun DaysView(
         val events = (0..<days).map { index ->
             readEventsWithEquinox(startingDay + index, deviceEvents)
         }
-        val eventsWithTime = events.map { dayEvents ->
+        val eventsWithTime = events.mapIndexed { dayIndex, dayEvents ->
             addDivisions(
                 dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-                    .filter { it.time != null }.sortedWith { x, y ->
-                        (x.start.timeInMillis compareTo y.end.timeInMillis).let {
-                            if (it != 0) return@sortedWith it
-                        }
-                        // If both start at the same time, put bigger events first, better for interval graphs
-                        y.start.timeInMillis compareTo x.end.timeInMillis
-                    },
+                    .mapNotNull { event ->
+                        event.interval.clipToDay((startingDay + dayIndex).toCivilDate())
+                            ?.let { event to it }
+                    }.sortedWith(
+                        compareBy<Pair<CalendarEvent.DeviceCalendarEvent, DeviceEventDaySegment>> { it.second.startMillis }
+                            .thenByDescending { it.second.endMillis },
+                    ),
             )
         }
         val eventsWithoutTime = remember(events) {
             events.map { dayEvents ->
-                dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
+                dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.isAllDay }
             }
         }
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
@@ -963,9 +969,9 @@ fun DaysView(
 
                 // Already available events boxes
                 eventsWithTime.forEachIndexed { i, it ->
-                    it.forEach { (event, column, columnsCount) ->
-                        val start = hoursFractionOfDay(event.start)
-                        val end = hoursFractionOfDay(event.end)
+                    it.forEach { (event, segment, column, columnsCount) ->
+                        val start = segment.startHour
+                        val end = segment.endHour
                         val color = eventColor(event)
                         Text(
                             " " + event.title,
@@ -983,7 +989,7 @@ fun DaysView(
                                 }
                                 .requiredSize(
                                     with(density) { (cellWidthPx / columnsCount - defaultWidthReductionPx).toDp() },
-                                    with(density) { ((end - start) * cellHeightPx).toDp() - heightSizeReduction },
+                                    (with(density) { ((end - start) * cellHeightPx).toDp() } - heightSizeReduction).coerceAtLeast(1.dp),
                                 )
                                 .clickable { viewEvent(event) }
                                 .background(color, MaterialTheme.shapes.small)

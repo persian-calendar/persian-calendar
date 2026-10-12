@@ -80,7 +80,6 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Numeral
@@ -161,7 +160,7 @@ private val useDefaultPriority
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastLanguage: Language? = null
-private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
+private var deviceCalendarEvents = DeviceCalendarEventsStore.empty()
 private var latestJdnUpdate: Jdn? = null
 
 @ColorInt

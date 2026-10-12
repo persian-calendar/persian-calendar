@@ -3,8 +3,8 @@ package com.byagowi.persiancalendar.ui
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.changeWeekDaysForTest
@@ -55,10 +55,10 @@ class EventsTest {
         )
 
         assertEquals(
-            1, repository.getEvents(Jdn(PersianDate(1400, 12, 24)), EventsStore.empty()).size,
+            1, repository.getEvents(Jdn(PersianDate(1400, 12, 24)), DeviceCalendarEventsStore.empty()).size,
         )
         assertEquals(
-            1, repository.getEvents(Jdn(PersianDate(1400, 12, 14)), EventsStore.empty()).size,
+            1, repository.getEvents(Jdn(PersianDate(1400, 12, 14)), DeviceCalendarEventsStore.empty()).size,
         )
     }
 

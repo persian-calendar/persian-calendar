@@ -198,7 +198,7 @@ data class EventsRepository(
     }
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {
-        val emptyDeviceCalendar: DeviceCalendarEventsStore = EventsStore.empty()
+        val emptyDeviceCalendar = DeviceCalendarEventsStore.empty()
         return (fromJdn + 1..toJdn).count {
             it.weekDay !in weekEnds && getEvents(
                 it,
