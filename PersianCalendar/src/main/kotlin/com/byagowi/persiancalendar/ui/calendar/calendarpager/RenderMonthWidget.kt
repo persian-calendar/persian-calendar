@@ -5,7 +5,7 @@ import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.EventsStore
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.shortTitle
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -26,7 +26,7 @@ fun renderMonthWidget(
     canvas: Canvas,
     baseDate: AbstractDate,
     today: Jdn,
-    deviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent>,
+    deviceEvents: DeviceCalendarEventsStore,
     isRtl: Boolean,
     isShowWeekOfYearEnabled: Boolean,
     selectedDay: Jdn?,

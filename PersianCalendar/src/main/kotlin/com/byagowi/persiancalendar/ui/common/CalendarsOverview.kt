@@ -71,7 +71,7 @@ import com.byagowi.persiancalendar.PREF_CALENDARS_PRIORITY_OPENED_ONCE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
-import com.byagowi.persiancalendar.entities.EventsStore
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.title
@@ -150,7 +150,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 resources,
                 jdn,
                 isToday,
-                deviceCalendarEvents = EventsStore.empty(),
+                deviceCalendarEvents = DeviceCalendarEventsStore.empty(),
                 withZodiac = true,
                 withOtherCalendars = true,
                 withTitle = true,

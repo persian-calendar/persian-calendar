@@ -100,6 +100,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -161,7 +162,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -370,7 +370,7 @@ fun SharedTransitionScope.CalendarScreen(
                 today = today,
                 navigateToAstronomy = navigateToAstronomy,
                 navigateToCalendarsPrioritySettings = navigateToCalendarsPrioritySettings,
-                topPadding = (if (isShowDeviceCalendarEvents) 0 else 8).dp,
+                topPadding = (if (isShowDeviceCalendarEvents && isTablet) 0 else 8).dp,
             )
         }).takeIf { enabledCalendars.size > 1 },
         (DetailsTab.Events to @Composable { appointments: List<CalendarEvent<*>> ->
@@ -398,7 +398,7 @@ fun SharedTransitionScope.CalendarScreen(
                         events = appointments,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         viewEvent = viewEvent,
-                        compact = isShowDeviceCalendarEvents && !isTablet,
+                        compact = false,
                         modifier = Modifier.padding(
                             top = 6.dp,
                             bottom = 8.dp,
@@ -462,7 +462,10 @@ fun SharedTransitionScope.CalendarScreen(
 //                                tint = MaterialTheme.colorScheme.primary,
 //                            )
 //                        }
-        }).takeIf { !eventsRepository.isEmpty || shiftWorkSettings.records.isNotEmpty() },
+        }).takeIf {
+            !eventsRepository.isEmpty || shiftWorkSettings.records.isNotEmpty() ||
+                    (!isTablet && isShowDeviceCalendarEvents)
+        },
         (DetailsTab.Times to @Composable { _: List<CalendarEvent<*>> ->
             val coordinates = coordinates
             if (coordinates != null) TimesTab(
@@ -487,14 +490,14 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }).takeIf { !removeThirdTab && enableTimesTab() },
     ).toMap()
-    val isButtonsMode = isShowDeviceCalendarEvents || tabs.isEmpty() || isTablet
-    var selectedTab by remember {
+    // On phones, device events belong inside the ordinary Events tab. Tablets retain DaysView.
+    val isButtonsMode = tabs.isEmpty() || isTablet
+    var preferredTab by rememberSaveable {
         val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
-        mutableStateOf(
-            DetailsTab.entries.getOrNull(lastChosenIndex) ?: run {
-                if (isButtonsMode) null else tabs.keys.firstOrNull()
-            },
-        )
+        mutableStateOf(DetailsTab.entries.getOrNull(lastChosenIndex))
+    }
+    val selectedTab = preferredTab?.takeIf { it in tabs } ?: run {
+        if (isButtonsMode) null else tabs.keys.firstOrNull()
     }
 
     Scaffold(
@@ -618,7 +621,7 @@ fun SharedTransitionScope.CalendarScreen(
             ) {
                 AppFloatingActionButton(
                     onClick = {
-                        if ((isTalkBackEnabled || !isShowDeviceCalendarEvents) && !isAddEventBoxEnabled) {
+                        if (!isButtonsMode || ((isTalkBackEnabled || !isShowDeviceCalendarEvents) && !isAddEventBoxEnabled)) {
                             addEvent(AddEventData.fromJdn(selectedDay))
                         } else addAction()
                     },
@@ -690,9 +693,9 @@ fun SharedTransitionScope.CalendarScreen(
                         selectedTab = selectedTab,
                         isTablet = isTablet,
                         onSelectedTabChange = {
-                            selectedTab = it
+                            preferredTab = it
                             context.preferences.edit {
-                                putInt(LAST_CHOSEN_TAB_KEY, selectedTab?.ordinal ?: -1)
+                                putInt(LAST_CHOSEN_TAB_KEY, it?.ordinal ?: -1)
                             }
                         },
                         selectedDay = selectedDay,
@@ -869,7 +872,7 @@ private fun Details(
         val initialScroll =
             with(LocalDensity.current) { (cellHeight * initialHour - 16.dp).roundToPx() }
         val scrollState = rememberScrollState(initialScroll)
-        LaunchedEffect(selectedDay) {
+        LaunchedEffect(selectedDay, isButtonsMode) {
             onAddEventBoxEnabledChange(false)
             scrollState.animateScrollTo(initialScroll)
         }
@@ -881,7 +884,7 @@ private fun Details(
                 onSelectedTabChange(
                     selectedTab?.let {
                         tabs.keys.toList().getOrNull(
-                            (it.ordinal + if (isLeft xor isRtl) 1 else -1).mod(tabs.size),
+                            (tabs.keys.indexOf(it) + if (isLeft xor isRtl) 1 else -1).mod(tabs.size),
                         )
                     },
                 )
@@ -902,18 +905,20 @@ private fun Details(
             }
         }
 
-        if (!isButtonsMode) Column(modifier = horizontalSwipeModifier) {
-            val pagerState = rememberPagerState(initialPage = selectedTab?.ordinal ?: 0) {
-                tabs.size
+        if (!isButtonsMode) Column {
+            val tabsList = tabs.keys.toList()
+            val pagerState = key(tabsList) {
+                rememberPagerState(
+                    initialPage = tabsList.indexOf(selectedTab).coerceAtLeast(0),
+                ) { tabsList.size }
             }
             val coroutineScope = rememberCoroutineScope()
-            val tabsList = tabs.keys.toList()
             if (tabs.size > 1) PrimaryTabRow(
                 selectedTabIndex = pagerState.currentPage,
                 divider = {},
                 containerColor = Color.Transparent,
                 indicator = {
-                    val offset = tabs.keys.indexOf(selectedTab).coerceAtLeast(0)
+                    val offset = pagerState.currentPage
                     val tabIndicatorColor by animateColor(MaterialTheme.colorScheme.primary)
                     TabRowDefaults.PrimaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(selectedTabIndex = offset),
@@ -928,9 +933,6 @@ private fun Details(
                         selected = pagerState.currentPage == tabsList.indexOf(tab),
                         unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                         onClick = {
-                            tabsList.getOrNull(pagerState.currentPage)?.let {
-                                onSelectedTabChange(it)
-                            }
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(tabsList.indexOf(tab))
                             }
@@ -939,7 +941,7 @@ private fun Details(
                 }
             }
 
-            LaunchedEffect(pagerState.currentPage) {
+            LaunchedEffect(pagerState.currentPage, tabsList) {
                 tabsList.getOrNull(pagerState.currentPage)?.let {
                     if (selectedTab != it) onSelectedTabChange(it)
                 }
@@ -968,10 +970,12 @@ private fun Details(
                         (tabs[selectedTab] ?: return@Column)(
                             readEventsWithEquinox(
                                 jdn = selectedDay,
-                                // Tabs are disabled when device events are enabled so empty is enough here
-                                deviceEvents = EventsStore.empty(),
+                                deviceEvents = dayDeviceEvents,
                             ),
                         )
+                        if (selectedTab == DetailsTab.Events) {
+                            Spacer(Modifier.height(fabPlaceholderHeight ?: 0.dp))
+                        }
                     }
                     ScrollShadow(scrollState)
                 }

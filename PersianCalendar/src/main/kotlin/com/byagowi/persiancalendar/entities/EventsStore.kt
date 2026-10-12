@@ -24,7 +24,7 @@ private constructor(private val store: Map<Int, List<T>>) {
         date: CivilDate, irregularCalendarEventsStore: IrregularCalendarEventsStore,
         deviceEvents: DeviceCalendarEventsStore,
     ): List<CalendarEvent<*>> {
-        return deviceEvents.getEventsEntry(date).sortedBy { it.start.timeInMillis } +
+        return deviceEvents.getEvents(date) +
                 getEvents(date, irregularCalendarEventsStore)
     }
 
@@ -41,4 +41,3 @@ typealias PersianCalendarEventsStore = EventsStore<CalendarEvent.PersianCalendar
 typealias IslamicCalendarEventsStore = EventsStore<CalendarEvent.IslamicCalendarEvent>
 typealias GregorianCalendarEventsStore = EventsStore<CalendarEvent.GregorianCalendarEvent>
 typealias NepaliCalendarEventsStore = EventsStore<CalendarEvent.NepaliCalendarEvent>
-typealias DeviceCalendarEventsStore = EventsStore<CalendarEvent.DeviceCalendarEvent>

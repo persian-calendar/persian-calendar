@@ -15,11 +15,11 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
+import com.byagowi.persiancalendar.entities.DeviceEventInterval
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.title
-import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -191,11 +191,15 @@ private fun readDeviceEvents(
     }
 
     return runCatching {
+        val endingDate = GregorianCalendar(startingDate.timeZone).apply {
+            timeInMillis = startingDate.timeInMillis
+            add(GregorianCalendar.DAY_OF_MONTH, duration.inWholeDays.toInt())
+        }
         context.contentResolver.query(
             CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
                 ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
                 ContentUris.appendId(
-                    this, startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds,
+                    this, endingDate.timeInMillis + 1.days.inWholeMilliseconds,
                 )
             }.build(),
             arrayOf(
@@ -224,21 +228,23 @@ private fun readDeviceEvents(
                     ) || boundaryRegex.containsMatchIn(it.getString(2).orEmpty())
                 }
             }.map {
-                val start = Date(it.getLong(3)).toGregorianCalendar()
-                val end = Date(it.getLong(4)).toGregorianCalendar()
+                val interval = DeviceEventInterval(
+                    beginMillis = it.getLong(3),
+                    endMillis = it.getLong(4),
+                    isAllDay = it.getString(6/*ALL_DAY*/) == "1",
+                    displayTimeZone = startingDate.timeZone,
+                )
                 CalendarEvent.DeviceCalendarEvent(
                     id = it.getLong(0),
                     title = it.getString(1),
-                    time = if (it.getString(6/*ALL_DAY*/) == "1") null else Clock(start).toBasicFormatString() + (if (it.getLong(
+                    time = if (interval.isAllDay) null else Clock(interval.start).toBasicFormatString() + (if (it.getLong(
                             3,
                         ) != it.getLong(4) && it.getLong(4) != 0L
-                    ) " $EN_DASH ${Clock(end).toBasicFormatString()}"
+                    ) " $EN_DASH ${Clock(interval.end).toBasicFormatString()}"
                     else ""),
-                    start = start,
-                    end = end,
+                    interval = interval,
                     description = it.getString(2)?.replace(descriptionCleaningPattern, "")
                         .orEmpty(),
-                    date = start.toCivilDate(),
                     color = it.getString(7) ?: it.getString(8).orEmpty(),
                     isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday,
                     source = null,
@@ -258,7 +264,10 @@ fun Context.readDaysDeviceEvents(
 ) = DeviceCalendarEventsStore(
     readDeviceEvents(
         this,
-        jdn.toGregorianCalendar(),
+        DeviceEventInterval.startOfDay(
+            jdn.toCivilDate(),
+            if (isForcedIranTimeEnabled) TimeZone.getTimeZone(IRAN_TIMEZONE_ID) else TimeZone.getDefault(),
+        ),
         duration,
         limit = limit,
     ),
@@ -279,7 +288,7 @@ fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<C
 
 fun Context.searchDeviceCalendarEvents(searchTerm: String?): List<CalendarEvent.DeviceCalendarEvent> {
     val now = System.currentTimeMillis()
-    val startDate = GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) }
+    val startDate = Date().toGregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) }
     val duration = (365L * 2L).days // 1 year backwards + 1 year forward
     val events = readDeviceEvents(
         context = this,

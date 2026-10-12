@@ -57,7 +57,6 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
-import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.shortTitle
 import com.byagowi.persiancalendar.entities.title
@@ -245,7 +244,7 @@ fun daysTable(
                         resources = resources,
                         jdn = selectedDay,
                         isToday = false,
-                        deviceCalendarEvents = EventsStore.empty(),
+                        deviceCalendarEvents = DeviceCalendarEventsStore.empty(),
                         withZodiac = true,
                         withOtherCalendars = true,
                         withTitle = true,
@@ -460,7 +459,7 @@ fun daysTable(
                                                 resources = resources,
                                                 jdn = day,
                                                 isToday = isToday,
-                                                deviceCalendarEvents = EventsStore.empty(),
+                                                deviceCalendarEvents = DeviceCalendarEventsStore.empty(),
                                                 withZodiac = isToday,
                                                 withOtherCalendars = false,
                                                 withTitle = true,
