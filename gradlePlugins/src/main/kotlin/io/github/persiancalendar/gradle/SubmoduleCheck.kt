@@ -31,15 +31,13 @@ abstract class SubmoduleCheck : DefaultTask() {
 
                 when (prefix) {
                     '-' -> return@forEach // uninitialized submodule — nothing checked out to verify
-                    '+' -> {
-                        add("$path is checked out at $sha but the parent repo records a different commit (run: git add $path)")
-                        return@forEach
-                    }
-
                     'U' -> {
                         add("$path is in a conflicted state")
                         return@forEach
                     }
+                    // '+' means the checkout differs from the parent's recorded commit.
+                    // That's fine: only the recorded commit matters for a fresh clone,
+                    // and a submodule remote that has moved ahead is harmless.
                 }
 
                 val subDir = File(rootDir, path)
@@ -50,8 +48,27 @@ abstract class SubmoduleCheck : DefaultTask() {
 
                 // Refresh remote-tracking refs first, since `git push` does not update them.
                 git(subDir, "fetch", "--quiet", "origin")
+
+                // Local checkout ahead of the remote → unpushed commits.
+                // (Behind the remote is fine: HEAD is still contained in a remote branch.)
                 if (git(subDir, "branch", "-r", "--contains", "HEAD").isBlank()) {
                     add("submodule HEAD ($sha) is not pushed to its remote: $path")
+                }
+
+                // The commit recorded by the parent repo is what a fresh clone (e.g. F-Droid)
+                // will check out, so it must exist on the submodule's remote.
+                val recordedSha = git(rootDir, "ls-tree", "HEAD", "--", path)
+                    .trim()
+                    .substringBefore('\t')
+                    .substringAfterLast(' ')
+
+                if (recordedSha.isNotEmpty() &&
+                    git(subDir, "branch", "-r", "--contains", recordedSha).isBlank()
+                ) {
+                    add(
+                        "submodule commit $recordedSha recorded by the parent repo is not " +
+                                "available on its remote: $path"
+                    )
                 }
             }
         }
