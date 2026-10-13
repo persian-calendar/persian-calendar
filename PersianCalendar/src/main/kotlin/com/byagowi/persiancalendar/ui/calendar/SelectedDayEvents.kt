@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -17,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
@@ -59,10 +62,17 @@ internal fun SelectedDayEvents(
                 modifier = Modifier.padding(12.dp).size(24.dp),
                 strokeWidth = 2.dp,
             )
-        } else Box(Modifier.onSizeChanged { contentHeight = it.height }) {
+        } else key(jdn) {
+            val opacity = remember { Animatable(0f) }
+            LaunchedEffect(Unit) {
+                opacity.animateTo(1f, animationSpec = tween(durationMillis = 300))
+            }
             // DayEvents animates title edits. A different day must start fresh, so its rows
             // cannot inherit the previous day's positional AnimatedContent/tooltip state.
-            key(jdn) {
+            Box(
+                Modifier.onSizeChanged { contentHeight = it.height }
+                    .graphicsLayer { alpha = opacity.value },
+            ) {
                 if (events.isEmpty()) Text(
                     text = stringResource(Res.string.no_event),
                     textAlign = TextAlign.Center,
