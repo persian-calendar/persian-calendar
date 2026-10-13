@@ -44,6 +44,7 @@ class CalendarProviderState<T>(
     val data: T,
     val status: CalendarProviderStatus,
     val error: Throwable? = null,
+    val hasResult: Boolean = status == CalendarProviderStatus.Ready,
 )
 
 private class CalendarProviderRequest<T>(
@@ -148,6 +149,7 @@ private fun <T> rememberCalendarProviderRequest(
                     publish(
                         CalendarProviderState(
                             previous?.data ?: latestEmpty, CalendarProviderStatus.Loading,
+                            hasResult = previous?.hasResult == true,
                         ),
                     )
                     runCatching {

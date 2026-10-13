@@ -34,6 +34,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -114,6 +116,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.Key
@@ -121,6 +125,11 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.changedToUp
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInWindow
@@ -191,7 +200,6 @@ import com.byagowi.persiancalendar.shared.generated.resources.events
 import com.byagowi.persiancalendar.shared.generated.resources.month_pray_times
 import com.byagowi.persiancalendar.shared.generated.resources.more
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
-import com.byagowi.persiancalendar.shared.generated.resources.no_event
 import com.byagowi.persiancalendar.shared.generated.resources.none
 import com.byagowi.persiancalendar.shared.generated.resources.planetary_hours
 import com.byagowi.persiancalendar.shared.generated.resources.previous_x
@@ -327,6 +335,8 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     var searchTerm by rememberSaveable { mutableStateOf<String?>(null) }
+    var searchInputBounds by remember { mutableStateOf<Rect?>(null) }
+    var screenCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
     var isYearView by rememberSaveable { mutableStateOf(false) }
     val backButtonFraction = remember { mutableFloatStateOf(if (isYearView) 1f else 0f) }
@@ -362,7 +372,7 @@ fun SharedTransitionScope.CalendarScreen(
     var removeThirdTab by remember { mutableStateOf(false) }
     val isTablet = LocalResources.current.getBoolean(R.bool.is_tablet)
     val tabs = listOfNotNull(
-        (DetailsTab.Calendar to @Composable { _: List<CalendarEvent<*>> ->
+        (DetailsTab.Calendar to @Composable { _: List<CalendarEvent<*>>, _: Boolean ->
             CalendarsTab(
                 selectedDay = selectedDay,
                 today = today,
@@ -371,40 +381,15 @@ fun SharedTransitionScope.CalendarScreen(
                 topPadding = (if (isShowDeviceCalendarEvents && isTablet) 0 else 8).dp,
             )
         }).takeIf { enabledCalendars.size > 1 },
-        (DetailsTab.Events to @Composable { appointments: List<CalendarEvent<*>> ->
+        (DetailsTab.Events to @Composable { appointments: List<CalendarEvent<*>>, isLoading: Boolean ->
             Column {
-                AnimatedContent(
-                    targetState = appointments.isEmpty(),
-                    transitionSpec = {
-                        (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
-                    },
-                ) { appointmentsIsEmpty ->
-                    if (appointmentsIsEmpty) Box {
-                        Text(
-                            text = stringResource(Res.string.no_event),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(vertical = 8.dp, horizontal = 24.dp)
-                                .fillMaxWidth(),
-                        )
-//                            TabEditButton(
-//                                action = { navigateToHolidaysSettings(null) },
-//                                title = stringResource(R.string.settings),
-//                                visible = remember { PREF_HOLIDAY_TYPES !in context.preferences },
-//                            )
-                    } else DayEvents(
-                        events = appointments,
-                        navigateToHolidaysSettings = navigateToHolidaysSettings,
-                        viewEvent = viewEvent,
-                        compact = false,
-                        modifier = Modifier.padding(
-                            top = 6.dp,
-                            bottom = 8.dp,
-                            start = 24.dp,
-                            end = 24.dp,
-                        ),
-                    )
-                }
+                SelectedDayEvents(
+                    jdn = selectedDay,
+                    events = appointments,
+                    isLoading = isLoading,
+                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                    viewEvent = viewEvent,
+                )
 
 //        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
 //            Spacer(Modifier.height(16.dp))
@@ -464,7 +449,7 @@ fun SharedTransitionScope.CalendarScreen(
             !eventsRepository.isEmpty || shiftWorkSettings.records.isNotEmpty() ||
                     (!isTablet && isShowDeviceCalendarEvents)
         },
-        (DetailsTab.Times to @Composable { _: List<CalendarEvent<*>> ->
+        (DetailsTab.Times to @Composable { _: List<CalendarEvent<*>>, _: Boolean ->
             val coordinates = coordinates
             if (coordinates != null) TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
@@ -498,8 +483,47 @@ fun SharedTransitionScope.CalendarScreen(
         if (isButtonsMode) null else tabs.keys.firstOrNull()
     }
 
+    val calendarModifier = modifier
+        .onGloballyPositioned { screenCoordinates = it }
+        .pointerInput(searchTerm) {
+            if (searchTerm != "") return@pointerInput
+            awaitEachGesture {
+                val down = awaitFirstDown(
+                    pass = PointerEventPass.Initial,
+                )
+                val bounds = searchInputBounds ?: return@awaitEachGesture
+                val coordinates = screenCoordinates?.takeIf { it.isAttached }
+                    ?: return@awaitEachGesture
+                if (bounds.contains(coordinates.localToWindow(down.position))) return@awaitEachGesture
+                var isTap = true
+                do {
+                    val event = awaitPointerEvent(PointerEventPass.Initial)
+                    val change = event.changes.firstOrNull { it.id == down.id }
+                    if (event.changes.size != 1 || change == null || change.isConsumed) {
+                        return@awaitEachGesture
+                    }
+                    // A cancellation is already consumed on Initial; child clicks consume on Main.
+                    val released = change.changedToUp()
+                    awaitPointerEvent(PointerEventPass.Final)
+                    if ((change.position - down.position).getDistance() > viewConfiguration.touchSlop) {
+                        isTap = false
+                    }
+                    if (released) {
+                        if (isTap && searchTerm == "" &&
+                            change.uptimeMillis - down.uptimeMillis < viewConfiguration.longPressTimeoutMillis &&
+                            coordinates.isAttached &&
+                            searchInputBounds?.contains(coordinates.localToWindow(change.position)) == false
+                        ) {
+                            searchTerm = null
+                        }
+                        return@awaitEachGesture
+                    }
+                } while (change.pressed)
+            }
+        }
+
     Scaffold(
-        modifier = modifier.onKeyEvent { keyEvent ->
+        modifier = calendarModifier.onKeyEvent { keyEvent ->
             !isYearView && keyEvent.type == KeyEventType.KeyDown && when (keyEvent.key) {
                 Key.W -> {
                     navigateToWeek(selectedDay)
@@ -546,6 +570,7 @@ fun SharedTransitionScope.CalendarScreen(
                     if (isInSearch) Search(
                         searchTerm = searchTerm,
                         onSearchTermChange = { searchTerm = it },
+                        onInputBoundsChange = { searchInputBounds = it },
                         closeSearch = { searchTerm = null },
                         isSearchExpanded = isSearchExpanded,
                         today = today,
@@ -823,7 +848,7 @@ private fun Details(
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
     refreshToken: Int,
     isTablet: Boolean,
-    tabs: Map<DetailsTab, @Composable (List<CalendarEvent<*>>) -> Unit>,
+    tabs: Map<DetailsTab, @Composable (List<CalendarEvent<*>>, Boolean) -> Unit>,
     navigateToHolidaysSettings: (item: String?) -> Unit,
     swipeUpActions: Map<SwipeUpAction, () -> Unit>,
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
@@ -853,9 +878,12 @@ private fun Details(
     ) {
         val detailsWidth = this.maxWidth
 
-        val dayDeviceEvents = rememberDeviceCalendarEvents(
+        val dayDeviceEventsState = rememberDeviceCalendarEvents(
             selectedDay, days = 1, limit = 120, refreshToken = refreshToken,
-        ).data
+        )
+        val dayDeviceEvents = dayDeviceEventsState.data
+        val isDayEventsLoading = dayDeviceEventsState.status == CalendarProviderStatus.Loading &&
+                !dayDeviceEventsState.hasResult
         val scale = remember {
             mutableFloatStateOf(
                 if (isTablet) .75f else (maxHeight.value / (25f * defaultCellHeight)).coerceIn(
@@ -968,6 +996,7 @@ private fun Details(
                                 jdn = selectedDay,
                                 deviceEvents = dayDeviceEvents,
                             ),
+                            isDayEventsLoading,
                         )
                         if (selectedTab == DetailsTab.Events) {
                             Spacer(Modifier.height(fabPlaceholderHeight ?: 0.dp))
@@ -1077,7 +1106,7 @@ private fun Details(
                         }
                     }
                     val content = tabs[it]
-                    if (content != null) content(appointments)
+                    if (content != null) content(appointments, isDayEventsLoading)
                 }
             }
         }
@@ -1236,6 +1265,7 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 private fun Search(
     searchTerm: String?,
     onSearchTermChange: (String) -> Unit,
+    onInputBoundsChange: (Rect) -> Unit,
     isSearchExpanded: Boolean,
     closeSearch: () -> Unit,
     today: Jdn,
@@ -1264,19 +1294,39 @@ private fun Search(
     }
     val padding by animateDpAsState(targetValue = if (isSearchExpanded) 0.dp else 32.dp)
     val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    var isInputFocused by remember { mutableStateOf(false) }
+    val isSearchOpen = searchTerm != null
+    var hasInputBeenFocused by remember(isSearchOpen) { mutableStateOf(false) }
+    LaunchedEffect(isSearchOpen) {
+        if (isSearchOpen) {
+            focusRequester.requestFocus()
+            if (isInputFocused) hasInputBeenFocused = true
+        }
+    }
+    LaunchedEffect(searchTerm, isInputFocused, hasInputBeenFocused) {
+        if (hasInputBeenFocused && !isInputFocused && searchTerm == "") closeSearch()
+    }
     @OptIn(ExperimentalMaterial3Api::class) SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
-                modifier = if (isSearchExpanded) Modifier.padding(
-                    paddingValues = WindowInsets.safeDrawing.only(
-                        sides = WindowInsetsSides.Horizontal,
-                    ).asPaddingValues(),
-                ) else Modifier,
+                modifier = Modifier
+                    .onGloballyPositioned { onInputBoundsChange(it.boundsInWindow()) }
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        isInputFocused = it.isFocused
+                        if (it.isFocused) hasInputBeenFocused = true
+                    }
+                    .then(
+                        if (isSearchExpanded) Modifier.padding(
+                            paddingValues = WindowInsets.safeDrawing.only(
+                                sides = WindowInsetsSides.Horizontal,
+                            ).asPaddingValues(),
+                        ) else Modifier,
+                    ),
                 query = searchTerm.orEmpty(),
                 onQueryChange = onSearchTermChange,
                 onSearch = {},
-                expanded = isSearchExpanded,
+                expanded = isSearchExpanded || isInputFocused,
                 onExpandedChange = {},
                 placeholder = { Text(stringResource(Res.string.search_in_events)) },
                 trailingIcon = {
@@ -1288,11 +1338,10 @@ private fun Search(
             )
         },
         expanded = isSearchExpanded,
-        onExpandedChange = { if (!it) onSearchTermChange("") },
+        onExpandedChange = { if (!it) closeSearch() },
         modifier = Modifier
             .alpha(alpha)
-            .padding(horizontal = padding)
-            .focusRequester(focusRequester),
+            .padding(horizontal = padding),
     ) {
         if (padding.value != 0f) return@SearchBar
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
