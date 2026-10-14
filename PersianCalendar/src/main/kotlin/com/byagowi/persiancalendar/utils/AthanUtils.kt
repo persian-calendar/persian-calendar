@@ -99,19 +99,14 @@ fun scheduleAlarms(context: Context) {
     val athanGap = (context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
         ?: .0).minutes.inWholeMilliseconds
 
-    val prayTimes = coordinates?.calculatePrayTimes() ?: return
+    val date = GregorianCalendar()
+    val calculationOffsetMillis = date.prayTimeOffsetMillis()
+    val prayTimes = coordinates?.calculatePrayTimes(date) ?: return
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, prayTime ->
         scheduleAlarm(
             context, prayTime,
-            GregorianCalendar().also {
-                // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
-                it[GregorianCalendar.HOUR_OF_DAY] = 0
-                it[GregorianCalendar.MINUTE] = 0
-                it[GregorianCalendar.SECOND] = 0
-                it[GregorianCalendar.MILLISECOND] = 0
-                it.timeInMillis += prayTimes[prayTime].toMillis()
-            }.timeInMillis - athanGap,
+            prayTimeInMillis(date, prayTimes[prayTime], calculationOffsetMillis) - athanGap,
             i,
         )
     }
