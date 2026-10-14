@@ -26,19 +26,20 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
                 date[GregorianCalendar.MILLISECOND].milliseconds) / 1.hours,
     )
 
-    fun toMillis() = if (value.isNaN()) 0L else value.hours.inWholeMilliseconds
+    fun toMillis() = if (value.isFinite()) value.hours.inWholeMilliseconds else 0L
 
     fun toHoursAndMinutesPair(): IntIntPair {
-        if (value.isNaN()) return IntIntPair(0, 0)
-        return IntIntPair(value.toInt(), ((value - value.toInt()) * 60).toInt())
+        val totalMinutes = toMillis() / 60_000
+        return IntIntPair((totalMinutes / 60).toInt(), (totalMinutes % 60).toInt())
     }
 
     fun toHoursMinutesSecondsTriplet(): Triple<Int, Int, Int> {
-        if (value.isNaN()) return Triple(0, 0, 0)
-        val hours = value.toInt()
-        val minutes = ((value - hours) * 60).toInt()
-        val seconds = ((value * 3600) % 60).toInt()
-        return Triple(hours, minutes, seconds)
+        val totalSeconds = toMillis() / 1_000
+        return Triple(
+            (totalSeconds / 3_600).toInt(),
+            (totalSeconds / 60 % 60).toInt(),
+            (totalSeconds % 60).toInt(),
+        )
     }
 
     fun toBasicFormatString(withSeconds: Boolean = false): String {
