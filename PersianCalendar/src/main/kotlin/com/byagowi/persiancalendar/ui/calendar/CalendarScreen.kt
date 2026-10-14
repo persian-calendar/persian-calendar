@@ -195,8 +195,10 @@ import com.byagowi.persiancalendar.shared.generated.resources.ask_user_to_set_lo
 import com.byagowi.persiancalendar.shared.generated.resources.calendar
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.enable_exact_alarm_permission
 import com.byagowi.persiancalendar.shared.generated.resources.enable_notification
 import com.byagowi.persiancalendar.shared.generated.resources.events
+import com.byagowi.persiancalendar.shared.generated.resources.exempt_from_battery_optimizations
 import com.byagowi.persiancalendar.shared.generated.resources.month_pray_times
 import com.byagowi.persiancalendar.shared.generated.resources.more
 import com.byagowi.persiancalendar.shared.generated.resources.next_x
@@ -1205,7 +1207,7 @@ private fun SharedTransitionScope.CalendarsTab(
                 ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
             }
         } else if (showEncourageToExemptFromBatteryOptimizations(needsExactAlarmAccess) &&
-            (isNotifyDate || needsExactAlarmAccess) && language.isPersianOrDari
+            (isNotifyDate || needsExactAlarmAccess)
         ) {
             fun ignore() {
                 val preferences = context.preferences
@@ -1227,11 +1229,10 @@ private fun SharedTransitionScope.CalendarsTab(
             }
 
             EncourageActionLayout(
-                header = if (needsExactAlarmAccess) {
-                    "برای پخش اذان در زمان دقیق، مجوز «هشدارها و یادآوری‌ها» را در تنظیمات فعال می‌کنید؟"
-                } else {
-                    "مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟"
-                },
+                header = stringResource(
+                    if (needsExactAlarmAccess) Res.string.enable_exact_alarm_permission
+                    else Res.string.exempt_from_battery_optimizations,
+                ),
                 acceptButton = stringResource(Res.string.yes),
                 discardAction = ::ignore,
             ) {

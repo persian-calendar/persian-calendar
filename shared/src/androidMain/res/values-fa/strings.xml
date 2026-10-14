@@ -364,6 +364,8 @@
     <string name="live_wallpaper_settings">تنظیمات کاغذ دیواری زنده</string>
     <string name="screensaver_settings">تنظیمات محافظ صفحهٔ نمایش</string>
     <string name="enable_notification">مایلید اعلان تاریخ برنامه روشن شود؟</string>
+    <string name="enable_exact_alarm_permission">برای پخش اذان در زمان دقیق، مجوز «هشدارها و یادآوری‌ها» را در تنظیمات فعال می‌کنید؟</string>
+    <string name="exempt_from_battery_optimizations">مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟</string>
     <string name="add_quick_settings_tile">افزودن کاشی تنظیمات سریع</string>
     <string name="true_north">شمال حقیقی</string>
     <string name="full_screen">تمام‌صفحه</string>
