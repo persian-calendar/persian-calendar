@@ -190,7 +190,7 @@ class DeviceCalendarEventsTests {
         val segment = assertNotNull(wholeDay.clipToDay(day))
         assertEquals(begin, segment.startMillis)
         assertEquals(end, segment.endMillis)
-        assertEquals(0f, segment.startHour)
+        assertEquals(1f, segment.startHour)
         assertEquals(24f, segment.endHour)
         assertFalse(wholeDay.occupies(nextDay))
         assertNull(wholeDay.clipToDay(nextDay))
@@ -203,6 +203,36 @@ class DeviceCalendarEventsTests {
         val nextSegment = assertNotNull(nextDayEvent.interval.clipToDay(nextDay))
         assertEquals(0.25f, nextSegment.startHour)
         assertEquals(0.75f, nextSegment.endHour)
+    }
+
+    @Test
+    fun `timed events at a midnight gap retain their local clock coordinates`() {
+        val zone = TimeZone.getTimeZone("Africa/Cairo")
+        val previousDay = CivilDate(2026, 4, 23)
+        val day = CivilDate(2026, 4, 24)
+        val begin = millis("2026-04-23T22:00:00Z") // 01:00 local, the first valid instant.
+        val end = millis("2026-04-23T22:30:00Z") // 01:30 local.
+        val occurrence = DeviceEventInterval(begin, end, false, zone)
+        val segment = assertNotNull(occurrence.clipToDay(day))
+        assertEquals(begin, segment.startMillis)
+        assertEquals(end, segment.endMillis)
+        assertEquals(1f, segment.startHour)
+        assertEquals(1.5f, segment.endHour)
+        assertFalse(occurrence.occupies(previousDay))
+
+        val overnight = DeviceEventInterval(begin - 3_600_000L, end, false, zone)
+        val previousSegment = assertNotNull(overnight.clipToDay(previousDay))
+        assertEquals(23f, previousSegment.startHour)
+        assertEquals(24f, previousSegment.endHour)
+        assertEquals(begin, previousSegment.endMillis)
+        assertEquals(segment, overnight.clipToDay(day))
+
+        listOf(begin, 0L).forEach { missingOrPointEnd ->
+            val point = DeviceEventInterval(begin, missingOrPointEnd, false, zone)
+            val pointSegment = assertNotNull(point.clipToDay(day))
+            assertEquals(1f, pointSegment.startHour)
+            assertEquals(1f, pointSegment.endHour)
+        }
     }
 
     @Test
@@ -274,7 +304,10 @@ class DeviceCalendarEventsTests {
         val occurrence = interval("1919-03-31T04:30:00Z", "1919-03-31T04:45:00Z", false, zone.id)
         assertTrue(occurrence.occupies(day))
         assertFalse(occurrence.occupies(CivilDate(1919, 3, 30)))
-        assertEquals(millis("1919-03-31T04:30:00Z"), assertNotNull(occurrence.clipToDay(day)).startMillis)
+        val segment = assertNotNull(occurrence.clipToDay(day))
+        assertEquals(millis("1919-03-31T04:30:00Z"), segment.startMillis)
+        assertEquals(0.5f, segment.startHour)
+        assertEquals(0.75f, segment.endHour)
     }
 
     @Test
