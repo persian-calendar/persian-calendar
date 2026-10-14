@@ -73,14 +73,12 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                     }
                 }
                 tbody {
-                    repeat(mainCalendar.getMonthLength(date.year, date.month)) { day ->
+                    prayTimeReportMonthDates(mainCalendar, date).forEach { day ->
                         tr {
                             val prayTimes = coordinates.calculatePrayTimes(
-                                Jdn(
-                                    mainCalendar.createDate(date.year, date.month, day),
-                                ).toGregorianCalendar(),
+                                Jdn(day).toGregorianCalendar(),
                             )
-                            th { +numeral.format(day + 1) }
+                            th { +numeral.format(day.dayOfMonth) }
                             prayTimeList.forEach {
                                 td { +prayTimes[it].toBasicFormatString() }
                             }
