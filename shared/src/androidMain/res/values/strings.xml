@@ -351,6 +351,8 @@
     <string name="live_wallpaper_settings">Live wallpaper settings</string>
     <string name="screensaver_settings">Screensaver settings</string>
     <string name="enable_notification">Would you like to enable date notification?</string>
+    <string name="enable_exact_alarm_permission">Would you like to enable “Alarms &amp; reminders” in settings so Athan plays at the exact time?</string>
+    <string name="exempt_from_battery_optimizations">Would you like to exempt the app from battery optimization so date notifications work correctly?</string>
     <string name="add_quick_settings_tile">Add Quick Settings tile</string>
     <string name="true_north">True north</string>
     <string name="full_screen">Full Screen</string>
