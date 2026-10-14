@@ -43,7 +43,7 @@ class DeviceEventInterval(
         val (dayStart, dayEnd) = dayBounds(date)
         val clippedStart = maxOf(beginMillis, dayStart)
         val clippedEnd = minOf(maxOf(beginMillis, endMillis), dayEnd)
-        val startHour = if (clippedStart == dayStart) 0f else hourAt(clippedStart)
+        val startHour = hourAt(clippedStart)
         val wallEndHour = if (clippedEnd == dayEnd) 24f else hourAt(clippedEnd)
         // The fixed wall-clock grid has one row for the repeated DST hour. Keep an occurrence
         // crossing that backward transition visible with its elapsed span when clocks reverse.
