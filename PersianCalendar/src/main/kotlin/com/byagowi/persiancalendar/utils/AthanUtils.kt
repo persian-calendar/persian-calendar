@@ -139,15 +139,18 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
             .setAction(BROADCAST_ALARM),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
-    if (AlarmManagerCompat.canScheduleExactAlarms(am)) AlarmManagerCompat.setExactAndAllowWhileIdle(
-        am,
-        AlarmManager.RTC_WAKEUP,
-        timeInMillis,
-        pendingIntent,
-    ) else AlarmManagerCompat.setAndAllowWhileIdle(
-        am,
-        AlarmManager.RTC_WAKEUP,
-        timeInMillis,
-        pendingIntent,
+    scheduleWithExactAlarmFallback(
+        canScheduleExact = { AlarmManagerCompat.canScheduleExactAlarms(am) },
+        scheduleExact = {
+            AlarmManagerCompat.setExactAndAllowWhileIdle(
+                am, AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent,
+            )
+        },
+        scheduleInexact = {
+            AlarmManagerCompat.setAndAllowWhileIdle(
+                am, AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent,
+            )
+        },
+        onPermissionFailure = logException,
     )
 }

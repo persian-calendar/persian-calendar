@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.service
 
+import android.app.AlarmManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,7 @@ import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.rescheduleAlarmsWithExactAccess
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startWorker
@@ -37,6 +39,9 @@ class BroadcastReceivers : BroadcastReceiver() {
                 -> update(context, true)
 
             BROADCAST_UPDATE_APP -> update(context, true)
+
+            AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED ->
+                rescheduleAlarmsWithExactAccess(context)
 
             ADD_EVENT -> runCatching {
                 val addEventIntent = AddEventData.upcoming().asIntent()

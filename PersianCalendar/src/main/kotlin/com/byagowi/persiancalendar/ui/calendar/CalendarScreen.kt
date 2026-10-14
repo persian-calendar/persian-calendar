@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
-import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -157,6 +156,7 @@ import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISMISSED_TIMES
+import com.byagowi.persiancalendar.PREF_EXACT_ALARM_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
@@ -264,7 +264,6 @@ import com.byagowi.persiancalendar.utils.AddEventData
 import com.byagowi.persiancalendar.utils.addEvent
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.createSearchRegex
-import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
 import com.byagowi.persiancalendar.utils.logException
@@ -272,6 +271,7 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.requestExactAlarmAccess
 import com.byagowi.persiancalendar.utils.viewEvent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -1184,6 +1184,8 @@ private fun SharedTransitionScope.CalendarsTab(
         )
 
         val context = LocalContext.current
+        val hasExactAlarmAccess = rememberExactAlarmAccess()
+        val needsExactAlarmAccess = getEnabledAlarms(context).isNotEmpty() && !hasExactAlarmAccess
         if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
                     context, Manifest.permission.POST_NOTIFICATIONS,
@@ -1202,34 +1204,38 @@ private fun SharedTransitionScope.CalendarsTab(
                     },
                 ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
             }
-        } else if (showEncourageToExemptFromBatteryOptimizations() && isNotifyDate && language.isPersianOrDari) {
+        } else if (showEncourageToExemptFromBatteryOptimizations(needsExactAlarmAccess) &&
+            (isNotifyDate || needsExactAlarmAccess) && language.isPersianOrDari
+        ) {
             fun ignore() {
                 val preferences = context.preferences
+                val ignoredCountKey = if (needsExactAlarmAccess) {
+                    PREF_EXACT_ALARM_IGNORED_COUNT
+                } else {
+                    PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
+                }
                 preferences.edit {
-                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
-                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
+                    val current = preferences.getInt(ignoredCountKey, 0)
+                    putInt(ignoredCountKey, current + 1)
                 }
             }
 
             fun requestExemption() {
                 runCatching {
                     context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
+                }.onFailure(logException).onFailure { ignore() }
             }
 
-            val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission(),
-            ) { requestExemption() }
-
             EncourageActionLayout(
-                header = "مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟",
+                header = if (needsExactAlarmAccess) {
+                    "برای پخش اذان در زمان دقیق، مجوز «هشدارها و یادآوری‌ها» را در تنظیمات فعال می‌کنید؟"
+                } else {
+                    "مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟"
+                },
                 acceptButton = stringResource(Res.string.yes),
                 discardAction = ::ignore,
             ) {
-                val alarmManager = context.getSystemService<AlarmManager>()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
-                    Manifest.permission.SCHEDULE_EXACT_ALARM,
-                ) else requestExemption()
+                if (needsExactAlarmAccess) requestExactAlarmAccess(context) else requestExemption()
             }
         }
     }
@@ -1237,20 +1243,17 @@ private fun SharedTransitionScope.CalendarsTab(
 
 @Composable
 @ReadOnlyComposable
-private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
+private fun showEncourageToExemptFromBatteryOptimizations(needsExactAlarmAccess: Boolean): Boolean {
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
-    if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 1) return false
-    val alarmManager = context.getSystemService<AlarmManager>()
-    return when {
-        isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching {
-            alarmManager?.canScheduleExactAlarms()
-        }.getOrNull().debugAssertNotNull == false -> true
-
-        !isIgnoringBatteryOptimizations(context) -> true
-        else -> false
+    val ignoredCountKey = if (needsExactAlarmAccess) {
+        PREF_EXACT_ALARM_IGNORED_COUNT
+    } else {
+        PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
     }
+    if (context.preferences.getInt(ignoredCountKey, 0) >= 1) return false
+    return needsExactAlarmAccess || !isIgnoringBatteryOptimizations(context)
 }
 
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
