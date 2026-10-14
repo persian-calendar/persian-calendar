@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
-import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.asrMethod
@@ -29,6 +27,8 @@ import io.github.persiancalendar.praytimes.PrayTimes
 import org.jetbrains.compose.resources.StringResource
 import java.util.GregorianCalendar
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
 
 // .split() turns an empty string into an array with an empty string which is undesirable
 // for our use so this filter any non-empty string after split, its name rhymes with .filterNotNull
@@ -54,13 +54,7 @@ fun Coordinates.calculatePrayTimes(
     val year = calendar[GregorianCalendar.YEAR]
     val month = calendar[GregorianCalendar.MONTH] + 1
     val day = calendar[GregorianCalendar.DAY_OF_MONTH]
-    val offset = (calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0))
-        // This turns GMT+4:30 to GMT+3:30 as Iran has abandoned summer but older devices aren't unaware
-        .let {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
-                it == 4.5 && calendar.timeZone.id == IRAN_TIMEZONE_ID
-            ) 3.5 else it
-        }
+    val offset = calendar.prayTimeOffsetMillis().milliseconds / 1.hours
     return PrayTimes(
         calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod,
         midnightMethod,
