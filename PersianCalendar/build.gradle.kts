@@ -9,7 +9,7 @@ plugins {
 val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
 
 android {
-    compileSdk { version = release(37) { minorApiLevel = 1 } }
+    compileSdk { version = release(37) { minorApiLevel = 2 } }
 
     buildFeatures {
         buildConfig = true

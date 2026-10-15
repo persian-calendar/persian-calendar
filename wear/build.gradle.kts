@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.byagowi.persiancalendar"
-    compileSdk { version = release(37) { minorApiLevel = 1 } }
+    compileSdk { version = release(37) { minorApiLevel = 2 } }
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
