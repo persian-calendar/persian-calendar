@@ -1,21 +1,28 @@
 [submodule "fastlane"]
 	path = fastlane
 	url = https://github.com/persian-calendar/persian-calendar-metadata.git
+	branch = main
 [submodule "shared/data/events"]
 	path = shared/data/events
 	url = https://github.com/persian-calendar/events.git
+	branch = main
 [submodule "libs/calculator"]
 	path = libs/calculator
 	url = https://github.com/persian-calendar/calculator.git
+	branch = main
 [submodule "libs/calendar"]
 	path = libs/calendar
 	url = https://github.com/persian-calendar/calendar.git
+	branch = main
 [submodule "libs/equinox"]
 	path = libs/equinox
 	url = https://github.com/persian-calendar/equinox.git
+	branch = main
 [submodule "libs/praytimes"]
 	path = libs/praytimes
 	url = https://github.com/persian-calendar/praytimes.git
+	branch = main
 [submodule "libs/qr"]
 	path = libs/qr
 	url = https://github.com/persian-calendar/qr.git
+	branch = main
