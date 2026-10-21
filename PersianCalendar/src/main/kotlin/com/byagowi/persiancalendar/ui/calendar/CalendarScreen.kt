@@ -664,7 +664,11 @@ fun SharedTransitionScope.CalendarScreen(
         BoxWithConstraints(
             Modifier
                 .padding(top = paddingValues.calculateTopPadding())
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
+                .then(
+                    if (isLandscape) Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
+                    ) else Modifier
+                ),
         ) {
             val maxWidth = this.maxWidth
             val maxHeight = this.maxHeight
