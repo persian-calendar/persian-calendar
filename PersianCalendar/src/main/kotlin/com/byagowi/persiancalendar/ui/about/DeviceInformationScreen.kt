@@ -467,7 +467,7 @@ private fun createItemsList(
         ).joinToString("\n"),
         sdkNumber(),
     ),
-    Item("OS Version", System.getProperty("os.version", null) ?: ""),
+    Item("OS Version", System.getProperty("os.version", null).orEmpty()),
     Item("Model", Build.MODEL),
     Item("Product", Build.PRODUCT),
     Item(
