@@ -238,6 +238,14 @@ fun SharedTransitionScope.DeviceInformationScreen(
     }
 }
 
+private fun sdkNumber(): String {
+    return if (Build.VERSION.SDK_INT >= 36) {
+        val minor = Build.getMinorSdkVersion(Build.VERSION.SDK_INT_FULL)
+        val major = Build.VERSION.SDK_INT
+        if (minor > 0) "$major.$minor" else major.toString()
+    } else Build.VERSION.SDK_INT.toString()
+}
+
 @Composable
 private fun OverviewTopBar(modifier: Modifier = Modifier) {
     var showScheduleDialog by rememberSaveable { mutableStateOf(false) }
@@ -248,7 +256,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                 Triple(androidIcon, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(
                     settingsIcon,
-                    "API " + Build.VERSION.SDK_INT,
+                    "API " + sdkNumber(),
                 ) { showScheduleDialog = true },
                 Triple(motorcycleIcon, Build.SUPPORTED_ABIS[0]) {
                     showScheduleDialog = true
@@ -419,6 +427,10 @@ private fun createItemsList(
                     ).inputStream.bufferedReader().readText().trim(),
                 )
             }.getOrNull().debugAssertNotNull
+            System.getProperty("os.arch", null)?.let {
+                appendLine()
+                append("os.arch: $it")
+            }
         },
     ),
     Item(
@@ -453,8 +465,9 @@ private fun createItemsList(
                 "MIUI Version: $miuiVersion ($displayVersion) (optimization: ${isMiuiOptimizationDisabled()})"
             },
         ).joinToString("\n"),
-        Build.VERSION.SDK_INT.toString(),
+        sdkNumber(),
     ),
+    Item("OS Version", System.getProperty("os.version", null) ?: ""),
     Item("Model", Build.MODEL),
     Item("Product", Build.PRODUCT),
     Item(
