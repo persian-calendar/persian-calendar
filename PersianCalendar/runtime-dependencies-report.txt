@@ -592,21 +592,21 @@
 |    |    |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.9.4 -> 2.11.0 (*)
 |    |    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.9.4 -> 2.11.0 (*)
 |    |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.9.4 -> 2.11.0 (*)
-|    |    |    |    +--- androidx.navigationevent:navigationevent-compose:1.0.0 -> 1.1.2
-|    |    |    |    |    \--- androidx.navigationevent:navigationevent-compose-android:1.1.2
-|    |    |    |    |         +--- androidx.compose.runtime:runtime:1.11.2 -> 1.12.1 (*)
-|    |    |    |    |         +--- androidx.compose.ui:ui:1.11.2 -> 1.12.1 (*)
-|    |    |    |    |         +--- androidx.navigationevent:navigationevent:1.1.2
-|    |    |    |    |         |    \--- androidx.navigationevent:navigationevent-android:1.1.2
+|    |    |    |    +--- androidx.navigationevent:navigationevent-compose:1.0.0 -> 1.1.1
+|    |    |    |    |    \--- androidx.navigationevent:navigationevent-compose-android:1.1.1
+|    |    |    |    |         +--- androidx.compose.runtime:runtime:1.11.0-rc01 -> 1.12.1 (*)
+|    |    |    |    |         +--- androidx.compose.ui:ui:1.11.0-rc01 -> 1.12.1 (*)
+|    |    |    |    |         +--- androidx.navigationevent:navigationevent:1.1.1
+|    |    |    |    |         |    \--- androidx.navigationevent:navigationevent-android:1.1.1
 |    |    |    |    |         |         +--- androidx.annotation:annotation:1.9.1 -> 1.10.0 (*)
 |    |    |    |    |         |         +--- androidx.collection:collection:1.5.0 (*)
 |    |    |    |    |         |         +--- androidx.compose.runtime:runtime-annotation:1.9.0 -> 1.12.1 (*)
 |    |    |    |    |         |         +--- androidx.core:core-viewtree:1.0.0 (*)
-|    |    |    |    |         |         +--- androidx.navigationevent:navigationevent-compose:1.1.2 (c) (*)
+|    |    |    |    |         |         +--- androidx.navigationevent:navigationevent-compose:1.1.1 (c) (*)
 |    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.21 (*)
 |    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0 -> 1.11.0 (*)
 |    |    |    |    |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 -> 1.11.0 (*)
-|    |    |    |    |         +--- androidx.navigationevent:navigationevent:1.1.2 (c) (*)
+|    |    |    |    |         +--- androidx.navigationevent:navigationevent:1.1.1 (c) (*)
 |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.21 (*)
 |    |    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 -> 1.11.0 (*)
 |    |    |    |    +--- androidx.savedstate:savedstate:1.2.1 -> 1.4.0 (*)
@@ -620,7 +620,7 @@
 |    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.6.1 -> 2.11.0 (*)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1 -> 2.11.0 (*)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.6.1 -> 2.11.0 (*)
-|    |    |    +--- androidx.navigationevent:navigationevent:1.0.0 -> 1.1.2 (*)
+|    |    |    +--- androidx.navigationevent:navigationevent:1.0.0 -> 1.1.1 (*)
 |    |    |    +--- androidx.profileinstaller:profileinstaller:1.4.0 (*)
 |    |    |    +--- androidx.savedstate:savedstate:1.2.1 -> 1.4.0 (*)
 |    |    |    +--- androidx.tracing:tracing:1.0.0 -> 1.2.0 (*)
@@ -636,21 +636,21 @@
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.21 (*)
 |    |    \--- org.jspecify:jspecify:1.0.0 (*)
 |    +--- androidx.core:core-ktx:1.19.1 (*)
-|    +--- org.jetbrains.androidx.navigation3:navigation3-ui:1.1.2
-|    |    \--- org.jetbrains.androidx.navigation3:navigation3-ui-android:1.1.2
-|    |         +--- androidx.activity:activity-compose:1.12.0 -> 1.13.0 (*)
+|    +--- org.jetbrains.androidx.navigation3:navigation3-ui:1.2.0
+|    |    \--- org.jetbrains.androidx.navigation3:navigation3-ui-android:1.2.0
 |    |         +--- androidx.annotation:annotation:1.9.1 -> 1.10.0 (*)
 |    |         +--- androidx.collection:collection:1.5.0 (*)
 |    |         +--- androidx.lifecycle:lifecycle-runtime-compose:2.10.0 -> 2.11.0 (*)
 |    |         +--- androidx.lifecycle:lifecycle-runtime:2.10.0 -> 2.11.0 (*)
-|    |         +--- androidx.navigation3:navigation3-runtime:1.1.7
-|    |         |    \--- androidx.navigation3:navigation3-runtime-android:1.1.7
+|    |         +--- androidx.navigation3:navigation3-runtime:1.2.0
+|    |         |    \--- androidx.navigation3:navigation3-runtime-android:1.2.0
 |    |         |         +--- androidx.collection:collection:1.5.0 (*)
 |    |         |         +--- androidx.compose.runtime:runtime-saveable:1.9.5 -> 1.12.1 (*)
 |    |         |         +--- androidx.compose.runtime:runtime:1.9.5 -> 1.12.1 (*)
+|    |         |         +--- androidx.core:core-ktx:1.1.0 -> 1.19.1 (*)
 |    |         |         +--- androidx.lifecycle:lifecycle-runtime:2.10.0 -> 2.11.0 (*)
-|    |         |         +--- androidx.navigation3:navigation3-ui:1.1.7 (c)
-|    |         |         |    \--- androidx.navigation3:navigation3-ui-android:1.1.7
+|    |         |         +--- androidx.navigation3:navigation3-ui:1.2.0 (c)
+|    |         |         |    \--- androidx.navigation3:navigation3-ui-android:1.2.0
 |    |         |         |         +--- androidx.activity:activity-compose:1.12.0 -> 1.13.0 (*)
 |    |         |         |         +--- androidx.annotation:annotation:1.8.0 -> 1.10.0 (*)
 |    |         |         |         +--- androidx.collection:collection:1.4.5 -> 1.5.0 (*)
@@ -660,22 +660,22 @@
 |    |         |         |         +--- androidx.compose.ui:ui:1.10.0 -> 1.12.1 (*)
 |    |         |         |         +--- androidx.lifecycle:lifecycle-runtime-compose:2.10.0 -> 2.11.0 (*)
 |    |         |         |         +--- androidx.lifecycle:lifecycle-runtime:2.10.0 -> 2.11.0 (*)
-|    |         |         |         +--- androidx.navigation3:navigation3-runtime:1.1.7 (*)
-|    |         |         |         +--- androidx.navigation3:navigation3-runtime:1.1.7 (c) (*)
-|    |         |         |         +--- androidx.navigationevent:navigationevent-compose:1.1.2 (*)
+|    |         |         |         +--- androidx.navigation3:navigation3-runtime:1.2.0 (*)
+|    |         |         |         +--- androidx.navigation3:navigation3-runtime:1.2.0 (c) (*)
+|    |         |         |         +--- androidx.navigationevent:navigationevent-compose:1.1.1 (*)
 |    |         |         |         +--- androidx.savedstate:savedstate-compose:1.4.0 (*)
 |    |         |         |         +--- androidx.savedstate:savedstate:1.4.0 (*)
 |    |         |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.21 (*)
-|    |         |         +--- androidx.navigationevent:navigationevent:1.1.2 (*)
+|    |         |         +--- androidx.navigationevent:navigationevent:1.1.1 (*)
 |    |         |         +--- androidx.savedstate:savedstate-compose:1.4.0 (*)
 |    |         |         +--- androidx.savedstate:savedstate:1.4.0 (*)
 |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 -> 2.4.21 (*)
 |    |         |         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3 -> 1.12.0 (*)
-|    |         +--- androidx.navigation3:navigation3-ui:1.1.7 (*)
+|    |         +--- androidx.navigation3:navigation3-ui:1.2.0 (*)
 |    |         +--- androidx.savedstate:savedstate-compose:1.4.0 (*)
 |    |         +--- androidx.savedstate:savedstate:1.4.0 (*)
 |    |         +--- org.jetbrains.androidx.navigationevent:navigationevent-compose:1.1.0
-|    |         |    +--- androidx.navigationevent:navigationevent-compose:1.1.1 -> 1.1.2 (*)
+|    |         |    +--- androidx.navigationevent:navigationevent-compose:1.1.1 (*)
 |    |         |    +--- org.jetbrains.compose.runtime:runtime:1.11.0 -> 1.12.2 (*)
 |    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
 |    |         +--- org.jetbrains.compose.animation:animation:1.10.0 -> 1.12.2
@@ -985,8 +985,8 @@
 +--- androidx.core:core-ktx:1.19.1 (*)
 +--- androidx.lifecycle:lifecycle-runtime-ktx:2.11.0 (*)
 +--- androidx.lifecycle:lifecycle-service:2.11.0 (*)
-+--- androidx.navigation3:navigation3-runtime:1.1.5 -> 1.1.7 (*)
-+--- androidx.navigation3:navigation3-ui:1.1.5 -> 1.1.7 (*)
++--- androidx.navigation3:navigation3-runtime:1.1.5 -> 1.2.0 (*)
++--- androidx.navigation3:navigation3-ui:1.1.5 -> 1.2.0 (*)
 +--- androidx.work:work-runtime-ktx:2.12.0
 |    +--- androidx.work:work-runtime:2.12.0
 |    |    +--- androidx.annotation:annotation-experimental:1.4.1 (*)
