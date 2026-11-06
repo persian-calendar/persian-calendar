@@ -825,7 +825,7 @@ private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId:
         it.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
         it.putExtra("events", eventsRepository.hashCode())
         it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        it.setData(it.toUri(Intent.URI_INTENT_SCHEME).toUri())
+        it.data = it.toUri(Intent.URI_INTENT_SCHEME).toUri()
     }
     @Suppress("DEPRECATION") remoteViews.setRemoteAdapter(
         R.id.widget_schedule_content,
