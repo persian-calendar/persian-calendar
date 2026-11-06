@@ -12,7 +12,7 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import androidx.work.Data
+import androidx.work.workDataOf
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -119,8 +119,10 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
 
     // Schedule in both alarmmanager and workmanager, startAthan has the logic to skip duplicated calls
     run {
-        val workerInputData = Data.Builder().putLong(KEY_EXTRA_PRAYER_TIME, timeInMillis)
-            .putString(KEY_EXTRA_PRAYER, prayTime.name).build()
+        val workerInputData = workDataOf(
+            KEY_EXTRA_PRAYER_TIME to timeInMillis,
+            KEY_EXTRA_PRAYER to prayTime.name,
+        )
         val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>()
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
             .setInputData(workerInputData)

@@ -410,13 +410,13 @@ private fun createRoundedBitmap(
 ): Bitmap {
     val width = size?.width?.toPx(resources) ?: 250f
     val height = size?.height?.toPx(resources) ?: 250f
-    val bitmap = createBitmap(width.roundToInt(), height.roundToInt())
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color }
-    Canvas(bitmap).drawRoundRect(
-        0f, 0f, width, height,
-        roundSize, roundSize, paint,
-    )
-    return bitmap
+    return createBitmap(width.roundToInt(), height.roundToInt()).applyCanvas {
+        drawRoundRect(
+            0f, 0f, width, height,
+            roundSize, roundSize, paint,
+        )
+    }
 }
 
 private fun getWidgetBackgroundColor(
