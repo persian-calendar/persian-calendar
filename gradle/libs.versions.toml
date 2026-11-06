@@ -1,5 +1,5 @@
 [versions]
-agp = "9.5.0"
+agp = "9.5.1"
 android-test = "1.7.0"
 android-test-runner = "1.7.0"
 androidx-activity = "1.13.0"
@@ -29,7 +29,7 @@ wear-protolayout = "1.4.2"
 wear-tiles = "1.6.2"
 wear-tooling-preview = "1.0.0"
 lint = "32.3.1"
-spotless = "8.10.4"
+spotless = "8.11.0"
 
 [libraries]
 agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
