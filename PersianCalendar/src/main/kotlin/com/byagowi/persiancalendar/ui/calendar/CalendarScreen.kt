@@ -475,8 +475,7 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }).takeIf { !removeThirdTab && enableTimesTab() },
     ).toMap()
-    // On phones, device events belong inside the ordinary Events tab. Tablets retain DaysView.
-    val isButtonsMode = tabs.isEmpty() || isTablet
+    val isButtonsMode = isShowDeviceCalendarEvents || tabs.isEmpty() || isTablet
     var preferredTab by rememberSaveable {
         val lastChosenIndex = context.preferences.getInt(LAST_CHOSEN_TAB_KEY, 0)
         mutableStateOf(DetailsTab.entries.getOrNull(lastChosenIndex))
