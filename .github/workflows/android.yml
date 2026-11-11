@@ -21,7 +21,7 @@ jobs:
       - uses: gradle/actions/wrapper-validation@v6.4.1
 
       - name: Set up JDK
-        uses: actions/setup-java@v6.1.0
+        uses: actions/setup-java@v6.2.0
         with:
           java-version: 21
           distribution: temurin
@@ -81,7 +81,7 @@ jobs:
           fetch-depth: 1
 
       - name: Set up JDK
-        uses: actions/setup-java@v6.1.0
+        uses: actions/setup-java@v6.2.0
         with:
           java-version: 21
           distribution: temurin
