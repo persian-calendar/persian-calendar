@@ -205,8 +205,9 @@ private fun Context.hasCalendarPermission() =
             PackageManager.PERMISSION_GRANTED
 
 /**
- * Reads just the days that have at least one device calendar event in the range. The year view
- * needs presence, not the events themselves, so this queries a minimal projection.
+ * Reads the days that have at least one device calendar event in the range, plus which of them
+ * are configured as holidays. The year view needs presence, not the events themselves, so this
+ * queries a minimal projection.
  */
 private fun readDaysWithDeviceEvents(
     context: Context,
@@ -214,9 +215,9 @@ private fun readDaysWithDeviceEvents(
     duration: Duration,
     settings: DeviceCalendarQuerySettings,
     cancellationSignal: CancellationSignal?,
-): Set<Jdn> {
+): DeviceEventDays {
     cancellationSignal?.throwIfCanceled()
-    if (!settings.enabled) return emptySet()
+    if (!settings.enabled) return DeviceEventDays.EMPTY
     if (!context.hasCalendarPermission()) throw SecurityException("Calendar permission is unavailable")
 
     val days = duration.inWholeDays.toInt()
@@ -232,7 +233,9 @@ private fun readDaysWithDeviceEvents(
         ),
     )
     val lastDay = firstDay + days - 1
-    return context.contentResolver.query(
+    val eventDays = mutableSetOf<Jdn>()
+    val holidayDays = mutableSetOf<Jdn>()
+    context.contentResolver.query(
         CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
             ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
             ContentUris.appendId(this, endingDate.timeInMillis + 1.days.inWholeMilliseconds)
@@ -249,39 +252,42 @@ private fun readDaysWithDeviceEvents(
         CalendarContract.Instances.BEGIN + " ASC",
         cancellationSignal,
     )?.use { cursor ->
-        buildSet {
-            generateSequence {
-                cancellationSignal?.throwIfCanceled()
-                if (cursor.moveToNext()) cursor else null
-            }.filter {
-                it.getString(3) == "1" && it.getLong(4) !in settings.excludedIds
-            }.forEach {
-                val interval = DeviceEventInterval(
-                    beginMillis = it.getLong(0),
-                    endMillis = it.getLong(1),
-                    isAllDay = it.getString(2) == "1",
-                    displayTimeZone = startingDate.timeZone,
-                )
-                val intervalStartDay = Jdn(interval.date)
-                val intervalEnd = interval.end
-                val intervalEndDay = Jdn(
-                    CivilDate(
-                        intervalEnd[GregorianCalendar.YEAR],
-                        intervalEnd[GregorianCalendar.MONTH] + 1,
-                        intervalEnd[GregorianCalendar.DAY_OF_MONTH],
-                    ),
-                )
-                val lastOccupiedDay =
-                    if (intervalEndDay > intervalStartDay) intervalEndDay else intervalStartDay
-                var day = if (intervalStartDay < firstDay) firstDay else intervalStartDay
-                val lastDayToMark = if (lastOccupiedDay > lastDay) lastDay else lastOccupiedDay
-                while (day <= lastDayToMark) {
-                    if (interval.occupies(day.toCivilDate())) add(day)
-                    day += 1
+        generateSequence {
+            cancellationSignal?.throwIfCanceled()
+            if (cursor.moveToNext()) cursor else null
+        }.filter {
+            it.getString(3) == "1" && it.getLong(4) !in settings.excludedIds
+        }.forEach {
+            val isHoliday = it.getLong(4) in settings.holidayIds
+            val interval = DeviceEventInterval(
+                beginMillis = it.getLong(0),
+                endMillis = it.getLong(1),
+                isAllDay = it.getString(2) == "1",
+                displayTimeZone = startingDate.timeZone,
+            )
+            val intervalStartDay = Jdn(interval.date)
+            val intervalEnd = interval.end
+            val intervalEndDay = Jdn(
+                CivilDate(
+                    intervalEnd[GregorianCalendar.YEAR],
+                    intervalEnd[GregorianCalendar.MONTH] + 1,
+                    intervalEnd[GregorianCalendar.DAY_OF_MONTH],
+                ),
+            )
+            val lastOccupiedDay =
+                if (intervalEndDay > intervalStartDay) intervalEndDay else intervalStartDay
+            var day = if (intervalStartDay < firstDay) firstDay else intervalStartDay
+            val lastDayToMark = if (lastOccupiedDay > lastDay) lastDay else lastOccupiedDay
+            while (day <= lastDayToMark) {
+                if (interval.occupies(day.toCivilDate())) {
+                    eventDays += day
+                    if (isHoliday) holidayDays += day
                 }
+                day += 1
             }
         }
     } ?: error("Calendar provider returned no cursor")
+    return DeviceEventDays(eventDays, holidayDays)
 }
 
 private const val DEVICE_EVENTS_CACHE_DAY_LIMIT = 120
@@ -295,6 +301,16 @@ private data class DeviceEventsEnvironment(
     val generation: Int,
 ) {
     val canQuery get() = settings.enabled && permissionGranted
+}
+
+/** Days in a range that have device calendar events, and which of them count as holidays. */
+class DeviceEventDays internal constructor(
+    val days: Set<Jdn>,
+    val holidays: Set<Jdn>,
+) {
+    companion object {
+        val EMPTY = DeviceEventDays(emptySet(), emptySet())
+    }
 }
 
 private enum class DeviceEventsQuery { Detailed, Presence }
@@ -323,11 +339,14 @@ private fun daysWithDeviceEventsRequest(startJdn: Jdn, days: Int) =
 /** A cache entry: a device events store, the days that have any device event, or both. */
 private class DeviceEventsResult(
     val store: DeviceCalendarEventsStore,
-    val days: Set<Jdn>,
+    val days: DeviceEventDays,
 ) {
     companion object {
-        fun ofEvents(store: DeviceCalendarEventsStore) = DeviceEventsResult(store, emptySet())
-        fun ofDays(days: Set<Jdn>) = DeviceEventsResult(DeviceCalendarEventsStore.empty(), days)
+        fun ofEvents(store: DeviceCalendarEventsStore) =
+            DeviceEventsResult(store, DeviceEventDays.EMPTY)
+
+        fun ofDays(days: DeviceEventDays) =
+            DeviceEventsResult(DeviceCalendarEventsStore.empty(), days)
     }
 }
 
@@ -342,7 +361,7 @@ class DeviceCalendarEventsCache internal constructor(
     private val scope: CoroutineScope,
 ) {
     private val emptyDeviceEvents = DeviceCalendarEventsStore.empty()
-    private val emptyResult = DeviceEventsResult(emptyDeviceEvents, emptySet())
+    private val emptyResult = DeviceEventsResult(emptyDeviceEvents, DeviceEventDays.EMPTY)
     private val entries = mutableStateMapOf<DeviceEventsRequest, CachedDeviceEvents>()
     private val accessOrder = LinkedHashMap<DeviceEventsRequest, Unit>(16, .75f, true)
     private val requests = mutableMapOf<DeviceEventsRequest, Job>()
@@ -390,14 +409,15 @@ class DeviceCalendarEventsCache internal constructor(
         getDeviceEvents(detailedDeviceEventsRequest(startJdn, days, limit)) { it.store }
 
     /**
-     * Observes the days that have at least one device calendar event in the range without loading
-     * the events themselves, which is all a year overview needs.
+     * Observes the days that have at least one device calendar event in the range, and which of
+     * them count as holidays, without loading the events themselves. That is all a year overview
+     * needs.
      */
     @Composable
     fun getDaysWithDeviceEvents(
         startJdn: Jdn,
         days: Int,
-    ): CalendarProviderState<Set<Jdn>> =
+    ): CalendarProviderState<DeviceEventDays> =
         getDeviceEvents(daysWithDeviceEventsRequest(startJdn, days)) { it.days }
 
     @Composable

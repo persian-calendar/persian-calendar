@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.global.shiftWorkSettings
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStart
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
+import com.byagowi.persiancalendar.ui.calendar.DeviceEventDays
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
 
@@ -34,7 +35,7 @@ fun renderMonthWidget(
     setWeekNumberText: ((i: Int, text: String) -> Unit)? = null,
     setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
     // When provided, device event presence comes from these days instead of from the store.
-    deviceEventDays: Set<Jdn>? = null,
+    deviceEventDays: DeviceEventDays? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
     val startingWeekDay = monthStartJdn.weekDay
@@ -72,12 +73,14 @@ fun renderMonthWidget(
                 val isToday = day == today
 
                 val text = mainCalendarNumeral.format(dayOffset + 1)
-                val isHoliday = events.any { it.isHoliday } || day.weekDay in weekEnds
+                val isHoliday = day.weekDay in weekEnds ||
+                        events.any { it.isHoliday } ||
+                        deviceEventDays?.holidays?.contains(day) == true
                 dayPainter.setDayOfMonthItem(
                     isToday = isToday,
                     isSelected = day == selectedDay,
                     hasEvent = events.any { it !is CalendarEvent.DeviceCalendarEvent },
-                    hasAppointment = deviceEventDays?.contains(day)
+                    hasAppointment = deviceEventDays?.days?.contains(day)
                         ?: events.any { it is CalendarEvent.DeviceCalendarEvent },
                     isHoliday = isHoliday,
                     jdn = day,
