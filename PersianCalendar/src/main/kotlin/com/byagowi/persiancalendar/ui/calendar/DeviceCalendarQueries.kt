@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
+import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.CancellationSignal
+import android.provider.CalendarContract
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +32,7 @@ import com.byagowi.persiancalendar.utils.deviceCalendarQuerySettings
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.queryCalendarProvider
 import com.byagowi.persiancalendar.utils.readDeviceEvents
+import io.github.persiancalendar.calendar.CivilDate
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -41,6 +44,7 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.GregorianCalendar
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -200,40 +204,84 @@ private fun Context.hasCalendarPermission() =
     ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) ==
             PackageManager.PERMISSION_GRANTED
 
-@Composable
-fun rememberDeviceCalendarEvents(
-    jdn: Jdn,
-    days: Int,
-    refreshToken: Int,
-    limit: Int = 100,
-): CalendarProviderState<DeviceCalendarEventsStore> {
-    val context = LocalContext.current.applicationContext
-    val empty = remember { DeviceCalendarEventsStore.empty() }
-    return rememberCalendarProviderRequest(empty) {
-        // Read snapshot-backed settings here, not in an old composition's captured closure.
-        val settings = deviceCalendarQuerySettings()
-        CalendarProviderRequest(
-            key = listOf(jdn, days, limit, settings),
-            refreshKey = refreshToken,
-            enabled = settings.enabled,
-            permissionGranted = context.hasCalendarPermission(),
-            debounceMillis = 0,
-            prepareQuery = {
-                { signal ->
-                    DeviceCalendarEventsStore(
-                        readDeviceEvents(
-                            context,
-                            DeviceEventInterval.startOfDay(jdn.toCivilDate(), settings.timeZone),
-                            days.days,
-                            limit,
-                            settings = settings,
-                            cancellationSignal = signal,
-                        ),
-                    )
-                }
-            },
-        )
+/**
+ * Reads just the days that have at least one device calendar event in the range. The year view
+ * needs presence, not the events themselves, so this queries a minimal projection.
+ */
+private fun readDaysWithDeviceEvents(
+    context: Context,
+    startingDate: GregorianCalendar,
+    duration: Duration,
+    settings: DeviceCalendarQuerySettings,
+    cancellationSignal: CancellationSignal?,
+): Set<Jdn> {
+    cancellationSignal?.throwIfCanceled()
+    if (!settings.enabled) return emptySet()
+    if (!context.hasCalendarPermission()) throw SecurityException("Calendar permission is unavailable")
+
+    val days = duration.inWholeDays.toInt()
+    val endingDate = GregorianCalendar(startingDate.timeZone).apply {
+        timeInMillis = startingDate.timeInMillis
+        add(GregorianCalendar.DAY_OF_MONTH, days)
     }
+    val firstDay = Jdn(
+        CivilDate(
+            startingDate[GregorianCalendar.YEAR],
+            startingDate[GregorianCalendar.MONTH] + 1,
+            startingDate[GregorianCalendar.DAY_OF_MONTH],
+        ),
+    )
+    val lastDay = firstDay + days - 1
+    return context.contentResolver.query(
+        CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
+            ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
+            ContentUris.appendId(this, endingDate.timeInMillis + 1.days.inWholeMilliseconds)
+        }.build(),
+        arrayOf(
+            CalendarContract.Instances.BEGIN, // 0
+            CalendarContract.Instances.END, // 1
+            CalendarContract.Instances.ALL_DAY, // 2
+            CalendarContract.Instances.VISIBLE, // 3
+            CalendarContract.Instances.CALENDAR_ID, // 4
+        ),
+        null,
+        null,
+        CalendarContract.Instances.BEGIN + " ASC",
+        cancellationSignal,
+    )?.use { cursor ->
+        buildSet {
+            generateSequence {
+                cancellationSignal?.throwIfCanceled()
+                if (cursor.moveToNext()) cursor else null
+            }.filter {
+                it.getString(3) == "1" && it.getLong(4) !in settings.excludedIds
+            }.forEach {
+                val interval = DeviceEventInterval(
+                    beginMillis = it.getLong(0),
+                    endMillis = it.getLong(1),
+                    isAllDay = it.getString(2) == "1",
+                    displayTimeZone = startingDate.timeZone,
+                )
+                val intervalStartDay = Jdn(interval.date)
+                val intervalEnd = interval.end
+                val intervalEndDay = Jdn(
+                    CivilDate(
+                        intervalEnd[GregorianCalendar.YEAR],
+                        intervalEnd[GregorianCalendar.MONTH] + 1,
+                        intervalEnd[GregorianCalendar.DAY_OF_MONTH],
+                    ),
+                )
+                val lastOccupiedDay =
+                    if (intervalEndDay > intervalStartDay) intervalEndDay else intervalStartDay
+                var day = if (intervalStartDay < firstDay) firstDay else intervalStartDay
+                val lastDayToMark = if (lastOccupiedDay > lastDay) lastDay else lastOccupiedDay
+                while (day <= lastDayToMark) {
+                    if (interval.occupies(day.toCivilDate())) add(day)
+                    day += 1
+                }
+            }
+        }
+    } ?: error("Calendar provider returned no cursor")
 }
 
 private const val DEVICE_EVENTS_CACHE_DAY_LIMIT = 120
@@ -249,20 +297,42 @@ private data class DeviceEventsEnvironment(
     val canQuery get() = settings.enabled && permissionGranted
 }
 
+private enum class DeviceEventsQuery { Detailed, Presence }
+
 private data class DeviceEventsRequest(
     val startJdn: Jdn,
     val days: Int,
     val limit: Int,
+    val query: DeviceEventsQuery,
 ) {
-    val isDay get() = days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
+    val isDay get() = query == DeviceEventsQuery.Detailed &&
+            days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
 
     fun covers(jdn: Jdn) = (jdn - startJdn) in 0 until days
 }
 
-private fun deviceEventsOfDayRequest(jdn: Jdn) = DeviceEventsRequest(jdn, 1, DEVICE_EVENTS_CACHE_DAY_LIMIT)
+private fun detailedDeviceEventsRequest(startJdn: Jdn, days: Int, limit: Int) =
+    DeviceEventsRequest(startJdn, days, limit, DeviceEventsQuery.Detailed)
+
+private fun deviceEventsOfDayRequest(jdn: Jdn) =
+    detailedDeviceEventsRequest(jdn, 1, DEVICE_EVENTS_CACHE_DAY_LIMIT)
+
+private fun daysWithDeviceEventsRequest(startJdn: Jdn, days: Int) =
+    DeviceEventsRequest(startJdn, days, 0, DeviceEventsQuery.Presence)
+
+/** A cache entry: a device events store, the days that have any device event, or both. */
+private class DeviceEventsResult(
+    val store: DeviceCalendarEventsStore,
+    val days: Set<Jdn>,
+) {
+    companion object {
+        fun ofEvents(store: DeviceCalendarEventsStore) = DeviceEventsResult(store, emptySet())
+        fun ofDays(days: Set<Jdn>) = DeviceEventsResult(DeviceCalendarEventsStore.empty(), days)
+    }
+}
 
 private class CachedDeviceEvents(
-    val state: CalendarProviderState<DeviceCalendarEventsStore>,
+    val state: CalendarProviderState<DeviceEventsResult>,
     val generation: Int,
 )
 
@@ -272,6 +342,7 @@ class DeviceCalendarEventsCache internal constructor(
     private val scope: CoroutineScope,
 ) {
     private val emptyDeviceEvents = DeviceCalendarEventsStore.empty()
+    private val emptyResult = DeviceEventsResult(emptyDeviceEvents, emptySet())
     private val entries = mutableStateMapOf<DeviceEventsRequest, CachedDeviceEvents>()
     private val accessOrder = LinkedHashMap<DeviceEventsRequest, Unit>(16, .75f, true)
     private val requests = mutableMapOf<DeviceEventsRequest, Job>()
@@ -307,7 +378,7 @@ class DeviceCalendarEventsCache internal constructor(
     /** Observes a day's cached device events and requests it when it is missing or outdated. */
     @Composable
     fun getDeviceEventsOfDay(jdn: Jdn): CalendarProviderState<DeviceCalendarEventsStore> =
-        getDeviceEvents(deviceEventsOfDayRequest(jdn))
+        getDeviceEvents(deviceEventsOfDayRequest(jdn)) { it.store }
 
     /** Observes a range's cached device events and requests it when it is missing or outdated. */
     @Composable
@@ -316,14 +387,34 @@ class DeviceCalendarEventsCache internal constructor(
         days: Int,
         limit: Int = 100,
     ): CalendarProviderState<DeviceCalendarEventsStore> =
-        getDeviceEvents(DeviceEventsRequest(startJdn, days, limit))
+        getDeviceEvents(detailedDeviceEventsRequest(startJdn, days, limit)) { it.store }
+
+    /**
+     * Observes the days that have at least one device calendar event in the range without loading
+     * the events themselves, which is all a year overview needs.
+     */
+    @Composable
+    fun getDaysWithDeviceEvents(
+        startJdn: Jdn,
+        days: Int,
+    ): CalendarProviderState<Set<Jdn>> =
+        getDeviceEvents(daysWithDeviceEventsRequest(startJdn, days)) { it.days }
 
     @Composable
-    private fun getDeviceEvents(request: DeviceEventsRequest): CalendarProviderState<DeviceCalendarEventsStore> {
+    private fun <T> getDeviceEvents(
+        request: DeviceEventsRequest,
+        select: (DeviceEventsResult) -> T,
+    ): CalendarProviderState<T> {
         val currentEnvironment = environment
         val cached by remember(request) { derivedStateOf { entries[request] } }
         LaunchedEffect(request, currentEnvironment) { requestDeviceEvents(request, force = false) }
-        return stateOf(currentEnvironment, cached)
+        val state = stateOf(currentEnvironment, cached)
+        return CalendarProviderState(
+            select(state.data),
+            state.status,
+            state.error,
+            state.hasResult,
+        )
     }
 
     internal fun update(
@@ -374,13 +465,13 @@ class DeviceCalendarEventsCache internal constructor(
     private fun stateOf(
         environment: DeviceEventsEnvironment?,
         cached: CachedDeviceEvents?,
-    ): CalendarProviderState<DeviceCalendarEventsStore> = when {
-        environment == null -> CalendarProviderState(emptyDeviceEvents, CalendarProviderStatus.Loading)
-        !environment.settings.enabled -> CalendarProviderState(emptyDeviceEvents, CalendarProviderStatus.Ready)
+    ): CalendarProviderState<DeviceEventsResult> = when {
+        environment == null -> CalendarProviderState(emptyResult, CalendarProviderStatus.Loading)
+        !environment.settings.enabled -> CalendarProviderState(emptyResult, CalendarProviderStatus.Ready)
         !environment.permissionGranted ->
-            CalendarProviderState(emptyDeviceEvents, CalendarProviderStatus.PermissionDenied)
+            CalendarProviderState(emptyResult, CalendarProviderStatus.PermissionDenied)
 
-        cached == null -> CalendarProviderState(emptyDeviceEvents, CalendarProviderStatus.Loading)
+        cached == null -> CalendarProviderState(emptyResult, CalendarProviderStatus.Loading)
         cached.generation == environment.generation -> cached.state
         // Keep the previous result while refreshing so lazy-list rows do not collapse and cancel
         // a backward fling.
@@ -405,18 +496,23 @@ class DeviceCalendarEventsCache internal constructor(
         val first = missing.minBy { it.value }
         val last = missing.maxBy { it.value }
         val count = last - first + 1
-        val request = DeviceEventsRequest(first, count, DEVICE_EVENTS_CACHE_DAY_LIMIT * count)
+        val request = detailedDeviceEventsRequest(
+            first, count, DEVICE_EVENTS_CACHE_DAY_LIMIT * count,
+        )
         if (requests.containsKey(request)) return
         activePreloadRequest = request
         val job = scope.launch {
             val state = loadDeviceEvents(request, environment)
             if (state.status == CalendarProviderStatus.Ready) {
+                val store = state.data.store
                 repeat(count) { offset ->
                     val jdn = first + offset
                     publish(
                         deviceEventsOfDayRequest(jdn),
                         CalendarProviderState(
-                            DeviceCalendarEventsStore(state.data.getEvents(jdn.toCivilDate())),
+                            DeviceEventsResult.ofEvents(
+                                DeviceCalendarEventsStore(store.getEvents(jdn.toCivilDate())),
+                            ),
                             CalendarProviderStatus.Ready,
                         ),
                         environment.generation,
@@ -454,38 +550,53 @@ class DeviceCalendarEventsCache internal constructor(
     private suspend fun loadDeviceEvents(
         request: DeviceEventsRequest,
         environment: DeviceEventsEnvironment,
-    ): CalendarProviderState<DeviceCalendarEventsStore> = runCatching {
+    ): CalendarProviderState<DeviceEventsResult> = runCatching {
         queryCalendarProvider { signal ->
-            DeviceCalendarEventsStore(
-                readDeviceEvents(
-                    context,
-                    DeviceEventInterval.startOfDay(
-                        request.startJdn.toCivilDate(),
-                        environment.settings.timeZone,
-                    ),
-                    request.days.days,
-                    request.limit,
-                    settings = environment.settings,
-                    cancellationSignal = signal,
-                ),
+            val start = DeviceEventInterval.startOfDay(
+                request.startJdn.toCivilDate(),
+                environment.settings.timeZone,
             )
+            when (request.query) {
+                DeviceEventsQuery.Detailed -> DeviceEventsResult.ofEvents(
+                    DeviceCalendarEventsStore(
+                        readDeviceEvents(
+                            context,
+                            start,
+                            request.days.days,
+                            request.limit,
+                            settings = environment.settings,
+                            cancellationSignal = signal,
+                        ),
+                    ),
+                )
+
+                DeviceEventsQuery.Presence -> DeviceEventsResult.ofDays(
+                    readDaysWithDeviceEvents(
+                        context,
+                        start,
+                        request.days.days,
+                        environment.settings,
+                        signal,
+                    ),
+                )
+            }
         }
     }.fold(
         onSuccess = { CalendarProviderState(it, CalendarProviderStatus.Ready) },
         onFailure = { error ->
             if (error is CancellationException) throw error
             if (error is SecurityException) {
-                CalendarProviderState(emptyDeviceEvents, CalendarProviderStatus.PermissionDenied, error)
+                CalendarProviderState(emptyResult, CalendarProviderStatus.PermissionDenied, error)
             } else {
                 logException(error)
-                CalendarProviderState(emptyDeviceEvents, CalendarProviderStatus.Error, error)
+                CalendarProviderState(emptyResult, CalendarProviderStatus.Error, error)
             }
         },
     )
 
     private fun publish(
         request: DeviceEventsRequest,
-        state: CalendarProviderState<DeviceCalendarEventsStore>,
+        state: CalendarProviderState<DeviceEventsResult>,
         generation: Int,
     ) {
         // A result from before an invalidation must not overwrite a newer request's state.

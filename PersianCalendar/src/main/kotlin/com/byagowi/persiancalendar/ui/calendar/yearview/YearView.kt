@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.entities.Calendar
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isBoldFont
@@ -63,11 +64,11 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.select_month
 import com.byagowi.persiancalendar.shared.generated.resources.select_year
+import com.byagowi.persiancalendar.ui.calendar.DeviceCalendarEventsCache
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.detectHorizontalSwipe
 import com.byagowi.persiancalendar.ui.calendar.detectZoom
-import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEvents
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
@@ -91,7 +92,7 @@ fun YearView(
     scale: MutableFloatState,
     maxWidth: Dp,
     maxHeight: Dp,
-    refreshToken: Int,
+    deviceCalendarEventsCache: DeviceCalendarEventsCache,
     bottomPadding: Dp,
     today: Jdn,
     modifier: Modifier = Modifier,
@@ -148,6 +149,7 @@ fun YearView(
     }
 
     val coroutineScope = rememberCoroutineScope()
+    val emptyDeviceEvents = remember { DeviceCalendarEventsStore.empty() }
 
     val detectZoom = Modifier.detectZoom {
         scale.floatValue = (scale.floatValue * it).coerceIn(
@@ -182,9 +184,8 @@ fun YearView(
                             (today on calendar).year + yearOffset, 1, 1,
                         ),
                     )
-                    val yearDeviceEvents = rememberDeviceCalendarEvents(
+                    val yearDeviceEventDays = deviceCalendarEventsCache.getDaysWithDeviceEvents(
                         yearStartJdn,
-                        refreshToken = refreshToken,
                         days = 366,
                     ).data
                     FlowRow(
@@ -245,7 +246,8 @@ fun YearView(
                                                 canvas = canvas.nativeCanvas,
                                                 today = today,
                                                 baseDate = monthDate,
-                                                deviceEvents = yearDeviceEvents,
+                                                deviceEvents = emptyDeviceEvents,
+                                                deviceEventDays = yearDeviceEventDays,
                                                 isRtl = isRtl,
                                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                                                 selectedDay = selectedDay,

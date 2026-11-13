@@ -33,6 +33,8 @@ fun renderMonthWidget(
     calendar: Calendar,
     setWeekNumberText: ((i: Int, text: String) -> Unit)? = null,
     setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
+    // When provided, device event presence comes from these days instead of from the store.
+    deviceEventDays: Set<Jdn>? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
     val startingWeekDay = monthStartJdn.weekDay
@@ -75,7 +77,8 @@ fun renderMonthWidget(
                     isToday = isToday,
                     isSelected = day == selectedDay,
                     hasEvent = events.any { it !is CalendarEvent.DeviceCalendarEvent },
-                    hasAppointment = events.any { it is CalendarEvent.DeviceCalendarEvent },
+                    hasAppointment = deviceEventDays?.contains(day)
+                        ?: events.any { it is CalendarEvent.DeviceCalendarEvent },
                     isHoliday = isHoliday,
                     jdn = day,
                     dayOfMonth = if (setText == null) text else "",
