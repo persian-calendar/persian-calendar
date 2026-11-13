@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">ru</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">Календарь</string>
     <string name="widget_name">Персидский календарь</string>
     <string name="widget_mini_name">Персидский календарь (мини)</string>
     <string name="widget_age_name">Персидский календарь (возраст)</string>

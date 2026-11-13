@@ -2,7 +2,7 @@
 <resources>
     <string name="code">ar</string>
     <!--Global-->
-    <string name="app_name">Calendar</string>
+    <string name="app_name">التقويم</string>
     <string name="widget_name">التقويم الفارسي</string>
     <string name="widget_mini_name">التقويم الفارسي (صغير)</string>
     <string name="widget_age_name">التقويم الفارسي (عمر)</string>

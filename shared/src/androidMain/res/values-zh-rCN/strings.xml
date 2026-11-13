@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">zh</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">日历</string>
     <string name="widget_name">波斯历</string>
     <string name="widget_mini_name">波斯历（迷你版）</string>
     <string name="widget_age_name">波斯历（年龄）</string>

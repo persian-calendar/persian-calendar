@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">ta</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">நாட்காட்டி</string>
     <string name="widget_name">பாரசீக நாட்காட்டி</string>
     <string name="widget_mini_name">பாரசீக நாட்காட்டி (சிறு)</string>
     <string name="widget_age_name">பாரசீக நாட்காட்டி (அகவை)</string>

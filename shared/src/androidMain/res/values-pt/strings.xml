@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">pt</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">Calendário</string>
     <string name="widget_name">Calendário Persa</string>
     <string name="widget_mini_name">Calendário Persa (mini)</string>
     <string name="widget_age_name">Calendário Persa (idade)</string>

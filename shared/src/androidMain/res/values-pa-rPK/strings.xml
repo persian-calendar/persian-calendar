@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">pa-PK</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">کیلنڈر</string>
     <string name="widget_name">فارسی تقویم</string>
     <string name="widget_mini_name">فارسی تقویم (چھوٹا)</string>
     <string name="widget_age_name">فارسی تقویم (عمر)</string>

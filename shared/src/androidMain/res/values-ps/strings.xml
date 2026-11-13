@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">ps</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">جنتری</string>
     <string name="widget_name">پرژن جنتری</string>
     <string name="widget_mini_name">پرژن جنتری(کوچنی)</string>
     <string name="widget_age_name">پرژن جنتری (عمر)</string>

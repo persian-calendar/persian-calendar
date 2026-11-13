@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">kmr</string>
-    <string name="app_name">Calendar</string>
+    <string name="app_name">Rojhejmêr</string>
     <string name="widget_name">Rojhejmêra Farsî</string>
     <string name="widget_mini_name">Rojhejmêra Farsî (piçûk)</string>
     <string name="widget_age_name">Rojhejmêra Farsî (temen)</string>
