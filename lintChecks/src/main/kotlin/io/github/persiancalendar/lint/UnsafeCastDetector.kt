@@ -17,6 +17,7 @@ class UnsafeCastDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitBinaryExpressionWithType(node: UBinaryExpressionWithType) {
+            if (context.isVendoredSource()) return
             val sourceText = node.sourcePsi?.text ?: return
             if (" as " in sourceText) context.report(
                 issue = ISSUE,

@@ -16,6 +16,7 @@ class ComposeStringResourceDetector : Detector(), SourceCodeScanner {
     override fun getApplicableMethodNames() = listOf("stringResource")
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
+        if (context.isVendoredSource()) return
         if (context.evaluator.isMemberInClass(method, "androidx.compose.ui.res.StringResources_androidKt")) {
             context.report(
                 issue = ISSUE,

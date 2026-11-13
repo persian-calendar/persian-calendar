@@ -18,6 +18,7 @@ class DebugAssertNotNullSafeCallDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitQualifiedReferenceExpression(node: UQualifiedReferenceExpression) {
+            if (context.isVendoredSource()) return
             val selector = node.selector as? USimpleNameReferenceExpression ?: return
             if (selector.identifier != "debugAssertNotNull") return
 

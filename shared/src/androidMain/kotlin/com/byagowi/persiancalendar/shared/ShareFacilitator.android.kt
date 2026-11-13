@@ -90,6 +90,7 @@ actual abstract class ShareFacilitator private actual constructor() {
                     Intent(Intent.ACTION_SEND).also {
                         it.type = mime
                         it.putExtra(Intent.EXTRA_STREAM, uri)
+                        it.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     },
                     chooserTitle,
                 ),

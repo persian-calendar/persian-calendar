@@ -1,5 +1,7 @@
 @file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
 
+import com.android.build.api.dsl.Lint
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
@@ -8,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.plugin.parcelize)
     alias(libs.plugins.kotlin.plugin.serialization)
     id("io.github.persiancalendar.appbuildplugin")
+    id("com.android.lint")
 }
 
 val generatedAppSrcDir = layout.buildDirectory.dir("generated/source/appsrc/main").get().asFile
@@ -27,6 +30,10 @@ kotlin {
         androidResources {
             enable = true
         }
+
+        // The KMP Android target has its own lint DSL, separate from the standalone lint
+        // plugin extension which drives the JVM component.
+        lint { applyProjectLintOptions() }
 
         compilerOptions {
             freeCompilerArgs.addAll(
@@ -80,6 +87,32 @@ kotlin {
     }
 }
 
+// Applied to both the KMP Android target lint and the standalone lint plugin (JVM) extension.
+fun Lint.applyProjectLintOptions() {
+    warningsAsErrors = true
+    abortOnError = true
+    checkAllWarnings = true
+    checkReleaseBuilds = true
+    checkDependencies = true
+    checkTestSources = true
+    checkGeneratedSources = true
+    disable += listOf(
+        "MissingTranslation",
+        // Translation data can carry quantities a language does not actually use
+        "UnusedQuantity",
+        "SelectableText",
+        "IconLocation",
+        "DuplicateStrings",
+        // Makes the CI fail in unrelated changes
+        "GradleDependency",
+        "AndroidGradlePluginVersion",
+        // Useless complain we don't care about
+        "SyntheticAccessor",
+    )
+}
+
+lint { applyProjectLintOptions() }
+
 compose.resources {
     publicResClass = true
     packageOfResClass = "com.byagowi.persiancalendar.shared.generated.resources"
@@ -95,4 +128,8 @@ tasks.configureEach {
     if (name.startsWith("compile")) {
         dependsOn("codegenerators")
     }
+}
+
+dependencies {
+    lintChecks(project(":lintChecks"))
 }

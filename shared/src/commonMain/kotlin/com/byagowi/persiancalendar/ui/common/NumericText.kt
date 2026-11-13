@@ -265,6 +265,9 @@ fun cascadeDelay(
  * has no number to compare, so [RollDirection.Auto] reads as [RollDirection.Down]
  * here; [NumericText] is where Auto means something.
  */
+// The public FontScaling.toDp() resolves to its default implementation in the restricted
+// FontScalingLinear interface, which lint reports as RestrictedApi.
+@Suppress("RestrictedApi")
 @Composable
 fun RollingDigit(
     glyph: String,

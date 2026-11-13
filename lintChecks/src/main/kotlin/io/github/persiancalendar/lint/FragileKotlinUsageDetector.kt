@@ -29,7 +29,7 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitPostfixExpression(node: UPostfixExpression) {
-            if (context.isVendored()) return
+            if (context.isVendoredSource()) return
             if (node.operator.text != "!!") return
             context.report(
                 issue = DOUBLE_BANG_ISSUE,
@@ -39,7 +39,7 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
         }
 
         override fun visitCallExpression(node: UCallExpression) {
-            if (context.isVendored()) return
+            if (context.isVendoredSource()) return
             if (node.methodName != "error") return
             val containingClass = node.resolve()?.containingClass?.qualifiedName
             if (containingClass == null || !containingClass.startsWith("kotlin.")) return
@@ -51,7 +51,7 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
         }
 
         override fun visitThrowExpression(node: UThrowExpression) {
-            if (context.isVendored()) return
+            if (context.isVendoredSource()) return
             context.report(
                 issue = THROW_ISSUE,
                 location = context.getLocation(node),
@@ -59,9 +59,6 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
             )
         }
     }
-
-    private fun JavaContext.isVendored() =
-        file.absolutePath.replace('\\', '/').contains("/libs/")
 
     companion object {
         val DOUBLE_BANG_ISSUE = Issue.create(

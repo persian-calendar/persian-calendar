@@ -17,6 +17,7 @@ class ElvisEmptyStringDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitLiteralExpression(node: ULiteralExpression) {
+            if (context.isVendoredSource()) return
             if (!node.isString) return
             val psiNode = node.sourcePsi ?: return
             if (psiNode.text != "\"\"") return

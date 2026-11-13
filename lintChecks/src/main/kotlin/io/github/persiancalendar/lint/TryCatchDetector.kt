@@ -17,6 +17,7 @@ class TryCatchDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitTryExpression(node: UTryExpression) {
+            if (context.isVendoredSource()) return
             context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),

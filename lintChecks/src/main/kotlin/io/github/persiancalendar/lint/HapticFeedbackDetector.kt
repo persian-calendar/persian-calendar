@@ -16,6 +16,7 @@ class HapticFeedbackDetector : Detector(), SourceCodeScanner {
     override fun getApplicableMethodNames() = listOf("performHapticFeedback")
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
+        if (context.isVendoredSource()) return
         val message = when (method.containingClass?.qualifiedName) {
             "android.view.View" -> {
                 "Direct call to View.performHapticFeedback() is not allowed.\nUse com.byagowi.persiancalendar.ui.utils provided alternatives."
