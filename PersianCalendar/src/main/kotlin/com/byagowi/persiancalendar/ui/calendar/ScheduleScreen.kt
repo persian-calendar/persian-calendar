@@ -245,8 +245,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         monthHtmlReport(context, date, isWholeYear, deviceEvents),
                                     )
                                 }.onFailure { error ->
-                                    if (error is CancellationException) throw error
-                                    logException(error)
+                                    if (error !is CancellationException) logException(error)
                                 }
                             }
                         }

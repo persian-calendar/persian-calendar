@@ -488,7 +488,7 @@ private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, 
                     it.getIntOrNull(3)?.let(::Color),
                 )
             }.groupBy { it.accountName }
-        } ?: error("Calendar provider returned no calendars cursor")
+        }
     }
     val latestOnFailure by rememberUpdatedState(onFailure)
     LaunchedEffect(result.error) {

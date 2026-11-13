@@ -23,14 +23,15 @@ internal fun scheduleWithExactAlarmFallback(
             return
         }
     }.onFailure { exception ->
-        if (exception !is SecurityException) throw exception
-        onPermissionFailure(exception)
+        if (exception is SecurityException) onPermissionFailure(exception)
+        else logException(exception)
     }
     runCatching {
         scheduleInexact()
     }.onFailure { exception ->
-        if (exception !is SecurityException) throw exception
-        // Keep the WorkManager backup already enqueued by the caller, even on an OEM failure.
-        onPermissionFailure(exception)
+        if (exception is SecurityException) {
+            // Keep the WorkManager backup already enqueued by the caller, even on an OEM failure.
+            onPermissionFailure(exception)
+        } else logException(exception)
     }
 }

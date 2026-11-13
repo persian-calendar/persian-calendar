@@ -173,7 +173,7 @@ private fun <T> rememberCalendarProviderRequest(
                         currentCoroutineContext().ensureActive()
                         publish(CalendarProviderState(result, CalendarProviderStatus.Ready))
                     }.onFailure { error ->
-                        if (error is CancellationException) throw error
+                        if (error is CancellationException) return@onFailure
                         if (error is SecurityException) {
                             publish(
                                 CalendarProviderState(
@@ -218,7 +218,6 @@ private fun readDaysWithDeviceEvents(
 ): DeviceEventDays {
     cancellationSignal?.throwIfCanceled()
     if (!settings.enabled) return DeviceEventDays.EMPTY
-    if (!context.hasCalendarPermission()) throw SecurityException("Calendar permission is unavailable")
 
     val days = duration.inWholeDays.toInt()
     val endingDate = GregorianCalendar(startingDate.timeZone).apply {
@@ -235,7 +234,7 @@ private fun readDaysWithDeviceEvents(
     val lastDay = firstDay + days - 1
     val eventDays = mutableSetOf<Jdn>()
     val holidayDays = mutableSetOf<Jdn>()
-    context.contentResolver.query(
+    val cursor = context.contentResolver.query(
         CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
             ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
             ContentUris.appendId(this, endingDate.timeInMillis + 1.days.inWholeMilliseconds)
@@ -251,7 +250,8 @@ private fun readDaysWithDeviceEvents(
         null,
         CalendarContract.Instances.BEGIN + " ASC",
         cancellationSignal,
-    )?.use { cursor ->
+    ) ?: return DeviceEventDays.EMPTY
+    cursor.use { cursor ->
         generateSequence {
             cancellationSignal?.throwIfCanceled()
             if (cursor.moveToNext()) cursor else null
@@ -286,7 +286,7 @@ private fun readDaysWithDeviceEvents(
                 day += 1
             }
         }
-    } ?: error("Calendar provider returned no cursor")
+    }
     return DeviceEventDays(eventDays, holidayDays)
 }
 
@@ -522,7 +522,7 @@ class DeviceCalendarEventsCache internal constructor(
         if (requests.containsKey(request)) return
         activePreloadRequest = request
         val job = scope.launch {
-            val state = loadDeviceEvents(request, environment)
+            val state = loadDeviceEvents(request, environment) ?: return@launch
             if (state.status == CalendarProviderStatus.Ready) {
                 val store = state.data.store
                 repeat(count) { offset ->
@@ -561,7 +561,8 @@ class DeviceCalendarEventsCache internal constructor(
         if (requests.containsKey(request)) return
         if (!force && entries[request]?.generation == environment.generation) return
         val job = scope.launch {
-            publish(request, loadDeviceEvents(request, environment), environment.generation)
+            val state = loadDeviceEvents(request, environment) ?: return@launch
+            publish(request, state, environment.generation)
         }
         requests[request] = job
         job.invokeOnCompletion { if (requests[request] === job) requests.remove(request) }
@@ -570,49 +571,54 @@ class DeviceCalendarEventsCache internal constructor(
     private suspend fun loadDeviceEvents(
         request: DeviceEventsRequest,
         environment: DeviceEventsEnvironment,
-    ): CalendarProviderState<DeviceEventsResult> = runCatching {
-        queryCalendarProvider { signal ->
-            val start = DeviceEventInterval.startOfDay(
-                request.startJdn.toCivilDate(),
-                environment.settings.timeZone,
-            )
-            when (request.query) {
-                DeviceEventsQuery.Detailed -> DeviceEventsResult.ofEvents(
-                    DeviceCalendarEventsStore(
-                        readDeviceEvents(
+    ): CalendarProviderState<DeviceEventsResult>? {
+        val result = runCatching {
+            queryCalendarProvider { signal ->
+                val start = DeviceEventInterval.startOfDay(
+                    request.startJdn.toCivilDate(),
+                    environment.settings.timeZone,
+                )
+                when (request.query) {
+                    DeviceEventsQuery.Detailed -> DeviceEventsResult.ofEvents(
+                        DeviceCalendarEventsStore(
+                            readDeviceEvents(
+                                context,
+                                start,
+                                request.days.days,
+                                request.limit,
+                                settings = environment.settings,
+                                cancellationSignal = signal,
+                            ),
+                        ),
+                    )
+
+                    DeviceEventsQuery.Presence -> DeviceEventsResult.ofDays(
+                        readDaysWithDeviceEvents(
                             context,
                             start,
                             request.days.days,
-                            request.limit,
-                            settings = environment.settings,
-                            cancellationSignal = signal,
+                            environment.settings,
+                            signal,
                         ),
-                    ),
-                )
-
-                DeviceEventsQuery.Presence -> DeviceEventsResult.ofDays(
-                    readDaysWithDeviceEvents(
-                        context,
-                        start,
-                        request.days.days,
-                        environment.settings,
-                        signal,
-                    ),
-                )
+                    )
+                }
             }
         }
-    }.fold(
-        onSuccess = { CalendarProviderState(it, CalendarProviderStatus.Ready) },
-        onFailure = { error ->
-            if (error is CancellationException) throw error
-            if (error is SecurityException) {
-                CalendarProviderState(emptyResult, CalendarProviderStatus.PermissionDenied, error)
-            } else {
+        val error = result.exceptionOrNull()
+        return when {
+            error == null -> CalendarProviderState(
+                result.getOrThrow(), CalendarProviderStatus.Ready,
+            )
+            error is CancellationException -> null
+            error is SecurityException -> CalendarProviderState(
+                emptyResult, CalendarProviderStatus.PermissionDenied, error,
+            )
+            else -> {
                 logException(error)
                 CalendarProviderState(emptyResult, CalendarProviderStatus.Error, error)
             }
-        },
-    )
+        }
+    }
 
     private fun publish(
         request: DeviceEventsRequest,

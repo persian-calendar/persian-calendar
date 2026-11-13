@@ -177,10 +177,6 @@ internal fun readDeviceEvents(
 ): List<CalendarEvent.DeviceCalendarEvent> {
     cancellationSignal?.throwIfCanceled()
     if (!settings.enabled) return emptyList()
-    if (ActivityCompat.checkSelfPermission(
-            context, Manifest.permission.READ_CALENDAR,
-        ) != PackageManager.PERMISSION_GRANTED
-    ) throw SecurityException("Calendar permission is unavailable")
 
     val selection: String?
     val selectionArgs: Array<String>?
@@ -196,7 +192,7 @@ internal fun readDeviceEvents(
         boundaryRegex = null
     }
 
-    return run {
+    val events = run {
         val endingDate = GregorianCalendar(startingDate.timeZone).apply {
             timeInMillis = startingDate.timeInMillis
             add(GregorianCalendar.DAY_OF_MONTH, duration.inWholeDays.toInt())
@@ -260,13 +256,13 @@ internal fun readDeviceEvents(
                     source = null,
                 )
             }.take(limit).toList()
-        } ?: error("Calendar provider returned no cursor")
-    }.also {
-        cancellationSignal?.throwIfCanceled()
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) !=
-            PackageManager.PERMISSION_GRANTED
-        ) throw SecurityException("Calendar permission was revoked")
+        } ?: emptyList()
     }
+    cancellationSignal?.throwIfCanceled()
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) !=
+        PackageManager.PERMISSION_GRANTED
+    ) return emptyList()
+    return events
 }
 
 internal data class DeviceCalendarQuerySettings(
