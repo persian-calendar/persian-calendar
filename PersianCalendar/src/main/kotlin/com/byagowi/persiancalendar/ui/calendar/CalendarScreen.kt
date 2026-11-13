@@ -695,6 +695,7 @@ fun SharedTransitionScope.CalendarScreen(
                     yearViewCalendar = yearViewCalendar,
                     onYearViewCalendarChange = { yearViewCalendar = it },
                     maxHeight = maxHeight,
+                    refreshToken = refreshToken,
                     bottomPadding = bottomPadding
                         // For screens without navigation bar, at least make sure it has some bottom padding
                         .coerceAtLeast(24.dp),

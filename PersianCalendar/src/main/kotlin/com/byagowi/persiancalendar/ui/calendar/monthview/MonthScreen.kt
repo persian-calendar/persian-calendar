@@ -102,6 +102,7 @@ fun SharedTransitionScope.MonthScreen(
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
     today: Jdn,
+    refreshToken: Int,
     refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
     modifier: Modifier = Modifier,
@@ -233,7 +234,11 @@ fun SharedTransitionScope.MonthScreen(
                     items(ITEMS_COUNT) { index ->
                         val weekJdn = indexToJdn(baseJdn, index)
                         val resources = LocalResources.current
-                        val deviceEvents = rememberDeviceCalendarEvents(weekJdn, days = 7).data
+                        val deviceEvents = rememberDeviceCalendarEvents(
+                            weekJdn,
+                            days = 7,
+                            refreshToken = refreshToken
+                        ).data
                         val events = (0..<7).map { index ->
                             eventsRepository.getEvents(weekJdn + index, deviceEvents)
                         }

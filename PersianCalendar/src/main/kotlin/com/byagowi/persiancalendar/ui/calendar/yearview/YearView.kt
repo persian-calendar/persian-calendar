@@ -91,6 +91,7 @@ fun YearView(
     scale: MutableFloatState,
     maxWidth: Dp,
     maxHeight: Dp,
+    refreshToken: Int,
     bottomPadding: Dp,
     today: Jdn,
     modifier: Modifier = Modifier,
@@ -181,8 +182,11 @@ fun YearView(
                             (today on calendar).year + yearOffset, 1, 1,
                         ),
                     )
-                    val yearDeviceEvents =
-                        rememberDeviceCalendarEvents(yearStartJdn, days = 366).data
+                    val yearDeviceEvents = rememberDeviceCalendarEvents(
+                        yearStartJdn,
+                        refreshToken = refreshToken,
+                        days = 366,
+                    ).data
                     FlowRow(
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth(),

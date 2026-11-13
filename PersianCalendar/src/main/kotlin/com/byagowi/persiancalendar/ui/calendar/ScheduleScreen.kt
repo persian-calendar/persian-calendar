@@ -93,7 +93,7 @@ import kotlin.time.Duration.Companion.days
 
 @Composable
 fun SharedTransitionScope.ScheduleScreen(
-    refreshToken: Int,
+    deviceCalendarEventsCache: DeviceCalendarEventsCache,
     refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
@@ -107,6 +107,15 @@ fun SharedTransitionScope.ScheduleScreen(
     var isFirstTime by remember { mutableStateOf(true) }
     val firstVisibleItemJdn by remember {
         derivedStateOf { indexToJdn(baseJdn, listState.firstVisibleItemIndex) }
+    }
+    val preloadRange by remember {
+        derivedStateOf {
+            val first = (listState.firstVisibleItemIndex - PRELOAD_DAYS).coerceAtLeast(0)
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                ?: listState.firstVisibleItemIndex
+            val last = (lastVisible + PRELOAD_DAYS).coerceAtMost(ITEMS_COUNT - 1)
+            indexToJdn(baseJdn, first) to (last - first + 1)
+        }
     }
     LaunchedEffect(today) {
         if (isFirstTime) {
@@ -130,7 +139,6 @@ fun SharedTransitionScope.ScheduleScreen(
         }
     }
     val language = language
-
     val preferredSwipeUpAction = preferredSwipeUpAction
     val isLandscape = isLandscape()
     val swipeDownModifier = Modifier.detectSwipe {
@@ -273,6 +281,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                 else MaterialTheme.typography.titleLarge
             val viewEvent = viewEvent(refreshCalendar)
+            deviceCalendarEventsCache.preload(preloadRange.first, preloadRange.second)
             LazyColumn(
                 state = listState,
                 contentPadding = WindowInsets.safeDrawing.only(
@@ -292,9 +301,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         baseJdn = jdn
                         coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
                     }
-                    val deviceEvents = rememberDeviceCalendarEvents(
-                        jdn, days = 1, limit = 120, refreshToken = refreshToken,
-                    )
+                    val deviceEvents = deviceCalendarEventsCache.getEventsOfDay(jdn)
                     val events = eventsRepository.getEvents(jdn, deviceEvents.data)
                     Column {
                         // Give pending days a size so LazyColumn does not enqueue hundreds of
@@ -388,4 +395,5 @@ fun SharedTransitionScope.ScheduleScreen(
 }
 
 private const val ITEMS_COUNT = 365 * 2
+private const val PRELOAD_DAYS = 12
 private fun indexToJdn(baseJdn: Jdn, index: Int) = baseJdn + index - ITEMS_COUNT / 2

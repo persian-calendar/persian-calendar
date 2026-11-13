@@ -110,6 +110,7 @@ import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.WeekScreen
 import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
 import com.byagowi.persiancalendar.ui.calendar.rememberCalendarProviderRevision
+import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEventsCache
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
@@ -172,6 +173,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 )
             }
 
+            val deviceEventsCache = rememberDeviceCalendarEventsCache(refreshToken)
             NavDisplay(
                 backStack = backStack,
                 onBack = navigateUp,
@@ -210,13 +212,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             navigateUp = navigateUp,
                             initiallySelectedDay = it.day,
                             today = today,
+                            refreshToken = refreshToken,
                             refreshCalendar = refreshCalendar,
                             commandBringDay = commandBringDay,
                         )
                     }
                     entry<Screen.Schedule> {
                         ScheduleScreen(
-                            refreshToken = refreshToken,
+                            deviceCalendarEventsCache = deviceEventsCache,
                             refreshCalendar = refreshCalendar,
                             commandBringDay = commandBringDay,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,
