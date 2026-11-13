@@ -92,6 +92,9 @@ enum class Language(val code: String, val nativeName: String) {
     OTA(
         "ota", "عثمانى",
     ),
+    PA_PK(
+        "pa-PK", "پنجابی",
+    ),
     PT(
         "pt", "Português",
     ),
@@ -107,11 +110,17 @@ enum class Language(val code: String, val nativeName: String) {
     TR(
         "tr", "Türkçe",
     ),
+    UK(
+        "uk", "Українська",
+    ),
     UR(
         "ur", "اردو",
     ),
     ZH_CN(
         "zh-CN", "中文",
+    ),
+    ZH_TW(
+        "zh-TW", "繁體中文",
     );
 
     val isArabic get() = this == AR
@@ -130,7 +139,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val inParentheses: String
         get() = when (this) {
-            JA, ZH_CN -> "%s（%s）"
+            JA, ZH_CN, ZH_TW -> "%s（%s）"
             else -> "%s (%s)"
         }
 
@@ -138,54 +147,54 @@ enum class Language(val code: String, val nativeName: String) {
     val dmy: String
         get() = when (this) {
             CKB -> $$"%1$sی %2$sی %3$s"
-            ZH_CN -> $$"%3$s 年 %2$s %1$s 日"
+            ZH_CN, ZH_TW -> $$"%3$s 年 %2$s %1$s 日"
             else -> $$"%1$s %2$s %3$s"
         }
     val dm: String
         get() = when (this) {
             CKB -> $$"%1$sی %2$s"
-            JA, ZH_CN -> $$"%2$s %1$s"
+            JA, ZH_CN, ZH_TW -> $$"%2$s %1$s"
             EN_US -> $$"%2$s %1$s"
             else -> $$"%1$s %2$s"
         }
     val my: String
         get() = when (this) {
             CKB -> $$"%1$sی %2$s"
-            ZH_CN -> $$"%2$s 年 %1$s"
+            ZH_CN, ZH_TW -> $$"%2$s 年 %1$s"
             else -> $$"%1$s %2$s"
         }
     val timeAndDateFormat: String
         get() = when (this) {
-            JA, ZH_CN -> $$"%2$s %1$s"
+            JA, ZH_CN, ZH_TW -> $$"%2$s %1$s"
             else -> $$"%1$s$$spacedComma%2$s"
         }
     val clockAmPmOrder: String
         get() = when (this) {
-            ZH_CN -> $$"%2$s %1$s"
+            ZH_CN, ZH_TW -> $$"%2$s %1$s"
             else -> $$"%1$s %2$s"
         }
 
     val isLessKnownRtl: Boolean
         get() = when (this) {
-            AZB, GLK, OTA -> true
+            AZB, GLK, OTA, PA_PK -> true
             else -> false
         }
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, EN_IR, JA, ZH_CN, FR, ES, DE, PT, IT, AR, TR, TG, RU, CKB, IN -> true
+            EN_US, EN_IR, JA, ZH_CN, ZH_TW, FR, ES, DE, PT, IT, AR, TR, TG, RU, UK, CKB, IN -> true
             else -> false
         }
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, TR, KMR, TA, TG, NE, RU, IN -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, ZH_TW, FR, ES, DE, PT, IT, TR, KMR, TA, TG, NE, RU, UK, IN, PA_PK -> true
             else -> false
         }
 
     val preferredCalculationMethod: CalculationMethod
         get() = when (this) {
-            FA_AF, PS, UR, ES, DE, AR, CKB, TR, IT, JA, PT, ZH_CN, OTA, KMR, TG, NE, TA -> CalculationMethod.MWL
+            FA_AF, PS, UR, ES, DE, AR, CKB, TR, IT, JA, PT, ZH_CN, ZH_TW, OTA, KMR, TG, NE, TA, UK, PA_PK -> CalculationMethod.MWL
             FA, AZB, EN_IR, EN_US, GLK -> CalculationMethod.Tehran
             IN -> CalculationMethod.Singapore
             FR -> CalculationMethod.France
@@ -214,21 +223,21 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, TR, KMR, EN_IR, TG, NE, TA, IN -> false
-            FA, FA_AF, PS, AR, AZB, CKB, GLK, OTA, UR -> true
+            EN_US, JA, ZH_CN, ZH_TW, FR, ES, DE, PT, IT, RU, UK, TR, KMR, EN_IR, TG, NE, TA, IN -> false
+            FA, FA_AF, PS, AR, AZB, CKB, GLK, OTA, UR, PA_PK -> true
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalNumeral: Boolean
         get() = when (this) {
-            UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, TR, KMR, TG -> false
+            UR, EN_IR, EN_US, JA, ZH_CN, ZH_TW, FR, ES, DE, PT, IT, RU, UK, TR, KMR, TG, PA_PK -> false
             else -> true
         }
 
     // Whether the language doesn't need " and " between date parts or not
     val languagePrefersHalfSpaceAndInDates: Boolean
         get() = when (this) {
-            JA, ZH_CN -> true
+            JA, ZH_CN, ZH_TW -> true
             else -> false
         }
 
@@ -262,7 +271,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, IN -> true
+            EN_US, JA, ZH_CN, ZH_TW, FR, ES, DE, PT, IT, RU, UK, UR, PA_PK, TR, KMR, TG, TA, IN -> true
             else -> false
         }
 
@@ -300,7 +309,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             FA, FA_AF, PS, AR, AZB, CKB, EN_IR, GLK, OTA -> WeekDay.SATURDAY
             EN_US, IN -> WeekDay.SUNDAY
-            JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
+            JA, ZH_CN, ZH_TW, FR, ES, DE, PT, IT, RU, UK, UR, PA_PK, TR, KMR, TG, TA, NE -> WeekDay.MONDAY
         }
     val defaultWeekStartAsString get() = defaultWeekStart.ordinal.toString()
 
@@ -484,7 +493,7 @@ enum class Language(val code: String, val nativeName: String) {
             else -> '/'
         }
         val needsZeroPad = iso8601DateFormat || when (this) {
-            FR, IT, NE, PT, RU, TR, KMR -> true
+            FR, IT, NE, PT, RU, UK, TR, KMR -> true
             // According to the dated on the first page of https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1404.pdf
             // It seems it's a zero padded locale
             // But according to نیازهای شرایط محلی برای زبان فارسی ایران it's not
@@ -494,12 +503,12 @@ enum class Language(val code: String, val nativeName: String) {
         }
         val format = if (iso8601DateFormat) $$"%1$s$$sep%2$s$$sep%3$s" else when (this) {
             // Year major
-            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN, OTA -> $$"%1$s$$sep%2$s$$sep%3$s"
+            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN, ZH_TW, OTA -> $$"%1$s$$sep%2$s$$sep%3$s"
             // Month major
             EN_US -> $$"%2$s$$sep%3$s$$sep%1$s"
             // Day major, most likely everything else goes here but check via JS'
             // new Date().toLocaleDateString('XX')
-            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA, IN -> $$"%3$s$$sep%2$s$$sep%1$s"
+            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, UK, TG, TR, UR, PA_PK, TA, IN -> $$"%3$s$$sep%2$s$$sep%1$s"
         }
         return format.format(
             numeral.format(year),

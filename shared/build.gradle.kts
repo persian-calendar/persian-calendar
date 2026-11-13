@@ -97,7 +97,6 @@ fun Lint.applyProjectLintOptions() {
     checkTestSources = true
     checkGeneratedSources = true
     disable += listOf(
-        "MissingTranslation",
         "IconLocation",
         "DuplicateStrings",
         // Makes the CI fail in unrelated changes
