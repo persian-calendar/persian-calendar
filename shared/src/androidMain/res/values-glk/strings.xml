@@ -4,7 +4,7 @@
     <string name="app_name">فارسي تقويم</string>
     <string name="widget_name">فارسي تقويم</string>
     <string name="widget_mini_name">فارسي تقويم (کۊجدانه)</string>
-    <string name="widget_age_name">تقویم فارسی (سن)</string>
+    <string name="widget_age_name">فارسي تقويم (سن)</string>
     <string name="close">دٚوستن</string>
     <string name="open">واکۊدن</string>
     <string name="accept">تأیید</string>
@@ -70,12 +70,12 @@
     <string name="sunrise">دتاوستن</string>
     <string name="dhuhr">ظؤهرˇاذان</string>
     <string name="asr">عصر</string>
-    <string name="sunset">مغريب</string>
+    <string name="sunset">مغرب</string>
     <string name="maghrib">اذانˇمغرب</string>
     <string name="isha">عشاء</string>
     <string name="midnight">نیصفˇشب</string>
     <string name="spring_equinox">لحظه-يه اعتدالˇبهاری ؤ تحویلˇسال %1$s</string>
-    <string name="select_type_date">انتخاب گونهٔ تاریخ</string>
+    <string name="select_type_date">تاريخˇگونهˈدؤجين کۊدن</string>
     <string name="year">سال</string>
     <string name="select_year">سالˇدؤجين کۊدن</string>
     <string name="month">ماه</string>
@@ -110,7 +110,7 @@
     <string name="astronomical_info_summary">ايطلاعاتˇنيشان دأن صورتˇفلکی، سالˇنام ؤ قمر در عقربˇمانستن</string>
     <string name="week_number">هفته-يه سال</string>
     <string name="week_number_summary">هفته-يه سال تقويمˇدۊرۊن</string>
-    <string name="week_start">شۊرۊىˇهفته</string>
+    <string name="week_start">شۊرۊˇهفته</string>
     <string name="week_start_summary">هفته شۊرۊ بؤنˇدؤجين</string>
     <string name="week_ends">هفته تعطيلي رۊزان</string>
     <string name="week_ends_summary">هفته دۊرۊن کؤ رۊزانأ تعطيل نيشان بده</string>
@@ -126,11 +126,11 @@
     <string name="showing_iran_time">ابزارکانˇنيشان دأن، نوارˇاعلان ˇبرنامه ایرانˇوختˇمرأ همه جگا، خارجˇايراني-يانˇره</string>
     <string name="customize_widget">ويجتان ؤ اعلانˈشخصي چاکۊدن</string>
     <string name="which_one_to_show">کؤيتأيأ نيشان بده</string>
-    <string name="customize_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
+    <string name="customize_widget_summary">چي چيزانأ ويجتان ؤ اعلانˇدۊرۊن نيشان بده</string>
     <string name="ask_user_to_set_location">اؤقاتˇشرعي نيشان دأنˇوأسي شيمي جايأ مالۊم بۊکۊنيد</string>
     <string name="notify_date">اعلانˇرا تاودن</string>
     <string name="enable_notify">تاريخانأ هميشک خبر بده</string>
-    <string name="notify_date_lock_screen">صفه کي قؤفلˈبؤسته أ اعلانانيشان بده</string>
+    <string name="notify_date_lock_screen">صفه کي قؤفلˈبؤسته أ اعلانان نيشان بده</string>
     <string name="notify_date_lock_screen_summary">فقد اۊ وخته کي مؤحافظتˇگۊشي ره تنظيم ببه کار کۊنه</string>
     <string name="gps_location">مؤختصاتˇ فأگيفتن جي‌پي‌اسˇجأ</string>
     <string name="gps_location_help">أگه أيأ جأ بتأنيد, تنظيماتˇباقي بخشانأ نيازي ني-يه</string>
@@ -153,7 +153,7 @@
     <string name="athan_alarm_summary">أ نمازانˇره اذان بگه</string>
     <string name="custom_athan">اذانˇدؤجين کۊدن</string>
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
-    <string name="custom_notification_is_set">درخاستي صدا تنظيم بؤبؤ</string>
+    <string name="custom_notification_is_set">درخواستي صدا تنظيم بؤبؤ</string>
     <string name="default_athan">اذانˇپیش‌فرض</string>
     <string name="athan_disabled_summary">اذانˇتنظيماتˇرا تأودأنˇره, ئي جگايأ فهرستˇجأدؤجين بۊکۊنيد, يا شيمي مؤقعيتˇمۊشخصاتˈوارد بۊکۊنيد</string>
     <!--Permissions-->
@@ -163,8 +163,8 @@
     <string name="phone_calendar_required">اول وا وهأليد دزگا تقويمˇدۊرۊن بشه, أگه دزگا تقويمˈوهأليد برنامه تأنه شيمي شخصي رۊيدادانأ فارسي تقويمˇدۊرۊن نيشان بده.</string>
     <string name="version">نيويشتن %1$s</string>
     <string name="licenses">مۊجوز</string>
-    <string name="about_license_title">برنامه ايجازهان</string>
-    <string name="about_license_sum">مۊجوز GPLv3، ايستفادده بؤبؤسته مۊجوزانˇشرايطˈکي فارسي تقويم ؤ کيتابخانهانˇدۊرۊن ايستفاده بؤبؤسته دأريه-يأ وارسي بۊکۊنيد.</string>
+    <string name="about_license_title">برنامه مۊجوزان</string>
+    <string name="about_license_sum">مۊجوز GPLv3، ايستفاده بؤبؤسته مۊجوزانˇشرايطˈکي فارسي تقويم ؤ کيتابخانهانˇدۊرۊن ايستفاده بؤبؤسته دأريه-يأ وارسي بۊکۊنيد.</string>
     <string name="about_send_mail">رایانامه</string>
     <string name="about_email_sum">شخصي رايانامهˈ برنامه نيويسˇره اۊسه کۊدن</string>
     <string name="about_no_client">رایانامه اۊسه کۊدنˇره برنامه-ئي نصب ني-يه!</string>
@@ -193,14 +193,14 @@
     <string name="pm">ب.ظ</string>
     <string name="holiday">تعطيلي</string>
     <string name="shift_work_days_head">طۊل</string>
-    <string name="prefer_linear_date_summary">۱۳۹۰/۱/۱شمسی جأ ايستفاده کۊدن ۱ فرودینˇ۱۳۹۰ جأ ویجت ؤ اعلانˇدۊرۊن</string>
+    <string name="prefer_linear_date_summary">۱۳۹۰/۱/۱ شمسی جأ ايستفاده کۊدن ۱ فروردینˇ۱۳۹۰ جأ ویجت ؤ اعلانˇدۊرۊن</string>
     <string name="prefer_linear_date">عددي تاريخ</string>
     <string name="month_events">أ ما مۊناسبتان</string>
-    <string name="map">Map</string>
+    <string name="map">نقشه</string>
     <string name="widget_background_color">رنگ پس‌زمینه ویجت</string>
     <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
     <string name="share">هم‌رسانی</string>
-    <string name="enable_location_services">خدمات موقعیت غیرفعال است، برای استفاده از این ویژگی لطفاً آن را فعال سازید.</string>
+    <string name="enable_location_services">موقعيت‌ياب خاموشه، أ ويژگيˇايستفادهˇوأسي لؤطفن اۊنأ رؤشن بۊکۊنيد.</string>
     <string name="select_date">انتخاب تاریخ</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="preview">پيشادئن</string>
@@ -291,8 +291,8 @@
         <item quantity="other">%1$s رۊز %2$s</item>
     </plurals>
     <plurals name="minutes">
-        <item quantity="one">%1$s ديقه</item>
-        <item quantity="other">%1$s ديقه</item>
+        <item quantity="one">%1$s دقيقه</item>
+        <item quantity="other">%1$s دقيقه</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">%1$s ساعت</item>

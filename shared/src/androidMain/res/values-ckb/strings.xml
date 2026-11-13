@@ -21,7 +21,7 @@
     <string name="about">لەبارە</string>
     <string name="exit">دەرچوون</string>
     <string name="add_event">زیادکردنی ڕووداو</string>
-    <string name="not_supported_action">ڕۆژژمێری ئامراز لەم کردەوەیە پشتیوانی ناکات</string>
+    <string name="not_supported_action">ئامرازەکە لەم کردەوەیە پشتیوانی ناکات</string>
     <string name="today">ئەمڕۆ</string>
     <string name="return_to_today">گەڕانەوە بۆ ئەمڕۆ</string>
     <string name="search_in_events">گەڕان لە بۆنەکاندا</string>
@@ -74,7 +74,7 @@
     <string name="sunset">ڕۆژاوا</string>
     <string name="maghrib">بانگی شێوان</string>
     <string name="isha">بانگی خەوتنان</string>
-    <string name="midnight">نیوه‌شەوی شەرعی</string>
+    <string name="midnight">نیوەشەوی شەرعی</string>
     <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵی %1$s</string>
     <string name="select_type_date">ھەڵبژاردنی جۆری ڕێککەوت</string>
     <string name="year">ساڵ</string>
@@ -85,12 +85,12 @@
     <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
     <string name="incorrect_date">ڕێککەوتی پێدراو ھەڵەیە.</string>
     <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
-    <string name="calibrate_compass_summary">بۆ باشترکردنی دیقەتی ڕووگەنوێن، لە شتی موگناتیسی دوور بنەوە، سەر و خوار بە ئامرازکە بکەن و لە گشت تەوەرەکاندا بیھێنن و بیبەن.</string>
+    <string name="calibrate_compass_summary">بۆ باشترکردنی دیقەتی ڕووگەنوێن، لە شتی موگناتیسی دوور بنەوە، ئامرازەکە سەر و خوار بکەن و لە گشت تەوەرەکاندا بیخولێننەوە.</string>
     <string name="level">تەراز</string>
     <string name="stop">ڕاگرتن</string>
     <string name="resume">درێژەپێدان</string>
     <string name="north">باکوور</string>
-    <string name="east">ڕۆژهەڵات</string>
+    <string name="east">ڕۆژھەڵات</string>
     <string name="south">باشوور</string>
     <string name="west">ڕۆژاوا</string>
     <string name="qibla">ڕووگە</string>
@@ -128,7 +128,7 @@
     <string name="customize_widget">تایبەتیکردنی ویجیتەکان و ئاگاداری</string>
     <string name="which_one_to_show">کامەیان نیشان بدرێ</string>
     <string name="customize_widget_summary">چ شتگەلێک لە ویجیتەکان و ئاگاداریدا نیشان بدرێ</string>
-    <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه</string>
+    <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعییەکان، شوێنەکەت لە ڕێکخستندا دیاری بکە</string>
     <string name="notify_date">ئاگاداریی ڕێککەوت</string>
     <string name="enable_notify">ئاگاداریی ھەمیشەیی بۆ گشت جۆرەکانی ڕێککەوت</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
@@ -137,7 +137,7 @@
     <string name="gps_location_help">ئەگەر ئەمە بلوێ، ھیچی تر پێویست نییە</string>
     <string name="gps_internet_description">تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
 \n
-\nبەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە.</string>
+\nبەرنامە تەنیا جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە.</string>
     <string name="wait_for_gps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە</string>
     <string name="location">شوێن</string>
     <string name="location_help">ئەگەر تێیدا نەبوو، لە ژێرەوە دیاریی بکە</string>
@@ -145,7 +145,7 @@
     <string name="longitude">درێژاییی جوگرافی</string>
     <string name="altitude">بەرزاییی جوگرافی</string>
     <string name="altitude_praytime">بە مەتر (دڵخواز)</string>
-    <string name="coordinates">مختصات جغرافیایی</string>
+    <string name="coordinates">پۆتانی جوگرافی</string>
     <string name="athan">بانگ</string>
     <string name="in_city_time">بە ئاسۆی %1$s</string>
     <string name="pray_methods">شێوازەکانی حیسابکردن</string>
@@ -156,9 +156,9 @@
     <string name="athan_alarm_summary">بۆ ئەم نوێژانە بانگ بدرێ</string>
     <string name="custom_athan">ھەڵبژاردنی بانگ</string>
     <string name="abdulbasit">عەبدولباست عەبدوسسەمەد</string>
-    <string name="custom_notification_is_set">دەنگی داواکراو رێکخرا</string>
+    <string name="custom_notification_is_set">دەنگی داواکراو ڕێکخرا</string>
     <string name="default_athan">بانگی بنەڕەتی</string>
-    <string name="athan_disabled_summary">بۆ چالاککردنی ڕێکخستنی بانگ، شوێنێک لە پێڕستدا ھەڵ‌ببژێرن یا پۆتانەکەتان لە سەرەوە تۆمار بکەن</string>
+    <string name="athan_disabled_summary">بۆ چالاککردنی ڕێکخستنی بانگ، شوێنێک لە پێڕستدا ھەڵ‌ببژێرن یان پۆتانەکەتان لە سەرەوە تۆمار بکەن</string>
     <!--Permissions-->
     <string name="location_access">دەستڕاگەیشتن بە شوێن</string>
     <string name="phone_location_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی شوێنە، دەنا دەبێ بەدەست درێژایی و پانایی جوگرافی تێ‌بخەن.</string>
@@ -171,7 +171,7 @@
     <string name="about_send_mail">ئیمەیل</string>
     <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەرانی بەرنامە</string>
     <string name="about_no_client">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە</string>
-    <string name="about_developers">پەرەپێدەران (بە شێوەیەکی هەڕەمەکی ریزکراون)</string>
+    <string name="about_developers">پەرەپێدەران (بە شێوەیەکی ھەڕەمەکی ڕیزکراون)</string>
     <string name="previous_x">%1$s پاشەوە</string>
     <string name="next_x">%1$s پێشەوە</string>
     <string name="week_days_name_column">ئەستوونی %1$s لە خشتەی ڕۆژەکاندا</string>
@@ -187,10 +187,10 @@
     <string name="spaced_comma">،\u0020</string>
     <string name="spaced_colon">:\u0020</string>
     <string name="device_information">زانیاریی ئامراز</string>
-    <string name="center_align_widgets_summary">ھێنانە ناوەڕاستی ویجتەکانی ٢×٢ و ٤×١</string>
-    <string name="center_align_widgets">ھێنانە ناوەڕاستی ویجت</string>
-    <string name="n_till">%1$s بۆ %2$s</string>
-    <string name="recurs">پاتەکردنەوە</string>
+    <string name="center_align_widgets_summary">ھێنانە ناوەڕاستی ویجیتەکانی ٢×٢ و ٤×١</string>
+    <string name="center_align_widgets">ھێنانە ناوەڕاستی ویجیت</string>
+    <string name="n_till">%1$s تا %2$s</string>
+    <string name="recurs">دووپاتکردنەوە</string>
     <string name="am">ب.ن</string>
     <string name="pm">د.ن</string>
     <string name="holiday">پشوودان</string>
@@ -202,12 +202,12 @@
     <string name="widget_background_color">ڕەنگی باکگراوندی ویجیت</string>
     <string name="select_widgets_background_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ باکگراوندی ویجیت</string>
     <string name="share">ھاوبەشی</string>
-    <string name="enable_location_services">راژەی شوێن چالاک نییە، تکایه بۆ بەکارھێنانی ئەم تایبەتمەندییە، چالاکی بکە.</string>
+    <string name="enable_location_services">ڕاژەی شوێن چالاک نییە، تکایە بۆ بەکارھێنانی ئەم تایبەتمەندییە، چالاکی بکە.</string>
     <string name="select_date">ھەڵبژاردنی ڕێککەوت</string>
     <string name="age_widget_title">سەردێڕی ویجیت</string>
     <string name="preview">پێشبینین</string>
     <string name="ignore">گوێ مەدەیە</string>
-    <string name="theme_default">بنەڕەتی سیستم</string>
+    <string name="theme_default">بنەڕەتی سیستەم</string>
     <string name="theme_light">ڕووناک</string>
     <string name="theme_dark">تاریک</string>
     <string name="theme_modern">نۆژەن</string>
@@ -289,12 +289,12 @@
     <string name="sun_view">نیشاندانی خۆر</string>
     <string name="asr_hanafi_juristic">شێوازی نوێژی ئێوارەی حەنەفی</string>
     <string name="month_pray_times">کاتە شەرعییەکانی مانگ</string>
-    <string name="high_latitudes_method">شێوازی بەرزی</string>
+    <string name="high_latitudes_method">شێوازی پانییە بەرزەکان</string>
     <string name="high_latitudes_night_middle">ناوەڕاستی شەو</string>
     <string name="high_latitudes_angle_based">بەپێی گۆشە</string>
-    <string name="high_latitudes_one_seventh">حەوت یەک</string>
+    <string name="high_latitudes_one_seventh">یەک لە حەوت</string>
     <string name="none">ھیچیان</string>
-    <string name="show_sun_and_moon_path_in_24_hours">نیشاندانی بازی خۆر و مانگ لە ٢٤ کاتکۆی داھاتوودا</string>
+    <string name="show_sun_and_moon_path_in_24_hours">نیشاندانی ڕێڕەوی خۆر و مانگ لە ٢٤ کاتکۆی داھاتوودا</string>
     <string name="widget_prefer_device_colors">شوێنکەوتنی ڕەنگکاریی سیستەم لە ویجیتەکاندا</string>
     <string name="nepali_calendar">ڕۆژژمێری نیپالی</string>
     <string name="nepali_calendar_short">نیپالی</string>
@@ -305,7 +305,7 @@
     <string name="summer">ھاوین</string>
     <string name="autumn">پاییز</string>
     <string name="winter">زستان</string>
-    <string name="spring">بەهار</string>
+    <string name="spring">بەھار</string>
     <string name="mercury">زاوە</string>
     <string name="venus">ڤینۆس</string>
     <string name="earth">زەوی</string>
@@ -325,21 +325,21 @@
     <string name="enable_notification">دەتەوێت ئاگاداریی ڕێککەوت چالاک بکەیت؟</string>
     <string name="add_quick_settings_tile">زیادکردنی کاشیی ڕێکخستنی خێرا</string>
     <string name="true_north">باکووری ڕاستی</string>
-    <string name="full_screen">پڕ بە شاشە</string>
+    <string name="full_screen">شاشەی پڕ</string>
     <string name="exit_full_screen">دەرچوون لە شاشەی پڕ</string>
     <string name="color_gradient">لاری ڕەنگی</string>
     <string name="time_zones">ناوچەی کاتییەکان</string>
     <string name="qr_code">کۆدی وەڵامدانەوەی خێرا</string>
     <string name="navigate_up">ڕۆیشتن بۆ سەرەوە</string>
     <string name="open_navigation_rail">کردنەوەی لیستی ڕێنیشاندەر</string>
-    <string name="more_options">هەڵبژاردەی زیاتر</string>
+    <string name="more_options">ھەڵبژاردەی زیاتر</string>
     <string name="yes">بەڵێ</string>
     <string name="sample_inputs">داتایی نموونەیی</string>
     <string name="year_view">دیمەنی ساڵ</string>
-    <string name="widget_background_transparency">شەفافیەتی پاشبنەمای ویجت</string>
-    <string name="save">هەڵگرتن</string>
-    <string name="holidays_in_red">جەژنەکان بە ڕەنگی سوور</string>
-    <string name="add_widget">ویجت زیاد بکە</string>
+    <string name="widget_background_transparency">شەفافیەتی پاشبنەمای ویجیت</string>
+    <string name="save">ھەڵگرتن</string>
+    <string name="holidays_in_red">پشوودانەکان بە ڕەنگی سوور</string>
+    <string name="add_widget">ویجیت زیاد بکە</string>
     <string name="vibration">لەرزین</string>
     <string name="schedule">بەرنامە</string>
     <string name="print">چاپکردن</string>
@@ -350,11 +350,11 @@
         <item quantity="other">%1$s ڕۆژ %2$s</item>
     </plurals>
     <plurals name="work_days">
-        <item quantity="one">تەنها یەک ڕۆژی کاری</item>
+        <item quantity="one">تەنھا یەک ڕۆژی کاری</item>
         <item quantity="other">%1$s ڕۆژی کاری</item>
     </plurals>
     <plurals name="seconds">
-        <item quantity="one">تەنها یەک چرکە</item>
+        <item quantity="one">تەنھا یەک چرکە</item>
         <item quantity="other">%1$s چرکە</item>
     </plurals>
     <plurals name="minutes">
@@ -370,7 +370,7 @@
         <item quantity="other">%1$s ڕۆژ</item>
     </plurals>
     <plurals name="weeks">
-        <item quantity="one">تەنها یەک حەفتە</item>
+        <item quantity="one">تەنھا یەک حەفتە</item>
         <item quantity="other">%1$s حەفتە</item>
     </plurals>
     <plurals name="months">
