@@ -79,7 +79,7 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="midnight">Midnight</string>
-    <string name="spring_equinox">Spring equinox time of year %1$s</string>
+    <string name="spring_equinox">Spring equinox moment in year %1$s</string>
     <!--Date Converter-->
     <string name="select_type_date">Select date type</string>
     <string name="year">Year</string>
@@ -88,7 +88,7 @@
     <string name="select_month">Select month</string>
     <string name="day">Day</string>
     <string name="select_day">Select day</string>
-    <string name="incorrect_date">The entered day isn’t valid.</string>
+    <string name="incorrect_date">The entered date isn’t valid.</string>
     <!--Compass-->
     <string name="compass_not_found">Compass sensor not found</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
@@ -114,7 +114,7 @@
     <string name="show_device_calendar_events">Personal Calendar Events</string>
     <string name="show_device_calendar_events_summary">Show personal calendar events</string>
     <string name="calendars_priority">Calendars Priority</string>
-    <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
+    <string name="calendars_priority_summary">Set calendar priorities or hide calendars</string>
     <string name="astronomy">Astronomy</string>
     <string name="astronomical_info_summary">Show additional information like constellation, ancient names of years and moon in scorpio</string>
     <string name="week_number">Week Number</string>
@@ -122,21 +122,21 @@
     <string name="week_start">Week Start</string>
     <string name="week_start_summary">Select week start day</string>
     <string name="week_ends">Weekends</string>
-    <string name="week_ends_summary">Select weekends days</string>
+    <string name="week_ends_summary">Select weekend days</string>
     <string name="hijri_offset">Hijri offset</string>
-    <string name="hijri_offset_summary">Adjust Hijri calendar by adding a number</string>
-    <string name="clock_in_24">Clock in 24 hour</string>
-    <string name="showing_clock_in_24">Show the clock in 24 hour</string>
+    <string name="hijri_offset_summary">Adjust the Hijri calendar by a number of days</string>
+    <string name="clock_in_24">24-hour clock</string>
+    <string name="showing_clock_in_24">Show the clock in 24-hour format</string>
     <!--Widget and Notification Settings-->
     <string name="widget_text_color">Widget Text Color</string>
-    <string name="select_widgets_text_color">Select custom color for widgets texts</string>
+    <string name="select_widgets_text_color">Select a custom color for widget text</string>
     <string name="clock_on_widget">Clock on the Widget</string>
     <string name="showing_clock_on_widget">Show clock on the widget</string>
     <string name="iran_time">Iran Time</string>
     <string name="showing_iran_time">Widgets and notifications in Iran time zone</string>
     <string name="customize_widget">Widget Customization</string>
     <string name="which_one_to_show">Which ones to show</string>
-    <string name="customize_widget_summary">What to show from notification and widgets to make them more compact</string>
+    <string name="customize_widget_summary">What to show in the notification and widgets to keep them compact</string>
     <string name="ask_user_to_set_location">Set the location in the settings in order to view this place correctly</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
@@ -145,21 +145,21 @@
     <!--Location and Athan-->
     <string name="gps_location">Get location from GPS or network</string>
     <string name="gps_location_help">Other options are not needed if this is possible</string>
-    <string name="gps_internet_description">Please enable device’s GPS and Internet connection to find your location.\n\nThe app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again.</string>
-    <string name="wait_for_gps">Please wait… If nothing appeared after one minute you probably should try other options</string>
+    <string name="gps_internet_description">Please enable the device’s GPS and Internet connection to find your location.\n\nThe app needs this only once; however, if you move to a new location, GPS and Internet access will be needed again.</string>
+    <string name="wait_for_gps">Please wait… If nothing appears after a minute, you should probably try other options</string>
     <string name="location">Location</string>
-    <string name="location_help">If none of them, specify it below</string>
+    <string name="location_help">If none of these, specify it below</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="altitude">Altitude</string>
-    <string name="altitude_praytime">in meter (optional)</string>
+    <string name="altitude_praytime">in meters (optional)</string>
     <string name="coordinates">Coordinates</string>
     <string name="athan">Athan</string>
     <string name="in_city_time">in %1$s</string>
     <string name="pray_methods">Calculation methods</string>
-    <string name="pray_methods_calculation">Calculation methods for pray times and Qibla compass</string>
+    <string name="pray_methods_calculation">Calculation methods for prayer times and the Qibla compass</string>
     <string name="athan_gap">Athan Gap</string>
-    <string name="athan_gap_summary">How long ahead of the Athan should the alarm be triggered (in minutes)</string>
+    <string name="athan_gap_summary">How many minutes before the Athan should the alarm trigger?</string>
     <string name="athan_alarm">Athan Alarm</string>
     <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
     <string name="custom_athan">Select Athan</string>
@@ -169,14 +169,14 @@
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
     <!--Permissions-->
     <string name="location_access">Location Access</string>
-    <string name="phone_location_required">This part of the app needs location permission, if you choose deny you have to enter your latitude and longitude manually.</string>
+    <string name="phone_location_required">This part of the app needs location permission. If you choose to deny, you’ll have to enter your latitude and longitude manually.</string>
     <string name="calendar_access">Calendar Access</string>
-    <string name="phone_calendar_required">This part of the app needs calendar permission, if you allow it your personal events will be shown on the calendar.</string>
+    <string name="phone_calendar_required">This part of the app needs calendar permission. If you allow it, your personal events will be shown on the calendar.</string>
     <!--About-->
     <string name="version">Version %1$s</string>
     <string name="licenses">License</string>
     <string name="about_license_title">Application License</string>
-    <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
+    <string name="about_license_sum">Review the GPLv3 license and other license terms used by Persian Calendar.</string>
     <string name="about_send_mail">E-Mail</string>
     <string name="about_email_sum">Send personal email to the authors of the app</string>
     <string name="about_no_client">No email client is installed</string>
@@ -186,11 +186,11 @@
     <!-- Used in accessibility, next day or month or year -->
     <string name="next_x">Next %1$s</string>
     <!-- Used in accessibility, describes headers of calendar -->
-    <string name="week_days_name_column">%1$s column in days table</string>
+    <string name="week_days_name_column">%1$s column in the days table</string>
     <!-- Used in accessibility -->
     <string name="equivalent_to">Equivalent to</string>
     <!-- Used in accessibility -->
-    <string name="nth_week_of_year">%1$s week of year</string>
+    <string name="nth_week_of_year">Week %1$s of the year</string>
     <!-- Search for Shift Work in web to get some more information about it -->
     <string name="shift_work_settings">Shift work settings</string>
     <string name="remove">Remove</string>
@@ -204,20 +204,20 @@
     <string name="device_information">Device Information</string>
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
-    <string name="n_till">%1$s till to %2$s</string>
+    <string name="n_till">%1$s until %2$s</string>
     <string name="recurs">Recurs</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
     <string name="holiday">holiday</string>
     <string name="shift_work_days_head">Duration</string>
-    <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
-    <string name="prefer_linear_date">Prefer numerical form of dates</string>
+    <string name="prefer_linear_date_summary">Use 2000/1/1 instead of 1 January 2000 in widgets and notifications</string>
+    <string name="prefer_linear_date">Prefer numerical date format</string>
     <string name="month_events">Month’s events</string>
     <string name="map">Map</string>
     <string name="widget_background_color">Widget Background Color</string>
-    <string name="select_widgets_background_color">Select custom color for widgets background</string>
+    <string name="select_widgets_background_color">Select a custom color for the widget background</string>
     <string name="share">Share</string>
-    <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
+    <string name="enable_location_services">Location services are disabled; please turn them on to use this feature.</string>
     <string name="select_date">Select date</string>
     <string name="starting_date">Starting date</string>
     <string name="age_widget_title">Widget title</string>
@@ -256,8 +256,8 @@
     <!--Widget customizations-->
     <string name="widget_customization_other_calendars">Other calendars on 1x4 and 2x2 widgets</string>
     <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
-    <string name="widget_customization_times">Pray times on widgets and notification (if is set)</string>
-    <string name="widget_customization_times_location">Location of pray times on 2x2 and notification (if is set)</string>
+    <string name="widget_customization_times">Prayer times on widgets and notification (if set)</string>
+    <string name="widget_customization_times_location">Location of prayer times on the 2x2 widget and notification (if set)</string>
     <!--Persian Calendar months-->
     <string name="farvardin">Farvardin</string>
     <string name="ordibehesht">Ordibehesht</string>
@@ -393,7 +393,7 @@
     <string name="large_day_number_on_notification">Large day number on notification</string>
     <string name="pref_ui">UI</string>
     <string name="week">Week</string>
-    <string name="bold_text">Bold test</string>
+    <string name="bold_text">Bold text</string>
     <string name="widget_text_size">Text size</string>
 
     <plurals name="shift_work_record_title">
