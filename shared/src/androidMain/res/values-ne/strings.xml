@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_age_name">फारसी पात्रो उमेर ()</string>
-    <string name="widget_name">फारसी पात्रो</string>
+    <string name="code">ne</string>
     <string name="app_name">फारसी पात्रो</string>
+    <string name="widget_name">फारसी पात्रो</string>
     <string name="widget_mini_name">फारसी पात्रो (सानो )</string>
+    <string name="widget_age_name">फारसी पात्रो उमेर ()</string>
     <string name="close">बन्द</string>
     <string name="open">खुला</string>
     <string name="accept">हुन्छ</string>
@@ -15,10 +16,6 @@
     <string name="calendar">पात्रो</string>
     <string name="date_converter">मीती परिवर्तन</string>
     <string name="converter">मीती परिवर्तन</string>
-    <string name="code">ne</string>
-    <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन।</string>
-    <string name="moon_in_scorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
-    <string name="spring_equinox">वर्षको वसन्त रितु समय %1$s</string>
     <string name="compass">कम्पास</string>
     <string name="settings">सेटिंग</string>
     <string name="about">बारे</string>
@@ -57,7 +54,9 @@
     <string name="libra">तुला</string>
     <string name="scorpio">वृश्चिक</string>
     <string name="sagittarius">धनु</string>
+    <string name="moon_in_scorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
     <string name="events">चाडपर्व</string>
+    <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन।</string>
     <string name="sunrise_sun_view">सूर्योदय</string>
     <string name="midday_sun_view">मध्याह्न</string>
     <string name="sunset_sun_view">सूर्यास्त</string>
@@ -66,38 +65,17 @@
     <string name="n_hours_minutes">%1$sघन्टा %2$sमिनेट</string>
     <string name="times">समय</string>
     <string name="imsak">इम्साक</string>
+    <string name="fajr">फजर</string>
     <string name="sunrise">सूर्योदय</string>
+    <string name="dhuhr">धुहर</string>
+    <string name="asr">Asr</string>
     <string name="sunset">सूर्यास्त</string>
+    <string name="maghrib">मघरिब</string>
     <string name="isha">इशा</string>
     <string name="midnight">मध्यरात</string>
+    <string name="spring_equinox">वर्षको वसन्त रितु समय %1$s</string>
     <string name="select_type_date">मिति प्रकार चयन गर्नुहोस्</string>
     <string name="year">बर्ष</string>
-    <string name="native_digits">नेटिभ अंकहरू</string>
-    <string name="enable_native_digits">नेटिभ अंकहरू सक्षम पार्नुहोस्</string>
-    <string name="show_device_calendar_events_summary">व्यक्तिगत पात्रो घटनाहरू देखाउनुहोस्</string>
-    <string name="calendars_priority_summary">प्राथमिकता देखाउन वा लुकाउन पात्रोहरू सेट गर्नुहोस्</string>
-    <string name="week_number">वर्षको हप्ता</string>
-    <string name="week_number_summary">क्यालेन्डरमा वर्षको हप्ता देखाउनुहोस्</string>
-    <string name="week_start">हप्ताको सुरुवात</string>
-    <string name="ask_user_to_set_location">यो ठाउँ सही रूपमा हेर्नको लागि सेटिङहरूमा स्थान सेट गर्नुहोस्</string>
-    <string name="notify_date_lock_screen">लक स्क्रिनमा सूचना देखाउनुहोस्</string>
-    <string name="hijri_offset_summary">संख्या थपेर इस्लामिक क्यालेन्डर समायोजन गर्नुहोस्</string>
-    <string name="custom_notification_is_set">अनुकूलन सूचना भर्खरै सेट गरिएको छ</string>
-    <string name="select_widgets_text_color">विजेट पाठहरूको लागि अनुकूलन रङ चयन गर्नुहोस्</string>
-    <string name="gps_location_help">यदि यो सम्भव छ भने अन्य विकल्पहरू आवश्यक पर्दैन</string>
-    <string name="gps_internet_description">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्।
-\n
-\nएपलाई यो एक पटक मात्र चाहिन्छ, यद्यपि, यदि तपाइँ नयाँ स्थानमा जानुभयो भने, GPS र इन्टरनेटमा पहुँच गर्न फेरि आवश्यक छ।</string>
-    <string name="wait_for_gps">कृपया प्रतीक्षा गर्नुहोस्… यदि एक मिनेट पछि केहि पनि देखा परेन भने तपाईले अन्य विकल्पहरू प्रयास गर्नुपर्छ</string>
-    <string name="athan_gap_summary">Athan भन्दा कति समय अगाडि अलार्म ट्रिगर गर्नुपर्छ (मिनेटमा)</string>
-    <string name="athan_alarm">एथन अलार्म</string>
-    <string name="custom_athan">Athan चयन गर्नुहोस्</string>
-    <string name="about_license_title">आवेदन लाइसेन्स</string>
-    <string name="phone_location_required">एपको यो भागलाई स्थान अनुमति चाहिन्छ, यदि तपाईंले अस्वीकार गर्न चाहनुहुन्छ भने तपाईंले आफ्नो अक्षांश र देशान्तर म्यानुअल रूपमा प्रविष्ट गर्नुपर्नेछ।</string>
-    <string name="licenses">इजाजतपत्र</string>
-    <string name="about_license_sum">फारसी क्यालेन्डरमा प्रयोग गरिएको GPLv3 लाइसेन्स र अन्य इजाजतपत्र सर्तहरू जाँच गर्नुहोस्।</string>
-    <string name="fajr">फजर</string>
-    <string name="dhuhr">धुहर</string>
     <string name="select_year">वर्ष चयन गर्नुहोस्</string>
     <string name="month">महिना</string>
     <string name="select_month">महिना छान्नुहोस्</string>
@@ -120,18 +98,27 @@
     <string name="language">भाषा</string>
     <string name="skin">थेम</string>
     <string name="select_skin">थेम चुन्नुहोस</string>
+    <string name="native_digits">नेटिभ अंकहरू</string>
+    <string name="enable_native_digits">नेटिभ अंकहरू सक्षम पार्नुहोस्</string>
     <string name="events_summary">देखाउने घटनाहरू</string>
     <string name="show_device_calendar_events">ब्यक्तिगत क्यालेन्डर घटनाहरू</string>
+    <string name="show_device_calendar_events_summary">व्यक्तिगत पात्रो घटनाहरू देखाउनुहोस्</string>
     <string name="calendars_priority">पात्रो प्राथमिकता</string>
+    <string name="calendars_priority_summary">प्राथमिकता देखाउन वा लुकाउन पात्रोहरू सेट गर्नुहोस्</string>
     <string name="astronomy">खगोलीय जानकारी</string>
     <string name="astronomical_info_summary">नक्षत्र, वर्षको पुरानो नाम र वृश्चिकमा चन्द्रमा जस्ता थप जानकारी देखाउनुहोस</string>
+    <string name="week_number">वर्षको हप्ता</string>
+    <string name="week_number_summary">क्यालेन्डरमा वर्षको हप्ता देखाउनुहोस्</string>
+    <string name="week_start">हप्ताको सुरुवात</string>
     <string name="week_start_summary">हप्ताको सुरुवात दिन चयन गर्नुहोस्</string>
     <string name="week_ends">सप्ताहन्त</string>
     <string name="week_ends_summary">सप्ताहन्त दिनहरू चयन गर्नुहोस्</string>
     <string name="hijri_offset">इस्लामिक अफसेट</string>
+    <string name="hijri_offset_summary">संख्या थपेर इस्लामिक क्यालेन्डर समायोजन गर्नुहोस्</string>
     <string name="clock_in_24">24 घण्टामा घडी</string>
     <string name="showing_clock_in_24">24 घण्टामा घडी देखाउनुहोस्</string>
     <string name="widget_text_color">विजेट पाठ रङ</string>
+    <string name="select_widgets_text_color">विजेट पाठहरूको लागि अनुकूलन रङ चयन गर्नुहोस्</string>
     <string name="clock_on_widget">विजेटमा घडी</string>
     <string name="showing_clock_on_widget">विजेटमा घडी देखाउनुहोस्</string>
     <string name="iran_time">इरान समय</string>
@@ -139,10 +126,17 @@
     <string name="customize_widget">विजेट अनुकूलन</string>
     <string name="which_one_to_show">कुन देखाउने हो</string>
     <string name="customize_widget_summary">तिनीहरूलाई थप संकुचित बनाउन सूचना र विजेटहरूबाट के देखाउने</string>
+    <string name="ask_user_to_set_location">यो ठाउँ सही रूपमा हेर्नको लागि सेटिङहरूमा स्थान सेट गर्नुहोस्</string>
     <string name="notify_date">मिति सूचना सक्षम गर्नुहोस्</string>
     <string name="enable_notify">सबै मिति प्रकारहरूको लागि निरन्तर सूचना</string>
+    <string name="notify_date_lock_screen">लक स्क्रिनमा सूचना देखाउनुहोस्</string>
     <string name="notify_date_lock_screen_summary">लक स्क्रिन सुरक्षा विधि सेट हुँदा मात्र।</string>
     <string name="gps_location">GPS वा नेटवर्कबाट स्थान प्राप्त गर्नुहोस्</string>
+    <string name="gps_location_help">यदि यो सम्भव छ भने अन्य विकल्पहरू आवश्यक पर्दैन</string>
+    <string name="gps_internet_description">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्।
+\n
+\nएपलाई यो एक पटक मात्र चाहिन्छ, यद्यपि, यदि तपाइँ नयाँ स्थानमा जानुभयो भने, GPS र इन्टरनेटमा पहुँच गर्न फेरि आवश्यक छ।</string>
+    <string name="wait_for_gps">कृपया प्रतीक्षा गर्नुहोस्… यदि एक मिनेट पछि केहि पनि देखा परेन भने तपाईले अन्य विकल्पहरू प्रयास गर्नुपर्छ</string>
     <string name="location">स्थान</string>
     <string name="location_help">यदि तिनीहरू मध्ये कुनै पनि छैन भने, यसलाई तल निर्दिष्ट गर्नुहोस्</string>
     <string name="latitude">अक्षांश</string>
@@ -155,78 +149,42 @@
     <string name="pray_methods">गणना विधिहरू</string>
     <string name="pray_methods_calculation">प्रार्थना समय र Qibla कम्पास लागि गणना विधिहरू</string>
     <string name="athan_gap">एथन ग्याप</string>
+    <string name="athan_gap_summary">Athan भन्दा कति समय अगाडि अलार्म ट्रिगर गर्नुपर्छ (मिनेटमा)</string>
+    <string name="athan_alarm">एथन अलार्म</string>
     <string name="athan_alarm_summary">का लागि अलार्म ट्रिगर गर्न प्रार्थना</string>
+    <string name="custom_athan">Athan चयन गर्नुहोस्</string>
     <string name="abdulbasit">अब्दुल बासित अब्दुल समद</string>
+    <string name="custom_notification_is_set">अनुकूलन सूचना भर्खरै सेट गरिएको छ</string>
     <string name="default_athan">पूर्वनिर्धारित Athan</string>
     <string name="athan_disabled_summary">Athan अलार्म सेट गर्न, स्थान छान्नुहोस् वा माथिको निर्देशांकहरू प्रविष्ट गर्नुहोस्</string>
     <string name="location_access">स्थान पहुँच</string>
+    <string name="phone_location_required">एपको यो भागलाई स्थान अनुमति चाहिन्छ, यदि तपाईंले अस्वीकार गर्न चाहनुहुन्छ भने तपाईंले आफ्नो अक्षांश र देशान्तर म्यानुअल रूपमा प्रविष्ट गर्नुपर्नेछ।</string>
     <string name="calendar_access">क्यालेन्डर पहुँच</string>
     <string name="phone_calendar_required">एपको यो भागलाई क्यालेन्डर अनुमति चाहिन्छ, यदि तपाईंले यसलाई अनुमति दिनुभयो भने तपाईंको व्यक्तिगत घटनाहरू पात्रोमा देखाइनेछ।</string>
     <string name="version">संस्करण %1$s</string>
-    <string name="nepali_calendar">नेपाली पात्रो</string>
-    <string name="nepali_calendar_short">नेपाली</string>
-    <string name="season">ऋतु</string>
-    <plurals name="shift_work_record_title">
-        <item quantity="one">%1$s %2$s दिन</item>
-        <item quantity="other">%1$s %2$s दिनहरु</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">%1$s घन्टा</item>
-        <item quantity="other">%1$s घन्टाहरु</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">%1$s दिन</item>
-        <item quantity="other">%1$s दिनहरु</item>
-    </plurals>
-    <plurals name="years">
-        <item quantity="one">%1$s वर्ष</item>
-        <item quantity="other">%1$s वर्षहर्</item>
-    </plurals>
-    <string name="show_secondary_calendar">अन्य पात्रो देखाउनुहोस्</string>
+    <string name="licenses">इजाजतपत्र</string>
+    <string name="about_license_title">आवेदन लाइसेन्स</string>
+    <string name="about_license_sum">फारसी क्यालेन्डरमा प्रयोग गरिएको GPLv3 लाइसेन्स र अन्य इजाजतपत्र सर्तहरू जाँच गर्नुहोस्।</string>
     <string name="about_send_mail">इमेल</string>
-    <string name="shift_work_starting_date_edit">%1$s, पहिले चयन गरिएको, रोजिएको शिफ्ट काम सुरु हुने दिन हो।</string>
-    <string name="hijri_calendar">इस्लामिक क्यालेन्डर</string>
-    <string name="method_tehran">जियोफिजिक्स संस्थान, तेहरान विश्वविद्यालय</string>
-    <string name="center_align_widgets_summary">केन्द्र पङ्क्तिबद्ध 4x1 र 2x2 विजेटहरू</string>
-    <string name="prefer_linear_date">मितिहरूको संख्यात्मक रूपलाई प्राथमिकता दिनुहोस्</string>
-    <string name="select_widgets_background_color">विजेट पृष्ठभूमिका लागि अनुकूलन रङ चयन गर्नुहोस्</string>
-    <string name="preview">पूर्वावलोकन</string>
-    <string name="method_mwl">मुस्लिम विश्व लीग</string>
-    <string name="method_egypt">इजिप्टियन सामान्य प्राधिकरण सर्वेक्षण</string>
-    <string name="about_no_client">कुनै इमेल क्लाइन्ट स्थापना गरिएको छैन</string>
-    <string name="shift_work_reset_button">असक्षम वा पुन: प्रोग्राम गर्नुहोस्</string>
-    <string name="method_karachi">इस्लामिक विज्ञान विश्वविद्यालय, कराची</string>
-    <string name="equivalent_to">को बराबर</string>
-    <string name="prefer_linear_date_summary">विजेट र सूचनामा 1 जनवरी 2000 को सट्टा 2000/1/1 प्रयोग गर्नुहोस्</string>
-    <string name="enable_location_services">स्थान सेवा असक्षम गरिएको छ, कृपया सुविधा प्रयोग गर्न यसलाई सक्रिय गर्नुहोस्।</string>
-    <string name="high_latitudes_angle_based">कोण आधारित</string>
-    <string name="method_makkah">उम्म अल-कुरा विश्वविद्यालय, मक्का</string>
-    <string name="high_latitudes_one_seventh">एक सातौं</string>
-    <string name="high_latitudes_night_middle">मध्यरात</string>
-    <plurals name="minutes">
-        <item quantity="one">%1$s मिनेट</item>
-        <item quantity="other">%1$s मिनेटहरु</item>
-    </plurals>
-    <plurals name="months">
-        <item quantity="one">%1$s महिना</item>
-        <item quantity="other">%1$s महिनाहरु</item>
-    </plurals>
-    <string name="asr">Asr</string>
-    <string name="maghrib">मघरिब</string>
     <string name="about_email_sum">एपका विकासकर्ताहरूलाई व्यक्तिगत इमेल पठाउनुहोस्</string>
+    <string name="about_no_client">कुनै इमेल क्लाइन्ट स्थापना गरिएको छैन</string>
     <string name="about_developers">विकासकर्ताहरू (अनियमित रूपमा राखिएको)</string>
     <string name="previous_x">अघिल्लो %1$s</string>
     <string name="next_x">अर्को %1$s</string>
     <string name="week_days_name_column">%1$s दिन तालिकामा स्तम्भ</string>
+    <string name="equivalent_to">को बराबर</string>
     <string name="nth_week_of_year">%1$s वर्षको हप्ता</string>
     <string name="shift_work_settings">काम सेटिङहरू सिफ्ट गर्नुहोस्</string>
     <string name="remove">हटाउनुहोस्</string>
     <string name="shift_work_starting_date">%1$s, क्यालेन्डरमा चयन गरिएको, काम सुरु हुने दिन हो।</string>
+    <string name="shift_work_starting_date_edit">%1$s, पहिले चयन गरिएको, रोजिएको शिफ्ट काम सुरु हुने दिन हो।</string>
+    <string name="shift_work_reset_button">असक्षम वा पुन: प्रोग्राम गर्नुहोस्</string>
     <string name="spaced_and">\u0020र\u0020</string>
     <string name="spaced_or">\u0020वा\u0020</string>
     <string name="spaced_comma">,\u0020</string>
     <string name="spaced_colon">:\u0020</string>
     <string name="device_information">उपकरण जानकारी</string>
+    <string name="center_align_widgets_summary">केन्द्र पङ्क्तिबद्ध 4x1 र 2x2 विजेटहरू</string>
     <string name="center_align_widgets">विजेटहरू केन्द्रमा पङ्क्तिबद्ध गर्नुहोस्</string>
     <string name="n_till">%1$s देखि %2$s सम्म</string>
     <string name="recurs">दोहोरिन्छ</string>
@@ -234,12 +192,17 @@
     <string name="pm">PM</string>
     <string name="holiday">छुट्टी</string>
     <string name="shift_work_days_head">अवधि</string>
+    <string name="prefer_linear_date_summary">विजेट र सूचनामा 1 जनवरी 2000 को सट्टा 2000/1/1 प्रयोग गर्नुहोस्</string>
+    <string name="prefer_linear_date">मितिहरूको संख्यात्मक रूपलाई प्राथमिकता दिनुहोस्</string>
     <string name="month_events">महिनाका घटनाहरू</string>
     <string name="map">नक्सा</string>
     <string name="widget_background_color">विजेट पृष्ठभूमि रङ</string>
+    <string name="select_widgets_background_color">विजेट पृष्ठभूमिका लागि अनुकूलन रङ चयन गर्नुहोस्</string>
     <string name="share">सेयर गर्नुहोस्</string>
+    <string name="enable_location_services">स्थान सेवा असक्षम गरिएको छ, कृपया सुविधा प्रयोग गर्न यसलाई सक्रिय गर्नुहोस्।</string>
     <string name="select_date">मिति चयन गर्नुहोस्</string>
     <string name="age_widget_title">विजेट शीर्षक</string>
+    <string name="preview">पूर्वावलोकन</string>
     <string name="ignore">बेवास्ता गर्नुहोस्</string>
     <string name="theme_default">प्रणाली पूर्वनिर्धारित</string>
     <string name="theme_light">उज्यालो</string>
@@ -248,6 +211,7 @@
     <string name="theme_aqua">निलो</string>
     <string name="theme_black">कालो</string>
     <string name="persian_calendar">फारसी क्यालेन्डर</string>
+    <string name="hijri_calendar">इस्लामिक क्यालेन्डर</string>
     <string name="gregorian_calendar">ग्रेगोरियन क्यालेन्डर</string>
     <string name="persian_calendar_short">फारसी</string>
     <string name="hijri_calendar_short">इस्लामिक</string>
@@ -257,7 +221,12 @@
     <string name="shift_work_evening">साँझ</string>
     <string name="shift_work_night">राती</string>
     <string name="method_jafari">शिया इथना-अशरी, लेवा संस्थान, कुम</string>
+    <string name="method_mwl">मुस्लिम विश्व लीग</string>
     <string name="method_isna">उत्तरी अमेरिका को इस्लामिक समाज</string>
+    <string name="method_egypt">इजिप्टियन सामान्य प्राधिकरण सर्वेक्षण</string>
+    <string name="method_makkah">उम्म अल-कुरा विश्वविद्यालय, मक्का</string>
+    <string name="method_karachi">इस्लामिक विज्ञान विश्वविद्यालय, कराची</string>
+    <string name="method_tehran">जियोफिजिक्स संस्थान, तेहरान विश्वविद्यालय</string>
     <string name="other_holidays">अरू</string>
     <string name="view_source">स्रोत हेर्नुहोस्</string>
     <string name="widget_customization_other_calendars">1x4 र 2x2 विजेटहरूमा अन्य पात्रोहरू</string>
@@ -287,6 +256,7 @@
     <string name="ramadan">रमजान</string>
     <string name="shawwal">सवल</string>
     <string name="dhu_al_qidah">धु अल-किदाह</string>
+    <string name="dhu_al_hijjah">धु उल हिज्जा</string>
     <string name="january">जनवरी</string>
     <string name="february">फेब्रुअरी</string>
     <string name="march">मार्च</string>
@@ -314,12 +284,42 @@
     <string name="thursday_short">बि</string>
     <string name="friday_short">शु</string>
     <string name="sun_view">सूर्य दृश्य</string>
+    <string name="asr_hanafi_juristic">Hanafi Asr न्यायिक विधि</string>
     <string name="month_pray_times">महिनाको प्रार्थना समय</string>
     <string name="high_latitudes_method">उच्च अक्षांश विधि</string>
+    <string name="high_latitudes_night_middle">मध्यरात</string>
+    <string name="high_latitudes_angle_based">कोण आधारित</string>
+    <string name="high_latitudes_one_seventh">एक सातौं</string>
     <string name="none">कुनै पनि छैन</string>
     <string name="show_sun_and_moon_path_in_24_hours">24 घण्टामा सूर्य र चन्द्र मार्ग देखाउनुहोस्</string>
-    <string name="dhu_al_hijjah">धु उल हिज्जा</string>
-    <string name="asr_hanafi_juristic">Hanafi Asr न्यायिक विधि</string>
     <string name="widget_prefer_device_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
+    <string name="nepali_calendar">नेपाली पात्रो</string>
+    <string name="nepali_calendar_short">नेपाली</string>
+    <string name="show_secondary_calendar">अन्य पात्रो देखाउनुहोस्</string>
+    <string name="season">ऋतु</string>
     <string name="calculator">क्यालकुलेटर</string>
+    <plurals name="shift_work_record_title">
+        <item quantity="one">%1$s %2$s दिन</item>
+        <item quantity="other">%1$s %2$s दिनहरु</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%1$s मिनेट</item>
+        <item quantity="other">%1$s मिनेटहरु</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%1$s घन्टा</item>
+        <item quantity="other">%1$s घन्टाहरु</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">%1$s दिन</item>
+        <item quantity="other">%1$s दिनहरु</item>
+    </plurals>
+    <plurals name="months">
+        <item quantity="one">%1$s महिना</item>
+        <item quantity="other">%1$s महिनाहरु</item>
+    </plurals>
+    <plurals name="years">
+        <item quantity="one">%1$s वर्ष</item>
+        <item quantity="other">%1$s वर्षहर्</item>
+    </plurals>
 </resources>
