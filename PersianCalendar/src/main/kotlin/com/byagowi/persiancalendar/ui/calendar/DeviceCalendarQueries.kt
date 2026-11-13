@@ -355,6 +355,11 @@ private class CachedDeviceEvents(
     val generation: Int,
 )
 
+/** A cached result is reusable when it is current and is not a transient failure to retry. */
+private fun CachedDeviceEvents?.isReusable(generation: Int): Boolean =
+    this != null && this.generation == generation &&
+        state.status != CalendarProviderStatus.Error
+
 /** A preloadable LRU cache of device calendar events, keyed by the requested range. */
 class DeviceCalendarEventsCache internal constructor(
     private val context: Context,
@@ -383,7 +388,7 @@ class DeviceCalendarEventsCache internal constructor(
         LaunchedEffect(startJdnRange, days) {
             preloadStart = startJdnRange
             preloadDays = days
-            requestPreloadedDeviceEvents(force = false)
+            requestPreloadedDeviceEvents()
         }
         // The range is only protected from eviction while its screen is present.
         DisposableEffect(Unit) {
@@ -427,7 +432,7 @@ class DeviceCalendarEventsCache internal constructor(
     ): CalendarProviderState<T> {
         val currentEnvironment = environment
         val cached by remember(request) { derivedStateOf { entries[request] } }
-        LaunchedEffect(request, currentEnvironment) { requestDeviceEvents(request, force = false) }
+        LaunchedEffect(request, currentEnvironment) { requestDeviceEvents(request) }
         val state = stateOf(currentEnvironment, cached)
         return CalendarProviderState(
             select(state.data),
@@ -458,7 +463,7 @@ class DeviceCalendarEventsCache internal constructor(
             generation = (previous?.generation ?: 0) + 1,
         )
         cancelRequests()
-        requestPreloadedDeviceEvents(force = false)
+        requestPreloadedDeviceEvents()
     }
 
     /**
@@ -467,13 +472,16 @@ class DeviceCalendarEventsCache internal constructor(
      */
     internal suspend fun runWhileResumed(): Unit = suspendCancellableCoroutine { continuation ->
         isResumed = true
-        // What was loaded before the pause may have changed while observers were off.
-        if (entries.isNotEmpty()) invalidate()
+        // Pausing cancels in-flight requests, including a first load which has not published
+        // anything yet, so every generation is invalidated to reissue the active requests.
+        // Provider change notifications do not run while paused either, so cached results may
+        // be stale as well.
+        invalidate()
         continuation.invokeOnCancellation {
             isResumed = false
             cancelRequests()
         }
-        requestPreloadedDeviceEvents(force = false)
+        requestPreloadedDeviceEvents()
     }
 
     private fun invalidate() {
@@ -502,14 +510,14 @@ class DeviceCalendarEventsCache internal constructor(
         )
     }
 
-    private fun requestPreloadedDeviceEvents(force: Boolean) {
+    private fun requestPreloadedDeviceEvents() {
         val start = preloadStart ?: return
         val days = preloadDays
         if (days <= 0) return
         val environment = environment ?: return
         if (!environment.canQuery || !isResumed) return
         val missing = (0 until days).map { start + it }.filter { day ->
-            force || entries[deviceEventsOfDayRequest(day)]?.generation != environment.generation
+            !entries[deviceEventsOfDayRequest(day)].isReusable(environment.generation)
         }
         if (missing.isEmpty()) return
         // Query the whole missing span at once instead of one provider query per day.
@@ -551,7 +559,7 @@ class DeviceCalendarEventsCache internal constructor(
         }
     }
 
-    private fun requestDeviceEvents(request: DeviceEventsRequest, force: Boolean) {
+    private fun requestDeviceEvents(request: DeviceEventsRequest) {
         // Preloading and reading a range both count as using it, which keeps it out of eviction.
         if (entries.containsKey(request)) accessOrder[request] = Unit
         val environment = environment ?: return
@@ -559,7 +567,7 @@ class DeviceCalendarEventsCache internal constructor(
         if (request.isDay && activePreloadRequest?.covers(request.startJdn) == true) return
         if (!environment.canQuery || !isResumed) return
         if (requests.containsKey(request)) return
-        if (!force && entries[request]?.generation == environment.generation) return
+        if (entries[request].isReusable(environment.generation)) return
         val job = scope.launch {
             val state = loadDeviceEvents(request, environment) ?: return@launch
             publish(request, state, environment.generation)
