@@ -122,7 +122,6 @@ android {
         checkGeneratedSources = true
         baseline = file("lint-baseline.xml") // To update: ./gradlew updateLintBaseline
         disable += listOf(
-            "MissingTranslation",
             "SelectableText",
             "IconLocation",
             "DuplicateStrings",

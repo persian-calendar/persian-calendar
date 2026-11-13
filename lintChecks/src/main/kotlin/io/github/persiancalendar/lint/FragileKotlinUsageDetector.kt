@@ -29,7 +29,6 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
 
     override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
         override fun visitPostfixExpression(node: UPostfixExpression) {
-            if (context.isVendoredSource()) return
             if (node.operator.text != "!!") return
             context.report(
                 issue = DOUBLE_BANG_ISSUE,

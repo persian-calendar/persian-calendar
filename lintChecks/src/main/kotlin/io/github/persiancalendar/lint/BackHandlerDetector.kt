@@ -16,7 +16,6 @@ class BackHandlerDetector : Detector(), SourceCodeScanner {
     override fun getApplicableMethodNames() = listOf("BackHandler")
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
-        if (context.isVendoredSource()) return
         if (context.evaluator.isMemberInClass(method, "androidx.activity.compose.BackHandlerKt")) {
             context.report(
                 issue = ISSUE,
