@@ -249,28 +249,42 @@ private data class EventsCacheEnvironment(
     val canQuery get() = settings.enabled && permissionGranted
 }
 
-private class CachedEventsDay(
+private data class EventsRequest(
+    val startJdn: Jdn,
+    val days: Int,
+    val limit: Int,
+) {
+    val isDay get() = days == 1 && limit == EVENTS_CACHE_DAY_LIMIT
+
+    fun covers(jdn: Jdn) = (jdn - startJdn) in 0 until days
+}
+
+private fun dayRequest(jdn: Jdn) = EventsRequest(jdn, 1, EVENTS_CACHE_DAY_LIMIT)
+
+private class CachedEvents(
     val state: CalendarProviderState<DeviceCalendarEventsStore>,
     val generation: Int,
 )
 
-/** A day-keyed, preloadable LRU cache of device calendar events. */
+/** A preloadable LRU cache of device calendar events, keyed by the requested range. */
 class DeviceCalendarEventsCache internal constructor(
     private val context: Context,
     private val scope: CoroutineScope,
 ) {
     private val empty = DeviceCalendarEventsStore.empty()
-    private val entries = mutableStateMapOf<Jdn, CachedEventsDay>()
-    private val accessOrder = LinkedHashMap<Jdn, Unit>(16, .75f, true)
-    private val requests = mutableMapOf<Jdn, Job>()
+    private val entries = mutableStateMapOf<EventsRequest, CachedEvents>()
+    private val accessOrder = LinkedHashMap<EventsRequest, Unit>(16, .75f, true)
+    private val requests = mutableMapOf<EventsRequest, Job>()
     private var environment by mutableStateOf<EventsCacheEnvironment?>(null)
     private var isResumed = false
     private var preloadStart: Jdn? = null
     private var preloadDays = 0
+    private var activePreloadRequest: EventsRequest? = null
 
     /**
-     * Requests [days] days starting at [startJdnRange]. Days are queried off the main thread
-     * and stay cached, so a row that scrolls in has its final height right away.
+     * Requests [days] days starting at [startJdnRange]. The whole range is loaded in a single
+     * provider query and split into day entries, so a row that scrolls in has its final height
+     * right away.
      */
     @Suppress("ComposableNaming", "ComposeNamingUppercase")
     @Composable
@@ -279,16 +293,36 @@ class DeviceCalendarEventsCache internal constructor(
         LaunchedEffect(startJdnRange, days) {
             preloadStart = startJdnRange
             preloadDays = days
-            requestRange(startJdnRange, days, force = false)
+            requestPreloadedRange(force = false)
+        }
+        // The range is only protected from eviction while its screen is present.
+        DisposableEffect(Unit) {
+            onDispose {
+                preloadStart = null
+                preloadDays = 0
+            }
         }
     }
 
     /** Observes the day's cached events and requests it when it is missing or outdated. */
     @Composable
-    fun getEventsOfDay(jdn: Jdn): CalendarProviderState<DeviceCalendarEventsStore> {
+    fun getEventsOfDay(jdn: Jdn): CalendarProviderState<DeviceCalendarEventsStore> =
+        getEvents(dayRequest(jdn))
+
+    /** Observes the range's cached events and requests it when it is missing or outdated. */
+    @Composable
+    fun getEventsOfDays(
+        startJdn: Jdn,
+        days: Int,
+        limit: Int = 100,
+    ): CalendarProviderState<DeviceCalendarEventsStore> =
+        getEvents(EventsRequest(startJdn, days, limit))
+
+    @Composable
+    private fun getEvents(request: EventsRequest): CalendarProviderState<DeviceCalendarEventsStore> {
         val currentEnvironment = environment
-        val cached by remember(jdn) { derivedStateOf { entries[jdn] } }
-        LaunchedEffect(jdn, currentEnvironment) { requestDay(jdn, force = false) }
+        val cached by remember(request) { derivedStateOf { entries[request] } }
+        LaunchedEffect(request, currentEnvironment) { requestEvents(request, force = false) }
         return stateOf(currentEnvironment, cached)
     }
 
@@ -317,21 +351,29 @@ class DeviceCalendarEventsCache internal constructor(
     }
 
     /**
-     * Holds requests while the app is not resumed and refreshes the preloaded range on resume,
-     * as provider change notifications do not run while the app is paused.
+     * Holds requests while the app is not resumed and reloads on resume, as provider change
+     * notifications do not run while the app is paused.
      */
     internal suspend fun runWhileResumed(): Unit = suspendCancellableCoroutine { continuation ->
         isResumed = true
+        // What was loaded before the pause may have changed while observers were off.
+        if (entries.isNotEmpty()) invalidate()
         continuation.invokeOnCancellation {
             isResumed = false
             cancelRequests()
         }
-        requestPreloadedRange(force = true)
+        requestPreloadedRange(force = false)
+    }
+
+    private fun invalidate() {
+        val current = environment ?: return
+        environment = current.copy(generation = current.generation + 1)
+        cancelRequests()
     }
 
     private fun stateOf(
         environment: EventsCacheEnvironment?,
-        cached: CachedEventsDay?,
+        cached: CachedEvents?,
     ): CalendarProviderState<DeviceCalendarEventsStore> = when {
         environment == null -> CalendarProviderState(empty, CalendarProviderStatus.Loading)
         !environment.settings.enabled -> CalendarProviderState(empty, CalendarProviderStatus.Ready)
@@ -351,67 +393,105 @@ class DeviceCalendarEventsCache internal constructor(
 
     private fun requestPreloadedRange(force: Boolean) {
         val start = preloadStart ?: return
-        if (preloadDays <= 0) return
-        requestRange(start, preloadDays, force)
-    }
-
-    private fun requestRange(startJdn: Jdn, days: Int, force: Boolean) {
-        repeat(days) { requestDay(startJdn + it, force) }
-    }
-
-    private fun requestDay(jdn: Jdn, force: Boolean) {
-        // Preloading and reading a day both count as using it, which keeps it out of eviction.
-        if (entries.containsKey(jdn)) accessOrder[jdn] = Unit
+        val days = preloadDays
+        if (days <= 0) return
         val environment = environment ?: return
         if (!environment.canQuery || !isResumed) return
-        if (requests.containsKey(jdn)) return
-        if (!force && entries[jdn]?.generation == environment.generation) return
-        val job = scope.launch { loadDay(jdn, environment) }
-        requests[jdn] = job
-        job.invokeOnCompletion { if (requests[jdn] === job) requests.remove(jdn) }
+        val missing = (0 until days).map { start + it }.filter { day ->
+            force || entries[dayRequest(day)]?.generation != environment.generation
+        }
+        if (missing.isEmpty()) return
+        // Query the whole missing span at once instead of one provider query per day.
+        val first = missing.minBy { it.value }
+        val last = missing.maxBy { it.value }
+        val count = last - first + 1
+        val request = EventsRequest(first, count, EVENTS_CACHE_DAY_LIMIT * count)
+        if (requests.containsKey(request)) return
+        activePreloadRequest = request
+        val job = scope.launch {
+            val state = loadState(request, environment)
+            if (state.status == CalendarProviderStatus.Ready) {
+                repeat(count) { offset ->
+                    val jdn = first + offset
+                    publish(
+                        dayRequest(jdn),
+                        CalendarProviderState(
+                            DeviceCalendarEventsStore(state.data.getEvents(jdn.toCivilDate())),
+                            CalendarProviderStatus.Ready,
+                        ),
+                        environment.generation,
+                    )
+                }
+            } else {
+                repeat(count) { offset ->
+                    publish(dayRequest(first + offset), state, environment.generation)
+                }
+            }
+        }
+        requests[request] = job
+        job.invokeOnCompletion {
+            if (requests[request] === job) requests.remove(request)
+            if (activePreloadRequest === request) activePreloadRequest = null
+        }
     }
 
-    private suspend fun loadDay(jdn: Jdn, environment: EventsCacheEnvironment) {
-        val state = runCatching {
-            queryCalendarProvider { signal ->
-                DeviceCalendarEventsStore(
-                    readDeviceEvents(
-                        context,
-                        DeviceEventInterval.startOfDay(
-                            jdn.toCivilDate(),
-                            environment.settings.timeZone,
-                        ),
-                        1.days,
-                        EVENTS_CACHE_DAY_LIMIT,
-                        settings = environment.settings,
-                        cancellationSignal = signal,
-                    ),
-                )
-            }
-        }.fold(
-            onSuccess = { CalendarProviderState(it, CalendarProviderStatus.Ready) },
-            onFailure = { error ->
-                if (error is CancellationException) throw error
-                if (error is SecurityException) {
-                    CalendarProviderState(empty, CalendarProviderStatus.PermissionDenied, error)
-                } else {
-                    logException(error)
-                    CalendarProviderState(empty, CalendarProviderStatus.Error, error)
-                }
-            },
-        )
-        publish(jdn, state, environment.generation)
+    private fun requestEvents(request: EventsRequest, force: Boolean) {
+        // Preloading and reading a range both count as using it, which keeps it out of eviction.
+        if (entries.containsKey(request)) accessOrder[request] = Unit
+        val environment = environment ?: return
+        // The preload loader publishes these days in bulk, do not query them one by one as well.
+        if (request.isDay && activePreloadRequest?.covers(request.startJdn) == true) return
+        if (!environment.canQuery || !isResumed) return
+        if (requests.containsKey(request)) return
+        if (!force && entries[request]?.generation == environment.generation) return
+        val job = scope.launch {
+            publish(request, loadState(request, environment), environment.generation)
+        }
+        requests[request] = job
+        job.invokeOnCompletion { if (requests[request] === job) requests.remove(request) }
     }
+
+    private suspend fun loadState(
+        request: EventsRequest,
+        environment: EventsCacheEnvironment,
+    ): CalendarProviderState<DeviceCalendarEventsStore> = runCatching {
+        queryCalendarProvider { signal ->
+            DeviceCalendarEventsStore(
+                readDeviceEvents(
+                    context,
+                    DeviceEventInterval.startOfDay(
+                        request.startJdn.toCivilDate(),
+                        environment.settings.timeZone,
+                    ),
+                    request.days.days,
+                    request.limit,
+                    settings = environment.settings,
+                    cancellationSignal = signal,
+                ),
+            )
+        }
+    }.fold(
+        onSuccess = { CalendarProviderState(it, CalendarProviderStatus.Ready) },
+        onFailure = { error ->
+            if (error is CancellationException) throw error
+            if (error is SecurityException) {
+                CalendarProviderState(empty, CalendarProviderStatus.PermissionDenied, error)
+            } else {
+                logException(error)
+                CalendarProviderState(empty, CalendarProviderStatus.Error, error)
+            }
+        },
+    )
 
     private fun publish(
-        jdn: Jdn,
+        request: EventsRequest,
         state: CalendarProviderState<DeviceCalendarEventsStore>,
         generation: Int,
     ) {
         // A result from before an invalidation must not overwrite a newer request's state.
         if (environment?.generation != generation) return
-        entries[jdn] = CachedEventsDay(state, generation)
-        accessOrder[jdn] = Unit
+        entries[request] = CachedEvents(state, generation)
+        accessOrder[request] = Unit
         trim()
     }
 
@@ -420,23 +500,26 @@ class DeviceCalendarEventsCache internal constructor(
         val start = preloadStart
         val iterator = accessOrder.entries.iterator()
         while (entries.size > EVENTS_CACHE_CAPACITY && iterator.hasNext()) {
-            val jdn = iterator.next().key
-            if (requests.containsKey(jdn)) continue
-            if (start != null && preloadDays > 0 && (jdn - start) in 0 until preloadDays) continue
+            val request = iterator.next().key
+            if (requests.containsKey(request)) continue
+            if (request.isDay && start != null && preloadDays > 0 &&
+                (request.startJdn - start) in 0 until preloadDays
+            ) continue
             iterator.remove()
-            entries.remove(jdn)
+            entries.remove(request)
         }
     }
 
     private fun cancelRequests() {
         requests.values.forEach { it.cancel() }
         requests.clear()
+        activePreloadRequest = null
     }
 }
 
 /**
- * Creates an [DeviceCalendarEventsCache] whose cached days are invalidated by [refreshToken] or a provider
- * change; the most recently preloaded range is reloaded after an invalidation.
+ * Creates a [DeviceCalendarEventsCache] whose cached ranges are invalidated by [refreshToken] or
+ * a provider change; the most recently preloaded range is reloaded after an invalidation.
  */
 @Composable
 fun rememberDeviceCalendarEventsCache(refreshToken: Int): DeviceCalendarEventsCache {

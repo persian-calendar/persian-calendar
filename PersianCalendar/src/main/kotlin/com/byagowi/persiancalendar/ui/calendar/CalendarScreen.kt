@@ -283,6 +283,7 @@ import kotlin.time.Duration.Companion.days
 @Composable
 fun SharedTransitionScope.CalendarScreen(
     refreshToken: Int,
+    deviceCalendarEventsCache: DeviceCalendarEventsCache,
     refreshCalendar: () -> Unit,
     bringDayCommand: Jdn?,
     clearBringDayCommand: () -> Unit,
@@ -737,7 +738,7 @@ fun SharedTransitionScope.CalendarScreen(
                         isAddEventBoxEnabled = isAddEventBoxEnabled,
                         onAddEventBoxEnabledChange = { isAddEventBoxEnabled = it },
                         fabPlaceholderHeight = fabPlaceholderHeight,
-                        refreshToken = refreshToken,
+                        deviceCalendarEventsCache = deviceCalendarEventsCache,
                         navigateToHolidaysSettings = navigateToHolidaysSettings,
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
@@ -751,6 +752,7 @@ fun SharedTransitionScope.CalendarScreen(
                         selectedDay = selectedDay,
                         isHighlighted = isHighlighted,
                         refreshToken = refreshToken,
+                        deviceCalendarEventsCache = deviceCalendarEventsCache,
                         changeSelectedDay = { day: Jdn ->
                             isHighlighted = true
                             selectedDay = day
@@ -851,7 +853,7 @@ private fun Details(
     fabPlaceholderHeight: Dp?,
     isAddEventBoxEnabled: Boolean,
     onAddEventBoxEnabledChange: (Boolean) -> Unit,
-    refreshToken: Int,
+    deviceCalendarEventsCache: DeviceCalendarEventsCache,
     isTablet: Boolean,
     tabs: Map<DetailsTab, @Composable (List<CalendarEvent<*>>, Boolean) -> Unit>,
     navigateToHolidaysSettings: (item: String?) -> Unit,
@@ -883,9 +885,7 @@ private fun Details(
     ) {
         val detailsWidth = this.maxWidth
 
-        val dayDeviceEventsState = rememberDeviceCalendarEvents(
-            selectedDay, days = 1, limit = 120, refreshToken = refreshToken,
-        )
+        val dayDeviceEventsState = deviceCalendarEventsCache.getEventsOfDay(selectedDay)
         val dayDeviceEvents = dayDeviceEventsState.data
         val isDayEventsLoading = dayDeviceEventsState.status == CalendarProviderStatus.Loading &&
                 !dayDeviceEventsState.hasResult

@@ -72,6 +72,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.previous_x
 import com.byagowi.persiancalendar.shared.generated.resources.schedule
 import com.byagowi.persiancalendar.shared.generated.resources.week
 import com.byagowi.persiancalendar.shared.generated.resources.week_days_name_column
+import com.byagowi.persiancalendar.ui.calendar.DeviceCalendarEventsCache
 import com.byagowi.persiancalendar.ui.calendar.EventsColumn
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -79,7 +80,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.outOfMonthAlpha
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.todayCircleWidth
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe
-import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEvents
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -102,7 +102,7 @@ fun SharedTransitionScope.MonthScreen(
     navigateUp: () -> Unit,
     initiallySelectedDay: Jdn,
     today: Jdn,
-    refreshToken: Int,
+    deviceCalendarEventsCache: DeviceCalendarEventsCache,
     refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
     modifier: Modifier = Modifier,
@@ -234,10 +234,9 @@ fun SharedTransitionScope.MonthScreen(
                     items(ITEMS_COUNT) { index ->
                         val weekJdn = indexToJdn(baseJdn, index)
                         val resources = LocalResources.current
-                        val deviceEvents = rememberDeviceCalendarEvents(
+                        val deviceEvents = deviceCalendarEventsCache.getEventsOfDays(
                             weekJdn,
                             days = 7,
-                            refreshToken = refreshToken
                         ).data
                         val events = (0..<7).map { index ->
                             eventsRepository.getEvents(weekJdn + index, deviceEvents)

@@ -184,6 +184,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     entry<Screen.Calendar> {
                         CalendarScreen(
                             refreshToken = refreshToken,
+                            deviceCalendarEventsCache = deviceEventsCache,
                             refreshCalendar = refreshCalendar,
                             bringDayCommand = bringDayCommand,
                             clearBringDayCommand = { bringDayCommand = null },
@@ -212,7 +213,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             navigateUp = navigateUp,
                             initiallySelectedDay = it.day,
                             today = today,
-                            refreshToken = refreshToken,
+                            deviceCalendarEventsCache = deviceEventsCache,
                             refreshCalendar = refreshCalendar,
                             commandBringDay = commandBringDay,
                         )
@@ -231,6 +232,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     entry<Screen.Week> {
                         WeekScreen(
                             refreshToken = refreshToken,
+                            deviceCalendarEventsCache = deviceEventsCache,
                             refreshCalendar = refreshCalendar,
                             commandBringDay = commandBringDay,
                             navigateToHolidaysSettings = navigateToHolidaysSettings,

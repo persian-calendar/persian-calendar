@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEvents
+import com.byagowi.persiancalendar.ui.calendar.DeviceCalendarEventsCache
 import com.byagowi.persiancalendar.utils.AddEventData
 import kotlinx.coroutines.launch
 
@@ -25,6 +25,7 @@ fun CalendarPager(
     selectedDay: Jdn,
     isHighlighted: Boolean,
     refreshToken: Int,
+    deviceCalendarEventsCache: DeviceCalendarEventsCache,
     changeSelectedDay: (Jdn) -> Unit,
     calendarPagerState: CalendarPagerState,
     yearViewCalendar: Calendar?,
@@ -62,8 +63,8 @@ fun CalendarPager(
             val monthStartDate =
                 mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
             val monthStartJdn = Jdn(monthStartDate)
-            val monthDeviceEvents = rememberDeviceCalendarEvents(
-                monthStartJdn, days = 32, limit = 750, refreshToken = refreshToken,
+            val monthDeviceEvents = deviceCalendarEventsCache.getEventsOfDays(
+                monthStartJdn, days = 32, limit = 750,
             ).data
             daysTable(
                 monthStartDate,
