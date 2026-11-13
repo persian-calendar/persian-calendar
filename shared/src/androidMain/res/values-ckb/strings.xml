@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">ckb</string>
-    <string name="app_name">ڕۆژژمێری فارسی</string>
+    <string name="app_name">Calendar</string>
     <string name="widget_name">ڕۆژژمێری فارسی</string>
     <string name="widget_mini_name">ڕۆژژمێری فارسی (بچووک)</string>
     <string name="widget_age_name">ڕۆژژمێری فارسی (تەمەن)</string>

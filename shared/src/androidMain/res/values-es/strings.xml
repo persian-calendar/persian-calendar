@@ -2,7 +2,7 @@
 <resources>
     <string name="code">es</string>
     <!--Global-->
-    <string name="app_name">Calendario persa</string>
+    <string name="app_name">Calendar</string>
     <string name="widget_name">Calendario persa</string>
     <string name="widget_mini_name">Calendario persa (mini)</string>
     <string name="widget_age_name">Calendario persa (edad)</string>

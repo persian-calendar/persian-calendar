@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">ota</string>
-    <string name="app_name">ایران تقویمی</string>
+    <string name="app_name">Calendar</string>
     <string name="widget_name">ایران تقویمی</string>
     <string name="widget_mini_name">ایران تقویمی (كوچوك)</string>
     <string name="widget_age_name">ایران تقویمی (یاش)</string>
