@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">pt</string>
-    <string name="app_name">Persian Calendar</string>
+    <string name="app_name">Calendário Persa</string>
     <string name="close">Fechar</string>
     <string name="open">Abrir</string>
     <string name="accept">OK</string>
@@ -49,17 +49,17 @@
     <string name="sunrise">Nascer do Sol</string>
     <string name="sunset">Pôr do Sol</string>
     <string name="midnight">Meia-noite</string>
-    <string name="select_type_date">Selecionar formato de data</string>
+    <string name="select_type_date">Selecionar tipo de data</string>
     <string name="year">Ano</string>
     <string name="select_year">Selecionar ano</string>
     <string name="month">Mês</string>
     <string name="select_month">Selecionar mês</string>
     <string name="day">Dia</string>
     <string name="select_day">Selecionar dia</string>
-    <string name="incorrect_date">O dia inserido não é válido.</string>
+    <string name="incorrect_date">A data inserida não é válida.</string>
     <string name="calibrate_compass_summary">Para melhorar a precisão do sensor da bússola, afaste o dispositivo de quaisquer objetos magnéticos, incline e gire o aparelho em todos os sentidos.</string>
     <string name="level">Nível</string>
-    <string name="stop">Stop</string>
+    <string name="stop">Parar</string>
     <string name="north">Norte</string>
     <string name="east">Este</string>
     <string name="south">Sul</string>
@@ -68,8 +68,8 @@
     <string name="pref_notification">Notificação</string>
     <string name="pref_interface">Interface</string>
     <string name="language">Idioma</string>
-    <string name="skin">Interface</string>
-    <string name="select_skin">Selecionar interface</string>
+    <string name="skin">Tema</string>
+    <string name="select_skin">Selecionar tema</string>
     <string name="events_summary">Eventos a mostrar</string>
     <string name="show_device_calendar_events">Calendário de eventos pessoais</string>
     <string name="astronomy">Astronomia</string>
@@ -93,7 +93,7 @@
     <string name="longitude">Longitude</string>
     <string name="altitude">Altitude</string>
     <string name="coordinates">Coordenadas</string>
-    <string name="pray_methods">Métodos de calculação</string>
+    <string name="pray_methods">Métodos de cálculo</string>
     <string name="athan_alarm">Alarme Athan</string>
     <string name="custom_athan">Selecionar Athan</string>
     <string name="version">Versão %1$s</string>
@@ -101,8 +101,8 @@
     <string name="about_license_title">Licença da Aplicação</string>
     <string name="about_send_mail">E-Mail</string>
     <string name="about_email_sum">Envie um email aos autores da app</string>
-    <string name="about_developers">Contribuidores (ordem aleatória)</string>
-    <string name="nth_week_of_year">%1$s semana do ano</string>
+    <string name="about_developers">Programadores (ordem aleatória)</string>
+    <string name="nth_week_of_year">Semana %1$s do ano</string>
     <string name="remove">Remover</string>
     <string name="shift_work_reset_button">Desativar ou reprogramar</string>
     <string name="spaced_and">\u0020e\u0020</string>
@@ -111,10 +111,10 @@
     <string name="pm">PM</string>
     <string name="holiday">Feriado</string>
     <string name="shift_work_days_head">Duração</string>
-    <string name="prefer_linear_date_summary">Usar 2000/1/1 em vez de 1 Janeiro 2000 no widget e notificações</string>
+    <string name="prefer_linear_date_summary">Usar 2000/1/1 em vez de 1 de janeiro de 2000 no widget e notificações</string>
     <string name="month_events">Eventos do mês</string>
     <string name="map">Mapa</string>
-    <string name="widget_background_color">Cor do background do widget</string>
+    <string name="widget_background_color">Cor do fundo do widget</string>
     <string name="share">Partilhar</string>
     <string name="select_date">Selecionar data</string>
     <string name="starting_date">Data de início</string>
@@ -133,7 +133,7 @@
     <string name="hijri_calendar_short">Islâmico</string>
     <string name="gregorian_calendar_short">Gregoriano</string>
     <string name="shift_work_morning">Manhã</string>
-    <string name="shift_work_off">Off</string>
+    <string name="shift_work_off">Folga</string>
     <string name="other_holidays">Outros</string>
     <string name="january">Janeiro</string>
     <string name="february">Fevereiro</string>
@@ -149,11 +149,11 @@
     <string name="december">Dezembro</string>
     <string name="saturday">Sábado</string>
     <string name="sunday">Domingo</string>
-    <string name="monday">Segunda-Feira</string>
-    <string name="tuesday">Terça-Feira</string>
-    <string name="wednesday">Quarta-Feira</string>
-    <string name="thursday">Quinta-Feira</string>
-    <string name="friday">Sexta-Feira</string>
+    <string name="monday">Segunda-feira</string>
+    <string name="tuesday">Terça-feira</string>
+    <string name="wednesday">Quarta-feira</string>
+    <string name="thursday">Quinta-feira</string>
+    <string name="friday">Sexta-feira</string>
     <string name="saturday_short">S</string>
     <string name="sunday_short">D</string>
     <string name="monday_short">S</string>
@@ -177,7 +177,7 @@
     <string name="mars">Marte</string>
     <string name="jupiter">Júpiter</string>
     <string name="saturn">Saturno</string>
-    <string name="uranus">Uranio</string>
+    <string name="uranus">Úrano</string>
     <string name="neptune">Neptuno</string>
     <string name="pluto">Plutão</string>
     <string name="sun">Sol</string>
@@ -186,7 +186,7 @@
     <string name="qr_code">Código QR</string>
     <string name="more_options">Mais opções</string>
     <string name="yes">Sim</string>
-    <string name="widget_background_transparency">Transparência do background do widget</string>
+    <string name="widget_background_transparency">Transparência do fundo do widget</string>
     <string name="save">Guardar</string>
     <string name="holidays_in_red">Feriados a vermelho</string>
     <string name="add_widget">Adicionar widget</string>

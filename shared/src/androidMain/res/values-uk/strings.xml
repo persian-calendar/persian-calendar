@@ -18,6 +18,6 @@
     <string name="converter">Конвертер</string>
     <string name="compass">Компас</string>
     <string name="settings">Налаштування</string>
-    <string name="about">Опис</string>
+    <string name="about">Про програму</string>
     <string name="exit">Вихід</string>
 </resources>

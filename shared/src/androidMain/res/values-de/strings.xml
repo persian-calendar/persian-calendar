@@ -9,7 +9,7 @@
     <string name="open">Öffnen</string>
     <string name="accept">OK</string>
     <string name="add">Hinzufügen</string>
-    <string name="help">Helfen</string>
+    <string name="help">Hilfe</string>
     <string name="more">Mehr</string>
     <string name="cancel">Abbrechen</string>
     <string name="continue_button">Weiter</string>
@@ -37,7 +37,7 @@
     <string name="animal_year_name_ox">Ochse</string>
     <string name="animal_year_name_tiger">Tiger</string>
     <string name="animal_year_name_rabbit">Kaninchen</string>
-    <string name="animal_year_name_dragon">Drachen</string>
+    <string name="animal_year_name_dragon">Drache</string>
     <string name="animal_year_name_snake">Schlange</string>
     <string name="animal_year_name_horse">Pferd</string>
     <string name="animal_year_name_goat">Ziege</string>
@@ -64,7 +64,7 @@
     <string name="sunset_sun_view">Sonnenuntergang</string>
     <string name="length_of_day">Tageszeit</string>
     <string name="remaining_daylight">Verbleibend</string>
-    <string name="n_hours_minutes">%1$sStunde %2$sMinuten</string>
+    <string name="n_hours_minutes">%1$s Std. %2$s Min.</string>
     <string name="times">Zeiten</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>
@@ -83,10 +83,10 @@
     <string name="select_month">Monat auswählen</string>
     <string name="day">Tag</string>
     <string name="select_day">Tag auswählen</string>
-    <string name="incorrect_date">Der eingegebene Tag ist nicht gültig.</string>
+    <string name="incorrect_date">Das eingegebene Datum ist nicht gültig.</string>
     <string name="compass_not_found">Kompasssensor nicht gefunden</string>
     <string name="calibrate_compass_summary">Um die Genauigkeit des Kompasssensors zu verbessern, halten Sie das Telefon von magnetischen Objekten fern, neigen Sie das Gerät und drehen Sie es um jede Achse hin und her.</string>
-    <string name="level">Gleichgewicht</string>
+    <string name="level">Wasserwaage</string>
     <string name="stop">Stoppen</string>
     <string name="resume">Fortsetzen</string>
     <string name="north">Nord</string>
@@ -117,13 +117,13 @@
     <string name="week_ends_summary">Wochenendtage wählen</string>
     <string name="hijri_offset">Islamischer Offset</string>
     <string name="hijri_offset_summary">Anpassung des islamischen Kalenders durch Hinzufügen einer Zahl</string>
-    <string name="clock_in_24">Uhr in 24 Stunden</string>
-    <string name="showing_clock_in_24">Uhr in 24 Stunden anzeigen</string>
+    <string name="clock_in_24">24-Stunden-Uhr</string>
+    <string name="showing_clock_in_24">Uhr im 24-Stunden-Format anzeigen</string>
     <string name="widget_text_color">Widget-Textfarbe</string>
     <string name="select_widgets_text_color">Eine benutzerdefinierte Farbe für Widget-Texte wählen</string>
     <string name="clock_on_widget">Uhr auf dem Widget</string>
     <string name="showing_clock_on_widget">Uhr auf dem Widget anzeigen</string>
-    <string name="iran_time">Iran Zeit</string>
+    <string name="iran_time">Iranische Zeit</string>
     <string name="showing_iran_time">Widgets und Benachrichtigungen in der iranischen Zeitzone</string>
     <string name="customize_widget">Widget Anpassung</string>
     <string name="which_one_to_show">Welche sollen angezeigt werden</string>
@@ -142,7 +142,7 @@
     <string name="latitude">Breitengrad</string>
     <string name="longitude">Längengrad</string>
     <string name="altitude">Höhe</string>
-    <string name="altitude_praytime">in Meter (optional)</string>
+    <string name="altitude_praytime">in Metern (optional)</string>
     <string name="coordinates">Koordinaten</string>
     <string name="athan">Adhan</string>
     <string name="in_city_time">in %1$s</string>
@@ -151,7 +151,7 @@
     <string name="athan_gap">Adhan Lücke</string>
     <string name="athan_gap_summary">Wie lange vor dem Adhan soll der Alarm ausgelöst werden (in Minuten)</string>
     <string name="athan_alarm">Adhan Alarm</string>
-    <string name="athan_alarm_summary">Gebete zur Auslösung des Alarms für</string>
+    <string name="athan_alarm_summary">Gebete, für die der Alarm ausgelöst werden soll</string>
     <string name="custom_athan">Adhan wählen</string>
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
     <string name="custom_notification_is_set">Benutzerdefinierte Benachrichtigung ist gerade eingestellt</string>
@@ -188,11 +188,11 @@
     <string name="center_align_widgets">Widgets zentriert ausrichten</string>
     <string name="n_till">%1$s bis zu %2$s</string>
     <string name="recurs">Wiederholen</string>
-    <string name="am">Uhr</string>
-    <string name="pm">Uhr</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
     <string name="holiday">Feiertag</string>
     <string name="shift_work_days_head">Dauer</string>
-    <string name="prefer_linear_date_summary">2000/1/1 statt 1. Januar 2000 in Widget und Meldung zu verwenden</string>
+    <string name="prefer_linear_date_summary">2000/1/1 statt 1. Januar 2000 in Widgets und Benachrichtigungen verwenden</string>
     <string name="prefer_linear_date">Numerische Form von Daten bevorzugen</string>
     <string name="month_events">Ereignisse des Monats</string>
     <string name="map">Karte</string>
@@ -206,7 +206,7 @@
     <string name="preview">Vorschau</string>
     <string name="ignore">Ignorieren</string>
     <string name="theme_default">System Standard</string>
-    <string name="theme_light">Licht</string>
+    <string name="theme_light">Hell</string>
     <string name="theme_dark">Dunkel</string>
     <string name="theme_modern">Modern</string>
     <string name="theme_aqua">Aqua</string>
@@ -222,7 +222,7 @@
     <string name="shift_work_evening">Abend</string>
     <string name="shift_work_night">Nacht</string>
     <string name="method_jafari">Shia Ithna-Ashari, Leva-Institut, Qum</string>
-    <string name="method_mwl">Islamische Weltföderation, Saudi-Arabien</string>
+    <string name="method_mwl">Islamische Weltliga, Saudi-Arabien</string>
     <string name="method_isna">Islamische Gesellschaft Nordamerikas</string>
     <string name="method_egypt">Ägyptische Generalbehörde für Vermessung</string>
     <string name="method_makkah">Umm Al-Qura Universität, Makkah</string>
@@ -293,7 +293,7 @@
     <string name="high_latitudes_one_seventh">Ein Siebtel</string>
     <string name="none">Keine</string>
     <string name="show_sun_and_moon_path_in_24_hours">Sonne und Mondpfad in 24 Stunden anzeigen</string>
-    <string name="widget_prefer_device_colors">Gerätefärbung in Widgets verfolgen</string>
+    <string name="widget_prefer_device_colors">Farbgebung des Geräts in Widgets übernehmen</string>
     <string name="nepali_calendar">Nepalesischer Kalender</string>
     <string name="nepali_calendar_short">Nepalesisch</string>
     <string name="show_secondary_calendar">Zweitkalender anzeigen</string>
