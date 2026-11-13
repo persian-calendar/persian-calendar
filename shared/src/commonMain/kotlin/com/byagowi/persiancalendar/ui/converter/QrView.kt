@@ -80,21 +80,21 @@ fun QrView(
         path.addRoundRect(
             RoundRect(
                 0f, 0f, cellSize * 7, cellSize * 7,
-                cellSize * roundness * 2, cellSize * roundness * 2,
+                cellSize * roundness * 3.5f, cellSize * roundness * 3.5f,
             ),
             Path.Direction.Clockwise,
         )
         path.addRoundRect(
             RoundRect(
                 cellSize, cellSize, cellSize * 6, cellSize * 6,
-                cellSize * roundness * 1.5f, cellSize * roundness * 1.5f,
+                cellSize * roundness * 3f, cellSize * roundness * 3f,
             ),
             Path.Direction.CounterClockwise,
         )
         path.addRoundRect(
             RoundRect(
                 cellSize * 2, cellSize * 2, cellSize * 5, cellSize * 5,
-                cellSize * roundness, cellSize * roundness,
+                cellSize * roundness * 2.5f, cellSize * roundness * 2.5f,
             ),
             Path.Direction.Clockwise,
         )
