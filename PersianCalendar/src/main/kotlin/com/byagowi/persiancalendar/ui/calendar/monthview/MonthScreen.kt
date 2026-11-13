@@ -72,7 +72,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.previous_x
 import com.byagowi.persiancalendar.shared.generated.resources.schedule
 import com.byagowi.persiancalendar.shared.generated.resources.week
 import com.byagowi.persiancalendar.shared.generated.resources.week_days_name_column
-import com.byagowi.persiancalendar.ui.calendar.EventsRow
+import com.byagowi.persiancalendar.ui.calendar.EventsColumn
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.outOfMonthAlpha
@@ -237,7 +237,7 @@ fun SharedTransitionScope.MonthScreen(
                         val events = (0..<7).map { index ->
                             eventsRepository.getEvents(weekJdn + index, deviceEvents)
                         }
-                        EventsRow(
+                        EventsColumn(
                             events = events,
                             horizontalPadding = 0.dp,
                             defaultWidthReduction = defaultWidthReduction,
