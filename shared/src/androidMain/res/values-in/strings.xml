@@ -117,7 +117,7 @@
     <string name="week_ends_summary">Pilih hari akhir pekan</string>
     <string name="hijri_offset">Offset Hijriah</string>
     <string name="hijri_offset_summary">Sesuaikan kalender Hijriah dengan menambahkan sejumlah hari</string>
-    <string name="clock_in_24">Jam 24 jam</string>
+    <string name="clock_in_24">Format 24 jam</string>
     <string name="showing_clock_in_24">Tampilkan jam dalam format 24 jam</string>
     <string name="widget_text_color">Warna Teks Widget</string>
     <string name="select_widgets_text_color">Pilih warna kustom untuk teks widget</string>

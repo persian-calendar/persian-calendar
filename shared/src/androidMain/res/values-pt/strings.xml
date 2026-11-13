@@ -103,7 +103,7 @@
     <string name="native_digits">Algarismos nativos</string>
     <string name="enable_native_digits">Ativar algarismos nativos</string>
     <string name="events_summary">Eventos a mostrar</string>
-    <string name="show_device_calendar_events">Calendário de eventos pessoais</string>
+    <string name="show_device_calendar_events">Eventos do calendário pessoal</string>
     <string name="show_device_calendar_events_summary">Mostrar eventos do calendário pessoal</string>
     <string name="calendars_priority">Prioridade dos calendários</string>
     <string name="calendars_priority_summary">Definir as prioridades dos calendários ou ocultar calendários</string>
@@ -165,7 +165,7 @@
     <string name="licenses">Licença</string>
     <string name="about_license_title">Licença da Aplicação</string>
     <string name="about_license_sum">Consulte a licença GPLv3 e os restantes termos de licença utilizados pelo Calendário Persa.</string>
-    <string name="about_send_mail">E-Mail</string>
+    <string name="about_send_mail">E-mail</string>
     <string name="about_email_sum">Envie um email aos autores da app</string>
     <string name="about_no_client">Não está instalado nenhum cliente de email</string>
     <string name="about_developers">Programadores (ordem aleatória)</string>
@@ -297,7 +297,7 @@
     <string name="nepali_calendar">Calendário Nepalês</string>
     <string name="nepali_calendar_short">Nepalês</string>
     <string name="show_secondary_calendar">Mostrar calendário secundário</string>
-    <string name="season">Estação/Época</string>
+    <string name="season">Estação</string>
     <string name="solar_eclipse">Eclipse solar</string>
     <string name="lunar_eclipse">Eclipse lunar</string>
     <string name="summer">Verão</string>
@@ -344,8 +344,8 @@
     <string name="vibration">Vibração</string>
     <string name="schedule">Agenda</string>
     <string name="print">Imprimir</string>
-    <string name="week_view">Visão semanal</string>
-    <string name="day_view">Visão diária</string>
+    <string name="week_view">Vista semanal</string>
+    <string name="day_view">Vista diária</string>
     <string name="horoscope">Horóscopo</string>
     <string name="planetary_hours">Horas planetárias</string>
     <string name="select_font">Selecionar tipo de letra</string>

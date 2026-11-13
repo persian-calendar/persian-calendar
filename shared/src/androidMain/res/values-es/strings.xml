@@ -68,7 +68,7 @@
     <string name="length_of_day">Duración del día</string>
     <string name="remaining_daylight">Restante</string>
     <string name="n_hours_minutes">%1$sh %2$sm</string>
-    <string name="times">Tiempos</string>
+    <string name="times">Horarios</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>
     <string name="sunrise">Amanecer</string>

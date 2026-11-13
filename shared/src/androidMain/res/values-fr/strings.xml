@@ -109,8 +109,8 @@
     <string name="calendars_priority_summary">Paramétrer les calendriers pour les afficher en priorité ou les masquer</string>
     <string name="astronomy">Astronomie</string>
     <string name="astronomical_info_summary">Afficher des informations supplémentaires comme les constellations, les anciens noms des années et la Lune en Scorpion</string>
-    <string name="week_number">Semaine de l’année</string>
-    <string name="week_number_summary">Afficher la semaine de l’année sur le calendrier</string>
+    <string name="week_number">Numéro de semaine</string>
+    <string name="week_number_summary">Afficher le numéro de semaine dans le calendrier</string>
     <string name="week_start">Début de la semaine</string>
     <string name="week_start_summary">Sélectionnez le jour de début de semaine</string>
     <string name="week_ends">Fins de semaine</string>
@@ -121,7 +121,7 @@
     <string name="showing_clock_in_24">Afficher l’horloge en 24 heures</string>
     <string name="widget_text_color">Couleur du texte du widget</string>
     <string name="select_widgets_text_color">Sélectionnez une couleur personnalisée pour les textes des widgets</string>
-    <string name="clock_on_widget">Horloge sur le Widget</string>
+    <string name="clock_on_widget">Horloge sur le widget</string>
     <string name="showing_clock_on_widget">Afficher l’horloge sur le widget</string>
     <string name="iran_time">Heure d’Iran</string>
     <string name="showing_iran_time">Widgets et notifications dans le fuseau horaire de l’Iran</string>

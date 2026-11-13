@@ -62,9 +62,9 @@
     <string name="sunrise_sun_view">Alba</string>
     <string name="midday_sun_view">Mezzogiorno</string>
     <string name="sunset_sun_view">Tramonto</string>
-    <string name="length_of_day">Dì</string>
+    <string name="length_of_day">Durata del giorno</string>
     <string name="remaining_daylight">Rimanente</string>
-    <string name="n_hours_minutes">%1$so %2$sm</string>
+    <string name="n_hours_minutes">%1$s h %2$s min</string>
     <string name="times">Orari</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>
@@ -127,7 +127,7 @@
     <string name="showing_iran_time">Widget e notifiche nel fuso orario dell’Iran</string>
     <string name="customize_widget">Personalizzazione dei widget</string>
     <string name="which_one_to_show">Quali mostrare</string>
-    <string name="customize_widget_summary">Cosa mostrare dalle notifiche e dai widget per renderli più compatti</string>
+    <string name="customize_widget_summary">Cosa mostrare nella notifica e nei widget per renderli più compatti</string>
     <string name="ask_user_to_set_location">Imposta la posizione nelle impostazioni per visualizzare correttamente questo luogo</string>
     <string name="notify_date">Attiva la notifica della data</string>
     <string name="enable_notify">Notifica persistente per tutti i tipi di data</string>
@@ -136,9 +136,9 @@
     <string name="gps_location">Ottieni la posizione dal GPS o dalla rete</string>
     <string name="gps_location_help">Se ciò è possibile, non sono necessarie altre opzioni</string>
     <string name="gps_internet_description">Attiva il GPS e la connessione Internet del dispositivo per individuare la tua posizione.\n\nL’app richiede questa autorizzazione solo una volta, tuttavia, se ti sposti in una nuova posizione, sarà necessario accedere nuovamente al GPS e a Internet.</string>
-    <string name="wait_for_gps">attendi! per favore… Se dopo un minuto non è apparso nulla, probabilmente dovresti provare altre opzioni</string>
+    <string name="wait_for_gps">Attendi… Se dopo un minuto non compare nulla, probabilmente dovresti provare altre opzioni</string>
     <string name="location">Localizzazione</string>
-    <string name="location_help">Se nessuno di questi, specificarlo di seguito</string>
+    <string name="location_help">Se nessuno di questi va bene, specificalo qui sotto</string>
     <string name="latitude">Latitudine</string>
     <string name="longitude">Longitudine</string>
     <string name="altitude">Altitudine</string>
@@ -205,7 +205,7 @@
     <string name="age_widget_title">Titolo del widget</string>
     <string name="preview">Anteprima</string>
     <string name="ignore">Ignora</string>
-    <string name="theme_default">Impostazioni predefinite del sistema</string>
+    <string name="theme_default">Predefinito di sistema</string>
     <string name="theme_light">Chiaro</string>
     <string name="theme_dark">Scuro</string>
     <string name="theme_modern">Moderno</string>
@@ -285,7 +285,7 @@
     <string name="thursday_short">G</string>
     <string name="friday_short">V</string>
     <string name="sun_view">Vista del Sole</string>
-    <string name="asr_hanafi_juristic">Metodo Hanafi Asr Juristic</string>
+    <string name="asr_hanafi_juristic">Metodo hanafita per l’Asr</string>
     <string name="month_pray_times">Orari di preghiera del mese</string>
     <string name="high_latitudes_method">Metodo delle alte latitudini</string>
     <string name="high_latitudes_night_middle">Centro della notte</string>

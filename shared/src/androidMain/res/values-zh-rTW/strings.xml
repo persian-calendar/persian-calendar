@@ -93,7 +93,7 @@
     <string name="east">東</string>
     <string name="south">南</string>
     <string name="west">西</string>
-    <string name="qibla">朝拜方向</string>
+    <string name="qibla">麥加方向</string>
     <string name="pref_widget">小工具</string>
     <string name="pref_notification">通知</string>
     <string name="pref_interface">介面</string>

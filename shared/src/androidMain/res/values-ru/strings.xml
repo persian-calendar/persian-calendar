@@ -26,8 +26,8 @@
     <string name="return_to_today">Вернуться к сегодняшнему дню</string>
     <string name="search_in_events">Поиск в событиях</string>
     <string name="days_distance">Расстояние</string>
-    <string name="start_of_year_diff">%1$s дней (~%2$s недель или %3$s месяцев) с начала года</string>
-    <string name="end_of_year_diff">%1$s дней (~%2$s недель или %3$s месяцев) до конца года</string>
+    <string name="start_of_year_diff">%1$s дн. (~%2$s нед. или %3$s мес.) с начала года</string>
+    <string name="end_of_year_diff">%1$s дн. (~%2$s нед. или %3$s мес.) до конца года</string>
     <string name="year_name">Название года</string>
     <string name="animal_year_name_monkey">Обезьяна</string>
     <string name="animal_year_name_rooster">Петух</string>
@@ -150,7 +150,7 @@
     <string name="in_city_time">в %1$s</string>
     <string name="pray_methods">Методы расчета</string>
     <string name="pray_methods_calculation">Методы расчета времени молитвы и компаса Киблы</string>
-    <string name="athan_gap">Предупреждение об Азане</string>
+    <string name="athan_gap">Интервал до азана</string>
     <string name="athan_gap_summary">За какое время до Азана должен сработать будильник (в минутах)</string>
     <string name="athan_alarm">Будильник Азана</string>
     <string name="athan_alarm_summary">Для каких молитв включать будильник</string>
@@ -295,7 +295,7 @@
     <string name="high_latitudes_one_seventh">Одна седьмая</string>
     <string name="none">Нет</string>
     <string name="show_sun_and_moon_path_in_24_hours">Показать путь Солнца и Луны за 24 часа</string>
-    <string name="widget_prefer_device_colors">Применить расцветку обоев системы к виджетам</string>
+    <string name="widget_prefer_device_colors">Следовать цветам устройства в виджетах</string>
     <string name="nepali_calendar">Непальский календарь</string>
     <string name="nepali_calendar_short">Непальский</string>
     <string name="show_secondary_calendar">Показать дополнительный календарь</string>

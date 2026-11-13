@@ -125,7 +125,7 @@
     <string name="showing_clock_on_widget">Uhr auf dem Widget anzeigen</string>
     <string name="iran_time">Iranische Zeit</string>
     <string name="showing_iran_time">Widgets und Benachrichtigungen in der iranischen Zeitzone</string>
-    <string name="customize_widget">Widget Anpassung</string>
+    <string name="customize_widget">Widget-Anpassung</string>
     <string name="which_one_to_show">Welche sollen angezeigt werden</string>
     <string name="customize_widget_summary">Was von Benachrichtigungen und Widgets angezeigt werden soll, um sie kompakter zu machen</string>
     <string name="ask_user_to_set_location">Legen Sie den Ort in den Einstellungen fest, um diesen Ort korrekt anzuzeigen</string>
@@ -150,7 +150,7 @@
     <string name="pray_methods_calculation">Berechnungsmethoden für Gebetszeiten und Qibla-Kompass</string>
     <string name="athan_gap">Adhan Lücke</string>
     <string name="athan_gap_summary">Wie lange vor dem Adhan soll der Alarm ausgelöst werden (in Minuten)</string>
-    <string name="athan_alarm">Adhan Alarm</string>
+    <string name="athan_alarm">Adhan-Alarm</string>
     <string name="athan_alarm_summary">Gebete, für die der Alarm ausgelöst werden soll</string>
     <string name="custom_athan">Adhan wählen</string>
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
@@ -205,7 +205,7 @@
     <string name="age_widget_title">Widget Titel</string>
     <string name="preview">Vorschau</string>
     <string name="ignore">Ignorieren</string>
-    <string name="theme_default">System Standard</string>
+    <string name="theme_default">Systemstandard</string>
     <string name="theme_light">Hell</string>
     <string name="theme_dark">Dunkel</string>
     <string name="theme_modern">Modern</string>
@@ -233,7 +233,7 @@
     <string name="widget_customization_other_calendars">Andere Kalender auf 1x4 und 2x2 Widgets</string>
     <string name="widget_customization_non_holiday_events">Nicht-Feiertage auf 2x2-Widget und Benachrichtigung</string>
     <string name="widget_customization_times">Gebetszeiten auf Widgets und Benachrichtigungen (falls eingestellt)</string>
-    <string name="widget_customization_times_location">Lage der Gebetszeiten auf 2x2 und Benachrichtigung (falls eingestellt)</string>
+    <string name="widget_customization_times_location">Position der Gebetszeiten auf dem 2x2-Widget und in der Benachrichtigung (falls eingestellt)</string>
     <string name="farvardin">Farvardin</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Khordad</string>
@@ -284,8 +284,8 @@
     <string name="wednesday_short">Mi</string>
     <string name="thursday_short">Do</string>
     <string name="friday_short">Fr</string>
-    <string name="sun_view">Ansicht der Sonne</string>
-    <string name="asr_hanafi_juristic">Hanafi Asr Juristische Methode</string>
+    <string name="sun_view">Sonnenansicht</string>
+    <string name="asr_hanafi_juristic">Hanafitische Asr-Methode</string>
     <string name="month_pray_times">Gebetszeiten des Monats</string>
     <string name="high_latitudes_method">Methode für hohe Breitengrade</string>
     <string name="high_latitudes_night_middle">Nachtmitte</string>
