@@ -665,8 +665,8 @@ fun SharedTransitionScope.CalendarScreen(
                 .padding(top = paddingValues.calculateTopPadding())
                 .then(
                     if (isLandscape) Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-                    ) else Modifier
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start),
+                    ) else Modifier,
                 ),
         ) {
             val maxWidth = this.maxWidth
@@ -837,7 +837,6 @@ private fun enableTimesTab(): Boolean {
             PREF_APP_LANGUAGE !in preferences
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Details(
     selectedDay: Jdn,
