@@ -19,6 +19,12 @@ abstract class SubmoduleCheck : DefaultTask() {
     fun run() {
         val rootDir = layout.projectDirectory.asFile
 
+        // Source archives (as used by some distribution builders) have no git metadata at all.
+        if (gitResult(rootDir, "rev-parse", "--git-dir").exitCode != 0) {
+            logger.lifecycle("Submodule check skipped: not a git checkout.")
+            return
+        }
+
         val failures = buildList {
             git(
                 rootDir,
@@ -46,8 +52,25 @@ abstract class SubmoduleCheck : DefaultTask() {
                     add("submodule has uncommitted changes: $path")
                 }
 
+                // Shallow checkouts (actions/checkout with fetch-depth: 1, F-Droid's clone)
+                // cannot prove ancestry: the recorded commit may be an ancestor of the remote
+                // branch while the shallow boundary hides the link. This guard is a release aid,
+                // not a build requirement, so only verify when that is actually possible.
+                if (git(subDir, "rev-parse", "--is-shallow-repository").trim() == "true") {
+                    logger.lifecycle(
+                        "Submodule check: skipping remote verification for $path (shallow checkout).",
+                    )
+                    return@forEach
+                }
+
                 // Refresh remote-tracking refs first, since `git push` does not update them.
-                git(subDir, "fetch", "--quiet", "origin")
+                // Offline builds (F-Droid) cannot fetch; do not turn that into a failure either.
+                if (gitResult(subDir, "fetch", "--quiet", "origin").exitCode != 0) {
+                    logger.lifecycle(
+                        "Submodule check: skipping remote verification for $path (could not fetch origin).",
+                    )
+                    return@forEach
+                }
 
                 // Local checkout ahead of the remote → unpushed commits.
                 // (Behind the remote is fine: HEAD is still contained in a remote branch.)
@@ -81,4 +104,7 @@ abstract class SubmoduleCheck : DefaultTask() {
     }
 
     private fun git(dir: File, vararg args: String): String = execOperations.git(dir, *args)
+
+    private fun gitResult(dir: File, vararg args: String): GitResult =
+        execOperations.gitResult(dir, *args)
 }
