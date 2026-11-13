@@ -77,7 +77,7 @@
     <string name="astronomy">آسترونومی</string>
     <string name="week_ends">هفتەصوڭی گونلری</string>
     <string name="location">قونوم</string>
-    <string name="latitude">اگلەم</string>
+    <string name="latitude">انلەم</string>
     <string name="longitude">بویلام</string>
     <string name="altitude">راقم (یوكسكلك)</string>
     <string name="coordinates">قواوردیناتلر</string>
@@ -176,7 +176,7 @@
     <string name="tropical">تروپیقال</string>
     <string name="calculator">حساب ماكینەسی</string>
     <string name="chinese">چین</string>
-    <string name="yes">أوت</string>
+    <string name="yes">اوت</string>
     <string name="save">قید ایت</string>
     <string name="vibration">تیترەشیم</string>
     <string name="schedule">پلان</string>
