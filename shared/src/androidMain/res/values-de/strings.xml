@@ -321,6 +321,8 @@
     <string name="live_wallpaper_settings">Live-Hintergrundbild Einstellungen</string>
     <string name="screensaver_settings">Bildschirmschoner Einstellungen</string>
     <string name="enable_notification">Möchten Sie die Datumsbenachrichtigung aktivieren?</string>
+    <string name="enable_exact_alarm_permission">Möchten Sie „Alarme und Erinnerungen“ in den Einstellungen aktivieren, damit der Adhan zur exakten Zeit abgespielt wird?</string>
+    <string name="exempt_from_battery_optimizations">Möchten Sie die App von der Akku-Optimierung ausnehmen, damit die Datumsbenachrichtigungen korrekt funktionieren?</string>
     <string name="add_quick_settings_tile">Kachel für Schnelleinstellungen hinzufügen</string>
     <string name="true_north">Echter Norden</string>
     <string name="full_screen">Vollbild</string>

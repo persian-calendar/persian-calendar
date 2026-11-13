@@ -323,6 +323,8 @@
     <string name="live_wallpaper_settings">Canlı duvar kağıdı ayarları</string>
     <string name="screensaver_settings">Ekran koruyucu ayarları</string>
     <string name="enable_notification">Tarih bildirimini etkinleştirmek ister misiniz\?</string>
+    <string name="enable_exact_alarm_permission">Ezanın tam vaktinde çalması için ayarlardan “Alarmlar ve hatırlatıcılar” iznini etkinleştirmek ister misiniz\?</string>
+    <string name="exempt_from_battery_optimizations">Tarih bildirimlerinin doğru çalışması için uygulamayı pil optimizasyonundan muaf tutmak ister misiniz\?</string>
     <string name="add_quick_settings_tile">Hızlı ayarlar kutucuğu ekle</string>
     <string name="true_north">Gerçek kuzey</string>
     <string name="full_screen">Tam Ekran</string>

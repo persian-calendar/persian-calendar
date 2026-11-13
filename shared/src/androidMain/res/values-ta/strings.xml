@@ -321,6 +321,8 @@
     <string name="live_wallpaper_settings">நேரடி சுவர்த்தாள் அமைப்புகள்</string>
     <string name="screensaver_settings">திரைக் காப்பி அமைப்புகள்</string>
     <string name="enable_notification">தேதி அறிவிப்பை இயக்க விரும்புகிறீர்களா?</string>
+    <string name="enable_exact_alarm_permission">இறைஅழைப்பு சரியான நேரத்தில் ஒலிக்க, அமைப்புகளில் “அலாரங்கள் &amp; நினைவூட்டல்கள்” என்பதை இயக்க விரும்புகிறீர்களா?</string>
+    <string name="exempt_from_battery_optimizations">தேதி அறிவிப்புகள் சரியாக வேலை செய்ய, பயன்பாட்டை பேட்டரி மேம்படுத்தலில் இருந்து விலக்க விரும்புகிறீர்களா?</string>
     <string name="add_quick_settings_tile">விரைவான அமைப்புகள் ஓடு சேர்</string>
     <string name="true_north">உண்மையான வடக்கு</string>
     <string name="full_screen">முழுத் திரை</string>

@@ -323,11 +323,14 @@
     <string name="live_wallpaper_settings">Paramètres du fond d’écran animé</string>
     <string name="screensaver_settings">Paramètres de l’économiseur d’écran</string>
     <string name="enable_notification">Voulez-vous activer la notification de la date \?</string>
+    <string name="enable_exact_alarm_permission">Voulez-vous activer « Alarmes et rappels » dans les paramètres pour que l’Athan soit diffusé à l’heure exacte ?</string>
+    <string name="exempt_from_battery_optimizations">Voulez-vous exclure l’application de l’optimisation de la batterie afin que les notifications de date fonctionnent correctement ?</string>
     <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
     <string name="true_north">Vrai Nord</string>
     <string name="full_screen">Plein écran</string>
     <string name="exit_full_screen">Quitter le plein écran</string>
     <string name="color_gradient">Dégradé de couleurs</string>
+    <string name="time_zones">Fuseaux horaires</string>
     <string name="qr_code">Code QR</string>
     <string name="navigate_up">Remonter</string>
     <string name="open_navigation_rail">Ouvrir le panneau de navigation</string>

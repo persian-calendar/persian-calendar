@@ -60,6 +60,7 @@
     <string name="moon_in_scorpio">القمر في العقرب</string>
     <string name="events">المناسبات</string>
     <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم</string>
+    <string name="nothing_scheduled">لا شيء مجدول</string>
     <string name="ask_calendar_permission">هل ترغب في تمكين الأحداث الشخصية من تقويم جهازك؟</string>
     <string name="sunrise_sun_view">الشروق</string>
     <string name="midday_sun_view">الظهر</string>
@@ -344,6 +345,8 @@
     <string name="live_wallpaper_settings">إعدادات الخلفية المتحركة</string>
     <string name="screensaver_settings">إعدادات شاشة التوقف</string>
     <string name="enable_notification">هل ترغب في تفعيل تنبيه التاريخ؟</string>
+    <string name="enable_exact_alarm_permission">هل ترغب في تفعيل «المنبهات والتذكيرات» في الإعدادات ليعمل الأذان في الوقت المحدد بدقة؟</string>
+    <string name="exempt_from_battery_optimizations">هل ترغب في استثناء التطبيق من تحسين البطارية ليعمل تنبيه التاريخ بشكل صحيح؟</string>
     <string name="add_quick_settings_tile">إضافة الإعدادات السريعة</string>
     <string name="true_north">الشمال الحقيقي</string>
     <string name="full_screen">ملء الشاشة</string>
@@ -357,6 +360,7 @@
     <string name="yes">نعم</string>
     <string name="sample_inputs">مدخلات نموذجية</string>
     <string name="year_view">العرض السنوي</string>
+    <string name="month_view">العرض الشهري</string>
     <string name="widget_background_transparency">شفافية خلفية المصغر</string>
     <string name="save">حفظ</string>
     <string name="holidays_in_red">العطل باللون الأحمر</string>
@@ -366,8 +370,18 @@
     <string name="print">طباعة</string>
     <string name="week_view">العرض الأسبوعي</string>
     <string name="day_view">العرض اليومي</string>
+    <string name="horoscope">الطالع</string>
+    <string name="planetary_hours">ساعات الكواكب</string>
+    <string name="select_font">اختيار الخط</string>
+    <string name="move_up">نقل لأعلى</string>
+    <string name="move_down">نقل لأسفل</string>
+    <string name="black_moon">ليليث (القمر الأسود)</string>
+    <string name="dynamic_icon">الأيقونة الديناميكية</string>
+    <string name="large_day_number_on_notification">رقم اليوم كبير في التنبيه</string>
     <string name="pref_ui">واجهة المستخدم</string>
     <string name="week">أسبوع</string>
+    <string name="bold_text">نص عريض</string>
+    <string name="widget_text_size">حجم النص</string>
     <plurals name="shift_work_record_title">
         <item quantity="zero">لا يوم %2$s</item>
         <item quantity="one">يوم واحد %2$s</item>

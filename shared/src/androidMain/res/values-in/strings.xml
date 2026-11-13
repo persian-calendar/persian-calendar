@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="code">id</string>
+    <string name="code">in</string>
     <string name="app_name">Kalender Persia</string>
     <string name="widget_name">Kalender Persia</string>
     <string name="widget_mini_name">Kalender Persia (mini)</string>
@@ -321,6 +321,8 @@
     <string name="live_wallpaper_settings">Pengaturan wallpaper hidup</string>
     <string name="screensaver_settings">Pengaturan screensaver</string>
     <string name="enable_notification">Apakah Anda ingin mengaktifkan notifikasi tanggal?</string>
+    <string name="enable_exact_alarm_permission">Apakah Anda ingin mengaktifkan “Alarm &amp; pengingat” di pengaturan agar azan diputar pada waktu yang tepat?</string>
+    <string name="exempt_from_battery_optimizations">Apakah Anda ingin mengecualikan aplikasi dari pengoptimalan baterai agar notifikasi tanggal berfungsi dengan benar?</string>
     <string name="add_quick_settings_tile">Tambahkan tile Pengaturan Cepat</string>
     <string name="true_north">Utara sejati</string>
     <string name="full_screen">Layar Penuh</string>
@@ -361,6 +363,9 @@
     </plurals>
     <plurals name="work_days">
         <item quantity="other">%1$s hari kerja</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%1$s detik</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="other">%1$s menit</item>

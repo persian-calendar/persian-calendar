@@ -60,6 +60,7 @@
     <string name="moon_in_scorpio">Luna en Escorpio</string>
     <string name="events">Eventos</string>
     <string name="no_event">No hay evento ni cita para este día</string>
+    <string name="nothing_scheduled">Nada programado</string>
     <string name="ask_calendar_permission">¿Quieres activar tus eventos personales desde el calendario de tu dispositivo?</string>
     <string name="sunrise_sun_view">Amanecer</string>
     <string name="midday_sun_view">Mediodía</string>
@@ -213,6 +214,7 @@
     <string name="share">Compartir</string>
     <string name="enable_location_services">Los servicios de ubicación están deshabilitados; por favor, actívelos para usar esta función.</string>
     <string name="select_date">Elegir fecha</string>
+    <string name="starting_date">Fecha de inicio</string>
     <string name="age_widget_title">Título del widget</string>
     <string name="preview">Previsualización</string>
     <string name="ignore">Ignorar</string>
@@ -332,6 +334,8 @@
     <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
     <string name="screensaver_settings">Ajustes del salvapantallas</string>
     <string name="enable_notification">¿Desea habilitar la notificación de la fecha\?</string>
+    <string name="enable_exact_alarm_permission">¿Desea habilitar “Alarmas y recordatorios” en los ajustes para que el azán suene a la hora exacta?</string>
+    <string name="exempt_from_battery_optimizations">¿Desea excluir la aplicación de la optimización de batería para que las notificaciones de fecha funcionen correctamente?</string>
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
     <string name="true_north">Norte verdadero</string>
     <string name="full_screen">Pantalla completa</string>
@@ -345,6 +349,7 @@
     <string name="yes">Sí</string>
     <string name="sample_inputs">Ejemplos de entradas</string>
     <string name="year_view">Vista del año</string>
+    <string name="month_view">Vista mensual</string>
     <string name="widget_background_transparency">Transparencia de fondo del widget</string>
     <string name="save">Guardar</string>
     <string name="holidays_in_red">Festivos en rojo</string>
@@ -353,6 +358,19 @@
     <string name="schedule">Horario</string>
     <string name="print">Imprimir</string>
     <string name="week_view">Vista semanal</string>
+    <string name="day_view">Vista diaria</string>
+    <string name="horoscope">Horóscopo</string>
+    <string name="planetary_hours">Horas planetarias</string>
+    <string name="select_font">Elegir fuente</string>
+    <string name="move_up">Mover hacia arriba</string>
+    <string name="move_down">Mover hacia abajo</string>
+    <string name="black_moon">Lilith</string>
+    <string name="dynamic_icon">Icono dinámico</string>
+    <string name="large_day_number_on_notification">Número grande del día en la notificación</string>
+    <string name="pref_ui">Interfaz de usuario</string>
+    <string name="week">Semana</string>
+    <string name="bold_text">Texto en negrita</string>
+    <string name="widget_text_size">Tamaño del texto</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s día</item>
         <item quantity="other">%1$s %2$s días</item>

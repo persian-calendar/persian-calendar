@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="code">zh-rCN</string>
+    <string name="code">zh</string>
     <string name="app_name">波斯历</string>
     <string name="widget_name">波斯历</string>
     <string name="widget_mini_name">波斯历（迷你版）</string>
@@ -321,6 +321,8 @@
     <string name="live_wallpaper_settings">动态壁纸设置</string>
     <string name="screensaver_settings">屏保设置</string>
     <string name="enable_notification">是否启用日期通知？</string>
+    <string name="enable_exact_alarm_permission">是否在设置中启用“闹钟和提醒”，以便宣礼在准确的时间播放？</string>
+    <string name="exempt_from_battery_optimizations">是否将本应用加入电池优化豁免名单，以便日期通知正常工作？</string>
     <string name="add_quick_settings_tile">添加快捷设置图块</string>
     <string name="true_north">真北</string>
     <string name="full_screen">全屏</string>
