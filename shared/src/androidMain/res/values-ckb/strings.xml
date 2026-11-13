@@ -57,6 +57,7 @@
     <string name="moon_in_scorpio">ڕۆژانی مانگ لە دووپشکدا</string>
     <string name="events">بۆنەکان</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە</string>
+    <string name="nothing_scheduled">ھیچ بەرنامەیەک نییە</string>
     <string name="ask_calendar_permission">ئایا دەتەوێت ڕووداوە کەسییەکانت لە ساڵنامەی ئامێرەکەتەوە چالاک بکەیت؟</string>
     <!-- Sun Info -->
     <string name="sunrise_sun_view">ڕۆژھەڵات</string>
@@ -204,6 +205,7 @@
     <string name="share">ھاوبەشی</string>
     <string name="enable_location_services">ڕاژەی شوێن چالاک نییە، تکایە بۆ بەکارھێنانی ئەم تایبەتمەندییە، چالاکی بکە.</string>
     <string name="select_date">ھەڵبژاردنی ڕێککەوت</string>
+    <string name="starting_date">ڕێککەوتی دەستپێکردن</string>
     <string name="age_widget_title">سەردێڕی ویجیت</string>
     <string name="preview">پێشبینین</string>
     <string name="ignore">گوێ مەدەیە</string>
@@ -323,6 +325,8 @@
     <string name="live_wallpaper_settings">ڕێکخستنەکانی نەخشەوێنە زیندوو</string>
     <string name="screensaver_settings">ڕێکخستنەکانی شاشەپارێز</string>
     <string name="enable_notification">دەتەوێت ئاگاداریی ڕێککەوت چالاک بکەیت؟</string>
+    <string name="enable_exact_alarm_permission">دەتەوێت «زەنگەکان و یادخەرەوەکان» لە ڕێکخستنەکاندا چالاک بکەیت بۆ ئەوەی بانگ لە کاتی دیاریکراودا بدرێت؟</string>
+    <string name="exempt_from_battery_optimizations">دەتەوێت بەرنامەکە لە باشترکردنی باتری بەدەر بکەیت بۆ ئەوەی ئاگاداریی ڕێککەوت بە دروستی کار بکات؟</string>
     <string name="add_quick_settings_tile">زیادکردنی کاشیی ڕێکخستنی خێرا</string>
     <string name="true_north">باکووری ڕاستی</string>
     <string name="full_screen">شاشەی پڕ</string>
@@ -336,6 +340,7 @@
     <string name="yes">بەڵێ</string>
     <string name="sample_inputs">داتایی نموونەیی</string>
     <string name="year_view">دیمەنی ساڵ</string>
+    <string name="month_view">دیمەنی مانگ</string>
     <string name="widget_background_transparency">شەفافیەتی پاشبنەمای ویجیت</string>
     <string name="save">ھەڵگرتن</string>
     <string name="holidays_in_red">پشوودانەکان بە ڕەنگی سوور</string>
@@ -345,6 +350,18 @@
     <string name="print">چاپکردن</string>
     <string name="week_view">پێشاندانی حەفتانە</string>
     <string name="day_view">پێشاندانی ڕۆژانە</string>
+    <string name="horoscope">زایچە</string>
+    <string name="planetary_hours">کاتژمێرەکانی ھەسارەکان</string>
+    <string name="select_font">ھەڵبژاردنی فۆنت</string>
+    <string name="move_up">گواستنەوە بۆ سەرەوە</string>
+    <string name="move_down">گواستنەوە بۆ خوارەوە</string>
+    <string name="black_moon">لیلیت</string>
+    <string name="dynamic_icon">ئایکۆنی گۆڕاو</string>
+    <string name="large_day_number_on_notification">ژمارەی گەورەی ڕۆژ لە ئاگاداریدا</string>
+    <string name="pref_ui">ڕووکاری بەکارھێنەر</string>
+    <string name="week">حەفتە</string>
+    <string name="bold_text">دەقی قەڵەو</string>
+    <string name="widget_text_size">قەبارەی دەق</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">ڕۆژێک %2$s</item>
         <item quantity="other">%1$s ڕۆژ %2$s</item>

@@ -57,6 +57,7 @@
     <string name="moon_in_scorpio">Моҳ дар Ақраб аст</string>
     <string name="events">Рӯйдодҳо</string>
     <string name="no_event">Дар ин рӯз ягон чорабинӣ ё таъинот нест</string>
+    <string name="nothing_scheduled">Ҳеҷ чиз ба нақша гирифта нашудааст</string>
     <string name="ask_calendar_permission">Моилиед рӯйдодҳои шахсии шумо аз тақвими дастгоҳ намоиш дода шаванд?</string>
     <string name="sunrise_sun_view">Тулӯи офтоб</string>
     <string name="midday_sun_view">Нимрӯз</string>
@@ -107,11 +108,13 @@
     <string name="calendars_priority">Афзалияти тақвимҳо</string>
     <string name="calendars_priority_summary">Афзалияти тақвимҳоро таъин кунед ё онҳоро пинҳон кунед</string>
     <string name="astronomy">Астрономӣ</string>
+    <string name="astronomical_info_summary">Намоиши маълумоти иловагӣ ба монанди бурҷи фалакӣ, номҳои қадими солҳо ва Моҳ дар Ақраб</string>
     <string name="week_number">Рақами ҳафта</string>
     <string name="week_number_summary">Намоиши рақами ҳафта дар тақвим</string>
     <string name="week_start">Оғози ҳафта</string>
     <string name="week_start_summary">Рӯзи оғози ҳафтаро интихоб кунед</string>
     <string name="week_ends">Охири ҳафта</string>
+    <string name="week_ends_summary">Рӯзҳои истироҳати ҳафтаро интихоб кунед</string>
     <string name="hijri_offset">Танзими тақвими исломӣ</string>
     <string name="hijri_offset_summary">Тақвими исломиро бо илова кардани шумораи рӯзҳо танзим кунед</string>
     <string name="clock_in_24">Соат дар шакли 24-соатӣ</string>
@@ -176,6 +179,7 @@
     <string name="shift_work_settings">Танзими сменаи корӣ</string>
     <string name="remove">Ҳазф</string>
     <string name="shift_work_starting_date">Оғози сменаи корӣ аз рӯзи дар тақвим интихобшуда, %1$s хоҳад буд.</string>
+    <string name="shift_work_starting_date_edit">Оғози сменаи корӣ аз рӯзи қаблан интихобшуда, %1$s хоҳад буд.</string>
     <string name="shift_work_reset_button">Хомӯш кардан ё аз нав барномарезӣ кардан</string>
     <string name="spaced_and">\u0020ва\u0020</string>
     <string name="spaced_or">\u0020ё\u0020</string>
@@ -199,6 +203,7 @@
     <string name="share">Мубодила</string>
     <string name="enable_location_services">Хидматҳои ҷойгиршавӣ ғайрифаъоланд, лутфан онҳоро барои истифодаи ин хусусият фаъол кунед.</string>
     <string name="select_date">Интихоби сана</string>
+    <string name="starting_date">Санаи оғоз</string>
     <string name="age_widget_title">Унвони виҷет</string>
     <string name="preview">Пешнамоиш</string>
     <string name="ignore">Нодида гиред</string>
@@ -283,12 +288,17 @@
     <string name="friday_short">Ҷм</string>
     <string name="sun_view">Хуршеднамо</string>
     <string name="asr_hanafi_juristic">Усули ҳисоби намози асри Ҳанафӣ</string>
+    <string name="month_pray_times">Вақтҳои намоз дар моҳ</string>
+    <string name="high_latitudes_method">Усули арзҳои баланди ҷуғрофӣ</string>
     <string name="high_latitudes_night_middle">Нимаи шаб</string>
     <string name="high_latitudes_angle_based">Бар пояи зовия</string>
     <string name="high_latitudes_one_seventh">Якҳафтум</string>
     <string name="none">Ҳеҷ кадом</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Намоиши масири Офтоб ва Моҳ дар 24 соат</string>
+    <string name="widget_prefer_device_colors">Пайравии рангбандии дастгоҳ дар виҷетҳо</string>
     <string name="nepali_calendar">Неполӣ</string>
     <string name="nepali_calendar_short">Неполӣ</string>
+    <string name="show_secondary_calendar">Намоиши тақвими иловагӣ</string>
     <string name="season">Фасл</string>
     <string name="solar_eclipse">Хуршедгирифтагӣ</string>
     <string name="lunar_eclipse">Моҳгирифтагӣ</string>
@@ -310,11 +320,57 @@
     <string name="tropical">Эътидолӣ</string>
     <string name="calculator">Калкулятор</string>
     <string name="chinese">Чинӣ</string>
+    <string name="live_wallpaper_settings">Танзимоти тасвири заминаи зинда</string>
+    <string name="screensaver_settings">Танзимоти ҳифзкунандаи экран</string>
+    <string name="enable_notification">Оё мехоҳед огоҳии сана фаъол карда шавад?</string>
+    <string name="enable_exact_alarm_permission">Оё мехоҳед дар танзимот «ҳушдорҳо ва ёдрасонҳо»-ро фаъол кунед, то азон дар вақти дақиқ садо диҳад?</string>
+    <string name="exempt_from_battery_optimizations">Оё мехоҳед барномаро аз оптимизатсияи батарея истисно кунед, то огоҳии сана дуруст кор кунад?</string>
+    <string name="add_quick_settings_tile">Илова кардани плиткаи танзимоти зуд</string>
+    <string name="true_north">Шимоли ҳақиқӣ</string>
+    <string name="full_screen">Экрани пурра</string>
+    <string name="exit_full_screen">Баромадан аз экрани пурра</string>
+    <string name="color_gradient">Тайфи рангӣ</string>
+    <string name="time_zones">Минтақаҳои вақт</string>
+    <string name="qr_code">Рамзи QR</string>
+    <string name="navigate_up">Гузариш ба боло</string>
+    <string name="open_navigation_rail">Боз кардани ҷеввони гузариш</string>
+    <string name="more_options">Имконотҳои бештар</string>
     <string name="yes">Бале</string>
+    <string name="sample_inputs">Намунаҳои воридотӣ</string>
+    <string name="year_view">Намуди сол</string>
+    <string name="month_view">Намуди моҳ</string>
+    <string name="widget_background_transparency">Шаффофияти пасзаминаи виҷет</string>
     <string name="save">Захира</string>
+    <string name="holidays_in_red">Истироҳатҳо бо ранги сурх</string>
+    <string name="add_widget">Илова кардани виҷет</string>
+    <string name="vibration">Ларзиш</string>
+    <string name="schedule">Ҷадвали вақт</string>
+    <string name="print">Чоп</string>
+    <string name="week_view">Намуди ҳафта</string>
+    <string name="day_view">Намуди рӯз</string>
+    <string name="horoscope">Зоича</string>
+    <string name="planetary_hours">Соатҳои сайёраҳо</string>
+    <string name="select_font">Интихоби шрифт</string>
+    <string name="move_up">Ба боло кӯчонидан</string>
+    <string name="move_down">Ба поён кӯчонидан</string>
+    <string name="black_moon">Моҳи сиёҳ</string>
+    <string name="dynamic_icon">Нишон додани рақами рӯз дар нишона</string>
+    <string name="large_day_number_on_notification">Рақами калони рӯз дар огоҳӣ</string>
+    <string name="pref_ui">Зоҳири корбарӣ</string>
+    <string name="week">Ҳафта</string>
+    <string name="bold_text">Матни ғафс</string>
+    <string name="widget_text_size">Андозаи матн</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s рӯз %2$s</item>
         <item quantity="other">%1$s рӯз %2$s</item>
+    </plurals>
+    <plurals name="work_days">
+        <item quantity="one">%1$s рӯзи корӣ</item>
+        <item quantity="other">%1$s рӯзи корӣ</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s сония</item>
+        <item quantity="other">%1$s сония</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s дақиқа</item>
@@ -327,6 +383,10 @@
     <plurals name="days">
         <item quantity="one">%1$s рӯз</item>
         <item quantity="other">%1$s рӯз</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">%1$s ҳафта</item>
+        <item quantity="other">%1$s ҳафта</item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s моҳ</item>
