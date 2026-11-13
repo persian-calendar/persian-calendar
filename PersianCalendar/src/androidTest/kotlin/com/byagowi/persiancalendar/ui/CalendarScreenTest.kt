@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.today
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
+import com.byagowi.persiancalendar.ui.calendar.rememberDeviceCalendarEventsCache
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,8 +20,23 @@ class CalendarScreenTest {
     fun calendarScreenSmokeTest() {
         composeTestRule.setContent {
             NavigationMock {
-                val now = System.currentTimeMillis()
-                CalendarScreen(0, {}, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, today, now)
+                CalendarScreen(
+                    deviceCalendarEventsCache = rememberDeviceCalendarEventsCache(0),
+                    refreshCalendar = {},
+                    bringDayCommand = null,
+                    clearBringDayCommand = {},
+                    openNavigationRail = {},
+                    navigateToSchedule = {},
+                    navigateToMonthView = {},
+                    navigateToHolidaysSettings = {},
+                    navigateToSettingsLocationTab = {},
+                    navigateToSettingsLocationTabSetAthanAlarm = {},
+                    navigateToCalendarsPrioritySettings = {},
+                    navigateToAstronomy = {},
+                    navigateToWeek = {},
+                    today = today,
+                    now = System.currentTimeMillis(),
+                )
             }
         }
     }

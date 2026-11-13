@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 fun CalendarPager(
     selectedDay: Jdn,
     isHighlighted: Boolean,
-    refreshToken: Int,
     deviceCalendarEventsCache: DeviceCalendarEventsCache,
     changeSelectedDay: (Jdn) -> Unit,
     calendarPagerState: CalendarPagerState,
@@ -40,7 +39,6 @@ fun CalendarPager(
         suggestedPagerSize = suggestedPagerSize,
         addEvent = addEvent,
         today = today,
-        refreshToken = refreshToken,
         setSelectedDay = changeSelectedDay,
         onWeekClick = navigateToWeek,
         arrowAction = { isPrevious, isLongClick ->

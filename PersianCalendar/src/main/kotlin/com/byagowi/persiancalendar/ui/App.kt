@@ -183,7 +183,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 entryProvider = entryProvider {
                     entry<Screen.Calendar> {
                         CalendarScreen(
-                            refreshToken = refreshToken,
                             deviceCalendarEventsCache = deviceEventsCache,
                             refreshCalendar = refreshCalendar,
                             bringDayCommand = bringDayCommand,
@@ -231,7 +230,6 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                     entry<Screen.Week> {
                         WeekScreen(
-                            refreshToken = refreshToken,
                             deviceCalendarEventsCache = deviceEventsCache,
                             refreshCalendar = refreshCalendar,
                             commandBringDay = commandBringDay,

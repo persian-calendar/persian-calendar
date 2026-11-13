@@ -282,7 +282,6 @@ import kotlin.time.Duration.Companion.days
 
 @Composable
 fun SharedTransitionScope.CalendarScreen(
-    refreshToken: Int,
     deviceCalendarEventsCache: DeviceCalendarEventsCache,
     refreshCalendar: () -> Unit,
     bringDayCommand: Jdn?,
@@ -751,7 +750,6 @@ fun SharedTransitionScope.CalendarScreen(
                     fun CalendarPager(pagerModifier: Modifier) = CalendarPager(
                         selectedDay = selectedDay,
                         isHighlighted = isHighlighted,
-                        refreshToken = refreshToken,
                         deviceCalendarEventsCache = deviceCalendarEventsCache,
                         changeSelectedDay = { day: Jdn ->
                             isHighlighted = true

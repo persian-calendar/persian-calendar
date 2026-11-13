@@ -175,7 +175,6 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SharedTransitionScope.WeekScreen(
-    refreshToken: Int,
     deviceCalendarEventsCache: DeviceCalendarEventsCache,
     refreshCalendar: () -> Unit,
     commandBringDay: (Jdn) -> Unit,
@@ -385,7 +384,6 @@ fun SharedTransitionScope.WeekScreen(
                         suggestedPagerSize = pagerSize,
                         addEvent = addEvent,
                         today = today,
-                        refreshToken = refreshToken,
                         setSelectedDay = setSelectedDayInWeekPager,
                         secondaryCalendar = secondaryCalendar,
                         arrowAction = { isPrevious, _ ->

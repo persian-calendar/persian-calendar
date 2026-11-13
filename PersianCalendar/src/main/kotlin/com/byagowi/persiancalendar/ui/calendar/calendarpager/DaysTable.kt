@@ -105,7 +105,6 @@ fun daysTable(
     suggestedPagerSize: DpSize,
     addEvent: (AddEventData) -> Unit,
     today: Jdn,
-    refreshToken: Int,
     setSelectedDay: (Jdn) -> Unit,
     arrowAction: PageArrowAction,
     secondaryCalendar: Calendar?,
@@ -134,7 +133,7 @@ fun daysTable(
     val diameter = min(cellWidth, cellHeight)
     val context = LocalContext.current
     val baseDayPainter = remember(
-        cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile, isBoldFont,
+        cellWidthPx, suggestedHeight, monthColors, resources, fontFile, isBoldFont,
         secondaryCalendar, isRtl, language, mainCalendarNumeral, numeral, showMoonInScorpio,
     ) {
         DayPainter(
