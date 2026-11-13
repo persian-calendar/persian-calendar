@@ -98,9 +98,6 @@ fun Lint.applyProjectLintOptions() {
     checkGeneratedSources = true
     disable += listOf(
         "MissingTranslation",
-        // Translation data can carry quantities a language does not actually use
-        "UnusedQuantity",
-        "SelectableText",
         "IconLocation",
         "DuplicateStrings",
         // Makes the CI fail in unrelated changes

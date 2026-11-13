@@ -103,7 +103,6 @@
     <string name="jupiter">Giove</string>
     <plurals name="years">
         <item quantity="one">%1$s anno</item>
-        <item quantity="many">%1$s anni</item>
         <item quantity="other">%1$s anni</item>
     </plurals>
     <string name="february">Febbraio</string>
@@ -136,12 +135,10 @@
     <string name="sun">Sole</string>
     <plurals name="weeks">
         <item quantity="one">%1$s settimana</item>
-        <item quantity="many">%1$s settimane</item>
         <item quantity="other">%1$s settimane</item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s mese</item>
-        <item quantity="many">%1$s mesi</item>
         <item quantity="other">%1$s mesi</item>
     </plurals>
     <string name="march">Marzo</string>
@@ -343,32 +340,26 @@
     <string name="week">Settimana</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s giorno</item>
-        <item quantity="many">%1$s %2$s giorni</item>
         <item quantity="other">%1$s %2$s giorni</item>
     </plurals>
     <plurals name="work_days">
         <item quantity="one">%1$s giorno lavorativo</item>
-        <item quantity="many">%1$s giorni lavorativi</item>
         <item quantity="other">%1$s giorni lavorativi</item>
     </plurals>
     <plurals name="seconds">
         <item quantity="one">%1$s secondo</item>
-        <item quantity="many">%1$s secondi</item>
         <item quantity="other">%1$s secondi</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">%1$s minuto</item>
-        <item quantity="many">%1$s minuti</item>
         <item quantity="other">%1$s minuti</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">%1$s ora</item>
-        <item quantity="many">%1$s ore</item>
         <item quantity="other">%1$s ore</item>
     </plurals>
     <plurals name="days">
         <item quantity="one">%1$s giorno</item>
-        <item quantity="many">%1$s giorni</item>
         <item quantity="other">%1$s giorni</item>
     </plurals>
     <string name="about_send_mail">E-mail</string>
