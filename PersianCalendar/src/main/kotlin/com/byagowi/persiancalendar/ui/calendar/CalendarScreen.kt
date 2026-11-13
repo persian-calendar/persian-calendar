@@ -885,7 +885,7 @@ private fun Details(
     ) {
         val detailsWidth = this.maxWidth
 
-        val dayDeviceEventsState = deviceCalendarEventsCache.getEventsOfDay(selectedDay)
+        val dayDeviceEventsState = deviceCalendarEventsCache.getDeviceEventsOfDay(selectedDay)
         val dayDeviceEvents = dayDeviceEventsState.data
         val isDayEventsLoading = dayDeviceEventsState.status == CalendarProviderStatus.Loading &&
                 !dayDeviceEventsState.hasResult

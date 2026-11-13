@@ -234,7 +234,7 @@ fun SharedTransitionScope.MonthScreen(
                     items(ITEMS_COUNT) { index ->
                         val weekJdn = indexToJdn(baseJdn, index)
                         val resources = LocalResources.current
-                        val deviceEvents = deviceCalendarEventsCache.getEventsOfDays(
+                        val deviceEvents = deviceCalendarEventsCache.getDeviceEventsOfDays(
                             weekJdn,
                             days = 7,
                         ).data

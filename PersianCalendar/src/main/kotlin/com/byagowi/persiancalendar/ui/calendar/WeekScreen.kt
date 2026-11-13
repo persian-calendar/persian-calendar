@@ -435,7 +435,7 @@ fun SharedTransitionScope.WeekScreen(
                             val pageWeekStart = (today + (page - weeksLimit / 2) * 7).let {
                                 it - (it.weekDay - weekStart)
                             }
-                            val weekDeviceEvents = deviceCalendarEventsCache.getEventsOfDays(
+                            val weekDeviceEvents = deviceCalendarEventsCache.getDeviceEventsOfDays(
                                 pageWeekStart, days = 7,
                             ).data
 
@@ -516,7 +516,7 @@ fun SharedTransitionScope.WeekScreen(
                             }
 
                             val dayDeviceEvents =
-                                deviceCalendarEventsCache.getEventsOfDay(pageDay).data
+                                deviceCalendarEventsCache.getDeviceEventsOfDay(pageDay).data
 
                             DaysView(
                                 bottomPadding = fabPlaceholderHeight ?: 0.dp,

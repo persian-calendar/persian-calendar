@@ -63,7 +63,7 @@ fun CalendarPager(
             val monthStartDate =
                 mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
             val monthStartJdn = Jdn(monthStartDate)
-            val monthDeviceEvents = deviceCalendarEventsCache.getEventsOfDays(
+            val monthDeviceEvents = deviceCalendarEventsCache.getDeviceEventsOfDays(
                 monthStartJdn, days = 32, limit = 750,
             ).data
             daysTable(

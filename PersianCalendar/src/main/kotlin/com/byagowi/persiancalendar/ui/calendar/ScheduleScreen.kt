@@ -281,7 +281,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                 else MaterialTheme.typography.titleLarge
             val viewEvent = viewEvent(refreshCalendar)
-            deviceCalendarEventsCache.preload(preloadRange.first, preloadRange.second)
+            deviceCalendarEventsCache.preloadDeviceEvents(preloadRange.first, preloadRange.second)
             LazyColumn(
                 state = listState,
                 contentPadding = WindowInsets.safeDrawing.only(
@@ -301,7 +301,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         baseJdn = jdn
                         coroutineScope.launch { listState.scrollToItem(ITEMS_COUNT / 2) }
                     }
-                    val deviceEvents = deviceCalendarEventsCache.getEventsOfDay(jdn)
+                    val deviceEvents = deviceCalendarEventsCache.getDeviceEventsOfDay(jdn)
                     val events = eventsRepository.getEvents(jdn, deviceEvents.data)
                     Column {
                         // Give pending days a size so LazyColumn does not enqueue hundreds of
