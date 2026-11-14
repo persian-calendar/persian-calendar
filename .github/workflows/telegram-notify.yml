@@ -15,22 +15,69 @@ jobs:
       - name: Notify
         env:
           COMMITS: ${{ toJson(github.event.commits) }}
-          TEMPLATE: '.[] | "<a href=\"\(.url)\">\(.id[:8])</a> • <a href=\"https://github.com/\(.author.username | @html)\">\(.author.username | @html)</a>
-
-          \(.message | gsub("(?<a>[<>&\"])"; .a|@html))
-
-          "'
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          (
-            printenv COMMITS | jq -r "$TEMPLATE"
-            printf '📅 @Persian_Calendar'
-          ) | \
-          jq -R --slurp '{
-            text: .,
-            disable_web_page_preview: true,
-            chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}",
-            parse_mode: "HTML"
-          }' | \
-          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-            -H 'Content-Type: application/json' \
-            --data-binary @-
+          set -o pipefail
+          jq -c --arg chat_id "$TELEGRAM_CHAT_ID" '
+            # Telegram counts the 4096 character limit in UTF-16 code units.
+            def w: if . > 65535 then 2 else 1 end;
+            def u16len: [explode[] | w] | add // 0;
+            def u16cut($n):
+              reduce explode[] as $cp ({out: [], used: 0};
+                ($cp | w) as $k
+                | if .used + $k > $n then . else .used += $k | .out += [$cp] end)
+              | .out | implode;
+
+            # These are the only characters that need escaping in Telegram HTML mode.
+            def esc: gsub("(?<a>[<>&\"])"; .a | @html);
+
+            def body($max):
+              (.message // "")
+              | gsub("\r\n"; "\n")
+              | if u16len > $max then u16cut($max) + "…" else . end
+              | esc
+              # Guards against input where escaping multiplies the size up to 5x.
+              | if u16len > 2600
+                then (u16cut(2600) | sub("&[A-Za-z0-9#]*$"; ""))
+                else . end;
+
+            def entry:
+              "<a href=\"\(.url | esc)\">\(.id[:8] | esc)</a> • "
+              + (if .author.username then
+                   (.author.username | esc) as $user
+                   | "<a href=\"https://github.com/\($user)\">\($user)</a>"
+                 else (.author.name // "unknown" | esc) end)
+              + "\n\n" + body(3000);
+
+            def footer($i; $n):
+              if $n > 1 then "📅 @Persian_Calendar • \($i)/\($n)"
+              else "📅 @Persian_Calendar" end;
+
+            # Pack whole commits into messages of at most 4000 UTF-16 units.
+            def chunk($budget):
+              reduce .[] as $e ({chunks: [], cur: [], size: 0};
+                ($e | u16len) as $w
+                | if (.cur | length) == 0 then .cur = [$e] | .size = $w
+                  elif .size + 2 + $w > $budget then .chunks += [.cur] | .cur = [$e] | .size = $w
+                  else .cur += [$e] | .size += 2 + $w end)
+              | .chunks + (if (.cur | length) > 0 then [.cur] else [] end);
+
+            ((. // []) | if type == "array" then . else [] end) as $commits
+            | [$commits[] | entry] as $entries
+            | ($entries | chunk(4000)) as $chunks
+            | ($chunks | length) as $n
+            | range(0; $n) as $i
+            | {
+                chat_id: $chat_id,
+                parse_mode: "HTML",
+                disable_web_page_preview: true,
+                text: (($chunks[$i] | join("\n\n")) + "\n\n" + footer($i + 1; $n))
+              }
+          ' <<<"$COMMITS" | while IFS= read -r payload; do
+            curl --fail-with-body --silent --show-error --retry 3 \
+              -H 'Content-Type: application/json' \
+              --data-binary "$payload" \
+              "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage"
+            echo
+          done

@@ -47,14 +47,19 @@ jobs:
           distribution: temurin
 
       - name: Build and send apks to telegram
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           ./gradlew assembleNightly
-          apk_path="$(find . -type f -iname *.apk)"
-          curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
-            -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -F "caption=Size: $(ls -l --block-size=K "$apk_path" | awk '{ print $5 }')K" \
+          apk_path="$(find . -type f -iname '*.apk' -print -quit)"
+          apk_kb=$(( ($(wc -c <"$apk_path") + 1023) / 1024 ))
+          curl --fail-with-body --silent --show-error --retry 3 \
+            "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendDocument" \
+            -F "chat_id=${TELEGRAM_CHAT_ID}" \
+            --form-string "caption=Size: ${apk_kb}K" \
             -F parse_mode=HTML \
-            -F document=@"$apk_path"
+            -F "document=@${apk_path}"
           rm "$apk_path"
 
   update-report:
