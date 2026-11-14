@@ -358,6 +358,27 @@
     <string name="week">Minggu</string>
     <string name="bold_text">Teks tebal</string>
     <string name="widget_text_size">Ukuran teks</string>
+    <string name="method_france">Umat Muslim Prancis</string>
+    <string name="method_russia">Administrasi Spiritual Umat Muslim Rusia</string>
+    <string name="method_singapore">Brunei, Indonesia, Malaysia, dan Singapura</string>
+    <string name="moazzenzadeh">Rahim Moazzenzadeh Ardabili</string>
+    <string name="entezar">Entezar, Rouhollah Kazemizadeh</string>
+    <string name="notification_athan_help">Untuk mengatur volume Azan, tekan tombol volume fisik, buka menu tiga titik di panel tersebut, lalu ubah volume saluran notifikasi perangkat.</string>
+    <string name="show_direct_path_label">Jalur langsung</string>
+    <string name="show_grid_label">Kisi</string>
+    <string name="show_my_location_label">GPS</string>
+    <string name="show_location_label">Lokasi</string>
+    <string name="show_night_mask_label">Masker malam</string>
+    <string name="moon_visibility">Visibilitas bulan</string>
+    <string name="show_globe_view_label">Bola dunia 3D</string>
+    <string name="magnetic_field_strength">Kekuatan medan magnet</string>
+    <string name="magnetic_declination">Deklinasi magnet</string>
+    <string name="magnetic_inclination">Inklinasi magnet</string>
+    <string name="tectonic_plates">Lempeng tektonik</string>
+    <string name="crescent_evening_visibility_yallop">Visibilitas hilal petang (Yallop)</string>
+    <string name="crescent_evening_visibility_odeh">Visibilitas hilal petang (Odeh)</string>
+    <string name="crescent_morning_visibility_yallop">Visibilitas hilal pagi (Yallop)</string>
+    <string name="crescent_morning_visibility_odeh">Visibilitas hilal pagi (Odeh)</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%1$s %2$s hari</item>
     </plurals>

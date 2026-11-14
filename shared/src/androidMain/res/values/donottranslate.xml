@@ -1,35 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="international">مناسبت‌های بین‌المللی و جهانی</string>
-    <string name="afghanistan_events">افغانستان</string>
-    <string name="about_help_subtitle" translatable="false">نسخهٔ سال %s-%s</string>
-    <string name="not_set_time" translatable="false">--:--</string>
-    <string name="moazzenzadeh" translatable="false">رحیم مؤذن‌زاده اردبیلی</string>
-    <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
-    <string name="notification_athan_help" translatable="false">برای تنظیم حجم صدای اذان، هنگام زدن دکمهٔ فیزیکی جهت تنظیم صدای گوشی، در قسمت سه‌نقطهٔ آن پنجره، حجم صدای کانال اعلان (Notification) دستگاه را تغییر دهید.</string>
     <string name="empty" translatable="false" />
-    <plurals name="empty" translatable="false">
-        <item quantity="one"></item>
-        <item quantity="other"></item>
-    </plurals>
-    <!--  Map  -->
-    <string name="show_direct_path_label" translatable="false">Direct path</string>
-    <string name="show_grid_label" translatable="false">Grid</string>
-    <string name="show_my_location_label" translatable="false">GPS</string>
-    <string name="show_location_label" translatable="false">Location</string>
-    <string name="show_night_mask_label" translatable="false">Night mask</string>
-    <string name="moon_visibility" translatable="false">Moon visibility</string>
-    <string name="show_globe_view_label" translatable="false">3D globe</string>
-    <string name="magnetic_field_strength" translatable="false">Magnetic field strength</string>
-    <string name="magnetic_declination" translatable="false">Magnetic declination</string>
-    <string name="magnetic_inclination" translatable="false">Magnetic inclination</string>
-    <string name="tectonic_plates" translatable="false">Tectonic plates</string>
-    <string name="crescent_evening_visibility_yallop" translatable="false">Crescent evening visibility (Yallop)</string>
-    <string name="crescent_evening_visibility_odeh" translatable="false">Crescent evening visibility (Odeh)</string>
-    <string name="crescent_morning_visibility_yallop" translatable="false">Crescent morning visibility (Yallop)</string>
-    <string name="crescent_morning_visibility_odeh" translatable="false">Crescent morning visibility (Odeh)</string>
-    <string name="method_france" translatable="false">Muslims of France</string>
-    <string name="method_russia" translatable="false">Spiritual Administration of Muslims of Russia</string>
-    <!-- This originally was Islamic Religious Council of Singapore but let's mention Malaysia also -->
-    <string name="method_singapore" translatable="false">Brunei, Indonesia, Malaysia and Singapore</string>
+    <string name="not_set_time" translatable="false">--:--</string>
 </resources>

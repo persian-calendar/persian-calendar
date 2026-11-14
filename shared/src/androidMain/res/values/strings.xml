@@ -395,6 +395,29 @@
     <string name="week">Week</string>
     <string name="bold_text">Bold text</string>
     <string name="widget_text_size">Text size</string>
+    <string name="method_france">Muslims of France</string>
+    <string name="method_russia">Spiritual Administration of Muslims of Russia</string>
+    <!-- This originally was 'Islamic Religious Council of Singapore' but let's mention Malaysia also -->
+    <string name="method_singapore">Brunei, Indonesia, Malaysia and Singapore</string>
+    <string name="moazzenzadeh">Rahim Moazzenzadeh Ardabili</string>
+    <string name="entezar">Entezar, Rouhollah Kazemizadeh</string>
+    <string name="notification_athan_help">To adjust the Athan volume, press the physical volume button, open the three-dot menu in that panel, and change the volume of the device’s notification channel.</string>
+    <!--  Map  -->
+    <string name="show_direct_path_label">Direct path</string>
+    <string name="show_grid_label">Grid</string>
+    <string name="show_my_location_label">GPS</string>
+    <string name="show_location_label">Location</string>
+    <string name="show_night_mask_label">Night mask</string>
+    <string name="moon_visibility">Moon visibility</string>
+    <string name="show_globe_view_label">3D globe</string>
+    <string name="magnetic_field_strength">Magnetic field strength</string>
+    <string name="magnetic_declination">Magnetic declination</string>
+    <string name="magnetic_inclination">Magnetic inclination</string>
+    <string name="tectonic_plates">Tectonic plates</string>
+    <string name="crescent_evening_visibility_yallop">Crescent evening visibility (Yallop)</string>
+    <string name="crescent_evening_visibility_odeh">Crescent evening visibility (Odeh)</string>
+    <string name="crescent_morning_visibility_yallop">Crescent morning visibility (Yallop)</string>
+    <string name="crescent_morning_visibility_odeh">Crescent morning visibility (Odeh)</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

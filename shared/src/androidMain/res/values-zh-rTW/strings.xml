@@ -358,6 +358,27 @@
     <string name="week">週</string>
     <string name="bold_text">粗體文字</string>
     <string name="widget_text_size">文字大小</string>
+    <string name="method_france">法國穆斯林</string>
+    <string name="method_russia">俄羅斯穆斯林宗教管理局</string>
+    <string name="method_singapore">汶萊、印尼、馬來西亞、新加坡</string>
+    <string name="moazzenzadeh">拉希姆·穆安津扎德·阿爾達比利</string>
+    <string name="entezar">恩特扎爾，魯霍拉·卡澤米扎德</string>
+    <string name="notification_athan_help">若要調整喚拜音量，請按下實體音量鍵，開啟該面板中的三點選單，然後變更裝置通知頻道的音量。</string>
+    <string name="show_direct_path_label">直線路徑</string>
+    <string name="show_grid_label">格線</string>
+    <string name="show_my_location_label">GPS</string>
+    <string name="show_location_label">位置</string>
+    <string name="show_night_mask_label">夜間遮罩</string>
+    <string name="moon_visibility">月亮可見度</string>
+    <string name="show_globe_view_label">3D 地球</string>
+    <string name="magnetic_field_strength">磁場強度</string>
+    <string name="magnetic_declination">磁偏角</string>
+    <string name="magnetic_inclination">磁傾角</string>
+    <string name="tectonic_plates">板塊</string>
+    <string name="crescent_evening_visibility_yallop">傍晚新月可見度（Yallop）</string>
+    <string name="crescent_evening_visibility_odeh">傍晚新月可見度（Odeh）</string>
+    <string name="crescent_morning_visibility_yallop">清晨新月可見度（Yallop）</string>
+    <string name="crescent_morning_visibility_odeh">清晨新月可見度（Odeh）</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%1$s %2$s 天</item>
     </plurals>

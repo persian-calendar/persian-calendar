@@ -358,6 +358,27 @@
     <string name="week">週</string>
     <string name="bold_text">太字</string>
     <string name="widget_text_size">文字サイズ</string>
+    <string name="method_france">フランスのイスラム教徒</string>
+    <string name="method_russia">ロシアのイスラム教徒精神管理局</string>
+    <string name="method_singapore">ブルネイ、インドネシア、マレーシア、シンガポール</string>
+    <string name="moazzenzadeh">ラヒーム・モアッゼンザーデ・アルダビーリー</string>
+    <string name="entezar">エンテザール、ロウホッラー・カーゼミーザーデ</string>
+    <string name="notification_athan_help">アダンの音量を調整するには、端末の音量ボタンを押し、表示されたパネルの3点メニューを開いて、端末の通知チャンネルの音量を変更してください。</string>
+    <string name="show_direct_path_label">直線経路</string>
+    <string name="show_grid_label">グリッド</string>
+    <string name="show_my_location_label">GPS</string>
+    <string name="show_location_label">位置</string>
+    <string name="show_night_mask_label">夜間マスク</string>
+    <string name="moon_visibility">月の可視性</string>
+    <string name="show_globe_view_label">3D地球儀</string>
+    <string name="magnetic_field_strength">磁場の強さ</string>
+    <string name="magnetic_declination">磁気偏角</string>
+    <string name="magnetic_inclination">磁気伏角</string>
+    <string name="tectonic_plates">構造プレート</string>
+    <string name="crescent_evening_visibility_yallop">夕方の三日月の可視性（Yallop）</string>
+    <string name="crescent_evening_visibility_odeh">夕方の三日月の可視性（Odeh）</string>
+    <string name="crescent_morning_visibility_yallop">明け方の三日月の可視性（Yallop）</string>
+    <string name="crescent_morning_visibility_odeh">明け方の三日月の可視性（Odeh）</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%2$s %1$s日</item>
     </plurals>
