@@ -448,8 +448,7 @@ fun SharedTransitionScope.CalendarScreen(
 //                            )
 //                        }
         }).takeIf {
-            !eventsRepository.isEmpty || shiftWorkSettings.records.isNotEmpty() ||
-                    (!isTablet && isShowDeviceCalendarEvents)
+            !eventsRepository.isEmpty || shiftWorkSettings.records.isNotEmpty() || isTablet
         },
         (DetailsTab.Times to @Composable { _: List<CalendarEvent<*>>, _: Boolean ->
             val coordinates = coordinates
