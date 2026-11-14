@@ -42,6 +42,8 @@ import io.github.cosinekitty.astronomy.Vector
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.runBlocking
 import java.util.GregorianCalendar
 import kotlin.math.abs
@@ -145,7 +147,12 @@ class MapDraw(
     private val maskDateSink = GregorianCalendar().also { --it.timeInMillis }
     private var currentMapType = MapType.NONE
 
-    fun updateMap(timeInMillis: Long, mapType: MapType) {
+    // Synchronous entry point retained for widget rendering.
+    fun updateMap(timeInMillis: Long, mapType: MapType) = runBlocking {
+        updateMapAsync(timeInMillis, mapType)
+    }
+
+    suspend fun updateMapAsync(timeInMillis: Long, mapType: MapType) {
         if (mapType == MapType.NONE) {
             currentMapType = mapType
             maskFormattedTime = ""
@@ -170,21 +177,20 @@ class MapDraw(
             MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH -> {
                 val date = maskDateSink.toCivilDate()
                 maskFormattedTime = formatDate(Jdn(date) on mainCalendar, forceNonNumerical = true)
-                runBlocking {
-                    crescentVisibilityMap.update(
-                        baseTime = Time(date.year, date.month, date.dayOfMonth, 0, 0, .0),
-                        mapType = mapType,
-                        threads = Runtime.getRuntime().availableProcessors().coerceAtLeast(1),
-                    )
-                }
+                crescentVisibilityMap.update(
+                    baseTime = Time(date.year, date.month, date.dayOfMonth, 0, 0, .0),
+                    mapType = mapType,
+                    threads = Runtime.getRuntime().availableProcessors().coerceAtLeast(1),
+                )
             }
 
             else -> Unit
         }
     }
 
-    private fun writeMagneticMap(timeInMillis: Long, mapType: MapType) {
+    private suspend fun writeMagneticMap(timeInMillis: Long, mapType: MapType) {
         repeat(360) { x ->
+            currentCoroutineContext().ensureActive()
             repeat(180) { y ->
                 val latitude = 180 / 2f - y
                 val longitude = x - 360 / 2f
@@ -201,7 +207,7 @@ class MapDraw(
         }
     }
 
-    private fun writeDayNightMask(timeInMillis: Long) {
+    private suspend fun writeDayNightMask(timeInMillis: Long) {
         val time = Time.fromMillisecondsSince1970(timeInMillis)
         var sunMaxAltitude = .0
         var moonMaxAltitude = .0
@@ -216,6 +222,7 @@ class MapDraw(
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
         (0..<360 step scaleDegree).forEach { x ->
+            currentCoroutineContext().ensureActive()
             (0..<180 step scaleDegree).forEach { y ->
                 val latitude = 180 / 2.0 - y
                 val longitude = x - 360 / 2.0
