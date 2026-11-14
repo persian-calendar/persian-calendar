@@ -55,6 +55,9 @@ jobs:
             exit 0
           fi
 
+          # The exact pending block that was appended to the message, if any.
+          pending_text="$(jq -r '.messages[-1].pending // ""' "$payload_file")"
+
           case "$CONCLUSION" in
             success)   icon='✅'; label='passed' ;;
             failure)   icon='❌'; label='failed' ;;
@@ -82,7 +85,7 @@ jobs:
               else "⚠️" end;
 
             .jobs
-            | map("\(.conclusion | icon) \(.name | friendly | esc)")
+            | map("• \(.conclusion | icon) \(.name | friendly | esc)")
             | join("\n")' 2>/dev/null || true)"
 
           status="$status_short"
@@ -92,27 +95,35 @@ jobs:
           # long commit list. The status is inserted above the footer.
           payload="$(jq -c \
             --arg status "$status" \
-            --arg status_short "$status_short" '
+            --arg status_short "$status_short" \
+            --arg pending "$pending_text" '
               def w: if . > 65535 then 2 else 1 end;
               def u16len: [explode[] | w] | add // 0;
               def footer: "\n\n📅 @Persian_Calendar[^\n]*$";
-              def waiting: "⏳ Android CI is running…";
+              def old_pending: "⏳ Android CI is running…";
 
               .messages[-1] as $last
               | $last.text as $text
-              | ($text | contains(waiting)) as $pending
+              # The pending block is stored verbatim in the artifact, so it can
+              # be replaced literally instead of by pattern.
+              | ($pending != "" and ($text | contains($pending))) as $replace
+              # Messages sent before the per-job block existed only have this
+              # single line; replace it the same way.
+              | (($replace | not) and ($text | contains(old_pending))) as $legacy
               # With per-job lines too long, fall back to the one-line status
               # so the edited text can never exceed the 4096 limit.
               | (if (($text | u16len) + ($status | u16len) + 2) > 4096
                  then $status_short else $status end) as $line
-              # Normal case: the pending line becomes the result. Messages sent
-              # before that line existed get the result inserted above the footer.
-              | (if $pending
-                 then ($text | sub(waiting; $line))
+              # Messages sent before the pending block existed get the result
+              # inserted above the footer instead.
+              | (if $replace
+                 then ($text | split($pending) | join($line))
+                 elif $legacy
+                 then ($text | split(old_pending) | join($line))
                  elif ($text | test(footer))
                  then ($text | sub("(?<f>" + footer + ")"; "\n\n" + $line + .f))
                  else $text + "\n\n" + $line end) as $edited
-              | (if (($edited | u16len) > 4096) and ($pending | not) and ($text | test(footer))
+              | (if (($edited | u16len) > 4096) and (($replace or $legacy) | not) and ($text | test(footer))
                  then ($text | sub("(?<f>" + footer + ")"; "\n\n" + $line))
                  else $edited end) as $final
               | if ($final | u16len) > 4096
