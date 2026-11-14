@@ -53,13 +53,19 @@ jobs:
                  else (.author.name // "unknown" | esc) end)
               + "\n\n" + body(3000);
 
-            def footer($i; $n):
+            def signature($i; $n):
               if $n > 1 then "📅 @Persian_Calendar • \($i)/\($n)"
               else "📅 @Persian_Calendar" end;
 
+            # The last message says the build is still running; the build-status
+            # workflow replaces that line with the result once CI finishes.
+            def footer($i; $n):
+              (if $i == $n then "⏳ Android CI is running…\n\n" else "" end)
+              + signature($i; $n);
+
             # Pack whole commits into messages of at most 3700 UTF-16 units.
-            # 3700 rather than 4096: room is reserved for the CI result that is
-            # appended to the last message once the build finishes.
+            # 3700 rather than 4096: room is reserved for the pending line that
+            # is later replaced by the CI result.
             def chunk($budget):
               reduce .[] as $e ({chunks: [], cur: [], size: 0};
                 ($e | u16len) as $w

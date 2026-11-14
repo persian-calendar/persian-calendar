@@ -80,17 +80,23 @@ jobs:
               def w: if . > 65535 then 2 else 1 end;
               def u16len: [explode[] | w] | add // 0;
               def footer: "\n\n📅 @Persian_Calendar[^\n]*$";
+              def waiting: "⏳ Android CI is running…";
 
               .messages[-1] as $last
               | $last.text as $text
+              | ($text | contains(waiting)) as $pending
               # Drop the failed job list first, then fall back to replacing the
               # footer, so the edited text can never exceed the 4096 limit.
               | (if (($text | u16len) + ($status | u16len) + 2) > 4096
                  then $status_short else $status end) as $line
-              | (if ($text | test(footer))
+              # Normal case: the pending line becomes the result. Messages sent
+              # before that line existed get the result inserted above the footer.
+              | (if $pending
+                 then ($text | sub(waiting; $line))
+                 elif ($text | test(footer))
                  then ($text | sub("(?<f>" + footer + ")"; "\n\n" + $line + .f))
                  else $text + "\n\n" + $line end) as $edited
-              | (if ($edited | u16len) > 4096 and ($text | test(footer))
+              | (if (($edited | u16len) > 4096) and ($pending | not) and ($text | test(footer))
                  then ($text | sub("(?<f>" + footer + ")"; "\n\n" + $line))
                  else $edited end) as $final
               | if ($final | u16len) > 4096
