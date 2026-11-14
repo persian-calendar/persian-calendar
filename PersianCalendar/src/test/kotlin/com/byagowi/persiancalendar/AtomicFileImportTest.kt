@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar
 
-import android.annotation.SuppressLint
 import com.byagowi.persiancalendar.utils.importFileAtomically
 import java.io.File
 import java.io.IOException
@@ -12,7 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 // These tests run on the host JVM; exceptions deliberately simulate provider failures.
-@SuppressLint("NewApi", "ThrowUsage", "TryCatchUsage")
+@Suppress("NewApi", "ThrowUsage", "TryCatchUsage")
 class AtomicFileImportTest {
     private val replace: (File, File) -> Unit = { source, target ->
         Files.move(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)

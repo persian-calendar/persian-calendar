@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 private class DemoDialogs
 
 /*
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -792,7 +791,7 @@ private fun getRandomTransparentColor(): Int {
 //             return dragHelper.shouldInterceptTouchEvent(event)
 //         }
 //
-//         @SuppressLint("ClickableViewAccessibility")
+//         @Suppress("ClickableViewAccessibility")
 //         override fun onTouchEvent(event: MotionEvent): Boolean {
 //             dragHelper.processTouchEvent(event)
 //             return true
@@ -981,7 +980,7 @@ fun showSensorTestDialog(activity: Activity) {
 
                 override fun onSensorChanged(event: SensorEvent?) {
                     val v = event?.values ?: return
-                    @SuppressLint("SetTextI18n")
+                    @Suppress("SetTextI18n")
                     textView.text = sensorDescription + "\nn: ${v.size}\n" +
                             v.joinToString("\n") + run {
                         if (v.size == 3) "\n|v| ${sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])}"
@@ -1094,7 +1093,7 @@ class LSystem(context: Context) : View(context) {
             when (it) {
                 '-' -> canvas.rotate(-angle)
                 '+' -> canvas.rotate(+angle)
-                '[' -> @SuppressLint("UseKtx") canvas.save()
+                '[' -> @Suppress("UseKtx") canvas.save()
                 ']' -> canvas.restore()
 
                 else -> {

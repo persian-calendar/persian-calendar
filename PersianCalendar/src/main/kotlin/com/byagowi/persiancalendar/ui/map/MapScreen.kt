@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -130,7 +129,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
-@SuppressLint("MemberExtensionConflict") // ExitTransition.KeepUntilTransitionsFinished is the intended public extension.
 @Composable
 fun SharedTransitionScope.MapScreen(
     navigateUp: () -> Unit,
@@ -233,6 +231,7 @@ fun SharedTransitionScope.MapScreen(
                 boundsTransform = appBoundsTransform,
             ),
             transitionSpec = {
+                @Suppress("MemberExtensionConflict") // ExitTransition.KeepUntilTransitionsFinished is the intended public extension.
                 (fadeIn(
                     animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
                 ) togetherWith ExitTransition.KeepUntilTransitionsFinished).apply {
