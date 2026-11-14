@@ -91,15 +91,24 @@ fun CalculationMethod.title(resources: Resources): String {
     )
 }
 
+// EclipseKind.Penumbral is lunar-only and Annular is solar-only, and hybrid solar
+// eclipses are reported by the library as annular or total. The two remaining
+// combinations are therefore impossible; assert them in debug and fall back to
+// an empty label in release instead of a null/crash if that contract is broken.
 @StringRes
-fun eclipseTypeTitleRes(isSolar: Boolean, kind: EclipseKind): Int? = when {
-    isSolar && kind == EclipseKind.Annular -> R.string.eclipse_annular_solar
-    isSolar && kind == EclipseKind.Partial -> R.string.eclipse_partial_solar
-    !isSolar && kind == EclipseKind.Partial -> R.string.eclipse_partial_lunar
-    !isSolar && kind == EclipseKind.Penumbral -> R.string.eclipse_penumbral_lunar
-    isSolar && kind == EclipseKind.Total -> R.string.eclipse_total_solar
-    !isSolar && kind == EclipseKind.Total -> R.string.eclipse_total_lunar
-    else -> null
+fun eclipseTypeTitleRes(isSolar: Boolean, kind: EclipseKind): Int = when {
+    isSolar -> when (kind) {
+        EclipseKind.Annular -> R.string.eclipse_annular_solar
+        EclipseKind.Partial -> R.string.eclipse_partial_solar
+        EclipseKind.Total -> R.string.eclipse_total_solar
+        EclipseKind.Penumbral -> null.debugAssertNotNull ?: R.string.empty
+    }
+    else -> when (kind) {
+        EclipseKind.Partial -> R.string.eclipse_partial_lunar
+        EclipseKind.Penumbral -> R.string.eclipse_penumbral_lunar
+        EclipseKind.Total -> R.string.eclipse_total_lunar
+        EclipseKind.Annular -> null.debugAssertNotNull ?: R.string.empty
+    }
 }
 
 // As "twilight may persist throughout the night during some months of the year" can happen in latitudes

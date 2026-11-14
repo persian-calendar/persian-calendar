@@ -788,8 +788,7 @@ private fun Header(
                     val formattedDate = Date(peak.toMillisecondsSince1970()).toGregorianCalendar()
                         .formatDateAndTime()
                     val isSolar = title == R.string.solar_eclipse
-                    val type = eclipseTypeTitleRes(isSolar, kind)?.let { resources.getString(it) }
-                        ?: resources.getString(title)
+                    val type = resources.getString(eclipseTypeTitleRes(isSolar, kind))
                     when {
                         language.isPersianOrDari -> "$type بعدی"
                         else -> resources.getString(R.string.next_x, type)
