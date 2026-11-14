@@ -744,7 +744,7 @@ fun DaysView(
                     }
                     ScrollShadow(headerScrollState)
                 }
-            } else if (maxDayAllDayEvents != 0) EventsColumn(
+            } else if (maxDayAllDayEvents != 0) EventsRow(
                 events = eventsWithoutTime,
                 horizontalPadding = pagerArrowSizeAndPadding.dp,
                 defaultWidthReduction = defaultWidthReduction,
@@ -1247,7 +1247,7 @@ fun DaysView(
 }
 
 @Composable
-fun EventsColumn(
+fun EventsRow(
     events: List<List<CalendarEvent<*>>>,
     defaultWidthReduction: Dp,
     viewEvent: (CalendarEvent.DeviceCalendarEvent) -> Unit,
@@ -1315,7 +1315,7 @@ fun EventsColumn(
                                     )
                                 }
                                 if (i == defaultItems - 1 && dayEvents.size > defaultItems && !isExpanded) Text(
-                                    " +" + numeral.format(dayEvents.size - defaultItems),
+                                    " +" + numeral.format(dayEvents.size - defaultItems + 1),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(bottom = 4.dp),
