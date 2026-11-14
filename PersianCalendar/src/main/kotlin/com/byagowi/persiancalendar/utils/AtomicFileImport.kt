@@ -10,7 +10,7 @@ internal fun importFileAtomically(
     destination: File,
     maxBytes: Long,
     replace: (File, File) -> Unit,
-    validate: (File) -> Unit,
+    validate: (File) -> Boolean,
 ): Result<Unit> {
     val temporary = runCatching {
         File.createTempFile("import-", ".tmp", destination.parentFile)
@@ -30,7 +30,9 @@ internal fun importFileAtomically(
             }
             output.fd.sync()
         }
-        validate(temporary)
+        if (!validate(temporary)) return@runCatching Result.failure<Unit>(
+            IOException("Import failed validation"),
+        )
         // Both files are in the same directory. Never delete the destination first:
         // if replacement fails, the previously selected file must survive.
         replace(temporary, destination)

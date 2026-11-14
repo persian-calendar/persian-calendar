@@ -253,11 +253,7 @@ private fun ColumnScope.FontPicker(
                             File(context.filesDir, STORED_FONT_NAME),
                             16L * 1024 * 1024,
                             replace = { source, target -> Os.rename(source.path, target.path) },
-                        ) { file ->
-                            requireNotNull(Typeface.createFromFile(file)) {
-                                "Selected file is not a readable font"
-                            }
-                        }
+                        ) { file -> Typeface.createFromFile(file) != null }
                     }.map { name }
                 }.getOrElse { Result.failure(it) }
             }

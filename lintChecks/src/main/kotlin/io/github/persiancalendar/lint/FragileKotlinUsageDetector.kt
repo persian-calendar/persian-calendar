@@ -15,7 +15,9 @@ import org.jetbrains.uast.UThrowExpression
 
 /**
  * Guards against Kotlin shortcuts which fail hard instead of modelling an outcome: `!!`,
- * `error(...)` and any `throw` statement. Vendored sources under `libs/` are exempt.
+ * `error(...)`, `require(...)`/`requireNotNull(...)`, `check(...)`/`checkNotNull(...)`,
+ * `TODO()` and any `throw` statement. Vendored sources under `libs/` are exempt. Debug-only
+ * assertions belong in `(null).debugAssertNotNull` or `assert(...)` instead.
  *
  * Assertions which must fail only in debug builds belong in `(null).debugAssertNotNull`.
  */
@@ -39,14 +41,34 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
 
         override fun visitCallExpression(node: UCallExpression) {
             if (context.isVendoredSource()) return
-            if (node.methodName != "error") return
+            if (node.methodName !in setOf(
+                    "error", "require", "requireNotNull", "check", "checkNotNull", "TODO",
+                )
+            ) return
             val containingClass = node.resolve()?.containingClass?.qualifiedName
             if (containingClass == null || !containingClass.startsWith("kotlin.")) return
-            context.report(
-                issue = ERROR_FUNCTION_ISSUE,
-                location = context.getLocation(node),
-                message = "Avoid `error(...)`, return a fallback value or a `Result` instead.",
-            )
+            when (node.methodName) {
+                "error" -> context.report(
+                    issue = ERROR_FUNCTION_ISSUE,
+                    location = context.getLocation(node),
+                    message = "Avoid `error(...)`, return a fallback value or a `Result` instead.",
+                )
+                "require", "requireNotNull" -> context.report(
+                    issue = REQUIRE_FUNCTION_ISSUE,
+                    location = context.getLocation(node),
+                    message = "Avoid `require(...)`/`requireNotNull(...)`, return a fallback value or a `Result` instead.",
+                )
+                "check", "checkNotNull" -> context.report(
+                    issue = CHECK_FUNCTION_ISSUE,
+                    location = context.getLocation(node),
+                    message = "Avoid `check(...)`/`checkNotNull(...)`, return a fallback value or a `Result` instead.",
+                )
+                else -> context.report(
+                    issue = TODO_FUNCTION_ISSUE,
+                    location = context.getLocation(node),
+                    message = "Replace `TODO()` with a real implementation or a safe fallback.",
+                )
+            }
         }
 
         override fun visitThrowExpression(node: UThrowExpression) {
@@ -77,6 +99,45 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
             id = "ErrorFunctionUsage",
             briefDescription = "`error()` function usage",
             explanation = "Avoid `error(...)`, return a fallback value or propagate a `Result` instead of failing.",
+            category = Category.CORRECTNESS,
+            priority = 6,
+            severity = Severity.WARNING,
+            implementation = Implementation(
+                FragileKotlinUsageDetector::class.java,
+                Scope.JAVA_FILE_SCOPE,
+            ),
+        )
+
+        val REQUIRE_FUNCTION_ISSUE = Issue.create(
+            id = "RequireUsage",
+            briefDescription = "`require()`/`requireNotNull()` usage",
+            explanation = "Avoid `require(...)`/`requireNotNull(...)`; return a fallback value or propagate a `Result` instead of failing.",
+            category = Category.CORRECTNESS,
+            priority = 6,
+            severity = Severity.WARNING,
+            implementation = Implementation(
+                FragileKotlinUsageDetector::class.java,
+                Scope.JAVA_FILE_SCOPE,
+            ),
+        )
+
+        val CHECK_FUNCTION_ISSUE = Issue.create(
+            id = "CheckUsage",
+            briefDescription = "`check()`/`checkNotNull()` usage",
+            explanation = "Avoid `check(...)`/`checkNotNull(...)`; return a fallback value or propagate a `Result` instead of failing.",
+            category = Category.CORRECTNESS,
+            priority = 6,
+            severity = Severity.WARNING,
+            implementation = Implementation(
+                FragileKotlinUsageDetector::class.java,
+                Scope.JAVA_FILE_SCOPE,
+            ),
+        )
+
+        val TODO_FUNCTION_ISSUE = Issue.create(
+            id = "TodoUsage",
+            briefDescription = "`TODO()` usage",
+            explanation = "`TODO()` throws NotImplementedError at runtime; replace it with a real implementation or a safe fallback.",
             category = Category.CORRECTNESS,
             priority = 6,
             severity = Severity.WARNING,

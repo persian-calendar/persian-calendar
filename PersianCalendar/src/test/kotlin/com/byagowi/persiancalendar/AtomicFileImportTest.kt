@@ -19,29 +19,29 @@ class AtomicFileImportTest {
     }
 
     @Test
-    fun `failed reads oversized files and invalid fonts preserve the previous file`() {
+    fun `failed reads oversized files invalid validations and failed replacements preserve the previous file`() {
         val directory = Files.createTempDirectory("font-import").toFile()
         try {
             val destination = File(directory, "font.ttf").apply { writeText("old") }
             val broken = object : InputStream() {
                 override fun read(): Int = throw IOException("provider failed")
             }
-            assertFailsWith<IOException> { importFileAtomically(broken, destination, 10, replace) {}.getOrThrow() }
+            assertFailsWith<IOException> { importFileAtomically(broken, destination, 10, replace) { true }.getOrThrow() }
             assertFailsWith<IOException> {
-                importFileAtomically("too large".byteInputStream(), destination, 2, replace) {}.getOrThrow()
+                importFileAtomically("too large".byteInputStream(), destination, 2, replace) { true }.getOrThrow()
             }
-            assertFailsWith<IllegalArgumentException> {
+            assertFailsWith<IOException> {
                 importFileAtomically("invalid".byteInputStream(), destination, 10, replace) { error ->
-                    require(error.readText() == "valid")
+                    error.readText() == "valid"
                 }.getOrThrow()
             }
             assertFailsWith<IOException> {
                 importFileAtomically("valid".byteInputStream(), destination, 10,
-                    replace = { _, _ -> throw IOException("rename failed") }) {}.getOrThrow()
+                    replace = { _, _ -> throw IOException("rename failed") }) { true }.getOrThrow()
             }
             assertEquals("old", destination.readText())
             assertEquals(listOf("font.ttf"), directory.listFiles().orEmpty().map { it.name })
-            importFileAtomically("valid".byteInputStream(), destination, 10, replace) {}.getOrThrow()
+            importFileAtomically("valid".byteInputStream(), destination, 10, replace) { true }.getOrThrow()
             assertEquals("valid", destination.readText())
         } finally {
             directory.deleteRecursively()

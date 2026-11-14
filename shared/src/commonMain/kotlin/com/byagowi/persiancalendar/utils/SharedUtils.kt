@@ -7,6 +7,7 @@ expect val logException: (Throwable) -> Unit
 
 expect var isDebugBuild: Boolean
 
+@Suppress("CheckUsage") // This is the sanctioned debug-only assertion helper.
 inline val <T> T.debugAssertNotNull: T
     inline get() = if (isDebugBuild) checkNotNull(this) else this
 
