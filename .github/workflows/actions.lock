@@ -19,6 +19,7 @@ workflows:
     '.github/workflows/update-dependencies-report.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-java@v6.2.0'
+        - 'actions/upload-artifact@v7.0.2'
     '.github/workflows/update-report-on-change.yml': []
 dependencies:
     'actions/checkout@v7.0.1':

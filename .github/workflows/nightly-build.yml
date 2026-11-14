@@ -67,6 +67,7 @@ jobs:
     needs: build
     permissions:
       contents: write
+      actions: read
     uses: ./.github/workflows/update-dependencies-report.yml
     with:
       ref: ${{ github.ref_name }}
