@@ -195,11 +195,7 @@ class MapDraw(
                         MapType.MAGNETIC_INCLINATION -> field.inclination
                         else -> 0f
                     }
-                    when {
-                        value > 1 -> ((value * 255 / 180).toInt() shl 24) + 0xFF0000
-                        value < -1 -> ((-value + 255 / 180).toInt() shl 24) + 0xFF
-                        else -> ((30 - abs(value) * 30).toInt() shl 24) + 0xFF00
-                    }
+                    magneticMapColor(value)
                 } else (field.fieldStrength / 68000/*25-65 μT*/ * 255).toInt() shl 24
             }
         }
