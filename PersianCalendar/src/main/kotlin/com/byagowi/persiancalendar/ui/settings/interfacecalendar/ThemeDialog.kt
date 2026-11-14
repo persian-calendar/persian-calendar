@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import android.graphics.Typeface
 import android.os.Build
+import android.system.Os
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -29,6 +31,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -80,11 +83,16 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.getFileName
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
+import com.byagowi.persiancalendar.utils.importFileAtomically
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.showUnsupportedActionToast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.stringResource
 import java.io.File
+import java.io.IOException
 import kotlin.random.Random
 
 @Composable
@@ -229,21 +237,36 @@ private fun ColumnScope.FontPicker(
 ) {
     val customFontToken = customFontName
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val fontPicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument(),
     ) { uri ->
-        if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            File(context.filesDir, STORED_FONT_NAME).outputStream().use(inputStream::copyTo)
-            // It's funny but if dialog isn't closed before the font change it can cause crash
-            // with "Out of order buffers detected for RequestedLayerState" and
-            // "Out of order buffers detected for RequestedLayerState" messages and without
-            // any vm stacktrace…
-            onDismissRequest()
-            context.preferences.edit {
-                putString(
-                    PREF_CUSTOM_FONT_NAME,
-                    "${Random.nextDouble()}/${getFileName(context, uri)}",
-                )
+        if (uri != null) scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    val name = getFileName(context, uri)
+                    val input = context.contentResolver.openInputStream(uri)
+                        ?: return@runCatching Result.failure<String>(IOException("Could not open selected font"))
+                    input.use {
+                        importFileAtomically(
+                            it,
+                            File(context.filesDir, STORED_FONT_NAME),
+                            16L * 1024 * 1024,
+                            replace = { source, target -> Os.rename(source.path, target.path) },
+                        ) { file ->
+                            Typeface.createFromFile(file)
+                        }
+                    }.map { name }
+                }.getOrElse { Result.failure(it) }
+            }
+            result.onSuccess { fileName ->
+                // Close before changing the font to avoid out-of-order rendering buffers.
+                onDismissRequest()
+                context.preferences.edit {
+                    putString(PREF_CUSTOM_FONT_NAME, "${Random.nextDouble()}/$fileName")
+                }
+            }.onFailure(logException).onFailure {
+                showUnsupportedActionToast(context)
             }
         }
     }
