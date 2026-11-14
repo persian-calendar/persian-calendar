@@ -179,10 +179,10 @@
     <string name="shift_work_starting_date">在日曆上選取的 %1$s 是輪班起始日。</string>
     <string name="shift_work_starting_date_edit">先前選取的 %1$s 是所選的輪班起始日。</string>
     <string name="shift_work_reset_button">停用或重新設定</string>
-    <string name="spaced_and">\u0020和\u0020</string>
-    <string name="spaced_or">\u0020或\u0020</string>
-    <string name="spaced_comma">，\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_and">和</string>
+    <string name="spaced_or">或</string>
+    <string name="spaced_comma">，</string>
+    <string name="spaced_colon">：</string>
     <string name="device_information">裝置資訊</string>
     <string name="center_align_widgets_summary">將 4x1 與 2x2 小工具置中對齊</string>
     <string name="center_align_widgets">將小工具置中對齊</string>
