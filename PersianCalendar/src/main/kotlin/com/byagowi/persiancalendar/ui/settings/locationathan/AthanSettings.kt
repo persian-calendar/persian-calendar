@@ -200,7 +200,7 @@ fun AthanSettings(
             }
         }
         AnimatedVisibility(
-            preferencesUpdateToken.let { getEnabledAlarms(context).isNotEmpty() } && isLocationSet && language.isPersianOrDari,
+            preferencesUpdateToken.let { getEnabledAlarms(context).isNotEmpty() } && isLocationSet,
         ) { SettingsHelp(stringResource(Res.string.notification_athan_help)) }
         AnimatedVisibility(isLocationSet) {
             SettingsSwitch(

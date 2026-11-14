@@ -53,7 +53,6 @@ import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.events
 import com.byagowi.persiancalendar.shared.generated.resources.holiday
-import com.byagowi.persiancalendar.shared.generated.resources.international
 import com.byagowi.persiancalendar.shared.generated.resources.other_holidays
 import com.byagowi.persiancalendar.shared.generated.resources.view_source
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -133,7 +132,7 @@ fun HolidaysTypesDialog(
                 @Composable
                 fun International() {
                     ItemCheckBox(
-                        label = stringResource(Res.string.international),
+                        label = "بین‌المللی",
                         enabledTypes = enabledTypes,
                         key = EventsRepository.INTERNATIONAL_KEY,
                         destinationItem = destinationItem,

@@ -86,12 +86,10 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.shared.generated.resources.Res
-import com.byagowi.persiancalendar.shared.generated.resources.afghanistan_events
 import com.byagowi.persiancalendar.shared.generated.resources.close
 import com.byagowi.persiancalendar.shared.generated.resources.days
 import com.byagowi.persiancalendar.shared.generated.resources.horoscope
 import com.byagowi.persiancalendar.shared.generated.resources.hours
-import com.byagowi.persiancalendar.shared.generated.resources.international
 import com.byagowi.persiancalendar.shared.generated.resources.minutes
 import com.byagowi.persiancalendar.shared.generated.resources.seconds
 import com.byagowi.persiancalendar.shared.generated.resources.settings
@@ -310,8 +308,8 @@ private fun DayEventContent(
                     val text = listOfNotNull(
                         when {
                             event is CalendarEvent.DeviceCalendarEvent -> "این رویداد شخصی از تقویم دستگاه می‌آید، تقویمی که پیش از این برنامه به‌صورت پیش‌فرض نصب بوده است."
-                            event.source == EventSource.Afghanistan -> stringResource(Res.string.afghanistan_events)
-                            event.source == EventSource.International -> stringResource(Res.string.international)
+                            event.source == EventSource.Afghanistan -> "افغانستان"
+                            event.source == EventSource.International -> "بین‌المللی"
                             event.source == EventSource.AncientIran -> "ممکن است در برخی منابع این رویداد در روز دیگری آورده شده باشد ولی در تقویم‌های رسمی معتبر این رویدادها با منطق ماه‌های تقویم جلالی (ماه‌های ۳۰روزه) و نه تقویم خورشیدی فعلی آورده می‌شود."
                             event.source == EventSource.Iran -> "این رویداد با نام «${event.metadata[EventsRepository.ORIGINAL_TITLE] ?: event.title}» در تقویم رسمی تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران آمده است."
                             else -> null

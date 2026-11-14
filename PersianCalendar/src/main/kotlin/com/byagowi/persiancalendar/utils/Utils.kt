@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.highLatitudesMethod
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.midnightMethod
 import com.byagowi.persiancalendar.shared.R
 import com.byagowi.persiancalendar.shared.generated.resources.Res
@@ -74,27 +73,20 @@ fun showUnsupportedActionToast(context: Context) {
 
 // The same order as https://praytimes.org/
 fun CalculationMethod.title(resources: Resources): String {
-    if (language.isArabicScript) {
+    return resources.getString(
         when (this) {
-            CalculationMethod.France -> return "مسلمانان فرانسه"
-            CalculationMethod.Russia -> return "ادارهٔ معنوی مسلمانان روسیه"
-            CalculationMethod.Singapore -> return "برونئی، اندونزی، مالزی، و سنگاپور"
-            else -> {}
+            CalculationMethod.MWL -> R.string.method_mwl
+            CalculationMethod.ISNA -> R.string.method_isna
+            CalculationMethod.Egypt -> R.string.method_egypt
+            CalculationMethod.Makkah -> R.string.method_makkah
+            CalculationMethod.Karachi -> R.string.method_karachi
+            CalculationMethod.Jafari -> R.string.method_jafari
+            CalculationMethod.Tehran -> R.string.method_tehran
+            CalculationMethod.France -> R.string.method_france
+            CalculationMethod.Russia -> R.string.method_russia
+            CalculationMethod.Singapore -> R.string.method_singapore
         }
-    }
-    val titleId = when (this) {
-        CalculationMethod.MWL -> R.string.method_mwl
-        CalculationMethod.ISNA -> R.string.method_isna
-        CalculationMethod.Egypt -> R.string.method_egypt
-        CalculationMethod.Makkah -> R.string.method_makkah
-        CalculationMethod.Karachi -> R.string.method_karachi
-        CalculationMethod.Jafari -> R.string.method_jafari
-        CalculationMethod.Tehran -> R.string.method_tehran
-        CalculationMethod.France -> R.string.method_france
-        CalculationMethod.Russia -> R.string.method_russia
-        CalculationMethod.Singapore -> R.string.method_singapore
-    }
-    return resources.getString(titleId)
+    )
 }
 
 // As "twilight may persist throughout the night during some months of the year" can happen in latitudes

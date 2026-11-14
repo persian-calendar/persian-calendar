@@ -181,7 +181,7 @@ fun SharedTransitionScope.MapScreen(
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             MapType.entries.drop(1).forEach {
                 Text(
-                    language.mapType(it) ?: stringResource(it.title),
+                    stringResource(it.title),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -336,8 +336,6 @@ fun SharedTransitionScope.MapScreen(
                     isEnabled: Boolean = false,
                     onClick: () -> Unit,
                 ) {
-                    val title =
-                        language.mapButtons(stringRes = titleRes) ?: stringResource(titleRes)
                     Box(modifier.weight(weight = 1f)) {
                         val tint by animateColor(
                             color = if (isEnabled) {
@@ -345,7 +343,7 @@ fun SharedTransitionScope.MapScreen(
                             } else LocalContentColor.current,
                         )
                         CompositionLocalProvider(LocalContentColor provides tint) {
-                            AppIconButton(icon, title, onClick = onClick)
+                            AppIconButton(icon, title = stringResource(titleRes), onClick = onClick)
                         }
                     }
                 }

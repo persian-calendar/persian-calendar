@@ -96,7 +96,6 @@ import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.about
 import com.byagowi.persiancalendar.shared.generated.resources.about_developers
 import com.byagowi.persiancalendar.shared.generated.resources.about_email_sum
-import com.byagowi.persiancalendar.shared.generated.resources.about_help_subtitle
 import com.byagowi.persiancalendar.shared.generated.resources.about_license_sum
 import com.byagowi.persiancalendar.shared.generated.resources.about_license_title
 import com.byagowi.persiancalendar.shared.generated.resources.about_send_mail
@@ -226,8 +225,7 @@ private fun Header(modifier: Modifier = Modifier) {
                         if (language.isUserAbleToReadPersian) {
                             appendLine()
                             append(
-                                stringResource(
-                                    Res.string.about_help_subtitle,
+                                "نسخهٔ سال %s-%s".format(
                                     numeral.format(supportedYearOfIranCalendar - 1),
                                     numeral.format(supportedYearOfIranCalendar),
                                 ),

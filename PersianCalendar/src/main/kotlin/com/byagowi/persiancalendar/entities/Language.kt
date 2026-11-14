@@ -608,43 +608,6 @@ enum class Language(val code: String, val nativeName: String) {
     fun formatAuAsKm(value: Double): String = formatKm((value * AU_IN_KM).roundToLong())
     fun formatKm(value: Long): String = preferredNumeral.formatLongNumber(value) + " " + kilometer
 
-    fun mapType(mapType: MapType): String? {
-        return when (this) {
-            FA, FA_AF -> when (mapType) {
-                MapType.NONE -> null
-                MapType.DAY_NIGHT -> "تاریکی شب"
-                MapType.MOON_VISIBILITY -> "پدیداری ماه"
-                MapType.MAGNETIC_FIELD_STRENGTH -> "قدرت میدان مغناطیسی"
-                MapType.MAGNETIC_DECLINATION -> "انحراف مغناطیسی"
-                MapType.MAGNETIC_INCLINATION -> "میل مغناطیسی"
-                MapType.TIME_ZONES -> null
-                MapType.TECTONIC_PLATES -> "صفحه‌های زمین‌ساخت/تکتونیک"
-                MapType.EVENING_YALLOP -> "رویت هلال در شامگاه (Yallop)"
-                MapType.EVENING_ODEH -> "رویت هلال در شامگاه (Odeh)"
-                MapType.MORNING_YALLOP -> "رویت هلال در بامداد (Yallop)"
-                MapType.MORNING_ODEH -> "رویت هلال در بامداد (Odeh)"
-            }
-
-            else -> null
-        }
-    }
-
-    fun mapButtons(stringRes: StringResource): String? {
-        return when (this) {
-            FA, FA_AF -> when (stringRes) {
-                Res.string.show_globe_view_label -> "کرهٔ سه‌بعدی"
-                Res.string.show_direct_path_label -> "مسیر مستقیم"
-                Res.string.show_grid_label -> "توری"
-                Res.string.show_my_location_label -> "مکان‌یاب / GPS"
-                Res.string.show_location_label -> "مکان"
-                Res.string.show_night_mask_label -> "تاریکی شب"
-                else -> null
-            }
-
-            else -> null
-        }
-    }
-
     val inch
         get() = when {
             isArabicScript -> "اینچ"
