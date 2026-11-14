@@ -53,7 +53,6 @@ import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
 import kotlin.math.roundToInt
-import com.byagowi.persiancalendar.shared.R as SharedR
 
 @Composable
 fun Compass(
@@ -150,8 +149,8 @@ private class CompassView(private val resources: Resources) {
         val dashSize = 4 * dp
         it.pathEffect = DashPathEffect(floatArrayOf(dashSize, dashSize / 2), 0f)
     }
-    private val kaaba = resources.getDrawable(R.drawable.kaaba, null)
-        .toBitmap((32 * dp).toInt(), (32 * dp).toInt())
+    private val kaaba =
+        resources.getDrawable(R.drawable.kaaba, null).toBitmap((32 * dp).toInt(), (32 * dp).toInt())
 
     private var cx = 0f
     private var cy = 0f // Center of Compass (cx, cy)
@@ -352,8 +351,9 @@ private class CompassView(private val resources: Resources) {
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
             val textCenter = cy - radius / 2
             withRotation(90f, cx, textCenter) {
-                val distance = language.preferredNumeral.formatLongNumber(qiblaHeading.km) +
-                    " " + resources.getString(SharedR.string.kilometer)
+                val distance = numeral.formatLongNumber(qiblaHeading.km) + " " + run {
+                    resources.getString(com.byagowi.persiancalendar.shared.R.string.kilometer)
+                }
                 drawText(distance, cx, textCenter + 4 * dp, textStrokePaint)
                 drawText(distance, cx, textCenter + 4 * dp, textPaint)
             }

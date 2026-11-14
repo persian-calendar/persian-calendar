@@ -114,7 +114,9 @@ fun SharedTransitionScope.LevelScreen(
                         )
                         AppIconButton(
                             icon = syncAltIcon,
-                            title = stringResource(Res.string.centimeter) + " / " + stringResource(Res.string.inch),
+                            title = stringResource(Res.string.centimeter) + " / " + run {
+                                stringResource(Res.string.inch)
+                            },
                             modifier = Modifier.rotate(rotation),
                         ) { cmInchFlip = !cmInchFlip }
                     }

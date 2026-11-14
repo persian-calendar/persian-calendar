@@ -57,6 +57,7 @@ internal fun rememberCalendarProviderRevision(): Int {
                     lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
                 ) ++revision
             }
+
             fun changed() {
                 if (generation != activeGeneration ||
                     !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
@@ -74,7 +75,7 @@ internal fun rememberCalendarProviderRevision(): Int {
                     when (intent.action) {
                         Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIME_CHANGED,
                         Intent.ACTION_TIMEZONE_CHANGED,
-                        -> changed()
+                            -> changed()
                     }
                 }
             }

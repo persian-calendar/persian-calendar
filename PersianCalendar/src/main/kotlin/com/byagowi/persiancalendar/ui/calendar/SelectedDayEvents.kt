@@ -54,12 +54,16 @@ internal fun SelectedDayEvents(
         }
     }
     Box(
-        modifier.fillMaxWidth().heightIn(min = if (isLoading) loadingHeight else 0.dp),
+        modifier
+            .fillMaxWidth()
+            .heightIn(min = if (isLoading) loadingHeight else 0.dp),
         contentAlignment = Alignment.TopCenter,
     ) {
         if (isLoading) {
             if (showProgress) CircularProgressIndicator(
-                modifier = Modifier.padding(12.dp).size(24.dp),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(24.dp),
                 strokeWidth = 2.dp,
             )
         } else key(jdn) {
@@ -70,19 +74,27 @@ internal fun SelectedDayEvents(
             // DayEvents animates title edits. A different day must start fresh, so its rows
             // cannot inherit the previous day's positional AnimatedContent/tooltip state.
             Box(
-                Modifier.onSizeChanged { contentHeight = it.height }
+                Modifier
+                    .onSizeChanged { contentHeight = it.height }
                     .graphicsLayer { alpha = opacity.value },
             ) {
                 if (events.isEmpty()) Text(
                     text = stringResource(Res.string.no_event),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp, horizontal = 24.dp)
+                        .fillMaxWidth(),
                 ) else DayEvents(
                     events = events,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     viewEvent = viewEvent,
                     compact = false,
-                    modifier = Modifier.padding(top = 6.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
+                    modifier = Modifier.padding(
+                        top = 6.dp,
+                        bottom = 8.dp,
+                        start = 24.dp,
+                        end = 24.dp,
+                    ),
                 )
             }
         }

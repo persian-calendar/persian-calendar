@@ -26,8 +26,8 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.tectonicplates
 import com.byagowi.persiancalendar.generated.timezones
 import com.byagowi.persiancalendar.generated.worldmap
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatDate
@@ -47,11 +47,9 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.runBlocking
 import java.util.GregorianCalendar
-import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
-import com.byagowi.persiancalendar.shared.R as SharedR
 
 class MapDraw(
     resources: Resources,
@@ -61,7 +59,9 @@ class MapDraw(
 ) {
     private val solarDraw = SolarDraw(resources)
     private val pinDrawable = resources.getDrawable(R.drawable.ic_pin, null)
-    private val kilometerUnit = resources.getString(SharedR.string.kilometer)
+    private val kilometerUnit = resources.getString(
+        com.byagowi.persiancalendar.shared.R.string.kilometer,
+    )
 
     val mapScaleFactor = 16 // As the path bounds is 360x180 *16
     val mapWidth = 360 * mapScaleFactor
@@ -89,11 +89,9 @@ class MapDraw(
     private val tectonicPlatesPath: Path by lazy(LazyThreadSafetyMode.NONE) {
         createPathFromText(tectonicplates)
             // `topojson['transform']` result, turn it to degrees scale
-            .scaleBy(0.17586713f, 0.074727945f)
-            .translateBy(-180f, -66.1632f)
+            .scaleBy(0.17586713f, 0.074727945f).translateBy(-180f, -66.1632f)
             // Make it the same scale as mapPath
-            .translateBy(180f, -90f)
-            .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
+            .translateBy(180f, -90f).scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
     }
     // How the two above are created: https://gist.github.com/ebraminio/8313cff47813a5c9f98278c7ee8cde4e
 
@@ -133,8 +131,9 @@ class MapDraw(
                 )
             }
 
-            MapType.MAGNETIC_INCLINATION, MapType.MAGNETIC_DECLINATION, MapType.MAGNETIC_FIELD_STRENGTH ->
+            MapType.MAGNETIC_INCLINATION, MapType.MAGNETIC_DECLINATION, MapType.MAGNETIC_FIELD_STRENGTH -> {
                 canvas.drawBitmap(maskMap, null, mapRect, null)
+            }
 
             MapType.TIME_ZONES -> canvas.drawPath(timezonesPath, miscPaint)
             MapType.TECTONIC_PLATES -> canvas.drawPath(tectonicPlatesPath, miscPaint)
@@ -397,13 +396,14 @@ class MapDraw(
             val center = points[points.size / 2]
             val centerPlus1 = points[points.size / 2 + 1]
             val textDegree = Math.toDegrees(
-                atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
-                    .toDouble(),
+                atan2(
+                    centerPlus1.second - center.second,
+                    centerPlus1.first - center.first,
+                ).toDouble(),
             ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
             val heading = coordinates.toEarthHeading(directPathDestination)
             canvas.withRotation(textDegree, center.first, center.second) {
-                val distance = language.preferredNumeral.formatLongNumber(heading.km) +
-                    " " + kilometerUnit
+                val distance = numeral.formatLongNumber(heading.km) + " " + kilometerUnit
                 drawText(distance, center.first, center.second - 2 * dp, textPaint)
             }
         }

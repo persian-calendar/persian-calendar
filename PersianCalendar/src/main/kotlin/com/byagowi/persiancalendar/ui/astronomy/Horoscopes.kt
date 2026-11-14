@@ -67,6 +67,7 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
@@ -122,6 +123,7 @@ import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlin.math.sin
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -155,10 +157,9 @@ fun HoroscopeDialog(
                     formatAngle(longitude % 30), // Remaining angle
                     Zodiac.fromTropical(longitude).symbol,
                     if (language.isArabicScript) RLM else "",
-                    language.formatAuAsKm(
-                        distance,
-                        kilometer = stringResource(Res.string.kilometer),
-                    ),
+                    numeral.formatLongNumber((distance * AU_IN_KM).roundToLong()) + " " + run {
+                        stringResource(Res.string.kilometer)
+                    },
                 )
             }
 

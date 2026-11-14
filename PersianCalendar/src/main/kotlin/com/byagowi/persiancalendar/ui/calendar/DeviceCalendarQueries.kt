@@ -321,8 +321,9 @@ private data class DeviceEventsRequest(
     val limit: Int,
     val query: DeviceEventsQuery,
 ) {
-    val isDay get() = query == DeviceEventsQuery.Detailed &&
-            days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
+    val isDay
+        get() = query == DeviceEventsQuery.Detailed &&
+                days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
 
     fun covers(jdn: Jdn) = (jdn - startJdn) in 0 until days
 }
@@ -358,7 +359,7 @@ private class CachedDeviceEvents(
 /** A cached result is reusable when it is current and is not a transient failure to retry. */
 private fun CachedDeviceEvents?.isReusable(generation: Int): Boolean =
     this != null && this.generation == generation &&
-        state.status != CalendarProviderStatus.Error
+            state.status != CalendarProviderStatus.Error
 
 /** A preloadable LRU cache of device calendar events, keyed by the requested range. */
 class DeviceCalendarEventsCache internal constructor(
@@ -495,7 +496,11 @@ class DeviceCalendarEventsCache internal constructor(
         cached: CachedDeviceEvents?,
     ): CalendarProviderState<DeviceEventsResult> = when {
         environment == null -> CalendarProviderState(emptyResult, CalendarProviderStatus.Loading)
-        !environment.settings.enabled -> CalendarProviderState(emptyResult, CalendarProviderStatus.Ready)
+        !environment.settings.enabled -> CalendarProviderState(
+            emptyResult,
+            CalendarProviderStatus.Ready,
+        )
+
         !environment.permissionGranted ->
             CalendarProviderState(emptyResult, CalendarProviderStatus.PermissionDenied)
 
@@ -617,10 +622,12 @@ class DeviceCalendarEventsCache internal constructor(
             error == null -> CalendarProviderState(
                 result.getOrThrow(), CalendarProviderStatus.Ready,
             )
+
             error is CancellationException -> null
             error is SecurityException -> CalendarProviderState(
                 emptyResult, CalendarProviderStatus.PermissionDenied, error,
             )
+
             else -> {
                 logException(error)
                 CalendarProviderState(emptyResult, CalendarProviderStatus.Error, error)

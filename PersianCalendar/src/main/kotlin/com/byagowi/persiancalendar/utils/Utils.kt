@@ -87,7 +87,7 @@ fun CalculationMethod.title(resources: Resources): String {
             CalculationMethod.France -> R.string.method_france
             CalculationMethod.Russia -> R.string.method_russia
             CalculationMethod.Singapore -> R.string.method_singapore
-        }
+        },
     )
 }
 
@@ -103,6 +103,7 @@ fun eclipseTypeTitleRes(isSolar: Boolean, kind: EclipseKind): Int = when {
         EclipseKind.Total -> R.string.eclipse_total_solar
         EclipseKind.Penumbral -> null.debugAssertNotNull ?: R.string.empty
     }
+
     else -> when (kind) {
         EclipseKind.Partial -> R.string.eclipse_partial_lunar
         EclipseKind.Penumbral -> R.string.eclipse_penumbral_lunar

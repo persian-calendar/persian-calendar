@@ -1261,8 +1261,7 @@ private fun showEncourageToExemptFromBatteryOptimizations(needsExactAlarmAccess:
     } else {
         PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
     }
-    if (context.preferences.getInt(ignoredCountKey, 0) >= 1) return false
-    return needsExactAlarmAccess || !isIgnoringBatteryOptimizations(context)
+    return context.preferences.getInt(ignoredCountKey, 0) < 1 && (needsExactAlarmAccess || !isIgnoringBatteryOptimizations(context))
 }
 
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {

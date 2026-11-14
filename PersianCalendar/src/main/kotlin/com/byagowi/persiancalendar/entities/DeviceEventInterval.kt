@@ -12,16 +12,23 @@ class DeviceEventInterval(
     val isAllDay: Boolean,
     displayTimeZone: TimeZone,
 ) {
-    private val timeZone = if (isAllDay) TimeZone.getTimeZone("UTC") else
-        (displayTimeZone.clone() as? TimeZone).debugAssertNotNull ?: displayTimeZone
+    private val timeZone = when {
+        isAllDay -> TimeZone.getTimeZone("UTC")
+        else -> (displayTimeZone.clone() as? TimeZone).debugAssertNotNull ?: displayTimeZone
+    }
     val start: GregorianCalendar get() = calendarAt(beginMillis)
     val end: GregorianCalendar get() = calendarAt(endMillis)
     val date: CivilDate
         get() = start.let {
-            CivilDate(it[GregorianCalendar.YEAR], it[GregorianCalendar.MONTH] + 1, it[GregorianCalendar.DAY_OF_MONTH])
+            CivilDate(
+                it[GregorianCalendar.YEAR],
+                it[GregorianCalendar.MONTH] + 1,
+                it[GregorianCalendar.DAY_OF_MONTH],
+            )
         }
 
-    private fun calendarAt(millis: Long) = GregorianCalendar(timeZone).apply { timeInMillis = millis }
+    private fun calendarAt(millis: Long) =
+        GregorianCalendar(timeZone).apply { timeInMillis = millis }
 
     private fun dayBounds(date: CivilDate): Pair<Long, Long> {
         val start = startOfDay(date, timeZone)
@@ -58,8 +65,7 @@ class DeviceEventInterval(
     }
 
     private fun hourAt(millis: Long): Float = calendarAt(millis).let {
-        it[GregorianCalendar.HOUR_OF_DAY] + it[GregorianCalendar.MINUTE] / 60f +
-                it[GregorianCalendar.SECOND] / 3600f + it[GregorianCalendar.MILLISECOND] / 3_600_000f
+        it[GregorianCalendar.HOUR_OF_DAY] + it[GregorianCalendar.MINUTE] / 60f + it[GregorianCalendar.SECOND] / 3600f + it[GregorianCalendar.MILLISECOND] / 3_600_000f
     }
 
     companion object {
@@ -77,7 +83,9 @@ class DeviceEventInterval(
 
             val previousOffset = timeZone.getOffset(resolved - 86_400_000L)
             val earlier = wallMidnight - previousOffset
-            if (earlier < resolved && timeZone.getOffset(earlier) == previousOffset) resolved = earlier
+            if (earlier < resolved && timeZone.getOffset(earlier) == previousOffset) {
+                resolved = earlier
+            }
 
             if (resolved + timeZone.getOffset(resolved) > wallMidnight) {
                 var before = wallMidnight - timeZone.getOffset(resolved)

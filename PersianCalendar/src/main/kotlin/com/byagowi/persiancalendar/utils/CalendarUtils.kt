@@ -261,8 +261,8 @@ internal fun readDeviceEvents(
                 )
             }.filter {
                 it.interval.overlaps(startingDate.toCivilDate(), endingDate.toCivilDate())
-            // Search ranks upcoming occurrences before past ones at the call site. Do not
-            // discard those occurrences here simply because the provider sorts oldest first.
+                // Search ranks upcoming occurrences before past ones at the call site. Do not
+                // discard those occurrences here simply because the provider sorts oldest first.
             }.take(if (searchTerm.isNullOrBlank()) limit else Int.MAX_VALUE).toList()
         } ?: emptyList()
     }

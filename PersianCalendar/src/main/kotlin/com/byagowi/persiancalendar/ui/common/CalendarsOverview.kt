@@ -328,7 +328,7 @@ fun SharedTransitionScope.CalendarsOverview(
             AutoSizedBodyText(
                 if (language.isNepali) {
                     phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " + moonName +
-                        " ~" + Tithi.tithiName(System.currentTimeMillis())
+                            " ~" + Tithi.tithiName(System.currentTimeMillis())
                 } else {
                     phase.emoji(coordinates) + " " + moonName + exactTime
                 },

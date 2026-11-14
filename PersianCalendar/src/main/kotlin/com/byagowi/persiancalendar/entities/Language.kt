@@ -6,7 +6,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
-import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.global.iso8601DateFormat
@@ -19,7 +18,6 @@ import com.byagowi.persiancalendar.utils.logException
 import io.github.persiancalendar.praytimes.CalculationMethod
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.math.roundToLong
 
 enum class Language(val code: String, val nativeName: String) {
     // The following order is used for language change dialog also
@@ -479,9 +477,6 @@ enum class Language(val code: String, val nativeName: String) {
             NE, TA -> true
             else -> false
         }
-
-    fun formatAuAsKm(value: Double, kilometer: String): String =
-        preferredNumeral.formatLongNumber((value * AU_IN_KM).roundToLong()) + " " + kilometer
 
     companion object {
         @Suppress("ConstantLocale")

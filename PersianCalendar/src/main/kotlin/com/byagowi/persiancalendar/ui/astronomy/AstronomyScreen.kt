@@ -91,6 +91,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import androidx.core.util.lruCache
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
@@ -99,6 +100,7 @@ import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.toGregorianCalendar
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.shared.R
@@ -163,6 +165,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -701,9 +704,8 @@ private fun SharedTransitionScope.SolarDisplay(
                     }
                     SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
                         Text(
-                            text = language.formatAuAsKm(
-                                astronomyState.moon.dist,
-                                kilometer = stringResource(Res.string.kilometer),
+                            text = numeral.formatLongNumber((astronomyState.moon.dist * AU_IN_KM).roundToLong()) + " " + stringResource(
+                                Res.string.kilometer,
                             ),
                             color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
                             modifier = Modifier.padding(bottom = 24.dp),
