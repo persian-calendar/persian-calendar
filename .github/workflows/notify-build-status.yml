@@ -1,3 +1,5 @@
+name: Build status
+
 permissions: {}
 
 on:
@@ -7,31 +9,121 @@ on:
     branches: [main]
 
 jobs:
-  on-success:
-    runs-on: ubuntu-slim
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  update-notification:
+    name: Append the CI result to the Telegram notification
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    if: ${{ github.event.workflow_run.event == 'push' }}
     steps:
-      - name: Unpin failure message
+      - name: Edit the notification message
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          CI_RUN_ID: ${{ github.event.workflow_run.id }}
+          CI_URL: ${{ github.event.workflow_run.html_url }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
         run: |
-          # curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
-          #   -d disable_notification=false \
-          #   -d message_id=3716 \
-          #   -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
-          # sleep 1
-          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinChatMessage \
-            -d message_id=3716 \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
-  on-failure:
-    runs-on: ubuntu-slim
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - name: Notify about the build failure
-        run: |
-          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
-            -d disable_notification=false \
-            -d message_id=3715 \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
-          sleep 1
-          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinChatMessage \
-            -d message_id=3715 \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          set -o pipefail
+
+          # The message was sent by the push-triggered "Notify" run of this commit.
+          notify_run="$(gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/workflows/telegram-notify.yml/runs?head_sha=${HEAD_SHA}&event=push&per_page=1" \
+            --jq '.workflow_runs[0].id // empty')"
+          if [[ -z "$notify_run" ]]; then
+            echo "::warning::No push-triggered Notify run for ${HEAD_SHA}; nothing to update."
+            exit 0
+          fi
+
+          work="$(mktemp -d)"
+          for _ in {1..12}; do
+            if gh run download "$notify_run" --name telegram-message --dir "$work" 2>/dev/null; then
+              break
+            fi
+            # The Notify run may still be uploading its artifact.
+            sleep 5
+          done
+          payload_file="$(find "$work" -name telegram-message.json -print -quit)"
+          if [[ -z "$payload_file" ]]; then
+            echo "::warning::No telegram-message artifact in Notify run ${notify_run}; nothing to update."
+            exit 0
+          fi
+          if [[ "$(jq '.messages | length' "$payload_file")" -eq 0 ]]; then
+            echo "::notice::The Notify run sent no message."
+            exit 0
+          fi
+
+          case "$CONCLUSION" in
+            success)   icon='✅'; label='passed' ;;
+            failure)   icon='❌'; label='failed' ;;
+            cancelled) icon='⏹'; label='cancelled' ;;
+            timed_out) icon='⌛'; label='timed out' ;;
+            *)         icon='⚠️'; label="$CONCLUSION" ;;
+          esac
+          status_short="${icon} <a href=\"${CI_URL}\">Android CI</a> ${label}"
+
+          detail=''
+          if [[ "$CONCLUSION" != 'success' ]]; then
+            failed_jobs="$(gh run view "$CI_RUN_ID" --json jobs \
+              --jq '[.jobs[] | select(.conclusion != "success" and .conclusion != "skipped") | .name] | join(", ")' \
+              2>/dev/null || true)"
+            [[ -n "$failed_jobs" ]] && detail=" — ${failed_jobs}"
+          fi
+
+          # Edit the last message only; earlier ones are just the overflow of a
+          # long commit list. The status is inserted above the footer.
+          payload="$(jq -c \
+            --arg status "${status_short}${detail}" \
+            --arg status_short "$status_short" '
+              def w: if . > 65535 then 2 else 1 end;
+              def u16len: [explode[] | w] | add // 0;
+              def footer: "\n\n📅 @Persian_Calendar[^\n]*$";
+
+              .messages[-1] as $last
+              | $last.text as $text
+              # Drop the failed job list first, then fall back to replacing the
+              # footer, so the edited text can never exceed the 4096 limit.
+              | (if (($text | u16len) + ($status | u16len) + 2) > 4096
+                 then $status_short else $status end) as $line
+              | (if ($text | test(footer))
+                 then ($text | sub("(?<f>" + footer + ")"; "\n\n" + $line + .f))
+                 else $text + "\n\n" + $line end) as $edited
+              | (if ($edited | u16len) > 4096 and ($text | test(footer))
+                 then ($text | sub("(?<f>" + footer + ")"; "\n\n" + $line))
+                 else $edited end) as $final
+              | if ($final | u16len) > 4096
+                then null
+                else {
+                  chat_id: .chat_id,
+                  message_id: $last.message_id,
+                  parse_mode: "HTML",
+                  text: $final
+                } end' "$payload_file")"
+
+          if [[ "$payload" == 'null' ]]; then
+            echo "::warning::The notification message is too long for the CI result; not editing it."
+            exit 0
+          fi
+
+          if response="$(curl --fail-with-body --silent --show-error --retry 3 \
+                -H 'Content-Type: application/json' \
+                --data-binary "$payload" \
+                "https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageText" 2>&1)"; then
+            echo "$response"
+            exit 0
+          fi
+
+          case "$response" in
+            *'message is not modified'*)
+              echo "::notice::The message already shows this CI result."
+              ;;
+            *'message to edit not found'*)
+              echo "::warning::The notification message was deleted; nothing to update."
+              ;;
+            *)
+              echo "$response"
+              exit 1
+              ;;
+          esac

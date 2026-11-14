@@ -12,13 +12,16 @@ jobs:
     name: Notify via Telegram
     runs-on: ubuntu-latest
     steps:
-      - name: Notify
+      - name: Send the message
         env:
           COMMITS: ${{ toJson(github.event.commits) }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           set -o pipefail
+          work="$(mktemp -d)"
+          : > "$work/responses.jsonl"
+
           jq -c --arg chat_id "$TELEGRAM_CHAT_ID" '
             # Telegram counts the 4096 character limit in UTF-16 code units.
             def w: if . > 65535 then 2 else 1 end;
@@ -54,7 +57,9 @@ jobs:
               if $n > 1 then "📅 @Persian_Calendar • \($i)/\($n)"
               else "📅 @Persian_Calendar" end;
 
-            # Pack whole commits into messages of at most 4000 UTF-16 units.
+            # Pack whole commits into messages of at most 3700 UTF-16 units.
+            # 3700 rather than 4096: room is reserved for the CI result that is
+            # appended to the last message once the build finishes.
             def chunk($budget):
               reduce .[] as $e ({chunks: [], cur: [], size: 0};
                 ($e | u16len) as $w
@@ -65,7 +70,7 @@ jobs:
 
             ((. // []) | if type == "array" then . else [] end) as $commits
             | [$commits[] | entry] as $entries
-            | ($entries | chunk(4000)) as $chunks
+            | ($entries | chunk(3700)) as $chunks
             | ($chunks | length) as $n
             | range(0; $n) as $i
             | {
@@ -74,10 +79,34 @@ jobs:
                 disable_web_page_preview: true,
                 text: (($chunks[$i] | join("\n\n")) + "\n\n" + footer($i + 1; $n))
               }
-          ' <<<"$COMMITS" | while IFS= read -r payload; do
-            curl --fail-with-body --silent --show-error --retry 3 \
+          ' <<<"$COMMITS" > "$work/requests.jsonl"
+
+          while IFS= read -r payload; do
+            response=$(curl --fail-with-body --silent --show-error --retry 3 \
               -H 'Content-Type: application/json' \
               --data-binary "$payload" \
-              "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage"
-            echo
-          done
+              "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage")
+            printf '%s\n' "$response" >> "$work/responses.jsonl"
+            echo "$response"
+          done < "$work/requests.jsonl"
+
+          # The ids and texts are handed to the build-status workflow, which
+          # edits the last message once Android CI has finished.
+          jq -n --arg chat_id "$TELEGRAM_CHAT_ID" \
+            --slurpfile requests "$work/requests.jsonl" \
+            --slurpfile responses "$work/responses.jsonl" \
+            '{
+              chat_id: $chat_id,
+              messages: [
+                range(0; ($requests | length))
+                | {message_id: $responses[.].result.message_id, text: $requests[.].text}
+              ]
+            }' > telegram-message.json
+
+      - name: Save the message ids for the build status
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: telegram-message
+          path: telegram-message.json
+          retention-days: 1
+          if-no-files-found: error

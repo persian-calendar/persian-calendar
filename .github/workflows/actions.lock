@@ -14,7 +14,8 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-java@v6.2.0'
     '.github/workflows/notify-build-status.yml': []
-    '.github/workflows/telegram-notify.yml': []
+    '.github/workflows/telegram-notify.yml':
+        - 'actions/upload-artifact@v7.0.2'
     '.github/workflows/update-dependencies-report.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-java@v6.2.0'
