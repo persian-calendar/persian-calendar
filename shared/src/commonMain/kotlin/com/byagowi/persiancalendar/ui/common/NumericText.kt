@@ -265,9 +265,6 @@ fun cascadeDelay(
  * has no number to compare, so [RollDirection.Auto] reads as [RollDirection.Down]
  * here; [NumericText] is where Auto means something.
  */
-// The public FontScaling.toDp() resolves to its default implementation in the restricted
-// FontScalingLinear interface, which lint reports as RestrictedApi.
-@Suppress("RestrictedApi")
 @Composable
 fun RollingDigit(
     glyph: String,
@@ -291,7 +288,10 @@ fun RollingDigit(
     val blurOutProgress = remember { Animatable(1f) }
 
     val glyphHeight = with(LocalDensity.current) {
-        style.lineHeight.takeOrElse { style.fontSize }.toDp()
+        style.lineHeight.takeOrElse { style.fontSize }.let {
+            // round trip just to workaround lint
+            it.toPx().toDp()
+        }
     }
     val entry = glyphHeight * shape.travelRatio
     // The direction the arriving glyph travels from: below it, for an upward roll.
