@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
+import android.content.ComponentCallbacks2
 import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.CancellationSignal
 import android.provider.CalendarContract
 import androidx.compose.runtime.Composable
@@ -11,6 +13,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -292,6 +295,7 @@ private fun readDaysWithDeviceEvents(
 
 private const val DEVICE_EVENTS_CACHE_DAY_LIMIT = 120
 private const val DEVICE_EVENTS_CACHE_CAPACITY = 90
+private const val DEVICE_EVENTS_CACHE_LOW_MEMORY_CAPACITY = 12
 
 private data class DeviceEventsEnvironment(
     val settings: DeviceCalendarQuerySettings,
@@ -365,7 +369,7 @@ private fun CachedDeviceEvents?.isReusable(generation: Int): Boolean =
 class DeviceCalendarEventsCache internal constructor(
     private val context: Context,
     private val scope: CoroutineScope,
-) {
+) : ComponentCallbacks2 {
     private val emptyDeviceEvents = DeviceCalendarEventsStore.empty()
     private val emptyResult = DeviceEventsResult(emptyDeviceEvents, DeviceEventDays.EMPTY)
     private val entries = mutableStateMapOf<DeviceEventsRequest, CachedDeviceEvents>()
@@ -376,6 +380,46 @@ class DeviceCalendarEventsCache internal constructor(
     private var preloadStart: Jdn? = null
     private var preloadDays = 0
     private var activePreloadRequest: DeviceEventsRequest? = null
+    private var trimGeneration by mutableIntStateOf(0)
+
+    init {
+        context.registerComponentCallbacks(this)
+    }
+
+    internal fun dispose() {
+        context.unregisterComponentCallbacks(this)
+        cancelRequests()
+        entries.clear()
+        accessOrder.clear()
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onTrimMemory(level: Int) {
+        when {
+            level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN -> {
+                cancelRequests()
+                trim(maxEntries = 0, protectPreload = false)
+            }
+
+            level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW -> {
+                trim(
+                    maxEntries = DEVICE_EVENTS_CACHE_LOW_MEMORY_CAPACITY,
+                    protectPreload = false,
+                )
+                trimGeneration++
+                if (isResumed) requestPreloadedDeviceEvents()
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onLowMemory() {
+        trim(maxEntries = 0, protectPreload = false)
+        trimGeneration++
+        if (isResumed) requestPreloadedDeviceEvents()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) = Unit
 
     /**
      * Requests [days] days of device calendar events starting at [startJdnRange]. The whole range
@@ -433,7 +477,7 @@ class DeviceCalendarEventsCache internal constructor(
     ): CalendarProviderState<T> {
         val currentEnvironment = environment
         val cached by remember(request) { derivedStateOf { entries[request] } }
-        LaunchedEffect(request, currentEnvironment) { requestDeviceEvents(request) }
+        LaunchedEffect(request, currentEnvironment, trimGeneration) { requestDeviceEvents(request) }
         val state = stateOf(currentEnvironment, cached)
         return CalendarProviderState(
             select(state.data),
@@ -647,14 +691,17 @@ class DeviceCalendarEventsCache internal constructor(
         trim()
     }
 
-    private fun trim() {
-        if (entries.size <= DEVICE_EVENTS_CACHE_CAPACITY) return
+    private fun trim(
+        maxEntries: Int = DEVICE_EVENTS_CACHE_CAPACITY,
+        protectPreload: Boolean = true,
+    ) {
+        if (entries.size <= maxEntries) return
         val start = preloadStart
         val iterator = accessOrder.entries.iterator()
-        while (entries.size > DEVICE_EVENTS_CACHE_CAPACITY && iterator.hasNext()) {
+        while (entries.size > maxEntries && iterator.hasNext()) {
             val request = iterator.next().key
             if (requests.containsKey(request)) continue
-            if (request.isDay && start != null && preloadDays > 0 &&
+            if (protectPreload && request.isDay && start != null && preloadDays > 0 &&
                 (request.startJdn - start) in 0 until preloadDays
             ) continue
             iterator.remove()
@@ -680,6 +727,7 @@ fun rememberDeviceCalendarEventsCache(refreshToken: Int): DeviceCalendarEventsCa
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val providerRevision = LocalCalendarProviderRevision.current
     val cache = remember(context, scope) { DeviceCalendarEventsCache(context, scope) }
+    DisposableEffect(cache) { onDispose { cache.dispose() } }
     // Settings are snapshot-backed, so sample them here and never inside the query.
     val settings = deviceCalendarQuerySettings()
     val permissionGranted = context.hasCalendarPermission()
