@@ -94,10 +94,10 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.icons.material.filled.androidIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.motorcycleIcon
-import com.byagowi.persiancalendar.ui.icons.material.filled.permDeviceInformationIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.printIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.settingsIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.sportsEsportsIcon
+import com.byagowi.persiancalendar.ui.icons.material.outlined.mobileInfoOutlinedIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
@@ -261,7 +261,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                 Triple(motorcycleIcon, Build.SUPPORTED_ABIS[0]) {
                     showScheduleDialog = true
                 },
-                Triple(permDeviceInformationIcon, Build.MODEL) {
+                Triple(mobileInfoOutlinedIcon, Build.MODEL) {
                     showScheduleDialog = true
                 },
             )

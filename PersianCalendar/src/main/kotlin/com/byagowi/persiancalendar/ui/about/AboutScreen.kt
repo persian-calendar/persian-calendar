@@ -117,8 +117,8 @@ import com.byagowi.persiancalendar.ui.icons.material.filled.emailIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.folderIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.helpIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.paletteIcon
-import com.byagowi.persiancalendar.ui.icons.material.filled.permDeviceInformationIcon
 import com.byagowi.persiancalendar.ui.icons.material.filled.translateIcon
+import com.byagowi.persiancalendar.ui.icons.material.outlined.mobileInfoOutlinedIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -146,7 +146,7 @@ fun SharedTransitionScope.AboutScreen(
                 },
                 actions = {
                     AppIconButton(
-                        icon = permDeviceInformationIcon,
+                        icon = mobileInfoOutlinedIcon,
                         title = stringResource(Res.string.device_information),
                         onClick = navigateToDeviceInformation,
                     )

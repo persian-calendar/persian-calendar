@@ -41,7 +41,7 @@ class AppBuildPlugin : Plugin<Project> {
                         "keyboard_arrow_down", "keyboard_arrow_left", "keyboard_arrow_right",
                         "keyboard_arrow_up", "location_on", "map", "menu", "mode_night",
                         "more_horiz", "more_vert", "motorcycle", "my_location", "nightlight_round",
-                        "open_in_browser", "open_in_new", "palette", "perm_device_information",
+                        "open_in_browser", "open_in_new", "palette",
                         "play_arrow", "print", "remove_circle_outline", "restore", "search",
                         "settings", "settings_backup_restore", "share", "social_distance",
                         "sports_esports", "stop", "swap_vertical_circle", "sync_alt", "translate",
@@ -49,6 +49,7 @@ class AppBuildPlugin : Plugin<Project> {
                     ),
                     "outlined" to listOf(
                         "light_mode", "location_on", "palette", "swipe_down", "swipe_up", "widgets",
+                        "mobile_info",
                     ),
                     "rounded" to listOf("drag_handle"),
                 ),

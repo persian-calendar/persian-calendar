@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.icons.material.filled
+package com.byagowi.persiancalendar.ui.icons.material.outlined
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -10,14 +10,14 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
 @Suppress("CheckReturnValue")
-public val permDeviceInformationIcon: ImageVector
+public val mobileInfoOutlinedIcon: ImageVector
   get() {
-    if (_perm_device_information != null) {
-      return _perm_device_information!!
+    if (_mobile_info != null) {
+      return _mobile_info!!
     }
-    _perm_device_information =
+    _mobile_info =
       ImageVector.Builder(
-          name = "perm_device_information",
+          name = "mobile_info",
           defaultWidth = 24.dp,
           defaultHeight = 24.dp,
           viewportWidth = 24f,
@@ -55,7 +55,17 @@ public val permDeviceInformationIcon: ImageVector
             reflectiveQuadTo(17f, 23f)
             horizontalLineTo(7f)
             close()
-            moveToRelative(4f, -6.5f)
+            moveTo(7f, 21f)
+            horizontalLineTo(17f)
+            verticalLineTo(3f)
+            horizontalLineTo(7f)
+            verticalLineTo(21f)
+            close()
+            moveToRelative(0f, 0f)
+            verticalLineTo(3f)
+            verticalLineTo(21f)
+            close()
+            moveToRelative(4f, -4.5f)
             horizontalLineToRelative(2f)
             verticalLineTo(11f)
             horizontalLineTo(11f)
@@ -74,7 +84,7 @@ public val permDeviceInformationIcon: ImageVector
           }
         }
         .build()
-    return _perm_device_information!!
+    return _mobile_info!!
   }
 
-private var _perm_device_information: ImageVector? = null
+private var _mobile_info: ImageVector? = null
