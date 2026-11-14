@@ -682,7 +682,7 @@ private fun SharedTransitionScope.ConverterAndDistance(
             TextWithSlideAnimation(
                 zodiacs.joinToString(spacedComma) {
                     it.format(resources, true, isPersian)
-                } + spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1]),
+                } + spacedColon + stringResource((zodiacs[0] compatibilityWith zodiacs[1]).title),
             )
         }
     }

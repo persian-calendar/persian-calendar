@@ -379,6 +379,26 @@
     <string name="crescent_evening_visibility_odeh">Visibilitas hilal petang (Odeh)</string>
     <string name="crescent_morning_visibility_yallop">Visibilitas hilal pagi (Yallop)</string>
     <string name="crescent_morning_visibility_odeh">Visibilitas hilal pagi (Odeh)</string>
+    <string name="eclipse_annular_solar">Gerhana matahari cincin</string>
+    <string name="eclipse_partial_solar">Gerhana matahari sebagian</string>
+    <string name="eclipse_partial_lunar">Gerhana bulan sebagian</string>
+    <string name="eclipse_penumbral_lunar">Gerhana bulan penumbra</string>
+    <string name="eclipse_total_solar">Gerhana matahari total</string>
+    <string name="eclipse_total_lunar">Gerhana bulan total</string>
+    <string name="athan_vibration_summary">Aktifkan getaran di awal azan</string>
+    <string name="moon_new_moon">Bulan baru</string>
+    <string name="moon_waxing_crescent">Bulan sabit awal</string>
+    <string name="moon_first_quarter">Kuartal pertama</string>
+    <string name="moon_waxing_gibbous">Cembung awal</string>
+    <string name="moon_full_moon">Bulan purnama</string>
+    <string name="moon_waning_gibbous">Cembung akhir</string>
+    <string name="moon_third_quarter">Kuartal ketiga</string>
+    <string name="moon_waning_crescent">Bulan sabit akhir</string>
+    <string name="compatibility_best">Terbaik</string>
+    <string name="compatibility_better">Baik</string>
+    <string name="compatibility_neutral">Netral</string>
+    <string name="compatibility_worse">Buruk</string>
+    <string name="compatibility_worst">Terburuk</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%1$s %2$s hari</item>
     </plurals>

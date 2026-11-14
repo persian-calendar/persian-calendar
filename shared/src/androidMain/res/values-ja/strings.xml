@@ -379,6 +379,26 @@
     <string name="crescent_evening_visibility_odeh">夕方の三日月の可視性（Odeh）</string>
     <string name="crescent_morning_visibility_yallop">明け方の三日月の可視性（Yallop）</string>
     <string name="crescent_morning_visibility_odeh">明け方の三日月の可視性（Odeh）</string>
+    <string name="eclipse_annular_solar">金環日食</string>
+    <string name="eclipse_partial_solar">部分日食</string>
+    <string name="eclipse_partial_lunar">部分月食</string>
+    <string name="eclipse_penumbral_lunar">半影月食</string>
+    <string name="eclipse_total_solar">皆既日食</string>
+    <string name="eclipse_total_lunar">皆既月食</string>
+    <string name="athan_vibration_summary">アダンの開始時に振動を有効にする</string>
+    <string name="moon_new_moon">新月</string>
+    <string name="moon_waxing_crescent">三日月</string>
+    <string name="moon_first_quarter">上弦の月</string>
+    <string name="moon_waxing_gibbous">十三夜月</string>
+    <string name="moon_full_moon">満月</string>
+    <string name="moon_waning_gibbous">十六夜月</string>
+    <string name="moon_third_quarter">下弦の月</string>
+    <string name="moon_waning_crescent">有明月</string>
+    <string name="compatibility_best">最高</string>
+    <string name="compatibility_better">良い</string>
+    <string name="compatibility_neutral">普通</string>
+    <string name="compatibility_worse">悪い</string>
+    <string name="compatibility_worst">最悪</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%2$s %1$s日</item>
     </plurals>

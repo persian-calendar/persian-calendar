@@ -137,6 +137,7 @@ import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import com.byagowi.persiancalendar.utils.eclipseTypeTitleRes
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
@@ -787,7 +788,7 @@ private fun Header(
                     val formattedDate = Date(peak.toMillisecondsSince1970()).toGregorianCalendar()
                         .formatDateAndTime()
                     val isSolar = title == R.string.solar_eclipse
-                    val type = language.tryTranslateEclipseType(isSolar, kind)
+                    val type = eclipseTypeTitleRes(isSolar, kind)?.let { resources.getString(it) }
                         ?: resources.getString(title)
                     when {
                         language.isPersianOrDari -> "$type بعدی"

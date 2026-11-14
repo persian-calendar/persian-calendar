@@ -1,7 +1,17 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.moon_first_quarter
+import com.byagowi.persiancalendar.shared.generated.resources.moon_full_moon
+import com.byagowi.persiancalendar.shared.generated.resources.moon_new_moon
+import com.byagowi.persiancalendar.shared.generated.resources.moon_third_quarter
+import com.byagowi.persiancalendar.shared.generated.resources.moon_waning_crescent
+import com.byagowi.persiancalendar.shared.generated.resources.moon_waning_gibbous
+import com.byagowi.persiancalendar.shared.generated.resources.moon_waxing_crescent
+import com.byagowi.persiancalendar.shared.generated.resources.moon_waxing_gibbous
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.persiancalendar.praytimes.Coordinates
+import org.jetbrains.compose.resources.StringResource
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -19,15 +29,15 @@ value class LunarAge private constructor(private val fraction: Double) {
     // Eight is number phases in this system, named by most of the cultures
     fun toPhase() = Phase.entries.getOrNull((fraction * 8).roundToInt()) ?: Phase.NEW_MOON
 
-    enum class Phase(private val rawEmoji: String) {
-        NEW_MOON("🌑"),
-        WAXING_CRESCENT("🌒"),
-        FIRST_QUARTER("🌓"),
-        WAXING_GIBBOUS("🌔"),
-        FULL_MOON("🌕"),
-        WANING_GIBBOUS("🌖"),
-        THIRD_QUARTER("🌗"),
-        WANING_CRESCENT("🌘");
+    enum class Phase(val title: StringResource, private val rawEmoji: String) {
+        NEW_MOON(Res.string.moon_new_moon, "🌑"),
+        WAXING_CRESCENT(Res.string.moon_waxing_crescent, "🌒"),
+        FIRST_QUARTER(Res.string.moon_first_quarter, "🌓"),
+        WAXING_GIBBOUS(Res.string.moon_waxing_gibbous, "🌔"),
+        FULL_MOON(Res.string.moon_full_moon, "🌕"),
+        WANING_GIBBOUS(Res.string.moon_waning_gibbous, "🌖"),
+        THIRD_QUARTER(Res.string.moon_third_quarter, "🌗"),
+        WANING_CRESCENT(Res.string.moon_waning_crescent, "🌘");
 
         fun emoji(coordinates: Coordinates?): String {
             return when {

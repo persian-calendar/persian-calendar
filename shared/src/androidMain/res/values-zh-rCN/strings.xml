@@ -379,6 +379,26 @@
     <string name="crescent_evening_visibility_odeh">傍晚月牙可见度（Odeh）</string>
     <string name="crescent_morning_visibility_yallop">清晨月牙可见度（Yallop）</string>
     <string name="crescent_morning_visibility_odeh">清晨月牙可见度（Odeh）</string>
+    <string name="eclipse_annular_solar">日环食</string>
+    <string name="eclipse_partial_solar">日偏食</string>
+    <string name="eclipse_partial_lunar">月偏食</string>
+    <string name="eclipse_penumbral_lunar">半影月食</string>
+    <string name="eclipse_total_solar">日全食</string>
+    <string name="eclipse_total_lunar">月全食</string>
+    <string name="athan_vibration_summary">在宣礼开始时启用振动</string>
+    <string name="moon_new_moon">新月</string>
+    <string name="moon_waxing_crescent">蛾眉月</string>
+    <string name="moon_first_quarter">上弦月</string>
+    <string name="moon_waxing_gibbous">盈凸月</string>
+    <string name="moon_full_moon">满月</string>
+    <string name="moon_waning_gibbous">亏凸月</string>
+    <string name="moon_third_quarter">下弦月</string>
+    <string name="moon_waning_crescent">残月</string>
+    <string name="compatibility_best">三合</string>
+    <string name="compatibility_better">六合</string>
+    <string name="compatibility_neutral">三会</string>
+    <string name="compatibility_worse">六冲</string>
+    <string name="compatibility_worst">口舌</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%1$s 天%2$s</item>
     </plurals>

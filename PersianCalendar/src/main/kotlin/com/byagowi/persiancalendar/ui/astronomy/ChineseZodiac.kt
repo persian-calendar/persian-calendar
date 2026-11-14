@@ -4,12 +4,19 @@ import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.shared.R
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.compatibility_best
+import com.byagowi.persiancalendar.shared.generated.resources.compatibility_better
+import com.byagowi.persiancalendar.shared.generated.resources.compatibility_neutral
+import com.byagowi.persiancalendar.shared.generated.resources.compatibility_worse
+import com.byagowi.persiancalendar.shared.generated.resources.compatibility_worst
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.EARTH
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.FIRE
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.METAL
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.WATER
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.WOOD
 import io.github.persiancalendar.calendar.PersianDate
+import org.jetbrains.compose.resources.StringResource
 
 /**
  * موش و بقر و پلنگ و خرگوش شمار - زان چار چو بگذری نهنگ آید و مار
@@ -79,7 +86,13 @@ enum class ChineseZodiac(
         }
     }
 
-    enum class Compatibility { BEST, BETTER, NEUTRAL, WORSE, WORST }
+    enum class Compatibility(val title: StringResource) {
+        BEST(Res.string.compatibility_best),
+        BETTER(Res.string.compatibility_better),
+        NEUTRAL(Res.string.compatibility_neutral),
+        WORSE(Res.string.compatibility_worse),
+        WORST(Res.string.compatibility_worst),
+    }
 
     // https://en.wikipedia.org/wiki/Chinese_zodiac#Signs
     val yinYang: YinYang get() = YinYang.entries[(ordinal + 1) % 2]

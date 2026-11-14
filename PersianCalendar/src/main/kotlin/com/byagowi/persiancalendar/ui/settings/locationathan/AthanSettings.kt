@@ -57,6 +57,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.athan_alarm
 import com.byagowi.persiancalendar.shared.generated.resources.athan_alarm_summary
 import com.byagowi.persiancalendar.shared.generated.resources.athan_gap
 import com.byagowi.persiancalendar.shared.generated.resources.athan_gap_summary
+import com.byagowi.persiancalendar.shared.generated.resources.athan_vibration_summary
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.custom_athan
 import com.byagowi.persiancalendar.shared.generated.resources.default_athan
@@ -207,7 +208,7 @@ fun AthanSettings(
                 key = PREF_ATHAN_VIBRATION,
                 value = athanVibration,
                 title = stringResource(Res.string.vibration),
-                summary = language.tryTranslateAthanVibrationSummary(),
+                summary = stringResource(Res.string.athan_vibration_summary),
                 onBeforeToggle = {
                     invalidateAthanChannel(context)
                     it

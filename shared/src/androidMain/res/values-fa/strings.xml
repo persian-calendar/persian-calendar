@@ -387,6 +387,26 @@
     <string name="crescent_morning_visibility_yallop">رویت هلال در بامداد (Yallop)</string>
     <string name="crescent_morning_visibility_odeh">رویت هلال در بامداد (Odeh)</string>
 
+    <string name="eclipse_annular_solar">خورشیدگرفتگی حلقه‌ای</string>
+    <string name="eclipse_partial_solar">خورشیدگرفتگی جزئی</string>
+    <string name="eclipse_partial_lunar">ماه‌گرفتگی جزئی</string>
+    <string name="eclipse_penumbral_lunar">ماه‌گرفتگی نیم‌سایه‌ای</string>
+    <string name="eclipse_total_solar">خورشیدگرفتگی کلی</string>
+    <string name="eclipse_total_lunar">ماه‌گرفتگی کلی</string>
+    <string name="athan_vibration_summary">فعال‌سازی لرزش در ابتدای پخش اذان</string>
+    <string name="moon_new_moon">ماه نو یا بَرن</string>
+    <string name="moon_waxing_crescent">هلال سوی ماه تمام</string>
+    <string name="moon_first_quarter">یک‌چهارم نخست</string>
+    <string name="moon_waxing_gibbous">برآمدگی سوی ماه تمام</string>
+    <string name="moon_full_moon">ماه تمام یا بدر</string>
+    <string name="moon_waning_gibbous">برآمدگی سوی کمرنگی</string>
+    <string name="moon_third_quarter">یک‌چهارم سوم</string>
+    <string name="moon_waning_crescent">هلال سوی کمرنگی</string>
+    <string name="compatibility_best">بهترین</string>
+    <string name="compatibility_better">خوب</string>
+    <string name="compatibility_neutral">خنثی</string>
+    <string name="compatibility_worse">بد</string>
+    <string name="compatibility_worst">بدترین</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">یک روز %2$s</item>
         <item quantity="other">%1$s روز %2$s</item>

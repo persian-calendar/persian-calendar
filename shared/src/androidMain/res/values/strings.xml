@@ -419,6 +419,26 @@
     <string name="crescent_morning_visibility_yallop">Crescent morning visibility (Yallop)</string>
     <string name="crescent_morning_visibility_odeh">Crescent morning visibility (Odeh)</string>
 
+    <string name="eclipse_annular_solar">Annular solar eclipse</string>
+    <string name="eclipse_partial_solar">Partial solar eclipse</string>
+    <string name="eclipse_partial_lunar">Partial lunar eclipse</string>
+    <string name="eclipse_penumbral_lunar">Penumbral lunar eclipse</string>
+    <string name="eclipse_total_solar">Total solar eclipse</string>
+    <string name="eclipse_total_lunar">Total lunar eclipse</string>
+    <string name="athan_vibration_summary">Enable vibrator in the beginning of athan</string>
+    <string name="moon_new_moon">New moon</string>
+    <string name="moon_waxing_crescent">Waxing crescent</string>
+    <string name="moon_first_quarter">First quarter</string>
+    <string name="moon_waxing_gibbous">Waxing gibbous</string>
+    <string name="moon_full_moon">Full moon</string>
+    <string name="moon_waning_gibbous">Waning gibbous</string>
+    <string name="moon_third_quarter">Third quarter</string>
+    <string name="moon_waning_crescent">Waning crescent</string>
+    <string name="compatibility_best">Best</string>
+    <string name="compatibility_better">Better</string>
+    <string name="compatibility_neutral">Neutral</string>
+    <string name="compatibility_worse">Worse</string>
+    <string name="compatibility_worst">Worst</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
         <item quantity="other">%1$s %2$s days</item>

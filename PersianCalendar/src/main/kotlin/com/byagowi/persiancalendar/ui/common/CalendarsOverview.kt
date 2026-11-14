@@ -324,13 +324,13 @@ fun SharedTransitionScope.CalendarsOverview(
                 }.onFailure(logException).getOrNull().orEmpty()
             }
             val coordinates = coordinates
+            val moonName = stringResource(phase.title)
             AutoSizedBodyText(
                 if (language.isNepali) {
-                    phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " + language.moonNames(
-                        phase,
-                    ) + " ~" + Tithi.tithiName(System.currentTimeMillis())
+                    phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " + moonName +
+                        " ~" + Tithi.tithiName(System.currentTimeMillis())
                 } else {
-                    phase.emoji(coordinates) + " " + language.moonNames(phase) + exactTime
+                    phase.emoji(coordinates) + " " + moonName + exactTime
                 },
             )
         }

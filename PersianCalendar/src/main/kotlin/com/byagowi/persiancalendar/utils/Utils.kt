@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.PrayTime
@@ -16,6 +17,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_ang
 import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_night_middle
 import com.byagowi.persiancalendar.shared.generated.resources.high_latitudes_one_seventh
 import com.byagowi.persiancalendar.shared.generated.resources.none
+import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.cosinekitty.astronomy.Observer
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -87,6 +89,17 @@ fun CalculationMethod.title(resources: Resources): String {
             CalculationMethod.Singapore -> R.string.method_singapore
         }
     )
+}
+
+@StringRes
+fun eclipseTypeTitleRes(isSolar: Boolean, kind: EclipseKind): Int? = when {
+    isSolar && kind == EclipseKind.Annular -> R.string.eclipse_annular_solar
+    isSolar && kind == EclipseKind.Partial -> R.string.eclipse_partial_solar
+    !isSolar && kind == EclipseKind.Partial -> R.string.eclipse_partial_lunar
+    !isSolar && kind == EclipseKind.Penumbral -> R.string.eclipse_penumbral_lunar
+    isSolar && kind == EclipseKind.Total -> R.string.eclipse_total_solar
+    !isSolar && kind == EclipseKind.Total -> R.string.eclipse_total_lunar
+    else -> null
 }
 
 // As "twilight may persist throughout the night during some months of the year" can happen in latitudes
