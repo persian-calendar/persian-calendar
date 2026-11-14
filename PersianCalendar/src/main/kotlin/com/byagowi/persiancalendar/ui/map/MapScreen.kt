@@ -1,14 +1,19 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -125,6 +130,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
+@SuppressLint("MemberExtensionConflict") // ExitTransition.KeepUntilTransitionsFinished is the intended public extension.
 @Composable
 fun SharedTransitionScope.MapScreen(
     navigateUp: () -> Unit,
@@ -147,6 +153,7 @@ fun SharedTransitionScope.MapScreen(
             MapDraw(resources).apply { updateMapAsync(requestedTime, requestedType) }
         }
     }
+
     var displayLocation by rememberSaveable { mutableStateOf(true) }
     var displayGrid by rememberSaveable { mutableStateOf(false) }
     var isDirectPathMode by rememberSaveable { mutableStateOf(false) }
@@ -218,70 +225,84 @@ fun SharedTransitionScope.MapScreen(
         val scale = rememberSaveable { mutableFloatStateOf(1f) }
         val offsetX = rememberSaveable { mutableFloatStateOf(0f) }
         val offsetY = rememberSaveable { mutableFloatStateOf(0f) }
-        if (!showGlobeView) Canvas(
-            modifier = Modifier
-                .semantics { this.contentDescription = mapString }
-                .fillMaxSize()
-                .sharedBounds(
-                    sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                    boundsTransform = appBoundsTransform,
-                )
-                .appTransformable(
-                    scale = scale,
-                    offsetX = offsetX,
-                    offsetY = offsetY,
-                    disableHorizontalLimit = true,
-                    contentSize = { (width: Float, height: Float) ->
-                        Size(width = width, height = min(width / 2, height))
-                    },
-                    scaleRange = 1f..512f,
-                    onClick = { x: Float, y: Float, canvasSize: Size ->
-                        val mapSize = min(canvasSize.width / 2, canvasSize.height)
-                        val contentScale = mapSize / mapDraw.mapHeight
-                        val translateY = (canvasSize.height - mapSize) / 2f
-                        val mapX = x.mod(mapSize * 2) / contentScale
-                        val mapY = (y - translateY) / contentScale
-                        val latitude = 90 - mapY / mapDraw.mapScaleFactor
-                        val longitude = mapX / mapDraw.mapScaleFactor - 180
-                        if (abs(latitude) < 90 && abs(longitude) < 180) {
-                            if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
-                                Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
-                            } else {
-                                val coords =
-                                    EarthPosition(latitude.toDouble(), longitude.toDouble())
-                                if (isDirectPathMode) directPathDestination = coords else {
-                                    dialogInputCoordinates = coords
-                                    showCoordinatesDialog = true
+        if (!showGlobeView) AnimatedContent(
+            targetState = mapDraw,
+            modifier = Modifier.sharedBounds(
+                sharedContentState = rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+                boundsTransform = appBoundsTransform,
+            ),
+            transitionSpec = {
+                (fadeIn(
+                    animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
+                ) togetherWith ExitTransition.KeepUntilTransitionsFinished).apply {
+                    // The incoming map must be above the held outgoing map.
+                    targetContentZIndex = 1f
+                }
+            },
+            label = "mapDraw",
+        ) { mapDraw ->
+            Canvas(
+                modifier = Modifier
+                    .semantics { this.contentDescription = mapString }
+                    .fillMaxSize()
+                    .appTransformable(
+                        scale = scale,
+                        offsetX = offsetX,
+                        offsetY = offsetY,
+                        disableHorizontalLimit = true,
+                        contentSize = { (width: Float, height: Float) ->
+                            Size(width = width, height = min(width / 2, height))
+                        },
+                        scaleRange = 1f..512f,
+                        onClick = { x: Float, y: Float, canvasSize: Size ->
+                            val mapSize = min(canvasSize.width / 2, canvasSize.height)
+                            val contentScale = mapSize / mapDraw.mapHeight
+                            val translateY = (canvasSize.height - mapSize) / 2f
+                            val mapX = x.mod(mapSize * 2) / contentScale
+                            val mapY = (y - translateY) / contentScale
+                            val latitude = 90 - mapY / mapDraw.mapScaleFactor
+                            val longitude = mapX / mapDraw.mapScaleFactor - 180
+                            if (abs(latitude) < 90 && abs(longitude) < 180) {
+                                if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
+                                    Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT)
+                                        .show()
+                                } else {
+                                    val coords =
+                                        EarthPosition(latitude.toDouble(), longitude.toDouble())
+                                    if (isDirectPathMode) directPathDestination = coords else {
+                                        dialogInputCoordinates = coords
+                                        showCoordinatesDialog = true
+                                    }
                                 }
                             }
-                        }
-                    },
-                ),
-        ) {
-            val (width, height) = this.size
-            val mapSize = min(width / 2, height)
-            val contentScale = mapSize / mapDraw.mapHeight
-            mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-            translate(
-                left = offsetX.floatValue.mod(mapSize * 2 * scale.floatValue),
-                top = offsetY.floatValue,
+                        },
+                    ),
             ) {
-                scale(scale.floatValue) {
-                    repeat(if (width > height) 3 else 2) { tileIndex ->
-                        translate(
-                            left = (tileIndex - 1) * mapSize * 2,
-                            top = (height - mapSize) / 2,
-                        ) {
-                            scale(contentScale, pivot = Offset.Zero) {
-                                mapDraw.draw(
-                                    canvas = this.drawContext.canvas.nativeCanvas,
-                                    scale = scale.floatValue * contentScale,
-                                    displayLocation = displayLocation,
-                                    coordinates = markedCoordinates,
-                                    directPathDestination = directPathDestination,
-                                    displayGrid = displayGrid,
-                                )
+                val (width, height) = this.size
+                val mapSize = min(width / 2, height)
+                val contentScale = mapSize / mapDraw.mapHeight
+                mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
+                translate(
+                    left = offsetX.floatValue.mod(mapSize * 2 * scale.floatValue),
+                    top = offsetY.floatValue,
+                ) {
+                    scale(scale.floatValue) {
+                        repeat(if (width > height) 3 else 2) { tileIndex ->
+                            translate(
+                                left = (tileIndex - 1) * mapSize * 2,
+                                top = (height - mapSize) / 2,
+                            ) {
+                                scale(contentScale, pivot = Offset.Zero) {
+                                    mapDraw.draw(
+                                        canvas = this.drawContext.canvas.nativeCanvas,
+                                        scale = scale.floatValue * contentScale,
+                                        displayLocation = displayLocation,
+                                        coordinates = markedCoordinates,
+                                        directPathDestination = directPathDestination,
+                                        displayGrid = displayGrid,
+                                    )
+                                }
                             }
                         }
                     }
