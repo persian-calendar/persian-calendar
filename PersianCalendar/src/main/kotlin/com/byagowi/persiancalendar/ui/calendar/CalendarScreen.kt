@@ -195,6 +195,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.ask_user_to_set_lo
 import com.byagowi.persiancalendar.shared.generated.resources.calendar
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.shared.generated.resources.close
+import com.byagowi.persiancalendar.shared.generated.resources.day_view
 import com.byagowi.persiancalendar.shared.generated.resources.enable_exact_alarm_permission
 import com.byagowi.persiancalendar.shared.generated.resources.enable_notification
 import com.byagowi.persiancalendar.shared.generated.resources.events
@@ -341,12 +342,14 @@ fun SharedTransitionScope.CalendarScreen(
     var screenCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
     var isYearView by rememberSaveable { mutableStateOf(false) }
-    val backButtonFraction = remember { mutableFloatStateOf(if (isYearView) 1f else 0f) }
+    var isCalendarPagerVisible by remember { mutableStateOf(true) }
+    val backButtonFraction =
+        remember { mutableFloatStateOf(if (isYearView || !isCalendarPagerVisible) 1f else 0f) }
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
-    LaunchedEffect(isYearView, isAddEventBoxEnabled) {
+    LaunchedEffect(isYearView, isAddEventBoxEnabled, isCalendarPagerVisible) {
         animate(
             initialValue = backButtonFraction.floatValue,
-            targetValue = if (isYearView || isAddEventBoxEnabled) 1f else 0f,
+            targetValue = if (isYearView || isAddEventBoxEnabled || !isCalendarPagerVisible) 1f else 0f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
@@ -611,6 +614,9 @@ fun SharedTransitionScope.CalendarScreen(
                         isHighlighted = isHighlighted,
                         selectedDay = selectedDay,
                         bringDay = bringDay,
+                        isButtonsMode = isButtonsMode,
+                        toggleCalendarPager = { isCalendarPagerVisible = !isCalendarPagerVisible },
+                        isCalendarPagerVisible = isCalendarPagerVisible,
                     )
                 }
             }
@@ -789,13 +795,15 @@ fun SharedTransitionScope.CalendarScreen(
                         }
                     } else Column(Modifier.clip(materialCornerExtraLargeTop())) {
                         var calendarHeight by remember { mutableStateOf(pagerSize.height / 7 * 6) }
-                        CalendarPager(
-                            pagerModifier = Modifier
-                                .onSizeChanged {
-                                    calendarHeight = with(density) { it.height.toDp() }
-                                }
-                                .animateContentSize(appContentSizeAnimationSpec),
-                        )
+                        AnimatedVisibility(isCalendarPagerVisible) {
+                            CalendarPager(
+                                pagerModifier = Modifier
+                                    .onSizeChanged {
+                                        calendarHeight = with(density) { it.height.toDp() }
+                                    }
+                                    .animateContentSize(appContentSizeAnimationSpec),
+                            )
+                        }
                         val detailsMinHeight = maxHeight - calendarHeight
                         ScreenSurface(
                             workaroundClipBug = true,
@@ -1420,6 +1428,9 @@ private fun SharedTransitionScope.Toolbar(
     today: Jdn,
     now: Long,
     hasToolbarHeight: Boolean,
+    isButtonsMode: Boolean,
+    toggleCalendarPager: () -> Unit,
+    isCalendarPagerVisible: Boolean,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(
@@ -1431,12 +1442,14 @@ private fun SharedTransitionScope.Toolbar(
 
     val onBackPressed = {
         when {
+            isAddEventBoxEnabled -> onAddEventBoxEnabledChange(false)
+
+            !isCalendarPagerVisible -> toggleCalendarPager()
+
             isYearView -> {
                 onIsYearViewChange(false)
                 onYearViewCalendarChange(null)
             }
-
-            isAddEventBoxEnabled -> onAddEventBoxEnabledChange(false)
         }
     }
 
@@ -1469,37 +1482,60 @@ private fun SharedTransitionScope.Toolbar(
                         }
                     }
                 } else if (secondaryCalendar == null) {
-                    title = selectedMonth.monthName
+                    val selectedDate = selectedDay on mainCalendar
+                    title = if (isCalendarPagerVisible) selectedMonth.monthName else {
+                        language.dm.format(
+                            numeral.format(selectedDate.dayOfMonth),
+                            selectedDate.monthName,
+                        )
+                    }
                     subtitle = numeral.format(selectedMonth.year)
                 } else {
-                    title = language.my.format(
-                        selectedMonth.monthName, numeral.format(selectedMonth.year),
-                    )
                     val selectedDate = selectedDay on mainCalendar
+                    title = if (isCalendarPagerVisible) language.my.format(
+                        selectedMonth.monthName, numeral.format(selectedMonth.year),
+                    ) else language.dmy.format(
+                        numeral.format(selectedDate.dayOfMonth),
+                        selectedDate.monthName,
+                        numeral.format(selectedDate.year),
+                    )
                     val isCurrentMonth =
                         selectedDate.year == selectedMonth.year && selectedDate.month == selectedMonth.month
-                    if (isHighlighted && isCurrentMonth) {
+                    subtitle = if (!isCalendarPagerVisible) {
                         val selectedSecondaryDate = selectedDay on secondaryCalendar
-                        subtitle = language.my.format(
+                        language.dmy.format(
+                            numeral.format(selectedSecondaryDate.dayOfMonth),
+                            selectedSecondaryDate.monthName,
+                            numeral.format(selectedSecondaryDate.year),
+                        )
+                    } else if (isHighlighted && isCurrentMonth) {
+                        val selectedSecondaryDate = selectedDay on secondaryCalendar
+                        language.my.format(
                             selectedSecondaryDate.monthName,
                             numeral.format(selectedSecondaryDate.year),
                         )
                     } else {
-                        subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
+                        monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
                     }
                 }
             }
+            val isLandscape = isLandscape()
             Column(
                 Modifier
                     .clickable(
                         indication = null,
                         interactionSource = null,
                         onClickLabel = stringResource(
-                            if (isYearView && !yearViewIsInYearSelection) Res.string.select_year
-                            else Res.string.year_view,
+                            when {
+                                isButtonsMode && !isLandscape -> Res.string.day_view
+                                isYearView && !yearViewIsInYearSelection -> Res.string.select_year
+                                else -> Res.string.year_view
+                            },
                         ),
                     ) {
-                        if (isYearView) coroutineScope.launch {
+                        if (isButtonsMode && !isLandscape) {
+                            toggleCalendarPager()
+                        } else if (isYearView) coroutineScope.launch {
                             YearViewCommand.ToggleYearSelection.execute(
                                 yearViewLazyListState,
                                 yearViewScale,
@@ -1577,7 +1613,7 @@ private fun SharedTransitionScope.Toolbar(
         },
         colors = appTopAppBarColors(),
         navigationIcon = {
-            if (isYearView || isAddEventBoxEnabled) PredictiveBackHandler { flow ->
+            if (isYearView || isAddEventBoxEnabled || !isCalendarPagerVisible) PredictiveBackHandler { flow ->
                 runCatching {
                     flow.collect { backButtonFraction.floatValue = 1 - it.progress }
                 }.onSuccess { onBackPressed() }.onFailure {
