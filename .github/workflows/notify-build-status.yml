@@ -67,16 +67,17 @@ jobs:
           esac
           status_short="${icon} <a href=\"${CI_URL}\">Android CI</a> ${label}"
 
-          # One line per job, using names that mean something to a reader.
+          # One line per job, in workflow order, each linking to its log.
           job_lines="$(gh run view "$CI_RUN_ID" --json jobs --jq '
             def esc: gsub("(?<a>[<>&\"])"; .a | @html);
             def friendly:
               if startswith("build-and-test-jvm") then "Build, lint & JVM tests"
-              elif startswith("test-android") then
-                (if test("\\([^)]+\\)$") then
-                   "UI tests (Android " + (capture("\\((?<api>[^)]+)\\)").api) + " emulator)"
-                 else "UI tests (emulator)" end)
+              elif startswith("test-android") then "UI tests"
               else . end;
+            def order:
+              if startswith("build-and-test-jvm") then 0
+              elif startswith("test-android") then 1
+              else 2 end;
             def icon:
               if . == "success" then "✅"
               elif . == "failure" then "❌"
@@ -85,11 +86,14 @@ jobs:
               else "⚠️" end;
 
             .jobs
-            | map("• \(.conclusion | icon) \(.name | friendly | esc)")
+            | sort_by(.name | order)
+            | map("\(.conclusion | icon) <a href=\"\(.url | esc)\">\(.name | friendly | esc)</a>")
             | join("\n")' 2>/dev/null || true)"
 
+          # The job lines replace the pending lines; without them, fall back
+          # to the single-line result.
           status="$status_short"
-          [[ -n "$job_lines" ]] && status="${status_short}"$'\n'"${job_lines}"
+          [[ -n "$job_lines" ]] && status="$job_lines"
 
           # Edit the last message only; earlier ones are just the overflow of a
           # long commit list. The status is inserted above the footer.

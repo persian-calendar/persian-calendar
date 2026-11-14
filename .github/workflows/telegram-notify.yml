@@ -24,7 +24,7 @@ jobs:
 
           # Keep these labels in sync with the job names mapped in
           # notify-build-status.yml. They are escaped for the HTML parse mode.
-          pending_block=$'⏳ Android CI is running…\n• ⏳ Build, lint &amp; JVM tests\n• ⏳ UI tests (Android 29 emulator)'
+          pending_block=$'⏳ Build, lint &amp; JVM tests\n⏳ UI tests'
 
           jq -c --arg chat_id "$TELEGRAM_CHAT_ID" --arg pending "$pending_block" '
             # Telegram counts the 4096 character limit in UTF-16 code units.
