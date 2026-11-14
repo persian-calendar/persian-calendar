@@ -64,18 +64,34 @@ jobs:
           esac
           status_short="${icon} <a href=\"${CI_URL}\">Android CI</a> ${label}"
 
-          detail=''
-          if [[ "$CONCLUSION" != 'success' ]]; then
-            failed_jobs="$(gh run view "$CI_RUN_ID" --json jobs \
-              --jq '[.jobs[] | select(.conclusion != "success" and .conclusion != "skipped") | .name] | join(", ")' \
-              2>/dev/null || true)"
-            [[ -n "$failed_jobs" ]] && detail=" — ${failed_jobs}"
-          fi
+          # One line per job, using names that mean something to a reader.
+          job_lines="$(gh run view "$CI_RUN_ID" --json jobs --jq '
+            def esc: gsub("(?<a>[<>&\"])"; .a | @html);
+            def friendly:
+              if startswith("build-and-test-jvm") then "Build, lint & JVM tests"
+              elif startswith("test-android") then
+                (if test("\\([^)]+\\)$") then
+                   "UI tests (Android " + (capture("\\((?<api>[^)]+)\\)").api) + " emulator)"
+                 else "UI tests (emulator)" end)
+              else . end;
+            def icon:
+              if . == "success" then "✅"
+              elif . == "failure" then "❌"
+              elif . == "cancelled" then "⏹"
+              elif . == "skipped" then "⏭️"
+              else "⚠️" end;
+
+            .jobs
+            | map("\(.conclusion | icon) \(.name | friendly | esc)")
+            | join("\n")' 2>/dev/null || true)"
+
+          status="$status_short"
+          [[ -n "$job_lines" ]] && status="${status_short}"$'\n'"${job_lines}"
 
           # Edit the last message only; earlier ones are just the overflow of a
           # long commit list. The status is inserted above the footer.
           payload="$(jq -c \
-            --arg status "${status_short}${detail}" \
+            --arg status "$status" \
             --arg status_short "$status_short" '
               def w: if . > 65535 then 2 else 1 end;
               def u16len: [explode[] | w] | add // 0;
@@ -85,8 +101,8 @@ jobs:
               .messages[-1] as $last
               | $last.text as $text
               | ($text | contains(waiting)) as $pending
-              # Drop the failed job list first, then fall back to replacing the
-              # footer, so the edited text can never exceed the 4096 limit.
+              # With per-job lines too long, fall back to the one-line status
+              # so the edited text can never exceed the 4096 limit.
               | (if (($text | u16len) + ($status | u16len) + 2) > 4096
                  then $status_short else $status end) as $line
               # Normal case: the pending line becomes the result. Messages sent
