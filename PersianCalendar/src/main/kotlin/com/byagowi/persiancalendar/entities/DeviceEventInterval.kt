@@ -29,8 +29,12 @@ class DeviceEventInterval(
         return start.timeInMillis to end.timeInMillis
     }
 
-    fun occupies(date: CivilDate): Boolean {
-        val (dayStart, dayEnd) = dayBounds(date)
+    fun occupies(date: CivilDate): Boolean = overlaps(date, CivilDate(date.toJdn() + 1))
+
+    /** Whether this occurrence intersects the half-open range of civil dates. */
+    fun overlaps(first: CivilDate, exclusiveEnd: CivilDate): Boolean {
+        val dayStart = startOfDay(first, timeZone).timeInMillis
+        val dayEnd = startOfDay(exclusiveEnd, timeZone).timeInMillis
         if (dayStart >= dayEnd) return false
         // Preserve point events and records with missing/invalid ends on their start day.
         if (endMillis <= beginMillis) return beginMillis >= dayStart && beginMillis < dayEnd

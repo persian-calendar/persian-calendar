@@ -9,16 +9,23 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  update:
+  generate:
     runs-on: ubuntu-latest
+    outputs:
+      revision: ${{ steps.source.outputs.revision }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ inputs.ref }}
           submodules: true
+          persist-credentials: false
+
+      - name: Record source revision
+        id: source
+        run: echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK
         uses: actions/setup-java@v6.2.0
@@ -29,14 +36,69 @@ jobs:
       - name: Regenerate dependency reports
         run: ./gradlew PersianCalendar:updateDependenciesReport wear:updateDependenciesReport
 
-      - name: Commit and push report
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: dependency-reports
+          if-no-files-found: error
+          path: |
+            PersianCalendar/runtime-dependencies-report.txt
+            wear/runtime-dependencies-report.txt
+
+  commit:
+    needs: generate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ needs.generate.outputs.revision }}
+          persist-credentials: false
+
+      - name: Download reports
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: gh run download "$RUN_ID" --name dependency-reports --dir "$RUNNER_TEMP/dependency-reports"
+
+      - name: Validate and copy report files
+        shell: python
         run: |
+          import os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"]) / "dependency-reports"
+          for module in ("PersianCalendar", "wear"):
+              relative = Path(module) / "runtime-dependencies-report.txt"
+              source = root / relative
+              target = Path.cwd() / relative
+              for path in (root, source.parent, source, target.parent, target):
+                  if path.is_symlink():
+                      raise ValueError(f"Symlink rejected: {path}")
+              if not source.is_file() or source.stat().st_size > 5 * 1024 * 1024:
+                  raise ValueError(f"Invalid report: {source}")
+              data = source.read_bytes()
+              data.decode("utf-8")
+              if b"\0" in data:
+                  raise ValueError("Report must be plain text")
+              target.write_bytes(data)
+
+      - name: Commit and push report
+        env:
+          TARGET_REF: ${{ inputs.ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git check-ref-format "refs/heads/$TARGET_REF"
+          git config core.hooksPath /dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add PersianCalendar/runtime-dependencies-report.txt wear/runtime-dependencies-report.txt
+          git -c core.attributesFile=/dev/null add -- PersianCalendar/runtime-dependencies-report.txt wear/runtime-dependencies-report.txt
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
           git commit -m "Update the runtime dependencies report"
-          git push origin "HEAD:${{ inputs.ref }}"
+          # A normal push rejects a branch changed since generation; never overwrite it.
+          gh auth setup-git
+          git push origin "HEAD:refs/heads/$TARGET_REF"

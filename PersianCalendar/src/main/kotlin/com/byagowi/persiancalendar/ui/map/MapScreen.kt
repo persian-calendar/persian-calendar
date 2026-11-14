@@ -112,7 +112,9 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toEarthPosition
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -132,10 +134,19 @@ fun SharedTransitionScope.MapScreen(
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalResources.current
-    val mapDraw = remember(resources) { MapDraw(resources) }
+    var mapDraw by remember(resources) { mutableStateOf(MapDraw(resources)) }
 
     val timeInMillis = rememberSaveable { mutableLongStateOf(initialTime) }
     var mapType by rememberSaveable { mutableStateOf(MapType.DAY_NIGHT) }
+    LaunchedEffect(resources, timeInMillis.longValue, mapType, language) {
+        val requestedTime = timeInMillis.longValue
+        val requestedType = mapType
+        // The displayed renderer stays untouched until a complete replacement is ready.
+        // withContext also prevents a cancelled request from publishing a stale result.
+        mapDraw = withContext(Dispatchers.Default) {
+            MapDraw(resources).apply { updateMapAsync(requestedTime, requestedType) }
+        }
+    }
     var displayLocation by rememberSaveable { mutableStateOf(true) }
     var displayGrid by rememberSaveable { mutableStateOf(false) }
     var isDirectPathMode by rememberSaveable { mutableStateOf(false) }
@@ -195,7 +206,7 @@ fun SharedTransitionScope.MapScreen(
     }
 
     val context = LocalContext.current
-    var formattedTime by remember { mutableStateOf("") }
+    val formattedTime = mapDraw.maskFormattedTime
     Box(modifier = modifier) {
         ScreenSurface(
             modifier = Modifier.padding(
@@ -252,8 +263,6 @@ fun SharedTransitionScope.MapScreen(
             val mapSize = min(width / 2, height)
             val contentScale = mapSize / mapDraw.mapHeight
             mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-            mapDraw.updateMap(timeInMillis.longValue, mapType)
-            formattedTime = mapDraw.maskFormattedTime
             translate(
                 left = offsetX.floatValue.mod(mapSize * 2 * scale.floatValue),
                 top = offsetY.floatValue,
@@ -288,8 +297,6 @@ fun SharedTransitionScope.MapScreen(
         showGlobeView = false
     }.getOrNull()?.let { bitmap ->
         mapDraw.drawKaaba = coordinates != null && displayLocation && showQibla
-        mapDraw.updateMap(timeInMillis.longValue, mapType)
-        formattedTime = mapDraw.maskFormattedTime
         bitmap.applyCanvas {
             val scale = globeTextureSize / 2f / mapDraw.mapHeight
             withScale(x = scale, y = scale * 2) {

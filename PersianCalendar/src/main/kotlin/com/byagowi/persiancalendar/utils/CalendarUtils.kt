@@ -216,11 +216,15 @@ internal fun readDeviceEvents(
                 CalendarContract.Instances.DISPLAY_COLOR, // 8
                 CalendarContract.Instances.CALENDAR_ID, // 9
             ),
-            selection,
-            selectionArgs,
-            CalendarContract.Instances.BEGIN + " ASC LIMIT ${
-                limit * if (searchTerm != null) 3 else 1
-            }",
+            listOfNotNull(
+                "${CalendarContract.Instances.VISIBLE} = 1",
+                settings.excludedIds.takeIf { it.isNotEmpty() }?.let { ids ->
+                    "${CalendarContract.Instances.CALENDAR_ID} NOT IN (${ids.joinToString { "?" }})"
+                },
+                selection,
+            ).joinToString(" AND "),
+            (settings.excludedIds.map(Long::toString) + selectionArgs.orEmpty()).toTypedArray(),
+            CalendarContract.Instances.BEGIN + " ASC",
             cancellationSignal,
         )?.use { cursor ->
             generateSequence {
@@ -255,7 +259,11 @@ internal fun readDeviceEvents(
                     isHoliday = it.getLong(9) in settings.holidayIds,
                     source = null,
                 )
-            }.take(limit).toList()
+            }.filter {
+                it.interval.overlaps(startingDate.toCivilDate(), endingDate.toCivilDate())
+            // Search ranks upcoming occurrences before past ones at the call site. Do not
+            // discard those occurrences here simply because the provider sorts oldest first.
+            }.take(if (searchTerm.isNullOrBlank()) limit else Int.MAX_VALUE).toList()
         } ?: emptyList()
     }
     cancellationSignal?.throwIfCanceled()
