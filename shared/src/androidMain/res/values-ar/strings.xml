@@ -423,6 +423,9 @@
     <string name="compatibility_neutral">محايد</string>
     <string name="compatibility_worse">أسوأ</string>
     <string name="compatibility_worst">الأسوأ</string>
+    <string name="inch">بوصة</string>
+    <string name="centimeter">سنتيمتر</string>
+    <string name="kilometer">كيلومتر</string>
     <plurals name="shift_work_record_title">
         <item quantity="zero">لا يوم %2$s</item>
         <item quantity="one">يوم واحد %2$s</item>

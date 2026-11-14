@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.tectonicplates
 import com.byagowi.persiancalendar.generated.timezones
 import com.byagowi.persiancalendar.generated.worldmap
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -50,6 +51,7 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
+import com.byagowi.persiancalendar.shared.R as SharedR
 
 class MapDraw(
     resources: Resources,
@@ -59,6 +61,7 @@ class MapDraw(
 ) {
     private val solarDraw = SolarDraw(resources)
     private val pinDrawable = resources.getDrawable(R.drawable.ic_pin, null)
+    private val kilometerUnit = resources.getString(SharedR.string.kilometer)
 
     val mapScaleFactor = 16 // As the path bounds is 360x180 *16
     val mapWidth = 360 * mapScaleFactor
@@ -399,7 +402,9 @@ class MapDraw(
             ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
             val heading = coordinates.toEarthHeading(directPathDestination)
             canvas.withRotation(textDegree, center.first, center.second) {
-                drawText(heading.km, center.first, center.second - 2 * dp, textPaint)
+                val distance = language.preferredNumeral.formatLongNumber(heading.km) +
+                    " " + kilometerUnit
+                drawText(distance, center.first, center.second - 2 * dp, textPaint)
             }
         }
         if (displayGrid) {

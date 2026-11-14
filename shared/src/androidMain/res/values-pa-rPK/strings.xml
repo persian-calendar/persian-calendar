@@ -399,6 +399,9 @@
     <string name="compatibility_neutral">درمیانہ</string>
     <string name="compatibility_worse">بدتر</string>
     <string name="compatibility_worst">بدترین</string>
+    <string name="inch">انچ</string>
+    <string name="centimeter">سینٹی میٹر</string>
+    <string name="kilometer">کلومیٹر</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s دن %2$s</item>
         <item quantity="other">%1$s دن %2$s</item>

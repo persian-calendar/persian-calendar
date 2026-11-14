@@ -106,6 +106,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.astronomy
 import com.byagowi.persiancalendar.shared.generated.resources.day
 import com.byagowi.persiancalendar.shared.generated.resources.horoscope
+import com.byagowi.persiancalendar.shared.generated.resources.kilometer
 import com.byagowi.persiancalendar.shared.generated.resources.map
 import com.byagowi.persiancalendar.shared.generated.resources.moon
 import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
@@ -700,7 +701,10 @@ private fun SharedTransitionScope.SolarDisplay(
                     }
                     SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
                         Text(
-                            text = language.formatAuAsKm(astronomyState.moon.dist),
+                            text = language.formatAuAsKm(
+                                astronomyState.moon.dist,
+                                kilometer = stringResource(Res.string.kilometer),
+                            ),
                             color = LocalContentColor.current.copy(alpha = AppBlendAlpha),
                             modifier = Modifier.padding(bottom = 24.dp),
                         )

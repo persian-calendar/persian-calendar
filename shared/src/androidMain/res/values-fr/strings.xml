@@ -401,6 +401,9 @@
     <string name="compatibility_neutral">Neutre</string>
     <string name="compatibility_worse">Mauvais</string>
     <string name="compatibility_worst">Très mauvais</string>
+    <string name="inch">pouce</string>
+    <string name="centimeter">cm</string>
+    <string name="kilometer">km</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s jour %2$s</item>
         <item quantity="other">%1$s jours %2$s</item>

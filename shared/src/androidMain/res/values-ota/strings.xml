@@ -399,6 +399,9 @@
     <string name="compatibility_neutral">اورتا</string>
     <string name="compatibility_worse">دها یامان</string>
     <string name="compatibility_worst">ان یامان</string>
+    <string name="inch">اینچ</string>
+    <string name="centimeter">سانتی‌متر</string>
+    <string name="kilometer">کیلومتر</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s گون</item>
         <item quantity="other">%1$s %2$s گون</item>

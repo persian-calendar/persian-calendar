@@ -399,6 +399,9 @@
     <string name="compatibility_neutral">三會</string>
     <string name="compatibility_worse">六沖</string>
     <string name="compatibility_worst">口舌</string>
+    <string name="inch">英寸</string>
+    <string name="centimeter">公分</string>
+    <string name="kilometer">公里</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%1$s %2$s 天</item>
     </plurals>

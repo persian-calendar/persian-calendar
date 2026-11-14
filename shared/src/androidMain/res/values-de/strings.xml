@@ -399,6 +399,9 @@
     <string name="compatibility_neutral">Neutral</string>
     <string name="compatibility_worse">Weniger gut</string>
     <string name="compatibility_worst">Am schlechtesten</string>
+    <string name="inch">Zoll</string>
+    <string name="centimeter">cm</string>
+    <string name="kilometer">km</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s Tag</item>
         <item quantity="other">%1$s %2$s Tage</item>

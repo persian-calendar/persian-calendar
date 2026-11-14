@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.shared.generated.resources.Res
 import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.black_moon
 import com.byagowi.persiancalendar.shared.generated.resources.horoscope
+import com.byagowi.persiancalendar.shared.generated.resources.kilometer
 import com.byagowi.persiancalendar.shared.generated.resources.moon_in_scorpio
 import com.byagowi.persiancalendar.shared.generated.resources.select_year
 import com.byagowi.persiancalendar.shared.generated.resources.year_name
@@ -154,7 +155,10 @@ fun HoroscopeDialog(
                     formatAngle(longitude % 30), // Remaining angle
                     Zodiac.fromTropical(longitude).symbol,
                     if (language.isArabicScript) RLM else "",
-                    language.formatAuAsKm(distance),
+                    language.formatAuAsKm(
+                        distance,
+                        kilometer = stringResource(Res.string.kilometer),
+                    ),
                 )
             }
 

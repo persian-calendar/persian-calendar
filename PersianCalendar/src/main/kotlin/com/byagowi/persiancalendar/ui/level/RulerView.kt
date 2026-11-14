@@ -12,9 +12,12 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastRoundToInt
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.centimeter
+import com.byagowi.persiancalendar.shared.generated.resources.inch
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RulerView(
@@ -31,6 +34,8 @@ fun RulerView(
     val textStyle = LocalTextStyle.current.copy(
         fontSize = 12.sp * if (numeral.isArabicIndicVariants) 1.4f else 1f,
     )
+    val inchUnit = stringResource(Res.string.inch)
+    val centimeterUnit = stringResource(Res.string.centimeter)
     val outlineColor = MaterialTheme.colorScheme.outline
     Canvas(modifier) {
         fun ruler(gap: Float, end: Boolean, unit: String, subdivisions: Int) {
@@ -67,7 +72,7 @@ fun RulerView(
                 )
             }
         }
-        ruler(gap = dpi, end = cmInchFlip, unit = language.inch, subdivisions = 4)
-        ruler(gap = dpi / 2.54f, end = !cmInchFlip, unit = language.centimeter, subdivisions = 10)
+        ruler(gap = dpi, end = cmInchFlip, unit = inchUnit, subdivisions = 4)
+        ruler(gap = dpi / 2.54f, end = !cmInchFlip, unit = centimeterUnit, subdivisions = 10)
     }
 }

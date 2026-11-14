@@ -50,11 +50,12 @@ import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.centimeter
 import com.byagowi.persiancalendar.shared.generated.resources.compass
 import com.byagowi.persiancalendar.shared.generated.resources.exit_full_screen
 import com.byagowi.persiancalendar.shared.generated.resources.full_screen
+import com.byagowi.persiancalendar.shared.generated.resources.inch
 import com.byagowi.persiancalendar.shared.generated.resources.level
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
@@ -113,7 +114,7 @@ fun SharedTransitionScope.LevelScreen(
                         )
                         AppIconButton(
                             icon = syncAltIcon,
-                            title = language.centimeter + " / " + language.inch,
+                            title = stringResource(Res.string.centimeter) + " / " + stringResource(Res.string.inch),
                             modifier = Modifier.rotate(rotation),
                         ) { cmInchFlip = !cmInchFlip }
                     }

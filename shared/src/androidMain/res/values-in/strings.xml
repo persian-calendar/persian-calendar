@@ -399,6 +399,9 @@
     <string name="compatibility_neutral">Netral</string>
     <string name="compatibility_worse">Buruk</string>
     <string name="compatibility_worst">Terburuk</string>
+    <string name="inch">inci</string>
+    <string name="centimeter">cm</string>
+    <string name="kilometer">km</string>
     <plurals name="shift_work_record_title">
         <item quantity="other">%1$s %2$s hari</item>
     </plurals>

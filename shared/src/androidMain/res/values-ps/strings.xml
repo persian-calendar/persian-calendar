@@ -401,6 +401,9 @@
     <string name="compatibility_neutral">منځنی</string>
     <string name="compatibility_worse">بد</string>
     <string name="compatibility_worst">تر ټولو بد</string>
+    <string name="inch">انچ</string>
+    <string name="centimeter">سانتي‌متر</string>
+    <string name="kilometer">کيلومتر</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">یوه ورځ %2$s</item>
         <item quantity="other">%1$s ورځې %2$s</item>

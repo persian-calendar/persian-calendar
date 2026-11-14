@@ -401,6 +401,9 @@
     <string name="compatibility_neutral">Миёна</string>
     <string name="compatibility_worse">Бадтар</string>
     <string name="compatibility_worst">Бадтарин</string>
+    <string name="inch">дюйм</string>
+    <string name="centimeter">см</string>
+    <string name="kilometer">км</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s рӯз %2$s</item>
         <item quantity="other">%1$s рӯз %2$s</item>

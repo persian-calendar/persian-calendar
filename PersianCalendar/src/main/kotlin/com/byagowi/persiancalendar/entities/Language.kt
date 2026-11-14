@@ -480,26 +480,8 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    fun formatAuAsKm(value: Double): String = formatKm((value * AU_IN_KM).roundToLong())
-    fun formatKm(value: Long): String = preferredNumeral.formatLongNumber(value) + " " + kilometer
-
-    val inch
-        get() = when {
-            isArabicScript -> "اینچ"
-            else -> "in"
-        }
-
-    val centimeter
-        get() = when {
-            isArabicScript -> "سانتی‌متر"
-            else -> "cm"
-        }
-
-    val kilometer
-        get() = when {
-            isArabicScript -> "کیلومتر"
-            else -> "km"
-        }
+    fun formatAuAsKm(value: Double, kilometer: String): String =
+        preferredNumeral.formatLongNumber((value * AU_IN_KM).roundToLong()) + " " + kilometer
 
     companion object {
         @Suppress("ConstantLocale")

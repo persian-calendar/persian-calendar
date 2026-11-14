@@ -403,6 +403,9 @@
     <string name="compatibility_neutral">ناوەند</string>
     <string name="compatibility_worse">خراپتر</string>
     <string name="compatibility_worst">خراپترین</string>
+    <string name="inch">ئینچ</string>
+    <string name="centimeter">سانتیمەتر</string>
+    <string name="kilometer">کیلۆمەتر</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">ڕۆژێک %2$s</item>
         <item quantity="other">%1$s ڕۆژ %2$s</item>

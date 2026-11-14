@@ -401,6 +401,9 @@
     <string name="compatibility_neutral">सामान्य</string>
     <string name="compatibility_worse">नराम्रो</string>
     <string name="compatibility_worst">अत्यन्त नराम्रो</string>
+    <string name="inch">इन्च</string>
+    <string name="centimeter">सेमी</string>
+    <string name="kilometer">किमी</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s दिन</item>
         <item quantity="other">%1$s %2$s दिनहरु</item>

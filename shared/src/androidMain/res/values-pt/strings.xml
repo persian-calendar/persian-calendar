@@ -399,6 +399,9 @@
     <string name="compatibility_neutral">Neutra</string>
     <string name="compatibility_worse">Ruim</string>
     <string name="compatibility_worst">Péssima</string>
+    <string name="inch">polegada</string>
+    <string name="centimeter">cm</string>
+    <string name="kilometer">km</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s dia</item>
         <item quantity="other">%1$s %2$s dias</item>

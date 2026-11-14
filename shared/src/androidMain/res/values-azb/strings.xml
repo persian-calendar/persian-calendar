@@ -407,6 +407,9 @@
     <string name="compatibility_neutral">بیتاراف</string>
     <string name="compatibility_worse">داها پیس</string>
     <string name="compatibility_worst">لاپ پیس</string>
+    <string name="inch">اینچ</string>
+    <string name="centimeter">سانتی‌متر</string>
+    <string name="kilometer">کیلومتر</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s گۆن %2$s</item>
         <item quantity="other">%1$s گۆن %2$s</item>
