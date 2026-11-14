@@ -17,6 +17,20 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class DeviceCalendarEventsTests {
+    @Test
+    fun `query padding does not consume the eligible result limit`() {
+        val first = CivilDate(2026, 10, 12)
+        val end = CivilDate(2026, 10, 13)
+        val padding = interval("2026-10-11T00:00:00Z", "2026-10-12T00:00:00Z", true, "UTC")
+        val eligible = interval("2026-10-12T00:00:00Z", "2026-10-13T00:00:00Z", true, "UTC")
+        val nextDay = interval("2026-10-13T00:00:00Z", "2026-10-14T00:00:00Z", true, "UTC")
+        assertFalse(padding.overlaps(first, end))
+        assertTrue(eligible.overlaps(first, end))
+        assertFalse(nextDay.overlaps(first, end))
+        assertEquals(listOf(eligible), (List(120) { padding } + eligible + nextDay)
+            .asSequence().filter { it.overlaps(first, end) }.take(120).toList())
+    }
+
     private val zones = listOf("America/Los_Angeles", "Asia/Tehran", "UTC")
     private fun millis(instant: String): Long = assertNotNull(
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT).apply {
