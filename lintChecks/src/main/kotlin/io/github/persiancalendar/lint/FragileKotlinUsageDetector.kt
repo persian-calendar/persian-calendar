@@ -17,9 +17,9 @@ import org.jetbrains.uast.UThrowExpression
  * Guards against Kotlin shortcuts which fail hard instead of modelling an outcome: `!!`,
  * `error(...)`, `require(...)`/`requireNotNull(...)`, `check(...)`/`checkNotNull(...)`,
  * `TODO()` and any `throw` statement. Vendored sources under `libs/` are exempt. Debug-only
- * assertions belong in `(null).debugAssertNotNull` or `assert(...)` instead.
+ * assertions belong in `null.debugAssertNotNull` or `assert(...)` instead.
  *
- * Assertions which must fail only in debug builds belong in `(null).debugAssertNotNull`.
+ * Assertions which must fail only in debug builds belong in `null.debugAssertNotNull`.
  */
 class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
 
@@ -76,7 +76,7 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
             context.report(
                 issue = THROW_ISSUE,
                 location = context.getLocation(node),
-                message = "Avoid `throw`, return a fallback value instead, or use `(null).debugAssertNotNull` for assertions which must only fail in debug builds.",
+                message = "Avoid `throw`, return a fallback value instead, or use `null.debugAssertNotNull` for assertions which must only fail in debug builds.",
             )
         }
     }
@@ -150,7 +150,7 @@ class FragileKotlinUsageDetector : Detector(), SourceCodeScanner {
         val THROW_ISSUE = Issue.create(
             id = "ThrowUsage",
             briefDescription = "Throw statement usage",
-            explanation = "Avoid `throw`; return a fallback value or a `Result` instead. For assertions which must only fail in debug builds use `(null).debugAssertNotNull`.",
+            explanation = "Avoid `throw`; return a fallback value or a `Result` instead. For assertions which must only fail in debug builds use `null.debugAssertNotNull`.",
             category = Category.CORRECTNESS,
             priority = 6,
             severity = Severity.WARNING,

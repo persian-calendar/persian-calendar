@@ -329,7 +329,7 @@ private data class DeviceEventsRequest(
         get() = query == DeviceEventsQuery.Detailed &&
                 days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
 
-    fun covers(jdn: Jdn) = (jdn - startJdn) in 0 until days
+    fun covers(jdn: Jdn) = (jdn - startJdn) in 0..<days
 }
 
 private fun detailedDeviceEventsRequest(startJdn: Jdn, days: Int, limit: Int) =
@@ -565,7 +565,7 @@ class DeviceCalendarEventsCache internal constructor(
         if (days <= 0) return
         val environment = environment ?: return
         if (!environment.canQuery || !isResumed) return
-        val missing = (0 until days).map { start + it }.filter { day ->
+        val missing = (0..<days).map { start + it }.filter { day ->
             !entries[deviceEventsOfDayRequest(day)].isReusable(environment.generation)
         }
         if (missing.isEmpty()) return
@@ -702,7 +702,7 @@ class DeviceCalendarEventsCache internal constructor(
             val request = iterator.next().key
             if (requests.containsKey(request)) continue
             if (protectPreload && request.isDay && start != null && preloadDays > 0 &&
-                (request.startJdn - start) in 0 until preloadDays
+                (request.startJdn - start) in 0..<preloadDays
             ) continue
             iterator.remove()
             entries.remove(request)

@@ -10,6 +10,7 @@ class CustomIssueRegistry : IssueRegistry() {
         FragileKotlinUsageDetector.ERROR_FUNCTION_ISSUE,
         FragileKotlinUsageDetector.THROW_ISSUE,
         SuppressLintDetector.ISSUE,
+        UntilUsageDetector.ISSUE,
         ElvisEmptyStringDetector.ISSUE,
         DebugAssertNotNullSafeCallDetector.ISSUE,
         TryCatchDetector.ISSUE,
