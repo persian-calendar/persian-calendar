@@ -151,7 +151,7 @@
     <string name="pray_methods">مۊحاسبه شيوهان</string>
     <string name="pray_methods_calculation">اؤقاتˇشرعي شيوهانأ مۊحاسبه کۊدن</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
-    <string name="athan_gap_summary">چن دقه به اذان بمانسته, زنگ صدا بۊخۊره</string>
+    <string name="athan_gap_summary">چن دقه به اذان بمانسته, زنگ صدا بۊخۊره؟</string>
     <string name="athan_alarm">اذانان</string>
     <string name="athan_alarm_summary">أ نمازانˇره اذان بگه</string>
     <string name="custom_athan">اذانˇدؤجين کۊدن</string>

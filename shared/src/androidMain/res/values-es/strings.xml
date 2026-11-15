@@ -160,7 +160,7 @@
     <string name="pray_methods">Métodos de cálculo</string>
     <string name="pray_methods_calculation">Métodos de cálculo para los tiempos de oración y la brújula de la alquibla</string>
     <string name="athan_gap">Demora de azán</string>
-    <string name="athan_gap_summary">Cuánto tiempo antes del azán debe activarse la alarma (en minutos)</string>
+    <string name="athan_gap_summary">¿Cuánto tiempo antes del azán debe activarse la alarma (en minutos)?</string>
     <string name="athan_alarm">Alarma de azán</string>
     <string name="athan_alarm_summary">Activar la alarma de azán para estas oraciones</string>
     <string name="custom_athan">Elegir azán</string>

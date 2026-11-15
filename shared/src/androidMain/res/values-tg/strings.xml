@@ -151,7 +151,7 @@
     <string name="pray_methods">Усулҳои ҳисоб</string>
     <string name="pray_methods_calculation">Усулҳои ҳисоб барои вақти намоз ва компаси қибла</string>
     <string name="athan_gap">Масофаи азон</string>
-    <string name="athan_gap_summary">Чанд дақиқа пеш аз азон, ҳушдор бояд садо диҳад</string>
+    <string name="athan_gap_summary">Чанд дақиқа пеш аз азон, ҳушдор бояд садо диҳад?</string>
     <string name="athan_alarm">Азонҳо</string>
     <string name="athan_alarm_summary">Барои ин намозҳо азон гуфта шавад</string>
     <string name="custom_athan">Азонро интихоб кунед</string>

@@ -152,7 +152,7 @@
     <string name="pray_methods">شێوازەکانی حیسابکردن</string>
     <string name="pray_methods_calculation">شێوازەکانی حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
     <string name="athan_gap">مەودای بانگ</string>
-    <string name="athan_gap_summary">چەند خولەک بەر لە بانگی مزگەوت، بەرنامە بانگ بدا</string>
+    <string name="athan_gap_summary">چەند خولەک بەر لە بانگی مزگەوت، بەرنامە بانگ بدا؟</string>
     <string name="athan_alarm">بانگەکان</string>
     <string name="athan_alarm_summary">بۆ ئەم نوێژانە بانگ بدرێ</string>
     <string name="custom_athan">ھەڵبژاردنی بانگ</string>
@@ -407,7 +407,7 @@
     <string name="centimeter">سانتیمەتر</string>
     <string name="kilometer">کیلۆمەتر</string>
     <plurals name="shift_work_record_title">
-        <item quantity="one">ڕۆژێک %2$s</item>
+        <item quantity="one">%1$s ڕۆژ %2$s</item>
         <item quantity="other">%1$s ڕۆژ %2$s</item>
     </plurals>
     <plurals name="work_days">

@@ -151,7 +151,7 @@
     <string name="pray_methods">Hesaplama yöntemleri</string>
     <string name="pray_methods_calculation">Namaz vakitleri ve Kıble pusulası için hesaplama yöntemleri</string>
     <string name="athan_gap">Ezan Aralığı</string>
-    <string name="athan_gap_summary">Uyarı ezandan kaç dakika önce yapılsın</string>
+    <string name="athan_gap_summary">Uyarı ezandan kaç dakika önce yapılsın?</string>
     <string name="athan_alarm">Ezan Alarmı</string>
     <string name="athan_alarm_summary">Namaz vakti için ezan uyarıları</string>
     <string name="custom_athan">Ezan seç</string>

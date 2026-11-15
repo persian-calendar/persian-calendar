@@ -160,7 +160,7 @@
     <string name="pray_methods">طرق الحساب</string>
     <string name="pray_methods_calculation">طرق حساب أوقات الصلاة والقبلة</string>
     <string name="athan_gap">تقديم الأذان</string>
-    <string name="athan_gap_summary">تقديم الأذان (بالدقائق)</string>
+    <string name="athan_gap_summary">تقديم الأذان (بالدقائق)؟</string>
     <string name="athan_alarm">تنبيهات الأذان</string>
     <string name="athan_alarm_summary">تفعيل تنبيه الأذان لهذه الصلوات</string>
     <string name="custom_athan">اختيار صوت المؤذن</string>
@@ -427,9 +427,9 @@
     <string name="centimeter">سنتيمتر</string>
     <string name="kilometer">كيلومتر</string>
     <plurals name="shift_work_record_title">
-        <item quantity="zero">لا يوم %2$s</item>
-        <item quantity="one">يوم واحد %2$s</item>
-        <item quantity="two">يومين %2$s</item>
+        <item quantity="zero">%1$s يوم %2$s</item>
+        <item quantity="one">%1$s يوم %2$s</item>
+        <item quantity="two">%1$s يومين %2$s</item>
         <item quantity="few">%1$s أيام %2$s</item>
         <item quantity="many">%1$s يوما %2$s</item>
         <item quantity="other">%1$s يوم %2$s</item>

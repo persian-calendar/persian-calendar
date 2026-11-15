@@ -149,7 +149,7 @@
     <string name="pray_methods">Berechnungsmethoden</string>
     <string name="pray_methods_calculation">Berechnungsmethoden für Gebetszeiten und Qibla-Kompass</string>
     <string name="athan_gap">Adhan Lücke</string>
-    <string name="athan_gap_summary">Wie lange vor dem Adhan soll der Alarm ausgelöst werden (in Minuten)</string>
+    <string name="athan_gap_summary">Wie lange vor dem Adhan soll der Alarm ausgelöst werden (in Minuten)?</string>
     <string name="athan_alarm">Adhan-Alarm</string>
     <string name="athan_alarm_summary">Gebete, für die der Alarm ausgelöst werden soll</string>
     <string name="custom_athan">Adhan wählen</string>

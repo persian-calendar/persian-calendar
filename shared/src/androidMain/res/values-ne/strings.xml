@@ -151,7 +151,7 @@
     <string name="pray_methods">गणना विधिहरू</string>
     <string name="pray_methods_calculation">प्रार्थना समय र किब्ला कम्पासका लागि गणना विधिहरू</string>
     <string name="athan_gap">एथन ग्याप</string>
-    <string name="athan_gap_summary">एथन भन्दा कति समय अगाडि अलार्म ट्रिगर गर्नुपर्छ (मिनेटमा)</string>
+    <string name="athan_gap_summary">एथन भन्दा कति समय अगाडि अलार्म ट्रिगर गर्नुपर्छ (मिनेटमा)?</string>
     <string name="athan_alarm">एथन अलार्म</string>
     <string name="athan_alarm_summary">अलार्म ट्रिगर गर्नुपर्ने प्रार्थनाहरू</string>
     <string name="custom_athan">एथन चयन गर्नुहोस्</string>

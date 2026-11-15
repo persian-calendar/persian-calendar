@@ -152,7 +152,7 @@
     <string name="pray_methods">شیوه‌های محاسبه</string>
     <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
-    <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا درآورده شود</string>
+    <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا درآورده شود؟</string>
     <string name="athan_alarm">اذان‌ها</string>
     <string name="athan_alarm_summary">برای این نمازها اذان گفته شود</string>
     <string name="custom_athan">انتخاب اذان</string>
@@ -411,7 +411,7 @@
     <string name="centimeter">سانتی‌متر</string>
     <string name="kilometer">کیلومتر</string>
     <plurals name="shift_work_record_title">
-        <item quantity="one">یک روز %2$s</item>
+        <item quantity="one">%1$s روز %2$s</item>
         <item quantity="other">%1$s روز %2$s</item>
     </plurals>
     <plurals name="work_days">

@@ -149,7 +149,7 @@
     <string name="pray_methods">計算方法</string>
     <string name="pray_methods_calculation">礼拝時刻の計算方法</string>
     <string name="athan_gap">実際のアダンとアプリケーションのアダンの間隔</string>
-    <string name="athan_gap_summary">アダンの何分前に通知音が鳴る</string>
+    <string name="athan_gap_summary">アダンの何分前に通知音が鳴る？</string>
     <string name="athan_alarm">アダンのアラーム</string>
     <string name="athan_alarm_summary">アラームを鳴らす祈り</string>
     <string name="custom_athan">アダンを選択</string>
