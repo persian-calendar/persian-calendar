@@ -149,7 +149,7 @@
     <string name="pray_methods">Metodi di calcolo</string>
     <string name="pray_methods_calculation">Metodi di calcolo per gli orari di preghiera e la bussola Qibla</string>
     <string name="athan_gap">Intervallo dell’Athan</string>
-    <string name="athan_gap_summary">Quanto tempo prima dell’Athan deve essere attivato l’allarme (in minuti)</string>
+    <string name="athan_gap_summary">Quanto tempo prima dell’Athan deve essere attivato l’allarme (in minuti)?</string>
     <string name="athan_alarm">Allarme Athan</string>
     <string name="athan_alarm_summary">Preghiere per cui attivare l’allarme</string>
     <string name="custom_athan">Seleziona Athan</string>

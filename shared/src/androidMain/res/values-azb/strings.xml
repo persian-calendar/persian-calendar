@@ -84,9 +84,9 @@
     <string name="select_month">آی سئچ</string>
     <string name="day">گۆن</string>
     <string name="select_day">گۆن سئچ</string>
-    <string name="incorrect_date">بو تاریخ یانلیشدیر!</string>
+    <string name="incorrect_date">بو تاریخ یانلیشدیر.</string>
     <string name="compass_not_found">قطب‌نما سنسورو تاپیلمادی</string>
-    <string name="calibrate_compass_summary">وسیله‌نین دوز ایشله‌مه‌سی اۆچون مغناطیس اشیالاردان اوزاق توتون و هر طرفه بیر نئچه کئز چئویرین</string>
+    <string name="calibrate_compass_summary">وسیله‌نین دوز ایشله‌مه‌سی اۆچون مغناطیس اشیالاردان اوزاق توتون و هر طرفه بیر نئچه کئز چئویرین.</string>
     <string name="level">تاراز</string>
     <string name="stop">دایاندیر</string>
     <string name="resume">داوام</string>
@@ -133,11 +133,11 @@
     <string name="notify_date">اعلان گؤستر</string>
     <string name="enable_notify">تاریخ اعلانی قالارلی گؤسترمک</string>
     <string name="notify_date_lock_screen">اعلان‌لاری کلیدلی صفحه‌ده گؤستر</string>
-    <string name="notify_date_lock_screen_summary">سیستم‌ده تنظیم اولسا ایشلیئر</string>
+    <string name="notify_date_lock_screen_summary">سیستم‌ده تنظیم اولسا ایشلیئر.</string>
     <string name="gps_location">جی‌پی‌اس‌دن مختصات آلماق</string>
     <string name="gps_location_help">اوتوماتیک تنظیم اؤلور موقعیت‌ینیز</string>
-    <string name="gps_internet_description">اینترنت و جی‌پی‌اس‌ی آچیق بیراخین، برنامه هر مکاندا بیر کئز بو اریشیم‌لره احتیاجی اولاجاق‌دیر، مکانیز دئیش‌یلن دورومدا یئنی‌دن تنظیم گرکلی‌دیر</string>
-    <string name="wait_for_gps">بیرآز دایانین… بیر دقیقه سونرا نتیجه اولمازسا، جی‌پی‌اس‌ین آچیق اولماسین‌دان مطمئن اولون. اونو آچماق دا یارارسیز اولسا، گمان‌کی باشقا سئچنئک‌لری تست ائتملی‌سینیز.</string>
+    <string name="gps_internet_description">اینترنت و جی‌پی‌اس‌ی آچیق بیراخین، برنامه هر مکاندا بیر کئز بو اریشیم‌لره احتیاجی اولاجاق‌دیر، مکانیز دئیش‌یلن دورومدا یئنی‌دن تنظیم گرکلی‌دیر.</string>
+    <string name="wait_for_gps">بیرآز دایانین… بیر دقیقه سونرا نتیجه اولمازسا، جی‌پی‌اس‌ین آچیق اولماسین‌دان مطمئن اولون. اونو آچماق دا یارارسیز اولسا، گمان‌کی باشقا سئچنئک‌لری تست ائتملی‌سینیز</string>
     <string name="location">موقعیت</string>
     <string name="location_help">لیست‌ده اولمازسا مختصات داخیل ادین</string>
     <string name="latitude">جغرافیایی ائنلم</string>
@@ -160,16 +160,16 @@
     <string name="athan_disabled_summary">اذان تنظیم اولماق اۆچون مکان داخیل ادین</string>
     <!--Permissions-->
     <string name="location_access">مکان قونومونا ایجازه</string>
-    <string name="phone_location_required">برنامه‌نین بوراسی مکان قونومونا ایجازه ایستر یوخسا اؤزونوز موقعیت ورین</string>
+    <string name="phone_location_required">برنامه‌نین بوراسی مکان قونومونا ایجازه ایستر یوخسا اؤزونوز موقعیت ورین.</string>
     <string name="calendar_access">وسیله‌زین تقویم‌ینه ایجازه ایستر</string>
-    <string name="phone_calendar_required">اول‌جه وسیله تقویمی‌نه داخیل اولماق اوچون ایجازه ورملی‌سینیز، اگر بو ایجازه وریلسه، برنامه شخصی اولای‌لاری تقویم‌ده گؤستره بیلر</string>
+    <string name="phone_calendar_required">اول‌جه وسیله تقویمی‌نه داخیل اولماق اوچون ایجازه ورملی‌سینیز، اگر بو ایجازه وریلسه، برنامه شخصی اولای‌لاری تقویم‌ده گؤستره بیلر.</string>
     <string name="version">نسخه %1$s</string>
     <string name="licenses">مؤجویزلر</string>
     <string name="about_license_title">برنامه‌نین مؤجویزلری</string>
-    <string name="about_license_sum">مؤجویز GPLv3، کیتاب‌خانا مؤجویزلرین شرایط‌ین بررسی ائلین</string>
+    <string name="about_license_sum">مؤجویز GPLv3، کیتاب‌خانا مؤجویزلرین شرایط‌ین بررسی ائلین.</string>
     <string name="about_send_mail">ایمیل</string>
     <string name="about_email_sum">برنامه صاحیب‌لرینه شخصی ایمیل گؤندرمک</string>
-    <string name="about_no_client">ایمیل گؤندرمک اۆچون برنامه یوخدور.</string>
+    <string name="about_no_client">ایمیل گؤندرمک اۆچون برنامه یوخدور</string>
     <string name="about_developers">گلیشتیرنلر (رندم ترتیبلنیب)</string>
     <string name="previous_x">قاباق‌کی %1$s</string>
     <string name="next_x">سونراکی %1$s</string>
@@ -201,7 +201,7 @@
     <string name="widget_background_color">ویجت‌ین آرخا رنگی</string>
     <string name="select_widgets_background_color">ویجت آرخاسینا ایستدینیز رنگی سئچین</string>
     <string name="share">پایلاش</string>
-    <string name="enable_location_services">لوکئیشن سرویسی آچیق دئیل، لطفا بو قابلیت اۆچون اونو آچین</string>
+    <string name="enable_location_services">لوکئیشن سرویسی آچیق دئیل، لطفا بو قابلیت اۆچون اونو آچین.</string>
     <string name="select_date">انتخاب تاریخ</string>
     <string name="starting_date">باشلانقیج تاریخی</string>
     <string name="age_widget_title">عنوان ویجت</string>

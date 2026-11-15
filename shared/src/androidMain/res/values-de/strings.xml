@@ -64,7 +64,7 @@
     <string name="sunset_sun_view">Sonnenuntergang</string>
     <string name="length_of_day">Tageszeit</string>
     <string name="remaining_daylight">Verbleibend</string>
-    <string name="n_hours_minutes">%1$s Std. %2$s Min.</string>
+    <string name="n_hours_minutes">%1$s Std. %2$s Min</string>
     <string name="times">Zeiten</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>
