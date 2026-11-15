@@ -169,7 +169,7 @@
     <string name="about_license_sum">تقویم فارسی کے زیرِ استعمال GPLv3 لائسنس اور دیگر لائسنس شرائط کا جائزہ لیں۔</string>
     <string name="about_send_mail">ای میل</string>
     <string name="about_email_sum">ایپ کے مصنفین کو ذاتی ای میل بھیجیں</string>
-    <string name="about_no_client">ای میل بھیجنے کے لیے کوئی ایپ نصب نہیں ہے۔</string>
+    <string name="about_no_client">ای میل بھیجنے کے لیے کوئی ایپ نصب نہیں ہے</string>
     <string name="about_developers">ڈویلپرز (بے ترتیب ترتیب)</string>
     <!--Talkback, a11y-->
     <string name="previous_x">پچھلا %1$s</string>

@@ -85,7 +85,7 @@
     <string name="select_month">مايأ دؤجين کۊدن</string>
     <string name="day">رۊز</string>
     <string name="select_day">رۊزˈدؤجين کۊدن</string>
-    <string name="incorrect_date">تاریخˇدۊرۊن ساب بؤبؤ!</string>
+    <string name="incorrect_date">تاریخˇدۊرۊن ساب بؤبؤ.</string>
     <string name="compass_not_found">قؤطب‌نما حسگر پئدا نؤبؤ</string>
     <string name="calibrate_compass_summary">أنˇوأستي کي قؤطب-نما سنسؤر بهتر کار بۊکۊنه, مغناطيسي چيزانˇجأ دۊرˈبيد, دزگايأ وأگردانيد ؤ اۊنˈبه سه طرف جۊلؤب ؤ عقب بچرخأنيد.</string>
     <string name="level">تراز</string>
@@ -134,7 +134,7 @@
     <string name="notify_date">اعلانˇرا تاودن</string>
     <string name="enable_notify">تاريخانأ هميشک خبر بده</string>
     <string name="notify_date_lock_screen">صفه کي قؤفلˈبؤسته أ اعلانان نيشان بده</string>
-    <string name="notify_date_lock_screen_summary">فقد اۊ وخته کي مؤحافظتˇگۊشي ره تنظيم ببه کار کۊنه</string>
+    <string name="notify_date_lock_screen_summary">فقد اۊ وخته کي مؤحافظتˇگۊشي ره تنظيم ببه کار کۊنه.</string>
     <string name="gps_location">مؤختصاتˇ فأگيفتن جي‌پي‌اسˇجأ</string>
     <string name="gps_location_help">أگه أيأ جأ بتأنيد, تنظيماتˇباقي بخشانأ نيازي ني-يه</string>
     <string name="gps_internet_description">موقعیت‌یاب لؤطفن (GPS) ؤ اينترنتˈ قبله يا جهتˇجؤغرافيائي يافتنˇوأستي رؤشنˈکۊنيد. برنامه ايتأ جا ره فقد ايدفأ أ دسترسي-يانˈلازيم دأره, ولي أگه شيمي جأ عوضˈبه وا دۊمرتبه اۊنˈتنظيم بۊکۊنيد.</string>
@@ -170,7 +170,7 @@
     <string name="about_license_sum">مۊجوز GPLv3، ايستفاده بؤبؤسته مۊجوزانˇشرايطˈکي فارسي تقويم ؤ کيتابخانهانˇدۊرۊن ايستفاده بؤبؤسته دأريه-يأ وارسي بۊکۊنيد.</string>
     <string name="about_send_mail">رایانامه</string>
     <string name="about_email_sum">شخصي رايانامهˈ برنامه نيويسˇره اۊسه کۊدن</string>
-    <string name="about_no_client">رایانامه اۊسه کۊدنˇره برنامه-ئي نصب ني-يه!</string>
+    <string name="about_no_client">رایانامه اۊسه کۊدنˇره برنامه-ئي نصب ني-يه</string>
     <string name="about_developers">تؤسعه‌دهندهان</string>
     <!--TalkBack, a11y-->
     <string name="previous_x">%1$sˇقبل</string>

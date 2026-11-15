@@ -132,7 +132,7 @@
     <string name="notify_date">د نیټې خبرتیا فعالول</string>
     <string name="enable_notify">د ټولو نیټې ډولونو لپاره تلپاتې خبرتیا</string>
     <string name="notify_date_lock_screen">په لاک سکرین کې خبرتیا ښودل</string>
-    <string name="notify_date_lock_screen_summary">یوازې هغه وخت چې د لاک سکرین د ساتنې یوه طریقه ټاکل شوې وي</string>
+    <string name="notify_date_lock_screen_summary">یوازې هغه وخت چې د لاک سکرین د ساتنې یوه طریقه ټاکل شوې وي.</string>
     <string name="gps_location">له GPS یا شبکې څخه ځای ترلاسه کړئ</string>
     <string name="gps_location_help">که دا کار ممکن وي، نور اختیارونه اړین نه دي</string>
     <string name="gps_internet_description">د خپل ځای د موندلو لپاره مهرباني وکړئ د وسیلې GPS او د انټرنېټ اړیکه فعاله کړئ.\n\nاپلیکیشن یوازې یو ځل دې ته اړتیا لري؛ خو که نوي ځای ته لاړ شئ، بیا به GPS او انټرنېټ ته اړتیا وي.</string>

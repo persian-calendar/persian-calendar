@@ -136,7 +136,7 @@
     <string name="gps_location">GPSから情報を得る</string>
     <string name="gps_location_help">この方法がうまくいけば、他の設定は不要です</string>
     <string name="gps_internet_description">現在地を取得するには、端末のGPSとインターネット接続を有効にしてください。\n\nこの操作が必要なのは一度だけです。ただし、新しい場所に移動した場合は、再びGPSとインターネット接続が必要になります。</string>
-    <string name="wait_for_gps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります。</string>
+    <string name="wait_for_gps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります</string>
     <string name="location">場所</string>
     <string name="location_help">リストにない場合は、座標を追加</string>
     <string name="latitude">緯度</string>

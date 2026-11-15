@@ -56,7 +56,7 @@
     <string name="sagittarius">धनु</string>
     <string name="moon_in_scorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
     <string name="events">चाडपर्व</string>
-    <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन।</string>
+    <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन</string>
     <string name="nothing_scheduled">कुनै कार्यक्रम तय भएको छैन</string>
     <string name="ask_calendar_permission">के तपाईं आफ्नो उपकरणको पात्रोबाट व्यक्तिगत घटनाहरू सक्षम गर्न चाहनुहुन्छ?</string>
     <string name="sunrise_sun_view">सूर्योदय</string>

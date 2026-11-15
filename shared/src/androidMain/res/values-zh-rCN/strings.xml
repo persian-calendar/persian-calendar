@@ -132,7 +132,7 @@
     <string name="notify_date">启用日期通知</string>
     <string name="enable_notify">显示包含所有日历的常驻通知</string>
     <string name="notify_date_lock_screen">在锁屏上显示通知</string>
-    <string name="notify_date_lock_screen_summary">仅在设置了锁屏安全方式时生效</string>
+    <string name="notify_date_lock_screen_summary">仅在设置了锁屏安全方式时生效。</string>
     <string name="gps_location">通过 GPS 或网络获取位置</string>
     <string name="gps_location_help">如果此方式可行，则无需使用其他选项</string>
     <string name="gps_internet_description">请打开设备的 GPS 和互联网连接，以对您所在的位置进行定位。\n\n本应用只会请求这一次位置信息，但如果您移动到了新的位置，您需要重新打开 GPS 和互联网连接。</string>
@@ -164,7 +164,7 @@
     <string name="version">版本 %1$s</string>
     <string name="licenses">许可</string>
     <string name="about_license_title">应用程序许可</string>
-    <string name="about_license_sum">查阅波斯历使用的 GPLv3 许可和其他许可条款</string>
+    <string name="about_license_sum">查阅波斯历使用的 GPLv3 许可和其他许可条款。</string>
     <string name="about_send_mail">电子邮件</string>
     <string name="about_email_sum">向应用开发者发送私人邮件</string>
     <string name="about_no_client">未安装任何邮件应用</string>
