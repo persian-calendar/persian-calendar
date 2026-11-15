@@ -497,7 +497,7 @@ fun SharedTransitionScope.CalendarScreen(
                 val bounds = searchInputBounds ?: return@awaitEachGesture
                 val coordinates = screenCoordinates?.takeIf { it.isAttached }
                     ?: return@awaitEachGesture
-                if (bounds.contains(coordinates.localToWindow(down.position))) return@awaitEachGesture
+                if (coordinates.localToWindow(down.position) in bounds) return@awaitEachGesture
                 var isTap = true
                 do {
                     val event = awaitPointerEvent(PointerEventPass.Initial)
