@@ -184,7 +184,7 @@
     <string name="spaced_and">\u0020et\u0020</string>
     <string name="spaced_or">\u0020ou\u0020</string>
     <string name="spaced_comma">,\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_colon">\u00a0:\u0020</string>
     <string name="device_information">Informations sur l’appareil</string>
     <string name="center_align_widgets_summary">Alignement central des widgets 4x1 et 2x2</string>
     <string name="center_align_widgets">Alignement central des widgets</string>
