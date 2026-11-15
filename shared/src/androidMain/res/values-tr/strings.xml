@@ -121,10 +121,10 @@
     <string name="center_align_widgets">Widget’ları ortaya hizala</string>
     <string name="center_align_widgets_summary">4x1 ve 2x2 Widget’ları ortaya hizala</string>
     <string name="device_information">Cihaz Bilgisi</string>
-    <string name="spaced_colon">:\u0020</string>
-    <string name="spaced_comma">,\u0020</string>
-    <string name="spaced_and">\u0020ve\u0020</string>
-    <string name="spaced_or">\u0020veya\u0020</string>
+    <string name="spaced_colon">": "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_and">" ve "</string>
+    <string name="spaced_or">" veya "</string>
     <plurals name="minutes">
         <item quantity="one">%1$s dakika</item>
         <item quantity="other">%1$s dakika</item>
@@ -174,9 +174,7 @@
     <string name="latitude">Enlem</string>
     <string name="location_help">Hiçbiri yoksa aşağıda koordinatları kendiniz belirleyin</string>
     <string name="location">Konum</string>
-    <string name="gps_internet_description">Konumunuzu bulmak için cihazın GPS ve İnternet bağlantısını etkinleştirin lütfen.
-\n
-\nUygulamanın buna yalnızca bir kez ihtiyacı vardır, ancak yeni bir konuma geçerseniz, GPS ve İnternet’e tekrar erişim gerekir.</string>
+    <string name="gps_internet_description">Konumunuzu bulmak için cihazın GPS ve İnternet bağlantısını etkinleştirin lütfen. \n \nUygulamanın buna yalnızca bir kez ihtiyacı vardır, ancak yeni bir konuma geçerseniz, GPS ve İnternet’e tekrar erişim gerekir.</string>
     <string name="gps_location_help">Bu mümkünse diğer seçeneklere gerek yoktur</string>
     <string name="gps_location">GPS veya ağdan konum al</string>
     <string name="notify_date_lock_screen_summary">Yalnızca kilit ekranı güvenlik yöntemi ayarlandığında.</string>
@@ -340,7 +338,7 @@
     <string name="show_sun_and_moon_path_in_24_hours">24 Saatteki Güneş ve Ay Hareketlerini Göster</string>
     <string name="calculator">Hesap makinesi</string>
     <string name="chinese">Çin</string>
-    <string name="enable_notification">Tarih bildirimini etkinleştirmek ister misiniz\?</string>
+    <string name="enable_notification">Tarih bildirimini etkinleştirmek ister misiniz?</string>
     <string name="tropical">Tropikal</string>
     <string name="add_quick_settings_tile">Hızlı ayarlar kutucuğu ekle</string>
     <string name="live_wallpaper_settings">Canlı duvar kağıdı ayarları</string>
