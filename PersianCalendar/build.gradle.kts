@@ -187,3 +187,9 @@ dependencies {
 
     lintChecks(project(":lintChecks"))
 }
+
+if (providers.gradleProperty("platformTypeCheck").isPresent) {
+    dependencies {
+        "kotlinCompilerPluginClasspath"(project(":compilerPlugin"))
+    }
+}
