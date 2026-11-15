@@ -133,12 +133,10 @@
     <string name="notify_date">Включить уведомление о дате</string>
     <string name="customize_widget_summary">Что показывать из уведомлений и виджетов, чтобы сделать их компактнее</string>
     <string name="ask_user_to_set_location">Установите местоположение в настройках, чтобы это место отображалось корректно</string>
-    <string name="gps_internet_description">Пожалуйста, включите GPS устройства и подключение к Интернету, чтобы определить ваше местоположение.
-\n
-\nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
+    <string name="gps_internet_description">Пожалуйста, включите GPS устройства и подключение к Интернету, чтобы определить ваше местоположение. \n \nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
     <string name="wait_for_gps">Пожалуйста, подождите… Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
-    <string name="spaced_comma">,\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
     <string name="center_align_widgets_summary">Выравнивание по центру виджетов 4x1 и 2x2</string>
     <string name="prefer_linear_date_summary">Используйте 2000/1/1 вместо 1 января 2000 года в виджете и уведомлении</string>
     <string name="select_widgets_background_color">Выберите пользовательский цвет для фона виджетов</string>
@@ -259,8 +257,8 @@
     <string name="shift_work_starting_date">%1$s, выбранный в календаре, является днем начала сменной работы.</string>
     <string name="shift_work_starting_date_edit">%1$s, выбранный ранее, является выбранным днем начала сменной работы.</string>
     <string name="shift_work_reset_button">Отключить или перепрограммировать</string>
-    <string name="spaced_and">\u0020и\u0020</string>
-    <string name="spaced_or">\u0020или\u0020</string>
+    <string name="spaced_and">" и "</string>
+    <string name="spaced_or">" или "</string>
     <string name="device_information">Информация об устройстве</string>
     <string name="center_align_widgets">Выравнивание виджетов по центру</string>
     <string name="n_till">%1$s до %2$s</string>
@@ -311,7 +309,7 @@
     <string name="wednesday_short">Ср</string>
     <string name="thursday_short">Чт</string>
     <string name="friday_short">Пт</string>
-    <string name="enable_notification">Хотите включить уведомление о дате\?</string>
+    <string name="enable_notification">Хотите включить уведомление о дате?</string>
     <string name="add_quick_settings_tile">Добавить плитку быстрых настроек</string>
     <string name="true_north">Истинный север</string>
     <plurals name="shift_work_record_title">
@@ -348,7 +346,7 @@
         <item quantity="one">%1$s неделя</item>
         <item quantity="few">%1$s недели</item>
         <item quantity="many">%1$s недель</item>
-        <item quantity="other">%1$s недели</item>
+        <item quantity="other">%1$s недель</item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s месяц</item>
@@ -392,4 +390,24 @@
     <string name="save">Сохранить</string>
     <string name="holidays_in_red">Отмечать праздники красным</string>
     <string name="add_widget">Добавить виджет</string>
+    <string name="select_font"></string>
+    <string name="nothing_scheduled"></string>
+    <string name="vibration"></string>
+    <string name="black_moon"></string>
+    <string name="schedule"></string>
+    <string name="month_view"></string>
+    <string name="widget_text_size"></string>
+    <string name="pref_ui"></string>
+    <string name="day_view"></string>
+    <string name="horoscope"></string>
+    <string name="bold_text"></string>
+    <string name="large_day_number_on_notification"></string>
+    <string name="move_up"></string>
+    <string name="move_down"></string>
+    <string name="dynamic_icon"></string>
+    <string name="print"></string>
+    <string name="planetary_hours"></string>
+    <string name="week_view"></string>
+    <string name="week"></string>
+    <string name="starting_date"></string>
 </resources>
