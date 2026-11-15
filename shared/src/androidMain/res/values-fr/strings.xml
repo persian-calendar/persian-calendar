@@ -20,10 +20,10 @@
         <item quantity="other">%1$s minutes</item>
     </plurals>
     <string name="shift_work_reset_button">Désactiver ou reprogrammer</string>
-    <string name="spaced_and">\u0020et\u0020</string>
-    <string name="spaced_or">\u0020ou\u0020</string>
-    <string name="spaced_comma">,\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_and">" et "</string>
+    <string name="spaced_or">" ou "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
     <plurals name="hours">
         <item quantity="one">%1$s heure</item>
         <item quantity="many">%1$s heures</item>
@@ -71,9 +71,7 @@
     <string name="location_help">Si aucun d’entre eux, précisez-le ci-dessous</string>
     <string name="location">Localisation</string>
     <string name="wait_for_gps">Veuillez patienter… Si rien n’apparaît après une minute, vous devriez probablement essayer d’autres options</string>
-    <string name="gps_internet_description">Veuillez activer le GPS de l’appareil et la connexion Internet pour trouver votre position.
-\n
-\nL’application n’en a besoin qu’une seule fois, mais si vous changez de lieu, l’accès au GPS et à Internet est à nouveau nécessaire.</string>
+    <string name="gps_internet_description">Veuillez activer le GPS de l’appareil et la connexion Internet pour trouver votre position. \n \nL’application n’en a besoin qu’une seule fois, mais si vous changez de lieu, l’accès au GPS et à Internet est à nouveau nécessaire.</string>
     <string name="gps_location_help">Les autres options ne sont pas nécessaires si ceci est possible</string>
     <string name="gps_location">Obtenir la localisation à partir du GPS ou du réseau</string>
     <string name="notify_date_lock_screen_summary">Uniquement quand une méthode de sécurité de l’écran de verrouillage est définie.</string>
@@ -142,7 +140,7 @@
     <string name="times">Heures</string>
     <string name="remaining_daylight">Restant</string>
     <string name="length_of_day">En journée</string>
-    <string name="n_hours_minutes">%1$s h %2$s min</string>
+    <string name="n_hours_minutes">%1$s h %2$s min</string>
     <string name="sunset_sun_view">Coucher du soleil</string>
     <string name="midday_sun_view">Midi</string>
     <string name="sunrise_sun_view">Lever du soleil</string>
@@ -349,7 +347,7 @@
     <string name="pluto">Pluton</string>
     <string name="screensaver_settings">Paramètres de l’économiseur d’écran</string>
     <string name="live_wallpaper_settings">Paramètres du fond d’écran animé</string>
-    <string name="enable_notification">Voulez-vous activer la notification de la date \?</string>
+    <string name="enable_notification">Voulez-vous activer la notification de la date ?</string>
     <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
     <string name="true_north">Vrai Nord</string>
     <string name="full_screen">Plein écran</string>
@@ -370,7 +368,7 @@
     <string name="more_options">Plus d’options</string>
     <string name="yes">Oui</string>
     <string name="sample_inputs">Exemples d’entrées</string>
-    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos évènements personnels à partir de l’agenda de votre appareil ?</string>
+    <string name="ask_calendar_permission">Souhaitez-vous transmettre vos évènements personnels à partir de l’agenda de votre appareil ?</string>
     <string name="holidays_in_red">Vacances en rouge</string>
     <plurals name="work_days">
         <item quantity="one">%1$s jour de travail</item>
@@ -402,4 +400,5 @@
     <string name="week">Semaine</string>
     <string name="bold_text">Texte en gras</string>
     <string name="widget_text_size">Taille du texte</string>
+    <string name="time_zones"></string>
 </resources>
