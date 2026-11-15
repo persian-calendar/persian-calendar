@@ -108,9 +108,7 @@
     <string name="about_no_client">برنامه‌ای جهت ارسال رایانامه نصب نیست</string>
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
-    <string name="gps_internet_description">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید.
-\n
-\nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
+    <string name="gps_internet_description">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید. \n \nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از آغاز سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا پایان سال</string>
     <!-- Sun Info -->
@@ -194,10 +192,10 @@
         <item quantity="one">%1$s ساعت</item>
         <item quantity="other">%1$s ساعت</item>
     </plurals>
-    <string name="spaced_and">\u0020و\u0020</string>
-    <string name="spaced_or">\u0020یا\u0020</string>
-    <string name="spaced_comma">،\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_and">" و "</string>
+    <string name="spaced_or">" یا "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_information">اطلاعات دستگاه</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
