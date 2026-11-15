@@ -12,7 +12,6 @@ class CustomIssueRegistry : IssueRegistry() {
         SuppressLintDetector.ISSUE,
         UntilUsageDetector.ISSUE,
         ContainsOperatorDetector.ISSUE,
-        JavaPlatformTypeDetector.ISSUE,
         ElvisEmptyStringDetector.ISSUE,
         DebugAssertNotNullSafeCallDetector.ISSUE,
         TryCatchDetector.ISSUE,
