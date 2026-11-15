@@ -149,7 +149,7 @@
     <string name="pray_methods">计算方式</string>
     <string name="pray_methods_calculation">礼拜时间和朝向指南针的计算方式</string>
     <string name="athan_gap">宣礼间隔</string>
-    <string name="athan_gap_summary">在宣礼之前提前多少分钟触发闹铃</string>
+    <string name="athan_gap_summary">在宣礼之前提前多少分钟触发闹铃？</string>
     <string name="athan_alarm">宣礼闹钟</string>
     <string name="athan_alarm_summary">选择要触发闹钟的礼拜</string>
     <string name="custom_athan">选择宣礼</string>
