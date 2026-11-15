@@ -149,7 +149,7 @@
     <string name="pray_methods">Metode perhitungan</string>
     <string name="pray_methods_calculation">Metode perhitungan untuk waktu salat dan kompas Kiblat</string>
     <string name="athan_gap">Jeda Azan</string>
-    <string name="athan_gap_summary">Berapa lama sebelum azan alarm harus dipicu (dalam menit)</string>
+    <string name="athan_gap_summary">Berapa lama sebelum azan alarm harus dipicu (dalam menit)?</string>
     <string name="athan_alarm">Alarm Azan</string>
     <string name="athan_alarm_summary">Salat yang memicu alarm</string>
     <string name="custom_athan">Pilih Azan</string>

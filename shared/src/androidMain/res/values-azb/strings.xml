@@ -150,7 +150,7 @@
     <string name="pray_methods">حسابلاما مرجعی</string>
     <string name="pray_methods_calculation">شرعی اوقات‌ین مرجع‌ین تعیین ائتمک</string>
     <string name="athan_gap">واقعی اذان‌لا برنامه اذان‌ین مصافه‌سی</string>
-    <string name="athan_gap_summary">اذان‌دان نچه دقیقه قاباق، اعلان سس‌لن‌سین</string>
+    <string name="athan_gap_summary">اذان‌دان نچه دقیقه قاباق، اعلان سس‌لن‌سین?</string>
     <string name="athan_alarm">اذان‌لار</string>
     <string name="athan_alarm_summary">بو نامازلارا اذان دئیل‌سین</string>
     <string name="custom_athan">اذان سئچ‌یمی</string>

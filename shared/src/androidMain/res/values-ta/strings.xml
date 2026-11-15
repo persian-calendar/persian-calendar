@@ -149,7 +149,7 @@
     <string name="pray_methods">கணக்கீட்டு முறைகள்</string>
     <string name="pray_methods_calculation">தொழுகை நேரங்கள் மற்றும் கிப்லா திசைகாட்டி ஆகியவற்றிற்கான கணக்கீட்டு முறைகள்</string>
     <string name="athan_gap">இறைஅழைப்பு இடைவெளி</string>
-    <string name="athan_gap_summary">இறைஅழைப்புக்கு முன் அறிவிப்பொலி நேரம் (நிமையங்களில்)</string>
+    <string name="athan_gap_summary">இறைஅழைப்புக்கு முன் அறிவிப்பொலி நேரம் (நிமையங்களில்)?</string>
     <string name="athan_alarm">இறைஅழைப்பு அறிவிப்பொலி</string>
     <string name="athan_alarm_summary">அறிவிப்பொலியைத் தூண்டுவதற்கான வழிபாடுகள்</string>
     <string name="custom_athan">இறைஅழைப்பைத் தேர்ந்தெடு</string>

@@ -151,7 +151,7 @@
     <string name="pray_methods">Методы расчета</string>
     <string name="pray_methods_calculation">Методы расчета времени молитвы и компаса Киблы</string>
     <string name="athan_gap">Интервал до азана</string>
-    <string name="athan_gap_summary">За какое время до Азана должен сработать будильник (в минутах)</string>
+    <string name="athan_gap_summary">За какое время до Азана должен сработать будильник (в минутах)?</string>
     <string name="athan_alarm">Будильник Азана</string>
     <string name="athan_alarm_summary">Для каких молитв включать будильник</string>
     <string name="custom_athan">Выберите Азан</string>
