@@ -142,9 +142,7 @@
     <!--Location and Athan-->
     <string name="gps_location">Obtener la ubicación de GPS o de la red</string>
     <string name="gps_location_help">No se necesitan otras opciones de ajustes si esto es posible</string>
-    <string name="gps_internet_description">Habilite el GPS del dispositivo y la conexión a Internet para encontrar su ubicación, por favor.
-\n
-\n La aplicación necesita esto solo una vez, sin embargo, si se va a una nueva ubicación, se necesita acceder nuevamente al GPS e Internet.</string>
+    <string name="gps_internet_description">Habilite el GPS del dispositivo y la conexión a Internet para encontrar su ubicación, por favor. \n \n La aplicación necesita esto solo una vez, sin embargo, si se va a una nueva ubicación, se necesita acceder nuevamente al GPS e Internet.</string>
     <string name="wait_for_gps">Espere … Si no aparece nada después de un minuto, quizá debería probar otras opciones</string>
     <string name="location">Ubicación</string>
     <string name="location_help">Si ninguno de ellos, especifíquelo abajo</string>
@@ -200,10 +198,10 @@
         <item quantity="many">%1$s horas</item>
         <item quantity="other">%1$s horas</item>
     </plurals>
-    <string name="spaced_and">\u0020y\u0020</string>
-    <string name="spaced_or">\u0020o\u0020</string>
-    <string name="spaced_comma">,\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_and">" y "</string>
+    <string name="spaced_or">" o "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_information">Información del dispositivo</string>
     <string name="center_align_widgets_summary">Alineación central de widgets 4x1 y 2x2</string>
     <string name="center_align_widgets">Centrar los widgets</string>
@@ -361,7 +359,7 @@
     <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
     <string name="screensaver_settings">Ajustes del salvapantallas</string>
     <string name="true_north">Norte verdadero</string>
-    <string name="enable_notification">¿Desea habilitar la notificación de la fecha\?</string>
+    <string name="enable_notification">¿Desea habilitar la notificación de la fecha?</string>
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
     <string name="exit_full_screen">Salir de la pantalla completa</string>
     <string name="full_screen">Pantalla completa</string>
@@ -398,4 +396,20 @@
     <string name="schedule">Horario</string>
     <string name="print">Imprimir</string>
     <string name="week_view">Vista semanal</string>
+    <string name="select_font"></string>
+    <string name="nothing_scheduled"></string>
+    <string name="black_moon"></string>
+    <string name="month_view"></string>
+    <string name="widget_text_size"></string>
+    <string name="pref_ui"></string>
+    <string name="day_view"></string>
+    <string name="horoscope"></string>
+    <string name="bold_text"></string>
+    <string name="large_day_number_on_notification"></string>
+    <string name="move_up"></string>
+    <string name="move_down"></string>
+    <string name="dynamic_icon"></string>
+    <string name="planetary_hours"></string>
+    <string name="week"></string>
+    <string name="starting_date"></string>
 </resources>
