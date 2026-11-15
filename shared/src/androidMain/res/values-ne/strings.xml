@@ -85,9 +85,7 @@
     <string name="custom_notification_is_set">अनुकूलन सूचना भर्खरै सेट गरिएको छ</string>
     <string name="select_widgets_text_color">विजेट पाठहरूको लागि अनुकूलन रङ चयन गर्नुहोस्</string>
     <string name="gps_location_help">यदि यो सम्भव छ भने अन्य विकल्पहरू आवश्यक पर्दैन</string>
-    <string name="gps_internet_description">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्।
-\n
-\nएपलाई यो एक पटक मात्र चाहिन्छ, यद्यपि, यदि तपाइँ नयाँ स्थानमा जानुभयो भने, GPS र इन्टरनेटमा पहुँच गर्न फेरि आवश्यक छ।</string>
+    <string name="gps_internet_description">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्। \n \nएपलाई यो एक पटक मात्र चाहिन्छ, यद्यपि, यदि तपाइँ नयाँ स्थानमा जानुभयो भने, GPS र इन्टरनेटमा पहुँच गर्न फेरि आवश्यक छ।</string>
     <string name="wait_for_gps">कृपया प्रतीक्षा गर्नुहोस्… यदि एक मिनेट पछि केहि पनि देखा परेन भने तपाईले अन्य विकल्पहरू प्रयास गर्नुपर्छ</string>
     <string name="athan_gap_summary">Athan भन्दा कति समय अगाडि अलार्म ट्रिगर गर्नुपर्छ (मिनेटमा)</string>
     <string name="athan_alarm">एथन अलार्म</string>
@@ -222,10 +220,10 @@
     <string name="shift_work_settings">काम सेटिङहरू सिफ्ट गर्नुहोस्</string>
     <string name="remove">हटाउनुहोस्</string>
     <string name="shift_work_starting_date">%1$s, क्यालेन्डरमा चयन गरिएको, काम सुरु हुने दिन हो।</string>
-    <string name="spaced_and">\u0020र\u0020</string>
-    <string name="spaced_or">\u0020वा\u0020</string>
-    <string name="spaced_comma">,\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_and">" र "</string>
+    <string name="spaced_or">" वा "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_information">उपकरण जानकारी</string>
     <string name="center_align_widgets">विजेटहरू केन्द्रमा पङ्क्तिबद्ध गर्नुहोस्</string>
     <string name="n_till">%1$s देखि %2$s सम्म</string>
@@ -322,4 +320,70 @@
     <string name="asr_hanafi_juristic">Hanafi Asr न्यायिक विधि</string>
     <string name="widget_prefer_device_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="calculator">क्यालकुलेटर</string>
+    <string name="enable_notification"></string>
+    <string name="select_font"></string>
+    <string name="sample_inputs"></string>
+    <string name="moon"></string>
+    <string name="navigate_up"></string>
+    <string name="save"></string>
+    <plurals name="weeks">
+    </plurals>
+    <string name="nothing_scheduled"></string>
+    <string name="winter"></string>
+    <string name="venus"></string>
+    <string name="earth"></string>
+    <string name="vibration"></string>
+    <string name="black_moon"></string>
+    <string name="jupiter"></string>
+    <string name="schedule"></string>
+    <string name="add_widget"></string>
+    <string name="uranus"></string>
+    <string name="live_wallpaper_settings"></string>
+    <string name="spring"></string>
+    <string name="summer"></string>
+    <string name="screensaver_settings"></string>
+    <string name="year_view"></string>
+    <string name="saturn"></string>
+    <string name="chinese"></string>
+    <string name="qr_code"></string>
+    <string name="open_navigation_rail"></string>
+    <string name="yes"></string>
+    <plurals name="seconds">
+    </plurals>
+    <string name="month_view"></string>
+    <string name="widget_text_size"></string>
+    <string name="autumn"></string>
+    <string name="pref_ui"></string>
+    <plurals name="work_days">
+    </plurals>
+    <string name="ask_calendar_permission"></string>
+    <string name="pluto"></string>
+    <string name="day_view"></string>
+    <string name="holidays_in_red"></string>
+    <string name="horoscope"></string>
+    <string name="bold_text"></string>
+    <string name="lunar_eclipse"></string>
+    <string name="large_day_number_on_notification"></string>
+    <string name="move_up"></string>
+    <string name="move_down"></string>
+    <string name="dynamic_icon"></string>
+    <string name="print"></string>
+    <string name="color_gradient"></string>
+    <string name="planetary_hours"></string>
+    <string name="mars"></string>
+    <string name="time_zones"></string>
+    <string name="exit_full_screen"></string>
+    <string name="full_screen"></string>
+    <string name="week_view"></string>
+    <string name="widget_background_transparency"></string>
+    <string name="week"></string>
+    <string name="neptune"></string>
+    <string name="more_options"></string>
+    <string name="tropical"></string>
+    <string name="add_quick_settings_tile"></string>
+    <string name="true_north"></string>
+    <string name="sun"></string>
+    <string name="starting_date"></string>
+    <string name="mercury"></string>
+    <string name="solar_eclipse"></string>
 </resources>
