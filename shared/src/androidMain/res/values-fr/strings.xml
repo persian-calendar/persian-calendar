@@ -113,8 +113,8 @@
     <string name="week_number_summary">Afficher le numéro de semaine dans le calendrier</string>
     <string name="week_start">Début de la semaine</string>
     <string name="week_start_summary">Sélectionnez le jour de début de semaine</string>
-    <string name="week_ends">Fins de semaine</string>
-    <string name="week_ends_summary">Sélectionnez les jours de fin de semaine</string>
+    <string name="week_ends">Week-ends</string>
+    <string name="week_ends_summary">Sélectionnez les jours du week-end</string>
     <string name="hijri_offset">Décalage du calendrier islamique</string>
     <string name="hijri_offset_summary">Ajuster le calendrier islamique d’un nombre de jours</string>
     <string name="clock_in_24">Horloge en 24 heures</string>
@@ -167,8 +167,8 @@
     <string name="licenses">Licence</string>
     <string name="about_license_title">Licence de l’application</string>
     <string name="about_license_sum">Vérifier la licence GPLv3 et les autres conditions de licence utilisées pour Calendrier persan.</string>
-    <string name="about_send_mail">Courriel</string>
-    <string name="about_email_sum">Envoyer un courriel personnel aux auteurs de l’application</string>
+    <string name="about_send_mail">E-mail</string>
+    <string name="about_email_sum">Envoyer un e-mail personnel aux auteurs de l’application</string>
     <string name="about_no_client">Aucun client de messagerie n’est installé</string>
     <string name="about_developers">Développeurs (ordonnés au hasard)</string>
     <string name="previous_x">%1$s précédent(e)</string>
