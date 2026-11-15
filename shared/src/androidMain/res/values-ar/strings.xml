@@ -143,9 +143,7 @@
     <!--Location and Athan-->
     <string name="gps_location">تحديد المكان باستخدام ال GPS</string>
     <string name="gps_location_help">لا تحتاج إلى الخيارات الأخرى إذا كان هذا الخيار مفعل</string>
-    <string name="gps_internet_description">يرجى تفعيل ال GPS أو الإتصال بالشبكة ليتم تحديد المكان.
-\n
-\nالتطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل ال GPS والشبكة لتحديد المكان الجديد.</string>
+    <string name="gps_internet_description">يرجى تفعيل ال GPS أو الإتصال بالشبكة ليتم تحديد المكان. \n \nالتطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل ال GPS والشبكة لتحديد المكان الجديد.</string>
     <string name="wait_for_gps">جارٍ البحث يرجى الانتظار … تأكد أن ال GPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى</string>
     <string name="location">المكان</string>
     <string name="location_help">إذا لم يكن أسم مدينتك موجوداً، حدد الإحداثيات اللازمة أدناه</string>
@@ -192,10 +190,10 @@
     <string name="shift_work_starting_date">%1$s، حدد على التقويم، هو مدة إزاحة وقت العمل من اليوم.</string>
     <string name="shift_work_starting_date_edit">%1$s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
-    <string name="spaced_and">\u0020و\u0020</string>
-    <string name="spaced_or">\u0020أو\u0020</string>
-    <string name="spaced_comma">،\u0020</string>
-    <string name="spaced_colon">:\u0020</string>
+    <string name="spaced_and">" و "</string>
+    <string name="spaced_or">" أو "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_information">معلومات الجهاز</string>
     <string name="center_align_widgets_summary">توسيط المصغر 4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>
@@ -441,4 +439,16 @@
     <string name="starting_date">تاريخ البدء</string>
     <string name="pref_ui">واجهة المستخدم</string>
     <string name="week">أسبوع</string>
+    <string name="select_font"></string>
+    <string name="nothing_scheduled"></string>
+    <string name="black_moon"></string>
+    <string name="month_view"></string>
+    <string name="widget_text_size"></string>
+    <string name="horoscope"></string>
+    <string name="bold_text"></string>
+    <string name="large_day_number_on_notification"></string>
+    <string name="move_up"></string>
+    <string name="move_down"></string>
+    <string name="dynamic_icon"></string>
+    <string name="planetary_hours"></string>
 </resources>
