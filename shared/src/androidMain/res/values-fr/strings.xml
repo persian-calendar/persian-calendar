@@ -151,7 +151,7 @@
     <string name="pray_methods">Méthodes de calcul</string>
     <string name="pray_methods_calculation">Méthodes de calcul des heures de prière et de la boussole Qibla</string>
     <string name="athan_gap">Écart d’Athan</string>
-    <string name="athan_gap_summary">Combien de temps avant l’Athan doit-on déclencher l’alarme (en minutes)?</string>
+    <string name="athan_gap_summary">Combien de temps avant l’Athan doit-on déclencher l’alarme (en minutes)\u00a0?</string>
     <string name="athan_alarm">Alarme Athan</string>
     <string name="athan_alarm_summary">Prières pour lesquelles déclencher l’alarme</string>
     <string name="custom_athan">Sélectionnez l’Athan</string>
