@@ -367,7 +367,7 @@ fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): DpSize?
         else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
         if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
-    ).map { getAppWidgetOptions(widgetId).getInt(it, 0) }
+    ).map { getAppWidgetOptions(widgetId)?.getInt(it, 0) ?: 0 }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
     return DpSize(width.dp, height.dp).takeIf { width > 10 && height > 10 }
 }
