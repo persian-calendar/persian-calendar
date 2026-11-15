@@ -54,10 +54,33 @@ jobs:
           ./gradlew assembleNightly
           apk_path="$(find . -type f -iname '*.apk' -print -quit)"
           apk_kb=$(( ($(wc -c <"$apk_path") + 1023) / 1024 ))
+
+          # Method references per dex file (method_ids_size at offset 0x58 of
+          # the dex header), the number the 64K method limit used to apply to.
+          dex_methods="$(python3 -c '
+          import struct, sys, zipfile
+          
+          counts = []
+          with zipfile.ZipFile(sys.argv[1]) as apk:
+              for name in sorted(n for n in apk.namelist()
+                                 if n.startswith("classes") and n.endswith(".dex")):
+                  with apk.open(name) as dex:
+                      counts.append(struct.unpack_from("<I", dex.read(0x70), 0x58)[0])
+          if counts:
+              total = sum(counts)
+              if len(counts) == 1:
+                  print(f"{total:,}")
+              else:
+                  print(f"{total:,} ({len(counts)} dex, largest {max(counts):,})")
+          ' "$apk_path" 2>/dev/null)" || true
+
+          caption="Size: ${apk_kb}K"
+          [[ -n "$dex_methods" ]] && caption+=$'\n'"Methods: ${dex_methods}"
+
           curl --fail-with-body --silent --show-error --retry 3 \
             "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendDocument" \
             -F "chat_id=${TELEGRAM_CHAT_ID}" \
-            --form-string "caption=Size: ${apk_kb}K" \
+            --form-string "caption=${caption}" \
             -F parse_mode=HTML \
             -F "document=@${apk_path}"
           rm "$apk_path"
