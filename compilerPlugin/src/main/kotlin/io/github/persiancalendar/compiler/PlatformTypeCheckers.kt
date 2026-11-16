@@ -15,10 +15,13 @@ import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.fir.types.ConeFlexibleType
 import org.jetbrains.kotlin.fir.types.isMarkedNullable
 import org.jetbrains.kotlin.fir.types.resolvedType
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.FqName
 
 class PlatformTypeCheckers(session: FirSession) : FirAdditionalCheckersExtension(session) {
     override val expressionCheckers: ExpressionCheckers = object : ExpressionCheckers() {
@@ -59,7 +62,9 @@ private fun reportIfPlatformReceiver(
 ) {
     if (receiver == null) return
     if (receiver.resolvedType !is ConeFlexibleType) return
-    val callableKey = receiver.callableKey(context.session) ?: return
+    val symbol = receiver.callableSymbol(context.session) ?: return
+    if (symbol.resolvedAnnotationClassIds.any { it in NON_NULL_ANNOTATIONS }) return
+    val callableKey = symbol.callableId.toString().replace('/', '.')
     if (callableKey.startsWith("kotlin.")) return
     if (callableKey.startsWith("_synthetic.")) return
     if (callableKey in ALWAYS_NON_NULL) return
@@ -71,14 +76,20 @@ private fun reportIfPlatformReceiver(
     )
 }
 
-private fun FirExpression.callableKey(session: FirSession): String? {
+private fun FirExpression.callableSymbol(session: FirSession): FirCallableSymbol<*>? {
     val symbol = toResolvedCallableSymbol(session) ?: return null
     if (symbol is FirVariableSymbol<*>) {
         val initializer = symbol.resolvedInitializer ?: return null
-        return initializer.callableKey(session)
+        return initializer.callableSymbol(session)
     }
-    return symbol.callableId.toString().replace('/', '.')
+    return symbol
 }
+
+private val NON_NULL_ANNOTATIONS = setOf(
+    ClassId.topLevel(FqName("android.annotation.NonNull")),
+    ClassId.topLevel(FqName("androidx.annotation.NonNull")),
+    ClassId.topLevel(FqName("android.support.annotation.NonNull")),
+)
 
 // These Java APIs are documented/guaranteed to return a non-null value even though the
 // platform stubs do not carry that information.
@@ -90,7 +101,6 @@ private val ALWAYS_NON_NULL = setOf(
     "android.media.AudioFormat.Builder.setEncoding",
     "android.media.AudioFormat.Builder.setSampleRate",
     "android.view.InputDevice.getDeviceIds",
-    "android.view.inputmethod.InputMethodManager.getEnabledInputMethodSubtypeList",
     "android.widget.Toast.makeText",
     "java.lang.Class.forName",
     "java.lang.Class.getDeclaredField",
