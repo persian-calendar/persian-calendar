@@ -42,7 +42,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.getValue
@@ -331,7 +330,6 @@ fun SharedTransitionScope.MapScreen(
             }
         }
         GlobeView(bitmap) { showGlobeView = false }
-        DisposableEffect(key1 = bitmap) { onDispose { bitmap.recycle() } }
     }
 
     Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {

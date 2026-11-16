@@ -45,14 +45,20 @@ import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 
+/** Takes ownership of [bitmap]; the caller must not recycle or mutate it after handing it over. */
 @Composable
 fun GlobeView(
     bitmap: Bitmap,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
 ) {
+    // The GL thread may still be uploading when Compose replaces or removes the view.
+    // Keep recycling and uploads under one owner, including EGL context recreation.
+    val textureOwner = remember { GlobeTextureOwner(bitmap, Bitmap::recycle) }
     val renderer = remember {
-        GLRenderer(onSurfaceCreated = { it.loadTexture(bitmap) }).also {
+        GLRenderer(onSurfaceCreated = { renderer ->
+            textureOwner.withTexture(renderer::loadTexture)
+        }).also {
             it.fragmentShader = globeFragmentShader
         }
     }
@@ -86,9 +92,12 @@ fun GlobeView(
             glView
         },
         update = {
-            bitmap.let {}
-            if (renderer.isSurfaceCreated) it.queueEvent { renderer.loadTexture(bitmap) }
+            textureOwner.replace(bitmap)
+            it.queueEvent {
+                if (renderer.isSurfaceCreated) textureOwner.withTexture(renderer::loadTexture)
+            }
         },
+        onRelease = { textureOwner.close() },
         modifier = modifier
             .pointerInput(Unit) {
                 var lastPointerId: PointerId? = null
