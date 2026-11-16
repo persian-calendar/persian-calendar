@@ -36,7 +36,7 @@ class MainActivity : BaseActivity() {
         setTheme(R.style.BaseTheme)
         super.onCreate(savedInstanceState)
 
-        intent.getLongExtra(eventKey, -1L).takeIf { it != -1L }?.let { eventId ->
+        intent?.getLongExtra(eventKey, -1L)?.takeIf { it != -1L }?.let { eventId ->
             val intent = Intent(Intent.ACTION_VIEW).setData(
                 ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId),
             )

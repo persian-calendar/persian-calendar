@@ -32,8 +32,6 @@ private object PlatformTypeFunctionCallChecker :
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirFunctionCall) {
         if (expression.isNullAwareExtension(context.session)) return
-        // debugAssertNotNull accepts and returns nullable; it is not a nullness sanitizer.
-        if (expression.calleeReference.name.asString() == "debugAssertNotNull") return
         reportIfPlatformReceiver(expression.explicitReceiver, reporter)
     }
 }
@@ -43,8 +41,6 @@ private object PlatformTypePropertyAccessChecker :
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirPropertyAccessExpression) {
         if (expression.isNullAwareExtension(context.session)) return
-        // debugAssertNotNull accepts and returns nullable; it is not a nullness sanitizer.
-        if (expression.calleeReference.name.asString() == "debugAssertNotNull") return
         reportIfPlatformReceiver(expression.explicitReceiver, reporter)
     }
 }
@@ -66,7 +62,6 @@ private fun reportIfPlatformReceiver(
     val callableKey = receiver.callableKey(context.session) ?: return
     if (callableKey.startsWith("kotlin.")) return
     if (callableKey.startsWith("_synthetic.")) return
-    if (callableKey.endsWith(".debugAssertNotNull")) return
     if (callableKey in ALWAYS_NON_NULL) return
     reporter.reportOn(
         receiver.source,
@@ -120,7 +115,6 @@ private val ALWAYS_NON_NULL = setOf(
     "android.view.Window.attributes",
     "android.view.inputmethod.InputMethodManager.getEnabledInputMethodSubtypeList",
     "android.view.inputmethod.InputMethodManager.enabledInputMethodList",
-    "android.app.Activity.intent",
     "android.widget.Toast.makeText",
     "java.io.FileOutputStream.fd",
     "java.lang.Class.forName",
