@@ -19,7 +19,7 @@ class AtomicFileImportTest {
 
     @Test
     fun `failed reads oversized files invalid validations and failed replacements preserve the previous file`() {
-        val directory = Files.createTempDirectory("font-import").toFile() ?: throw Exception("Failed to create")
+        val directory = Files.createTempDirectory("font-import")?.toFile() ?: throw Exception("Failed to create")
         try {
             val destination = File(directory, "font.ttf").apply { writeText("old") }
             val broken = object : InputStream() {
