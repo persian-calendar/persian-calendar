@@ -449,7 +449,7 @@ private fun MenuItems(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && runCatching {
             AppWidgetManager.getInstance(
                 context,
-            ).isRequestPinAppWidgetSupported
+            )?.isRequestPinAppWidgetSupported
         }.getOrNull() == true) {
         AppDropdownMenuItem(
             text = { Text(stringResource(Res.string.add_widget)) },

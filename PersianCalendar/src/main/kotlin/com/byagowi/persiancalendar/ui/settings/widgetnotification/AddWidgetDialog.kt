@@ -43,7 +43,7 @@ fun AddWidgetDialog(
             fun addWidget() {
                 closeDialog()
                 runCatching {
-                    widgetManager.requestPinAppWidget(widget.provider, null, null)
+                    widgetManager?.requestPinAppWidget(widget.provider, null, null)
                 }.getOrNull().debugAssertNotNull
             }
             Spacer(Modifier.height(16.dp))

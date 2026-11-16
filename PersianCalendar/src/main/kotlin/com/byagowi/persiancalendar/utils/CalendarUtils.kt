@@ -80,16 +80,25 @@ fun getA11yDaySummary(
 
     val mainDate = jdn on mainCalendar
 
-    if (withTitle) appendLine().append(dayTitleSummary(jdn, mainDate))
+    if (withTitle) {
+        appendLine()
+        append(dayTitleSummary(jdn, mainDate))
+    }
 
     val shift = shiftWorkSettings.workTitle(jdn)
-    if (shift != null) appendLine().append(shift)
+    if (shift != null) {
+        appendLine()
+        append(shift)
+    }
 
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars != null) {
-            appendLine().appendLine().append(resources.getString(R.string.equivalent_to))
-                .append(" ").append(otherCalendars)
+            appendLine()
+            appendLine()
+            append(resources.getString(R.string.equivalent_to))
+            append(" ")
+            append(otherCalendars)
         }
     }
 
@@ -111,14 +120,18 @@ fun getA11yDaySummary(
         addIsHoliday = false,
     )
     if (nonHolidays.isNotEmpty()) {
-        appendLine().appendLine().appendLine(resources.getString(R.string.events))
-            .append(nonHolidays)
+        appendLine()
+        appendLine()
+        appendLine(resources.getString(R.string.events))
+        append(nonHolidays)
     }
 
     if (withWeekOfYear) {
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn, weekStart)
-        appendLine().appendLine().append(
+        appendLine()
+        appendLine()
+        append(
             resources.getString(
                 R.string.nth_week_of_year, numeral.format(weekOfYearStart),
             ),
@@ -126,7 +139,9 @@ fun getA11yDaySummary(
     }
 
     if (withZodiac && showMoonInScorpio) {
-        appendLine().appendLine().appendLine(generateYearName(resources, jdn, withEmoji = false))
+        appendLine()
+        appendLine()
+        appendLine(generateYearName(resources, jdn, withEmoji = false))
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))
     }
 }

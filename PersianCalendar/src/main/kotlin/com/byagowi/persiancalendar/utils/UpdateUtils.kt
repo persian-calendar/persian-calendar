@@ -563,7 +563,7 @@ private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
 
 fun updateMonthWidget(context: Context, widgetId: Int, command: Int) {
     val appWidgetManager = AppWidgetManager.getInstance(context)
-    val size = appWidgetManager.getWidgetSize(context.resources, widgetId)
+    val size = appWidgetManager?.getWidgetSize(context.resources, widgetId) ?: DpSize(0.dp, 0.dp)
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
         if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command),
     )
@@ -826,7 +826,7 @@ private fun createScheduleRemoteViews(context: Context, size: DpSize?, widgetId:
         it.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
         it.putExtra("events", eventsRepository.hashCode())
         it.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        it.data = it.toUri(Intent.URI_INTENT_SCHEME).toUri()
+        it.data = it.toUri(Intent.URI_INTENT_SCHEME)?.toUri()
     }
     @Suppress("DEPRECATION") remoteViews.setRemoteAdapter(
         R.id.widget_schedule_content,

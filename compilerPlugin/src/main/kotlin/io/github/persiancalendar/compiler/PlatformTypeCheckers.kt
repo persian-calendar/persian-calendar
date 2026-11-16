@@ -83,9 +83,6 @@ private fun FirExpression.callableKey(session: FirSession): String? {
 // These Java APIs are documented/guaranteed to return a non-null value even though the
 // platform stubs do not carry that information.
 private val ALWAYS_NON_NULL = setOf(
-    "android.appwidget.AppWidgetManager.getInstance",
-    "android.content.ClipData.newPlainText",
-    "android.content.Context.applicationContext",
     "android.content.Context.contentResolver",
     "android.content.Context.resources",
     "android.content.ContextWrapper.resources",
@@ -125,13 +122,11 @@ private val ALWAYS_NON_NULL = setOf(
     "java.lang.Process.inputStream",
     "java.lang.Runtime.exec",
     "java.lang.Runtime.getRuntime",
-    "java.lang.StringBuilder.append",
     "java.nio.ByteBuffer.allocateDirect",
     "java.nio.ByteBuffer.asFloatBuffer",
     "java.nio.ByteBuffer.order",
     "java.nio.FloatBuffer.put",
     "java.text.Format.format",
-    "java.util.Calendar.time",
     "java.util.GregorianCalendar.timeZone",
     "java.util.Locale.getDefault",
     "java.util.TimeZone.displayName",

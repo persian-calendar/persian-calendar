@@ -494,7 +494,8 @@ private fun CalendarsFlow(
                             interactionSource = null,
                             indication = ripple(bounded = false),
                         ) {
-                            val entry = ClipData.newPlainText("date", formatDate(date))
+                            val entry =
+                                ClipData.newPlainText("date", formatDate(date)) ?: return@clickable
                             coroutineScope.launch { clipboard.setClipEntry(entry.toClipEntry()) }
                         }
                         .semantics { this.contentDescription = formatDate(date) },
