@@ -1,6 +1,14 @@
 package io.github.persiancalendar.compiler
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
+import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactory1
+import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactoryToRendererMap
+import org.jetbrains.kotlin.diagnostics.Severity
+import org.jetbrains.kotlin.diagnostics.SourceElementPositioningStrategies
+import org.jetbrains.kotlin.diagnostics.rendering.BaseDiagnosticRendererFactory
+import org.jetbrains.kotlin.diagnostics.rendering.DiagnosticParameterRenderer
+import org.jetbrains.kotlin.diagnostics.rendering.RenderingContext
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.analysis.checkers.MppCheckerKind
@@ -8,7 +16,6 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.ExpressionCheckers
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirFunctionCallChecker
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirPropertyAccessExpressionChecker
-import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtension
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
@@ -70,8 +77,14 @@ private fun reportIfPlatformReceiver(
     if (callableKey in ALWAYS_NON_NULL) return
     reporter.reportOn(
         receiver.source,
-        FirErrors.OTHER_ERROR_WITH_REASON,
-        "Platform type from $callableKey. Annotate the Java declaration or handle nullability explicitly",
+        PlatformTypeDiagnostic.factory,
+        buildString {
+            append("Java platform type dereference: `")
+            append(callableKey)
+            append("` is used without a null check.\n")
+            append("The Java declaration has no compiler-visible @NonNull annotation, so Kotlin sees a platform type.\n")
+            append("Fix: use `?.` or `?:`, or add a recognized @NonNull annotation to the Java API.")
+        },
         context,
     )
 }
@@ -90,6 +103,35 @@ private val NON_NULL_ANNOTATIONS = setOf(
     ClassId.topLevel(FqName("androidx.annotation.NonNull")),
     ClassId.topLevel(FqName("android.support.annotation.NonNull")),
 )
+
+private object PlatformTypeDiagnostic {
+    @Suppress("UNCHECKED_CAST")
+    private val rendererMap: KtDiagnosticFactoryToRendererMap =
+        KtDiagnosticFactoryToRendererMap::class.java
+            .getDeclaredConstructor(String::class.java)
+            .apply { isAccessible = true }
+            .newInstance("PlatformType") as KtDiagnosticFactoryToRendererMap
+
+    private val renderer = object : BaseDiagnosticRendererFactory() {
+        override val MAP: KtDiagnosticFactoryToRendererMap get() = rendererMap
+    }
+
+    private val stringRenderer = object : DiagnosticParameterRenderer<String> {
+        override fun render(obj: String, renderingContext: RenderingContext): String = obj
+    }
+
+    val factory: KtDiagnosticFactory1<String> = KtDiagnosticFactory1(
+        "JAVA_PLATFORM_TYPE_DEREFERENCE",
+        Severity.ERROR,
+        SourceElementPositioningStrategies.DEFAULT,
+        PsiElement::class,
+        renderer,
+    )
+
+    init {
+        rendererMap.put(factory, "{0}", stringRenderer)
+    }
+}
 
 // These Java APIs are documented/guaranteed to return a non-null value even though the
 // platform stubs do not carry that information.
