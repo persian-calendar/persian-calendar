@@ -81,7 +81,8 @@ fun AthanSelectDialog(
         commonDialogCallback(it) callback@{ uri ->
             // If no ringtone has been found better to skip touching preferences store
             val ringtone = RingtoneManager.getRingtone(context, uri) ?: return@callback null
-            ringtone.getTitle(context).orEmpty() to uri
+            val title: String? = ringtone.getTitle(context)
+            title.orEmpty() to uri
         }
         Toast.makeText(
             context,

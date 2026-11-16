@@ -92,7 +92,6 @@ private val ALWAYS_NON_NULL = setOf(
     "android.media.AudioAttributes.Builder.setUsage",
     "android.media.AudioFormat.Builder.setEncoding",
     "android.media.AudioFormat.Builder.setSampleRate",
-    "android.media.Ringtone.getTitle",
     "android.net.Uri.buildUpon",
     "android.os.Build.SUPPORTED_ABIS",
     "android.os.Build.VERSION.INCREMENTAL",
