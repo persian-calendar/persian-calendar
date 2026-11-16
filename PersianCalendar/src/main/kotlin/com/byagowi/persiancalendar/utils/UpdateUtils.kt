@@ -562,13 +562,13 @@ class StoredMonthOffset(val offset: Int) {
 private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
 
 fun updateMonthWidget(context: Context, widgetId: Int, command: Int) {
-    val appWidgetManager = AppWidgetManager.getInstance(context)
-    val size = appWidgetManager?.getWidgetSize(context.resources, widgetId) ?: DpSize(0.dp, 0.dp)
+    val appWidgetManager = AppWidgetManager.getInstance(context) ?: return
+    val size = appWidgetManager.getWidgetSize(context.resources, widgetId)
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
         if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command),
     )
     val views = createMonthRemoteViews(context, size, widgetId)
-    appWidgetManager?.updateAppWidget(widgetId, views)
+    appWidgetManager.updateAppWidget(widgetId, views)
 }
 
 private fun createMonthRemoteViews(context: Context, size: DpSize?, widgetId: Int): RemoteViews {
