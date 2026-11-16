@@ -465,7 +465,7 @@ private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, 
         },
     ) { cancellationSignal ->
         context.contentResolver.query(
-            CalendarContract.Calendars.CONTENT_URI.buildUpon().build(),
+            CalendarContract.Calendars.CONTENT_URI,
             arrayOf(
                 CalendarContract.Calendars._ID, // 0
                 CalendarContract.Calendars.ACCOUNT_NAME, // 1

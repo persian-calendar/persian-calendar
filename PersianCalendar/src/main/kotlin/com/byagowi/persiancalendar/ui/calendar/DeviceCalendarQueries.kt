@@ -131,8 +131,7 @@ private fun <T> rememberCalendarProviderRequest(
     }
     LaunchedEffect(lifecycle) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            snapshotFlow { latestRequest() to latestRevision }
-                .distinctUntilChangedBy { (request, revision) -> request.identity to revision }
+            snapshotFlow { latestRequest() to latestRevision }.distinctUntilChangedBy { (request, revision) -> request.identity to revision }
                 .collectLatest { (request, revision) ->
                     fun publish(state: CalendarProviderState<T>) {
                         // A changed input can precede collectLatest's cancellation on Main.
@@ -200,13 +199,17 @@ private fun <T> rememberCalendarProviderRequest(
                 }
         }
     }
-    return stored?.takeIf { it.contentKey == currentRequest.contentKey }?.state
-        ?: emptyState(currentRequest)
+    return stored?.takeIf { it.contentKey == currentRequest.contentKey }?.state ?: run {
+        emptyState(currentRequest)
+    }
 }
 
-private fun Context.hasCalendarPermission() =
-    ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) ==
-            PackageManager.PERMISSION_GRANTED
+private fun Context.hasCalendarPermission(): Boolean {
+    return ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.READ_CALENDAR,
+    ) == PackageManager.PERMISSION_GRANTED
+}
 
 /**
  * Reads the days that have at least one device calendar event in the range, plus which of them
@@ -239,9 +242,9 @@ private fun readDaysWithDeviceEvents(
     val eventDays = mutableSetOf<Jdn>()
     val holidayDays = mutableSetOf<Jdn>()
     val cursor = context.contentResolver.query(
-        CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
-            ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
-            ContentUris.appendId(this, endingDate.timeInMillis + 1.days.inWholeMilliseconds)
+        (CalendarContract.Instances.CONTENT_URI.buildUpon() ?: return DeviceEventDays.EMPTY).also {
+            ContentUris.appendId(it, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
+            ContentUris.appendId(it, endingDate.timeInMillis + 1.days.inWholeMilliseconds)
         }.build(),
         arrayOf(
             CalendarContract.Instances.BEGIN, // 0
@@ -325,8 +328,7 @@ private data class DeviceEventsRequest(
     val query: DeviceEventsQuery,
 ) {
     val isDay
-        get() = query == DeviceEventsQuery.Detailed &&
-                days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
+        get() = query == DeviceEventsQuery.Detailed && days == 1 && limit == DEVICE_EVENTS_CACHE_DAY_LIMIT
 
     fun covers(jdn: Jdn) = (jdn - startJdn) in 0..<days
 }
@@ -361,8 +363,7 @@ private class CachedDeviceEvents(
 
 /** A cached result is reusable when it is current and is not a transient failure to retry. */
 private fun CachedDeviceEvents?.isReusable(generation: Int): Boolean =
-    this != null && this.generation == generation &&
-            state.status != CalendarProviderStatus.Error
+    this != null && this.generation == generation && state.status != CalendarProviderStatus.Error
 
 /** A preloadable LRU cache of device calendar events, keyed by the requested range. */
 class DeviceCalendarEventsCache internal constructor(
@@ -488,12 +489,7 @@ class DeviceCalendarEventsCache internal constructor(
         refreshToken: Int,
     ) {
         val previous = environment
-        if (previous != null &&
-            previous.settings == settings &&
-            previous.permissionGranted == permissionGranted &&
-            previous.revision == revision &&
-            previous.refreshToken == refreshToken
-        ) return
+        if (previous != null && previous.settings == settings && previous.permissionGranted == permissionGranted && previous.revision == revision && previous.refreshToken == refreshToken) return
         environment = DeviceEventsEnvironment(
             settings = settings,
             permissionGranted = permissionGranted,
@@ -546,8 +542,10 @@ class DeviceCalendarEventsCache internal constructor(
             CalendarProviderStatus.Ready,
         )
 
-        !environment.permissionGranted ->
-            CalendarProviderState(emptyResult, CalendarProviderStatus.PermissionDenied)
+        !environment.permissionGranted -> CalendarProviderState(
+            emptyResult,
+            CalendarProviderStatus.PermissionDenied,
+        )
 
         cached == null -> CalendarProviderState(emptyResult, CalendarProviderStatus.Loading)
         cached.generation == environment.generation -> cached.state
@@ -705,9 +703,7 @@ class DeviceCalendarEventsCache internal constructor(
         while (entries.size > maxEntries && iterator.hasNext()) {
             val request = iterator.next().key
             if (memoryPolicy.preloadingAllowed && requests.containsKey(request)) continue
-            if (protectPreload && request.isDay && start != null && preloadDays > 0 &&
-                (request.startJdn - start) in 0..<preloadDays
-            ) continue
+            if (protectPreload && request.isDay && start != null && preloadDays > 0 && (request.startJdn - start) in 0..<preloadDays) continue
             iterator.remove()
             entries.remove(request)
         }
@@ -777,8 +773,9 @@ fun rememberDeviceCalendarSearch(
                             signal,
                         )
                         val (upcoming, past) = events.partition { it.interval.beginMillis >= now }
-                        (upcoming.sortedBy { it.interval.beginMillis } +
-                                past.sortedByDescending { it.interval.beginMillis }).take(100)
+                        (upcoming.sortedBy { it.interval.beginMillis } + past.sortedByDescending { it.interval.beginMillis }).take(
+                            100,
+                        )
                     }
                 query
             },

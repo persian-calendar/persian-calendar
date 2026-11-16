@@ -213,11 +213,12 @@ internal fun readDeviceEvents(
             add(GregorianCalendar.DAY_OF_MONTH, duration.inWholeDays.toInt())
         }
         context.contentResolver.query(
-            CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
-                ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
+            (CalendarContract.Instances.CONTENT_URI.buildUpon() ?: return emptyList()).also {
                 ContentUris.appendId(
-                    this, endingDate.timeInMillis + 1.days.inWholeMilliseconds,
+                    it,
+                    startingDate.timeInMillis - 1.days.inWholeMilliseconds,
                 )
+                ContentUris.appendId(it, endingDate.timeInMillis + 1.days.inWholeMilliseconds)
             }.build(),
             arrayOf(
                 CalendarContract.Instances.EVENT_ID, // 0
@@ -282,8 +283,10 @@ internal fun readDeviceEvents(
         } ?: emptyList()
     }
     cancellationSignal?.throwIfCanceled()
-    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) !=
-        PackageManager.PERMISSION_GRANTED
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_CALENDAR,
+        ) != PackageManager.PERMISSION_GRANTED
     ) return emptyList()
     return events
 }
