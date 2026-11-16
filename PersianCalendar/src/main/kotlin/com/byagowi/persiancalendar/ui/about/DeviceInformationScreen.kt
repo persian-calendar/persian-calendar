@@ -695,7 +695,8 @@ private fun createItemsList(
         Item(
             "OpenGL Extensions",
             buildAnnotatedString {
-                val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
+                val extensions =
+                    GLES20.glGetString(GLES20.GL_EXTENSIONS)?.trim().orEmpty().split(" ")
                 val regex = Regex("GL_([a-zA-Z]+)_(.+)")
                 extensions.forEachIndexed { i, it ->
                     if (i != 0) appendLine()

@@ -140,6 +140,7 @@ import com.byagowi.persiancalendar.ui.utils.ChangesHapticFeedback
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.eclipseTypeTitleRes
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
@@ -811,7 +812,7 @@ private fun Header(
     }
 
     Column(modifier) {
-        headerCache[jdn].fastForEach { line ->
+        (headerCache[jdn] ?: null.debugAssertNotNull)?.fastForEach { line ->
             AnimatedContent(targetState = line, transitionSpec = appCrossfadeSpec) {
                 SelectionContainer {
                     Text(
@@ -881,7 +882,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
         (1..4).map { i ->
             seasonsCache[
                 CivilDate(PersianDate(persianYear, i * 3, 29)).year,
-            ][i % 4]
+            ]?.getOrNull(i % 4) ?: null.debugAssertNotNull
         }
     }
     repeat(2) { row ->
@@ -889,7 +890,7 @@ private fun Seasons(jdn: Jdn, timeInMillis: MutableLongState) {
             repeat(2) { cell ->
                 Box(Modifier.weight(1f)) {
                     val title = stringResource(seasonsOrder[cell + row * 2].nameStringRes)
-                    val (time, formattedTime) = equinoxes[cell + row * 2]
+                    val (time, formattedTime) = equinoxes[cell + row * 2] ?: return@Box
                     Cell(
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.small)

@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.shared.R
+import com.byagowi.persiancalendar.ui.utils.getDrawableOrFallback
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import kotlin.math.abs
@@ -35,8 +36,8 @@ class SolarDraw(resources: Resources) {
         drawable.draw(canvas)
     }
 
-    private val sunDrawable = resources.getDrawable(R.drawable.ic_sun, null)
-    private val smallSunDrawable = resources.getDrawable(R.drawable.ic_sun_small, null)
+    private val sunDrawable = resources.getDrawableOrFallback(R.drawable.ic_sun)
+    private val smallSunDrawable = resources.getDrawableOrFallback(R.drawable.ic_sun_small)
 
     fun moon(
         canvas: Canvas, phase: Double, cx: Float, cy: Float, r: Float,
@@ -84,14 +85,14 @@ class SolarDraw(resources: Resources) {
         moonDrawable.draw(canvas)
     }
 
-    private val moonDrawable = resources.getDrawable(R.drawable.ic_moon, null)
+    private val moonDrawable = resources.getDrawableOrFallback(R.drawable.ic_moon)
     private val ovalPath = Path()
 
     private val moonShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x90000000.toInt()
     }
 
-    private val earthDrawable = resources.getDrawable(R.drawable.ic_earth, null)
+    private val earthDrawable = resources.getDrawableOrFallback(R.drawable.ic_earth)
 
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthDrawable.setBounds(

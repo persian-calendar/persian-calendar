@@ -131,7 +131,8 @@ fun AppTheme(content: @Composable () -> Unit) {
                     val bitmap = remember(customImageName) {
                         val file = File(context.filesDir, STORED_IMAGE_NAME).takeIf { it.exists() }
                             ?: return@remember null
-                        BitmapFactory.decodeFile(file.absolutePath).asImageBitmap()
+                        (BitmapFactory.decodeFile(file.absolutePath)
+                            ?: null.debugAssertNotNull)?.asImageBitmap()
                     }
                     if (bitmap != null) {
                         Image(

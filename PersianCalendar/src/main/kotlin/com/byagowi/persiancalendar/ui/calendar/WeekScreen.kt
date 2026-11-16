@@ -1223,11 +1223,13 @@ fun DaysView(
                         !numeral.isArabicIndicVariants
                     }
                     AnimatedContent(
-                        targetState = clockCache[y * 15] + when {
+                        targetState = run {
+                            clockCache[y * 15] ?: null.debugAssertNotNull
+                        }.orEmpty() + when {
                             !compact -> "\n"
                             days == 7 -> " "
                             else -> " $EN_DASH "
-                        } + clockCache[(y + dy) * 15],
+                        } + (clockCache[(y + dy) * 15] ?: null.debugAssertNotNull).orEmpty(),
                         transitionSpec = appCrossfadeSpec,
                     ) {
                         Text(

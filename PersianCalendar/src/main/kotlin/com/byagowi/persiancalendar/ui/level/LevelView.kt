@@ -27,6 +27,7 @@ import androidx.compose.runtime.MutableFloatState
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getDrawableOrFallback
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
@@ -93,12 +94,12 @@ class LevelView(
     /**
      * Drawables
      */
-    private val level1D = resources.getDrawable(R.drawable.level_1d, null)
-    private val bubble1D = resources.getDrawable(R.drawable.bubble_1d, null)
-    private val marker1D = resources.getDrawable(R.drawable.marker_1d, null)
-    private val level2D = resources.getDrawable(R.drawable.level_2d, null)
-    private val bubble2D = resources.getDrawable(R.drawable.bubble_2d, null)
-    private val marker2D = resources.getDrawable(R.drawable.marker_2d, null)
+    private val level1D = resources.getDrawableOrFallback(R.drawable.level_1d)
+    private val bubble1D = resources.getDrawableOrFallback(R.drawable.bubble_1d)
+    private val marker1D = resources.getDrawableOrFallback(R.drawable.marker_1d)
+    private val level2D = resources.getDrawableOrFallback(R.drawable.level_2d)
+    private val bubble2D = resources.getDrawableOrFallback(R.drawable.bubble_2d)
+    private val marker2D = resources.getDrawableOrFallback(R.drawable.marker_2d)
 
     /**
      * Speed adjustment

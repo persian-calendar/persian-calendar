@@ -48,6 +48,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.resolveAndroidCustomTypeface
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getDrawableOrFallback
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
@@ -149,8 +150,10 @@ private class CompassView(private val resources: Resources) {
         val dashSize = 4 * dp
         it.pathEffect = DashPathEffect(floatArrayOf(dashSize, dashSize / 2), 0f)
     }
-    private val kaaba =
-        resources.getDrawable(R.drawable.kaaba, null).toBitmap((32 * dp).toInt(), (32 * dp).toInt())
+    private val kaaba = (resources.getDrawableOrFallback(R.drawable.kaaba)).toBitmap(
+        (32 * dp).toInt(),
+        (32 * dp).toInt(),
+    )
 
     private var cx = 0f
     private var cy = 0f // Center of Compass (cx, cy)

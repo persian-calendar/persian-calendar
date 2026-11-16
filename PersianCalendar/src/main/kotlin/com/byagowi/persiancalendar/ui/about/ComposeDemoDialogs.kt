@@ -683,6 +683,7 @@ fun PeriodicTableDialog(
             DisposableEffect(Unit) {
                 // https://commons.wikimedia.org/wiki/File:Ave_Maria_(Bach-Gounod).mid
                 val mediaPlayer = MediaPlayer.create(context, R.raw.avemaria)
+                    ?: return@DisposableEffect onDispose {}
                 runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(
                     logException,
                 )

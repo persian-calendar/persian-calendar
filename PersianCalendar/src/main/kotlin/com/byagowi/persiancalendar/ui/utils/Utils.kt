@@ -6,11 +6,14 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
 import android.view.HapticFeedbackConstants
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
@@ -125,3 +128,14 @@ val enabledCalendarsWithDefault: List<Calendar>
 @Composable
 @ReadOnlyComposable
 fun isLandscape() = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+/**
+ * Resolves a drawable resource, asserting in debug builds when the resource is missing and
+ * falling back to a transparent drawable instead of crashing in production.
+ */
+fun Resources.getDrawableOrFallback(
+    @DrawableRes id: Int,
+    theme: Resources.Theme? = null,
+): Drawable {
+    return getDrawable(id, theme) ?: null.debugAssertNotNull ?: ColorDrawable()
+}

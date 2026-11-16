@@ -35,7 +35,7 @@ jobs:
 
       - name: Build debug APK and run JVM tests
         run: |
-          ./gradlew assembleDebug lintDebug testDebugUnitTest :wear:testDebugUnitTest --stacktrace
+          ./gradlew assembleDebug lintDebug testDebugUnitTest :wear:testDebugUnitTest -PplatformTypeCheck --stacktrace
 
       - name: Run lint checks
         run: |

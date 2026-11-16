@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getDrawableOrFallback
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -58,7 +59,7 @@ class MapDraw(
     mapForegroundColor: Int? = null,
 ) {
     private val solarDraw = SolarDraw(resources)
-    private val pinDrawable = resources.getDrawable(R.drawable.ic_pin, null)
+    private val pinDrawable = resources.getDrawableOrFallback(R.drawable.ic_pin)
     private val kilometerUnit = resources.getString(
         com.byagowi.persiancalendar.shared.R.string.kilometer,
     )
@@ -107,7 +108,7 @@ class MapDraw(
     var drawKaaba: Boolean = false
 
     private val kaabaIcon by lazy(LazyThreadSafetyMode.NONE) {
-        resources.getDrawable(R.drawable.kaaba, null)
+        resources.getDrawableOrFallback(R.drawable.kaaba)
     }
 
     var markersScale = 1f

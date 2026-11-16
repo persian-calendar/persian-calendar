@@ -138,6 +138,7 @@ import com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActiv
 import com.byagowi.persiancalendar.ui.theme.resolveCustomFontPath
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getDrawableOrFallback
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
@@ -1518,7 +1519,7 @@ fun createWeekViewRemoteViews(
 
         if (index == 3) {
             // the day is today
-            val drawable = context.resources.getDrawable(R.drawable.hollow_circle, null)
+            val drawable = context.resources.getDrawableOrFallback(R.drawable.hollow_circle)
             drawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 if (prefersWidgetsDynamicColors) {
                     if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK

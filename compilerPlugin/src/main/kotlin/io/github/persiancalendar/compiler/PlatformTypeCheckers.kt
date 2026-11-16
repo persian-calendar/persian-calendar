@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtensi
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
+import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.types.ConeFlexibleType
 import org.jetbrains.kotlin.fir.types.resolvedType
 
@@ -46,10 +48,78 @@ private fun reportIfPlatformReceiver(
 ) {
     if (receiver == null) return
     if (receiver.resolvedType !is ConeFlexibleType) return
+    val callable = receiver.toResolvedCallableSymbol(context.session) ?: return
+    if (callable.isLocal) return
+    val callableKey = callable.callableId.toString().replace('/', '.')
+    if (callableKey.startsWith("kotlin.")) return
+    if (callableKey.endsWith(".debugAssertNotNull")) return
+    if (callableKey in ALWAYS_NON_NULL) return
     reporter.reportOn(
         receiver.source,
         FirErrors.OTHER_ERROR_WITH_REASON,
-        "Dereference of a Java platform type. Annotate the Java declaration or handle nullability explicitly.",
+        "Platform type from $callableKey. Annotate the Java declaration or handle nullability explicitly.",
         context,
     )
 }
+
+// These Java APIs are documented/guaranteed to return a non-null value even though the
+// platform stubs do not carry that information.
+private val ALWAYS_NON_NULL = setOf(
+    "android.appwidget.AppWidgetManager.getInstance",
+    "android.content.Context.applicationContext",
+    "android.content.Context.contentResolver",
+    "android.content.Context.resources",
+    "android.content.ContextWrapper.resources",
+    "android.content.Intent.toUri",
+    "android.content.res.Resources.configuration",
+    "android.content.res.Resources.displayMetrics",
+    "android.database.Cursor.getString",
+    "android.hardware.SensorEvent.sensor",
+    "android.hardware.SensorEvent.values",
+    "android.location.LocationManager.allProviders",
+    "android.media.AudioAttributes.Builder.setContentType",
+    "android.media.AudioAttributes.Builder.setFlags",
+    "android.media.AudioAttributes.Builder.setLegacyStreamType",
+    "android.media.AudioAttributes.Builder.setUsage",
+    "android.media.AudioFormat.Builder.setEncoding",
+    "android.media.AudioFormat.Builder.setSampleRate",
+    "android.media.Ringtone.getTitle",
+    "android.net.Uri.buildUpon",
+    "android.os.Build.SUPPORTED_ABIS",
+    "android.os.Build.VERSION.INCREMENTAL",
+    "android.os.Build.VERSION.RELEASE",
+    "android.provider.CalendarContract.Calendars.CONTENT_URI",
+    "android.provider.CalendarContract.Instances.CONTENT_URI",
+    "android.service.dreams.DreamService.window",
+    "android.view.ContextThemeWrapper.resources",
+    "android.view.DisplayCutout.boundingRects",
+    "android.view.InputDevice.getDeviceIds",
+    "android.view.View.context",
+    "android.view.Window.attributes",
+    "android.view.inputmethod.InputMethodManager.getEnabledInputMethodSubtypeList",
+    "android.view.inputmethod.InputMethodManager.enabledInputMethodList",
+    "android.app.Activity.intent",
+    "android.app.Activity.window",
+    "android.widget.Toast.makeText",
+    "java.io.FileOutputStream.fd",
+    "java.lang.Class.forName",
+    "java.lang.Class.getDeclaredMethod",
+    "java.lang.Class.getMethod",
+    "java.lang.Process.inputStream",
+    "java.lang.Runtime.exec",
+    "java.lang.Runtime.getRuntime",
+    "java.lang.StringBuilder.append",
+    "java.lang.System.getProperty",
+    "java.nio.ByteBuffer.allocateDirect",
+    "java.nio.ByteBuffer.asFloatBuffer",
+    "java.nio.FloatBuffer.put",
+    "java.text.Format.format",
+    "java.util.Calendar.time",
+    "java.util.GregorianCalendar.timeZone",
+    "java.util.Locale.getDefault",
+    "java.util.TimeZone.displayName",
+    "java.util.TimeZone.getAvailableIDs",
+    "java.util.TimeZone.getDefault",
+    "java.util.TimeZone.getTimeZone",
+    "java.util.TimeZone.id",
+)
