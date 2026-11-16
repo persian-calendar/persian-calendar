@@ -183,7 +183,7 @@ class MapDraw(
                 crescentVisibilityMap.update(
                     baseTime = Time(date.year, date.month, date.dayOfMonth, 0, 0, .0),
                     mapType = mapType,
-                    threads = Runtime.getRuntime().availableProcessors().coerceAtLeast(1),
+                    threads = Runtime.getRuntime()?.availableProcessors()?.coerceAtLeast(1) ?: 1,
                 )
             }
 

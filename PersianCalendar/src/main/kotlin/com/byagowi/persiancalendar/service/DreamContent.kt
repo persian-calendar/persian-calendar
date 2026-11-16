@@ -85,11 +85,16 @@ private fun brownNoise(): AudioTrack {
         (((Random.nextDouble() * 2 - 1) * .02 + lastOut) / 1.02)
     }.map { (it * Short.MAX_VALUE).toInt().toShort() }.toShortArray()
     val audioTrack = AudioTrack.Builder().setAudioAttributes(
-        AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build(),
+        AudioAttributes.Builder().also {
+            it.setUsage(AudioAttributes.USAGE_MEDIA)
+            it.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+        }.build(),
     ).setAudioFormat(
-        AudioFormat.Builder().setSampleRate(sampleRate).setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-            .setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build(),
+        AudioFormat.Builder().also {
+            it.setSampleRate(sampleRate)
+            it.setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+            it.setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+        }.build(),
     ).setBufferSizeInBytes(buffer.size * 2).setTransferMode(AudioTrack.MODE_STATIC).build()
     audioTrack.write(buffer, 0, buffer.size)
     audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)

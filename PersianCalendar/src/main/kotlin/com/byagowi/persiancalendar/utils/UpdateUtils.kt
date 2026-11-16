@@ -387,13 +387,11 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
             )
         }
     }.onFailure(logException).onFailure {
-        if (BuildConfig.DEVELOPMENT) {
-            Toast.makeText(
-                context,
-                "An error has happened, see the in-app log and post it to me",
-                Toast.LENGTH_LONG,
-            ).show()
-        }
+        if (BuildConfig.DEVELOPMENT) Toast.makeText(
+            context,
+            "An error has happened, see the in-app log and post it to me",
+            Toast.LENGTH_LONG,
+        )?.show()
     }
 }
 

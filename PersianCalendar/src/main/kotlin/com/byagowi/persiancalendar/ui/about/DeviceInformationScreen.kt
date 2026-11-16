@@ -150,12 +150,11 @@ fun SharedTransitionScope.DeviceInformationScreen(
             }
         } + "\ncutoutPath: " + WindowInsets.cutoutPath?.toSvg(false)
         val items = remember(primaryColor) {
-            val runtime = Runtime.getRuntime() ?: return@remember emptyList()
             createItemsList(
                 activity ?: return@remember emptyList(),
                 primaryColor,
                 insets,
-                runtime,
+                Runtime.getRuntime() ?: return@remember emptyList(),
             )
         }
         val shareFacilitator =
@@ -424,7 +423,7 @@ private fun createItemsList(
                 append(
                     runtime.exec(
                         arrayOf("uname", "-m"),
-                    ).inputStream.bufferedReader().readText().trim(),
+                    )?.inputStream?.bufferedReader()?.readText().orEmpty().trim(),
                 )
             }.getOrNull().debugAssertNotNull
             System.getProperty("os.arch", null)?.let {
@@ -621,7 +620,10 @@ private fun createItemsList(
         activity.getSystemService<SensorManager>()?.getSensorList(Sensor.TYPE_ALL)
             ?.joinToString("\n"),
     ),
-    Item("Input Device", InputDevice.getDeviceIds().map(InputDevice::getDevice).joinToString()),
+    Item(
+        "Input Device",
+        InputDevice.getDeviceIds()?.map(InputDevice::getDevice).orEmpty().joinToString(),
+    ),
     Item(
         "System Features", activity.packageManager?.systemAvailableFeatures?.joinToString("\n"),
     ),

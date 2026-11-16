@@ -154,7 +154,6 @@ fun SharedTransitionScope.ConverterScreen(
                         LocalLayoutDirection provides LayoutDirection.Ltr,
                     ) {
                         AnimatedVisibility(resetButtonVisibility) {
-                            val backspaceSpace = null
                             AppIconButton(
                                 icon = backspaceIcon,
                                 title = stringResource(Res.string.return_to_today),
@@ -283,9 +282,9 @@ private fun TimeZones(
     onResetActionChange: (() -> Unit) -> Unit,
     onResetButtonVisibilityChange: (Boolean) -> Unit,
 ) {
-    var firstTimeZone by rememberSaveable { mutableStateOf(TimeZone.getDefault()) }
+    var firstTimeZone by rememberSaveable { mutableStateOf<TimeZone?>(TimeZone.getDefault()) }
     val utc = TimeZone.getTimeZone("UTC")
-    var secondTimeZone by rememberSaveable { mutableStateOf(utc) }
+    var secondTimeZone by rememberSaveable { mutableStateOf<TimeZone?>(utc) }
     val clock = remember { mutableLongStateOf(System.currentTimeMillis()) }
     onResetButtonVisibilityChange(
         run {
@@ -297,7 +296,7 @@ private fun TimeZones(
         onShareActionChange { shareFacilitator ->
             shareFacilitator.shareText(
                 listOf(firstTimeZone, secondTimeZone).joinToString("\n") { timeZone ->
-                    timeZone.displayName + ": " + Clock(
+                    timeZone?.displayName.orEmpty() + ": " + Clock(
                         GregorianCalendar(timeZone).also {
                             it.timeInMillis = clock.longValue
                         },
@@ -312,10 +311,11 @@ private fun TimeZones(
         }
     }
     val zones = remember {
-        TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
+        TimeZone.getAvailableIDs().orEmpty().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
     }
     val difference = run {
-        val distance = secondTimeZone.rawOffset.milliseconds - firstTimeZone.rawOffset.milliseconds
+        val distance =
+            (secondTimeZone?.rawOffset ?: 0).milliseconds - (firstTimeZone?.rawOffset ?: 0).milliseconds
         Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
     }
 
@@ -720,7 +720,7 @@ private val minutesRange = 0..59
 
 @Composable
 private fun TimeZoneClock(
-    timeZone: TimeZone,
+    timeZone: TimeZone?,
     onTimeZoneChange: (TimeZone) -> Unit,
     clock: MutableLongState,
     zones: List<TimeZone>,

@@ -129,7 +129,7 @@ data class EventsRepository(
     }
 
     fun List<CalendarEvent<*>>.filterEvents(): List<CalendarEvent<*>> {
-        val timeZone = TimeZone.getDefault().id
+        val timeZone = TimeZone.getDefault()?.id
         return this.filter {
             when {
                 it.metadata[ALWAYS_DISPLAYED] == true -> true
@@ -231,8 +231,8 @@ data class EventsRepository(
 
         fun getEnabledTypes(preferences: SharedPreferences, language: Language): Set<String> {
             return preferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: when {
-                language.isIranExclusive && TimeZone.getDefault().id == IRAN_TIMEZONE_ID -> iranDefault
-                language.isAfghanistanExclusive && TimeZone.getDefault().id == AFGHANISTAN_TIMEZONE_ID -> afghanistanDefault
+                language.isIranExclusive && TimeZone.getDefault()?.id == IRAN_TIMEZONE_ID -> iranDefault
+                language.isAfghanistanExclusive && TimeZone.getDefault()?.id == AFGHANISTAN_TIMEZONE_ID -> afghanistanDefault
                 else -> emptySet()
             }
         }

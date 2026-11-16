@@ -70,7 +70,7 @@ fun showUnsupportedActionToast(context: Context) {
         context,
         R.string.not_supported_action,
         Toast.LENGTH_SHORT,
-    ).show()
+    )?.show()
 }
 
 // The same order as https://praytimes.org/

@@ -250,7 +250,7 @@ fun daysTable(
                         withTitle = true,
                     ),
                     Toast.LENGTH_SHORT,
-                ).show()
+                )?.show()
             }
 
             val arrowOffsetY =

@@ -560,7 +560,7 @@ fun updateStoredPreference(context: Context) {
     clockIn24_.value = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME,
-    ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+    ) && TimeZone.getDefault()?.id != IRAN_TIMEZONE_ID
     isDynamicIconEverEnabled_.value = PREF_DYNAMIC_ICON_ENABLED in preferences
     isDynamicIconEnabled_.value = preferences.getBoolean(
         PREF_DYNAMIC_ICON_ENABLED, DEFAULT_DYNAMIC_ICON_ENABLED,

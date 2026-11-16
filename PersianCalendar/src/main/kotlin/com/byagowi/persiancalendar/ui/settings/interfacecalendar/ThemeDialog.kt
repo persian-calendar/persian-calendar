@@ -293,7 +293,7 @@ private fun ColumnScope.FontPicker(
                                 context,
                                 "پرونده‌ای در قالب ttf یا otf انتخاب کنید",
                                 Toast.LENGTH_LONG,
-                            ).show()
+                            )?.show()
                         }.onFailure(logException).onFailure {
                             showUnsupportedActionToast(context)
                         }.getOrNull().debugAssertNotNull

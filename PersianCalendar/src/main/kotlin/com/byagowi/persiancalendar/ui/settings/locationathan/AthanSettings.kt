@@ -158,7 +158,7 @@ fun AthanSettings(
                         context,
                         "اگر امکان فعال‌سازی اعلان وجود ندارد احتمالاً نیاز باشد برنامه را حذف و مجدداً نصب کنید.",
                         Toast.LENGTH_LONG,
-                    ).show()
+                    )?.show()
                     onDismissRequest()
                 }
                 result = true
@@ -169,7 +169,7 @@ fun AthanSettings(
                     context,
                     "جهت عملکرد صحیح اذان برنامه به دسترسی اعلان نیاز دارد.",
                     Toast.LENGTH_LONG,
-                ).show()
+                )?.show()
                 launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
             return false

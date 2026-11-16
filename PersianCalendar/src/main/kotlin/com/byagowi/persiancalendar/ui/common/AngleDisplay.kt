@@ -77,7 +77,7 @@ class AngleDisplay(
             lcdBackgroundPaint,
         )
         canvas.drawText(
-            displayFormat.format(angle).padStart(backgroundText.length, whiteSpace),
+            displayFormat.format(angle).orEmpty().padStart(backgroundText.length, whiteSpace),
             displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
             lcdForegroundPaint,
         )

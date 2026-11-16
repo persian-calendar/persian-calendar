@@ -140,7 +140,7 @@ fun CalendarSettings(
     Column(modifier = modifier) {
         val context = LocalContext.current
         val today = remember { Jdn.today() }
-        if ((language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian) && (when (TimeZone.getDefault().id) {
+        if ((language.isIranExclusive || language.isAfghanistanExclusive || language.isUserAbleToReadPersian) && (when (TimeZone.getDefault()?.id) {
                 AFGHANISTAN_TIMEZONE_ID, IRAN_TIMEZONE_ID -> false
                 else -> true
             } || !today.isYearSupportedOnApp)

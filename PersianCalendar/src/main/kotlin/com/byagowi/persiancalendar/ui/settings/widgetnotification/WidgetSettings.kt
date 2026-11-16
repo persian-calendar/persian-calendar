@@ -101,7 +101,7 @@ fun WidgetSettings(modifier: Modifier = Modifier) {
             summary = stringResource(Res.string.center_align_widgets_summary),
         )
         val isInIranTimeVisible = remember(language) {
-            (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+            (language.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault()?.id != IRAN_TIMEZONE_ID
         }
         if (isInIranTimeVisible) SettingsSwitch(
             key = PREF_IRAN_TIME,

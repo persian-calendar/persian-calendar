@@ -429,7 +429,7 @@ private fun YearHoroscopeDialogContent(
         }
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
-        val isUserLocatedInIranOrAfghanistan = when (TimeZone.getDefault().id) {
+        val isUserLocatedInIranOrAfghanistan = when (TimeZone.getDefault()?.id) {
             IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID -> true
             else -> false
         }

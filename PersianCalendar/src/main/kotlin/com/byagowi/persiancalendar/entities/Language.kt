@@ -485,7 +485,7 @@ enum class Language(val code: String, val nativeName: String) {
         @Suppress("ConstantLocale")
         private val userDeviceCountry = Locale.getDefault().country ?: "IR"
 
-        private val userTimeZoneId = TimeZone.getDefault().id ?: IRAN_TIMEZONE_ID
+        private val userTimeZoneId = TimeZone.getDefault()?.id ?: IRAN_TIMEZONE_ID
 
         // Preferred app language for certain locale
         fun getPreferredDefaultLanguage(context: Context): Language {

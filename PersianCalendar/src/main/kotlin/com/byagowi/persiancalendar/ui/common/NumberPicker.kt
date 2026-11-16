@@ -293,7 +293,7 @@ fun NumberEdit(
                 context,
                 R.string.incorrect_date,
                 Toast.LENGTH_SHORT,
-            ).show()
+            )?.show()
         }
         val textBackground by animateColor(
             if (inError) MaterialTheme.colorScheme.error.copy(alpha = .1f)

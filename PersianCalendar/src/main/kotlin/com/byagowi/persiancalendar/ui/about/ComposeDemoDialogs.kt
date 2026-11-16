@@ -363,7 +363,7 @@ fun ScheduleAlarm(
                         WorkManager.getInstance(context).beginUniqueWork(
                             "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker,
                         ).enqueue()
-                        Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT)?.show()
                     }
                 },
             ) { Text(stringResource(Res.string.accept)) }
@@ -622,7 +622,7 @@ fun createEasterEggClickHandler(callback: () -> Unit): () -> Unit {
         runCatching {
             when (++clickCount % 10) {
                 0 -> callback()
-                9 -> Toast.makeText(context, "One more to go!", Toast.LENGTH_SHORT).show()
+                9 -> Toast.makeText(context, "One more to go!", Toast.LENGTH_SHORT)?.show()
             }
         }.onFailure(logException)
     }

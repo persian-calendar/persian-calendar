@@ -481,7 +481,7 @@ fun SharedTransitionScope.CompassScreen(
                     )
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: orientation", Toast.LENGTH_SHORT,
-                    ).show()
+                    )?.show()
                     isListening = true
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
                     sensorManager.registerListener(
@@ -496,7 +496,7 @@ fun SharedTransitionScope.CompassScreen(
                     )
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: acc+magnet", Toast.LENGTH_SHORT,
-                    ).show()
+                    )?.show()
                     isListening = true
                 } else if (coordinates != null) {
                     showSnackbarMessage(

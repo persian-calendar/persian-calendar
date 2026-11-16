@@ -139,7 +139,7 @@ fun HolidaysTypesDialog(
                     )
                 }
 
-                if (language.isAfghanistanExclusive || TimeZone.getDefault().id == AFGHANISTAN_TIMEZONE_ID) {
+                if (language.isAfghanistanExclusive || TimeZone.getDefault()?.id == AFGHANISTAN_TIMEZONE_ID) {
                     Afghanistan()
                     International()
                     Iran()

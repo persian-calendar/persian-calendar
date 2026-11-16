@@ -74,10 +74,12 @@ fun startAthanNotification(context: Context, prayTime: PrayTime) {
             it.setBypassDnd(prayTime.isBypassDnd)
             it.setSound(
                 soundUri,
-                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
-                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED).build(),
+                AudioAttributes.Builder().also {
+                    it.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    it.setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    it.setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                    it.setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                }.build(),
             )
         }
         notificationManager.createNotificationChannel(notificationChannel)

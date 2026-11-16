@@ -71,7 +71,7 @@ private fun reportIfPlatformReceiver(
     reporter.reportOn(
         receiver.source,
         FirErrors.OTHER_ERROR_WITH_REASON,
-        "Platform type from $callableKey. Annotate the Java declaration or handle nullability explicitly.",
+        "Platform type from $callableKey. Annotate the Java declaration or handle nullability explicitly",
         context,
     )
 }
@@ -94,26 +94,12 @@ private val NON_NULL_ANNOTATIONS = setOf(
 // These Java APIs are documented/guaranteed to return a non-null value even though the
 // platform stubs do not carry that information.
 private val ALWAYS_NON_NULL = setOf(
-    "android.media.AudioAttributes.Builder.setContentType",
-    "android.media.AudioAttributes.Builder.setFlags",
-    "android.media.AudioAttributes.Builder.setLegacyStreamType",
-    "android.media.AudioAttributes.Builder.setUsage",
-    "android.media.AudioFormat.Builder.setEncoding",
-    "android.media.AudioFormat.Builder.setSampleRate",
-    "android.view.InputDevice.getDeviceIds",
-    "android.widget.Toast.makeText",
     "java.lang.Class.forName",
     "java.lang.Class.getDeclaredField",
     "java.lang.Class.getDeclaredMethod",
     "java.lang.Class.getMethod",
-    "java.lang.Runtime.exec",
-    "java.lang.Runtime.getRuntime",
     "java.nio.ByteBuffer.allocateDirect",
     "java.nio.ByteBuffer.asFloatBuffer",
     "java.nio.ByteBuffer.order",
-    "java.nio.FloatBuffer.put",
-    "java.text.Format.format",
     "java.util.Locale.getDefault",
-    "java.util.TimeZone.getAvailableIDs",
-    "java.util.TimeZone.getDefault",
 )

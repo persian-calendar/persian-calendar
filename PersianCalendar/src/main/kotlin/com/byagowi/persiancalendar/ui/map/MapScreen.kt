@@ -264,7 +264,7 @@ fun SharedTransitionScope.MapScreen(
                             if (abs(latitude) < 90 && abs(longitude) < 180) {
                                 if (abs(latitude) < 2 && abs(longitude) < 2 && displayGrid) {
                                     Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT)
-                                        .show()
+                                        ?.show()
                                 } else {
                                     val coords =
                                         EarthPosition(latitude.toDouble(), longitude.toDouble())

@@ -529,7 +529,7 @@ private fun MenuItems(
     var command by remember { mutableStateOf("") }
     if (command.isNotBlank()) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         val result = remember(command) {
-            Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
+            Runtime.getRuntime()?.exec(command)?.inputStream?.bufferedReader()?.readText().orEmpty()
         }
         val shareFacilitator = ShareFacilitator.create(stringResource(Res.string.settings))
         AppDialog(

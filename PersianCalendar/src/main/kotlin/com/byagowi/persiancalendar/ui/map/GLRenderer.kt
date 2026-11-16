@@ -53,7 +53,9 @@ class GLRenderer(
         arrayBufferHandle = bufferHandles[0]
         val buffer = ByteBuffer
             .allocateDirect(rectangleVertices.size * floatSize).order(ByteOrder.nativeOrder())
-        val floatBuffer = buffer.asFloatBuffer().put(rectangleVertices).position(0)
+        val floatBuffer = buffer.asFloatBuffer()
+        floatBuffer.put(rectangleVertices)
+        floatBuffer.position(0)
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayBufferHandle)
         GLES20.glBufferData(
             GLES20.GL_ARRAY_BUFFER, buffer.limit(), floatBuffer, GLES20.GL_STATIC_DRAW,

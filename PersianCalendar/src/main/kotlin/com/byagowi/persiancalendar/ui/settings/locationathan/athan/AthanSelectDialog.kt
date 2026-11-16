@@ -74,7 +74,7 @@ fun AthanSelectDialog(
             context,
             com.byagowi.persiancalendar.shared.R.string.custom_notification_is_set,
             Toast.LENGTH_SHORT,
-        ).show()
+        )?.show()
     }
 
     val deviceRingtone = rememberLauncherForActivityResult(PickRingtoneContract()) {
@@ -88,7 +88,7 @@ fun AthanSelectDialog(
             context,
             com.byagowi.persiancalendar.shared.R.string.custom_notification_is_set,
             Toast.LENGTH_SHORT,
-        ).show()
+        )?.show()
     }
     val soundFilePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument(),
@@ -158,7 +158,7 @@ fun AthanSelectDialog(
                         context,
                         "پرونده‌ای صوتی، برای نمونه «mp3»، انتخاب کنید",
                         Toast.LENGTH_LONG,
-                    ).show()
+                    )?.show()
                 }.onFailure(logException).onFailure {
                     showUnsupportedActionToast(context)
                 }.onFailure { onDismissRequest() }.let {}

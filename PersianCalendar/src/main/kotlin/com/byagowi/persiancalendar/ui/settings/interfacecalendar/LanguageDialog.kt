@@ -49,7 +49,7 @@ fun LanguageDialog(
         modifier = modifier,
     ) {
         val languages = Language.entries.let { languages ->
-            if (TimeZone.getDefault().id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID))
+            if (TimeZone.getDefault()?.id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID))
                 languages else languages.sortedBy { it.code }
         }.let { languages ->
             // Put the current language on top as one might don't know more exist above the current selection
