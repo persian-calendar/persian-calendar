@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.fir.types.ConeFlexibleType
 import org.jetbrains.kotlin.fir.types.resolvedType
 
@@ -48,10 +48,9 @@ private fun reportIfPlatformReceiver(
 ) {
     if (receiver == null) return
     if (receiver.resolvedType !is ConeFlexibleType) return
-    val callable = receiver.toResolvedCallableSymbol(context.session) ?: return
-    if (callable.isLocal) return
-    val callableKey = callable.callableId.toString().replace('/', '.')
+    val callableKey = receiver.callableKey(context.session) ?: return
     if (callableKey.startsWith("kotlin.")) return
+    if (callableKey.startsWith("_synthetic.")) return
     if (callableKey.endsWith(".debugAssertNotNull")) return
     if (callableKey in ALWAYS_NON_NULL) return
     reporter.reportOn(
@@ -62,10 +61,20 @@ private fun reportIfPlatformReceiver(
     )
 }
 
+private fun FirExpression.callableKey(session: FirSession): String? {
+    val symbol = toResolvedCallableSymbol(session) ?: return null
+    if (symbol is FirVariableSymbol<*>) {
+        val initializer = symbol.resolvedInitializer ?: return null
+        return initializer.callableKey(session)
+    }
+    return symbol.callableId.toString().replace('/', '.')
+}
+
 // These Java APIs are documented/guaranteed to return a non-null value even though the
 // platform stubs do not carry that information.
 private val ALWAYS_NON_NULL = setOf(
     "android.appwidget.AppWidgetManager.getInstance",
+    "android.content.ClipData.newPlainText",
     "android.content.Context.applicationContext",
     "android.content.Context.contentResolver",
     "android.content.Context.resources",
@@ -103,7 +112,9 @@ private val ALWAYS_NON_NULL = setOf(
     "android.widget.Toast.makeText",
     "java.io.FileOutputStream.fd",
     "java.lang.Class.forName",
+    "java.lang.Class.getDeclaredField",
     "java.lang.Class.getDeclaredMethod",
+    "java.lang.Class.getField",
     "java.lang.Class.getMethod",
     "java.lang.Process.inputStream",
     "java.lang.Runtime.exec",
@@ -112,6 +123,7 @@ private val ALWAYS_NON_NULL = setOf(
     "java.lang.System.getProperty",
     "java.nio.ByteBuffer.allocateDirect",
     "java.nio.ByteBuffer.asFloatBuffer",
+    "java.nio.ByteBuffer.order",
     "java.nio.FloatBuffer.put",
     "java.text.Format.format",
     "java.util.Calendar.time",
