@@ -13,9 +13,11 @@ import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtensi
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
+import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.fir.types.ConeFlexibleType
+import org.jetbrains.kotlin.fir.types.isMarkedNullable
 import org.jetbrains.kotlin.fir.types.resolvedType
 
 class PlatformTypeCheckers(session: FirSession) : FirAdditionalCheckersExtension(session) {
@@ -29,6 +31,9 @@ private object PlatformTypeFunctionCallChecker :
     FirFunctionCallChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirFunctionCall) {
+        if (expression.isNullAwareExtension(context.session)) return
+        // debugAssertNotNull accepts and returns nullable; it is not a nullness sanitizer.
+        if (expression.calleeReference.name.asString() == "debugAssertNotNull") return
         reportIfPlatformReceiver(expression.explicitReceiver, reporter)
     }
 }
@@ -37,8 +42,18 @@ private object PlatformTypePropertyAccessChecker :
     FirPropertyAccessExpressionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirPropertyAccessExpression) {
+        if (expression.isNullAwareExtension(context.session)) return
+        // debugAssertNotNull accepts and returns nullable; it is not a nullness sanitizer.
+        if (expression.calleeReference.name.asString() == "debugAssertNotNull") return
         reportIfPlatformReceiver(expression.explicitReceiver, reporter)
     }
+}
+
+private fun FirQualifiedAccessExpression.isNullAwareExtension(session: FirSession): Boolean {
+    val symbol = toResolvedCallableSymbol(session) ?: return false
+    if (symbol.resolvedReceiverType?.isMarkedNullable != true) return false
+    val resultType = resolvedType
+    return !resultType.isMarkedNullable && resultType !is ConeFlexibleType
 }
 
 context(context: CheckerContext)
@@ -82,7 +97,6 @@ private val ALWAYS_NON_NULL = setOf(
     "android.content.Intent.toUri",
     "android.content.res.Resources.configuration",
     "android.content.res.Resources.displayMetrics",
-    "android.database.Cursor.getString",
     "android.hardware.SensorEvent.sensor",
     "android.hardware.SensorEvent.values",
     "android.location.LocationManager.allProviders",
@@ -107,7 +121,6 @@ private val ALWAYS_NON_NULL = setOf(
     "android.view.inputmethod.InputMethodManager.getEnabledInputMethodSubtypeList",
     "android.view.inputmethod.InputMethodManager.enabledInputMethodList",
     "android.app.Activity.intent",
-    "android.app.Activity.window",
     "android.widget.Toast.makeText",
     "java.io.FileOutputStream.fd",
     "java.lang.Class.forName",
@@ -119,7 +132,6 @@ private val ALWAYS_NON_NULL = setOf(
     "java.lang.Runtime.exec",
     "java.lang.Runtime.getRuntime",
     "java.lang.StringBuilder.append",
-    "java.lang.System.getProperty",
     "java.nio.ByteBuffer.allocateDirect",
     "java.nio.ByteBuffer.asFloatBuffer",
     "java.nio.ByteBuffer.order",

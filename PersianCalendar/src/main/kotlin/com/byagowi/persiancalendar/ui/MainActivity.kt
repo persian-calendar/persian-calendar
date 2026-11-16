@@ -75,7 +75,7 @@ class MainActivity : BaseActivity() {
         // There is a window:enforceNavigationBarContrast set to false in styles.xml as the following
         // isn't as effective in dark themes.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
+            window?.isNavigationBarContrastEnforced = false
         }
     }
 
