@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.ComponentCallbacks2
 import android.content.ContentUris
 import android.content.Context
@@ -294,8 +295,6 @@ private fun readDaysWithDeviceEvents(
 }
 
 private const val DEVICE_EVENTS_CACHE_DAY_LIMIT = 120
-private const val DEVICE_EVENTS_CACHE_CAPACITY = 90
-private const val DEVICE_EVENTS_CACHE_LOW_MEMORY_CAPACITY = 12
 
 private data class DeviceEventsEnvironment(
     val settings: DeviceCalendarQuerySettings,
@@ -376,6 +375,7 @@ class DeviceCalendarEventsCache internal constructor(
     private val accessOrder = LinkedHashMap<DeviceEventsRequest, Unit>(16, .75f, true)
     private val requests = mutableMapOf<DeviceEventsRequest, Job>()
     private var environment by mutableStateOf<DeviceEventsEnvironment?>(null)
+    private val memoryPolicy = DeviceEventsCacheMemoryPolicy()
     private var isResumed = false
     private var preloadStart: Jdn? = null
     private var preloadDays = 0
@@ -396,27 +396,21 @@ class DeviceCalendarEventsCache internal constructor(
     @Suppress("DEPRECATION")
     override fun onTrimMemory(level: Int) {
         when {
-            level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN -> {
-                cancelRequests()
-                trim(maxEntries = 0, protectPreload = false)
-            }
-
-            level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW -> {
-                trim(
-                    maxEntries = DEVICE_EVENTS_CACHE_LOW_MEMORY_CAPACITY,
-                    protectPreload = false,
-                )
-                trimGeneration++
-                if (isResumed) requestPreloadedDeviceEvents()
-            }
+            level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN -> reduceMemory(clear = true)
+            level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW -> reduceMemory(clear = false)
         }
     }
 
     @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-    override fun onLowMemory() {
-        trim(maxEntries = 0, protectPreload = false)
+    override fun onLowMemory() = reduceMemory(clear = true)
+
+    private fun reduceMemory(clear: Boolean) {
+        memoryPolicy.onMemoryPressure()
+        // Stop a range query before it can repopulate all the days we just evicted. Visible
+        // consumers may re-request their own data, but speculative requests stay suspended.
+        cancelRequests()
+        trim(maxEntries = if (clear) 0 else memoryPolicy.capacity, protectPreload = false)
         trimGeneration++
-        if (isResumed) requestPreloadedDeviceEvents()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) = Unit
@@ -516,12 +510,19 @@ class DeviceCalendarEventsCache internal constructor(
      * notifications do not run while the app is paused.
      */
     internal suspend fun runWhileResumed(): Unit = suspendCancellableCoroutine { continuation ->
+        // Android has no "memory recovered" callback. Only a later foreground session with
+        // a healthy memory report restores speculative loading. Missing reports fail closed.
+        val memoryInfo = ActivityManager.MemoryInfo()
+        val activityManager = context.getSystemService(ActivityManager::class.java)
+        activityManager?.getMemoryInfo(memoryInfo)
+        memoryPolicy.onResume(lowMemory = activityManager == null || memoryInfo.lowMemory)
         isResumed = true
         // Pausing cancels in-flight requests, including a first load which has not published
         // anything yet, so every generation is invalidated to reissue the active requests.
         // Provider change notifications do not run while paused either, so cached results may
         // be stale as well.
         invalidate()
+        if (!memoryPolicy.preloadingAllowed) trim(protectPreload = false)
         continuation.invokeOnCancellation {
             isResumed = false
             cancelRequests()
@@ -560,6 +561,7 @@ class DeviceCalendarEventsCache internal constructor(
     }
 
     private fun requestPreloadedDeviceEvents() {
+        if (!memoryPolicy.preloadingAllowed) return
         val start = preloadStart ?: return
         val days = preloadDays
         if (days <= 0) return
@@ -580,6 +582,7 @@ class DeviceCalendarEventsCache internal constructor(
         activePreloadRequest = request
         val job = scope.launch {
             val state = loadDeviceEvents(request, environment) ?: return@launch
+            currentCoroutineContext().ensureActive()
             if (state.status == CalendarProviderStatus.Ready) {
                 val store = state.data.store
                 repeat(count) { offset ->
@@ -619,6 +622,7 @@ class DeviceCalendarEventsCache internal constructor(
         if (entries[request].isReusable(environment.generation)) return
         val job = scope.launch {
             val state = loadDeviceEvents(request, environment) ?: return@launch
+            currentCoroutineContext().ensureActive()
             publish(request, state, environment.generation)
         }
         requests[request] = job
@@ -692,15 +696,15 @@ class DeviceCalendarEventsCache internal constructor(
     }
 
     private fun trim(
-        maxEntries: Int = DEVICE_EVENTS_CACHE_CAPACITY,
-        protectPreload: Boolean = true,
+        maxEntries: Int = memoryPolicy.capacity,
+        protectPreload: Boolean = memoryPolicy.preloadingAllowed,
     ) {
         if (entries.size <= maxEntries) return
         val start = preloadStart
         val iterator = accessOrder.entries.iterator()
         while (entries.size > maxEntries && iterator.hasNext()) {
             val request = iterator.next().key
-            if (requests.containsKey(request)) continue
+            if (memoryPolicy.preloadingAllowed && requests.containsKey(request)) continue
             if (protectPreload && request.isDay && start != null && preloadDays > 0 &&
                 (request.startJdn - start) in 0..<preloadDays
             ) continue
