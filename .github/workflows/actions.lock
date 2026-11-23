@@ -5,20 +5,20 @@ version: 'v0.0.3'
 workflows:
     '.github/workflows/android.yml':
         - 'actions/checkout@v7.0.1'
-        - 'actions/setup-java@v6.2.0'
+        - 'actions/setup-java@v6.3.0'
         - 'actions/upload-artifact@v7.0.2'
         - 'gradle/actions@v6.4.1'
         - 'reactivecircus/android-emulator-runner@v2.38.0'
     '.github/workflows/dependabot-auto-merge.yml': []
     '.github/workflows/nightly-build.yml':
         - 'actions/checkout@v7.0.1'
-        - 'actions/setup-java@v6.2.0'
+        - 'actions/setup-java@v6.3.0'
     '.github/workflows/notify-build-status.yml': []
     '.github/workflows/telegram-notify.yml':
         - 'actions/upload-artifact@v7.0.2'
     '.github/workflows/update-dependencies-report.yml':
         - 'actions/checkout@v7.0.1'
-        - 'actions/setup-java@v6.2.0'
+        - 'actions/setup-java@v6.3.0'
         - 'actions/upload-artifact@v7.0.2'
     '.github/workflows/update-report-on-change.yml': []
 dependencies:
@@ -27,9 +27,9 @@ dependencies:
         commit: 'sha1-3d3c42e5aac5ba805825da76410c181273ba90b1'
         owner_id: 44036562
         repo_id: 197814629
-    'actions/setup-java@v6.2.0':
-        ref: 'v6.2.0'
-        commit: 'sha1-77dd5b2ce225ea11469928ac317850245a74ae78'
+    'actions/setup-java@v6.3.0':
+        ref: 'v6.3.0'
+        commit: 'sha1-d1374f8ac74474200d16ef8ecee22c7ae7a51880'
         owner_id: 44036562
         repo_id: 196057608
     'actions/upload-artifact@v7.0.2':
