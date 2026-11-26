@@ -1,10 +1,14 @@
 package com.byagowi.persiancalendar.ui.dialogs
 
 import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextReplacement
 import com.byagowi.persiancalendar.shared.generated.resources.Res
+import com.byagowi.persiancalendar.shared.generated.resources.accept
 import com.byagowi.persiancalendar.shared.generated.resources.cancel
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import org.jetbrains.compose.resources.stringResource
@@ -28,5 +32,18 @@ class CoordinatesDialogTest {
             .assertHasClickAction()
             .performClick()
         assert(!showDialog)
+    }
+
+    @Test
+    fun invalidMapCoordinateKeepsDialogOpen() {
+        var accept = ""
+        composeTestRule.setContent {
+            accept = stringResource(Res.string.accept)
+            CoordinatesDialog(isFromMap = true, saveCoordinates = false) {
+                org.junit.Assert.fail("Invalid coordinates dismissed the dialog")
+            }
+        }
+        composeTestRule.onAllNodes(hasSetTextAction())[0].performTextReplacement("91")
+        composeTestRule.onNodeWithText(accept).assertIsNotEnabled()
     }
 }

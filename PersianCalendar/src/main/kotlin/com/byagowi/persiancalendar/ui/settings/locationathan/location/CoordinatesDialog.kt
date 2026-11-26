@@ -26,10 +26,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import com.byagowi.persiancalendar.PREF_ALTITUDE
-import com.byagowi.persiancalendar.PREF_LATITUDE
-import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.shared.generated.resources.Res
@@ -65,11 +61,7 @@ fun CoordinatesDialog(
     onDismissRequest: () -> Unit,
 ) {
     val coordinates = inputCoordinates ?: coordinates
-    val fields = listOf(
-        Res.string.latitude to PREF_LATITUDE,
-        Res.string.longitude to PREF_LONGITUDE,
-        Res.string.altitude to PREF_ALTITUDE,
-    )
+    val fields = listOf(Res.string.latitude, Res.string.longitude, Res.string.altitude)
     val state = (coordinates?.run { listOf(latitude, longitude, elevation) }
         ?: List(3) { .0 }).map { rememberSaveable { mutableStateOf(it.toString()) } }
     var cityName by rememberSaveable { mutableStateOf<String?>(null) }
@@ -84,6 +76,10 @@ fun CoordinatesDialog(
             1 -> abs(value) <= 180 // Valid longitudes
             else -> value in -418.0..8_849.0 // Altitude, from Dead Sea to Mount Everest
         }
+    }
+    val parts = state.mapIndexed { index, field ->
+        if (index == 2 && field.value.isEmpty()) 0.0
+        else parseDouble(field.value)?.takeIf { isValidPart(it, index) }
     }
     AppDialog(
         title = { Text(stringResource(Res.string.coordinates)) },
@@ -107,31 +103,26 @@ fun CoordinatesDialog(
         confirmButton = {
             val context = LocalContext.current
             TextButton(
+                enabled = parts.all { it != null },
                 onClick = {
-                    onDismissRequest()
-                    val parts = state.mapIndexed { i, x ->
-                        // Replace empty elevation with zero
-                        if (i == 2 && x.value.isEmpty()) "0" else x.value
-                    }.mapIndexedNotNull { i, coordinate ->
-                        // Make sure coordinates array has both parsable and in range numbers
-                        parseDouble(coordinate)?.takeIf { isValidPart(it, i) }
-                    }
-                    if (parts.size == 3) {
-                        val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
+                    val (latitude, longitude, altitude) = parts
+                    if (latitude != null && longitude != null && altitude != null) {
+                        val newCoordinates = Coordinates(latitude, longitude, altitude)
                         if (saveCoordinates) context.preferences.saveLocation(
                             coordinates = newCoordinates,
                             cityName = cityName.orEmpty(),
                             countryCode = countryCode.orEmpty(),
                         )
                         notifyChange(newCoordinates)
-                    } else context.preferences.edit { fields.map { it.second }.forEach(::remove) }
+                        onDismissRequest()
+                    }
                 },
             ) { Text(stringResource(Res.string.accept)) }
         },
         onDismissRequest = onDismissRequest,
         modifier = modifier,
     ) {
-        fields.zip(state.withIndex()) { (stringRes), (i, fieldState) ->
+        fields.zip(state.withIndex()) { stringRes, (i, fieldState) ->
             val uiDirection = LocalLayoutDirection.current
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 TextField(
@@ -143,7 +134,7 @@ fun CoordinatesDialog(
                             Text(stringResource(stringRes), modifier = Modifier.fillMaxWidth())
                         }
                     },
-                    isError = parseDouble(fieldState.value)?.takeIf { isValidPart(it, i) } == null,
+                    isError = parts[i] == null,
                     value = numeral.format(fieldState.value, isInEdit = true).let {
                         if (stringRes == Res.string.altitude) it else it.replace("°", "") + "°"
                     },
