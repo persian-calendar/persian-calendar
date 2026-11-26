@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.startWorker
@@ -18,16 +17,9 @@ abstract class WidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
         context ?: return
         startWorker(context)
-        update(context, false)
-    }
-
-    override fun onAppWidgetOptionsChanged(
-        context: Context?, appWidgetManager: AppWidgetManager?, appWidgetId: Int,
-        newOptions: Bundle?,
-    ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        // set updateDate to make sure it passes throttle and gets updated
-        update(context ?: return, true)
+        val result = goAsync()
+        update(context, intent?.action == AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED)
+            .invokeOnCompletion { result?.finish() }
     }
 
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {

@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.entities.DeviceEventInterval
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.updateAndWait
 import io.github.persiancalendar.calendar.CivilDate
 import kotlinx.coroutines.coroutineScope
 import java.util.GregorianCalendar
@@ -22,10 +22,11 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
 
     override suspend fun doWork(): Result = coroutineScope {
         runCatching {
-            scheduleDayChangesUpdates()
             updateStoredPreference(applicationContext)
-            update(applicationContext, true)
+            updateAndWait(applicationContext, true)
         }.onFailure(logException)
+        // Replacing the current day-change work can cancel this worker. Finish its refresh first.
+        scheduleDayChangesUpdates()
         Result.success()
     }
 

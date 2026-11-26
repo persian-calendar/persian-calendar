@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.eventKey
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 
@@ -51,9 +50,6 @@ class MainActivity : BaseActivity() {
         initGlobal(this)
 
         startWorker(this)
-
-        readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
-        update(applicationContext, false)
 
         setContent {
             AppTheme {

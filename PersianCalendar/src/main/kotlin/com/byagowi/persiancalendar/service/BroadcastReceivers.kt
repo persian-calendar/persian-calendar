@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateMonthWidget
+import kotlinx.coroutines.Job
 
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -36,9 +37,8 @@ class BroadcastReceivers : BroadcastReceiver() {
 
             Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED,
             Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON,
-                -> update(context, true)
-
-            BROADCAST_UPDATE_APP -> update(context, true)
+            BROADCAST_UPDATE_APP,
+                -> finishAfter(update(context, true))
 
             AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED ->
                 rescheduleAlarmsWithExactAccess(context)
@@ -58,18 +58,23 @@ class BroadcastReceivers : BroadcastReceiver() {
             else -> {
                 if (action.startsWith(MONTH_PREV_COMMAND)) {
                     action.replace(MONTH_PREV_COMMAND, "").toIntOrNull()?.let { id ->
-                        updateMonthWidget(context, id, -1)
+                        finishAfter(updateMonthWidget(context, id, -1))
                     }
                 } else if (action.startsWith(MONTH_NEXT_COMMAND)) {
                     action.replace(MONTH_NEXT_COMMAND, "").toIntOrNull()?.let { id ->
-                        updateMonthWidget(context, id, 1)
+                        finishAfter(updateMonthWidget(context, id, 1))
                     }
                 } else if (action.startsWith(MONTH_RESET_COMMAND)) {
                     action.replace(MONTH_RESET_COMMAND, "").toIntOrNull()?.let { id ->
-                        updateMonthWidget(context, id, 0)
+                        finishAfter(updateMonthWidget(context, id, 0))
                     }
                 }
             }
         }
+    }
+
+    private fun finishAfter(job: Job) {
+        val result = goAsync()
+        job.invokeOnCompletion { result?.finish() }
     }
 }

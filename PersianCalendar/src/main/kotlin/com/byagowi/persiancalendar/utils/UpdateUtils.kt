@@ -145,6 +145,13 @@ import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 import java.util.Date
 import kotlin.math.ceil
@@ -161,6 +168,8 @@ private val useDefaultPriority
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastLanguage: Language? = null
+
+@Volatile
 private var deviceCalendarEvents = DeviceCalendarEventsStore.empty()
 private var latestJdnUpdate: Jdn? = null
 
@@ -170,14 +179,15 @@ private var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 @ColorInt
 private var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
-// Is called from MainActivity to make sure is updated, probably should be removed however
-fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
-    runCatching { deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today()) }.onFailure(
-        logException,
-    )
-}
+// Serialize widget rendering, including navigation clicks, so older requests cannot publish last.
+private val updateDispatcher = Dispatchers.IO.limitedParallelism(1)
+private val updateScope = CoroutineScope(
+    SupervisorJob() + updateDispatcher + CoroutineExceptionHandler { _, error -> logException(error) },
+)
 
 private var latestFiredUpdate = 0L
+
+@Volatile
 private var latestAnyWidgetUpdate = 0L
 
 private fun Dp.toPx(resources: Resources) = this.value * resources.dp
@@ -191,7 +201,15 @@ fun hasAnyWidgetUpdateRecently(): Boolean =
 // 16dp on pre-12, but Android 12 is more, is a bit ugly to have it as a global variable
 private var roundPixelSize = 0f
 
-fun update(context: Context, updateDate: Boolean) {
+fun update(context: Context, updateDate: Boolean): Job {
+    val app = context.applicationContext
+    return updateScope.launch { performUpdate(app, updateDate) }
+}
+
+suspend fun updateAndWait(context: Context, updateDate: Boolean) =
+    withContext(updateDispatcher) { performUpdate(context.applicationContext, updateDate) }
+
+private fun performUpdate(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
     if (!updateDate && (now - latestFiredUpdate).milliseconds < .5.seconds) {
         debugLog("UpdateUtils: skip update")
@@ -212,7 +230,7 @@ fun update(context: Context, updateDate: Boolean) {
         debugLog("UpdateUtils: date has changed")
         scheduleAlarms(context)
         latestJdnUpdate = jdn
-        readAndStoreDeviceCalendarEventsOfTheDay(context)
+        deviceCalendarEvents = context.readDayDeviceEvents(jdn)
 
 //        // Quick tile
 //        val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
@@ -387,11 +405,13 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
             )
         }
     }.onFailure(logException).onFailure {
-        if (BuildConfig.DEVELOPMENT) Toast.makeText(
-            context,
-            "An error has happened, see the in-app log and post it to me",
-            Toast.LENGTH_LONG,
-        )?.show()
+        if (BuildConfig.DEVELOPMENT) ContextCompat.getMainExecutor(context).execute {
+            Toast.makeText(
+                context,
+                "An error has happened, see the in-app log and post it to me",
+                Toast.LENGTH_LONG,
+            )?.show()
+        }
     }
 }
 
@@ -559,8 +579,8 @@ class StoredMonthOffset(val offset: Int) {
 
 private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
 
-fun updateMonthWidget(context: Context, widgetId: Int, command: Int) {
-    val appWidgetManager = AppWidgetManager.getInstance(context) ?: return
+fun updateMonthWidget(context: Context, widgetId: Int, command: Int): Job = updateScope.launch {
+    val appWidgetManager = AppWidgetManager.getInstance(context) ?: return@launch
     val size = appWidgetManager.getWidgetSize(context.resources, widgetId)
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
         if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command),
