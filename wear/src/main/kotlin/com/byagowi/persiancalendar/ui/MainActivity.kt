@@ -33,9 +33,7 @@ import com.byagowi.persiancalendar.requestComplicationsUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import com.byagowi.persiancalendar.today
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration.Companion.seconds
 
@@ -60,10 +58,7 @@ private fun WearApp() {
             motionScheme = MotionScheme.expressive(),
         ) {
             AppScaffold {
-                val dataStore = context.dataStore.data
-                val preferences by dataStore.collectAsState(
-                    remember { runBlocking { dataStore.firstOrNull() } },
-                )
+                val preferences by context.dataStore.data.collectAsState(initial = null)
                 val localeUtils = LocaleUtils()
                 val today = updatedToday()
                 val backStack = rememberNavBackStack(Screen.Main)

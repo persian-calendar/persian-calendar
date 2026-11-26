@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import android.content.ComponentName
+import androidx.concurrent.futures.SuspendToFutureAdapter
 import androidx.wear.protolayout.ActionBuilders.launchAction
 import androidx.wear.protolayout.DimensionBuilders.degrees
 import androidx.wear.protolayout.DimensionBuilders.dp
@@ -26,7 +27,6 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.google.common.util.concurrent.ListenableFuture
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
 
 class MainTileService : TileService() {
     override fun onRecentInteractionEventsAsync(
@@ -38,7 +38,7 @@ class MainTileService : TileService() {
         return super.onRecentInteractionEventsAsync(events)
     }
 
-    private fun tileLayout(requestParams: RequestBuilders.TileRequest) = materialScope(
+    private fun tileLayout(requestParams: RequestBuilders.TileRequest, enabledEvents: Set<String>) = materialScope(
         applicationContext,
         deviceConfiguration = requestParams.deviceConfiguration,
     ) {
@@ -76,12 +76,7 @@ class MainTileService : TileService() {
                 .build(),
         )
 
-        val todayEntries = run {
-            // Doesn't worth to use coroutine and stuff just to retrieve this I think
-            val preferences = runBlocking { dataStore.data.firstOrNull() }
-            val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-            generateEntries(localeUtils, today, enabledEvents, 1, false)
-        }
+        val todayEntries = generateEntries(localeUtils, today, enabledEvents, 1, false)
         root.addContent(
             primaryLayout(
                 titleSlot = {
@@ -134,14 +129,15 @@ class MainTileService : TileService() {
     }
 
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> {
-        return ImmediateFuture(
+        return SuspendToFutureAdapter.launchFuture {
+            val enabledEvents = dataStore.data.firstOrNull()?.get(enabledEventsKey).orEmpty()
             TileBuilders.Tile.Builder()
                 .setResourcesVersion(RESOURCES_VERSION)
                 .setTileTimeline(
-                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams)),
+                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams, enabledEvents)),
                 )
-                .build(),
-        )
+                .build()
+        }
     }
 
     override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ListenableFuture<ResourceBuilders.Resources> {

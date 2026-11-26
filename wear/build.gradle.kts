@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.wear.datastore.preferences)
     implementation(libs.wear.protolayout.material3)
     implementation(libs.wear.tiles)
+    implementation(libs.androidx.concurrent.futures)
     implementation(libs.wear.tooling.preview)
     implementation(libs.wear.watchface.complications.data.source.ktx) {
         // https://issuetracker.google.com/issues/525074818
