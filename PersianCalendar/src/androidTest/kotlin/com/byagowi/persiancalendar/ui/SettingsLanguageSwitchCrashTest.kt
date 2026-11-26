@@ -24,7 +24,7 @@ class SettingsLanguageSwitchCrashTest {
 
     @Test
     fun switchingLanguageBackAndForthDoesNotCrash() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
+        val context: Context = ApplicationProvider.getApplicationContext()
 
         composeTestRule.setContent {
             NavigationMock {

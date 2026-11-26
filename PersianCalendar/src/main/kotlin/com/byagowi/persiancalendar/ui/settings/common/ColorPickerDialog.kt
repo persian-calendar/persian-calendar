@@ -115,6 +115,7 @@ fun ColorPickerDialog(
                 LocalLayoutDirection provides LayoutDirection.Ltr,
             ) {
                 var transientValue by remember { mutableStateOf<String?>(null) }
+                @Suppress("DEPRECATION")
                 BasicTextField(
                     value = transientValue ?: "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
                     onValueChange = { newValue ->
@@ -141,6 +142,7 @@ fun ColorPickerDialog(
             }
         }
         repeat(if (isBackgroundPick) 4 else 3) {
+            @Suppress("DEPRECATION")
             Slider(
                 value = when (it) {
                     0 -> color.value.red

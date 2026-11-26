@@ -436,6 +436,7 @@ fun SettingsSlider(
             Text(state, style = MaterialTheme.typography.bodyLarge)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
+            @Suppress("DEPRECATION")
             Slider(
                 value = animateFloatAsState(value).value.coerceIn(valueRange),
                 valueRange = valueRange,

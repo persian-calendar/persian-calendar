@@ -189,7 +189,7 @@ fun SharedTransitionScope.MapScreen(
 
     var showMapTypesDialog by rememberSaveable { mutableStateOf(false) }
     if (showMapTypesDialog) @OptIn(ExperimentalMaterial3Api::class) ModalBottomSheet(
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = @Suppress("DEPRECATION") rememberModalBottomSheetState(skipPartiallyExpanded = true),
         onDismissRequest = { showMapTypesDialog = false },
     ) {
         FixStatusBarIconsColor()

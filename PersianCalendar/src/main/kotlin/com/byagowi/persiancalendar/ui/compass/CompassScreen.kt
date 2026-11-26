@@ -328,6 +328,7 @@ fun SharedTransitionScope.CompassScreen(
                             enter = fadeIn() + expandVertically(),
                             exit = fadeOut() + shrinkVertically(),
                         ) {
+                            @Suppress("DEPRECATION")
                             Slider(
                                 valueRange = 0f..24f,
                                 value = sliderValue,

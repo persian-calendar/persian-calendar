@@ -553,6 +553,7 @@ fun FontWeightsDialog(
             ),
             modifier = Modifier.fillMaxWidth(),
         )
+        @Suppress("DEPRECATION")
         Slider(
             valueRange = 100f..900f,
             value = weight,

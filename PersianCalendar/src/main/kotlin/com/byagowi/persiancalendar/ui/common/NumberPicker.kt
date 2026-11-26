@@ -299,6 +299,7 @@ fun NumberEdit(
             if (inError) MaterialTheme.colorScheme.error.copy(alpha = .1f)
             else Color.Transparent,
         )
+        @Suppress("DEPRECATION")
         BasicTextField(
             value = value,
             interactionSource = interactionSource,

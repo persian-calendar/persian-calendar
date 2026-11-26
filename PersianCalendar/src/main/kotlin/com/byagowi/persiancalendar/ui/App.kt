@@ -432,7 +432,8 @@ private fun AppNavigationRail(
                 val defaultColors = WideNavigationRailItemDefaults.colors()
                 val colors = defaultColors.copy(
                     selectedIconColor = animateColor(defaultColors.selectedIconColor).value,
-                    selectedTextColor = animateColor(defaultColors.selectedTextColor).value,
+                    selectedTextColorTopIconPosition = animateColor(defaultColors.selectedTextColorTopIconPosition).value,
+                    selectedTextColorStartIconPosition = animateColor(defaultColors.selectedTextColorStartIconPosition).value,
                     selectedIndicatorColor = animateColor(defaultColors.selectedIndicatorColor).value,
                     unselectedIconColor = animateColor(defaultColors.unselectedIconColor).value,
                     unselectedTextColor = animateColor(defaultColors.unselectedTextColor).value,

@@ -1317,6 +1317,7 @@ private fun Search(
     LaunchedEffect(searchTerm, isInputFocused, hasInputBeenFocused) {
         if (hasInputBeenFocused && !isInputFocused && searchTerm == "") closeSearch()
     }
+    @Suppress("DEPRECATION")
     @OptIn(ExperimentalMaterial3Api::class) SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
