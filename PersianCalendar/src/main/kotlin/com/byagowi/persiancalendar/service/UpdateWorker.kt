@@ -7,14 +7,16 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.CHANGE_DATE_TAG
+import com.byagowi.persiancalendar.entities.DeviceEventInterval
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.update
+import io.github.persiancalendar.calendar.CivilDate
 import kotlinx.coroutines.coroutineScope
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
@@ -28,17 +30,18 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     }
 
     private fun scheduleDayChangesUpdates() {
-        val remainedMillis = GregorianCalendar().also {
-            it[GregorianCalendar.HOUR_OF_DAY] = 0
-            it[GregorianCalendar.MINUTE] = 0
-            it[GregorianCalendar.SECOND] = 1
-            it[GregorianCalendar.MILLISECOND] = 0
-        }.timeInMillis.milliseconds + 1.days - System.currentTimeMillis().milliseconds
+        val now = GregorianCalendar()
+        val remainedMillis = nextDateUpdateMillis(now) - now.timeInMillis
         val dayIsChangedWorker = OneTimeWorkRequestBuilder<UpdateWorker>()
-            .setInitialDelay(remainedMillis.inWholeMilliseconds, TimeUnit.MILLISECONDS)
+            .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
             .build()
         WorkManager.getInstance(applicationContext)
             .beginUniqueWork(CHANGE_DATE_TAG, ExistingWorkPolicy.REPLACE, dayIsChangedWorker)
             .enqueue()
     }
+}
+
+internal fun nextDateUpdateMillis(now: GregorianCalendar): Long {
+    val tomorrow = CivilDate(now.toCivilDate().toJdn() + 1)
+    return DeviceEventInterval.startOfDay(tomorrow, now.timeZone).timeInMillis + 1.seconds.inWholeMilliseconds
 }
