@@ -118,13 +118,17 @@ fun addEvent(
     return { addEventData = it }
 }
 
+internal fun Intent.withOccurrence(event: CalendarEvent.DeviceCalendarEvent): Intent =
+    putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.interval.beginMillis)
+        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.interval.endMillis)
+
 private class ViewEventContract :
     ActivityResultContract<CalendarEvent.DeviceCalendarEvent, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
     override fun createIntent(context: Context, input: CalendarEvent.DeviceCalendarEvent): Intent {
         return Intent(Intent.ACTION_VIEW).setData(
             ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input.id),
-        )
+        ).withOccurrence(input)
     }
 }
 

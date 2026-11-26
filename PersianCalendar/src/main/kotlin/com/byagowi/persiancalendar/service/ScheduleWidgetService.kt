@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readTwoWeekDeviceEvents
+import com.byagowi.persiancalendar.utils.withOccurrence
 import io.github.persiancalendar.calendar.AbstractDate
 import java.util.GregorianCalendar
 
@@ -267,7 +268,7 @@ private class EventsViewFactory(
             } else row.setViewVisibility(R.id.day_wrapper, View.INVISIBLE)
         } else row.setViewVisibility(R.id.day_wrapper, View.GONE)
         val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
-            Intent().putExtra(eventKey, event.id)
+            Intent().putExtra(eventKey, event.id).withOccurrence(event)
         } else Intent().putExtra(jdnActionKey, item.day.value)
         row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
         return row

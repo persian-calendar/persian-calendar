@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
+import android.content.Intent
+import android.provider.CalendarContract
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -8,6 +10,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.GregorianCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.utils.withOccurrence
 import io.github.persiancalendar.calendar.CivilDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
@@ -31,6 +34,10 @@ class DeviceEventsTest {
             ),
             color = "", time = null,
         )
+        val intent = Intent().withOccurrence(occurrence)
+        assertEquals(occurrence.interval.beginMillis, intent.getLongExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, -1))
+        assertEquals(occurrence.interval.endMillis, intent.getLongExtra(CalendarContract.EXTRA_EVENT_END_TIME, -1))
+
         val deviceEvents = DeviceCalendarEventsStore(listOf(occurrence))
         (12..14).forEach { day ->
             assertSame(occurrence, repository.getEvents(Jdn(CivilDate(2026, 10, day)), deviceEvents).single())

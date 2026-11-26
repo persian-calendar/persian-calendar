@@ -36,11 +36,15 @@ class MainActivity : BaseActivity() {
         setTheme(R.style.BaseTheme)
         super.onCreate(savedInstanceState)
 
-        intent?.getLongExtra(eventKey, -1L)?.takeIf { it != -1L }?.let { eventId ->
-            val intent = Intent(Intent.ACTION_VIEW).setData(
+        val launchIntent = intent
+        launchIntent?.getLongExtra(eventKey, -1L)?.takeIf { it != -1L }?.let { eventId ->
+            val viewIntent = Intent(Intent.ACTION_VIEW).setData(
                 ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId),
             )
-            runCatching { startActivity(intent) }.onFailure(logException)
+            listOf(CalendarContract.EXTRA_EVENT_BEGIN_TIME, CalendarContract.EXTRA_EVENT_END_TIME).forEach { key ->
+                if (launchIntent.hasExtra(key)) viewIntent.putExtra(key, launchIntent.getLongExtra(key, 0L))
+            }
+            runCatching { startActivity(viewIntent) }.onFailure(logException)
             return finish()
         }
 
