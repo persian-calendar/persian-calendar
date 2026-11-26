@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar
 
 import androidx.collection.IntIntPair
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.eventCalendar
+import com.byagowi.persiancalendar.entities.getDateInstance
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.generated.gregorianEvents
@@ -70,13 +72,7 @@ private fun MutableList<Entry>.eventsOfCalendar(
     enabledEvents: Set<String>,
 ) {
     groupedEvents[IntIntPair(date.month, date.dayOfMonth)]?.forEach {
-        if (when (it.source) {
-                EventSource.Iran -> it.isHoliday || iranNonHolidaysKey in enabledEvents
-                EventSource.International -> internationalKey in enabledEvents
-                EventSource.AncientIran -> ancientIranKey in enabledEvents
-                else -> false
-            }
-        ) add(
+        if (isEnabled(it.source, it.isHoliday, enabledEvents)) add(
             Entry(
                 it.title,
                 if (it.isHoliday) EntryType.Holiday(it.source)
@@ -85,6 +81,14 @@ private fun MutableList<Entry>.eventsOfCalendar(
         )
     }
 }
+
+private fun isEnabled(source: EventSource, holiday: Boolean, enabled: Set<String>): Boolean =
+    when (source) {
+        EventSource.Iran -> holiday || iranNonHolidaysKey in enabled
+        EventSource.International -> internationalKey in enabled
+        EventSource.AncientIran -> ancientIranKey in enabled
+        else -> false
+    }
 
 const val iranNonHolidaysKey = "iranNonHolidays"
 const val internationalKey = "international"
@@ -97,20 +101,15 @@ fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry
     val events = buildList {
         eventsOfCalendar(groupedPersianEvents, persianDate, enabledEvents)
         eventsOfCalendar(groupedIslamicEvents, islamicDate, enabledEvents)
-        if (islamicDate.dayOfMonth >= 29) {
-            irregularRecurringEvents.forEach {
-                val type = EventSource.entries.firstOrNull { entry -> entry.name == it["type"] }
-                if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && (it["month"] as? Int) == islamicDate.month && IslamicDate(
-                        jdn + 1,
-                    ).month != islamicDate.month && ((it["holiday"] as? Boolean) == true || iranNonHolidaysKey in enabledEvents)
-                ) add(
-                    Entry(
-                        (it["title"] as? String).orEmpty(),
-                        if ((it["holiday"] as? Boolean) == true) EntryType.Holiday(type)
-                        else EntryType.NonHoliday(type),
-                    ),
-                )
-            }
+        irregularRecurringEvents.forEach { event ->
+            val source = EventSource.entries.firstOrNull { it.name == event["type"] } ?: return@forEach
+            val holiday = event["holiday"] == true
+            if (!isEnabled(source, holiday, enabledEvents)) return@forEach
+            val calendar = eventCalendar(event) ?: return@forEach
+            val date = Jdn(jdn) on calendar
+            if (getDateInstance(event, date.year, calendar) != date) return@forEach
+            val title = event["title"] as? String ?: return@forEach
+            add(Entry(title, if (holiday) EntryType.Holiday(source) else EntryType.NonHoliday(source)))
         }
         eventsOfCalendar(groupedGregorianEvents, civilDate, enabledEvents)
     }

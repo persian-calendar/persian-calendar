@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.entities
 
-import androidx.annotation.VisibleForTesting
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.generated.EventSource
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
@@ -38,14 +37,7 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
     // Create actually usable irregular event of a year based on defined rules and enabled holidays
     private fun generateEntry(year: Int, type: Calendar): List<CalendarEvent<*>> {
         return irregularRecurringEvents.filter { event ->
-            if (type != when (event["calendar"]) {
-                    "Gregorian" -> Calendar.GREGORIAN
-                    "Persian" -> Calendar.SHAMSI
-                    "Hijri" -> Calendar.ISLAMIC
-                    "Nepali" -> Calendar.NEPALI
-                    else -> return@filter false
-                }
-            ) return@filter false
+            if (type != eventCalendar(event)) return@filter false
             val isHoliday = (event["holiday"] as? Boolean).debugAssertNotNull == true
             when {
                 event["type"] == "International" && eventsRepository.international -> true
@@ -86,45 +78,5 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
                 else -> null
             }.debugAssertNotNull
         }
-    }
-}
-
-@VisibleForTesting
-fun getDateInstance(event: Map<String, Any>, year: Int, type: Calendar): AbstractDate? {
-    return when (event["rule"]) {
-        "single event" -> {
-            if ((event["year"] as? Int).debugAssertNotNull != year) return null
-            val month = (event["month"] as? Int).debugAssertNotNull ?: return null
-            val day = (event["day"] as? Int).debugAssertNotNull ?: return null
-            type.createDate(year, month, day)
-        }
-
-        "nth day from" -> {
-            val nth = (event["nth"] as? Int).debugAssertNotNull ?: return null
-            val day = (event["day"] as? Int).debugAssertNotNull ?: return null
-            val month = (event["month"] as? Int).debugAssertNotNull ?: return null
-            (Jdn(type, year, month, day) + nth - 1) on type
-        }
-
-        "end of month" -> {
-            val month = (event["month"] as? Int).debugAssertNotNull ?: return null
-            type.createDate(year, month, type.getMonthLength(year, month))
-        }
-
-        "last weekday of month" -> {
-            val month = (event["month"] as? Int).debugAssertNotNull ?: return null
-            val weekDay = (event["weekday"] as? Int).debugAssertNotNull ?: return null
-            val offset = (event["offset"] as? Int) ?: 0
-            type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay) + offset)
-        }
-
-        "nth weekday of month" -> {
-            val month = (event["month"] as? Int).debugAssertNotNull ?: return null
-            val weekDay = (event["weekday"] as? Int).debugAssertNotNull ?: return null
-            val nth = (event["nth"] as? Int).debugAssertNotNull ?: return null
-            type.createDate(year, month, type.getNthWeekDayOfMonth(year, month, weekDay, nth))
-        }
-
-        else -> null.debugAssertNotNull
     }
 }
