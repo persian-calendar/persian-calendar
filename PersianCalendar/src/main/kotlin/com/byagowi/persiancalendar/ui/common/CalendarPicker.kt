@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
@@ -109,27 +107,21 @@ private fun <T> SegmentedButtonItemsPicker(
         val cellWidth = maxWidth / items.size
         val cellLeft = remember { Animatable(cellWidth * visualIndex(value)) }
         val cellRight = remember { Animatable(cellWidth * (visualIndex(value) + 1)) }
+        val fastEffectsSpec = MaterialTheme.motionScheme.defaultSpatialSpec<Float>()
+        val slowEffectsSpec = MaterialTheme.motionScheme.slowSpatialSpec<Float>()
         LaunchedEffect(items, value) {
             val destinationVisualIndex = visualIndex(value)
             val isForward = cellLeft.value < cellWidth * destinationVisualIndex
-            val first = spring<Float>(
-                dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = Spring.StiffnessLow,
-            )
-            val second = spring<Float>(
-                dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = Spring.StiffnessMediumLow,
-            )
             coroutineScope.launch {
                 cellLeft.animateTo(
                     targetValue = cellWidth * destinationVisualIndex,
-                    animationSpec = if (isForward) first else second,
+                    animationSpec = if (isForward) slowEffectsSpec else fastEffectsSpec,
                 )
             }
             coroutineScope.launch {
                 cellRight.animateTo(
                     targetValue = cellWidth * (destinationVisualIndex + 1),
-                    animationSpec = if (isForward) second else first,
+                    animationSpec = if (isForward) fastEffectsSpec else slowEffectsSpec,
                 )
             }
         }

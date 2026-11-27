@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -98,7 +99,7 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.math.ceil
 import kotlin.math.min
 
-// For performance reasons it has two phases, a initiation phase that should be called outside
+// For performance reasons it has two phases, an initiation phase that should be called outside
 // the pager which creates a callback that should be invoked inside the pager.
 @Composable
 fun daysTable(
@@ -229,10 +230,11 @@ fun daysTable(
             }
 
             // Handles circle moves animation, change of the selected day
+            val animatedCenterSpec = MaterialTheme.motionScheme.slowSpatialSpec<Offset>()
             LaunchedEffect(key1 = indicatorCenter) {
                 if (indicatorCenter != null) animatedCenter.animateTo(
                     targetValue = indicatorCenter,
-                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
+                    animationSpec = animatedCenterSpec,
                 )
             }
 
@@ -346,6 +348,7 @@ fun daysTable(
                     val isBeforeMonth = dayOffset < startingWeekDay
                     val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
                     val column = dayOffset % 7
+                    val weekNumberAlphaSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
                     Box(
                         Modifier
                             .offset(y = cellHeight * (row + 1))
@@ -413,7 +416,7 @@ fun daysTable(
                                     alpha = (if (isBeforeMonth || isAfterMonth) outOfMonthAlpha else 1f).let {
                                         if (onlyWeek != null) animateFloatAsState(
                                             targetValue = it,
-                                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                            animationSpec = weekNumberAlphaSpec,
                                         ).value else it
                                     },
                                 ),

@@ -117,7 +117,7 @@ fun AthanSelectDialog(
         modifier = modifier,
     ) {
         val resources = LocalResources.current
-        listOf(
+        (listOf(
             Res.string.default_athan to R.raw.special,
             Res.string.abdulbasit to R.raw.abdulbasit,
             Res.string.moazzenzadeh to R.raw.moazzenzadeh,
@@ -163,7 +163,7 @@ fun AthanSelectDialog(
                     showUnsupportedActionToast(context)
                 }.onFailure { onDismissRequest() }.let {}
             },
-        ).forEach { (stringId, callback) ->
+        )).forEach { (stringId, callback) ->
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier

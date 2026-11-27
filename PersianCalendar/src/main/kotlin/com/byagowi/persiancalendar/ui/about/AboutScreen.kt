@@ -5,9 +5,7 @@ import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
@@ -350,7 +348,7 @@ private fun HelpItems() {
                         horizontal = 4.dp,
                         vertical = animateDpAsState(
                             if (expandedItem == i) 6.dp else 4.dp,
-                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                            animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
                         ).value,
                     )
                     .fillMaxWidth()

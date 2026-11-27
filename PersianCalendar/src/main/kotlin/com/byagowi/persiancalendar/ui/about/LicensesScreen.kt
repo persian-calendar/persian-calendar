@@ -4,9 +4,7 @@ import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -183,7 +181,7 @@ private fun BoxScope.Licenses() {
             )
             val verticalPadding by animateDpAsState(
                 if (expandedItem == i) 6.dp else 4.dp,
-                animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
             )
             Column(
                 modifier = Modifier

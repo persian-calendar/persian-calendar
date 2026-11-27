@@ -8,6 +8,7 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
@@ -41,7 +42,7 @@ fun AppDropdownMenuItem(
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
-    MaterialTheme(
+    MaterialExpressiveTheme(
         typography = MaterialTheme.typography.copy(labelLarge = MaterialTheme.typography.bodyLarge),
     ) {
         DropdownMenuItem(

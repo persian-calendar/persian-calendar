@@ -1,22 +1,16 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import androidx.compose.animation.BoundsTransform
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.IntSize
 
-val appBoundsTransform = BoundsTransform { _, _ ->
-    spring(
-        stiffness = Spring.StiffnessMediumLow,
-        dampingRatio = Spring.DampingRatioLowBouncy,
-        visibilityThreshold = Rect.VisibilityThreshold,
-    )
-}
+val appBoundsTransform: BoundsTransform
+    @Composable get() {
+        val spec = MaterialTheme.motionScheme.defaultSpatialSpec<Rect>()
+        return BoundsTransform { _, _ -> spec }
+    }
 
-val appContentSizeAnimationSpec = spring(
-    stiffness = Spring.StiffnessMediumLow,
-    dampingRatio = Spring.DampingRatioLowBouncy,
-    visibilityThreshold = IntSize.VisibilityThreshold,
-)
+val appContentSizeAnimationSpec
+    @Composable get() = MaterialTheme.motionScheme.defaultSpatialSpec<IntSize>()

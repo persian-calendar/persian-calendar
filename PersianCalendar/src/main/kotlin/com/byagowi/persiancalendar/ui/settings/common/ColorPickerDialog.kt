@@ -102,6 +102,7 @@ fun ColorPickerDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
     ) {
+        val appColorAnimationSpec = appColorAnimationSpec
         var showEditor by rememberSaveable { mutableStateOf(false) }
         val background = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
         val coroutineScope = rememberCoroutineScope()

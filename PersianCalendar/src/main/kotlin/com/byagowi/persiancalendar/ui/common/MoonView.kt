@@ -1,9 +1,8 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +30,7 @@ fun MoonView(jdn: Jdn, modifier: Modifier = Modifier) {
     LaunchedEffect(jdn) { value = eventualValue }
     val phase by animateFloatAsState(
         targetValue = value.toFloat(),
-        animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
+        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
     )
     Canvas(modifier) {
         drawIntoCanvas {
