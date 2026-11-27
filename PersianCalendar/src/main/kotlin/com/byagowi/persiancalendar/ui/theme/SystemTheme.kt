@@ -3,7 +3,9 @@ package com.byagowi.persiancalendar.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -24,7 +26,11 @@ fun SystemTheme(content: @Composable () -> Unit) {
     } else {
         if (isInDarkMode) DefaultDarkColorScheme else DefaultLightColorScheme
     }
-    MaterialTheme(colorScheme = colorScheme, typography = resolveTypography()) {
+    MaterialExpressiveTheme(
+        colorScheme = colorScheme,
+        typography = resolveTypography(),
+        motionScheme = MotionScheme.expressive(),
+    ) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
         //  We update the LocalContentColor to match our onBackground. This allows the default
         //  content color to be more appropriate to the theme background

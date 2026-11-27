@@ -6,7 +6,6 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.PowerManager
 import android.view.View
-import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -29,7 +28,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
@@ -42,7 +43,6 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -58,7 +58,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -87,7 +86,6 @@ import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 import com.byagowi.persiancalendar.ui.utils.getResourcesColor
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
@@ -97,10 +95,11 @@ import java.io.File
 @Suppress("ComposeModifierMissing")
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = appColorScheme(),
         typography = resolveTypography(),
         shapes = appShapes(),
+        motionScheme = MotionScheme.expressive(),
     ) {
         val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
 
@@ -261,32 +260,14 @@ fun appDialogSurfaceColor(): Color {
     } else MaterialTheme.colorScheme.surfaceContainerHigh
 }
 
-// @Composable
-// @ReadOnlyComposable
-fun appDialogProperties(usePlatformDefaultWidth: Boolean = true): DialogProperties {
-//    return if (isCrossWindowBlur()) DialogProperties(
-//        blurBehindRadius = 16.dp,
-//        scrimAlpha = .25f,
-//        usePlatformDefaultWidth = usePlatformDefaultWidth,
-//    ) else
-    return DialogProperties(usePlatformDefaultWidth = usePlatformDefaultWidth)
-}
-
-// Remove the following in favor of above when DialogProperties had blurBehindRadius which will
-// when androidx.compose.ui:ui reaches 1.13.0
 @Composable
-fun SetupDialogBlur() {
-    val window = LocalView.current.findDialogWindow()
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
-        window?.windowManager?.isCrossWindowBlurEnabled != true
-    ) return
-
-    LaunchedEffect(window) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        window.setDimAmount(.4f)
-        window.attributes.blurBehindRadius = 30
-        window.attributes = window.attributes
-    }
+@ReadOnlyComposable
+fun appDialogProperties(usePlatformDefaultWidth: Boolean = true): DialogProperties {
+    return if (isCrossWindowBlur()) DialogProperties(
+        blurBehindRadius = 16.dp,
+        scrimAlpha = .25f,
+        usePlatformDefaultWidth = usePlatformDefaultWidth,
+    ) else DialogProperties(usePlatformDefaultWidth = usePlatformDefaultWidth)
 }
 
 private fun isPowerSaveMode(context: Context): Boolean =
