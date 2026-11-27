@@ -30,7 +30,7 @@ fun MoonView(jdn: Jdn, modifier: Modifier = Modifier) {
     LaunchedEffect(jdn) { value = eventualValue }
     val phase by animateFloatAsState(
         targetValue = value.toFloat(),
-        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
+        animationSpec = MaterialTheme.motionScheme.slowSpatialSpec(),
     )
     Canvas(modifier) {
         drawIntoCanvas {
