@@ -40,7 +40,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,22 +50,15 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
@@ -133,6 +125,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.findDialogWindow
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.ui.utils.navigationRailTopGradient
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -485,31 +478,6 @@ fun FixStatusBarIconsColor() {
                 isBackgroundColorLight
         }
     }
-}
-
-@Composable
-private fun Modifier.navigationRailTopGradient(): Modifier {
-    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
-    val topColor by animateColor(
-        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
-    )
-    var height by remember { mutableFloatStateOf(0f) }
-    val direction = LocalLayoutDirection.current
-    return this
-        .onGloballyPositioned { height = it.positionInRoot().y }
-        .drawBehind {
-            val colors = listOf(topColor, Color.Transparent)
-            drawRect(
-                Brush.verticalGradient(colors, startY = -height, endY = 0f),
-                topLeft = Offset(
-                    x = if (direction == LayoutDirection.Rtl) -20.dp.toPx() else 0f,
-                    y = -height,
-                ),
-                size = this.size.copy(height = height, width = this.size.width + 20.dp.toPx()),
-            )
-        }
 }
 
 @Composable

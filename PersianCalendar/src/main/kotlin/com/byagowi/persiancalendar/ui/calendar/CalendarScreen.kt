@@ -19,7 +19,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
@@ -65,8 +64,10 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExpandedFullScreenSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -79,6 +80,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.SearchBarValue
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -92,11 +94,11 @@ import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.ReadOnlyComposable
@@ -113,9 +115,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -128,7 +127,6 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInWindow
@@ -136,7 +134,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -147,7 +144,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
@@ -259,8 +255,8 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.enabledCalendarsWithDefault
+import com.byagowi.persiancalendar.ui.utils.expandedSearchTopGradient
 import com.byagowi.persiancalendar.ui.utils.isLandscape
-import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.AddEventData
@@ -337,7 +333,7 @@ fun SharedTransitionScope.CalendarScreen(
         )
     }
 
-    var searchTerm by rememberSaveable { mutableStateOf<String?>(null) }
+    var isInSearch by rememberSaveable { mutableStateOf(false) }
     var searchInputBounds by remember { mutableStateOf<Rect?>(null) }
     var screenCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     var yearViewCalendar by rememberSaveable { mutableStateOf<Calendar?>(null) }
@@ -367,7 +363,7 @@ fun SharedTransitionScope.CalendarScreen(
         mapOf(
             SwipeDownAction.MonthView to { navigateToMonthView(selectedDay) },
             SwipeDownAction.YearView to {
-                searchTerm = null
+                isInSearch = false
                 isYearView = true
             },
             SwipeDownAction.None to { bringDay(selectedDay + 7, true, false) },
@@ -488,15 +484,15 @@ fun SharedTransitionScope.CalendarScreen(
 
     val calendarModifier = modifier
         .onGloballyPositioned { screenCoordinates = it }
-        .pointerInput(searchTerm) {
-            if (searchTerm != "") return@pointerInput
+        .pointerInput(isInSearch) {
+            if (isInSearch) return@pointerInput
             awaitEachGesture {
                 val down = awaitFirstDown(
                     pass = PointerEventPass.Initial,
                 )
                 val bounds = searchInputBounds ?: return@awaitEachGesture
-                val coordinates = screenCoordinates?.takeIf { it.isAttached }
-                    ?: return@awaitEachGesture
+                val coordinates =
+                    screenCoordinates?.takeIf { it.isAttached } ?: return@awaitEachGesture
                 if (coordinates.localToWindow(down.position) in bounds) return@awaitEachGesture
                 var isTap = true
                 do {
@@ -512,12 +508,11 @@ fun SharedTransitionScope.CalendarScreen(
                         isTap = false
                     }
                     if (released) {
-                        if (isTap && searchTerm == "" &&
-                            change.uptimeMillis - down.uptimeMillis < viewConfiguration.longPressTimeoutMillis &&
-                            coordinates.isAttached &&
-                            searchInputBounds?.contains(coordinates.localToWindow(change.position)) == false
+                        if (isTap && isInSearch && change.uptimeMillis - down.uptimeMillis < viewConfiguration.longPressTimeoutMillis && coordinates.isAttached && searchInputBounds?.contains(
+                                coordinates.localToWindow(change.position)
+                            ) == false
                         ) {
-                            searchTerm = null
+                            isInSearch = false
                         }
                         return@awaitEachGesture
                     }
@@ -555,12 +550,10 @@ fun SharedTransitionScope.CalendarScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             var toolbarHeight by remember { mutableStateOf(0.dp) }
-            val isSearchExpanded = !searchTerm.isNullOrEmpty()
-            Crossfade(targetState = searchTerm != null) { isInSearch ->
+            Crossfade(targetState = isInSearch) { isInSearchValue ->
                 Box(
-                    modifier = (if (isInSearch) {
-                        if (isSearchExpanded || toolbarHeight <= 0.dp) Modifier
-                        else Modifier.requiredHeight(toolbarHeight)
+                    modifier = (if (isInSearchValue) {
+                        Modifier.requiredHeight(toolbarHeight)
                     } else if (isYearView) {
                         if (toolbarHeight > 0.dp) {
                             Modifier.requiredHeight(toolbarHeight)
@@ -570,12 +563,8 @@ fun SharedTransitionScope.CalendarScreen(
                     }).fillMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    if (isInSearch) Search(
-                        searchTerm = searchTerm,
-                        onSearchTermChange = { searchTerm = it },
-                        onInputBoundsChange = { searchInputBounds = it },
-                        closeSearch = { searchTerm = null },
-                        isSearchExpanded = isSearchExpanded,
+                    if (isInSearchValue) Search(
+                        closeSearch = { isInSearch = false },
                         today = today,
                     ) { event ->
                         val date = event.date
@@ -597,7 +586,7 @@ fun SharedTransitionScope.CalendarScreen(
                         openNavigationRail = openNavigationRail,
                         swipeUpActions = swipeUpActions,
                         swipeDownActions = swipeDownActions,
-                        openSearch = { searchTerm = "" },
+                        openSearch = { isInSearch = true },
                         yearViewLazyListState = yearViewLazyListState,
                         yearViewScale = yearViewScale,
                         isYearView = isYearView,
@@ -1277,10 +1266,6 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 
 @Composable
 private fun Search(
-    searchTerm: String?,
-    onSearchTermChange: (String) -> Unit,
-    onInputBoundsChange: (Rect) -> Unit,
-    isSearchExpanded: Boolean,
     closeSearch: () -> Unit,
     today: Jdn,
     bringEvent: (CalendarEvent<*>) -> Unit,
@@ -1293,10 +1278,11 @@ private fun Search(
     }
     val repository = eventsRepository
     val enabledEvents = remember(key1 = today) { repository.getEnabledEvents(today) }
+    val textFieldState = rememberTextFieldState()
+    val searchTerm = textFieldState.text.toString()
     val deviceResults = rememberDeviceCalendarSearch(searchTerm, today)
     val items = remember(searchTerm, deviceResults, enabledEvents) {
-        val searchTerm = searchTerm
-        if (searchTerm.isNullOrBlank()) return@remember emptyList()
+        if (searchTerm.isBlank()) return@remember emptyList()
         val regex = createSearchRegex(searchTerm)
         deviceResults.data + enabledEvents.asSequence().filter {
             regex.containsMatchIn(it.title) || run {
@@ -1306,43 +1292,21 @@ private fun Search(
             }
         }.take(50).toList()
     }
-    val padding by animateDpAsState(targetValue = if (isSearchExpanded) 0.dp else 32.dp)
-    val focusRequester = remember { FocusRequester() }
-    var isInputFocused by remember { mutableStateOf(false) }
-    val isSearchOpen = searchTerm != null
-    var hasInputBeenFocused by remember(isSearchOpen) { mutableStateOf(false) }
-    LaunchedEffect(isSearchOpen) {
-        if (isSearchOpen) {
-            focusRequester.requestFocus()
-            if (isInputFocused) hasInputBeenFocused = true
+
+    val searchBarState = rememberSearchBarState()
+    LaunchedEffect(textFieldState.text.isNotEmpty()) {
+        if (textFieldState.text.isEmpty() && searchBarState.currentValue == SearchBarValue.Expanded) {
+            searchBarState.animateToCollapsed()
+        } else if (textFieldState.text.isNotEmpty() && searchBarState.currentValue == SearchBarValue.Collapsed) {
+            searchBarState.animateToExpanded()
         }
     }
-    LaunchedEffect(searchTerm, isInputFocused, hasInputBeenFocused) {
-        if (hasInputBeenFocused && !isInputFocused && searchTerm == "") closeSearch()
-    }
-    @Suppress("DEPRECATION")
-    @OptIn(ExperimentalMaterial3Api::class)
+
     val inputField = @Composable {
         SearchBarDefaults.InputField(
-            modifier = Modifier
-                .onGloballyPositioned { onInputBoundsChange(it.boundsInWindow()) }
-                .focusRequester(focusRequester)
-                .onFocusChanged {
-                    isInputFocused = it.isFocused
-                    if (it.isFocused) hasInputBeenFocused = true
-                }
-                .then(
-                    if (isSearchExpanded) Modifier.padding(
-                        paddingValues = WindowInsets.safeDrawing.only(
-                            sides = WindowInsetsSides.Horizontal,
-                        ).asPaddingValues(),
-                    ) else Modifier,
-                ),
-            query = searchTerm.orEmpty(),
-            onQueryChange = onSearchTermChange,
             onSearch = {},
-            expanded = isSearchExpanded || isInputFocused,
-            onExpandedChange = {},
+            textFieldState = textFieldState,
+            searchBarState = searchBarState,
             placeholder = { Text(stringResource(Res.string.search_in_events)) },
             trailingIcon = {
                 AppIconButton(
@@ -1352,18 +1316,19 @@ private fun Search(
             },
         )
     }
-    @Suppress("DEPRECATION")
-    @OptIn(ExperimentalMaterial3Api::class) SearchBar(
+
+    SearchBar(
+        state = searchBarState,
         inputField = inputField,
-        expanded = isSearchExpanded,
-        onExpandedChange = { if (!it) closeSearch() },
-        modifier = Modifier
-            .alpha(alpha)
-            .padding(horizontal = padding),
-    ) {
-        if (padding.value != 0f) return@SearchBar
+        modifier = Modifier.windowInsetsPadding(
+            WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
+        ),
+    )
+
+    val gradientHeight = WindowInsets.safeDrawing.getTop(LocalDensity.current)
+    ExpandedFullScreenSearchBar(state = searchBarState, inputField = { inputField() }) {
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            Box {
+            Box(Modifier.expandedSearchTopGradient(gradientHeight = gradientHeight)) {
                 val lazyListState = rememberLazyListState()
                 LazyColumn(
                     state = lazyListState,
@@ -1396,18 +1361,6 @@ private fun Search(
                 }
                 ScrollShadow(lazyListState)
             }
-        }
-    }
-
-    // Tweak status bar color when search is expanded, can break if system night mode is changed
-    // mid-search but who cares.
-    if (isSearchExpanded) LocalActivity.current?.window?.also { window ->
-        val view = LocalView.current
-        val colorScheme = MaterialTheme.colorScheme
-        DisposableEffect(Unit) {
-            val controller = WindowInsetsControllerCompat(window, view)
-            controller.isAppearanceLightStatusBars = colorScheme.surface.isLight
-            onDispose { controller.isAppearanceLightStatusBars = colorScheme.background.isLight }
         }
     }
 }
