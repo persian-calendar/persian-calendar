@@ -52,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -65,6 +66,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
@@ -494,13 +496,18 @@ private fun Modifier.navigationRailTopGradient(): Modifier {
         if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
     )
     var height by remember { mutableFloatStateOf(0f) }
+    val direction = LocalLayoutDirection.current
     return this
         .onGloballyPositioned { height = it.positionInRoot().y }
         .drawBehind {
             val colors = listOf(topColor, Color.Transparent)
             drawRect(
                 Brush.verticalGradient(colors, startY = -height, endY = 0f),
-                size = this.size.copy(height = -height),
+                topLeft = Offset(
+                    x = if (direction == LayoutDirection.Rtl) -20.dp.toPx() else 0f,
+                    y = -height,
+                ),
+                size = this.size.copy(height = height, width = this.size.width + 20.dp.toPx()),
             )
         }
 }
@@ -523,7 +530,7 @@ private fun NavigationRailSeasonsPager(now: Long) {
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
-            .padding(vertical = 10.dp, horizontal = 20.dp)
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp)
             .clip(MaterialTheme.shapes.extraLarge),
         pageSpacing = 8.dp,
     ) {
@@ -551,7 +558,7 @@ private fun BoxScope.NavigationRailDarkModeToggle() {
         targetState = if (isDark) lightModeOutlinedIcon else modeNightIcon,
         modifier = Modifier
             .semantics { this.hideFromAccessibility() }
-            .padding(bottom = 20.dp, end = 28.dp)
+            .padding(bottom = 20.dp, end = 8.dp)
             .align(Alignment.BottomEnd)
             .clickable(
                 indication = ripple(bounded = false),

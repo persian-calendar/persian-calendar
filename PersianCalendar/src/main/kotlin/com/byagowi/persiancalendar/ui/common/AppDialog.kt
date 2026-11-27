@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -39,7 +38,7 @@ fun BaseAppDialog(
     usePlatformDefaultWidth: Boolean = true,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+    BasicAlertDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
         properties = appDialogProperties(usePlatformDefaultWidth = usePlatformDefaultWidth),

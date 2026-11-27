@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
 import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.animate
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,13 +15,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +64,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
@@ -114,20 +120,22 @@ fun ColorPickerDialog(
             if (showEditor) CompositionLocalProvider(
                 LocalLayoutDirection provides LayoutDirection.Ltr,
             ) {
-                var transientValue by remember { mutableStateOf<String?>(null) }
-                @Suppress("DEPRECATION")
+                val textFieldState = remember {
+                    TextFieldState(
+                        initialText = "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
+                    )
+                }
+                LaunchedEffect(textFieldState.text) {
+                    runCatching {
+                        val newColor = Color(textFieldState.text.toString().toColorInt())
+                        coroutineScope.launch {
+                            color.animateTo(newColor, appColorAnimationSpec)
+                        }
+                    }.onFailure(logException)
+                }
                 BasicTextField(
-                    value = transientValue ?: "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
-                    onValueChange = { newValue ->
-                        if (newValue.length != 9) transientValue = newValue else runCatching {
-                            val newColor = Color(newValue.toColorInt())
-                            transientValue = null
-                            coroutineScope.launch {
-                                color.animateTo(newColor, appColorAnimationSpec)
-                            }
-                        }.onFailure { transientValue = newValue }
-                    },
-                    singleLine = false,
+                    state = textFieldState,
+                    lineLimits = TextFieldLineLimits.SingleLine,
                     modifier = Modifier.align(Alignment.BottomCenter),
                     textStyle = TextStyle.Default.copy(
                         textAlign = TextAlign.Center,
@@ -141,17 +149,24 @@ fun ColorPickerDialog(
                 )
             }
         }
-        repeat(if (isBackgroundPick) 4 else 3) {
-            @Suppress("DEPRECATION")
+        val states = (0..4).map {
+            remember {
+                SliderState(
+                    value = when (it) {
+                        0 -> color.value.red
+                        1 -> color.value.green
+                        2 -> color.value.blue
+                        else -> color.value.alpha
+                    },
+                )
+            }
+        }
+        states.take(if (isBackgroundPick) 4 else 3).forEachIndexed { index, state ->
             Slider(
-                value = when (it) {
-                    0 -> color.value.red
-                    1 -> color.value.green
-                    2 -> color.value.blue
-                    else -> color.value.alpha
-                },
+                state = state,
                 onValueChange = { value ->
-                    val newColor = when (it) {
+                    state.value = value
+                    val newColor = when (index) {
                         0 -> color.value.copy(red = value)
                         1 -> color.value.copy(green = value)
                         2 -> color.value.copy(blue = value)
@@ -162,7 +177,7 @@ fun ColorPickerDialog(
                         color.snapTo(newColor)
                     }
                 },
-                colors = when (it) {
+                colors = when (index) {
                     0 -> Color(0xFFFF1744)
                     1 -> Color(0xFF00C853)
                     2 -> Color(0xFF448AFF)
@@ -191,7 +206,18 @@ fun ColorPickerDialog(
                     background = background,
                     outlineWidth = 1.dp,
                     onClick = {
-                        coroutineScope.launch { color.animateTo(entry, appColorAnimationSpec) }
+                        coroutineScope.launch {
+                            color.animateTo(entry, appColorAnimationSpec)
+                        }
+                        listOf(
+                            entry.red, entry.green, entry.blue, entry.alpha,
+                        ).forEachIndexed { i, channel ->
+                            coroutineScope.launch {
+                                animate(states[i].value, channel) { value, _ ->
+                                    states[i].value = value
+                                }
+                            }
+                        }
                     },
                 )
             }

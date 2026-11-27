@@ -1261,7 +1261,10 @@ private fun showEncourageToExemptFromBatteryOptimizations(needsExactAlarmAccess:
     } else {
         PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
     }
-    return context.preferences.getInt(ignoredCountKey, 0) < 1 && (needsExactAlarmAccess || !isIgnoringBatteryOptimizations(context))
+    return context.preferences.getInt(
+        ignoredCountKey,
+        0,
+    ) < 1 && (needsExactAlarmAccess || !isIgnoringBatteryOptimizations(context))
 }
 
 private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
@@ -1318,37 +1321,40 @@ private fun Search(
         if (hasInputBeenFocused && !isInputFocused && searchTerm == "") closeSearch()
     }
     @Suppress("DEPRECATION")
+    @OptIn(ExperimentalMaterial3Api::class)
+    val inputField = @Composable {
+        SearchBarDefaults.InputField(
+            modifier = Modifier
+                .onGloballyPositioned { onInputBoundsChange(it.boundsInWindow()) }
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    isInputFocused = it.isFocused
+                    if (it.isFocused) hasInputBeenFocused = true
+                }
+                .then(
+                    if (isSearchExpanded) Modifier.padding(
+                        paddingValues = WindowInsets.safeDrawing.only(
+                            sides = WindowInsetsSides.Horizontal,
+                        ).asPaddingValues(),
+                    ) else Modifier,
+                ),
+            query = searchTerm.orEmpty(),
+            onQueryChange = onSearchTermChange,
+            onSearch = {},
+            expanded = isSearchExpanded || isInputFocused,
+            onExpandedChange = {},
+            placeholder = { Text(stringResource(Res.string.search_in_events)) },
+            trailingIcon = {
+                AppIconButton(
+                    icon = closeIcon,
+                    title = stringResource(Res.string.close),
+                ) { closeSearch() }
+            },
+        )
+    }
+    @Suppress("DEPRECATION")
     @OptIn(ExperimentalMaterial3Api::class) SearchBar(
-        inputField = {
-            SearchBarDefaults.InputField(
-                modifier = Modifier
-                    .onGloballyPositioned { onInputBoundsChange(it.boundsInWindow()) }
-                    .focusRequester(focusRequester)
-                    .onFocusChanged {
-                        isInputFocused = it.isFocused
-                        if (it.isFocused) hasInputBeenFocused = true
-                    }
-                    .then(
-                        if (isSearchExpanded) Modifier.padding(
-                            paddingValues = WindowInsets.safeDrawing.only(
-                                sides = WindowInsetsSides.Horizontal,
-                            ).asPaddingValues(),
-                        ) else Modifier,
-                    ),
-                query = searchTerm.orEmpty(),
-                onQueryChange = onSearchTermChange,
-                onSearch = {},
-                expanded = isSearchExpanded || isInputFocused,
-                onExpandedChange = {},
-                placeholder = { Text(stringResource(Res.string.search_in_events)) },
-                trailingIcon = {
-                    AppIconButton(
-                        icon = closeIcon,
-                        title = stringResource(Res.string.close),
-                    ) { closeSearch() }
-                },
-            )
-        },
+        inputField = inputField,
         expanded = isSearchExpanded,
         onExpandedChange = { if (!it) closeSearch() },
         modifier = Modifier
@@ -1453,7 +1459,7 @@ private fun SharedTransitionScope.Toolbar(
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+    TopAppBar(
         title = {
             val title: String
             val subtitle: String

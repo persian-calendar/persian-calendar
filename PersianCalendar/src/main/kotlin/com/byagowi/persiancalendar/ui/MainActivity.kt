@@ -50,6 +50,7 @@ class MainActivity : BaseActivity() {
         initGlobal(this)
 
         startWorker(this)
+        update(applicationContext, false)
 
         setContent {
             AppTheme {

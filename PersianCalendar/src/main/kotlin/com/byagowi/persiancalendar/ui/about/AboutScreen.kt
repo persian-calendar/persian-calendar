@@ -41,7 +41,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedFilterChip
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -137,7 +136,7 @@ fun SharedTransitionScope.AboutScreen(
         modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+            TopAppBar(
                 title = { Text(stringResource(Res.string.about)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = {

@@ -35,7 +35,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -173,7 +172,7 @@ fun SharedTransitionScope.SettingsScreen(
         topBar = {
             Column(Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)) {
 //                AnimatedVisibility(isAtTop) {
-                @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+                TopAppBar(
                     windowInsets = WindowInsets(),
                     title = {
                         AnimatedContent(
@@ -575,7 +574,7 @@ private fun CutoutDialog(
     onDismissRequest: () -> Unit,
 ) {
     val containerSize = LocalWindowInfo.current.containerSize.toSize()
-    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+    BasicAlertDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
         properties = appDialogProperties(usePlatformDefaultWidth = false),

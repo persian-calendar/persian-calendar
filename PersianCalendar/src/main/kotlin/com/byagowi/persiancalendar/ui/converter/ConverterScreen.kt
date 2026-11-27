@@ -29,7 +29,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -135,7 +134,7 @@ fun SharedTransitionScope.ConverterScreen(
         modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+            TopAppBar(
                 title = {
                     AppModesDropDown(
                         value = screenMode,
@@ -315,7 +314,8 @@ private fun TimeZones(
     }
     val difference = run {
         val distance =
-            (secondTimeZone?.rawOffset ?: 0).milliseconds - (firstTimeZone?.rawOffset ?: 0).milliseconds
+            (secondTimeZone?.rawOffset ?: 0).milliseconds - (firstTimeZone?.rawOffset
+                ?: 0).milliseconds
         Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
     }
 

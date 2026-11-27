@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -79,7 +78,7 @@ fun SharedTransitionScope.LicensesScreen(
         modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+            TopAppBar(
                 title = { Text(stringResource(Res.string.about_license_title)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },

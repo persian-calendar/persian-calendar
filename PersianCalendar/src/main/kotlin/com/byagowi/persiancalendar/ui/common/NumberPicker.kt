@@ -21,9 +21,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -33,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,7 +61,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -260,9 +261,12 @@ fun NumberEdit(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-    var value by remember(numeral) {
-        val valueText = numeral.format(initialValue)
-        mutableStateOf(TextFieldValue(valueText, selection = TextRange(0, valueText.length)))
+    val textFieldState = key(numeral) {
+        val initialFormatted = numeral.format(initialValue)
+        rememberTextFieldState(
+            initialText = initialFormatted,
+            initialSelection = TextRange(0, initialFormatted.length),
+        )
     }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     var isCapturedOnce by remember { mutableStateOf(false) }
@@ -283,13 +287,13 @@ fun NumberEdit(
     @Suppress("UseBackHandlerInsteadOfPredictiveBackHandler")
     BackHandler { clearFocus() }
 
-    fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
+    fun resolveValue() = textFieldState.text.toString().toIntOrNull()?.takeIf(isValid)
 
     Box(modifier, contentAlignment = Alignment.Center) {
         val inError = resolveValue() == null
         val context = LocalContext.current
         LaunchedEffect(inError) {
-            if (value.text.isNotEmpty() && inError) Toast.makeText(
+            if (textFieldState.text.isNotEmpty() && inError) Toast.makeText(
                 context,
                 R.string.incorrect_date,
                 Toast.LENGTH_SHORT,
@@ -299,13 +303,14 @@ fun NumberEdit(
             if (inError) MaterialTheme.colorScheme.error.copy(alpha = .1f)
             else Color.Transparent,
         )
-        @Suppress("DEPRECATION")
         BasicTextField(
-            value = value,
+            state = textFieldState,
             interactionSource = interactionSource,
-            maxLines = 1,
-            onValueChange = { value = it },
-            keyboardActions = KeyboardActions(onDone = { pendingConfirms.clear(); clearFocus() }),
+            lineLimits = TextFieldLineLimits.SingleLine,
+            onKeyboardAction = {
+                pendingConfirms.clear()
+                clearFocus()
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,

@@ -12,7 +12,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -26,10 +25,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -148,23 +147,13 @@ fun SharedTransitionScope.CompassScreen(
         }
     }
     var sensorNotFound by remember { mutableStateOf(false) }
-    var timeShift by remember { mutableFloatStateOf(0f) }
-    var isTimeShiftAnimate by remember { mutableStateOf(false) }
-    val timeShiftAnimate by animateFloatAsState(
-        targetValue = if (isTimeShiftAnimate) 24f else 0f,
-        animationSpec = tween(durationMillis = if (isTimeShiftAnimate) 10.seconds.inWholeMilliseconds.toInt() else 0),
-    ) {
-        if (isTimeShiftAnimate) {
-            timeShift = 0f
-            isTimeShiftAnimate = false
-        }
-    }
     val coordinates = coordinates
-    val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
-    val isSliderShown = sliderValue != 0f
+    var stopSlideAnimation by remember { mutableStateOf(false) }
+    val sliderState = remember { SliderState(value = 0f, trackRange = 0f..24f) }
+    val isSliderShown = sliderState.value != 0f
     val time = GregorianCalendar().also {
         it.timeInMillis = now
-        it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
+        it.add(GregorianCalendar.MINUTE, (sliderState.value * 60f).roundToInt())
     }
     var isStopped by rememberSaveable { mutableStateOf(false) }
 
@@ -196,7 +185,7 @@ fun SharedTransitionScope.CompassScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+            TopAppBar(
                 title = {
                     Column {
                         Text(
@@ -228,12 +217,19 @@ fun SharedTransitionScope.CompassScreen(
                     if (coordinates != null) AppIconButton(
                         icon = in24HoursIcon,
                         title = stringResource(Res.string.show_sun_and_moon_path_in_24_hours),
-                        modifier = Modifier.rotate(sliderValue / 24f * 360f),
+                        modifier = Modifier.rotate(sliderState.value / 24f * 360f),
                     ) {
-                        if (isTimeShiftAnimate) {
-                            isTimeShiftAnimate = false
-                            timeShift = 0f
-                        } else isTimeShiftAnimate = true
+                        if (sliderState.value != 0f) {
+                            stopSlideAnimation = true
+                            sliderState.value = 0f
+                        } else coroutineScope.launch {
+                            stopSlideAnimation = false
+                            animate(
+                                0f, 24f,
+                                animationSpec = tween(durationMillis = 10.seconds.inWholeMilliseconds.toInt()),
+                            ) { v, _ -> if (!stopSlideAnimation) sliderState.value = v }
+                            if (!stopSlideAnimation) sliderState.value = 0f
+                        }
                     }
                     if (coordinates != null) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
@@ -328,13 +324,11 @@ fun SharedTransitionScope.CompassScreen(
                             enter = fadeIn() + expandVertically(),
                             exit = fadeOut() + shrinkVertically(),
                         ) {
-                            @Suppress("DEPRECATION")
                             Slider(
-                                valueRange = 0f..24f,
-                                value = sliderValue,
+                                state = sliderState,
                                 onValueChange = {
-                                    isTimeShiftAnimate = false
-                                    timeShift = if (it == 24f) 0f else it
+                                    stopSlideAnimation = true
+                                    sliderState.value = it
                                 },
                                 colors = appSliderColor(),
                                 modifier = Modifier.padding(horizontal = 16.dp),

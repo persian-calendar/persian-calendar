@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
@@ -543,25 +544,23 @@ fun FontWeightsDialog(
         modifier = modifier,
     ) {
         val text by remember { mutableStateOf(TextFieldState("Sample text متن نمونه")) }
-        var weight by remember { mutableFloatStateOf(400f) }
+        val weight = remember { SliderState(value = 400f, trackRange = 100f..900f) }
         TextField(
             state = text,
             textStyle = LocalTextStyle.current.copy(
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                fontWeight = FontWeight(weight.roundToInt()),
+                fontWeight = FontWeight(weight.value.roundToInt()),
                 textAlign = TextAlign.Center,
             ),
             modifier = Modifier.fillMaxWidth(),
         )
-        @Suppress("DEPRECATION")
         Slider(
-            valueRange = 100f..900f,
-            value = weight,
-            onValueChange = { weight = it },
+            state = weight,
+            onValueChange = { weight.value = it },
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         Text(
-            text = numeral.format(weight.roundToInt()),
+            text = numeral.format(weight.value.roundToInt()),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )

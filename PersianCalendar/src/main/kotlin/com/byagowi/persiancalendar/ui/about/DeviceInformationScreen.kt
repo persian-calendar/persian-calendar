@@ -44,7 +44,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
@@ -120,7 +119,6 @@ import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun SharedTransitionScope.DeviceInformationScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,

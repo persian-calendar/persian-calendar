@@ -42,7 +42,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -252,7 +251,7 @@ fun SharedTransitionScope.AstronomyScreen(
         modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+            TopAppBar(
                 title = {
                     Text(
                         stringResource(Res.string.astronomy),

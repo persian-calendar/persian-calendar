@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.ui.settings
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
@@ -74,6 +76,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.highlightItem
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.preferences
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
@@ -436,11 +439,13 @@ fun SettingsSlider(
             Text(state, style = MaterialTheme.typography.bodyLarge)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            @Suppress("DEPRECATION")
+            val sliderState = remember { SliderState(value = value, trackRange = valueRange) }
             Slider(
-                value = animateFloatAsState(value).value.coerceIn(valueRange),
-                valueRange = valueRange,
-                onValueChange = onValueChange,
+                state = sliderState,
+                onValueChange = {
+                    sliderState.value = it
+                    onValueChange(it)
+                },
                 modifier = Modifier.weight(1f),
                 colors = appSliderColor(),
             )
@@ -456,8 +461,18 @@ fun SettingsSlider(
             }
             val isDefault = roundedValue == (defaultValue * visibleScale).roundToInt()
             AnimatedVisibility(visible = isDefault) { Spacer(Modifier.width(16.dp)) }
+            val coroutineScope = rememberCoroutineScope()
             AnimatedVisibility(visible = !isDefault) {
-                IconButton(onClick = { onValueChange(defaultValue) }) {
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            animate(sliderState.value, defaultValue) { v, _ ->
+                                sliderState.value = v
+                            }
+                        }
+                        onValueChange(defaultValue)
+                    },
+                ) {
                     Icon(settingsBackupRestoreIcon, stringResource(Res.string.cancel))
                 }
             }

@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -95,7 +94,7 @@ fun ShiftWorkDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
 ) {
-    @OptIn(ExperimentalMaterial3Api::class) BasicAlertDialog(
+    BasicAlertDialog(
         properties = appDialogProperties(),
         onDismissRequest = onDismissRequest,
         modifier = modifier,
