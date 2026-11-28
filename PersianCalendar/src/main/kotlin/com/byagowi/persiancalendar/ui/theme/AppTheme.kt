@@ -3,10 +3,8 @@ package com.byagowi.persiancalendar.ui.theme
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
-import android.os.Build
 import android.os.PowerManager
 import android.view.View
-import androidx.activity.compose.LocalActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
@@ -58,7 +56,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.platform.isCrossWindowBlurEnabled
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -240,17 +240,8 @@ private fun effectiveTheme(): Theme {
 
 @Composable
 @ReadOnlyComposable
-private fun isCrossWindowBlur(): Boolean {
-    // Replace with LocalWindowInfo.current.isCrossWindowBlurEnabled later
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && run {
-        LocalActivity.current?.window?.windowManager?.isCrossWindowBlurEnabled == true
-    }
-}
-
-@Composable
-@ReadOnlyComposable
 fun appDialogSurfaceColor(): Color {
-    val isCrossWindowBlur = isCrossWindowBlur()
+    val isCrossWindowBlur = LocalWindowInfo.current.isCrossWindowBlurEnabled
     val effectiveTheme = effectiveTheme()
     return if (isCrossWindowBlur) when (effectiveTheme) {
         Theme.DARK -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = .7f)
@@ -263,7 +254,7 @@ fun appDialogSurfaceColor(): Color {
 @Composable
 @ReadOnlyComposable
 fun appDialogProperties(usePlatformDefaultWidth: Boolean = true): DialogProperties {
-    return if (isCrossWindowBlur()) DialogProperties(
+    return if (LocalWindowInfo.current.isCrossWindowBlurEnabled) DialogProperties(
         blurBehindRadius = 16.dp,
         scrimAlpha = .25f,
         usePlatformDefaultWidth = usePlatformDefaultWidth,
