@@ -252,11 +252,11 @@ class DeviceCalendarEventsTests {
     @Test
     fun `both repeated midnight hours belong only to the overlap date`() {
         val zone = "America/Havana"
-        val previousDay = CivilDate(2026, 10, 31)
-        val day = CivilDate(2026, 11, 1)
-        val nextDay = CivilDate(2026, 11, 2)
-        val begin = millis("2026-11-01T04:00:00Z") // First occurrence of local midnight.
-        val end = millis("2026-11-02T05:00:00Z")
+        val previousDay = CivilDate(2025, 11, 1)
+        val day = CivilDate(2025, 11, 2)
+        val nextDay = CivilDate(2025, 11, 3)
+        val begin = millis("2025-11-02T04:00:00Z") // First occurrence of local midnight.
+        val end = millis("2025-11-03T05:00:00Z")
         assertEquals(begin, DeviceEventInterval.startOfDay(day, TimeZone.getTimeZone(zone)).timeInMillis)
         assertEquals(end, DeviceEventInterval.startOfDay(nextDay, TimeZone.getTimeZone(zone)).timeInMillis)
         assertEquals(25 * 3_600_000L, end - begin)
@@ -270,8 +270,8 @@ class DeviceCalendarEventsTests {
         assertFalse(wholeDay.occupies(nextDay))
 
         listOf(
-            "2026-11-01T04:15:00Z" to "2026-11-01T04:45:00Z",
-            "2026-11-01T05:15:00Z" to "2026-11-01T05:45:00Z",
+            "2025-11-02T04:15:00Z" to "2025-11-02T04:45:00Z",
+            "2025-11-02T05:15:00Z" to "2025-11-02T05:45:00Z",
         ).forEach { (start, finish) ->
             val occurrence = event(interval(start, finish, false, zone))
             val store = DeviceCalendarEventsStore(listOf(occurrence))
@@ -291,7 +291,7 @@ class DeviceCalendarEventsTests {
     fun `exclusive end at a midnight transition does not occupy the transition date`() {
         listOf(
             Triple("Africa/Cairo", CivilDate(2026, 4, 24), "2026-04-23T22:00:00Z"),
-            Triple("America/Havana", CivilDate(2026, 11, 1), "2026-11-01T04:00:00Z"),
+            Triple("America/Havana", CivilDate(2025, 11, 2), "2025-11-02T04:00:00Z"),
         ).forEach { (zone, day, boundary) ->
             val end = millis(boundary)
             val previousDay = CivilDate(day.toJdn() - 1)
