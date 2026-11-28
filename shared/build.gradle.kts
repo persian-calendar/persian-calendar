@@ -24,7 +24,7 @@ kotlin {
 
     android {
         namespace = "com.byagowi.persiancalendar.shared"
-        compileSdk = 37
+        compileSdk { version = release(37) { minorApiLevel = 2 } }
         minSdk = 23
 
         androidResources {
